@@ -2,15 +2,23 @@
 import CButton from '@/CButton.vue'
 import { onMounted, ref  } from 'vue'
 
-const users = ref([]);
+const results = ref({});
 
 onMounted(async () => {
 
-  console.log('fetch users..');
+  console.log('fetch results..');
 
-  users.value = await fetch('users.json')
+  results.value = await fetch('benchmark_results.json')
     .then((r) => r.json())
-    .then((data) => data)
+    .then((data) => {
+      return {
+        closed: data['unified_closed'],
+        opened: data['unified_open']
+      }
+    });
+
+    console.log(results.value);
+    
   
 })
 
@@ -27,10 +35,17 @@ const showAlert = () => {
 
     <CButton variant="success" @callAction="showAlert">OK</CButton>
 
-    <p>There are {{ users?.length }} user(s).</p>
+    <p>There are {{ results?.closed?.length }} closed and {{ results?.opened?.length }} opened.</p>
+
     <ul>
-      <li v-for="user in users">{{ user.name }}</li>
+      <li v-for="result in results.closed">{{ result.name }} ({{ result.avg }})
+      </li>
     </ul>
+
+    <ul>
+      <li v-for="result in results.opened">{{ result.name }} ({{ result.avg }})</li>
+    </ul>
+    <br>
   </div>
 </template>
 

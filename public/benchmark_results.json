@@ -1,0 +1,574 @@
+{
+  "timestamp": "2026-07-10 19:32",
+  "benchmarks": [
+    "Artificial Analysis",
+    "BenchLM.ai",
+    "Arena.ai Agent",
+    "SimpleBench.com",
+    "ARC Prize",
+    "Design Arena",
+    "DeepSWE",
+    "VendingBench",
+    "SWE-Marathon",
+    "FrontierSWE"
+  ],
+  "avg_benchmarks": [
+    "Artificial Analysis",
+    "BenchLM.ai",
+    "Arena.ai Agent",
+    "SimpleBench.com",
+    "ARC Prize",
+    "Design Arena",
+    "SWE-Marathon",
+    "FrontierSWE"
+  ],
+  "per_benchmark": {
+    "Artificial Analysis": {
+      "closed": [
+        [
+          "Claude Fable 5 (with fallback)",
+          60.0
+        ],
+        [
+          "GPT-5.6 Sol (max)",
+          59.0
+        ],
+        [
+          "GPT-5.6 Sol (xhigh)",
+          58.0
+        ],
+        [
+          "GPT-5.6 Sol (high)",
+          56.0
+        ],
+        [
+          "Claude Opus 4.8 (max)",
+          56.0
+        ]
+      ],
+      "open": [
+        [
+          "GLM-5.2 (max)",
+          51.0
+        ],
+        [
+          "MiniMax-M3",
+          44.0
+        ],
+        [
+          "DeepSeek V4 Pro (max)",
+          44.0
+        ],
+        [
+          "Kimi K2.6",
+          44.0
+        ],
+        [
+          "MiMo-V2.5-Pro",
+          42.0
+        ]
+      ]
+    },
+    "BenchLM.ai": {
+      "closed": [
+        [
+          "Claude Fable 5",
+          91.0
+        ],
+        [
+          "Claude Mythos 5",
+          89.0
+        ],
+        [
+          "Gemini 3.1 Pro",
+          88.0
+        ],
+        [
+          "Gemini 3 Pro Deep Think",
+          87.0
+        ],
+        [
+          "Claude Opus 4.8",
+          85.0
+        ]
+      ],
+      "open": [
+        [
+          "GLM-5.2",
+          81.0
+        ],
+        [
+          "DeepSeek V4 Pro (Max)",
+          78.0
+        ],
+        [
+          "GLM-5 (Reasoning)",
+          77.0
+        ],
+        [
+          "Kimi K2.6",
+          74.0
+        ],
+        [
+          "DeepSeek V4 Pro (High)",
+          74.0
+        ]
+      ]
+    },
+    "Arena.ai Agent": {
+      "closed": [
+        [
+          "Claude Fable 5 (High)",
+          14.1
+        ],
+        [
+          "Claude Opus 4.8 (Thinking)",
+          9.76
+        ],
+        [
+          "GPT 5.5 (xHigh)",
+          8.9
+        ],
+        [
+          "Claude Opus 4.7 (Thinking)",
+          8.51
+        ],
+        [
+          "Claude Opus 4.7",
+          8.22
+        ]
+      ],
+      "open": [
+        [
+          "GLM 5.2 (Max)",
+          6.54
+        ],
+        [
+          "GLM 5.1",
+          1.57
+        ],
+        [
+          "Kimi K2.7 Code Moonshot",
+          0.13
+        ],
+        [
+          "DeepSeek V4 Pro",
+          0.83
+        ],
+        [
+          "Kimi K2.6 Moonshot",
+          1.61
+        ]
+      ]
+    },
+    "SimpleBench.com": {
+      "closed": [
+        [
+          "Claude Fable",
+          81.9
+        ],
+        [
+          "Gemini 3.1 Pro Preview",
+          79.6
+        ],
+        [
+          "GPT-5.5 Pro",
+          76.9
+        ],
+        [
+          "Gemini 3.5 Flash",
+          76.7
+        ],
+        [
+          "Gemini 3 Pro Preview",
+          76.4
+        ]
+      ],
+      "open": [
+        [
+          "GLM 5.2",
+          58.8
+        ],
+        [
+          "Kimi K2.7 Code",
+          57.9
+        ],
+        [
+          "GLM 5.1",
+          55.1
+        ],
+        [
+          "GLM 5",
+          53.2
+        ]
+      ]
+    },
+    "ARC Prize": {
+      "closed": [
+        [
+          "GPT-5.6 Sol (Low)",
+          74.5
+        ],
+        [
+          "GPT-5.6 Sol (Medium)",
+          92.5
+        ],
+        [
+          "GPT-5.6 Sol (High)",
+          97.0
+        ],
+        [
+          "GPT-5.6 Sol (xHigh)",
+          97.5
+        ],
+        [
+          "GPT-5.6 Sol (Max)",
+          96.5
+        ]
+      ],
+      "open": [
+        [
+          "GLM-5.2",
+          77.0
+        ]
+      ]
+    },
+    "Design Arena": {
+      "closed": [
+        [
+          "GPT-5.6 Terra",
+          72.0
+        ],
+        [
+          "GPT-5.6 Sol",
+          71.0
+        ],
+        [
+          "GPT-5.6 Luna",
+          69.0
+        ],
+        [
+          "GPT-5.5",
+          68.0
+        ],
+        [
+          "Claude Opus 4.8",
+          63.0
+        ]
+      ],
+      "open": [
+        [
+          "Kimi K2.7 Code",
+          49.0
+        ],
+        [
+          "GLM 5.1",
+          48.0
+        ],
+        [
+          "GLM 5.2",
+          45.0
+        ],
+        [
+          "GLM 5",
+          43.0
+        ],
+        [
+          "GLM 5V Turbo",
+          40.0
+        ]
+      ]
+    },
+    "DeepSWE": {
+      "closed": [
+        [
+          "GPT 5.6 Sol",
+          73.0
+        ],
+        [
+          "Claude Fable 5",
+          70.0
+        ],
+        [
+          "GPT 5.6 Terra",
+          70.0
+        ],
+        [
+          "GPT 5.6 Luna",
+          67.0
+        ],
+        [
+          "GPT 5.5",
+          67.0
+        ]
+      ],
+      "open": [
+        [
+          "GLM 5.2",
+          44.0
+        ],
+        [
+          "Kimi K2.7 Code",
+          31.0
+        ]
+      ]
+    },
+    "VendingBench": {
+      "closed": [
+        [
+          "Claude Opus 4.7",
+          100.0
+        ],
+        [
+          "GPT-5.6 Sol",
+          88.0
+        ],
+        [
+          "Claude Opus 4.6",
+          73.3
+        ],
+        [
+          "GPT-5.5",
+          68.8
+        ],
+        [
+          "GPT-5.6 Terra",
+          67.1
+        ]
+      ],
+      "open": [
+        [
+          "GLM-5.2",
+          76.0
+        ],
+        [
+          "Kimi K2.6",
+          56.7
+        ]
+      ]
+    },
+    "SWE-Marathon": {
+      "closed": [
+        [
+          "Grok 4.5",
+          29.0
+        ],
+        [
+          "Claude Opus 4.8",
+          26.0
+        ],
+        [
+          "Claude Fable 5",
+          24.0
+        ],
+        [
+          "Claude Opus 4.7",
+          16.0
+        ],
+        [
+          "GPT-5.5",
+          12.0
+        ]
+      ],
+      "open": [
+        [
+          "GLM 5.2",
+          13.0
+        ],
+        [
+          "DeepSeek V4 Pro",
+          4.0
+        ],
+        [
+          "GLM 5.1",
+          1.0
+        ]
+      ]
+    },
+    "FrontierSWE": {
+      "closed": [
+        [
+          "Claude Fable 5",
+          90.0
+        ],
+        [
+          "Claude Opus 4.8",
+          75.0
+        ],
+        [
+          "GPT-5.5",
+          73.0
+        ],
+        [
+          "Claude Opus 4.7",
+          63.0
+        ],
+        [
+          "Claude Opus 4.6",
+          56.0
+        ]
+      ],
+      "open": [
+        [
+          "GLM-5.2",
+          74.0
+        ],
+        [
+          "GLM-5.1",
+          31.0
+        ],
+        [
+          "DeepSeek V4 Pro",
+          29.0
+        ],
+        [
+          "Kimi K2.6",
+          27.0
+        ],
+        [
+          "Kimi K2.5",
+          26.0
+        ]
+      ]
+    }
+  },
+  "unified_closed": [
+    {
+      "name": "GPT-5.6 Terra",
+      "avg": 74.5,
+      "num_benchmarks": 3,
+      "Artificial Analysis": 55.0,
+      "BenchLM.ai": null,
+      "Arena.ai Agent": null,
+      "SimpleBench.com": null,
+      "ARC Prize": 96.5,
+      "Design Arena": 72.0,
+      "DeepSWE": 70.0,
+      "VendingBench": 67.1,
+      "SWE-Marathon": null,
+      "FrontierSWE": null
+    },
+    {
+      "name": "GPT-5.6 Sol",
+      "avg": 73.075,
+      "num_benchmarks": 4,
+      "Artificial Analysis": 59.0,
+      "BenchLM.ai": null,
+      "Arena.ai Agent": null,
+      "SimpleBench.com": 64.8,
+      "ARC Prize": 97.5,
+      "Design Arena": 71.0,
+      "DeepSWE": 73.0,
+      "VendingBench": 88.0,
+      "SWE-Marathon": null,
+      "FrontierSWE": null
+    },
+    {
+      "name": "GPT-5.6 Luna",
+      "avg": 69.33333333333333,
+      "num_benchmarks": 3,
+      "Artificial Analysis": 51.0,
+      "BenchLM.ai": null,
+      "Arena.ai Agent": null,
+      "SimpleBench.com": null,
+      "ARC Prize": 88.0,
+      "Design Arena": 69.0,
+      "DeepSWE": 67.0,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null
+    },
+    {
+      "name": "Claude Opus 4.8",
+      "avg": 59.0075,
+      "num_benchmarks": 8,
+      "Artificial Analysis": 56.0,
+      "BenchLM.ai": 85.0,
+      "Arena.ai Agent": 9.76,
+      "SimpleBench.com": 64.8,
+      "ARC Prize": 92.5,
+      "Design Arena": 63.0,
+      "DeepSWE": 59.0,
+      "VendingBench": null,
+      "SWE-Marathon": 26.0,
+      "FrontierSWE": 75.0
+    },
+    {
+      "name": "Claude Fable 5",
+      "avg": 55.01666666666667,
+      "num_benchmarks": 6,
+      "Artificial Analysis": 60.0,
+      "BenchLM.ai": 91.0,
+      "Arena.ai Agent": 14.1,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": 51.0,
+      "DeepSWE": 70.0,
+      "VendingBench": null,
+      "SWE-Marathon": 24.0,
+      "FrontierSWE": 90.0
+    }
+  ],
+  "unified_open": [
+    {
+      "name": "GLM-5.2",
+      "avg": 50.7925,
+      "num_benchmarks": 8,
+      "Artificial Analysis": 51.0,
+      "BenchLM.ai": 81.0,
+      "Arena.ai Agent": 6.54,
+      "SimpleBench.com": 58.8,
+      "ARC Prize": 77.0,
+      "Design Arena": 45.0,
+      "DeepSWE": 44.0,
+      "VendingBench": 76.0,
+      "SWE-Marathon": 13.0,
+      "FrontierSWE": 74.0
+    },
+    {
+      "name": "DeepSeek V4 Flash",
+      "avg": 38.88333333333333,
+      "num_benchmarks": 3,
+      "Artificial Analysis": 40.0,
+      "BenchLM.ai": 72.0,
+      "Arena.ai Agent": 4.65,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null
+    },
+    {
+      "name": "Kimi K2.7 Code",
+      "avg": 37.2575,
+      "num_benchmarks": 4,
+      "Artificial Analysis": 42.0,
+      "BenchLM.ai": null,
+      "Arena.ai Agent": 0.13,
+      "SimpleBench.com": 57.9,
+      "ARC Prize": null,
+      "Design Arena": 49.0,
+      "DeepSWE": 31.0,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null
+    },
+    {
+      "name": "DeepSeek V4 Pro",
+      "avg": 31.166000000000004,
+      "num_benchmarks": 5,
+      "Artificial Analysis": 44.0,
+      "BenchLM.ai": 78.0,
+      "Arena.ai Agent": 0.83,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": 4.0,
+      "FrontierSWE": 29.0
+    }
+  ]
+}

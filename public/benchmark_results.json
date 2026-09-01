@@ -1,21 +1,22 @@
 {
-  "timestamp": "2026-07-10 19:32",
+  "timestamp": "2026-08-31 11:26",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
-    "Arena.ai Agent",
+    "Arena.ai Text",
     "SimpleBench.com",
     "ARC Prize",
     "Design Arena",
     "DeepSWE",
     "VendingBench",
     "SWE-Marathon",
-    "FrontierSWE"
+    "FrontierSWE",
+    "CyberGem"
   ],
   "avg_benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
-    "Arena.ai Agent",
+    "Arena.ai Text",
     "SimpleBench.com",
     "ARC Prize",
     "Design Arena",
@@ -26,138 +27,222 @@
     "Artificial Analysis": {
       "closed": [
         [
+          "Claude Opus 5 (max)",
+          63.0
+        ],
+        [
+          "Claude Opus 5 (xhigh)",
+          63.0
+        ],
+        [
           "Claude Fable 5 (with fallback)",
-          60.0
+          62.0
+        ],
+        [
+          "Claude Opus 5 (high)",
+          61.0
         ],
         [
           "GPT-5.6 Sol (max)",
-          59.0
+          61.0
+        ],
+        [
+          "Grok 4.6 (high)",
+          61.0
+        ],
+        [
+          "Grok 4.6 (xhigh)",
+          60.0
         ],
         [
           "GPT-5.6 Sol (xhigh)",
-          58.0
+          59.0
         ],
         [
-          "GPT-5.6 Sol (high)",
-          56.0
+          "Grok 4.6 (medium)",
+          59.0
         ],
         [
-          "Claude Opus 4.8 (max)",
-          56.0
+          "Claude Opus 5 (medium)",
+          59.0
         ]
       ],
       "open": [
         [
+          "Kimi K3 (max)",
+          60.0
+        ],
+        [
+          "GLM-5.3 (max)",
+          60.0
+        ],
+        [
+          "Qwen3.8 Max",
+          57.99999999999999
+        ],
+        [
+          "Qwen3.8 2.4T A95B",
+          57.99999999999999
+        ],
+        [
+          "GLM-5.3-Flash",
+          56.99999999999999
+        ],
+        [
+          "Qwen3.8-Flash-Next",
+          56.00000000000001
+        ],
+        [
+          "DeepSeek V4 Pro 0813 (max)",
+          53.0
+        ],
+        [
           "GLM-5.2 (max)",
-          51.0
+          53.0
         ],
         [
-          "MiniMax-M3",
-          44.0
+          "Qwen3.8 27B (xhigh)",
+          52.0
         ],
         [
-          "DeepSeek V4 Pro (max)",
-          44.0
-        ],
-        [
-          "Kimi K2.6",
-          44.0
-        ],
-        [
-          "MiMo-V2.5-Pro",
-          42.0
+          "DeepSeek V4 Flash 0731 (max)",
+          52.0
         ]
       ]
     },
     "BenchLM.ai": {
       "closed": [
         [
-          "Claude Fable 5",
-          91.0
+          "Tencent",
+          70.0
         ],
         [
-          "Claude Mythos 5",
-          89.0
+          "Dots Studio",
+          61.0
         ],
         [
-          "Gemini 3.1 Pro",
-          88.0
+          "Ornith AI",
+          63.0
         ],
         [
-          "Gemini 3 Pro Deep Think",
-          87.0
+          "Tencent",
+          44.0
         ],
         [
-          "Claude Opus 4.8",
-          85.0
+          "Thinking Machines Lab",
+          40.0
+        ],
+        [
+          "Thinking Machines Lab",
+          40.0
+        ],
+        [
+          "InternScience",
+          57.0
+        ],
+        [
+          "InternScience",
+          57.0
+        ],
+        [
+          "InternScience",
+          57.0
+        ],
+        [
+          "InternScience",
+          57.0
         ]
       ],
       "open": [
         [
-          "GLM-5.2",
-          81.0
-        ],
-        [
-          "DeepSeek V4 Pro (Max)",
-          78.0
-        ],
-        [
-          "GLM-5 (Reasoning)",
-          77.0
-        ],
-        [
-          "Kimi K2.6",
-          74.0
-        ],
-        [
-          "DeepSeek V4 Pro (High)",
-          74.0
+          "Mistral",
+          43.0
         ]
       ]
     },
-    "Arena.ai Agent": {
+    "Arena.ai Text": {
       "closed": [
         [
-          "Claude Fable 5 (High)",
-          14.1
+          "claude fable 5",
+          93.38461538461539
         ],
         [
-          "Claude Opus 4.8 (Thinking)",
-          9.76
+          "claude opus 4.6 (High)",
+          93.07692307692308
         ],
         [
-          "GPT 5.5 (xHigh)",
-          8.9
+          "claude opus 4.7 (High)",
+          92.61538461538461
         ],
         [
-          "Claude Opus 4.7 (Thinking)",
-          8.51
+          "muse spark 1.2  (xHigh)",
+          92.0
         ],
         [
-          "Claude Opus 4.7",
-          8.22
+          "claude opus 4.6",
+          91.84615384615384
+        ],
+        [
+          "claude opus 4.7",
+          91.38461538461539
+        ],
+        [
+          "claude opus 5 (High)",
+          91.07692307692308
+        ],
+        [
+          "muse spark 1.1",
+          90.76923076923077
+        ],
+        [
+          "gemini 3.7 flash (High)",
+          90.76923076923077
+        ],
+        [
+          "muse spark",
+          90.46153846153845
         ]
       ],
       "open": [
         [
-          "GLM 5.2 (Max)",
-          6.54
+          "kimi k3 max",
+          90.61538461538461
         ],
         [
-          "GLM 5.1",
-          1.57
+          "glm 5.3 max",
+          89.84615384615384
         ],
         [
-          "Kimi K2.7 Code Moonshot",
-          0.13
+          "qwen3.8 max",
+          89.07692307692308
         ],
         [
-          "DeepSeek V4 Pro",
-          0.83
+          "glm 5.2 max",
+          88.0
         ],
         [
-          "Kimi K2.6 Moonshot",
-          1.61
+          "glm 5.3 flash",
+          87.53846153846155
+        ],
+        [
+          "mimo v2.5 pro",
+          87.38461538461539
+        ],
+        [
+          "glm 5.1",
+          87.07692307692308
+        ],
+        [
+          "qwen3.5 max preview",
+          86.92307692307692
+        ],
+        [
+          "deepseek v4 pro high 20260813",
+          86.46153846153845
+        ],
+        [
+          "kimi k2.6",
+          86.3076923076923
         ]
       ]
     },
@@ -166,6 +251,10 @@
         [
           "Claude Fable",
           81.9
+        ],
+        [
+          "Claude Opus 5",
+          80.6
         ],
         [
           "Gemini 3.1 Pro Preview",
@@ -182,9 +271,45 @@
         [
           "Gemini 3 Pro Preview",
           76.4
+        ],
+        [
+          "Grok 4.6",
+          75.9
+        ],
+        [
+          "Muse Spark 1.2",
+          74.5
+        ],
+        [
+          "GPT-5.6 Sol Pro (xhigh)",
+          71.7
+        ],
+        [
+          "Qwen 3.7 Max",
+          70.4
         ]
       ],
       "open": [
+        [
+          "GLM 5.3",
+          66.2
+        ],
+        [
+          "Qwen 3.8 2.4T A95B",
+          62.5
+        ],
+        [
+          "DeepSeek V4 Flash",
+          61.1
+        ],
+        [
+          "Kimi K3 (max)",
+          60.7
+        ],
+        [
+          "Qwen 3.8 27B",
+          60.2
+        ],
         [
           "GLM 5.2",
           58.8
@@ -192,95 +317,159 @@
         [
           "Kimi K2.7 Code",
           57.9
-        ],
-        [
-          "GLM 5.1",
-          55.1
-        ],
-        [
-          "GLM 5",
-          53.2
         ]
       ]
     },
     "ARC Prize": {
       "closed": [
         [
-          "GPT-5.6 Sol (Low)",
-          74.5
+          "Gemini 3.7 Flash (High)",
+          95.5
         ],
         [
-          "GPT-5.6 Sol (Medium)",
-          92.5
+          "Gemini 3.7 Flash (Medium)",
+          91.2
         ],
         [
-          "GPT-5.6 Sol (High)",
-          97.0
+          "Gemini 3.7 Flash (Low)",
+          85.2
         ],
         [
-          "GPT-5.6 Sol (xHigh)",
-          97.5
+          "Grok 4.6 (XHigh)",
+          87.0
         ],
         [
-          "GPT-5.6 Sol (Max)",
-          96.5
+          "Grok 4.6 (High)",
+          87.0
+        ],
+        [
+          "Grok 4.6 (Medium)",
+          87.5
+        ],
+        [
+          "Grok 4.6 (Low)",
+          74.8
+        ],
+        [
+          "Inkling Small (XHigh)",
+          84.0
+        ],
+        [
+          "Inkling Small (High)",
+          78.0
+        ],
+        [
+          "Inkling Small (Medium)",
+          67.0
         ]
       ],
       "open": [
         [
-          "GLM-5.2",
-          77.0
+          "DeepSeek V4 Pro 0813 (Max)",
+          90.0
+        ],
+        [
+          "DeepSeek V4 Pro 0813 (High)",
+          87.2
+        ],
+        [
+          "DeepSeek V4 Pro 0813 (Low)",
+          90.5
+        ],
+        [
+          "DeepSeek V4 Pro 0813 (None)",
+          13.0
+        ],
+        [
+          "DeepSeek V4 Flash 0731 (Max)",
+          89.0
+        ],
+        [
+          "DeepSeek V4 Flash 0731 (High)",
+          87.0
+        ],
+        [
+          "DeepSeek V4 Flash 0731 (Low)",
+          84.0
+        ],
+        [
+          "DeepSeek V4 Flash 0731 (None)",
+          11.8
         ]
       ]
     },
     "Design Arena": {
       "closed": [
         [
-          "GPT-5.6 Terra",
-          72.0
-        ],
-        [
-          "GPT-5.6 Sol",
-          71.0
-        ],
-        [
-          "GPT-5.6 Luna",
-          69.0
+          "Grok 4.6",
+          76.0
         ],
         [
           "GPT-5.5",
+          70.0
+        ],
+        [
+          "GPT-5.6 Sol (XHigh)",
+          70.0
+        ],
+        [
+          "Muse Spark 1.2",
+          70.0
+        ],
+        [
+          "Claude Opus 5 (XHigh)",
+          69.0
+        ],
+        [
+          "GPT-5.6 Sol (Medium)",
+          69.0
+        ],
+        [
+          "Gemini 3.6 Flash",
           68.0
         ],
         [
-          "Claude Opus 4.8",
-          63.0
+          "Grok 4.5",
+          67.0
+        ],
+        [
+          "Gemini 3.7 Flash",
+          67.0
+        ],
+        [
+          "GPT-5.6 Terra",
+          67.0
         ]
       ],
       "open": [
         [
-          "Kimi K2.7 Code",
-          49.0
+          "Qwen3.8 Max",
+          70.0
+        ],
+        [
+          "Kimi K3",
+          63.0
         ],
         [
           "GLM 5.1",
-          48.0
+          51.0
+        ],
+        [
+          "Kimi K2.7 Code",
+          51.0
         ],
         [
           "GLM 5.2",
-          45.0
-        ],
-        [
-          "GLM 5",
-          43.0
-        ],
-        [
-          "GLM 5V Turbo",
-          40.0
+          47.0
         ]
       ]
     },
     "DeepSWE": {
       "closed": [
+        [
+          "Claude Opus 5",
+          74.0
+        ],
         [
           "GPT 5.6 Sol",
           73.0
@@ -290,98 +479,174 @@
           70.0
         ],
         [
-          "GPT 5.6 Terra",
-          70.0
-        ],
-        [
           "GPT 5.6 Luna",
           67.0
         ],
         [
           "GPT 5.5",
           67.0
+        ],
+        [
+          "Grok 4.6",
+          67.0
+        ],
+        [
+          "Gemini 3.7 Flash",
+          65.0
+        ],
+        [
+          "Claude Opus 4.8",
+          59.0
+        ],
+        [
+          "Muse Spark 1.2",
+          55.0
+        ],
+        [
+          "Claude Sonnet 5",
+          54.0
         ]
       ],
       "open": [
         [
-          "GLM 5.2",
-          44.0
+          "GLM 5.3",
+          69.0
         ],
         [
-          "Kimi K2.7 Code",
-          31.0
+          "Kimi K3",
+          69.0
+        ],
+        [
+          "GLM 5.3 Flash",
+          63.0
+        ],
+        [
+          "Deepseek V4 Pro",
+          63.0
+        ],
+        [
+          "Qwen3.8 Max",
+          57.0
+        ],
+        [
+          "Deepseek V4 Flash",
+          53.0
+        ],
+        [
+          "GLM 5.2",
+          44.0
         ]
       ]
     },
     "VendingBench": {
       "closed": [
         [
-          "Claude Opus 4.7",
+          "Claude Opus 5",
           100.0
         ],
         [
+          "Claude Opus 4.7",
+          97.8
+        ],
+        [
           "GPT-5.6 Sol",
-          88.0
+          86.0
+        ],
+        [
+          "Grok 4.6",
+          80.9
         ],
         [
           "Claude Opus 4.6",
-          73.3
+          71.7
         ],
         [
           "GPT-5.5",
-          68.8
+          67.3
         ],
         [
           "GPT-5.6 Terra",
-          67.1
+          65.7
+        ],
+        [
+          "Claude Sonnet 4.6",
+          64.4
         ]
       ],
       "open": [
         [
           "GLM-5.2",
-          76.0
+          74.4
         ],
         [
-          "Kimi K2.6",
-          56.7
+          "GLM-5.3",
+          73.0
         ]
       ]
     },
     "SWE-Marathon": {
       "closed": [
         [
-          "Grok 4.5",
-          29.0
+          "Claude Opus 5 (max)",
+          100.0
         ],
         [
-          "Claude Opus 4.8",
-          26.0
+          "Claude Opus 4.8 (max)",
+          97.6
         ],
         [
-          "Claude Fable 5",
-          24.0
+          "Claude Fable 5 (max)",
+          90.0
         ],
         [
-          "Claude Opus 4.7",
-          16.0
+          "GPT-5.6-sol (max)",
+          85.0
         ],
         [
-          "GPT-5.5",
-          12.0
+          "GPT-5.6-terra (max)",
+          65.0
+        ],
+        [
+          "Grok 4.6 (high)",
+          63.800000000000004
+        ],
+        [
+          "Claude Sonnet 5 (max)",
+          60.0
+        ],
+        [
+          "Grok 4.5 (max)",
+          58.8
+        ],
+        [
+          "GPT-5.6-luna (max)",
+          48.8
+        ],
+        [
+          "Gemini 3.7 Flash (max)",
+          45.0
         ]
       ],
       "open": [
         [
-          "GLM 5.2",
-          13.0
+          "Kimi K3 (max)",
+          96.2
         ],
         [
-          "DeepSeek V4 Pro",
-          4.0
+          "GLM 5.3 (max)",
+          85.0
         ],
         [
-          "GLM 5.1",
-          1.0
+          "GLM 5.3 Flash (max)",
+          77.6
+        ],
+        [
+          "GLM 5.2 (max)",
+          38.8
+        ],
+        [
+          "DeepSeek V4 Pro (max)",
+          21.2
         ]
       ]
     },
@@ -389,186 +654,1253 @@
       "closed": [
         [
           "Claude Fable 5",
-          90.0
+          88.0
+        ],
+        [
+          "Grok 4.6",
+          78.0
+        ],
+        [
+          "Grok 4.5",
+          72.0
         ],
         [
           "Claude Opus 4.8",
-          75.0
+          67.0
         ],
         [
           "GPT-5.5",
-          73.0
+          65.0
         ],
         [
           "Claude Opus 4.7",
-          63.0
+          56.0
         ],
         [
           "Claude Opus 4.6",
-          56.0
+          49.0
+        ],
+        [
+          "GPT-5.4",
+          46.0
+        ],
+        [
+          "Gemini 3.1 Pro",
+          34.0
+        ],
+        [
+          "Composer 2.5",
+          34.0
         ]
       ],
       "open": [
         [
+          "GLM-5.3",
+          78.0
+        ],
+        [
           "GLM-5.2",
-          74.0
+          67.0
         ],
         [
           "GLM-5.1",
-          31.0
+          26.0
         ],
         [
           "DeepSeek V4 Pro",
-          29.0
-        ],
-        [
-          "Kimi K2.6",
-          27.0
+          25.0
         ],
         [
           "Kimi K2.5",
-          26.0
+          23.0
+        ],
+        [
+          "Kimi K2.6",
+          22.0
+        ],
+        [
+          "Qwen3.6-Plus",
+          20.0
+        ]
+      ]
+    },
+    "CyberGem": {
+      "closed": [
+        [
+          "Claude Mythos Preview",
+          83.1
+        ],
+        [
+          "GPT-5.5",
+          81.8
+        ],
+        [
+          "Grok 4.6",
+          79.7
+        ],
+        [
+          "Grok 4.5",
+          79.0
+        ],
+        [
+          "GPT-5.4",
+          79.0
+        ],
+        [
+          "Claude Opus 4.6",
+          66.60000000000001
+        ],
+        [
+          "Claude Sonnet 4.6",
+          65.2
+        ],
+        [
+          "Muse Spark 1.1 (helpful-only)",
+          59.0
+        ],
+        [
+          "Claude Opus 4.5",
+          50.629999999999995
+        ],
+        [
+          "Muse Spark",
+          43.5
+        ]
+      ],
+      "open": [
+        [
+          "GLM-5.3",
+          84.5
+        ],
+        [
+          "DeepSeek-V4-Pro",
+          83.3
+        ],
+        [
+          "GLM-5.2",
+          77.2
+        ],
+        [
+          "DeepSeek-V4-Flash",
+          76.7
+        ],
+        [
+          "MiniMax M3",
+          73.1
+        ],
+        [
+          "GLM-5.1",
+          68.7
+        ],
+        [
+          "DeepSeek-V4-Pro Preview",
+          57.699999999999996
+        ],
+        [
+          "GLM-5",
+          43.2
+        ],
+        [
+          "Kimi K2.5",
+          41.3
+        ],
+        [
+          "GLM-4.7",
+          23.5
         ]
       ]
     }
   },
   "unified_closed": [
     {
-      "name": "GPT-5.6 Terra",
-      "avg": 74.5,
-      "num_benchmarks": 3,
-      "Artificial Analysis": 55.0,
+      "name": "Claude Opus 5",
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": 63.0,
       "BenchLM.ai": null,
-      "Arena.ai Agent": null,
-      "SimpleBench.com": null,
-      "ARC Prize": 96.5,
-      "Design Arena": 72.0,
-      "DeepSWE": 70.0,
-      "VendingBench": 67.1,
-      "SWE-Marathon": null,
-      "FrontierSWE": null
-    },
-    {
-      "name": "GPT-5.6 Sol",
-      "avg": 73.075,
-      "num_benchmarks": 4,
-      "Artificial Analysis": 59.0,
-      "BenchLM.ai": null,
-      "Arena.ai Agent": null,
-      "SimpleBench.com": 64.8,
+      "Arena.ai Text": 91.1,
+      "SimpleBench.com": 80.6,
       "ARC Prize": 97.5,
-      "Design Arena": 71.0,
-      "DeepSWE": 73.0,
-      "VendingBench": 88.0,
-      "SWE-Marathon": null,
-      "FrontierSWE": null
-    },
-    {
-      "name": "GPT-5.6 Luna",
-      "avg": 69.33333333333333,
-      "num_benchmarks": 3,
-      "Artificial Analysis": 51.0,
-      "BenchLM.ai": null,
-      "Arena.ai Agent": null,
-      "SimpleBench.com": null,
-      "ARC Prize": 88.0,
       "Design Arena": 69.0,
-      "DeepSWE": 67.0,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null
-    },
-    {
-      "name": "Claude Opus 4.8",
-      "avg": 59.0075,
-      "num_benchmarks": 8,
-      "Artificial Analysis": 56.0,
-      "BenchLM.ai": 85.0,
-      "Arena.ai Agent": 9.76,
-      "SimpleBench.com": 64.8,
-      "ARC Prize": 92.5,
-      "Design Arena": 63.0,
-      "DeepSWE": 59.0,
-      "VendingBench": null,
-      "SWE-Marathon": 26.0,
-      "FrontierSWE": 75.0
+      "DeepSWE": 74.0,
+      "VendingBench": 100.0,
+      "SWE-Marathon": 100.0,
+      "FrontierSWE": null,
+      "CyberGem": null
     },
     {
       "name": "Claude Fable 5",
-      "avg": 55.01666666666667,
       "num_benchmarks": 6,
-      "Artificial Analysis": 60.0,
-      "BenchLM.ai": 91.0,
-      "Arena.ai Agent": 14.1,
-      "SimpleBench.com": null,
+      "cl": 75.0,
+      "Artificial Analysis": 62.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 93.4,
+      "SimpleBench.com": 81.9,
       "ARC Prize": null,
-      "Design Arena": 51.0,
+      "Design Arena": 58.0,
       "DeepSWE": 70.0,
       "VendingBench": null,
-      "SWE-Marathon": 24.0,
-      "FrontierSWE": 90.0
+      "SWE-Marathon": 90.0,
+      "FrontierSWE": 88.0,
+      "CyberGem": null
+    },
+    {
+      "name": "Grok 4.6",
+      "num_benchmarks": 7,
+      "cl": 87.5,
+      "Artificial Analysis": 61.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 86.3,
+      "SimpleBench.com": 75.9,
+      "ARC Prize": 87.5,
+      "Design Arena": 76.0,
+      "DeepSWE": 67.0,
+      "VendingBench": 80.9,
+      "SWE-Marathon": 63.8,
+      "FrontierSWE": 78.0,
+      "CyberGem": 79.7
+    },
+    {
+      "name": "GPT-5.6 Sol",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": 61.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 89.5,
+      "SimpleBench.com": 64.8,
+      "ARC Prize": null,
+      "Design Arena": 70.0,
+      "DeepSWE": 73.0,
+      "VendingBench": 86.0,
+      "SWE-Marathon": 85.0,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "GPT-5.6 Terra",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 57.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 87.1,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": 67.0,
+      "DeepSWE": null,
+      "VendingBench": 65.7,
+      "SWE-Marathon": 65.0,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Muse Spark 1.2",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 57.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 92.0,
+      "SimpleBench.com": 74.5,
+      "ARC Prize": null,
+      "Design Arena": 70.0,
+      "DeepSWE": 55.0,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 43.5
+    },
+    {
+      "name": "Grok 4.5",
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": 56.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 87.7,
+      "SimpleBench.com": 70.0,
+      "ARC Prize": null,
+      "Design Arena": 67.0,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": 58.8,
+      "FrontierSWE": 72.0,
+      "CyberGem": 79.0
+    },
+    {
+      "name": "Gemini 3.7 Flash",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": 56.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 90.8,
+      "SimpleBench.com": null,
+      "ARC Prize": 95.5,
+      "Design Arena": 67.0,
+      "DeepSWE": 65.0,
+      "VendingBench": null,
+      "SWE-Marathon": 45.0,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Claude Sonnet 5",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": 55.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 86.3,
+      "SimpleBench.com": 60.6,
+      "ARC Prize": null,
+      "Design Arena": 58.0,
+      "DeepSWE": 54.0,
+      "VendingBench": null,
+      "SWE-Marathon": 60.0,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "GPT-5.6 Luna",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 52.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 84.9,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": 67.0,
+      "DeepSWE": 67.0,
+      "VendingBench": null,
+      "SWE-Marathon": 48.8,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Gemini 3.6 Flash",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": 52.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 89.4,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": 68.0,
+      "DeepSWE": 47.0,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Gemini 3.1 Pro",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": 48.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 90.3,
+      "SimpleBench.com": 79.6,
+      "ARC Prize": null,
+      "Design Arena": 53.0,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": 34.0,
+      "CyberGem": 38.8
+    },
+    {
+      "name": "Gemini 3.5 Flash",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 47.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 89.1,
+      "SimpleBench.com": 76.7,
+      "ARC Prize": null,
+      "Design Arena": 60.0,
+      "DeepSWE": 36.0,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Inkling",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": 42.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 82.9,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": 55.0,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Hy3",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 42.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": 56.0,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Inkling Small",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": 41.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 78.0,
+      "SimpleBench.com": null,
+      "ARC Prize": 84.0,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Qwen3.7 Plus",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 39.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 88.3,
+      "SimpleBench.com": 70.4,
+      "ARC Prize": null,
+      "Design Arena": 43.0,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Gemini 3.5 Flash-Lite",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": 37.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 85.8,
+      "SimpleBench.com": null,
+      "ARC Prize": 53.5,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Grok 4.3",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 37.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 83.4,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Muse Glimmer",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 35.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 80.9,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "gpt-oss-120b",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 24.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 69.5,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "ERNIE 5.0 Thinking Preview",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 22.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 84.0,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Mercury 2",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 22.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 68.6,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Trinity Large Thinking",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 19.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 72.2,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Magistral Medium 1.2",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 18.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 62.2,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "INTELLECT-3",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 16.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 70.2,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Ministral 3 8B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 11.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 51.8,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Granite 4.1 8B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 9.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 62.5,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Step3 VL 10B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 9.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 69.2,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Ring-flash-2.0",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 8.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 64.8,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "command a 03.2025",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 7.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 69.8,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "claude opus 4.8",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 89.4,
+      "SimpleBench.com": 64.8,
+      "ARC Prize": null,
+      "Design Arena": 65.0,
+      "DeepSWE": 59.0,
+      "VendingBench": null,
+      "SWE-Marathon": 97.6,
+      "FrontierSWE": 67.0,
+      "CyberGem": null
+    },
+    {
+      "name": "claude opus 4.6",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 93.1,
+      "SimpleBench.com": 67.6,
+      "ARC Prize": null,
+      "Design Arena": 54.0,
+      "DeepSWE": null,
+      "VendingBench": 71.7,
+      "SWE-Marathon": null,
+      "FrontierSWE": 49.0,
+      "CyberGem": 66.6
+    },
+    {
+      "name": "claude opus 4.7",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 92.6,
+      "SimpleBench.com": 61.7,
+      "ARC Prize": null,
+      "Design Arena": 55.0,
+      "DeepSWE": null,
+      "VendingBench": 97.8,
+      "SWE-Marathon": null,
+      "FrontierSWE": 56.0,
+      "CyberGem": null
+    },
+    {
+      "name": "gpt 5.5 instant",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 89.5,
+      "SimpleBench.com": 69.0,
+      "ARC Prize": null,
+      "Design Arena": 70.0,
+      "DeepSWE": 67.0,
+      "VendingBench": 67.3,
+      "SWE-Marathon": null,
+      "FrontierSWE": 65.0,
+      "CyberGem": 81.8
+    },
+    {
+      "name": "claude sonnet 4.6",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 88.0,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": 44.0,
+      "DeepSWE": null,
+      "VendingBench": 64.4,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 65.2
+    },
+    {
+      "name": "gemini 3 flash",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 88.3,
+      "SimpleBench.com": 61.1,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "gemini 3 pro",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 90.2,
+      "SimpleBench.com": 76.4,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "gpt 5.4 mini",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 88.8,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": 46.0,
+      "CyberGem": 79.0
+    },
+    {
+      "name": "grok 4 fast chat",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 79.7,
+      "SimpleBench.com": 60.5,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "muse spark 1.1",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 90.8,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": 64.0,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
     }
   ],
   "unified_open": [
     {
-      "name": "GLM-5.2",
-      "avg": 50.7925,
-      "num_benchmarks": 8,
-      "Artificial Analysis": 51.0,
-      "BenchLM.ai": 81.0,
-      "Arena.ai Agent": 6.54,
-      "SimpleBench.com": 58.8,
-      "ARC Prize": 77.0,
-      "Design Arena": 45.0,
-      "DeepSWE": 44.0,
-      "VendingBench": 76.0,
-      "SWE-Marathon": 13.0,
-      "FrontierSWE": 74.0
-    },
-    {
-      "name": "DeepSeek V4 Flash",
-      "avg": 38.88333333333333,
-      "num_benchmarks": 3,
-      "Artificial Analysis": 40.0,
-      "BenchLM.ai": 72.0,
-      "Arena.ai Agent": 4.65,
-      "SimpleBench.com": null,
+      "name": "GLM-5.3-Flash",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": 60.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 89.8,
+      "SimpleBench.com": 66.2,
       "ARC Prize": null,
       "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null
+      "DeepSWE": 69.0,
+      "VendingBench": 73.0,
+      "SWE-Marathon": 85.0,
+      "FrontierSWE": 78.0,
+      "CyberGem": 84.5
     },
     {
-      "name": "Kimi K2.7 Code",
-      "avg": 37.2575,
-      "num_benchmarks": 4,
-      "Artificial Analysis": 42.0,
+      "name": "Kimi K3",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": 60.0,
       "BenchLM.ai": null,
-      "Arena.ai Agent": 0.13,
-      "SimpleBench.com": 57.9,
+      "Arena.ai Text": 90.6,
+      "SimpleBench.com": 60.7,
       "ARC Prize": null,
-      "Design Arena": 49.0,
-      "DeepSWE": 31.0,
+      "Design Arena": 63.0,
+      "DeepSWE": 69.0,
+      "VendingBench": null,
+      "SWE-Marathon": 96.2,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Qwen3.8-Flash-Next",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 58.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 89.1,
+      "SimpleBench.com": 62.5,
+      "ARC Prize": null,
+      "Design Arena": 70.0,
+      "DeepSWE": 57.0,
       "VendingBench": null,
       "SWE-Marathon": null,
-      "FrontierSWE": null
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "GLM-5.2",
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": 53.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 88.0,
+      "SimpleBench.com": 58.8,
+      "ARC Prize": null,
+      "Design Arena": 47.0,
+      "DeepSWE": 44.0,
+      "VendingBench": 74.4,
+      "SWE-Marathon": 38.8,
+      "FrontierSWE": 67.0,
+      "CyberGem": 77.2
     },
     {
       "name": "DeepSeek V4 Pro",
-      "avg": 31.166000000000004,
       "num_benchmarks": 5,
-      "Artificial Analysis": 44.0,
-      "BenchLM.ai": 78.0,
-      "Arena.ai Agent": 0.83,
+      "cl": 62.5,
+      "Artificial Analysis": 53.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 85.8,
+      "SimpleBench.com": null,
+      "ARC Prize": 90.5,
+      "Design Arena": null,
+      "DeepSWE": 63.0,
+      "VendingBench": null,
+      "SWE-Marathon": 21.2,
+      "FrontierSWE": 25.0,
+      "CyberGem": 83.3
+    },
+    {
+      "name": "deepseek v4 flash",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 52.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 82.5,
+      "SimpleBench.com": 61.1,
+      "ARC Prize": 89.0,
+      "Design Arena": null,
+      "DeepSWE": 53.0,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 76.7
+    },
+    {
+      "name": "MiniMax-M3",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 45.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 83.4,
       "SimpleBench.com": null,
       "ARC Prize": null,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
-      "SWE-Marathon": 4.0,
-      "FrontierSWE": 29.0
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 73.1
+    },
+    {
+      "name": "Kimi K2.7 Code",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": 43.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": 57.9,
+      "ARC Prize": null,
+      "Design Arena": 51.0,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "MiMo-V2.5-Pro",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 43.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 87.4,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "solar pro4",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 42.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 73.2,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "qwen3.6 plus",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 38.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 86.2,
+      "SimpleBench.com": 63.0,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": 20.0,
+      "CyberGem": null
+    },
+    {
+      "name": "MiMo-V2-Omni",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 36.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 81.5,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Qwen3.5 Omni Plus",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 34.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 86.9,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Gemma 4 31B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 30.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 84.8,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Mistral Medium 3.5",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 30.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 81.1,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Qwen3 Coder Next",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 21.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 82.3,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Mistral Small 4",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 20.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 70.3,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Mistral Large 3",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 16.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 79.1,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Llama 4 Maverick",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 14.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 11.4,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "llama 3.3 70b instruct",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 9.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 64.2,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Olmo 3.1 32B Think",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 8.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 59.4,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Olmo 3.1 32B Instruct",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 6.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 66.2,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Phi-4 Mini",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 6.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 54.8,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "Olmo 3 7B Think",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 4.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 62.6,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "glm 5.1",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 87.1,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": 51.0,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": 26.0,
+      "CyberGem": 68.7
+    },
+    {
+      "name": "Mistral",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 43.0,
+      "Arena.ai Text": 49.5,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "kimi k2.6",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 86.3,
+      "SimpleBench.com": null,
+      "ARC Prize": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": 22.0,
+      "CyberGem": null
     }
   ]
 }

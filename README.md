@@ -32,7 +32,7 @@ LLM model performance aggregator — scores from 11 public leaderboards, unified
 ## Tech Stack
 
 - Vue 3 + Vite
-- Zero external UI libraries (no PrimeVue, no Tailwind)
+- Uses Buefy for UI components (no PrimeVue, no Tailwind)
 - Pure CSS with CSS custom properties
 
 ## Updating Data

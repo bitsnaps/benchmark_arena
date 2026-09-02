@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-02 05:11",
+  "timestamp": "2026-09-02 05:53",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -1551,7 +1551,7 @@
       "CyberGem": null
     },
     {
-      "name": "Qwen3.8-Flash-Next",
+      "name": "Qwen3.8",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": 58.0,

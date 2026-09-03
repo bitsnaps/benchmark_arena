@@ -27,11 +27,12 @@ LLM model performance aggregator — scores from 11 public leaderboards, unified
 - **Model Comparison** — select up to 5 models to compare side-by-side
 - **Search** — filter models by name instantly
 - **Coverage Level (CL)** — shows what % of core benchmarks a model appears on
-- **Closed/Open tabs** — toggle between closed-source and open-weight models
+- **Tier tabs** — All models (one merged ranking to spot the overall top LLM), Closed-source, Open-weight — each deep-linkable
 
 ## Tech Stack
 
 - Vue 3 + Vite
+- vue-router (hash history — GitHub Pages friendly): views live in `src/views`, deep-linkable routes like `#/leaderboard/all`
 - Uses Buefy for UI components (no PrimeVue, no Tailwind)
 - Pure CSS with CSS custom properties
 

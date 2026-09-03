@@ -239,6 +239,41 @@ a:hover { color: #7ff3df; }
 /* sub text under model names inside cells */
 .cell-sub { color: var(--faint); font-size: .75rem; }
 
+/* ── Buefy tabs (leaderboard tier switcher) ───────────────── */
+.b-tabs .tabs { margin-bottom: 1.1rem; }
+.b-tabs .tab-content { padding: 0; }
+.b-tabs .tabs a {
+  color: var(--muted); font-weight: 600; font-size: .88rem;
+  border-bottom-color: var(--line-2);
+}
+.b-tabs .tabs a:hover { color: var(--teal); border-bottom-color: var(--teal); }
+.b-tabs .tabs li.is-active a { color: var(--teal); border-bottom-color: var(--teal); }
+/* toggle variant → segmented control on cockpit surfaces */
+.b-tabs .tabs.is-toggle a {
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-bottom-color: var(--line); border-bottom-width: 1px;
+  color: var(--muted); border-radius: 0;
+}
+.b-tabs .tabs.is-toggle a:hover { color: var(--teal); border-color: var(--teal); background: var(--surface-3); }
+.b-tabs .tabs.is-toggle li.is-active a {
+  background: var(--teal-dim); border-color: var(--teal); color: var(--teal);
+}
+.b-tabs .tabs.is-toggle li:first-child a { border-radius: 10px 0 0 10px; }
+.b-tabs .tabs.is-toggle li:last-child a { border-radius: 0 10px 10px 0; }
+/* keep the segmented look when items wrap on narrow screens */
+.b-tabs .tabs.is-toggle.is-multiline li { margin-bottom: .35rem; }
+.b-tabs .tabs.is-toggle.is-multiline li:first-child a,
+.b-tabs .tabs.is-toggle.is-multiline li:last-child a { border-radius: 0; }
+.b-tabs .tabs.is-toggle.is-multiline a { border-radius: 10px !important; margin-right: .4rem; }
+
+/* tier chip inside merged-table model cells */
+.tier-chip {
+  font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  padding: .06rem .35rem; border-radius: 6px; margin-left: .35rem;
+}
+.tier-chip.closed { background: var(--rose-dim); color: var(--rose); }
+.tier-chip.open { background: var(--teal-dim); color: var(--teal); }
+
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 980px) {
   .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; }

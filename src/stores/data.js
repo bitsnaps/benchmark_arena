@@ -1,0 +1,120 @@
+// ── Data store (module-level singleton) ───────────────────────────────
+// Owns the benchmark snapshot and every derived list. Fetched once,
+// shared by all views. Swap later for Pinia when the app outgrows this.
+
+import { ref, computed } from 'vue';
+import { SHORT, CORE_BENCHMARKS, LEADER_BENCHES } from '../lib/constants.js';
+
+const rawData = ref(null);
+const loading = ref(true);
+const error = ref(null);
+
+let pending = null;
+
+export function ensureLoaded() {
+  if (rawData.value) return Promise.resolve();
+  if (!pending) {
+    pending = (async () => {
+      try {
+        const res = await fetch('benchmark_results.json');
+        if (!res.ok) throw new Error(String(res.status));
+        rawData.value = await res.json();
+      } catch {
+        error.value = 'Failed to load benchmark data.';
+      } finally {
+        loading.value = false;
+      }
+    })();
+  }
+  return pending;
+}
+
+// ── Benchmarks ────────────────────────────────────────────────────────
+const benchmarks = computed(() => rawData.value?.benchmarks ?? []);
+const coreBenchmarks = computed(() => benchmarks.value.filter(b => CORE_BENCHMARKS.includes(b)));
+const nonCoreBenchmarks = computed(() => benchmarks.value.filter(b => !CORE_BENCHMARKS.includes(b)));
+const perBenchData = computed(() => rawData.value?.per_benchmark || {});
+
+// ── Pivot lists ───────────────────────────────────────────────────────
+const pivotClosed = computed(() => rawData.value?.unified_closed || []);
+const pivotOpen = computed(() => rawData.value?.unified_open || []);
+
+// Merged list — every LLM in one ranking so the overall top model is
+// immediately visible (deduped by name just in case a model appears in
+// both source lists).
+const pivotAll = computed(() => {
+  const seen = new Set();
+  const out = [];
+  for (const r of [...pivotClosed.value, ...pivotOpen.value]) {
+    if (seen.has(r.name)) continue;
+    seen.add(r.name);
+    out.push(r);
+  }
+  return out;
+});
+
+const pivotFor = (tier) =>
+  tier === 'closed' ? pivotClosed.value : tier === 'open' ? pivotOpen.value : pivotAll.value;
+
+const stats = computed(() => ({
+  closed: pivotClosed.value.length,
+  open: pivotOpen.value.length,
+  totalBenchmarks: benchmarks.value.length,
+  coreBenchmarks: coreBenchmarks.value.length,
+  lastUpdated: rawData.value?.timestamp || '—',
+}));
+
+// ── Composite average over the core benchmarks ────────────────────────
+function avgForModel(row) {
+  const vals = coreBenchmarks.value
+    .map(b => row[b])
+    .filter(v => v !== null && v !== undefined);
+  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+}
+
+const topOverall = computed(() =>
+  [...pivotAll.value].sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
+const topClosed = computed(() =>
+  [...pivotClosed.value].sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
+const topOpen = computed(() =>
+  [...pivotOpen.value].sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
+
+// Per-benchmark leader cards for the overview
+const leaders = computed(() => LEADER_BENCHES.map(bench => {
+  const rows = [...pivotClosed.value, ...pivotOpen.value]
+    .filter(r => r[bench] !== null && r[bench] !== undefined);
+  const top = rows.reduce((acc, r) =>
+    acc === null || (r[bench] ?? -1) > (acc[bench] ?? -1) ? r : acc, null);
+  return { bench, short: SHORT[bench] || bench, model: top?.name ?? '—', score: top?.[bench] ?? null, count: rows.length };
+}));
+
+// ── Ranking per tier (independent of current sort/search) ─────────────
+const rankMaps = computed(() => {
+  const build = (list) => [...list]
+    .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))
+    .reduce((map, r, i) => map.set(r.name, i + 1), new Map());
+  return { all: build(pivotAll.value), closed: build(pivotClosed.value), open: build(pivotOpen.value) };
+});
+const rankOf = (tier, row) => rankMaps.value[tier]?.get(row.name);
+// Which tier a row belongs to (for the merged "all" table)
+const tierOf = (row) => rankMaps.value.closed.has(row.name) ? 'closed' : 'open';
+
+const isCore = (b) => coreBenchmarks.value.includes(b);
+
+// Full benchmark name as native tooltip on column headers
+function benchThAttrs(column) {
+  const b = column.field;
+  if (!b || b === 'avg' || b === 'rank') return {};
+  const core = coreBenchmarks.value.includes(b);
+  return { title: b + (core ? ' (core — counted in Avg)' : ' (not counted in Avg)') };
+}
+
+export function useData() {
+  return {
+    rawData, loading, error, ensureLoaded,
+    benchmarks, coreBenchmarks, nonCoreBenchmarks, perBenchData,
+    pivotClosed, pivotOpen, pivotAll, pivotFor, stats,
+    avgForModel, topOverall, topClosed, topOpen, leaders,
+    rankMaps, rankOf, tierOf, isCore, benchThAttrs,
+  };
+}

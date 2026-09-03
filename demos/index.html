@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Decision Lab — Benchmark Evaluations</title>
+<link rel="stylesheet" href="https://unpkg.com/buefy/dist/css/buefy.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #070b16;
+  --bg-elev: #0d1426;
+  --surface: #121a30;
+  --surface-2: #182240;
+  --surface-3: #1e2b4f;
+  --line: #27345a;
+  --line-2: #354675;
+  --text: #e9eefc;
+  --muted: #8b9bb8;
+  --faint: #5d6d8f;
+  --teal: #2ee6c7;
+  --teal-dim: rgba(46, 230, 199, 0.14);
+  --indigo: #8b9cff;
+  --indigo-dim: rgba(139, 156, 255, 0.16);
+  --gold: #f5c15a;
+  --gold-dim: rgba(245, 193, 90, 0.14);
+  --rose: #ff7a93;
+  --rose-dim: rgba(255, 122, 147, 0.14);
+  --green: #3ee0a0;
+  --orange: #ff9f6b;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  --radius: 16px;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--text); }
+body {
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+#app { min-height: 100vh; display: flex; flex-direction: column; }
+h1, h2, h3, h4, .brand-word, .display {
+  font-family: Outfit, "IBM Plex Sans", sans-serif;
+  letter-spacing: -0.03em;
+}
+.mono, td.num, .num, .tick { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+a { color: var(--teal); }
+a:hover { color: #7ff3df; }
+
+.lab-nav {
+  background: rgba(7, 11, 22, 0.86) !important;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  min-height: 4rem;
+}
+.lab-nav .navbar-item, .lab-nav .navbar-link { color: var(--text) !important; }
+.lab-nav .navbar-item:hover, .lab-nav .navbar-link:hover,
+.lab-nav .navbar-item.router-link-active {
+  background: var(--teal-dim) !important;
+  color: var(--teal) !important;
+}
+.lab-nav .navbar-burger { color: var(--text); }
+.brand-mark {
+  width: 34px; height: 34px; display: grid; place-items: center;
+  border-radius: 10px; margin-right: 10px;
+  background: linear-gradient(135deg, var(--teal), var(--indigo));
+  color: #061018; font-weight: 800; font-size: 14px;
+}
+.brand-word { font-weight: 700; font-size: 1.05rem; }
+.brand-word span { color: var(--teal); }
+.compare-pill {
+  background: var(--gold-dim); color: var(--gold) !important;
+  border-radius: 999px; padding: 0.35rem 0.8rem !important;
+  font-weight: 600; font-size: 0.85rem;
+}
+
+.shell { flex: 1; padding: 5.4rem 0 3rem; }
+.wrap { width: min(1240px, calc(100% - 2rem)); margin: 0 auto; }
+
+.hero-lab {
+  position: relative; overflow: hidden;
+  border: 1px solid var(--line); border-radius: 28px;
+  background:
+    radial-gradient(900px 280px at 10% -10%, rgba(46,230,199,.18), transparent 50%),
+    radial-gradient(700px 240px at 90% 0%, rgba(139,156,255,.18), transparent 46%),
+    linear-gradient(180deg, var(--bg-elev), var(--surface));
+  padding: 3.2rem 2.4rem 2.4rem;
+  box-shadow: var(--shadow);
+}
+.kicker {
+  color: var(--teal); font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+}
+.display { font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.05; margin: 0.4rem 0 1rem; }
+.lede { color: var(--muted); font-size: 1.08rem; max-width: 46rem; }
+.mesh {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.18;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 42px 42px; mask-image: linear-gradient(#000, transparent 80%);
+}
+
+.card-lab, .box, .table-wrap, .panel-lab, .stat, .step-card, .model-tile {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+.stat { padding: 1.05rem 1.15rem; }
+.stat .lbl { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: .08em; }
+.stat .val { font-size: 1.55rem; font-weight: 700; margin-top: .15rem; }
+.stat .sub { color: var(--faint); font-size: .8rem; }
+
+.section-title { font-size: 1.45rem; margin: 0 0 .35rem; }
+.section-sub { color: var(--muted); margin-bottom: 1.1rem; }
+
+.btn {
+  border: 1px solid var(--line-2); background: var(--surface-2); color: var(--text);
+  border-radius: 12px; padding: .62rem 1rem; cursor: pointer; font-weight: 600;
+  transition: .15s ease; display: inline-flex; align-items: center; gap: .45rem;
+}
+.btn:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-1px); }
+.btn.primary { background: linear-gradient(135deg, #19c8ad, #4f6dff); border: 0; color: #061018; }
+.btn.primary:hover { color: #061018; filter: brightness(1.08); }
+.btn.ghost { background: transparent; }
+.btn.tiny { padding: .32rem .6rem; font-size: .78rem; border-radius: 9px; }
+.btn.active { background: var(--teal-dim); color: var(--teal); border-color: var(--teal); }
+.btn.danger { color: var(--rose); border-color: rgba(255,122,147,.35); }
+
+.field-lab label { display: block; color: var(--muted); font-size: .8rem; margin-bottom: .3rem; font-weight: 600; }
+.input-lab, .select-lab, select.input-lab, textarea.input-lab {
+  width: 100%; background: var(--bg); color: var(--text);
+  border: 1px solid var(--line); border-radius: 12px; padding: .65rem .8rem;
+  outline: none;
+}
+.input-lab:focus, .select-lab:focus { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-dim); }
+select.input-lab option { background: var(--surface); }
+
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.chip {
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--muted);
+  border-radius: 999px; padding: .28rem .7rem; font-size: .78rem; cursor: pointer; font-weight: 600;
+}
+.chip.on, .chip:hover { color: var(--teal); border-color: var(--teal); background: var(--teal-dim); }
+
+.tag-lab {
+  display: inline-flex; align-items: center; gap: .3rem;
+  border-radius: 999px; padding: .18rem .55rem; font-size: .72rem; font-weight: 700;
+  background: var(--surface-3); color: var(--muted); border: 1px solid var(--line);
+}
+.tag-lab.teal { background: var(--teal-dim); color: var(--teal); border-color: transparent; }
+.tag-lab.gold { background: var(--gold-dim); color: var(--gold); border-color: transparent; }
+.tag-lab.indigo { background: var(--indigo-dim); color: var(--indigo); border-color: transparent; }
+.tag-lab.rose { background: var(--rose-dim); color: var(--rose); border-color: transparent; }
+
+.table-wrap { overflow: auto; }
+table.lab {
+  width: 100%; border-collapse: collapse; font-size: .9rem;
+}
+table.lab th {
+  position: sticky; top: 0; z-index: 1;
+  background: var(--surface-2); color: var(--muted); font-size: .72rem;
+  letter-spacing: .06em; text-transform: uppercase; text-align: left;
+  padding: .8rem .7rem; cursor: pointer; white-space: nowrap; user-select: none;
+}
+table.lab td { padding: .72rem .7rem; border-top: 1px solid var(--line); vertical-align: middle; }
+table.lab tr { cursor: pointer; }
+table.lab tbody tr:hover { background: rgba(46,230,199,.05); }
+table.lab .num { text-align: right; white-space: nowrap; }
+.model-cell { display: flex; align-items: center; gap: .7rem; }
+.av {
+  width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
+  font-weight: 800; font-size: .78rem; color: #061018; flex: none;
+}
+.bar {
+  height: 8px; background: #0b1224; border-radius: 99px; overflow: hidden; min-width: 72px;
+}
+.bar > i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--indigo), var(--teal)); }
+.rank {
+  width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px;
+  background: var(--surface-3); color: var(--muted); font-weight: 700; font-size: .8rem;
+}
+.rank.g { background: linear-gradient(135deg, #f5c15a, #f97316); color: #2a1600; }
+.rank.s { background: linear-gradient(135deg, #d0d7e8, #8b9bb8); color: #1a2233; }
+.rank.b { background: linear-gradient(135deg, #d97757, #9a5b3c); color: #2a1208; }
+
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.stack { display: flex; flex-direction: column; gap: 1rem; }
+.row { display: flex; gap: .7rem; flex-wrap: wrap; align-items: center; }
+.mt { margin-top: 1.6rem; }
+.mt-sm { margin-top: .8rem; }
+
+.model-tile { padding: 1.1rem; transition: .15s ease; }
+.model-tile:hover { transform: translateY(-3px); border-color: var(--line-2); }
+.tile-top { display: flex; justify-content: space-between; align-items: flex-start; gap: .6rem; }
+.score-xl { font-size: 1.8rem; font-weight: 800; color: var(--teal); }
+
+.tabs-lab { display: flex; gap: .35rem; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: .6rem; margin-bottom: 1rem; }
+.tabs-lab button { background: none; border: 0; color: var(--muted); padding: .45rem .75rem; cursor: pointer; font-weight: 600; border-radius: 9px; }
+.tabs-lab button.on { background: var(--teal-dim); color: var(--teal); }
+
+.hbar { display: grid; grid-template-columns: 180px 1fr 64px; gap: .7rem; align-items: center; margin: .45rem 0; }
+.hbar .name { font-size: .86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.track { height: 12px; background: #0b1224; border-radius: 99px; overflow: hidden; }
+.track > i { display: block; height: 100%; border-radius: 99px; }
+
+.scatter { width: 100%; height: 460px; background: radial-gradient(circle at 30% 20%, rgba(139,156,255,.08), transparent 40%), var(--bg); border-radius: 14px; border: 1px solid var(--line); }
+.tooltip {
+  position: fixed; z-index: 50; pointer-events: none;
+  background: #0b1224; border: 1px solid var(--line-2); color: var(--text);
+  padding: .5rem .7rem; border-radius: 10px; font-size: .8rem; box-shadow: var(--shadow);
+}
+
+.step-card { padding: 1rem; cursor: pointer; transition: .15s ease; }
+.step-card:hover, .step-card.on { border-color: var(--teal); background: linear-gradient(180deg, var(--teal-dim), var(--surface)); }
+.wizard-bar { height: 6px; background: var(--surface-3); border-radius: 99px; overflow: hidden; }
+.wizard-bar > i { display: block; height: 100%; background: linear-gradient(90deg, var(--teal), var(--indigo)); }
+
+.compare-grid { display: grid; gap: 1rem; }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: .35rem .8rem; font-size: .86rem; padding: .35rem 0; border-bottom: 1px solid var(--line); }
+.kv .k { color: var(--muted); }
+.winner { color: var(--teal); font-weight: 700; }
+.loser { color: var(--faint); }
+
+.footer-lab { border-top: 1px solid var(--line); color: var(--faint); padding: 1.4rem 0 2rem; font-size: .82rem; }
+.notice {
+  background: var(--gold-dim); border: 1px solid rgba(245,193,90,.25);
+  color: #f3d9a0; border-radius: 12px; padding: .8rem 1rem; font-size: .84rem;
+}
+
+.weight { display: grid; grid-template-columns: 140px 1fr 36px; gap: .6rem; align-items: center; font-size: .8rem; }
+input[type=range] { width: 100%; accent-color: var(--teal); }
+
+.page-head { margin-bottom: 1.2rem; }
+.crumb { color: var(--faint); font-size: .8rem; margin-bottom: .35rem; }
+.crumb a { color: var(--muted); text-decoration: none; }
+
+@media (max-width: 980px) {
+  .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; }
+  .hbar { grid-template-columns: 120px 1fr 52px; }
+}
+@media (max-width: 700px) {
+  .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .hero-lab { padding: 2rem 1.2rem; }
+  .hbar { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script type="application/json" id="llm-benchmarks">
+{
+  "meta": {
+    "updated": "2026-03-01",
+    "disclaimer": "Aggregated decision-support snapshot synthesized from public leaderboards and provider cards (LMSYS Arena, Artificial Analysis, SWE-bench Verified, LiveBench, HELM, Open LLM Leaderboard). Not an official ranking. Verify live pricing and evals before procurement."
+  },
+  "sources": [
+    {"id": "lmsys", "name": "LMSYS Chatbot Arena", "url": "https://lmarena.ai"},
+    {"id": "aa", "name": "Artificial Analysis", "url": "https://artificialanalysis.ai"},
+    {"id": "swe", "name": "SWE-bench Verified", "url": "https://www.swebench.com"},
+    {"id": "lb", "name": "LiveBench", "url": "https://livebench.ai"},
+    {"id": "helm", "name": "Stanford HELM", "url": "https://crfm.stanford.edu/helm"},
+    {"id": "hf", "name": "Open LLM Leaderboard", "url": "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard"}
+  ],
+  "metrics": [
+    {"key": "arenaElo", "label": "Arena Elo", "short": "Arena", "source": "LMSYS", "group": "preference", "desc": "Blind human preference battles. Best proxy for everyday chat quality.", "unit": "Elo", "weight": 18},
+    {"key": "aaIndex", "label": "AA Intelligence", "short": "AA Idx", "source": "Artificial Analysis", "group": "overall", "desc": "Composite intelligence index across reasoning, knowledge, math and code.", "unit": "idx", "weight": 16},
+    {"key": "mmluPro", "label": "MMLU-Pro", "short": "MMLU-P", "source": "Open LLM / papers", "group": "knowledge", "desc": "Harder multitask academic questions with ten choices. Knowledge + robustness.", "unit": "%", "weight": 8},
+    {"key": "gpqa", "label": "GPQA Diamond", "short": "GPQA", "source": "papers / AA", "group": "reasoning", "desc": "Graduate-level science questions designed to be Google-proof.", "unit": "%", "weight": 12},
+    {"key": "math", "label": "MATH", "short": "MATH", "source": "papers / AA", "group": "reasoning", "desc": "Competition mathematics word problems.", "unit": "%", "weight": 8},
+    {"key": "aime", "label": "AIME 2025", "short": "AIME", "source": "live evals", "group": "reasoning", "desc": "Invitation-level contest math. Stress test for multi-step reasoning.", "unit": "%", "weight": 6},
+    {"key": "humaneval", "label": "HumanEval", "short": "HE", "source": "eval harness", "group": "code", "desc": "Functional correctness on short Python programming puzzles.", "unit": "%", "weight": 6},
+    {"key": "swebench", "label": "SWE-bench Verified", "short": "SWE", "source": "SWE-bench", "group": "code", "desc": "Resolving real GitHub issues in popular repositories. Best coding-at-work proxy.", "unit": "%", "weight": 16},
+    {"key": "livebench", "label": "LiveBench", "short": "Live", "source": "LiveBench", "group": "overall", "desc": "Frequently refreshed tasks to reduce contamination.", "unit": "%", "weight": 10},
+    {"key": "mmmu", "label": "MMMU", "short": "MMMU", "source": "multimodal evals", "group": "multimodal", "desc": "College-level multimodal understanding across diagrams, charts and figures.", "unit": "%", "weight": 0}
+  ],
+  "useCases": [
+    {"id": "coding", "icon": "fa-code", "title": "Software engineering", "blurb": "Repos, reviews, agents, patches.", "weights": {"swebench": 40, "humaneval": 18, "livebench": 10, "arenaElo": 12, "aaIndex": 10, "price": 10}},
+    {"id": "reasoning", "icon": "fa-brain", "title": "Hard reasoning & math", "blurb": "Science, proofs, planning.", "weights": {"gpqa": 28, "aime": 18, "math": 16, "aaIndex": 18, "arenaElo": 10, "price": 10}},
+    {"id": "writing", "icon": "fa-pen-nib", "title": "Writing & comms", "blurb": "Tone, drafts, editing, briefs.", "weights": {"arenaElo": 40, "aaIndex": 20, "livebench": 10, "price": 15, "speed": 15}},
+    {"id": "research", "icon": "fa-book-open", "title": "Research & analysis", "blurb": "Papers, synthesis, long context.", "weights": {"mmluPro": 16, "gpqa": 16, "livebench": 14, "arenaElo": 16, "aaIndex": 14, "context": 14, "price": 10}},
+    {"id": "rag", "icon": "fa-database", "title": "RAG / support / ops", "blurb": "Grounded answers at scale.", "weights": {"arenaElo": 20, "mmluPro": 12, "price": 28, "speed": 20, "context": 20}},
+    {"id": "extract", "icon": "fa-table", "title": "Extraction & structured out", "blurb": "JSON, forms, classification.", "weights": {"aaIndex": 18, "humaneval": 14, "arenaElo": 18, "price": 25, "speed": 25}},
+    {"id": "multi", "icon": "fa-images", "title": "Multimodal", "blurb": "Images, slides, screenshots.", "weights": {"mmmu": 42, "arenaElo": 22, "aaIndex": 12, "price": 12, "speed": 12}},
+    {"id": "volume", "icon": "fa-bolt", "title": "High-volume / cheap", "blurb": "Batch jobs and product features.", "weights": {"price": 46, "speed": 22, "arenaElo": 16, "aaIndex": 16}}
+  ],
+  "models": [
+    {"id": "o3", "name": "OpenAI o3", "short": "o3", "provider": "OpenAI", "providerId": "openai", "license": "proprietary", "released": "2025-04", "contextWindow": 200000, "maxOutput": 100000, "modalities": ["text", "image"], "color": "#10a37f", "pricing": {"input": 10.0, "output": 40.0}, "speed": {"tps": 32, "ttft": 1.8}, "benchmarks": {"arenaElo": 1412, "aaIndex": 73.4, "mmluPro": 85.6, "gpqa": 83.3, "math": 96.4, "aime": 88.9, "humaneval": 95.1, "swebench": 69.1, "livebench": 71.2, "mmmu": 78.4}, "bestFor": ["reasoning", "coding", "research"], "strengths": ["Frontier science and math", "Strong agentic coding", "Reliable tool use"], "weaknesses": ["Premium price", "Higher latency than Flash-class models"], "notes": "Flagship reasoning model. Best when a wrong answer is expensive."},
+    {"id": "claude-4-opus", "name": "Claude 4 Opus", "short": "Opus 4", "provider": "Anthropic", "providerId": "anthropic", "license": "proprietary", "released": "2025-05", "contextWindow": 200000, "maxOutput": 32000, "modalities": ["text", "image", "file"], "color": "#d97757", "pricing": {"input": 15.0, "output": 75.0}, "speed": {"tps": 38, "ttft": 1.4}, "benchmarks": {"arenaElo": 1396, "aaIndex": 71.8, "mmluPro": 84.1, "gpqa": 74.6, "math": 91.2, "aime": 76.4, "humaneval": 94.4, "swebench": 72.5, "livebench": 68.8, "mmmu": 76.9}, "bestFor": ["coding", "writing", "research"], "strengths": ["Best-in-class SWE-bench", "Long-form taste and instruction following", "Careful on ambiguous tasks"], "weaknesses": ["Most expensive output tokens", "Overkill for classification"], "notes": "The tasteful workhorse for hard software and high-stakes writing."},
+    {"id": "gemini-2-5-pro", "name": "Gemini 2.5 Pro", "short": "Gem 2.5 Pro", "provider": "Google", "providerId": "google", "license": "proprietary", "released": "2025-03", "contextWindow": 1048576, "maxOutput": 65536, "modalities": ["text", "image", "file", "audio", "video"], "color": "#4285f4", "pricing": {"input": 1.25, "output": 10.0}, "speed": {"tps": 74, "ttft": 0.7}, "benchmarks": {"arenaElo": 1388, "aaIndex": 72.1, "mmluPro": 86.0, "gpqa": 84.0, "math": 95.1, "aime": 86.7, "humaneval": 92.8, "swebench": 63.8, "livebench": 70.4, "mmmu": 81.7}, "bestFor": ["research", "reasoning", "multi"], "strengths": ["1M context", "Top-tier science and multimodal", "Strong price/intelligence"], "weaknesses": ["Coding agents still trail Claude on SWE-bench", "Occasional verbosity"], "notes": "Default pick when the prompt is a pile of documents or mixed media."},
+    {"id": "gpt-4-1", "name": "GPT-4.1", "short": "4.1", "provider": "OpenAI", "providerId": "openai", "license": "proprietary", "released": "2025-04", "contextWindow": 1048576, "maxOutput": 32768, "modalities": ["text", "image"], "color": "#10a37f", "pricing": {"input": 2.0, "output": 8.0}, "speed": {"tps": 88, "ttft": 0.55}, "benchmarks": {"arenaElo": 1372, "aaIndex": 68.9, "mmluPro": 82.7, "gpqa": 69.4, "math": 87.6, "aime": 62.2, "humaneval": 94.8, "swebench": 54.6, "livebench": 64.1, "mmmu": 75.2}, "bestFor": ["coding", "extract", "rag"], "strengths": ["Instruction following", "1M context", "Stable production APIs"], "weaknesses": ["Reasoning below o-series", "Vision slightly behind Gemini"], "notes": "Balanced production model if you already live in the OpenAI stack."},
+    {"id": "claude-3-7-sonnet", "name": "Claude 3.7 Sonnet", "short": "Sonnet 3.7", "provider": "Anthropic", "providerId": "anthropic", "license": "proprietary", "released": "2025-02", "contextWindow": 200000, "maxOutput": 64000, "modalities": ["text", "image", "file"], "color": "#d97757", "pricing": {"input": 3.0, "output": 15.0}, "speed": {"tps": 67, "ttft": 0.62}, "benchmarks": {"arenaElo": 1365, "aaIndex": 66.4, "mmluPro": 80.5, "gpqa": 68.0, "math": 86.3, "aime": 54.8, "humaneval": 93.7, "swebench": 70.3, "livebench": 63.5, "mmmu": 72.8}, "bestFor": ["coding", "writing"], "strengths": ["Extended thinking mode", "Repo-scale coding", "Excellent prose"], "weaknesses": ["Price above Flash/mini class", "Math below dedicated reasoners"], "notes": "Sweet spot for daily engineering and editorial work."},
+    {"id": "grok-3", "name": "Grok 3", "short": "Grok 3", "provider": "xAI", "providerId": "xai", "license": "proprietary", "released": "2025-02", "contextWindow": 131072, "maxOutput": 32768, "modalities": ["text", "image"], "color": "#e8e8e8", "pricing": {"input": 3.0, "output": 15.0}, "speed": {"tps": 79, "ttft": 0.5}, "benchmarks": {"arenaElo": 1358, "aaIndex": 65.2, "mmluPro": 79.8, "gpqa": 66.7, "math": 85.1, "aime": 52.4, "humaneval": 91.5, "swebench": 52.0, "livebench": 61.9, "mmmu": 70.4}, "bestFor": ["writing", "research"], "strengths": ["Punchy style", "Solid real-time flavor", "Competitive generalist"], "weaknesses": ["Smaller ecosystem of tools", "Not the coding leader"], "notes": "Strong generalist when you want a less corporate voice."},
+    {"id": "o1", "name": "OpenAI o1", "short": "o1", "provider": "OpenAI", "providerId": "openai", "license": "proprietary", "released": "2024-12", "contextWindow": 200000, "maxOutput": 100000, "modalities": ["text", "image"], "color": "#10a37f", "pricing": {"input": 15.0, "output": 60.0}, "speed": {"tps": 24, "ttft": 2.4}, "benchmarks": {"arenaElo": 1352, "aaIndex": 67.8, "mmluPro": 83.4, "gpqa": 78.0, "math": 94.8, "aime": 74.0, "humaneval": 92.4, "swebench": 48.9, "livebench": 62.7, "mmmu": 73.9}, "bestFor": ["reasoning", "research"], "strengths": ["Deep chain-of-thought", "Excellent contest math", "Careful deductions"], "weaknesses": ["Slow and costly", "Superseded by o3 on most suites"], "notes": "Still viable, but o3 or Gemini 2.5 Pro usually dominate the same budget."},
+    {"id": "deepseek-r1", "name": "DeepSeek R1", "short": "R1", "provider": "DeepSeek", "providerId": "deepseek", "license": "open-weights", "released": "2025-01", "contextWindow": 164000, "maxOutput": 32768, "modalities": ["text"], "color": "#4f6dff", "pricing": {"input": 0.55, "output": 2.19}, "speed": {"tps": 58, "ttft": 0.9}, "benchmarks": {"arenaElo": 1346, "aaIndex": 66.9, "mmluPro": 81.2, "gpqa": 71.5, "math": 95.8, "aime": 79.8, "humaneval": 90.2, "swebench": 49.2, "livebench": 63.0, "mmmu": 0}, "bestFor": ["reasoning", "volume"], "strengths": ["o1-class math at a fraction of the price", "Open weights", "Great distillation base"], "weaknesses": ["No native vision", "Verbose traces", "Weaker product polish"], "notes": "The value bomb for reasoning workloads and self-hosting."},
+    {"id": "o3-mini", "name": "OpenAI o3-mini", "short": "o3-mini", "provider": "OpenAI", "providerId": "openai", "license": "proprietary", "released": "2025-01", "contextWindow": 200000, "maxOutput": 100000, "modalities": ["text"], "color": "#10a37f", "pricing": {"input": 1.1, "output": 4.4}, "speed": {"tps": 96, "ttft": 0.7}, "benchmarks": {"arenaElo": 1331, "aaIndex": 64.0, "mmluPro": 79.5, "gpqa": 76.8, "math": 93.2, "aime": 70.6, "humaneval": 91.8, "swebench": 49.3, "livebench": 60.8, "mmmu": 0}, "bestFor": ["reasoning", "coding"], "strengths": ["Reasoning near o1", "Much cheaper and faster", "Good for eval loops"], "weaknesses": ["No vision", "Less tasteful prose than Claude"], "notes": "First reasoning model to try before paying for o3."},
+    {"id": "gpt-4o", "name": "GPT-4o", "short": "4o", "provider": "OpenAI", "providerId": "openai", "license": "proprietary", "released": "2024-05", "contextWindow": 128000, "maxOutput": 16384, "modalities": ["text", "image", "audio"], "color": "#10a37f", "pricing": {"input": 2.5, "output": 10.0}, "speed": {"tps": 86, "ttft": 0.45}, "benchmarks": {"arenaElo": 1314, "aaIndex": 61.8, "mmluPro": 74.6, "gpqa": 53.6, "math": 76.6, "aime": 13.4, "humaneval": 90.2, "swebench": 33.2, "livebench": 53.4, "mmmu": 69.1}, "bestFor": ["writing", "multi", "rag"], "strengths": ["Low latency multimodal", "Mature tooling", "Voice-ready"], "weaknesses": ["Aging reasoning scores", "SWE-bench well behind 2025 peers"], "notes": "Still a fine realtime multimodal endpoint, no longer the overall leader."},
+    {"id": "deepseek-v3", "name": "DeepSeek V3", "short": "V3", "provider": "DeepSeek", "providerId": "deepseek", "license": "open-weights", "released": "2024-12", "contextWindow": 128000, "maxOutput": 8192, "modalities": ["text"], "color": "#4f6dff", "pricing": {"input": 0.27, "output": 1.1}, "speed": {"tps": 91, "ttft": 0.48}, "benchmarks": {"arenaElo": 1309, "aaIndex": 62.6, "mmluPro": 75.9, "gpqa": 59.1, "math": 90.2, "aime": 39.2, "humaneval": 89.4, "swebench": 42.0, "livebench": 55.8, "mmmu": 0}, "bestFor": ["volume", "coding", "extract"], "strengths": ["Extraordinary $/quality", "Open weights", "Strong generalist for the price"], "weaknesses": ["No vision", "Frontier agents still prefer Claude/o3"], "notes": "Default cheap brain for batch and product inference."},
+    {"id": "gemini-2-5-flash", "name": "Gemini 2.5 Flash", "short": "Gem Flash", "provider": "Google", "providerId": "google", "license": "proprietary", "released": "2025-03", "contextWindow": 1048576, "maxOutput": 65536, "modalities": ["text", "image", "file", "audio"], "color": "#4285f4", "pricing": {"input": 0.15, "output": 0.6}, "speed": {"tps": 260, "ttft": 0.28}, "benchmarks": {"arenaElo": 1296, "aaIndex": 59.4, "mmluPro": 76.4, "gpqa": 60.2, "math": 82.5, "aime": 41.0, "humaneval": 88.1, "swebench": 38.6, "livebench": 54.7, "mmmu": 72.6}, "bestFor": ["volume", "rag", "multi"], "strengths": ["Very fast", "Huge context", "Multimodal on a budget"], "weaknesses": ["Not a frontier reasoner", "Can skip nuance"], "notes": "The throughput king for RAG, extraction and UI features."},
+    {"id": "llama-4-maverick", "name": "Llama 4 Maverick", "short": "Llama 4", "provider": "Meta", "providerId": "meta", "license": "open-weights", "released": "2025-04", "contextWindow": 1048576, "maxOutput": 16384, "modalities": ["text", "image"], "color": "#0668E1", "pricing": {"input": 0.2, "output": 0.6}, "speed": {"tps": 118, "ttft": 0.4}, "benchmarks": {"arenaElo": 1288, "aaIndex": 58.7, "mmluPro": 74.2, "gpqa": 57.4, "math": 80.1, "aime": 34.6, "humaneval": 87.6, "swebench": 36.4, "livebench": 53.1, "mmmu": 71.0}, "bestFor": ["volume", "rag", "multi"], "strengths": ["Open weights + long context", "Easy to fine-tune", "Friendly unit economics"], "weaknesses": ["Below closed frontier on agents", "Quality varies by host"], "notes": "Best open generalist if you need to own the weights."},
+    {"id": "mistral-large-2", "name": "Mistral Large 2", "short": "Large 2", "provider": "Mistral", "providerId": "mistral", "license": "proprietary", "released": "2024-07", "contextWindow": 128000, "maxOutput": 8192, "modalities": ["text"], "color": "#ff7000", "pricing": {"input": 2.0, "output": 6.0}, "speed": {"tps": 72, "ttft": 0.52}, "benchmarks": {"arenaElo": 1276, "aaIndex": 56.1, "mmluPro": 71.4, "gpqa": 51.2, "math": 71.5, "aime": 18.7, "humaneval": 88.4, "swebench": 28.4, "livebench": 49.6, "mmmu": 0}, "bestFor": ["writing", "extract"], "strengths": ["EU-friendly option", "Snappy prose", "Simple pricing"], "weaknesses": ["Aging vs 2025 frontier", "No first-class vision here"], "notes": "Consider when data residency or Mistral platform integration matters."},
+    {"id": "gpt-4-1-mini", "name": "GPT-4.1 mini", "short": "4.1 mini", "provider": "OpenAI", "providerId": "openai", "license": "proprietary", "released": "2025-04", "contextWindow": 1048576, "maxOutput": 32768, "modalities": ["text", "image"], "color": "#10a37f", "pricing": {"input": 0.4, "output": 1.6}, "speed": {"tps": 142, "ttft": 0.32}, "benchmarks": {"arenaElo": 1271, "aaIndex": 57.6, "mmluPro": 73.0, "gpqa": 54.8, "math": 78.4, "aime": 28.5, "humaneval": 89.9, "swebench": 35.8, "livebench": 51.9, "mmmu": 68.4}, "bestFor": ["volume", "extract", "rag"], "strengths": ["Cheap long context", "Good enough for most product tasks", "Vision included"], "weaknesses": ["Not for hard science", "Agents stall on big repos"], "notes": "The practical default for 80% of application traffic."},
+    {"id": "qwen-2-5-72b", "name": "Qwen 2.5 72B", "short": "Qwen 72B", "provider": "Alibaba", "providerId": "alibaba", "license": "open-weights", "released": "2024-09", "contextWindow": 131072, "maxOutput": 8192, "modalities": ["text"], "color": "#611232", "pricing": {"input": 0.13, "output": 0.39}, "speed": {"tps": 84, "ttft": 0.5}, "benchmarks": {"arenaElo": 1263, "aaIndex": 55.4, "mmluPro": 71.6, "gpqa": 48.8, "math": 83.1, "aime": 22.4, "humaneval": 86.5, "swebench": 27.1, "livebench": 48.2, "mmmu": 0}, "bestFor": ["volume", "extract"], "strengths": ["Tiny price", "Strong math for size", "Great self-host candidate"], "weaknesses": ["English taste behind Claude", "No vision in this SKU"], "notes": "Use when you need a capable open model and aggressive unit cost."},
+    {"id": "claude-3-5-haiku", "name": "Claude 3.5 Haiku", "short": "Haiku", "provider": "Anthropic", "providerId": "anthropic", "license": "proprietary", "released": "2024-10", "contextWindow": 200000, "maxOutput": 8192, "modalities": ["text", "image"], "color": "#d97757", "pricing": {"input": 0.8, "output": 4.0}, "speed": {"tps": 148, "ttft": 0.3}, "benchmarks": {"arenaElo": 1249, "aaIndex": 52.8, "mmluPro": 64.4, "gpqa": 41.6, "math": 69.4, "aime": 10.8, "humaneval": 84.2, "swebench": 26.8, "livebench": 46.5, "mmmu": 62.1}, "bestFor": ["volume", "extract", "writing"], "strengths": ["Fast Claude taste", "Solid lightweight vision", "Predictable behavior"], "weaknesses": ["Not a reasoner", "Output price higher than Flash"], "notes": "Nice moderator/router/summarizer in an Anthropic stack."}
+  ]
+}
+</script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/vue-router@4/dist/vue-router.global.prod.js"></script>
+<script>
+const { createApp, ref, reactive, computed, watch, onMounted, onUnmounted } = Vue;
+const { createRouter, createWebHashHistory, useRoute, useRouter } = VueRouter;
+
+const DATA = JSON.parse(document.getElementById("llm-benchmarks").textContent);
+const MODELS = DATA.models;
+const METRICS = DATA.metrics;
+const USE_CASES = DATA.useCases;
+
+const store = reactive({
+  compareIds: [],
+  weights: Object.fromEntries(METRICS.map(m => [m.key, m.weight])),
+  includePrice: 12,
+  includeSpeed: 0,
+  includeContext: 0,
+  providers: [],
+  licenses: [],
+  query: "",
+  toast: ""
+});
+
+function toast(msg) {
+  store.toast = msg;
+  setTimeout(() => { if (store.toast === msg) store.toast = ""; }, 2200);
+}
+
+function blendedPrice(m) {
+  return m.pricing.input * 0.4 + m.pricing.output * 0.6;
+}
+function fmtMoney(n) {
+  if (n >= 10) return "$" + n.toFixed(2);
+  if (n >= 1) return "$" + n.toFixed(2);
+  return "$" + n.toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+}
+function fmtTokens(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1) + "M";
+  if (n >= 1000) return Math.round(n / 1000) + "K";
+  return String(n);
+}
+function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+function avg(arr) { return arr.length ? arr.reduce((s, x) => s + x, 0) / arr.length : 0; }
+
+const metricExtents = {};
+METRICS.forEach(metric => {
+  const vals = MODELS.map(m => m.benchmarks[metric.key]).filter(v => v != null && v > 0);
+  metricExtents[metric.key] = { min: Math.min(...vals), max: Math.max(...vals) };
+});
+const priceExt = { min: Math.min(...MODELS.map(blendedPrice)), max: Math.max(...MODELS.map(blendedPrice)) };
+const speedExt = { min: Math.min(...MODELS.map(m => m.speed.tps)), max: Math.max(...MODELS.map(m => m.speed.tps)) };
+const ctxExt = { min: Math.min(...MODELS.map(m => m.contextWindow)), max: Math.max(...MODELS.map(m => m.contextWindow)) };
+
+function normMetric(key, value) {
+  if (value == null || value <= 0) return null;
+  const { min, max } = metricExtents[key];
+  if (max === min) return 50;
+  return ((value - min) / (max - min)) * 100;
+}
+function normPrice(m) {
+  const p = Math.log(blendedPrice(m));
+  const a = Math.log(priceExt.min), b = Math.log(priceExt.max);
+  return (1 - (p - a) / (b - a)) * 100;
+}
+function normSpeed(m) {
+  return ((m.speed.tps - speedExt.min) / (speedExt.max - speedExt.min)) * 100;
+}
+function normContext(m) {
+  const a = Math.log(ctxExt.min), b = Math.log(ctxExt.max);
+  return ((Math.log(m.contextWindow) - a) / (b - a)) * 100;
+}
+
+function overallScore(m, weights = store.weights) {
+  let num = 0, den = 0;
+  METRICS.forEach(metric => {
+    const w = Number(weights[metric.key] || 0);
+    const n = normMetric(metric.key, m.benchmarks[metric.key]);
+    if (w > 0 && n != null) { num += n * w; den += w; }
+  });
+  if (store.includePrice > 0) { num += normPrice(m) * store.includePrice; den += store.includePrice; }
+  if (store.includeSpeed > 0) { num += normSpeed(m) * store.includeSpeed; den += store.includeSpeed; }
+  if (store.includeContext > 0) { num += normContext(m) * store.includeContext; den += store.includeContext; }
+  return den ? num / den : 0;
+}
+function valueScore(m) {
+  const perf = overallScore(m, Object.fromEntries(METRICS.map(x => [x.key, x.weight])));
+  return perf * (normPrice(m) / 50);
+}
+function scoreColor(v) {
+  if (v >= 80) return "var(--teal)";
+  if (v >= 60) return "var(--indigo)";
+  if (v >= 40) return "var(--gold)";
+  return "var(--rose)";
+}
+function providerColor(id) {
+  return ({ openai: "#10a37f", anthropic: "#d97757", google: "#4285f4", deepseek: "#6d7cff", meta: "#0668E1", xai: "#cfd3dc", mistral: "#ff7000", alibaba: "#c73b5f" })[id] || "#8b9bb8";
+}
+function initials(m) { return m.short.replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase(); }
+function byId(id) { return MODELS.find(m => m.id === id); }
+
+const rankedOverall = computed(() => [...MODELS].sort((a, b) => overallScore(b) - overallScore(a)));
+const laurels = computed(() => {
+  const pick = (fn) => [...MODELS].sort((a, b) => fn(b) - fn(a))[0];
+  return {
+    overall: pick(overallScore),
+    value: pick(valueScore),
+    coding: pick(m => m.benchmarks.swebench || 0),
+    reasoning: pick(m => (m.benchmarks.gpqa || 0) + (m.benchmarks.aime || 0)),
+    context: pick(m => m.contextWindow),
+    speed: pick(m => m.speed.tps),
+    cheap: [...MODELS].sort((a, b) => blendedPrice(a) - blendedPrice(b))[0],
+    open: pick(m => m.license === "open-weights" ? overallScore(m) + 1000 : overallScore(m))
+  };
+});
+
+function toggleCompare(id) {
+  const i = store.compareIds.indexOf(id);
+  if (i >= 0) store.compareIds.splice(i, 1);
+  else if (store.compareIds.length >= 4) toast("Compare up to 4 models");
+  else store.compareIds.push(id);
+}
+function filteredModels() {
+  const q = store.query.trim().toLowerCase();
+  return MODELS.filter(m => {
+    if (q && !(`${m.name} ${m.provider} ${m.short}`.toLowerCase().includes(q))) return false;
+    if (store.providers.length && !store.providers.includes(m.providerId)) return false;
+    if (store.licenses.length && !store.licenses.includes(m.license)) return false;
+    return true;
+  });
+}
+
+const ScoreBar = {
+  props: ["value", "label"],
+  template: `<div>
+    <div class="bar" :title="label"><i :style="{width: clamp + '%', background: 'linear-gradient(90deg, var(--indigo), var(--teal))'}"></i></div>
+  </div>`,
+  setup(p) { return { clamp: computed(() => clamp(p.value, 0, 100)) }; }
+};
+
+const ModelAvatar = {
+  props: ["model", "size"],
+  template: `<div class="av" :style="{background: providerColor(model.providerId), width: (size||34)+'px', height: (size||34)+'px', fontSize: ((size||34)*0.34)+'px'}">{{ initials(model) }}</div>`,
+  setup() { return { providerColor, initials }; }
+};
+
+const NavBar = {
+  template: `
+  <nav class="navbar is-fixed-top lab-nav" role="navigation">
+    <div class="wrap" style="display:flex;width:min(1240px,calc(100% - 2rem));">
+      <div class="navbar-brand">
+        <router-link to="/" class="navbar-item" @click="open=false">
+          <span class="brand-mark">λ</span>
+          <span class="brand-word">LLM <span>Decision Lab</span></span>
+        </router-link>
+        <a class="navbar-burger" :class="{'is-active': open}" @click="open=!open"><span></span><span></span><span></span></a>
+      </div>
+      <div class="navbar-menu" :class="{'is-active': open}">
+        <div class="navbar-start">
+          <router-link class="navbar-item" to="/leaderboard" @click="open=false">Leaderboard</router-link>
+          <router-link class="navbar-item" to="/metrics" @click="open=false">Metrics</router-link>
+          <router-link class="navbar-item" to="/pricing" @click="open=false">Price vs quality</router-link>
+          <router-link class="navbar-item" to="/advisor" @click="open=false">Use-case advisor</router-link>
+          <router-link class="navbar-item" to="/methodology" @click="open=false">Methodology</router-link>
+        </div>
+        <div class="navbar-end">
+          <router-link class="navbar-item compare-pill" to="/compare" @click="open=false">
+            <i class="fas fa-code-compare"></i>&nbsp; Compare ({{ store.compareIds.length }})
+          </router-link>
+        </div>
+      </div>
+    </div>
+  </nav>`,
+  setup() { const open = ref(false); return { open, store }; }
+};
+
+const Home = {
+  components: { ModelAvatar },
+  template: `
+  <div>
+    <section class="hero-lab">
+      <div class="mesh"></div>
+      <div class="kicker">Benchmark cockpit · snapshot {{ data.meta.updated }}</div>
+      <h1 class="display">Pick the right model<br>for the job — not the hype.</h1>
+      <p class="lede">A single cockpit for public LLM evals: global overall, price-wise value, and performance on the metrics that actually move your use case. Filter, compare, and get a recommendation in under a minute.</p>
+      <div class="row mt">
+        <router-link to="/advisor" class="btn primary"><i class="fas fa-wand-magic-sparkles"></i> Advise me</router-link>
+        <router-link to="/leaderboard" class="btn"><i class="fas fa-ranking-star"></i> Open leaderboard</router-link>
+        <router-link to="/pricing" class="btn ghost"><i class="fas fa-coins"></i> Best value</router-link>
+      </div>
+    </section>
+
+    <div class="grid-4 mt">
+      <div class="stat">
+        <div class="lbl">Models tracked</div>
+        <div class="val num">{{ models.length }}</div>
+        <div class="sub">Closed APIs + open weights</div>
+      </div>
+      <div class="stat">
+        <div class="lbl">Public sources</div>
+        <div class="val num">{{ data.sources.length }}</div>
+        <div class="sub">Arena, AA, SWE-bench, LiveBench…</div>
+      </div>
+      <div class="stat">
+        <div class="lbl">Global #1 tonight</div>
+        <div class="val" style="font-size:1.15rem">{{ laurels.overall.short }}</div>
+        <div class="sub">Overall {{ overallScore(laurels.overall).toFixed(1) }} / 100</div>
+      </div>
+      <div class="stat">
+        <div class="lbl">Best value</div>
+        <div class="val" style="font-size:1.15rem">{{ laurels.value.short }}</div>
+        <div class="sub">{{ fmtMoney(blendedPrice(laurels.value)) }} blended / 1M tok</div>
+      </div>
+    </div>
+
+    <div class="mt">
+      <h2 class="section-title">Start from the decision, not the model</h2>
+      <p class="section-sub">Four shortcuts people actually need. Everything else lives in the leaderboard.</p>
+      <div class="grid-4">
+        <router-link to="/leaderboard" class="model-tile" style="text-decoration:none;color:inherit">
+          <div class="tag-lab teal">Overall</div>
+          <h3 style="margin:.6rem 0 .3rem">Global average</h3>
+          <p style="color:var(--muted);font-size:.9rem">Min-max normalized composite across preference, knowledge, reasoning and code. Weights are yours to retune.</p>
+        </router-link>
+        <router-link to="/pricing" class="model-tile" style="text-decoration:none;color:inherit">
+          <div class="tag-lab gold">Budget</div>
+          <h3 style="margin:.6rem 0 .3rem">Price-wise pick</h3>
+          <p style="color:var(--muted);font-size:.9rem">Performance per dollar, scatter of quality vs blended token cost, and a monthly bill calculator.</p>
+        </router-link>
+        <router-link to="/metrics" class="model-tile" style="text-decoration:none;color:inherit">
+          <div class="tag-lab indigo">Evals</div>
+          <h3 style="margin:.6rem 0 .3rem">Per-metric ranks</h3>
+          <p style="color:var(--muted);font-size:.9rem">SWE-bench if you ship code. GPQA/AIME if you reason. Arena if you chat. MMMU if you see.</p>
+        </router-link>
+        <router-link to="/advisor" class="model-tile" style="text-decoration:none;color:inherit">
+          <div class="tag-lab rose">Wizard</div>
+          <h3 style="margin:.6rem 0 .3rem">Use-case advisor</h3>
+          <p style="color:var(--muted);font-size:.9rem">Answer four questions. Get a ranked shortlist with why-this-model reasons, not a vibe.</p>
+        </router-link>
+      </div>
+    </div>
+
+    <div class="mt">
+      <h2 class="section-title">Category leaders</h2>
+      <p class="section-sub">Computed live from this snapshot. Click through for the full card.</p>
+      <div class="grid-4">
+        <div class="model-tile" v-for="card in highlights" :key="card.label" @click="$router.push('/model/'+card.model.id)" style="cursor:pointer">
+          <div class="tile-top">
+            <div class="tag-lab">{{ card.label }}</div>
+            <model-avatar :model="card.model"></model-avatar>
+          </div>
+          <h3 style="margin:.7rem 0 .15rem">{{ card.model.name }}</h3>
+          <div style="color:var(--muted);font-size:.84rem">{{ card.model.provider }} · {{ card.note }}</div>
+          <div class="score-xl num mt-sm">{{ card.stat }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice mt"><i class="fas fa-circle-info"></i> {{ data.meta.disclaimer }}</div>
+  </div>`,
+  setup() {
+    const highlights = computed(() => ([
+      { label: "Best overall", model: laurels.value.overall, stat: overallScore(laurels.value.overall).toFixed(1), note: "Weighted composite" },
+      { label: "Best value", model: laurels.value.value, stat: fmtMoney(blendedPrice(laurels.value.value)), note: "Quality per dollar" },
+      { label: "Best coding", model: laurels.value.coding, stat: laurels.value.coding.benchmarks.swebench.toFixed(1) + "%", note: "SWE-bench Verified" },
+      { label: "Best reasoning", model: laurels.value.reasoning, stat: laurels.value.reasoning.benchmarks.gpqa.toFixed(1) + "%", note: "GPQA Diamond" }
+    ]));
+    return { data: DATA, models: MODELS, laurels, overallScore, blendedPrice, fmtMoney, highlights };
+  }
+};
+
+const Leaderboard = {
+  components: { ModelAvatar, ScoreBar },
+  template: `
+  <div>
+    <div class="page-head">
+      <div class="kicker">Global overall</div>
+      <h1 class="section-title">Leaderboard</h1>
+      <p class="section-sub">Sortable composite of public evals. Tune the weights if “overall” should mean something else for you.</p>
+    </div>
+    <div class="grid-2">
+      <div class="panel-lab" style="padding:1rem">
+        <div class="row">
+          <div class="field-lab" style="flex:1;min-width:180px">
+            <label>Search</label>
+            <input class="input-lab" v-model="store.query" placeholder="Model, provider…">
+          </div>
+          <div class="field-lab">
+            <label>License</label>
+            <div class="chips">
+              <span class="chip" :class="{on: store.licenses.includes('proprietary')}" @click="togLic('proprietary')">API</span>
+              <span class="chip" :class="{on: store.licenses.includes('open-weights')}" @click="togLic('open-weights')">Open weights</span>
+            </div>
+          </div>
+        </div>
+        <div class="field-lab mt-sm">
+          <label>Providers</label>
+          <div class="chips">
+            <span class="chip" v-for="p in providers" :key="p.id" :class="{on: store.providers.includes(p.id)}" @click="togProv(p.id)">{{ p.name }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel-lab" style="padding:1rem">
+        <div class="row" style="justify-content:space-between">
+          <label style="color:var(--muted);font-size:.8rem;font-weight:700">COMPOSITE WEIGHTS</label>
+          <button class="btn tiny" @click="resetWeights">Reset</button>
+        </div>
+        <div class="weight" v-for="m in metrics" :key="m.key">
+          <span>{{ m.short }}</span>
+          <input type="range" min="0" max="40" v-model.number="store.weights[m.key]">
+          <span class="num">{{ store.weights[m.key] }}</span>
+        </div>
+        <div class="weight">
+          <span>Value (cheap)</span>
+          <input type="range" min="0" max="40" v-model.number="store.includePrice">
+          <span class="num">{{ store.includePrice }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap mt">
+      <table class="lab">
+        <thead>
+          <tr>
+            <th @click="sortBy('rank')">#</th>
+            <th @click="sortBy('name')">Model</th>
+            <th @click="sortBy('overall')">Overall</th>
+            <th @click="sortBy('arenaElo')">Arena</th>
+            <th @click="sortBy('aaIndex')">AA</th>
+            <th @click="sortBy('swebench')">SWE</th>
+            <th @click="sortBy('gpqa')">GPQA</th>
+            <th @click="sortBy('price')">Blended $</th>
+            <th @click="sortBy('context')">Ctx</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in rows" :key="row.model.id" @click="$router.push('/model/'+row.model.id)">
+            <td><div class="rank" :class="row.rank===1?'g':row.rank===2?'s':row.rank===3?'b':''">{{ row.rank }}</div></td>
+            <td>
+              <div class="model-cell">
+                <model-avatar :model="row.model"></model-avatar>
+                <div>
+                  <div style="font-weight:700">{{ row.model.name }}</div>
+                  <div style="color:var(--faint);font-size:.75rem">{{ row.model.provider }} · {{ row.model.license === 'open-weights' ? 'open' : 'API' }}</div>
+                </div>
+              </div>
+            </td>
+            <td class="num" style="min-width:140px">
+              <div style="font-weight:700;color:var(--teal)">{{ row.overall.toFixed(1) }}</div>
+              <score-bar :value="row.overall"></score-bar>
+            </td>
+            <td class="num">{{ row.model.benchmarks.arenaElo }}</td>
+            <td class="num">{{ row.model.benchmarks.aaIndex }}</td>
+            <td class="num">{{ nvl(row.model.benchmarks.swebench) }}</td>
+            <td class="num">{{ nvl(row.model.benchmarks.gpqa) }}</td>
+            <td class="num">{{ fmtMoney(blendedPrice(row.model)) }}</td>
+            <td class="num">{{ fmtTokens(row.model.contextWindow) }}</td>
+            <td>
+              <button class="btn tiny" :class="{active: store.compareIds.includes(row.model.id)}" @click.stop="toggleCompare(row.model.id)">
+                {{ store.compareIds.includes(row.model.id) ? 'Added' : 'Compare' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="section-sub mt-sm">{{ rows.length }} models · click a header to sort · overall is min-max normalized inside this set</p>
+  </div>`,
+  setup() {
+    const sortKey = ref("overall");
+    const sortDir = ref(-1);
+    const providers = [
+      { id: "openai", name: "OpenAI" }, { id: "anthropic", name: "Anthropic" }, { id: "google", name: "Google" },
+      { id: "deepseek", name: "DeepSeek" }, { id: "meta", name: "Meta" }, { id: "xai", name: "xAI" },
+      { id: "mistral", name: "Mistral" }, { id: "alibaba", name: "Alibaba" }
+    ];
+    function sortBy(k) {
+      if (sortKey.value === k) sortDir.value *= -1;
+      else { sortKey.value = k; sortDir.value = k === "name" ? 1 : -1; }
+    }
+    function nvl(v) { return v ? v.toFixed(1) : "—"; }
+    const rows = computed(() => {
+      const list = filteredModels().map(model => ({ model, overall: overallScore(model) }));
+      list.sort((a, b) => overallScore(b.model) - overallScore(a.model));
+      list.forEach((r, i) => r.rank = i + 1);
+      const key = sortKey.value;
+      list.sort((a, b) => {
+        const dir = sortDir.value;
+        if (key === "name") return dir * a.model.name.localeCompare(b.model.name);
+        if (key === "overall" || key === "rank") return dir * (a.overall - b.overall);
+        if (key === "price") return dir * (blendedPrice(a.model) - blendedPrice(b.model));
+        if (key === "context") return dir * (a.model.contextWindow - b.model.contextWindow);
+        return dir * ((a.model.benchmarks[key] || 0) - (b.model.benchmarks[key] || 0));
+      });
+      return list;
+    });
+    function togProv(id) {
+      const i = store.providers.indexOf(id);
+      if (i >= 0) store.providers.splice(i, 1); else store.providers.push(id);
+    }
+    function togLic(id) {
+      const i = store.licenses.indexOf(id);
+      if (i >= 0) store.licenses.splice(i, 1); else store.licenses.push(id);
+    }
+    function resetWeights() {
+      METRICS.forEach(m => store.weights[m.key] = m.weight);
+      store.includePrice = 12; store.includeSpeed = 0; store.includeContext = 0;
+    }
+    return { store, metrics: METRICS, providers, rows, sortBy, nvl, fmtMoney, blendedPrice, fmtTokens, toggleCompare, resetWeights };
+  }
+};
+
+const MetricsPage = {
+  components: { ModelAvatar },
+  template: `
+  <div>
+    <div class="page-head">
+      <div class="kicker">Performance by eval</div>
+      <h1 class="section-title">Metrics explorer</h1>
+      <p class="section-sub">One leaderboard lies. Ten leaderboards argue. Use the eval that matches the work.</p>
+    </div>
+    <div class="tabs-lab">
+      <button v-for="m in metrics" :key="m.key" :class="{on: key===m.key}" @click="key=m.key">{{ m.label }}</button>
+    </div>
+    <div class="grid-2">
+      <div class="panel-lab" style="padding:1.2rem">
+        <div class="tag-lab indigo">{{ current.source }}</div>
+        <h2 style="margin:.5rem 0">{{ current.label }}</h2>
+        <p style="color:var(--muted)">{{ current.desc }}</p>
+        <p style="color:var(--faint);font-size:.84rem" class="mt-sm">Higher is better · unit {{ current.unit }} · default composite weight {{ current.weight }}</p>
+      </div>
+      <div class="panel-lab" style="padding:1.2rem">
+        <div class="lbl" style="color:var(--muted);font-size:.75rem;letter-spacing:.08em">WHAT THIS IS GOOD FOR</div>
+        <p style="margin:.4rem 0 0;color:var(--text)">{{ hint }}</p>
+      </div>
+    </div>
+    <div class="panel-lab mt" style="padding:1.2rem">
+      <div v-for="(row, i) in ranking" :key="row.model.id" class="hbar" @click="$router.push('/model/'+row.model.id)" style="cursor:pointer">
+        <div class="name"><span class="rank" :class="i===0?'g':i===1?'s':i===2?'b':''" style="display:inline-grid;margin-right:.45rem">{{ i+1 }}</span>{{ row.model.name }}</div>
+        <div class="track"><i :style="{width: row.pct + '%', background: barColor(i)}"></i></div>
+        <div class="num" :style="{color: i===0 ? 'var(--teal)' : 'inherit'}">{{ formatVal(row.val) }}</div>
+      </div>
+    </div>
+  </div>`,
+  setup() {
+    const key = ref("swebench");
+    const current = computed(() => METRICS.find(m => m.key === key.value));
+    const ranking = computed(() => {
+      const rows = MODELS.map(model => ({ model, val: model.benchmarks[key.value] || 0 }))
+        .filter(r => r.val > 0)
+        .sort((a, b) => b.val - a.val);
+      const max = rows[0] ? rows[0].val : 1;
+      rows.forEach(r => r.pct = (r.val / max) * 100);
+      return rows;
+    });
+    const hints = {
+      arenaElo: "Everyday assistants, writing, and “does this feel smart?” product UX.",
+      aaIndex: "A balanced intelligence headline when you refuse to overfit one benchmark.",
+      mmluPro: "Knowledge work, tutoring, and professional Q&A with trickier distractors.",
+      gpqa: "Scientific assistants, diligence, and anything where undergrads can be fooled.",
+      math: "Quantitative analysis and contest-style word problems.",
+      aime: "Brutal multi-step math. If AIME is high, the reasoner is real.",
+      humaneval: "Short code snippets, katas, interview-style generation.",
+      swebench: "The one that matters for coding agents that touch real repositories.",
+      livebench: "Fresh tasks — a check against memorized exams.",
+      mmmu: "Screenshots, slides, plots, and document vision."
+    };
+    function formatVal(v) {
+      if (key.value === "arenaElo") return String(Math.round(v));
+      return v.toFixed(1);
+    }
+    function barColor(i) { return i === 0 ? "linear-gradient(90deg,#f5c15a,#2ee6c7)" : "linear-gradient(90deg,#4f6dff,#2ee6c7)"; }
+    return { metrics: METRICS, key, current, ranking, hint: computed(() => hints[key.value]), formatVal, barColor };
+  }
+};
+
+const Pricing = {
+  components: { ModelAvatar },
+  template: `
+  <div>
+    <div class="page-head">
+      <div class="kicker">Price-wise selection</div>
+      <h1 class="section-title">Quality per dollar</h1>
+      <p class="section-sub">Blended price assumes 40% input / 60% output tokens — typical for chatty product traffic. Hover the scatter; run the calculator for your volume.</p>
+    </div>
+    <div class="grid-2">
+      <div class="panel-lab" style="padding:1rem">
+        <svg class="scatter" viewBox="0 0 640 460" @mousemove="onMove" @mouseleave="tip=null">
+          <defs>
+            <linearGradient id="axisg" x1="0" x2="1"><stop stop-color="#2ee6c7"/><stop offset="1" stop-color="#8b9cff"/></linearGradient>
+          </defs>
+          <text x="320" y="24" text-anchor="middle" fill="#8b9bb8" font-size="12">Overall quality vs blended USD / 1M tokens (log X)</text>
+          <line x1="70" y1="400" x2="610" y2="400" stroke="#27345a"/>
+          <line x1="70" y1="50" x2="70" y2="400" stroke="#27345a"/>
+          <text x="340" y="440" text-anchor="middle" fill="#5d6d8f" font-size="11">Cheaper →  ← Costlier</text>
+          <text x="18" y="230" fill="#5d6d8f" font-size="11" transform="rotate(-90 18 230)">Higher quality</text>
+          <g v-for="p in points" :key="p.id">
+            <circle :cx="p.x" :cy="p.y" :r="p.hot ? 9 : 7" :fill="p.color" fill-opacity="0.9" stroke="#e9eefc" stroke-width="1"
+              @mouseenter="tip=p" @click="$router.push('/model/'+p.id)" style="cursor:pointer"/>
+            <text v-if="p.hot" :x="p.x+10" :y="p.y-10" fill="#e9eefc" font-size="10">{{ p.short }}</text>
+          </g>
+        </svg>
+        <div class="tooltip" v-if="tip" :style="{left: mouse.x+14+'px', top: mouse.y+14+'px'}">
+          <strong>{{ tip.name }}</strong><br>
+          Overall {{ tip.overall.toFixed(1) }} · {{ fmtMoney(tip.price) }} blended<br>
+          Value index {{ tip.value.toFixed(1) }}
+        </div>
+      </div>
+      <div class="stack">
+        <div class="panel-lab" style="padding:1.1rem">
+          <h3 style="margin:.2rem 0 .8rem">Monthly bill estimator</h3>
+          <div class="grid-2">
+            <div class="field-lab"><label>Input tokens / month (millions)</label><input class="input-lab num" type="number" min="0" step="0.1" v-model.number="ins"></div>
+            <div class="field-lab"><label>Output tokens / month (millions)</label><input class="input-lab num" type="number" min="0" step="0.1" v-model.number="outs"></div>
+          </div>
+          <div class="table-wrap mt-sm">
+            <table class="lab">
+              <thead><tr><th>Model</th><th>Monthly</th><th>Quality</th><th>$ / quality pt</th></tr></thead>
+              <tbody>
+                <tr v-for="r in bills" :key="r.model.id" @click="$router.push('/model/'+r.model.id)">
+                  <td>{{ r.model.short }}</td>
+                  <td class="num">{{ fmtUsd(r.cost) }}</td>
+                  <td class="num">{{ r.q.toFixed(1) }}</td>
+                  <td class="num">{{ fmtUsd(r.cpq) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-wrap mt">
+      <table class="lab">
+        <thead>
+          <tr>
+            <th @click="sk='value'">Value score</th><th>Model</th><th>Input / 1M</th><th>Output / 1M</th>
+            <th>Blended</th><th>TPS</th><th>Overall</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(r,i) in valueRows" :key="r.model.id" @click="$router.push('/model/'+r.model.id)">
+            <td><div class="rank" :class="i===0?'g':i===1?'s':i===2?'b':''">{{ i+1 }}</div></td>
+            <td>
+              <div class="model-cell">
+                <model-avatar :model="r.model"></model-avatar>
+                <div><b>{{ r.model.name }}</b><div style="color:var(--faint);font-size:.75rem">{{ r.model.provider }}</div></div>
+              </div>
+            </td>
+            <td class="num">{{ fmtMoney(r.model.pricing.input) }}</td>
+            <td class="num">{{ fmtMoney(r.model.pricing.output) }}</td>
+            <td class="num">{{ fmtMoney(blendedPrice(r.model)) }}</td>
+            <td class="num">{{ r.model.speed.tps }}</td>
+            <td class="num" style="color:var(--teal)">{{ r.q.toFixed(1) }}</td>
+            <td class="num">{{ r.v.toFixed(1) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>`,
+  setup() {
+    const ins = ref(20);
+    const outs = ref(5);
+    const tip = ref(null);
+    const mouse = reactive({ x: 0, y: 0 });
+    const points = computed(() => {
+      const prices = MODELS.map(blendedPrice);
+      const scores = MODELS.map(m => overallScore(m));
+      const minP = Math.log(Math.min(...prices)), maxP = Math.log(Math.max(...prices));
+      const minS = Math.min(...scores), maxS = Math.max(...scores);
+      return MODELS.map(m => {
+        const p = blendedPrice(m);
+        const q = overallScore(m);
+        const x = 70 + ((Math.log(p) - minP) / (maxP - minP)) * 520;
+        const y = 400 - ((q - minS) / (maxS - minS)) * 330;
+        return { id: m.id, name: m.name, short: m.short, color: m.color, x, y, price: p, overall: q, value: valueScore(m), hot: q > 68 || p < 0.5 };
+      });
+    });
+    const valueRows = computed(() => MODELS.map(model => ({ model, q: overallScore(model), v: valueScore(model) })).sort((a, b) => b.v - a.v));
+    const bills = computed(() => MODELS.map(model => {
+      const cost = model.pricing.input * ins.value + model.pricing.output * outs.value;
+      const q = overallScore(model);
+      return { model, cost, q, cpq: cost / Math.max(q, 1) };
+    }).sort((a, b) => a.cost - b.cost));
+    function onMove(e) { mouse.x = e.clientX; mouse.y = e.clientY; }
+    function fmtUsd(n) { return "$" + n.toLocaleString(undefined, { maximumFractionDigits: 0 }); }
+    return { points, tip, mouse, onMove, fmtMoney, blendedPrice, valueRows, bills, ins, outs, fmtUsd };
+  }
+};
+
+const Compare = {
+  components: { ModelAvatar },
+  template: `
+  <div>
+    <div class="page-head">
+      <div class="kicker">Side by side</div>
+      <h1 class="section-title">Compare models</h1>
+      <p class="section-sub">Pick two to four. Winners per row light up teal.</p>
+    </div>
+    <div class="panel-lab" style="padding:1rem">
+      <div class="chips">
+        <span class="chip" v-for="m in models" :key="m.id" :class="{on: store.compareIds.includes(m.id)}" @click="toggleCompare(m.id)">{{ m.short }}</span>
+      </div>
+      <div class="row mt-sm">
+        <button class="btn tiny" @click="preset(['claude-3-7-sonnet','gpt-4-1','gemini-2-5-pro'])">Sonnet vs 4.1 vs Gem Pro</button>
+        <button class="btn tiny" @click="preset(['o3','deepseek-r1','o3-mini'])">Reasoning stack</button>
+        <button class="btn tiny" @click="preset(['deepseek-v3','gemini-2-5-flash','gpt-4-1-mini','llama-4-maverick'])">Budget lane</button>
+        <button class="btn tiny danger" @click="store.compareIds=[]">Clear</button>
+      </div>
+    </div>
+    <div v-if="picked.length<2" class="notice mt">Select at least two models to compare. You can also tap Compare on the leaderboard.</div>
+    <div v-else class="mt" :style="{'display':'grid','grid-template-columns':'repeat('+picked.length+',1fr)','gap':'1rem'}">
+      <div class="model-tile" v-for="m in picked" :key="m.id">
+        <model-avatar :model="m" :size="42"></model-avatar>
+        <h3 style="margin:.6rem 0 0">{{ m.name }}</h3>
+        <div style="color:var(--muted);font-size:.84rem">{{ m.provider }}</div>
+        <div class="score-xl num">{{ overallScore(m).toFixed(1) }}</div>
+        <div class="kv"><span class="k">Blended $ / 1M</span><span>{{ fmtMoney(blendedPrice(m)) }}</span></div>
+        <div class="kv"><span class="k">Context</span><span>{{ fmtTokens(m.contextWindow) }}</span></div>
+        <div class="kv"><span class="k">Speed</span><span>{{ m.speed.tps }} t/s</span></div>
+        <div class="kv" v-for="met in metrics" :key="met.key">
+          <span class="k">{{ met.short }}</span>
+          <span :class="isBest(met.key, m) ? 'winner' : 'loser'">{{ fmtM(m, met.key) }}</span>
+        </div>
+        <router-link class="btn tiny mt-sm" :to="'/model/'+m.id">Open card</router-link>
+      </div>
+    </div>
+  </div>`,
+  setup() {
+    const picked = computed(() => store.compareIds.map(byId).filter(Boolean));
+    function preset(ids) { store.compareIds.splice(0, store.compareIds.length, ...ids); }
+    function fmtM(m, key) {
+      const v = m.benchmarks[key];
+      if (!v) return "—";
+      return key === "arenaElo" ? v : v.toFixed(1);
+    }
+    function isBest(key, m) {
+      const vals = picked.value.map(x => x.benchmarks[key] || 0);
+      const best = Math.max(...vals);
+      return (m.benchmarks[key] || 0) === best && best > 0;
+    }
+    return { models: MODELS, store, toggleCompare, picked, preset, overallScore, fmtMoney, blendedPrice, fmtTokens, metrics: METRICS, fmtM, isBest };
+  }
+};
+
+const Advisor = {
+  components: { ModelAvatar },
+  template: `
+  <div>
+    <div class="page-head">
+      <div class="kicker">Decision wizard</div>
+      <h1 class="section-title">Use-case advisor</h1>
+      <p class="section-sub">Four questions. A ranked shortlist with reasons, not a mystic vibe check.</p>
+      <div class="wizard-bar"><i :style="{width: ((step+1)/4*100)+'%'}"></i></div>
+    </div>
+
+    <div v-if="step===0">
+      <h3>What are you actually doing?</h3>
+      <div class="grid-4 mt-sm">
+        <div class="step-card" v-for="u in uses" :key="u.id" :class="{on: form.use===u.id}" @click="form.use=u.id">
+          <i class="fas" :class="u.icon" style="color:var(--teal)"></i>
+          <h4 style="margin:.45rem 0 .2rem">{{ u.title }}</h4>
+          <p style="color:var(--muted);font-size:.84rem">{{ u.blurb }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="step===1">
+      <h3>How should we trade quality against cost and latency?</h3>
+      <div class="grid-3 mt-sm">
+        <div class="step-card" :class="{on: form.budget==='cheap'}" @click="form.budget='cheap'"><h4>Cost first</h4><p style="color:var(--muted)">Batch, product traffic, prototypes.</p></div>
+        <div class="step-card" :class="{on: form.budget==='balanced'}" @click="form.budget='balanced'"><h4>Balanced</h4><p style="color:var(--muted)">Daily work. Pay a bit more for fewer mistakes.</p></div>
+        <div class="step-card" :class="{on: form.budget==='quality'}" @click="form.budget='quality'"><h4>Quality first</h4><p style="color:var(--muted)">Wrong answers are expensive.</p></div>
+      </div>
+      <div class="grid-3 mt">
+        <div class="step-card" :class="{on: form.speed==='fast'}" @click="form.speed='fast'"><h4>Need snappy UX</h4></div>
+        <div class="step-card" :class="{on: form.speed==='ok'}" @click="form.speed='ok'"><h4>A few seconds is fine</h4></div>
+        <div class="step-card" :class="{on: form.speed==='slow'}" @click="form.speed='slow'"><h4>Think as long as you want</h4></div>
+      </div>
+    </div>
+
+    <div v-if="step===2">
+      <h3>Hard constraints</h3>
+      <div class="grid-2 mt-sm">
+        <div class="panel-lab" style="padding:1rem">
+          <div class="field-lab"><label>Minimum context window</label>
+            <select class="input-lab" v-model.number="form.minContext">
+              <option :value="0">No preference</option>
+              <option :value="128000">128K+</option>
+              <option :value="200000">200K+</option>
+              <option :value="1000000">1M+</option>
+            </select>
+          </div>
+          <div class="field-lab mt-sm"><label>Must see images?</label>
+            <div class="chips">
+              <span class="chip" :class="{on: form.vision===false}" @click="form.vision=false">No</span>
+              <span class="chip" :class="{on: form.vision===true}" @click="form.vision=true">Yes, vision required</span>
+            </div>
+          </div>
+        </div>
+        <div class="panel-lab" style="padding:1rem">
+          <div class="field-lab"><label>Weights / deployment</label>
+            <div class="chips">
+              <span class="chip" :class="{on: form.open==='any'}" @click="form.open='any'">Any</span>
+              <span class="chip" :class="{on: form.open==='open'}" @click="form.open='open'">Open weights only</span>
+              <span class="chip" :class="{on: form.open==='api'}" @click="form.open='api'">Hosted API only</span>
+            </div>
+          </div>
+          <div class="field-lab mt-sm"><label>Max blended $ / 1M tokens</label>
+            <select class="input-lab" v-model.number="form.maxPrice">
+              <option :value="0">No cap</option>
+              <option :value="1">Under $1</option>
+              <option :value="4">Under $4</option>
+              <option :value="12">Under $12</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="step===3">
+      <h3>Your shortlist</h3>
+      <p class="section-sub" v-if="!recs.length">Nothing survives those constraints. Loosen price, context or the open-weights filter.</p>
+      <div class="grid-3">
+        <div class="model-tile" v-for="(r,i) in recs" :key="r.model.id">
+          <div class="tile-top">
+            <div class="rank" :class="i===0?'g':i===1?'s':'b'">{{ i+1 }}</div>
+            <model-avatar :model="r.model"></model-avatar>
+          </div>
+          <h3 style="margin:.6rem 0 .2rem">{{ r.model.name }}</h3>
+          <div class="score-xl num">{{ r.score.toFixed(1) }}</div>
+          <div class="tag-lab teal" v-if="i===0">Recommended</div>
+          <ul style="padding-left:1.1rem;color:var(--muted);font-size:.86rem">
+            <li v-for="why in r.reasons" :key="why">{{ why }}</li>
+          </ul>
+          <div class="row mt-sm">
+            <router-link class="btn tiny primary" :to="'/model/'+r.model.id">Details</router-link>
+            <button class="btn tiny" @click="toggleCompare(r.model.id)">Compare</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt">
+      <button class="btn" v-if="step>0" @click="step--">Back</button>
+      <button class="btn primary" v-if="step<3" :disabled="step===0 && !form.use" @click="next">Continue</button>
+      <button class="btn" v-if="step===3" @click="step=0">Start over</button>
+    </div>
+  </div>`,
+  setup() {
+    const step = ref(0);
+    const form = reactive({ use: "", budget: "balanced", speed: "ok", minContext: 0, vision: false, open: "any", maxPrice: 0 });
+    function next() { if (step.value < 3) step.value += 1; }
+    const recs = computed(() => {
+      const use = USE_CASES.find(u => u.id === form.use) || USE_CASES[0];
+      const pool = MODELS.filter(m => {
+        if (form.vision && !m.modalities.includes("image")) return false;
+        if (form.open === "open" && m.license !== "open-weights") return false;
+        if (form.open === "api" && m.license !== "proprietary") return false;
+        if (form.minContext && m.contextWindow < form.minContext) return false;
+        if (form.maxPrice && blendedPrice(m) > form.maxPrice) return false;
+        return true;
+      });
+      return pool.map(m => {
+        let score = 0, den = 0;
+        const w = { ...use.weights };
+        if (form.budget === "cheap") w.price = (w.price || 0) + 24;
+        if (form.budget === "quality") { w.aaIndex = (w.aaIndex || 0) + 10; w.arenaElo = (w.arenaElo || 0) + 8; w.price = Math.max(0, (w.price || 0) - 10); }
+        if (form.speed === "fast") w.speed = (w.speed || 0) + 18;
+        Object.entries(w).forEach(([k, wt]) => {
+          let n = 0;
+          if (k === "price") n = normPrice(m);
+          else if (k === "speed") n = normSpeed(m);
+          else if (k === "context") n = normContext(m);
+          else n = normMetric(k, m.benchmarks[k]) ?? 0;
+          score += n * wt; den += wt;
+        });
+        score = den ? score / den : 0;
+        const reasons = [];
+        if ((m.benchmarks.swebench || 0) >= 60 && (use.id === "coding")) reasons.push("Elite SWE-bench — real repo work, not just katas.");
+        if ((m.benchmarks.gpqa || 0) >= 70 && (use.id === "reasoning" || use.id === "research")) reasons.push("GPQA Diamond in the serious-reasoner band.");
+        if (normPrice(m) >= 75) reasons.push("Blended token price sits in the cheap quartile.");
+        if (m.contextWindow >= 1000000) reasons.push("Native million-token context for whole-project dumps.");
+        if (m.license === "open-weights") reasons.push("Open weights — fine-tune or self-host if you need to.");
+        if (m.modalities.includes("image")) reasons.push("Vision is available on this SKU.");
+        if (m.speed.tps >= 120) reasons.push("High tokens/sec for interactive UX.");
+        if (!reasons.length) reasons.push("Solid fit after applying your filters and use-case weights.");
+        return { model: m, score, reasons: reasons.slice(0, 4) };
+      }).sort((a, b) => b.score - a.score).slice(0, 3);
+    });
+    return { step, form, uses: USE_CASES, next, recs, toggleCompare };
+  }
+};
+
+const ModelDetail = {
+  components: { ModelAvatar, ScoreBar },
+  template: `
+  <div v-if="m">
+    <div class="crumb"><router-link to="/leaderboard">Leaderboard</router-link> / {{ m.name }}</div>
+    <div class="hero-lab">
+      <div class="row">
+        <model-avatar :model="m" :size="56"></model-avatar>
+        <div>
+          <div class="kicker">{{ m.provider }} · {{ m.released }} · {{ m.license }}</div>
+          <h1 class="display" style="font-size:2.3rem">{{ m.name }}</h1>
+          <p class="lede">{{ m.notes }}</p>
+        </div>
+      </div>
+      <div class="grid-4 mt">
+        <div class="stat"><div class="lbl">Overall</div><div class="val num" style="color:var(--teal)">{{ overallScore(m).toFixed(1) }}</div></div>
+        <div class="stat"><div class="lbl">Blended price</div><div class="val num">{{ fmtMoney(blendedPrice(m)) }}</div><div class="sub">{{ fmtMoney(m.pricing.input) }} in / {{ fmtMoney(m.pricing.output) }} out</div></div>
+        <div class="stat"><div class="lbl">Context</div><div class="val num">{{ fmtTokens(m.contextWindow) }}</div><div class="sub">max out {{ fmtTokens(m.maxOutput) }}</div></div>
+        <div class="stat"><div class="lbl">Speed</div><div class="val num">{{ m.speed.tps }}</div><div class="sub">t/s · TTFT ~ {{ m.speed.ttft }}s</div></div>
+      </div>
+      <div class="row mt">
+        <button class="btn primary" :class="{active: store.compareIds.includes(m.id)}" @click="toggleCompare(m.id)">{{ store.compareIds.includes(m.id) ? 'In compare set' : 'Add to compare' }}</button>
+        <router-link class="btn" to="/compare">Go to compare</router-link>
+      </div>
+    </div>
+    <div class="grid-2 mt">
+      <div class="panel-lab" style="padding:1.1rem">
+        <h3>Benchmarks</h3>
+        <div v-for="met in metrics" :key="met.key" class="kv">
+          <span class="k">{{ met.label }}</span>
+          <span class="num">{{ fmtM(met.key) }}</span>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="panel-lab" style="padding:1.1rem">
+          <h3>Strengths</h3>
+          <ul style="color:var(--muted)"><li v-for="s in m.strengths" :key="s">{{ s }}</li></ul>
+          <h3>Watch-outs</h3>
+          <ul style="color:var(--muted)"><li v-for="s in m.weaknesses" :key="s">{{ s }}</li></ul>
+          <div class="chips mt-sm">
+            <span class="tag-lab teal" v-for="mod in m.modalities" :key="mod">{{ mod }}</span>
+            <span class="tag-lab gold" v-for="b in m.bestFor" :key="b">{{ b }}</span>
+          </div>
+        </div>
+        <div class="panel-lab" style="padding:1.1rem">
+          <h3>Closest alternatives</h3>
+          <div class="kv" v-for="a in alts" :key="a.id" style="cursor:pointer" @click="$router.push('/model/'+a.id)">
+            <span class="k">{{ a.name }}</span>
+            <span>{{ overallScore(a).toFixed(1) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else class="notice">Unknown model. <router-link to="/leaderboard">Back to leaderboard</router-link></div>`,
+  setup() {
+    const route = useRoute();
+    const m = computed(() => byId(route.params.id));
+    function fmtM(key) {
+      const v = m.value && m.value.benchmarks[key];
+      if (!v) return "—";
+      return key === "arenaElo" ? v : v.toFixed(1) + (key === "aaIndex" ? "" : "%");
+    }
+    const alts = computed(() => {
+      if (!m.value) return [];
+      const me = overallScore(m.value);
+      return [...MODELS].filter(x => x.id !== m.value.id).sort((a, b) => Math.abs(overallScore(a) - me) - Math.abs(overallScore(b) - me)).slice(0, 4);
+    });
+    return { m, metrics: METRICS, overallScore, fmtMoney, blendedPrice, fmtTokens, store, toggleCompare, fmtM, alts };
+  }
+};
+
+const Methodology = {
+  template: `
+  <div>
+    <div class="page-head">
+      <div class="kicker">How to read this</div>
+      <h1 class="section-title">Methodology</h1>
+    </div>
+    <div class="panel-lab" style="padding:1.3rem">
+      <p>{{ data.meta.disclaimer }}</p>
+      <h3 class="mt">Composite score</h3>
+      <p style="color:var(--muted)">Each published metric is min-max normalized across the models in this file, then combined with editable weights. Optional axes (cheapness, speed, context) can be mixed in from the leaderboard. This is a decision aid, not a moral ranking of labs.</p>
+      <h3 class="mt">Blended price</h3>
+      <p style="color:var(--muted)">0.4 × input + 0.6 × output USD per million tokens. Value score multiplies overall quality by a log-inverted price term so cheap-and-capable models surface.</p>
+      <h3 class="mt">Sources</h3>
+      <ul>
+        <li v-for="s in data.sources" :key="s.id"><a :href="s.url" target="_blank" rel="noopener">{{ s.name }}</a></li>
+      </ul>
+      <p style="color:var(--faint)">Snapshot date {{ data.meta.updated }}. Numbers drift — re-check provider cards before you sign a contract.</p>
+    </div>
+  </div>`,
+  setup() { return { data: DATA }; }
+};
+
+const routes = [
+  { path: "/", component: Home },
+  { path: "/leaderboard", component: Leaderboard },
+  { path: "/metrics", component: MetricsPage },
+  { path: "/pricing", component: Pricing },
+  { path: "/compare", component: Compare },
+  { path: "/advisor", component: Advisor },
+  { path: "/model/:id", component: ModelDetail },
+  { path: "/methodology", component: Methodology }
+];
+
+const router = createRouter({ history: createWebHashHistory(), routes });
+
+const Root = {
+  components: { NavBar },
+  template: `
+  <div>
+    <nav-bar></nav-bar>
+    <main class="shell">
+      <div class="wrap">
+        <router-view></router-view>
+        <footer class="footer-lab mt">
+          <div class="row" style="justify-content:space-between">
+            <span>LLM Decision Lab · Vue 3 + Buefy/Bulma · snapshot {{ data.meta.updated }}</span>
+            <span><router-link to="/methodology">Methodology</router-link> · data from embedded JSON</span>
+          </div>
+        </footer>
+      </div>
+    </main>
+    <div class="tooltip" v-if="store.toast" style="position:fixed;right:18px;bottom:18px;pointer-events:auto">{{ store.toast }}</div>
+  </div>`,
+  setup() { return { data: DATA, store }; }
+};
+
+const app = createApp(Root);
+app.use(router);
+app.mount("#app");
+</script>
+</body>
+</html>

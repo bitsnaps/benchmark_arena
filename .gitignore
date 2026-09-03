@@ -14,6 +14,10 @@ dist-ssr
 coverage
 *.local
 
+# pnpm is the package manager — never commit npm/yarn lockfiles
+package-lock.json
+yarn.lock
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -8,7 +8,9 @@ on:
       - 'public/**'
       - 'index.html'
       - 'package.json'
+      - 'pnpm-lock.yaml'
       - 'vite.config.js'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 permissions:
@@ -28,12 +30,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # Install pnpm BEFORE setup-node so the cache step can find it
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run build
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

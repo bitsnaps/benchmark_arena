@@ -47,6 +47,13 @@ python3 bench_scraper.py
 # copies to public/benchmark_results.json
 ```
 
+The output includes a `models_meta` section: per-model catalog metadata
+(parameters, active params, modalities, context window, USD pricing per 1M
+tokens, reasoning config, tokenizer, knowledge cutoff) matched from
+OpenRouter's public model catalog (`https://openrouter.ai/api/v1/models`),
+with HuggingFace safetensors totals as a fallback for open-weight parameter
+counts. Useful for in-depth side-by-side model comparisons.
+
 ## Dev
 
 ```bash

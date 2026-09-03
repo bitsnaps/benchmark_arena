@@ -30,10 +30,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      # Install pnpm BEFORE setup-node so the cache step can find it
+      # pnpm version is read from the "packageManager" field in package.json
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
       - uses: actions/setup-node@v4
         with:
           node-version: 22

@@ -5,5 +5,6 @@ import 'buefy/dist/css/buefy.css'
 import App from './App.vue'
 
 const app = createApp(App)
-app.use(Buefy)
+// FontAwesome is loaded via CDN in index.html (pack "fas")
+app.use(Buefy, { defaultIconPack: 'fas' })
 app.mount('#app')

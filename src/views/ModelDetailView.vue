@@ -49,7 +49,7 @@ function addToCompare() {
   if (!model.value || inCompare.value || compareFull.value) return;
   compareRows.value.push(model.value);
   compareMode.value = true;
-  router.push({ name: 'home' });
+  router.push({ name: 'compare' });
 }
 </script>
 

@@ -304,3 +304,47 @@ a.hbar:hover .name { color: var(--teal); }
   .hero-lab { padding: 2rem 1.2rem; }
   .hbar { grid-template-columns: 1fr; }
 }
+
+/* ── Side-by-side comparison view ─────────────────────────── */
+.cmp-toolbar { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; justify-content: space-between; }
+.cmp-scroll { overflow-x: auto; }
+.cmp-grid { display: grid; min-width: 760px; }
+.cmp-corner, .cmp-label {
+  position: sticky; left: 0; z-index: 2;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: .7rem 1rem;
+  display: flex; flex-direction: column; justify-content: center; gap: .15rem;
+}
+.cmp-corner { z-index: 3; border-bottom-color: var(--line-2); }
+.cmp-label { font-size: .84rem; font-weight: 600; color: var(--muted); }
+.cmp-hint { color: var(--faint); font-size: .7rem; font-weight: 500; }
+.cmp-cell {
+  border-bottom: 1px solid var(--line); border-left: 1px solid var(--line);
+  padding: .7rem .9rem; font-size: .92rem;
+  display: flex; flex-direction: column; gap: .3rem; justify-content: center; min-width: 0;
+}
+.cmp-headcell { border-bottom-color: var(--line-2); }
+.cmp-main { font-weight: 600; color: var(--text); overflow-wrap: anywhere; }
+.cmp-sub { color: var(--faint); font-size: .72rem; }
+.cmp-bar { max-width: 130px; }
+.cmp-arrow { color: var(--faint); font-size: .68rem; align-self: center; }
+.cmp-group {
+  grid-column: 1 / -1;
+  padding: .75rem 1rem .45rem;
+  font-size: .74rem; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--teal); font-weight: 800;
+  border-bottom: 1px solid var(--line-2);
+  background: var(--surface-2);
+  position: sticky; left: 0;
+}
+.cmp-cell.winner-cell { background: var(--teal-dim); }
+.cmp-cell.winner-cell .cmp-main { color: var(--teal); }
+.cmp-link { color: var(--indigo); font-size: .78rem; text-decoration: none; }
+.cmp-link:hover { color: var(--teal); }
+.cmp-x {
+  border: 0; background: transparent; color: var(--faint); cursor: pointer;
+  width: 26px; height: 26px; border-radius: 8px; flex: none;
+}
+.cmp-x:hover { background: var(--rose-dim); color: var(--rose); }
+.cmp-headcell .av { width: 38px; height: 38px; }

@@ -59,3 +59,40 @@ export function initials(name) {
 export function slugify(s) {
   return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
+
+// ── Metadata formatting (OpenRouter catalog values) ───────────────────
+// Token windows: 1_000_000 → "1M", 262_144 → "262K", 8_000 → "8K"
+export function fmtCtx(n) {
+  if (n === null || n === undefined || Number.isNaN(Number(n))) return '—';
+  n = Number(n);
+  if (n >= 1_000_000) {
+    const m = n / 1_000_000;
+    return (m >= 10 ? Math.round(m) : Math.round(m * 10) / 10) + 'M';
+  }
+  if (n >= 1000) return Math.round(n / 1000) + 'K';
+  return String(n);
+}
+
+// Billions of parameters: 753.3 → "753B", 41 → "41B", 1.5 → "1.5B"
+export function fmtB(b) {
+  if (b === null || b === undefined || Number.isNaN(Number(b))) return '—';
+  b = Number(b);
+  if (b >= 100) return Math.round(b) + 'B';
+  if (b >= 10) return Math.round(b) + 'B';
+  return (Math.round(b * 10) / 10) + 'B';
+}
+
+// USD per 1M tokens: 10 → "$10", 3.5 → "$3.50", 0.03 → "$0.03", 0 → "$0"
+export function fmtUsd(p) {
+  if (p === null || p === undefined || Number.isNaN(Number(p))) return '—';
+  p = Number(p);
+  if (p === 0) return '$0';
+  if (p >= 10) return '$' + Math.round(p);
+  if (p >= 1) return '$' + p.toFixed(2).replace(/0$/, '');
+  return '$' + p.toFixed(p < 0.1 ? 3 : 2).replace(/0+$/, '').replace(/\.$/, '');
+}
+
+// Modality chip icon (FontAwesome 7 names, icon pack = fas)
+export function modalityIcon(m) {
+  return { text: 'font', image: 'image', audio: 'volume-high', video: 'film', file: 'paperclip' }[m] || 'circle-question';
+}

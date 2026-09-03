@@ -1,10 +1,13 @@
 <script setup>
-// Side-by-side comparison of the checked models (up to 5).
+// Side-by-side comparison of the checked models (up to 5) + CTA to the
+// full comparison page (specs, pricing, modalities) at #/compare.
+import { useRouter } from 'vue-router';
 import { SHORT } from '../lib/constants.js';
 import { fmtScore, scoreColor, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
+const router = useRouter();
 const { benchmarks, avgForModel, isCore } = useData();
 const { compareRows, clearCompare, isBest } = useLeaderboard();
 </script>
@@ -15,7 +18,12 @@ const { compareRows, clearCompare, isBest } = useLeaderboard();
       <h3 class="section-title" style="margin:0;font-size:1.15rem">
         Side by side · {{ compareRows.length }}/5
       </h3>
-      <b-button size="is-small" icon-left="xmark" @click="clearCompare">Clear</b-button>
+      <div class="row" style="gap:.5rem">
+        <b-button size="is-small" type="is-primary" icon-left="table-columns" @click="router.push({ name: 'compare' })">
+          Full comparison
+        </b-button>
+        <b-button size="is-small" icon-left="xmark" @click="clearCompare">Clear</b-button>
+      </div>
     </div>
     <b-table :data="compareRows" narrowed hoverable scrollable :mobile-cards="false">
       <b-table-column field="name" label="Model" width="220" sticky v-slot="props">

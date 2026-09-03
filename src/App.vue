@@ -16,14 +16,13 @@ const menuOpen = ref(false);
 
 onMounted(ensureLoaded);
 
-// Reset the document title on navigation (model cards set their own)
+// Reset the document title on navigation (model cards / compare set their own)
 watch(route, (r) => {
-  if (r.name !== 'model') document.title = BASE_TITLE;
+  if (r.name !== 'model' && r.name !== 'compare') document.title = BASE_TITLE;
 });
 
 function goCompare() {
-  compareMode.value = true;
-  router.push({ name: 'home' });
+  router.push({ name: 'compare' });
 }
 </script>
 
@@ -52,7 +51,7 @@ function goCompare() {
               :to="{ name: 'benchmarks' }" @click="menuOpen = false">Benchmarks</router-link>
           </div>
           <div class="navbar-end">
-            <a class="navbar-item compare-pill" @click="goCompare">
+            <a class="navbar-item compare-pill" :class="{ 'is-active': route.name === 'compare' }" @click="goCompare">
               <i class="fas fa-code-compare"></i>&nbsp; Compare ({{ compareRows.length }})
             </a>
           </div>

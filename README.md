@@ -27,14 +27,14 @@ LLM model performance aggregator — scores from 11 public leaderboards, unified
 - **Tier tabs** — All models (one merged ranking to spot the overall top LLM), Closed-source, Open-weight — deep-linkable via `?tier=`
 - **Model pages** — every model has a score card at `#/model/<slug>`: Avg, coverage, rank-in-benchmark bars, "leads" badges
 - **Benchmark deep links** — the explorer is addressable at `#/benchmarks/<slug>` (e.g. `#/benchmarks/arc-agi-2`)
-- **Model Comparison** — select up to 5 models to compare side-by-side
+- **Model Comparison** — select up to 5 models on the leaderboard, or open the dedicated comparison page at `#/compare?models=<slug>,<slug,…>` — shareable, with a spec matrix (params, MoE active params, context, modalities, reasoning, tokenizer, release date), USD pricing per 1M tokens with blended 3:1 price and a score-per-dollar value metric, plus the full 11-leaderboard score matrix with best-in-row highlighting
 - **Search** — filter models by name, synced to `?q=` for shareable views
 - **Coverage Level (CL)** — shows what % of core benchmarks a model appears on
 
 ## Tech Stack
 
 - Vue 3 + Vite
-- vue-router (hash history — GitHub Pages friendly): views live in `src/views`, routes `#/`, `#/benchmarks/:slug?`, `#/model/:slug` (+ legacy `#/leaderboard/*` redirects)
+- vue-router (hash history — GitHub Pages friendly): views live in `src/views`, routes `#/`, `#/benchmarks/:slug?`, `#/model/:slug`, `#/compare` (+ legacy `#/leaderboard/*` redirects)
 - Uses Buefy for UI components (no PrimeVue, no Tailwind)
 - Pure CSS with CSS custom properties
 

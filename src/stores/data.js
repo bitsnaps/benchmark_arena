@@ -135,6 +135,17 @@ const benchRankIndex = computed(() => {
   return out;
 });
 
+// ── Model metadata (OpenRouter catalog snapshot) ──────────────────────
+// One entry per matched model: params, modalities, context, pricing…
+// Models absent from the catalog simply resolve to null.
+const modelsMeta = computed(() => rawData.value?.models_meta || {});
+const metaFor = (row) => (row && row.name ? modelsMeta.value[row.name] || null : null);
+const metaCoverage = computed(() => {
+  const total = pivotAll.value.length;
+  const withMeta = pivotAll.value.filter(r => !!modelsMeta.value[r.name]).length;
+  return { total, withMeta };
+});
+
 // Full benchmark name as native tooltip on column headers
 function benchThAttrs(column) {
   const b = column.field;
@@ -151,5 +162,6 @@ export function useData() {
     avgForModel, topOverall, topClosed, topOpen, leaders,
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
     modelSlugIndex, benchSlugIndex, benchRankIndex,
+    modelsMeta, metaFor, metaCoverage,
   };
 }

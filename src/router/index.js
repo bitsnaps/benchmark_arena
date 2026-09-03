@@ -7,6 +7,7 @@
 //   /                     Home = the leaderboard (tier tabs via ?tier=)
 //   /benchmarks/:slug?    Per-benchmark explorer (slug deep links)
 //   /model/:slug          Per-model score card
+//   /compare              Side-by-side comparison (?models=slug,slug)
 //   /leaderboard/...      Legacy redirects → /?tier=...
 
 import { createRouter, createWebHashHistory } from 'vue-router';
@@ -28,6 +29,11 @@ const routes = [
     path: '/model/:slug',
     name: 'model',
     component: () => import('../views/ModelDetailView.vue'),
+  },
+  {
+    path: '/compare',
+    name: 'compare',
+    component: () => import('../views/CompareView.vue'),
   },
   { path: '/:pathMatch(.*)*', redirect: { name: 'home' } },
 ];

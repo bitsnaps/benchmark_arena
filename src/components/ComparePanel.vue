@@ -1,7 +1,7 @@
 <script setup>
 // Side-by-side comparison of the checked models (up to 5).
 import { SHORT } from '../lib/constants.js';
-import { fmtScore, scoreColor, providerColor, initials } from '../lib/format.js';
+import { fmtScore, scoreColor, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
@@ -23,7 +23,10 @@ const { compareRows, clearCompare, isBest } = useLeaderboard();
           <span class="av" :style="{ background: providerColor(props.row.name).color }">
             {{ initials(props.row.name) }}
           </span>
-          <span class="has-text-weight-semibold">{{ props.row.name }}</span>
+          <router-link
+            class="model-link has-text-weight-semibold"
+            :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
+          >{{ props.row.name }}</router-link>
         </div>
       </b-table-column>
       <b-table-column field="avg" label="Avg" width="90" centered numeric v-slot="props">

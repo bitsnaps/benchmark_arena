@@ -2,20 +2,34 @@
 // Hash history: GitHub Pages has no server rewrites, so #/... URLs are
 // the zero-config option. Swap to createWebHistory when a real host with
 // SPA fallback exists.
+//
+// Site map (leaderboard-first):
+//   /                     Home = the leaderboard (tier tabs via ?tier=)
+//   /benchmarks/:slug?    Per-benchmark explorer (slug deep links)
+//   /model/:slug          Per-model score card
+//   /leaderboard/...      Legacy redirects → /?tier=...
 
 import { createRouter, createWebHashHistory } from 'vue-router';
-import OverviewView from '../views/OverviewView.vue';
+import HomeView from '../views/HomeView.vue';
 
 const routes = [
-  { path: '/', name: 'overview', component: OverviewView },
-  { path: '/leaderboard', redirect: { name: 'leaderboard', params: { tier: 'all' } } },
+  { path: '/', name: 'home', component: HomeView },
+  { path: '/leaderboard', redirect: { name: 'home' } },
   {
     path: '/leaderboard/:tier(all|closed|open)',
-    name: 'leaderboard',
-    component: () => import('../views/LeaderboardView.vue'),
+    redirect: (to) => ({ name: 'home', query: { tier: to.params.tier } }),
   },
-  { path: '/benchmarks', name: 'benchmarks', component: () => import('../views/BenchmarksView.vue') },
-  { path: '/:pathMatch(.*)*', redirect: { name: 'overview' } },
+  {
+    path: '/benchmarks/:slug?',
+    name: 'benchmarks',
+    component: () => import('../views/BenchmarksView.vue'),
+  },
+  {
+    path: '/model/:slug',
+    name: 'model',
+    component: () => import('../views/ModelDetailView.vue'),
+  },
+  { path: '/:pathMatch(.*)*', redirect: { name: 'home' } },
 ];
 
 export default createRouter({
@@ -23,7 +37,9 @@ export default createRouter({
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) return savedPosition;
-    // Only jump to top when switching views, not when flipping tier tabs
-    return to.name === from.name ? {} : { top: 0 };
+    // Keep scroll position when flipping tier tabs / search on home,
+    // but always land at the top for real view changes.
+    if (to.name === 'home' && from.name === 'home') return {};
+    return { top: 0 };
   },
 });

@@ -1,5 +1,7 @@
 // ── Static app configuration ──────────────────────────────────────────
 
+export const BASE_TITLE = 'Benchmark Arena | LLM Leaderboard Aggregator';
+
 // Column header shorthand per benchmark
 export const SHORT = {
   'Artificial Analysis': 'AA',

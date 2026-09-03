@@ -274,6 +274,26 @@ a:hover { color: #7ff3df; }
 .tier-chip.closed { background: var(--rose-dim); color: var(--rose); }
 .tier-chip.open { background: var(--teal-dim); color: var(--teal); }
 
+/* ── Model pages / deep links ─────────────────────────────── */
+.crumbs { display: flex; align-items: center; gap: .5rem; margin-bottom: 1rem; }
+.crumb { color: var(--faint); font-size: .82rem; font-weight: 600; text-decoration: none; }
+.crumb:hover { color: var(--teal); }
+.crumb.current { color: var(--muted); }
+.crumb-sep { color: var(--line-2); }
+.model-head { display: flex; align-items: center; gap: 1rem; padding: 1.2rem; flex-wrap: wrap; }
+.model-head .grow { flex: 1; min-width: 220px; }
+.av.lg { width: 52px; height: 52px; border-radius: 14px; font-size: 1.05rem; }
+.tag-lab.rose { background: var(--rose-dim); color: var(--rose); border-color: transparent; }
+.model-link { color: var(--text); text-decoration: none; }
+.model-link:hover { color: var(--teal); }
+a.hbar { color: inherit; text-decoration: none; }
+a.hbar:hover .name { color: var(--teal); }
+.hbar.missing { opacity: .4; }
+.crown { color: var(--gold); font-size: .7rem; font-weight: 700; margin-left: .4rem; text-transform: uppercase; letter-spacing: .05em; }
+.home-stats { margin-bottom: 1.4rem; }
+.kv.row-click { cursor: pointer; }
+.kv.row-click:hover .k { color: var(--teal); }
+
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 980px) {
   .grid-4, .grid-3 { grid-template-columns: 1fr 1fr; }

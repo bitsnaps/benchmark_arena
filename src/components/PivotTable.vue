@@ -2,7 +2,7 @@
 // The global pivot table — one row per model, one column per benchmark.
 // Reused by every leaderboard tier tab (all / closed / open).
 import { SHORT } from '../lib/constants.js';
-import { fmtScore, scoreColor, barWidth, clTag, rankClass, providerColor, initials } from '../lib/format.js';
+import { fmtScore, scoreColor, barWidth, clTag, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
@@ -50,7 +50,11 @@ function byAvg(a, b, isAsc) {
           {{ initials(props.row.name) }}
         </span>
         <div>
-          <div class="has-text-weight-semibold">{{ props.row.name }}</div>
+          <router-link
+            class="model-link has-text-weight-semibold"
+            :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
+            :title="'Open ' + props.row.name + '\'s score card'"
+          >{{ props.row.name }}</router-link>
           <div class="cell-sub">
             {{ providerColor(props.row.name).name }}
             <span v-if="tier === 'all'" class="tier-chip" :class="tierOf(props.row)">{{ tierOf(props.row) === 'closed' ? 'closed' : 'open' }}</span>

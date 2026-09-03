@@ -54,3 +54,8 @@ export function initials(name) {
   if (w0.length >= 3) return w0.slice(0, 2).toUpperCase();
   return (w0 + (words[1] || '')).slice(0, 2).toUpperCase();
 }
+
+// URL slug for model / benchmark deep links ("GPT-5.2 Pro" → "gpt-5-2-pro")
+export function slugify(s) {
+  return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}

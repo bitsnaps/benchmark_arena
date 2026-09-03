@@ -1,22 +1,25 @@
 <script setup>
 // Benchmarks — per-eval explorer: blurb, top-3 glance and bar ranking.
-import { ref, computed, watch } from 'vue';
-import { useRouter } from 'vue-router';
+// The selected benchmark is deep-linkable: /benchmarks/:slug
+import { ref, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { SHORT, BLURBS } from '../lib/constants.js';
-import { fmtScore, rankClass, trackColor } from '../lib/format.js';
+import { fmtScore, rankClass, trackColor, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 
+const route = useRoute();
 const router = useRouter();
-const { benchmarks, perBenchData, isCore } = useData();
+const { benchmarks, perBenchData, benchSlugIndex, modelSlugIndex, isCore } = useData();
 
-const activeBench = ref('');
 const benchFilter = ref('all');       // all | closed | open
 
-// Data is guaranteed loaded before views mount (App guards on loading),
-// but keep a watcher for safety on direct navigation.
-watch(benchmarks, (b) => {
-  if (!activeBench.value && b.length) activeBench.value = b[0];
-}, { immediate: true });
+// Active benchmark comes from the URL slug (falls back to the first one)
+const activeBench = computed(() => {
+  const slug = typeof route.params.slug === 'string' ? route.params.slug : '';
+  return (slug && benchSlugIndex.value.get(slug)) || benchmarks.value[0] || '';
+});
+
+const pick = (b) => router.push({ name: 'benchmarks', params: { slug: slugify(b) } });
 
 const benchInfo = computed(() => {
   const d = perBenchData.value[activeBench.value] || { closed: [], open: [] };
@@ -34,13 +37,24 @@ const rankingRows = computed(() => {
   return rows;
 });
 
-// Open the model in the leaderboard (All tab so either tier matches)
-const searchForModel = (name) =>
-  router.push({ name: 'leaderboard', params: { tier: 'all' }, query: { q: name } });
+// Open the model's score card; models that never made it into the
+// unified pivot fall back to a pre-filtered leaderboard search.
+const openModel = (name) => {
+  const slug = slugify(name);
+  if (modelSlugIndex.value.has(slug)) {
+    router.push({ name: 'model', params: { slug } });
+  } else {
+    router.push({ name: 'home', query: { q: name } });
+  }
+};
 </script>
 
 <template>
   <section>
+    <div class="crumbs">
+      <router-link class="crumb" :to="{ name: 'home' }"><i class="fas fa-arrow-left"></i> Leaderboard</router-link>
+    </div>
+
     <div class="page-head">
       <div class="kicker">Performance by eval</div>
       <h1 class="section-title">Benchmarks</h1>
@@ -48,7 +62,7 @@ const searchForModel = (name) =>
     </div>
 
     <div class="chips" style="margin-bottom:1rem">
-      <span class="chip" v-for="b in benchmarks" :key="b" :class="{ on: activeBench === b }" @click="activeBench = b">
+      <span class="chip" v-for="b in benchmarks" :key="b" :class="{ on: activeBench === b }" @click="pick(b)">
         {{ SHORT[b] || b }}
       </span>
     </div>
@@ -68,9 +82,10 @@ const searchForModel = (name) =>
       </div>
       <div class="panel-lab" style="padding:1.2rem">
         <div class="lbl">Top 3 at a glance</div>
-        <div class="kv" v-for="(r, i) in rankingRows.slice(0, 3)" :key="r.tier + r.name">
+        <div class="kv row-click" v-for="(r, i) in rankingRows.slice(0, 3)" :key="r.tier + r.name"
+          :title="'Open ' + r.name + '\'s score card'" @click="openModel(r.name)">
           <span class="k">
-            <span class="rank" :class="rankClass(i)" style="display:inline-grid;margin-right:.45rem">{{ i + 1 }}</span>
+            <span class="rank" :class="rankClass(i + 1)" style="display:inline-grid;margin-right:.45rem">{{ i + 1 }}</span>
             {{ r.name }}
           </span>
           <span class="num">{{ fmtScore(r.score) }}</span>
@@ -89,9 +104,9 @@ const searchForModel = (name) =>
       </div>
       <div style="max-height:520px;overflow:auto">
         <div v-for="(r, i) in rankingRows" :key="r.tier + r.name" class="hbar row-click"
-          :title="'Open ' + r.name + ' in the leaderboard'" @click="searchForModel(r.name)">
+          :title="'Open ' + r.name + '\'s score card'" @click="openModel(r.name)">
           <div class="name">
-            <span class="rank" :class="rankClass(i)" style="display:inline-grid;margin-right:.45rem">{{ i + 1 }}</span>
+            <span class="rank" :class="rankClass(i + 1)" style="display:inline-grid;margin-right:.45rem">{{ i + 1 }}</span>
             {{ r.name }}
           </div>
           <div class="track"><i :style="{ width: r.pct + '%', background: trackColor(i) }"></i></div>

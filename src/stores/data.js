@@ -4,6 +4,7 @@
 
 import { ref, computed } from 'vue';
 import { SHORT, CORE_BENCHMARKS, LEADER_BENCHES } from '../lib/constants.js';
+import { slugify } from '../lib/format.js';
 
 const rawData = ref(null);
 const loading = ref(true);
@@ -101,6 +102,39 @@ const tierOf = (row) => rankMaps.value.closed.has(row.name) ? 'closed' : 'open';
 
 const isCore = (b) => coreBenchmarks.value.includes(b);
 
+// ── Slug indexes (deep links) ─────────────────────────────────────────
+const modelSlugIndex = computed(() => {
+  const m = new Map();
+  for (const r of pivotAll.value) {
+    const s = slugify(r.name);
+    if (!m.has(s)) m.set(s, r);
+  }
+  return m;
+});
+
+const benchSlugIndex = computed(() => {
+  const m = new Map();
+  for (const b of benchmarks.value) m.set(slugify(b), b);
+  return m;
+});
+
+// Per-benchmark ranking across ALL models (for model cards):
+// { [bench]: { count, ranks: Map(name → 1-based rank), best } }
+const benchRankIndex = computed(() => {
+  const out = {};
+  for (const b of benchmarks.value) {
+    const rows = pivotAll.value
+      .filter(r => r[b] !== null && r[b] !== undefined)
+      .sort((x, y) => y[b] - x[b]);
+    out[b] = {
+      count: rows.length,
+      ranks: rows.reduce((m, r, i) => m.set(r.name, i + 1), new Map()),
+      best: rows[0]?.name ?? null,
+    };
+  }
+  return out;
+});
+
 // Full benchmark name as native tooltip on column headers
 function benchThAttrs(column) {
   const b = column.field;
@@ -116,5 +150,6 @@ export function useData() {
     pivotClosed, pivotOpen, pivotAll, pivotFor, stats,
     avgForModel, topOverall, topClosed, topOpen, leaders,
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
+    modelSlugIndex, benchSlugIndex, benchRankIndex,
   };
 }

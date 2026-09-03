@@ -1,8 +1,9 @@
 <script setup>
 // App shell — navbar, router outlet, footer. All data lives in the
 // shared store (src/stores/data.js), fetched once for every view.
-import { ref, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { BASE_TITLE } from './lib/constants.js';
 import { useData } from './stores/data.js';
 import { useLeaderboard } from './stores/leaderboard.js';
 
@@ -15,9 +16,14 @@ const menuOpen = ref(false);
 
 onMounted(ensureLoaded);
 
+// Reset the document title on navigation (model cards set their own)
+watch(route, (r) => {
+  if (r.name !== 'model') document.title = BASE_TITLE;
+});
+
 function goCompare() {
   compareMode.value = true;
-  router.push({ name: 'leaderboard', params: { tier: 'all' } });
+  router.push({ name: 'home' });
 }
 </script>
 
@@ -29,7 +35,7 @@ function goCompare() {
     <nav class="navbar is-fixed-top lab-nav" role="navigation" aria-label="main navigation">
       <div class="wrap" style="display:flex;width:min(1240px,calc(100% - 2rem));">
         <div class="navbar-brand">
-          <router-link class="navbar-item" :to="{ name: 'overview' }">
+          <router-link class="navbar-item" :to="{ name: 'home' }">
             <span class="brand-mark"><i class="fas fa-ranking-star"></i></span>
             <span class="brand-word">Benchmark <span>Arena</span></span>
           </router-link>
@@ -40,10 +46,8 @@ function goCompare() {
         </div>
         <div class="navbar-menu" :class="{ 'is-active': menuOpen }">
           <div class="navbar-start">
-            <router-link class="navbar-item" :class="{ 'is-active': route.name === 'overview' }"
-              :to="{ name: 'overview' }" @click="menuOpen = false">Overview</router-link>
-            <router-link class="navbar-item" :class="{ 'is-active': route.name === 'leaderboard' }"
-              :to="{ name: 'leaderboard', params: { tier: 'all' } }" @click="menuOpen = false">Leaderboard</router-link>
+            <router-link class="navbar-item" :class="{ 'is-active': route.name === 'home' }"
+              :to="{ name: 'home' }" @click="menuOpen = false">Leaderboard</router-link>
             <router-link class="navbar-item" :class="{ 'is-active': route.name === 'benchmarks' }"
               :to="{ name: 'benchmarks' }" @click="menuOpen = false">Benchmarks</router-link>
           </div>

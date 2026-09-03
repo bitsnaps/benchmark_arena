@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-03 18:34",
+  "timestamp": "2026-09-03 21:36",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -59,12 +59,72 @@
           61.0
         ],
         [
+          "GPT-6 Astra (max)",
+          61.0
+        ],
+        [
+          "GPT-6 Astra (xhigh)",
+          61.0
+        ],
+        [
           "GPT-5.6 Sol (max)",
           61.0
         ],
         [
           "Grok 4.6 (high)",
           61.0
+        ],
+        [
+          "Muse Spark 1.3 (xhigh)",
+          61.0
+        ],
+        [
+          "Claude Fable 5.1 (medium with fallback)",
+          60.0
+        ],
+        [
+          "GPT-6 Astra (high)",
+          60.0
+        ],
+        [
+          "Grok 4.6 (xhigh)",
+          60.0
+        ],
+        [
+          "GPT-6 Astra (medium)",
+          59.0
+        ],
+        [
+          "GPT-5.6 Sol (xhigh)",
+          59.0
+        ],
+        [
+          "Grok 4.6 (medium)",
+          59.0
+        ],
+        [
+          "Gemini 3.8 Flash (high)",
+          59.0
+        ],
+        [
+          "Claude Opus 5 (medium)",
+          59.0
+        ],
+        [
+          "Claude Fable 5.1 (low with fallback)",
+          57.99999999999999
+        ],
+        [
+          "GPT-5.6 Sol (high)",
+          56.99999999999999
+        ],
+        [
+          "Muse Spark 1.2 (xhigh)",
+          56.99999999999999
+        ],
+        [
+          "GPT-6 Astra (low)",
+          56.99999999999999
         ]
       ],
       "open": [
@@ -107,6 +167,66 @@
         [
           "DeepSeek V4 Flash 0731 (max)",
           52.0
+        ],
+        [
+          "DeepSeek V4 Flash Vision (max)",
+          51.0
+        ],
+        [
+          "Kimi K3 (low)",
+          48.0
+        ],
+        [
+          "MiniMax-M3",
+          45.0
+        ],
+        [
+          "DeepSeek V4 Pro (max)",
+          45.0
+        ],
+        [
+          "Qwen3.8 27B (medium)",
+          44.0
+        ],
+        [
+          "DeepSeek V4 Pro (high)",
+          44.0
+        ],
+        [
+          "Kimi K2.7 Code",
+          43.0
+        ],
+        [
+          "MiMo-V2.5-Pro",
+          43.0
+        ],
+        [
+          "Qwen3.8 27B (low)",
+          43.0
+        ],
+        [
+          "Solar Pro 4",
+          42.0
+        ],
+        [
+          "Nemotron 3 Ultra",
+          38.0
+        ],
+        [
+          "MiMo-V2.5",
+          38.0
+        ],
+        [
+          "Qwen3.6 27B",
+          38.0
+        ],
+        [
+          "Solar Open2 250B",
+          37.0
+        ],
+        [
+          "MiMo-V2-Omni-0327",
+          37.0
         ]
       ]
     },
@@ -151,6 +271,38 @@
         [
           "InternScience",
           57.0
+        ],
+        [
+          "InternScience",
+          57.0
+        ],
+        [
+          "Apodex",
+          54.0
+        ],
+        [
+          "StepFun",
+          46.0
+        ],
+        [
+          "InclusionAI",
+          49.0
+        ],
+        [
+          "Ornith AI",
+          49.0
+        ],
+        [
+          "Microsoft",
+          51.0
+        ],
+        [
+          "Ornith AI",
+          41.0
+        ],
+        [
+          "Inception",
+          43.0
         ]
       ],
       "open": [
@@ -201,6 +353,66 @@
         [
           "muse spark 1.1",
           91.07692307692308
+        ],
+        [
+          "gemini 3.7 flash (High)",
+          90.92307692307692
+        ],
+        [
+          "muse spark",
+          90.46153846153845
+        ],
+        [
+          "claude opus 5 max",
+          90.46153846153845
+        ],
+        [
+          "gemini 3.1 pro preview",
+          90.3076923076923
+        ],
+        [
+          "gemini 3 pro",
+          90.15384615384615
+        ],
+        [
+          "gpt 5.6 sol (xHigh)",
+          89.6923076923077
+        ],
+        [
+          "claude opus 4.8 (High)",
+          89.53846153846153
+        ],
+        [
+          "gpt 5.5 (High)",
+          89.53846153846153
+        ],
+        [
+          "gemini 3.6 flash (High)",
+          89.23076923076924
+        ],
+        [
+          "gemini 3.5 flash (High)",
+          89.07692307692308
+        ],
+        [
+          "gpt 5.5",
+          88.76923076923077
+        ],
+        [
+          "gpt 5.4 (High)",
+          88.76923076923077
+        ],
+        [
+          "gpt 5.2 chat latest 20260210",
+          88.61538461538461
+        ],
+        [
+          "gemini 3.5 flash (Medium)",
+          88.61538461538461
+        ],
+        [
+          "grok 4.20 beta1",
+          88.46153846153845
         ]
       ],
       "open": [
@@ -243,6 +455,66 @@
         [
           "deepseek v4 pro high 20260813",
           86.15384615384616
+        ],
+        [
+          "deepseek v4 pro",
+          85.84615384615385
+        ],
+        [
+          "glm 5",
+          85.84615384615385
+        ],
+        [
+          "deepseek v4 pro high preview",
+          85.38461538461539
+        ],
+        [
+          "gemma 4 31b",
+          84.76923076923077
+        ],
+        [
+          "kimi k2.5 thinking",
+          84.76923076923077
+        ],
+        [
+          "mimo v2 pro",
+          84.3076923076923
+        ],
+        [
+          "qwen3.6 plus",
+          83.6923076923077
+        ],
+        [
+          "minimax m3",
+          83.53846153846153
+        ],
+        [
+          "glm 4.7",
+          83.38461538461537
+        ],
+        [
+          "qwen3.5 397b a17b",
+          83.23076923076923
+        ],
+        [
+          "deepseek v4 flash high preview",
+          82.76923076923077
+        ],
+        [
+          "gemma 4 26b a4b",
+          82.76923076923077
+        ],
+        [
+          "qwen3.8 27b",
+          82.46153846153847
+        ],
+        [
+          "deepseek v4 flash",
+          82.46153846153847
+        ],
+        [
+          "qwen3 max preview",
+          82.3076923076923
         ]
       ]
     },
@@ -287,6 +559,66 @@
         [
           "Grok 4.6",
           75.9
+        ],
+        [
+          "Muse Spark 1.2",
+          74.5
+        ],
+        [
+          "GPT-5.6 Sol Pro (xhigh)",
+          71.7
+        ],
+        [
+          "Qwen 3.7 Max",
+          70.4
+        ],
+        [
+          "Grok 4.5",
+          70.0
+        ],
+        [
+          "GPT-5.5",
+          69.0
+        ],
+        [
+          "Claude Opus 4.6",
+          67.6
+        ],
+        [
+          "Claude Opus 4.8",
+          64.8
+        ],
+        [
+          "GPT-5.6 Sol (xhigh)",
+          64.8
+        ],
+        [
+          "Qwen 3.6 Max Preview",
+          63.0
+        ],
+        [
+          "Gemini 2.5 Pro (06-05)",
+          62.4
+        ],
+        [
+          "Claude Opus 4.5",
+          62.0
+        ],
+        [
+          "Claude Opus 4.7",
+          61.7
+        ],
+        [
+          "GPT-5 Pro",
+          61.6
+        ],
+        [
+          "Gemini 3 Flash Preview",
+          61.1
+        ],
+        [
+          "Claude Sonnet 5",
+          60.6
         ]
       ],
       "open": [
@@ -405,12 +737,12 @@
           92.5
         ],
         [
-          "Claude Opus 5",
+          "Claude Fable 5.1",
           90.5
         ],
         [
-          "Claude Fable 5.1",
-          90.33333333333333
+          "Claude Opus 5",
+          90.5
         ],
         [
           "GPT-5.6 Sol (Medium)",
@@ -422,7 +754,7 @@
         ],
         [
           "Claude Fable 5",
-          88.33333333333333
+          88.5
         ],
         [
           "Gemini 3.7 Flash",
@@ -439,12 +771,24 @@
         [
           "Claude Opus 4.7",
           85.0
+        ],
+        [
+          "Claude Opus 4.6",
+          84.66666666666667
+        ],
+        [
+          "Claude Opus 4.6 (Thinking)",
+          84.16666666666667
+        ],
+        [
+          "Grok 4.5",
+          83.16666666666667
         ]
       ],
       "open": [
         [
           "Kimi K3",
-          99.33333333333333
+          99.5
         ],
         [
           "GLM-5.3",
@@ -456,7 +800,7 @@
         ],
         [
           "Qwen3.8 Max",
-          85.5
+          85.33333333333334
         ],
         [
           "GLM-5.3-Flash",
@@ -509,6 +853,18 @@
         [
           "Muse Spark 1.2",
           55.0
+        ],
+        [
+          "Claude Sonnet 5",
+          54.0
+        ],
+        [
+          "Gemini 3.6 Flash",
+          47.0
+        ],
+        [
+          "Gemini 3.5 Flash",
+          36.0
         ]
       ],
       "open": [
@@ -741,6 +1097,54 @@
         [
           "Muse Spark",
           43.5
+        ],
+        [
+          "GPT-5",
+          39.4
+        ],
+        [
+          "Gemini 3.1 Pro",
+          38.800000000000004
+        ],
+        [
+          "Claude Sonnet 4.5",
+          28.9
+        ],
+        [
+          "Claude Opus 4.1",
+          25.0
+        ],
+        [
+          "Claude Sonnet 4",
+          22.6
+        ],
+        [
+          "Claude Sonnet 3.7",
+          14.499999999999998
+        ],
+        [
+          "GPT-4.1",
+          9.356337093563372
+        ],
+        [
+          "Gemini 2.5 Flash Preview",
+          4.844061048440611
+        ],
+        [
+          "o4-mini",
+          2.45520902455209
+        ],
+        [
+          "R2E-Gym-32B",
+          1.9907100199071004
+        ],
+        [
+          "OpenHands-LM-32B",
+          1.6589250165892502
+        ],
+        [
+          "SWE-Gym-32B",
+          0.06635700066357
         ]
       ],
       "open": [
@@ -783,6 +1187,14 @@
         [
           "GLM-4.7",
           23.5
+        ],
+        [
+          "DeepSeek-V3",
+          3.5832780358327807
+        ],
+        [
+          "Qwen3-235B-A22B",
+          1.85799601857996
         ]
       ]
     }
@@ -797,7 +1209,7 @@
       "Arena.ai Text": 92.9,
       "SimpleBench.com": 86.6,
       "ARC-AGI-2": 90.0,
-      "Design Arena": 90.3,
+      "Design Arena": 90.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -806,13 +1218,13 @@
     },
     {
       "name": "Claude Opus 5",
-      "num_benchmarks": 6,
-      "cl": 75.0,
+      "num_benchmarks": 5,
+      "cl": 62.5,
       "Artificial Analysis": 63.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 91.2,
       "SimpleBench.com": 80.6,
-      "ARC-AGI-2": 90.4,
+      "ARC-AGI-2": null,
       "Design Arena": 90.5,
       "DeepSWE": 74.0,
       "VendingBench": 100.0,
@@ -822,14 +1234,14 @@
     },
     {
       "name": "Claude Fable 5",
-      "num_benchmarks": 5,
-      "cl": 62.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 62.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 93.4,
       "SimpleBench.com": null,
-      "ARC-AGI-2": 89.2,
-      "Design Arena": 88.3,
+      "ARC-AGI-2": null,
+      "Design Arena": 88.5,
       "DeepSWE": 70.0,
       "VendingBench": null,
       "SWE-Marathon": 90.0,
@@ -853,22 +1265,6 @@
       "CyberGem": 43.5
     },
     {
-      "name": "GPT-5.6 Sol",
-      "num_benchmarks": 7,
-      "cl": 87.5,
-      "Artificial Analysis": 61.0,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 89.7,
-      "SimpleBench.com": 64.8,
-      "ARC-AGI-2": 92.5,
-      "Design Arena": 92.5,
-      "DeepSWE": 73.0,
-      "VendingBench": 86.0,
-      "SWE-Marathon": 85.0,
-      "FrontierSWE": 32.2,
-      "CyberGem": null
-    },
-    {
       "name": "Grok 4.6",
       "num_benchmarks": 7,
       "cl": 87.5,
@@ -883,6 +1279,22 @@
       "SWE-Marathon": 63.8,
       "FrontierSWE": 25.3,
       "CyberGem": 79.7
+    },
+    {
+      "name": "GPT-5.6 Sol",
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": 61.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 89.7,
+      "SimpleBench.com": 64.8,
+      "ARC-AGI-2": null,
+      "Design Arena": 92.5,
+      "DeepSWE": 73.0,
+      "VendingBench": 86.0,
+      "SWE-Marathon": 85.0,
+      "FrontierSWE": 32.2,
+      "CyberGem": null
     },
     {
       "name": "Gemini 3.8 Flash",
@@ -918,13 +1330,13 @@
     },
     {
       "name": "GPT-5.6 Terra",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 57.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 87.1,
       "SimpleBench.com": null,
-      "ARC-AGI-2": 83.9,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": 65.7,
@@ -950,13 +1362,13 @@
     },
     {
       "name": "Grok 4.5",
-      "num_benchmarks": 6,
-      "cl": 75.0,
+      "num_benchmarks": 5,
+      "cl": 62.5,
       "Artificial Analysis": 56.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 87.8,
       "SimpleBench.com": 70.0,
-      "ARC-AGI-2": 52.6,
+      "ARC-AGI-2": null,
       "Design Arena": 83.2,
       "DeepSWE": null,
       "VendingBench": null,
@@ -982,13 +1394,13 @@
     },
     {
       "name": "GPT-5.6 Luna",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 52.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 85.1,
       "SimpleBench.com": null,
-      "ARC-AGI-2": 59.5,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": 67.0,
       "VendingBench": null,
@@ -998,13 +1410,13 @@
     },
     {
       "name": "Gemini 3.6 Flash",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 52.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 89.2,
       "SimpleBench.com": null,
-      "ARC-AGI-2": 60.4,
+      "ARC-AGI-2": null,
       "Design Arena": 85.2,
       "DeepSWE": 47.0,
       "VendingBench": null,
@@ -1014,13 +1426,13 @@
     },
     {
       "name": "Gemini 3.1 Pro",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 48.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 90.3,
       "SimpleBench.com": 79.6,
-      "ARC-AGI-2": 77.1,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
@@ -1030,13 +1442,13 @@
     },
     {
       "name": "Gemini 3.5 Flash",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 47.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 89.1,
       "SimpleBench.com": 76.7,
-      "ARC-AGI-2": 72.1,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": 36.0,
       "VendingBench": null,
@@ -1062,13 +1474,13 @@
     },
     {
       "name": "Inkling",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 42.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 82.9,
       "SimpleBench.com": null,
-      "ARC-AGI-2": 36.5,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
@@ -1078,13 +1490,13 @@
     },
     {
       "name": "Inkling Small",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 2,
+      "cl": 25.0,
       "Artificial Analysis": 41.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 78.0,
       "SimpleBench.com": null,
-      "ARC-AGI-2": 40.1,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
@@ -1110,13 +1522,13 @@
     },
     {
       "name": "Gemini 3.5 Flash-Lite",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 2,
+      "cl": 25.0,
       "Artificial Analysis": 37.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 85.7,
       "SimpleBench.com": null,
-      "ARC-AGI-2": 10.3,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
@@ -1349,70 +1761,6 @@
       "CyberGem": null
     },
     {
-      "name": "claude opus 4.7",
-      "num_benchmarks": 4,
-      "cl": 50.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 92.6,
-      "SimpleBench.com": 61.7,
-      "ARC-AGI-2": 75.8,
-      "Design Arena": 85.0,
-      "DeepSWE": null,
-      "VendingBench": 97.8,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "claude opus 4.8",
-      "num_benchmarks": 4,
-      "cl": 50.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 89.5,
-      "SimpleBench.com": 64.8,
-      "ARC-AGI-2": 72.1,
-      "Design Arena": null,
-      "DeepSWE": 59.0,
-      "VendingBench": null,
-      "SWE-Marathon": 97.6,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "GPT-5 Pro",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 82.2,
-      "SimpleBench.com": 61.6,
-      "ARC-AGI-2": 18.3,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": 39.4
-    },
-    {
-      "name": "GPT-5.5 Pro",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 89.5,
-      "SimpleBench.com": 76.9,
-      "ARC-AGI-2": 85.0,
-      "Design Arena": null,
-      "DeepSWE": 67.0,
-      "VendingBench": 67.3,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": 81.8
-    },
-    {
       "name": "claude opus 4.6",
       "num_benchmarks": 3,
       "cl": 37.5,
@@ -1429,14 +1777,46 @@
       "CyberGem": 66.6
     },
     {
-      "name": "gemini 3 flash",
+      "name": "claude opus 4.7",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
       "BenchLM.ai": null,
+      "Arena.ai Text": 92.6,
+      "SimpleBench.com": 61.7,
+      "ARC-AGI-2": null,
+      "Design Arena": 85.0,
+      "DeepSWE": null,
+      "VendingBench": 97.8,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "claude opus 4.8",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 89.5,
+      "SimpleBench.com": 64.8,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": 59.0,
+      "VendingBench": null,
+      "SWE-Marathon": 97.6,
+      "FrontierSWE": null,
+      "CyberGem": null
+    },
+    {
+      "name": "gemini 3 flash",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
       "Arena.ai Text": 88.3,
       "SimpleBench.com": 61.1,
-      "ARC-AGI-2": 33.6,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
@@ -1446,13 +1826,13 @@
     },
     {
       "name": "gemini 3 pro",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 2,
+      "cl": 25.0,
       "Artificial Analysis": null,
       "BenchLM.ai": null,
       "Arena.ai Text": 90.2,
       "SimpleBench.com": 76.4,
-      "ARC-AGI-2": 54.0,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
@@ -1461,222 +1841,30 @@
       "CyberGem": null
     },
     {
+      "name": "gpt 5.5 instant",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 89.5,
+      "SimpleBench.com": 69.0,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": 67.0,
+      "VendingBench": 67.3,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 81.8
+    },
+    {
       "name": "grok 4 fast chat",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 2,
+      "cl": 25.0,
       "Artificial Analysis": null,
       "BenchLM.ai": null,
       "Arena.ai Text": 79.7,
       "SimpleBench.com": 60.5,
-      "ARC-AGI-2": 29.4,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "GPT-5.2 Pro",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 82.8,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 72.9,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "GPT-5.4 Pro",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 88.8,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 83.3,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": 79.0
-    },
-    {
-      "name": "claude sonnet 4.6",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 88.0,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 60.4,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": 64.4,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": 65.2
-    },
-    {
-      "name": "gemini 2.5 flash",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 78.5,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 2.5,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": 4.8
-    },
-    {
-      "name": "gemini 2.5 pro",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 84.0,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 4.9,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "gpt 5 mini",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 75.2,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 4.4,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "gpt 5 nano",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 67.2,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 2.6,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "gpt 5.4 mini",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 84.3,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 18.9,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "gpt 5.4 nano",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 77.2,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 5.7,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "grok 3 mini",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 71.4,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 0.4,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "grok 4.20 beta 0309 reasoning",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 88.0,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 65.1,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "o1 mini",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 67.2,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 0.8,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "o3 mini",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 71.2,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 3.0,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
@@ -1695,7 +1883,7 @@
       "Arena.ai Text": 90.6,
       "SimpleBench.com": 60.7,
       "ARC-AGI-2": 60.4,
-      "Design Arena": 99.3,
+      "Design Arena": 99.5,
       "DeepSWE": 69.0,
       "VendingBench": null,
       "SWE-Marathon": 96.2,
@@ -1727,7 +1915,7 @@
       "Arena.ai Text": 89.2,
       "SimpleBench.com": 62.5,
       "ARC-AGI-2": null,
-      "Design Arena": 85.5,
+      "Design Arena": 85.3,
       "DeepSWE": 57.0,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -1751,22 +1939,6 @@
       "CyberGem": null
     },
     {
-      "name": "GLM-5.2",
-      "num_benchmarks": 5,
-      "cl": 62.5,
-      "Artificial Analysis": 53.0,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 88.0,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 22.8,
-      "Design Arena": 86.8,
-      "DeepSWE": 44.0,
-      "VendingBench": 74.4,
-      "SWE-Marathon": 38.8,
-      "FrontierSWE": null,
-      "CyberGem": 77.2
-    },
-    {
       "name": "DeepSeek V4 Pro",
       "num_benchmarks": 4,
       "cl": 50.0,
@@ -1781,6 +1953,22 @@
       "SWE-Marathon": 21.2,
       "FrontierSWE": null,
       "CyberGem": 83.3
+    },
+    {
+      "name": "GLM-5.2",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 53.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 88.0,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": 86.8,
+      "DeepSWE": 44.0,
+      "VendingBench": 74.4,
+      "SWE-Marathon": 38.8,
+      "FrontierSWE": null,
+      "CyberGem": 77.2
     },
     {
       "name": "deepseek v4 flash",
@@ -2101,70 +2289,6 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null
-    },
-    {
-      "name": "deepseek r1",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 80.2,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 1.3,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "deepseek v3.2 exp thinking",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 80.8,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 4.0,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
-    },
-    {
-      "name": "glm 5",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 85.8,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 4.9,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": 43.2
-    },
-    {
-      "name": "minimax m2.5",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 75.5,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 4.9,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null
     }
   ],
   "models_meta": {
@@ -2219,6 +2343,7 @@
       ],
       "hugging_face_id": null,
       "description": "Claude Fable 5.1 improves on Claude Fable 5 across the board, with the biggest gains in agentic coding, long-running agentic workflows, and knowledge work: long code refactors, front-end and visual...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Claude Opus 5": {
@@ -2274,6 +2399,7 @@
       ],
       "hugging_face_id": null,
       "description": "Claude Opus 5 is Anthropic’s flagship model for demanding reasoning, coding, and long-horizon agentic work. It is particularly strong at end-to-end software tasks, code review and bug finding, visual analysis...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Claude Fable 5": {
@@ -2328,6 +2454,7 @@
       ],
       "hugging_face_id": null,
       "description": "Claude Fable 5 is a Mythos-class model from Anthropic, built for autonomous knowledge work and coding. It supports text, image, and file inputs with text output, with reasoning support and...",
+      "superseded_by": "Claude Fable 5.1",
       "match": "exact"
     },
     "Muse Spark 1.3": {
@@ -2385,60 +2512,7 @@
       ],
       "hugging_face_id": null,
       "description": "Muse Spark 1.3 is a multimodal reasoning model from Meta for long-running agentic, multi-agent, and coding workflows. It is designed to keep track of information across extended tasks, work through...",
-      "match": "exact"
-    },
-    "GPT-5.6 Sol": {
-      "or_id": "openai/gpt-5.6-sol",
-      "or_name": "OpenAI: GPT-5.6 Sol",
-      "provider": "OpenAI",
-      "created": "2026-07-09",
-      "context_length": 1050000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2026-02-16",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 2.0,
-        "output": 10.0,
-        "cache_read": 0.2
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "max",
-          "xhigh",
-          "high",
-          "medium",
-          "low",
-          "none"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": null,
-      "description": "GPT-5.6 Sol is the flagship model in OpenAI's GPT-5.6 series. It is suited for complex reasoning, coding, and agentic workflows, and is particularly strong at command-line and multi-step coding tasks...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Grok 4.6": {
@@ -2496,6 +2570,62 @@
       ],
       "hugging_face_id": null,
       "description": "Grok 4.6 is SpaceXAI's smartest model with frontier performance on coding, knowledge work, and STEM.",
+      "superseded_by": null,
+      "match": "exact"
+    },
+    "GPT-5.6 Sol": {
+      "or_id": "openai/gpt-5.6-sol",
+      "or_name": "OpenAI: GPT-5.6 Sol",
+      "provider": "OpenAI",
+      "created": "2026-07-09",
+      "context_length": 1050000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2026-02-16",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 2.0,
+        "output": 10.0,
+        "cache_read": 0.2
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "description": "GPT-5.6 Sol is the flagship model in OpenAI's GPT-5.6 series. It is suited for complex reasoning, coding, and agentic workflows, and is particularly strong at command-line and multi-step coding tasks...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Gemini 3.8 Flash": {
@@ -2551,6 +2681,7 @@
       ],
       "hugging_face_id": null,
       "description": "Gemini 3.8 Flash is Google's most intelligent Flash model with significant gains from 3.7 Flash across software engineering, agentic tasks, and multi-step reasoning.",
+      "superseded_by": null,
       "match": "exact"
     },
     "Muse Spark 1.2": {
@@ -2608,6 +2739,7 @@
       ],
       "hugging_face_id": null,
       "description": "Muse Spark 1.2 is a reasoning model from Meta, designed for complex agentic tasks. It accepts text, images, video, audio, and PDF documents, returns text, and offers a 1M-token context...",
+      "superseded_by": "Muse Spark 1.3",
       "match": "exact"
     },
     "GPT-5.6 Terra": {
@@ -2662,6 +2794,7 @@
       ],
       "hugging_face_id": null,
       "description": "GPT-5.6 Terra is a balanced model in OpenAI's GPT-5.6 series, positioned between the flagship Sol tier and the cost-efficient Luna tier. It is suited for everyday coding, reasoning, and agentic...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Gemini 3.7 Flash": {
@@ -2717,6 +2850,7 @@
       ],
       "hugging_face_id": null,
       "description": "Gemini 3.7 Flash is a multimodal model from Google for fast agentic workflows, coding, and complex multi-step reasoning. It is designed for tasks that require responsive performance and reliable multi-step...",
+      "superseded_by": "Gemini 3.8 Flash",
       "match": "exact"
     },
     "Grok 4.5": {
@@ -2771,6 +2905,7 @@
       ],
       "hugging_face_id": null,
       "description": "Grok 4.5 is a model from SpaceXAI with frontier performance on coding, knowledge work, and STEM.",
+      "superseded_by": "Grok 4.6",
       "match": "exact"
     },
     "Claude Sonnet 5": {
@@ -2825,6 +2960,7 @@
       ],
       "hugging_face_id": null,
       "description": "Sonnet 5 is Anthropic's most capable Sonnet-class model, with frontier performance across coding, agents, and professional work. It supports adaptive thinking with selectable reasoning effort levels (low, medium, high, max,...",
+      "superseded_by": null,
       "match": "exact"
     },
     "GPT-5.6 Luna": {
@@ -2879,6 +3015,7 @@
       ],
       "hugging_face_id": null,
       "description": "GPT-5.6 Luna is a fast, cost-efficient model in OpenAI's GPT-5.6 series. It is suited for high-volume, latency-sensitive tasks such as chat, classification, and lightweight agentic workflows, providing capable reasoning for...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Gemini 3.6 Flash": {
@@ -2935,6 +3072,7 @@
       ],
       "hugging_face_id": null,
       "description": "Gemini 3.6 Flash is a high-efficiency model from Google for coding, agentic workflows, and web and app development. It is designed to produce polished outputs with fewer unnecessary edits and...",
+      "superseded_by": "Gemini 3.8 Flash",
       "match": "exact"
     },
     "Gemini 3.1 Pro": {
@@ -2990,6 +3128,7 @@
       ],
       "hugging_face_id": "",
       "description": "Gemini 3.1 Pro Preview is Google’s frontier reasoning model, delivering enhanced software engineering performance, improved agentic reliability, and more efficient token usage across complex workflows. Building on the multimodal foundation...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Gemini 3.5 Flash": {
@@ -3046,6 +3185,7 @@
       ],
       "hugging_face_id": null,
       "description": "Gemini 3.5 Flash is Google's high-efficiency multimodal model, bringing near-Pro level coding and reasoning at Flash-tier cost and speed. It is highly optimized for coding proficiency and parallel agentic execution...",
+      "superseded_by": "Gemini 3.8 Flash",
       "match": "exact"
     },
     "Inkling": {
@@ -3107,6 +3247,7 @@
       ],
       "hugging_face_id": "thinkingmachines/Inkling",
       "description": "Inkling is an open-weight multimodal mixture-of-experts model from Thinking Machines Lab, with 41B active parameters out of 975B total. It is designed for general-purpose reasoning, coding, agentic and tool-use systems,...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Inkling Small": {
@@ -3169,6 +3310,7 @@
       ],
       "hugging_face_id": "thinkingmachines/Inkling-Small",
       "description": "Inkling Small is an open-weight multimodal mixture-of-experts model from Thinking Machines Lab, with 12B active parameters out of 276B total. It is positioned as the smaller, more efficient member of...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Qwen3.7 Plus": {
@@ -3221,6 +3363,7 @@
       ],
       "hugging_face_id": null,
       "description": "Qwen3.7-Plus is a cost-effective model in Alibaba's Qwen3.7 series. It supports text and image input with text output, building on the series' text capabilities with a comprehensive upgrade to its...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Gemini 3.5 Flash-Lite": {
@@ -3277,6 +3420,7 @@
       ],
       "hugging_face_id": null,
       "description": "Gemini 3.5 Flash Lite is a high-efficiency model from Google with upgraded agentic capabilities. It is suited for subagents that execute focused tasks within complex, multi-agent workflows.",
+      "superseded_by": null,
       "match": "exact"
     },
     "Grok 4.3": {
@@ -3332,6 +3476,7 @@
       ],
       "hugging_face_id": null,
       "description": "Grok 4.3 is a reasoning model from SpaceXAI. It accepts text and image inputs with text output, and is suited for agentic workflows, instruction-following tasks, and applications requiring high factual...",
+      "superseded_by": "Grok 4.6",
       "match": "exact"
     },
     "Muse Glimmer": {
@@ -3393,6 +3538,7 @@
       ],
       "hugging_face_id": "meta-models/Muse-Glimmer-30B",
       "description": "Muse Glimmer 30B is a dense, open-weight multimodal model from Meta Superintelligence Labs, distilled from Muse Spark and optimized for autonomous agents on consumer hardware. It is suited for long-horizon...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Granite 4.2 8B": {
@@ -3452,6 +3598,7 @@
       ],
       "hugging_face_id": "ibm-granite/granite-4.2-8b",
       "description": "Granite 4.2 8B is a dense reasoning model from IBM. It is suited for mathematics, code generation, multilingual dialogue, and agentic workflows that need multi-step reasoning. It supports full, low-effort,...",
+      "superseded_by": null,
       "match": "exact"
     },
     "gpt-oss-120b": {
@@ -3511,6 +3658,7 @@
       ],
       "hugging_face_id": "openai/gpt-oss-120b",
       "description": "gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose production use cases. It activates 5.1B parameters per forward pass and is optimized...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Mercury 2": {
@@ -3561,6 +3709,7 @@
       ],
       "hugging_face_id": null,
       "description": "Mercury 2 is an extremely fast reasoning LLM, and the first reasoning diffusion LLM (dLLM). Instead of generating tokens sequentially, Mercury 2 produces and refines multiple tokens in parallel, achieving...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Trinity Large Thinking": {
@@ -3604,6 +3753,7 @@
       ],
       "hugging_face_id": "arcee-ai/Trinity-Large-Thinking",
       "description": "Trinity Large Thinking is a powerful open source reasoning model from the team at Arcee AI. It shows strong performance in PinchBench, agentic workloads, and reasoning tasks. Launch video: https://youtu.be/Gc82AXLa0Rg?si=4RLn6WBz33qT--B7...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Ministral 3 8B": {
@@ -3647,6 +3797,7 @@
       ],
       "hugging_face_id": "mistralai/Ministral-3-14B-Instruct-2512",
       "description": "The largest model in the Ministral 3 family, Ministral 3 14B offers frontier capabilities and performance comparable to its larger Mistral Small 3.2 24B counterpart. A powerful and efficient language...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Granite 4.1 8B": {
@@ -3693,6 +3844,7 @@
       ],
       "hugging_face_id": "ibm-granite/granite-4.1-8b",
       "description": "Granite 4.1 8B is a dense, decoder-only 8-billion-parameter language model from IBM, part of the Granite 4.1 family. It supports a 131K-token context window and is designed for enterprise tasks...",
+      "superseded_by": "Granite 4.2 8B",
       "match": "exact"
     },
     "command a 03.2025": {
@@ -3733,212 +3885,8 @@
       ],
       "hugging_face_id": "CohereForAI/c4ai-command-a-03-2025",
       "description": "Command A is an open-weights 111B parameter model with a 256k context window focused on delivering great performance across agentic, multilingual, and coding use cases. Compared to other leading proprietary...",
+      "superseded_by": null,
       "match": "subset"
-    },
-    "claude opus 4.7": {
-      "or_id": "anthropic/claude-opus-4.7",
-      "or_name": "Anthropic: Claude Opus 4.7",
-      "provider": "Anthropic",
-      "created": "2026-04-16",
-      "context_length": 1000000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Claude",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 5.0,
-        "output": 25.0,
-        "cache_read": 0.5
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "max",
-          "xhigh",
-          "high",
-          "medium",
-          "low"
-        ],
-        "default_effort": "high"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "stop",
-        "structured_outputs",
-        "tool_choice",
-        "tools",
-        "verbosity"
-      ],
-      "hugging_face_id": null,
-      "description": "Opus 4.7 is the next generation of Anthropic's Opus family, built for long-running, asynchronous agents. Building on the coding and agentic strengths of Opus 4.6, it delivers stronger performance on...",
-      "match": "exact"
-    },
-    "claude opus 4.8": {
-      "or_id": "anthropic/claude-opus-4.8",
-      "or_name": "Anthropic: Claude Opus 4.8",
-      "provider": "Anthropic",
-      "created": "2026-05-27",
-      "context_length": 1000000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Claude",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 5.0,
-        "output": 25.0,
-        "cache_read": 0.5
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "max",
-          "xhigh",
-          "high",
-          "medium",
-          "low"
-        ],
-        "default_effort": "high"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "verbosity"
-      ],
-      "hugging_face_id": null,
-      "description": "Claude Opus 4.8 is Anthropic's most capable generally available model in the Opus family. It supports text, image, and file inputs with text output, with reasoning support and a 1M-token...",
-      "match": "exact"
-    },
-    "GPT-5 Pro": {
-      "or_id": "openai/gpt-5-pro",
-      "or_name": "OpenAI: GPT-5 Pro",
-      "provider": "OpenAI",
-      "created": "2025-10-06",
-      "context_length": 400000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2024-09-30",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 15.0,
-        "output": 120.0
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "high"
-        ],
-        "default_effort": "high"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": "",
-      "description": "GPT-5 Pro is OpenAI’s most advanced model, offering major improvements in reasoning, code quality, and user experience. It is optimized for complex tasks that require step-by-step reasoning, instruction following, and...",
-      "match": "exact"
-    },
-    "GPT-5.5 Pro": {
-      "or_id": "openai/gpt-5.5-pro",
-      "or_name": "OpenAI: GPT-5.5 Pro",
-      "provider": "OpenAI",
-      "created": "2026-04-24",
-      "context_length": 1050000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2025-12-01",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 30.0,
-        "output": 180.0
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "xhigh",
-          "high",
-          "medium"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": "",
-      "description": "GPT-5.5 Pro is OpenAI’s high-capability model optimized for deep reasoning and accuracy on complex, high-stakes workloads. It features a 1M+ token context window (922K input, 128K output) with support for...",
-      "match": "exact"
     },
     "claude opus 4.6": {
       "or_id": "anthropic/claude-opus-4.6",
@@ -3994,6 +3942,118 @@
       ],
       "hugging_face_id": "",
       "description": "Opus 4.6 is Anthropic’s strongest model for coding and long-running professional tasks. It is built for agents that operate across entire workflows rather than single prompts, making it especially effective...",
+      "superseded_by": "Claude Opus 5",
+      "match": "exact"
+    },
+    "claude opus 4.7": {
+      "or_id": "anthropic/claude-opus-4.7",
+      "or_name": "Anthropic: Claude Opus 4.7",
+      "provider": "Anthropic",
+      "created": "2026-04-16",
+      "context_length": 1000000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Claude",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 5.0,
+        "output": 25.0,
+        "cache_read": 0.5
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "high"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ],
+      "hugging_face_id": null,
+      "description": "Opus 4.7 is the next generation of Anthropic's Opus family, built for long-running, asynchronous agents. Building on the coding and agentic strengths of Opus 4.6, it delivers stronger performance on...",
+      "superseded_by": "Claude Opus 5",
+      "match": "exact"
+    },
+    "claude opus 4.8": {
+      "or_id": "anthropic/claude-opus-4.8",
+      "or_name": "Anthropic: Claude Opus 4.8",
+      "provider": "Anthropic",
+      "created": "2026-05-27",
+      "context_length": 1000000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Claude",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 5.0,
+        "output": 25.0,
+        "cache_read": 0.5
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "high"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ],
+      "hugging_face_id": null,
+      "description": "Claude Opus 4.8 is Anthropic's most capable generally available model in the Opus family. It supports text, image, and file inputs with text output, with reasoning support and a 1M-token...",
+      "superseded_by": "Claude Opus 5",
       "match": "exact"
     },
     "gemini 3 flash": {
@@ -4050,564 +4110,7 @@
       ],
       "hugging_face_id": "",
       "description": "Gemini 3 Flash Preview is a high speed, high value thinking model designed for agentic workflows, multi turn chat, and coding assistance. It delivers near Pro level reasoning and tool...",
-      "match": "exact"
-    },
-    "GPT-5.2 Pro": {
-      "or_id": "openai/gpt-5.2-pro",
-      "or_name": "OpenAI: GPT-5.2 Pro",
-      "provider": "OpenAI",
-      "created": "2025-12-10",
-      "context_length": 400000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 21.0,
-        "output": 168.0
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "xhigh",
-          "high",
-          "medium"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": "",
-      "description": "GPT-5.2 Pro is OpenAI’s most advanced model, offering major improvements in agentic coding and long context performance over GPT-5 Pro. It is optimized for complex tasks that require step-by-step reasoning,...",
-      "match": "exact"
-    },
-    "GPT-5.4 Pro": {
-      "or_id": "openai/gpt-5.4-pro",
-      "or_name": "OpenAI: GPT-5.4 Pro",
-      "provider": "OpenAI",
-      "created": "2026-03-05",
-      "context_length": 1050000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 30.0,
-        "output": 180.0
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "xhigh",
-          "high",
-          "medium"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": "",
-      "description": "GPT-5.4 Pro is OpenAI's most advanced model, building on GPT-5.4's unified architecture with enhanced reasoning capabilities for complex, high-stakes tasks. It features a 1M+ token context window (922K input, 128K...",
-      "match": "exact"
-    },
-    "claude sonnet 4.6": {
-      "or_id": "anthropic/claude-sonnet-4.6",
-      "or_name": "Anthropic: Claude Sonnet 4.6",
-      "provider": "Anthropic",
-      "created": "2026-02-17",
-      "context_length": 1000000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Claude",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 3.0,
-        "output": 15.0,
-        "cache_read": 0.3
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "max",
-          "high",
-          "medium",
-          "low"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_p",
-        "verbosity"
-      ],
-      "hugging_face_id": "",
-      "description": "Sonnet 4.6 is Anthropic's most capable Sonnet-class model yet, with frontier performance across coding, agents, and professional work. It excels at iterative development, complex codebase navigation, end-to-end project management with...",
-      "match": "exact"
-    },
-    "gemini 2.5 flash": {
-      "or_id": "google/gemini-2.5-flash",
-      "or_name": "Google: Gemini 2.5 Flash",
-      "provider": "Google",
-      "created": "2025-06-17",
-      "context_length": 1048576,
-      "max_output_tokens": 65535,
-      "modality": "text+image+file+audio+video->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text",
-        "audio",
-        "video"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Gemini",
-      "knowledge_cutoff": "2025-01-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.3,
-        "output": 2.5,
-        "cache_read": 0.03
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_p"
-      ],
-      "hugging_face_id": "",
-      "description": "Gemini 2.5 Flash is Google's state-of-the-art workhorse model, specifically designed for advanced reasoning, coding, mathematics, and scientific tasks. It includes built-in \"thinking\" capabilities, enabling it to provide responses with greater...",
-      "match": "exact"
-    },
-    "gemini 2.5 pro": {
-      "or_id": "google/gemini-2.5-pro",
-      "or_name": "Google: Gemini 2.5 Pro",
-      "provider": "Google",
-      "created": "2025-06-17",
-      "context_length": 1048576,
-      "max_output_tokens": 65536,
-      "modality": "text+image+file+audio+video->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file",
-        "audio",
-        "video"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Gemini",
-      "knowledge_cutoff": "2025-01-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 1.25,
-        "output": 10.0,
-        "cache_read": 0.125
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_p"
-      ],
-      "hugging_face_id": "",
-      "description": "Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking” capabilities, enabling it to reason through responses with enhanced accuracy...",
-      "match": "exact"
-    },
-    "gpt 5 mini": {
-      "or_id": "openai/gpt-5-mini",
-      "or_name": "OpenAI: GPT-5 Mini",
-      "provider": "OpenAI",
-      "created": "2025-08-07",
-      "context_length": 400000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2024-05-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.25,
-        "output": 2.0,
-        "cache_read": 0.025
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "high",
-          "medium",
-          "low",
-          "minimal"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": "",
-      "description": "GPT-5 Mini is a compact version of GPT-5, designed to handle lighter-weight reasoning tasks. It provides the same instruction-following and safety-tuning benefits as GPT-5, but with reduced latency and cost....",
-      "match": "exact"
-    },
-    "gpt 5 nano": {
-      "or_id": "openai/gpt-5-nano",
-      "or_name": "OpenAI: GPT-5 Nano",
-      "provider": "OpenAI",
-      "created": "2025-08-07",
-      "context_length": 400000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2024-05-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.05,
-        "output": 0.4,
-        "cache_read": 0.005
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "high",
-          "medium",
-          "low",
-          "minimal"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": "",
-      "description": "GPT-5-Nano is the smallest and fastest variant in the GPT-5 system, optimized for developer tools, rapid interactions, and ultra-low latency environments. While limited in reasoning depth compared to its larger...",
-      "match": "exact"
-    },
-    "gpt 5.4 mini": {
-      "or_id": "openai/gpt-5.4-mini",
-      "or_name": "OpenAI: GPT-5.4 Mini",
-      "provider": "OpenAI",
-      "created": "2026-03-17",
-      "context_length": 400000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2025-08-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.75,
-        "output": 4.5,
-        "cache_read": 0.075
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "xhigh",
-          "high",
-          "medium",
-          "low",
-          "none"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": "",
-      "description": "GPT-5.4 mini brings the core capabilities of GPT-5.4 to a faster, more efficient model optimized for high-throughput workloads. It supports text and image inputs with strong performance across reasoning, coding,...",
-      "match": "exact"
-    },
-    "gpt 5.4 nano": {
-      "or_id": "openai/gpt-5.4-nano",
-      "or_name": "OpenAI: GPT-5.4 Nano",
-      "provider": "OpenAI",
-      "created": "2026-03-17",
-      "context_length": 400000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2025-08-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.2,
-        "output": 1.25,
-        "cache_read": 0.02
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "xhigh",
-          "high",
-          "medium",
-          "low",
-          "none"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": "",
-      "description": "GPT-5.4 nano is the most lightweight and cost-efficient variant of the GPT-5.4 family, optimized for speed-critical and high-volume tasks. It supports text and image inputs and is designed for low-latency...",
-      "match": "exact"
-    },
-    "grok 4.20 beta 0309 reasoning": {
-      "or_id": "x-ai/grok-4.20",
-      "or_name": "SpaceXAI: Grok 4.20",
-      "provider": "SpaceXAI",
-      "created": "2026-03-31",
-      "context_length": 2000000,
-      "max_output_tokens": 1800000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Grok",
-      "knowledge_cutoff": "2025-09-01",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 1.25,
-        "output": 2.5,
-        "cache_read": 0.2
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "logprobs",
-        "max_tokens",
-        "reasoning",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "",
-      "description": "Grok 4.20 is a reasoning model from SpaceXAI with industry-leading speed and agentic tool calling capabilities. It combines the lowest hallucination rate on the market with strict prompt adherance, delivering...",
-      "match": "subset"
-    },
-    "o3 mini": {
-      "or_id": "openai/o3-mini",
-      "or_name": "OpenAI: o3 Mini",
-      "provider": "OpenAI",
-      "created": "2025-01-31",
-      "context_length": 200000,
-      "max_output_tokens": 100000,
-      "modality": "text+file->text",
-      "input_modalities": [
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2023-10-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 1.1,
-        "output": 4.4,
-        "cache_read": 0.55
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": "",
-      "description": "OpenAI o3-mini is a cost-efficient language model optimized for STEM reasoning tasks, particularly excelling in science, mathematics, and coding. This model supports the `reasoning_effort` parameter, which can be set to...",
+      "superseded_by": "Gemini 3.8 Flash",
       "match": "exact"
     },
     "Kimi K3": {
@@ -4669,6 +4172,7 @@
       ],
       "hugging_face_id": "moonshotai/Kimi-K3",
       "description": "Kimi K3 is a 2.8T parameter open-weight multimodal reasoning model from Moonshot AI. It is suited for complex coding, knowledge work, and long-horizon agentic workflows, and is particularly strong at...",
+      "superseded_by": null,
       "match": "exact"
     },
     "GLM-5.3": {
@@ -4729,6 +4233,7 @@
       ],
       "hugging_face_id": "zai-org/GLM-5.3",
       "description": "GLM-5.3 is a large-scale reasoning model from Z.ai, built for complex software engineering and long-horizon agent tasks. It supports text input and output with a 1M-token context window, and improves...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Qwen3.8-Max": {
@@ -4789,6 +4294,7 @@
       ],
       "hugging_face_id": null,
       "description": "Qwen3.8 Max is the flagship model in Alibaba's Qwen3.8 series, the general-availability successor to the Qwen3.8 Max Preview. It is a multimodal reasoning model intended for complex reasoning, visual understanding,...",
+      "superseded_by": null,
       "match": "exact"
     },
     "GLM-5.3-Flash": {
@@ -4850,6 +4356,67 @@
       ],
       "hugging_face_id": "zai-org/GLM-5.3-Flash",
       "description": "GLM-5.3-Flash is a native multimodal model from Z.ai. It is suited for efficient coding and long-horizon agent tasks. Its hybrid sparse and linear attention architecture maintains accurate long-context behavior while...",
+      "superseded_by": null,
+      "match": "exact"
+    },
+    "DeepSeek V4 Pro": {
+      "or_id": "deepseek/deepseek-v4-pro",
+      "or_name": "DeepSeek: DeepSeek V4 Pro 0423",
+      "provider": "DeepSeek",
+      "created": "2026-04-24",
+      "context_length": 1024000,
+      "max_output_tokens": 384000,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "DeepSeek",
+      "knowledge_cutoff": null,
+      "total_params_b": 1600.0,
+      "active_params_b": 49.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 1.0275,
+        "output": 2.0549,
+        "cache_read": 0.0856
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "xhigh",
+          "high"
+        ],
+        "default_effort": "high"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "deepseek-ai/DeepSeek-V4-Pro",
+      "description": "DeepSeek V4 Pro is a large-scale Mixture-of-Experts model from DeepSeek with 1.6T total parameters and 49B activated parameters, supporting a 1M-token context window. It is designed for advanced reasoning, coding,...",
+      "superseded_by": null,
       "match": "exact"
     },
     "GLM-5.2": {
@@ -4909,65 +4476,7 @@
       ],
       "hugging_face_id": "zai-org/GLM-5.2",
       "description": "GLM 5.2 is a large-scale reasoning model from Z.ai. It supports text input and output with a 1M-token context window, and is suited for long-horizon agent workflows, project-level software engineering,...",
-      "match": "exact"
-    },
-    "DeepSeek V4 Pro": {
-      "or_id": "deepseek/deepseek-v4-pro",
-      "or_name": "DeepSeek: DeepSeek V4 Pro 0423",
-      "provider": "DeepSeek",
-      "created": "2026-04-24",
-      "context_length": 1024000,
-      "max_output_tokens": 384000,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "DeepSeek",
-      "knowledge_cutoff": null,
-      "total_params_b": 1600.0,
-      "active_params_b": 49.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 1.0343,
-        "output": 2.0685,
-        "cache_read": 0.0862
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "xhigh",
-          "high"
-        ],
-        "default_effort": "high"
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_completion_tokens",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "reasoning_effort",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "deepseek-ai/DeepSeek-V4-Pro",
-      "description": "DeepSeek V4 Pro is a large-scale Mixture-of-Experts model from DeepSeek with 1.6T total parameters and 49B activated parameters, supporting a 1M-token context window. It is designed for advanced reasoning, coding,...",
+      "superseded_by": "GLM-5.3",
       "match": "exact"
     },
     "deepseek v4 flash": {
@@ -4990,9 +4499,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0825,
-        "output": 0.1649,
-        "cache_read": 0.0165
+        "input": 0.0778,
+        "output": 0.1557,
+        "cache_read": 0.0156
       },
       "reasoning": {
         "mandatory": false,
@@ -5028,6 +4537,7 @@
       ],
       "hugging_face_id": "deepseek-ai/DeepSeek-V4-Flash",
       "description": "DeepSeek V4 Flash is an efficiency-optimized Mixture-of-Experts model from DeepSeek with 284B total parameters and 13B activated parameters, supporting a 1M-token context window. It is designed for fast inference and...",
+      "superseded_by": null,
       "match": "exact"
     },
     "MiniMax-M3": {
@@ -5084,6 +4594,7 @@
       ],
       "hugging_face_id": "MiniMaxAI/Minimax-M3",
       "description": "MiniMax-M3 is a multimodal foundation model from MiniMax. It supports text, image, and video inputs with text output, a 1M-token context window, and is suited for long-horizon agentic work, coding,...",
+      "superseded_by": null,
       "match": "exact"
     },
     "MiMo-V2.5-Pro": {
@@ -5138,6 +4649,7 @@
       ],
       "hugging_face_id": "XiaomiMiMo/MiMo-V2.5-Pro",
       "description": "MiMo-V2.5-Pro is Xiaomi’s flagship model, delivering strong performance in general agentic capabilities, complex software engineering, and long-horizon tasks, with top rankings on benchmarks such as ClawEval, GDPVal, and SWE-bench Pro....",
+      "superseded_by": null,
       "match": "exact"
     },
     "solar pro4": {
@@ -5184,6 +4696,7 @@
       ],
       "hugging_face_id": null,
       "description": "Solar Pro 4 is Upstage's cost-efficient large language model, featuring a 524K context window. It is built for long-horizon tasks and agentic workflows, with strong capabilities in office productivity, document-intensive...",
+      "superseded_by": null,
       "match": "exact"
     },
     "qwen3.6 plus": {
@@ -5236,6 +4749,7 @@
       ],
       "hugging_face_id": "",
       "description": "Qwen 3.6 Plus builds on a hybrid architecture that combines efficient linear attention with sparse mixture-of-experts routing, enabling strong scalability and high-performance inference. Compared to the 3.5 series, it delivers...",
+      "superseded_by": "Qwen3.7 Plus",
       "match": "exact"
     },
     "Gemma 4 31B": {
@@ -5292,6 +4806,7 @@
       ],
       "hugging_face_id": "google/gemma-4-31B-it",
       "description": "Gemma 4 31B Instruct is Google DeepMind's 30.7B dense multimodal model supporting text and image input with text output. Features a 256K token context window, configurable thinking/reasoning mode, native function...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Mistral Medium 3.5": {
@@ -5345,6 +4860,7 @@
       ],
       "hugging_face_id": null,
       "description": "Mistral Medium 3.5 is a dense 128B instruction-following model from Mistral AI. It supports text and image inputs with text output, and is designed for agentic workflows, coding, and complex...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Qwen3 Coder Next": {
@@ -5392,6 +4908,7 @@
       ],
       "hugging_face_id": "Qwen/Qwen3-Coder-Next",
       "description": "Qwen3-Coder-Next is an open-weight causal language model optimized for coding agents and local development workflows. It uses a sparse MoE design with 80B total parameters and only 3B activated per...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Mistral Small 4": {
@@ -5446,6 +4963,7 @@
       ],
       "hugging_face_id": "mistralai/Mistral-Small-4-119B-2603",
       "description": "Mistral Small 4 is the next major release in the Mistral Small family, unifying the capabilities of several flagship Mistral models into a single system. It combines strong reasoning from...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Mistral Large 3": {
@@ -5490,6 +5008,7 @@
       ],
       "hugging_face_id": "",
       "description": "Mistral Large 3 2512 is Mistral’s most capable model to date, featuring a sparse mixture-of-experts architecture with 41B active parameters (675B total), and released under the Apache 2.0 license.",
+      "superseded_by": null,
       "match": "exact"
     },
     "Llama 4 Maverick": {
@@ -5538,6 +5057,7 @@
       ],
       "hugging_face_id": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
       "description": "Llama 4 Maverick 17B Instruct (128E) is a high-capacity multimodal language model from Meta, built on a mixture-of-experts (MoE) architecture with 128 experts and 17 billion active parameters per forward...",
+      "superseded_by": null,
       "match": "exact"
     },
     "Llama 4 Scout": {
@@ -5584,6 +5104,7 @@
       ],
       "hugging_face_id": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
       "description": "Llama 4 Scout 17B Instruct (16E) is a mixture-of-experts (MoE) language model developed by Meta, activating 17 billion parameters out of a total of 109B. It supports native multimodal input...",
+      "superseded_by": null,
       "match": "exact"
     },
     "llama 3.3 70b instruct": {
@@ -5631,216 +5152,7 @@
       ],
       "hugging_face_id": "meta-llama/Llama-3.3-70B-Instruct",
       "description": "The Meta Llama 3.3 multilingual large language model (LLM) is a pretrained and instruction tuned generative model in 70B (text in/text out). The Llama 3.3 instruction tuned text only model...",
-      "match": "exact"
-    },
-    "deepseek r1": {
-      "or_id": "deepseek/deepseek-r1",
-      "or_name": "DeepSeek: R1",
-      "provider": "DeepSeek",
-      "created": "2025-01-20",
-      "context_length": 64000,
-      "max_output_tokens": 16000,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "DeepSeek",
-      "knowledge_cutoff": "2024-07-31",
-      "total_params_b": 671.0,
-      "active_params_b": 37.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.7,
-        "output": 2.5
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "max_tokens",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_p"
-      ],
-      "hugging_face_id": "deepseek-ai/DeepSeek-R1",
-      "description": "DeepSeek R1 is here: Performance on par with [OpenAI o1](/openai/o1), but open-sourced and with fully open reasoning tokens. It's 671B parameters in size, with 37B active in an inference pass....",
-      "match": "exact"
-    },
-    "deepseek v3.2 exp thinking": {
-      "or_id": "deepseek/deepseek-v3.2-exp",
-      "or_name": "DeepSeek: DeepSeek V3.2 Exp",
-      "provider": "DeepSeek",
-      "created": "2025-09-29",
-      "context_length": 163840,
-      "max_output_tokens": 65536,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "DeepSeek",
-      "knowledge_cutoff": "2025-07-31",
-      "total_params_b": 685.4,
-      "active_params_b": null,
-      "params_source": "huggingface",
-      "pricing_usd_per_1m": {
-        "input": 0.27,
-        "output": 0.41
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "deepseek-ai/DeepSeek-V3.2-Exp",
-      "description": "DeepSeek-V3.2-Exp is an experimental large language model released by DeepSeek as an intermediate step between V3.1 and future architectures. It introduces DeepSeek Sparse Attention (DSA), a fine-grained sparse attention mechanism...",
-      "match": "subset"
-    },
-    "glm 5": {
-      "or_id": "z-ai/glm-5",
-      "or_name": "Z.ai: GLM 5",
-      "provider": "Z.ai",
-      "created": "2026-02-11",
-      "context_length": 198000,
-      "max_output_tokens": 128000,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 753.9,
-      "active_params_b": null,
-      "params_source": "huggingface",
-      "pricing_usd_per_1m": {
-        "input": 0.6,
-        "output": 1.92,
-        "cache_read": 0.12
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "zai-org/GLM-5",
-      "description": "GLM-5 is Z.ai’s flagship open-source foundation model engineered for complex systems design and long-horizon agent workflows. Built for expert developers, it delivers production-grade performance on large-scale programming tasks, rivaling leading...",
-      "match": "exact"
-    },
-    "minimax m2.5": {
-      "or_id": "minimax/minimax-m2.5",
-      "or_name": "MiniMax: MiniMax M2.5",
-      "provider": "MiniMax",
-      "created": "2026-02-12",
-      "context_length": 200000,
-      "max_output_tokens": 128000,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 228.7,
-      "active_params_b": null,
-      "params_source": "huggingface",
-      "pricing_usd_per_1m": {
-        "input": 0.27,
-        "output": 1.08,
-        "cache_read": 0.027
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "MiniMaxAI/MiniMax-M2.5",
-      "description": "MiniMax-M2.5 is a SOTA large language model designed for real-world productivity. Trained in a diverse range of complex real-world digital working environments, M2.5 builds upon the coding expertise of M2.1...",
+      "superseded_by": null,
       "match": "exact"
     }
   }

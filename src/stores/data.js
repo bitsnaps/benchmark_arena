@@ -74,31 +74,41 @@ function avgForModel(row) {
 }
 
 const topOverall = computed(() =>
-  [...pivotAll.value].sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
+  [...pivotAll.value].filter(r => !isSuperseded(r))
+    .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
 const topClosed = computed(() =>
-  [...pivotClosed.value].sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
+  [...pivotClosed.value].filter(r => !isSuperseded(r))
+    .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
 const topOpen = computed(() =>
-  [...pivotOpen.value].sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
+  [...pivotOpen.value].filter(r => !isSuperseded(r))
+    .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
 
-// Per-benchmark leader cards for the overview
+// Per-benchmark leader cards for the overview (current-generation models only)
 const leaders = computed(() => LEADER_BENCHES.map(bench => {
   const rows = [...pivotClosed.value, ...pivotOpen.value]
-    .filter(r => r[bench] !== null && r[bench] !== undefined);
+    .filter(r => !isSuperseded(r) && r[bench] !== null && r[bench] !== undefined);
   const top = rows.reduce((acc, r) =>
     acc === null || (r[bench] ?? -1) > (acc[bench] ?? -1) ? r : acc, null);
   return { bench, short: SHORT[bench] || bench, model: top?.name ?? '—', score: top?.[bench] ?? null, count: rows.length };
 }));
 
 // ── Ranking per tier (independent of current sort/search) ─────────────
+// Ranks are positions among CURRENT-generation models: superseded versions
+// (older release in the same product line, see models_meta.superseded_by)
+// are excluded so rank #1 is always the best current model.
 const rankMaps = computed(() => {
   const build = (list) => [...list]
+    .filter(r => !isSuperseded(r))
     .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))
     .reduce((map, r, i) => map.set(r.name, i + 1), new Map());
   return { all: build(pivotAll.value), closed: build(pivotClosed.value), open: build(pivotOpen.value) };
 });
 const rankOf = (tier, row) => rankMaps.value[tier]?.get(row.name);
-// Which tier a row belongs to (for the merged "all" table)
-const tierOf = (row) => rankMaps.value.closed.has(row.name) ? 'closed' : 'open';
+// Which tier a row belongs to (for the merged "all" table + license rows).
+// Checked against the RAW source lists — superseded models are excluded from
+// rankMaps, so they must not fall through to 'open'.
+const tierOf = (row) =>
+  (row && pivotClosed.value.some(r => r.name === row.name)) ? 'closed' : 'open';
 
 const isCore = (b) => coreBenchmarks.value.includes(b);
 
@@ -140,6 +150,12 @@ const benchRankIndex = computed(() => {
 // Models absent from the catalog simply resolve to null.
 const modelsMeta = computed(() => rawData.value?.models_meta || {});
 const metaFor = (row) => (row && row.name ? modelsMeta.value[row.name] || null : null);
+// Supersession: this model is an older version of a product line and a
+// newer release exists (scraper fills models_meta.superseded_by by ordering
+// same-family+variant siblings by release date).
+const supersededBy = (row) => metaFor(row)?.superseded_by || null;
+const isSuperseded = (row) => !!supersededBy(row);
+const releaseDateOf = (row) => metaFor(row)?.created || null;
 const metaCoverage = computed(() => {
   const total = pivotAll.value.length;
   const withMeta = pivotAll.value.filter(r => !!modelsMeta.value[r.name]).length;
@@ -162,6 +178,6 @@ export function useData() {
     avgForModel, topOverall, topClosed, topOpen, leaders,
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
     modelSlugIndex, benchSlugIndex, benchRankIndex,
-    modelsMeta, metaFor, metaCoverage,
+    modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, releaseDateOf,
   };
 }

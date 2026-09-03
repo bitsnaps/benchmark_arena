@@ -1,18 +1,26 @@
 <script setup>
 // The global pivot table — one row per model, one column per benchmark.
-// Reused by every leaderboard tier tab (all / closed / open).
+// Reused by every leaderboard tier tab (all / closed / open) and by the
+// "Older versions" section (variant="older": rank badge suppressed, rows
+// carry an extra dimming class).
 import { SHORT } from '../lib/constants.js';
-import { fmtScore, scoreColor, barWidth, clTag, rankClass, providerColor, initials, slugify } from '../lib/format.js';
+import { fmtScore, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
 const props = defineProps({
   rows: { type: Array, required: true },
   tier: { type: String, default: 'all' },
+  variant: { type: String, default: 'main' }, // 'main' | 'older'
 });
 
 const { benchmarks, nonCoreBenchmarks, stats, avgForModel, rankOf, tierOf, isCore, benchThAttrs } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
+
+// Opacity bands from benchmark coverage + extra dimming for older versions.
+// Hover restores full opacity (see .cov-table rules in main.css).
+const rowCls = (row) =>
+  [covClass(row.cl), props.variant === 'older' ? 'is-older-row' : ''].join(' ').trim();
 
 // Sorter for the computed Avg column (nulls always sink to the bottom)
 function byAvg(a, b, isAsc) {
@@ -26,12 +34,14 @@ function byAvg(a, b, isAsc) {
 </script>
 
 <template>
+  <div class="cov-table" :class="{ 'is-older-table': variant === 'older' }">
   <b-table
     :data="rows"
     narrowed
     hoverable
     scrollable
     :mobile-cards="false"
+    :row-class="rowCls"
     :checkable="compareMode"
     v-model:checked-rows="compareRows"
     :header-checkable="false"
@@ -103,4 +113,5 @@ function byAvg(a, b, isAsc) {
       </div>
     </template>
   </b-table>
+  </div>
 </template>

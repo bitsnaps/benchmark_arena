@@ -348,3 +348,63 @@ a.hbar:hover .name { color: var(--teal); }
 }
 .cmp-x:hover { background: var(--rose-dim); color: var(--rose); }
 .cmp-headcell .av { width: 38px; height: 38px; }
+
+/* ── Coverage opacity tiers (leaderboard rows) ───────────────────────── */
+/* Rows fade as CL drops so thin benchmark coverage is obvious at a glance
+   without hiding anything. Hover solidifies the row for readability. */
+.cov-table tbody tr { transition: opacity .15s ease; }
+.cov-table tbody tr.cov-full { opacity: 1; }
+.cov-table tbody tr.cov-mid  { opacity: .7; }
+.cov-table tbody tr.cov-low  { opacity: .52; }
+.cov-table tbody tr.cov-min  { opacity: .38; }
+.cov-table tbody tr:hover    { opacity: 1; }
+
+/* ── Older (superseded) versions section ─────────────────────────────── */
+.older-section {
+  border: 1px dashed color-mix(in srgb, var(--muted) 45%, transparent);
+  border-radius: 10px;
+  padding: .9rem 1rem 1rem;
+  background: color-mix(in srgb, var(--panel, #141a24) 55%, transparent);
+}
+.cov-table.is-older-table tbody tr.is-older-row { opacity: .55; }
+.cov-table.is-older-table tbody tr.is-older-row:hover { opacity: 1; }
+.cov-table.is-older-table .rank { filter: grayscale(1); opacity: .7; }
+.cov-table.is-older-table th { color: var(--muted); }
+
+/* ── Min-CL slider ───────────────────────────────────────────────────── */
+.cl-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--rose, #e2557b), var(--gold, #f5c15a), var(--teal, #2ee6c7));
+  outline: none;
+  cursor: pointer;
+  max-width: 260px;
+}
+.cl-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--text, #e8ecf4);
+  border: 2px solid var(--indigo, #4f6dff);
+  box-shadow: 0 1px 4px rgba(0,0,0,.4);
+}
+.cl-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--text, #e8ecf4);
+  border: 2px solid var(--indigo, #4f6dff);
+  box-shadow: 0 1px 4px rgba(0,0,0,.4);
+}
+
+/* ── Status tag on the compare page ──────────────────────────────────── */
+.tag-lab.warning {
+  color: var(--gold, #f5c15a);
+  border-color: color-mix(in srgb, var(--gold, #f5c15a) 55%, transparent);
+  background: color-mix(in srgb, var(--gold, #f5c15a) 12%, transparent);
+}

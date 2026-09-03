@@ -29,6 +29,17 @@ export function clTag(cl) {
   return 'is-danger is-light';
 }
 
+// Opacity band for benchmark coverage: rows fade as CL drops so thin data
+// is visually obvious without hiding anything. Bands align to 1/8 steps
+// of the 8 core benchmarks (87.5% = 7/8).
+export function covClass(cl) {
+  if (cl === null || cl === undefined) return 'cov-min';
+  if (cl >= 87.5) return 'cov-full';
+  if (cl >= 62.5) return 'cov-mid';
+  if (cl >= 37.5) return 'cov-low';
+  return 'cov-min';
+}
+
 // Gold / silver / bronze rank badge class
 export function rankClass(r) {
   return r === 1 ? 'g' : r === 2 ? 's' : r === 3 ? 'b' : '';

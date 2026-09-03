@@ -11,7 +11,7 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, rankMaps, rankOf, tierOf, isCore, stats } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 const model = computed(() => modelSlugIndex.value.get(route.params.slug) || null);
@@ -41,6 +41,11 @@ const best = computed(() => scored.value.slice().sort((a, b) => b.score - a.scor
 const overallRank = computed(() => (model.value ? rankMaps.value.all.get(model.value.name) : null));
 const tierRank = computed(() => (model.value && tier.value ? rankMaps.value[tier.value].get(model.value.name) : null));
 
+// Freshness: superseded models carry a banner pointing at their successor;
+// release date comes from the OpenRouter catalog snapshot (models_meta.created)
+const successor = computed(() => (model.value ? supersededBy(model.value) : null));
+const released = computed(() => (model.value ? releaseDateOf(model.value) : null));
+
 // Compare shortcut
 const inCompare = computed(() => !!model.value && compareRows.value.some(r => r.name === model.value.name));
 const compareFull = computed(() => compareRows.value.length >= 5 && !inCompare.value);
@@ -69,6 +74,7 @@ function addToCompare() {
         <div class="row mt-sm" style="gap:.4rem">
           <span class="tag-lab">{{ provider.name }}</span>
           <span class="tag-lab" :class="tier === 'closed' ? 'rose' : 'teal'">{{ tier === 'closed' ? 'Closed-source' : 'Open-weight' }}</span>
+          <span v-if="released" class="tag-lab">Released {{ released }}</span>
           <span v-if="overallRank" class="tag-lab gold">#{{ overallRank }} overall</span>
           <span v-if="tierRank" class="tag-lab">#{{ tierRank }} in {{ tier === 'closed' ? 'closed' : 'open' }}</span>
         </div>
@@ -79,6 +85,17 @@ function addToCompare() {
           {{ inCompare ? 'In compare (' + compareRows.length + '/5)' : 'Add to compare' }}
         </b-button>
       </div>
+    </div>
+
+    <!-- Superseded banner -->
+    <div v-if="successor" class="notice mt" style="border-color:var(--gold)">
+      <i class="fas fa-clock-rotate-left"></i>
+      <span>
+        This model has been superseded by
+        <router-link :to="{ name: 'model', params: { slug: slugify(successor) } }">{{ successor }}</router-link>
+        — a newer release of the same product line. It is excluded from the default
+        leaderboard ranking and shown only in the “Older versions” section.
+      </span>
     </div>
 
     <!-- Stat tiles -->

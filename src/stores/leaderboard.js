@@ -1,11 +1,19 @@
 // ── Leaderboard UI store (module-level singleton) ─────────────────────
-// Cross-view state: search filter + side-by-side compare selection.
+// Cross-view state: search filter + side-by-side compare selection +
+// freshness/coverage controls (older versions toggle, min-CL slider).
 
 import { ref, watch } from 'vue';
 
 const searchQuery = ref('');
 const compareMode = ref(false);
 const compareRows = ref([]);
+
+// Older (superseded) versions are hidden from the default leaderboard;
+// the toggle surfaces them in a dimmed section below the current ranking.
+const showOlder = ref(false);
+// Min-coverage slider (CL %): rows below the threshold are hidden.
+// 0 = show everything. Coverage opacity tiers stay visible otherwise.
+const minCl = ref(0);
 
 // Leaving compare mode resets the selection
 watch(compareMode, (on) => {
@@ -28,5 +36,5 @@ const isBest = (bench, row) => {
 };
 
 export function useLeaderboard() {
-  return { searchQuery, compareMode, compareRows, isSameModel, canCheck, clearCompare, isBest };
+  return { searchQuery, compareMode, compareRows, showOlder, minCl, isSameModel, canCheck, clearCompare, isBest };
 }

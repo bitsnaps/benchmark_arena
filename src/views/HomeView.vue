@@ -14,8 +14,8 @@ import ComparePanel from '../components/ComparePanel.vue';
 const route = useRoute();
 const router = useRouter();
 
-const { pivotFor, stats, topOverall, topOpen, avgForModel, leaders, coreBenchmarks, nonCoreBenchmarks } = useData();
-const { searchQuery, compareMode, compareRows } = useLeaderboard();
+const { pivotFor, stats, topOverall, topOpen, avgForModel, leaders, coreBenchmarks, nonCoreBenchmarks, isSuperseded, supersededBy } = useData();
+const { searchQuery, compareMode, compareRows, showOlder, minCl } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
 const tier = computed(() =>
@@ -42,12 +42,28 @@ watch(searchQuery, (q) => {
 });
 
 // ── Rows for the active tab ───────────────────────────────────────────
-const rows = computed(() => {
-  const base = pivotFor(tier.value);
-  if (!searchQuery.value) return base;
+// Two partitions: current-generation models (the default ranking) and
+// superseded older versions (hidden by default, shown dimmed below).
+// Both respect the search box and the min-CL slider; nothing is deleted.
+const applyFilters = (list) => {
   const q = searchQuery.value.toLowerCase();
-  return base.filter(r => r.name.toLowerCase().includes(q));
+  return list.filter(r =>
+    (r.cl ?? 0) >= minCl.value && (!q || r.name.toLowerCase().includes(q)));
+};
+
+const rows = computed(() =>
+  applyFilters(pivotFor(tier.value).filter(r => !isSuperseded(r))));
+
+const olderRows = computed(() => {
+  if (!showOlder.value) return [];
+  const older = applyFilters(pivotFor(tier.value).filter(r => isSuperseded(r)));
+  // Group by successor: old versions appear next to the model that replaced them
+  return older.sort((a, b) =>
+    String(supersededBy(a)).localeCompare(String(supersededBy(b))));
 });
+
+const supersededCount = computed(() =>
+  pivotFor(tier.value).filter(r => isSuperseded(r)).length);
 
 const openModel = (name) =>
   router.push({ name: 'model', params: { slug: slugify(name) } });
@@ -114,11 +130,45 @@ const openModel = (name) =>
           </b-switch>
         </b-field>
       </div>
+      <div class="row mt-sm" style="gap:1.2rem;align-items:center;flex-wrap:wrap">
+        <b-switch v-model="showOlder" size="is-small" type="is-warning" left-label>
+          Older versions
+          <b-tag size="is-small" type="is-warning is-light" rounded>{{ supersededCount }}</b-tag>
+        </b-switch>
+        <div class="row" style="gap:.6rem;align-items:center;flex:1;min-width:240px">
+          <span class="cell-sub" style="white-space:nowrap">Min coverage</span>
+          <input
+            class="cl-slider"
+            type="range"
+            min="0"
+            max="100"
+            step="12.5"
+            v-model.number="minCl"
+            aria-label="Minimum coverage level (CL%)"
+          />
+          <b-tag size="is-small" :type="minCl ? 'is-info' : 'is-dark is-light'" rounded>
+            {{ minCl ? 'CL ≥ ' + minCl + '%' : 'any CL' }}
+          </b-tag>
+        </div>
+        <span class="cell-sub">Row opacity = benchmark coverage — hover a row to solidify it</span>
+      </div>
     </div>
 
     <!-- The table -->
     <div class="mt">
       <PivotTable :rows="rows" :tier="tier" />
+    </div>
+
+    <!-- Older (superseded) versions — hidden by default, never deleted -->
+    <div v-if="showOlder" class="older-section mt">
+      <div class="row" style="justify-content:space-between;margin-bottom:.5rem">
+        <h3 style="margin:0;font-size:1.02rem">
+          <i class="fas fa-clock-rotate-left" style="color:var(--muted)"></i>
+          Older versions ({{ olderRows.length }})
+        </h3>
+        <span class="cell-sub">superseded by a newer release of the same product line — excluded from the ranking above</span>
+      </div>
+      <PivotTable :rows="olderRows" :tier="tier" variant="older" />
     </div>
 
     <p class="cell-sub mt-sm" style="text-align:center">

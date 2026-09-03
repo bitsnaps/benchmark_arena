@@ -30,6 +30,9 @@ LLM model performance aggregator — scores from 11 public leaderboards, unified
 - **Model Comparison** — select up to 5 models on the leaderboard, or open the dedicated comparison page at `#/compare?models=<slug>,<slug,…>` — shareable, with a spec matrix (params, MoE active params, context, modalities, reasoning, tokenizer, release date), USD pricing per 1M tokens with blended 3:1 price and a score-per-dollar value metric, plus the full 11-leaderboard score matrix with best-in-row highlighting
 - **Search** — filter models by name, synced to `?q=` for shareable views
 - **Coverage Level (CL)** — shows what % of core benchmarks a model appears on
+- **Coverage opacity tiers** — leaderboard rows fade with benchmark coverage (full opacity at ≥7/8 core evals; hover solidifies) so thin data is visible at a glance without hiding anything
+- **Min-CL slider** — hide models below a chosen coverage threshold (step = 1/8 of the core set)
+- **Supersession (auto, no manual "deprecated" flags)** — the scraper groups models into product lines via their OpenRouter id (`family + variant + version`), orders siblings by release date (`created`), and flags every older version with `superseded_by`. Older versions are hidden from the default ranking behind an "Older versions" toggle, listed dimmed with no rank, and their model pages carry a banner linking to the successor. Variant-aware: Gemini *Pro* and *Flash* lines never supersede each other
 
 ## Tech Stack
 
@@ -52,7 +55,9 @@ The output includes a `models_meta` section: per-model catalog metadata
 tokens, reasoning config, tokenizer, knowledge cutoff) matched from
 OpenRouter's public model catalog (`https://openrouter.ai/api/v1/models`),
 with HuggingFace safetensors totals as a fallback for open-weight parameter
-counts. Useful for in-depth side-by-side model comparisons.
+counts. Every older version in a product line also gets a `superseded_by`
+field (derived from release dates — see Supersession under Features).
+Useful for in-depth side-by-side model comparisons.
 
 ## Dev
 

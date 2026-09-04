@@ -15,6 +15,7 @@ export const SHORT = {
   'SWE-Marathon': 'SWE-M',
   'FrontierSWE': 'Frontier',
   'CyberGem': 'CyberG',
+  'EQBench CW': 'EQB',
 };
 
 // Benchmarks counted in the composite Avg column
@@ -39,6 +40,7 @@ export const BLURBS = {
   'SWE-Marathon': 'Long, multi-step engineering sessions — stamina for real codebases.',
   'FrontierSWE': 'Hard, frontier-grade software engineering issues.',
   'CyberGem': 'Cybersecurity challenges in capture-the-flag style.',
+  'EQBench CW': 'Creative writing judged by LLM panels (pairwise Elo). Non-core: thin coverage of current-gen models for now.',
 };
 
 // Leaderboard tier tabs (order matters — "all" first so the overall

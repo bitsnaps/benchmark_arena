@@ -14,7 +14,7 @@ const props = defineProps({
   tier: { type: String, default: 'all' },
 });
 
-const { benchmarks, nonCoreBenchmarks, stats, scoreForModel, avgForModel, rankOf, tierOf, isCore, benchThAttrs, isOlder, supersededBy } = useData();
+const { benchmarks, nonCoreBenchmarks, stats, scoreForModel, avgForModel, rankOf, tierOf, isCore, benchThAttrs, isOlder, supersededBy, metaFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
@@ -27,6 +27,9 @@ const olderTitle = (row) =>
   supersededBy(row)
     ? `superseded by ${supersededBy(row)} — hidden by default, excluded from the ranking`
     : 'stale generation (9+ months old, no successor in the data) — hidden by default, excluded from the ranking';
+
+// ★ footnote: source sites list this model under a different (e.g. HF repo) name
+const aliasNote = (row) => metaFor(row)?.alias_note || null;
 
 // Sorter for the global Score column (nulls always sink to the bottom)
 function byScore(a, b, isAsc) {
@@ -79,7 +82,7 @@ function scoreTitle(row) {
             class="model-link has-text-weight-semibold"
             :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
             :title="'Open ' + props.row.name + '\'s score card'"
-          >{{ props.row.name }}</router-link>
+          >{{ props.row.name }}<span v-if="aliasNote(props.row)" class="alias-star" :title="aliasNote(props.row)">★</span></router-link>
           <div class="cell-sub">
             {{ providerColor(props.row.name).name }}
             <span v-if="tier === 'all'" class="tier-chip" :class="tierOf(props.row)">{{ tierOf(props.row) === 'closed' ? 'closed' : 'open' }}</span>

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-04 15:38",
+  "timestamp": "2026-09-04 20:35",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -11,7 +11,8 @@
     "VendingBench",
     "SWE-Marathon",
     "FrontierSWE",
-    "CyberGem"
+    "CyberGem",
+    "EQBench CW"
   ],
   "avg_benchmarks": [
     "Artificial Analysis",
@@ -234,103 +235,103 @@
       "closed": [
         [
           "Claude Fable 5.1",
-          76.0
-        ],
-        [
-          "Claude Fable 5",
-          74.0
-        ],
-        [
-          "Claude Opus 5",
-          78.0
+          79.0
         ],
         [
           "GPT-6 Astra",
-          62.0
-        ],
-        [
-          "GPT-5.6 Sol",
-          68.0
-        ],
-        [
-          "Hy4 preview",
           70.0
         ],
         [
-          "Muse Spark 1.2",
-          56.0
+          "Claude Fable 5",
+          75.0
         ],
         [
-          "Muse Spark 1.1",
-          59.0
+          "Claude Opus 5",
+          77.0
         ],
         [
-          "Claude Opus 4.8",
-          61.0
+          "GPT-5.6 Sol",
+          70.0
         ],
         [
           "Gemini 3.8 Flash",
-          58.0
+          68.0
+        ],
+        [
+          "GPT-5.5",
+          64.0
+        ],
+        [
+          "Claude Opus 4.8",
+          63.0
+        ],
+        [
+          "Muse Spark 1.2",
+          64.0
+        ],
+        [
+          "Muse Spark 1.1",
+          63.0
+        ],
+        [
+          "GPT-5.6 Terra",
+          61.0
+        ],
+        [
+          "GPT-5.4",
+          56.0
+        ],
+        [
+          "Claude Sonnet 5",
+          66.0
+        ],
+        [
+          "Claude Opus 4.7",
+          59.0
         ],
         [
           "Gemini 3.7 Flash",
-          54.0
-        ],
-        [
-          "Gemini 3.6 Flash",
-          39.0
+          61.0
         ],
         [
           "Grok 4.6",
-          65.0
+          70.0
+        ],
+        [
+          "Gemini 3.6 Flash",
+          51.0
+        ],
+        [
+          "Gemini 3.5 Flash",
+          51.0
+        ],
+        [
+          "Claude Opus 4.7 (Adaptive)",
+          61.0
+        ],
+        [
+          "Claude Opus 4.6",
+          54.0
+        ],
+        [
+          "Gemini 3.1 Pro",
+          40.0
         ],
         [
           "Grok 4.5",
           63.0
         ],
         [
-          "GPT-5.5",
-          65.0
-        ],
-        [
-          "GPT-5.4",
-          57.0
-        ],
-        [
-          "Claude Opus 4.7",
-          58.0
-        ],
-        [
-          "GPT-5.6 Terra",
-          59.0
-        ],
-        [
-          "Claude Opus 4.7 (Adaptive)",
-          63.0
-        ],
-        [
           "Qwen3.7 Max",
-          38.0
+          43.0
         ],
         [
           "Muse Spark",
-          65.0
-        ],
-        [
-          "dots3-note Preview",
-          61.0
-        ],
-        [
-          "Claude Opus 4.6",
-          56.0
-        ],
-        [
-          "Hy3",
-          44.0
+          59.0
         ],
         [
           "Gemini 3 Pro",
-          59.0
+          60.0
         ]
       ],
       "open": [
@@ -340,63 +341,75 @@
         ],
         [
           "Qwen3.8 Max",
-          71.0
-        ],
-        [
-          "Qwen3.8-27B",
           68.0
         ],
         [
-          "MiMo-V2.5-Pro",
-          41.0
-        ],
-        [
-          "MiniMax M3",
-          40.0
-        ],
-        [
           "GLM-5.3",
-          69.0
+          68.0
+        ],
+        [
+          "Qwen3.8-27B",
+          64.0
         ],
         [
           "GLM-5.2",
           60.0
         ],
         [
+          "DeepSeek V4 Pro 0813",
+          56.0
+        ],
+        [
+          "GLM-5.3-Flash",
+          60.0
+        ],
+        [
+          "MiMo-V2.5-Pro",
+          41.0
+        ],
+        [
+          "Kimi K2.7 Code",
+          46.0
+        ],
+        [
+          "Kimi K2.6",
+          46.0
+        ],
+        [
           "GLM-5.1",
-          44.0
+          50.0
+        ],
+        [
+          "MiniMax M3",
+          43.0
         ],
         [
           "GLM-5",
-          55.0
+          50.0
         ],
         [
           "Qwen3.6 Plus",
-          37.0
-        ],
-        [
-          "MiniMax M2.7",
           36.0
         ],
         [
           "MiMo-V2.5",
-          55.0
+          51.0
         ],
         [
-          "GLM-5.3-Flash",
-          56.0
+          "Qwen3.8-Flash-Next",
+          68.0
         ],
         [
-          "DeepSeek V4 Pro 0813",
-          56.0
+          "Qwen3.5-122B-A10B",
+          49.0
         ],
         [
           "GLM-4.7",
           51.0
         ],
         [
-          "Qwen3.8-Flash-Next",
-          69.0
+          "MiniMax M2.7",
+          43.0
         ],
         [
           "Kimi K2.5 (Reasoning)",
@@ -404,31 +417,19 @@
         ],
         [
           "Gemma 4 31B",
-          26.0
+          28.0
         ],
         [
           "Qwen3.5-27B",
-          49.0
-        ],
-        [
-          "Qwen3.5-122B-A10B",
-          49.0
-        ],
-        [
-          "Kimi K2.7 Code",
-          40.0
-        ],
-        [
-          "Kimi K2.6",
-          42.0
-        ],
-        [
-          "Kimi K2.5",
-          39.0
+          48.0
         ],
         [
           "MiniMax M2.5",
           43.0
+        ],
+        [
+          "Gemma 4 26B A4B",
+          49.0
         ],
         [
           "Qwen3.5 397B",
@@ -954,11 +955,11 @@
       "closed": [
         [
           "GPT-5.6 Sol (XHigh)",
-          92.5
+          92.33333333333333
         ],
         [
           "Claude Fable 5.1",
-          91.5
+          90.83333333333333
         ],
         [
           "Claude Opus 5",
@@ -970,7 +971,7 @@
         ],
         [
           "Muse Spark 1.2",
-          89.0
+          88.83333333333333
         ],
         [
           "Claude Fable 5",
@@ -981,12 +982,12 @@
           87.0
         ],
         [
-          "Grok 4.6",
-          86.0
+          "Gemini 3.8 Flash",
+          86.16666666666667
         ],
         [
-          "Gemini 3.8 Flash",
-          85.16666666666667
+          "Grok 4.6",
+          86.0
         ],
         [
           "Gemini 3.6 Flash",
@@ -1020,7 +1021,7 @@
         ],
         [
           "Qwen3.8 Max",
-          85.16666666666667
+          85.33333333333334
         ],
         [
           "GLM-5.3-Flash",
@@ -1557,6 +1558,212 @@
           1.85799601857996
         ]
       ]
+    },
+    "EQBench CW": {
+      "closed": [
+        [
+          "claude-opus-5",
+          100.0
+        ],
+        [
+          "gpt-5.6-sol",
+          92.06721987370179
+        ],
+        [
+          "claude-fable-5",
+          90.45456917697406
+        ],
+        [
+          "muse-spark-1.1",
+          89.51516100412297
+        ],
+        [
+          "claude-opus-4-7",
+          89.05589478628465
+        ],
+        [
+          "gpt-5.6-terra",
+          86.11241584468452
+        ],
+        [
+          "gpt-5.5",
+          85.79927978706749
+        ],
+        [
+          "gpt-5.4",
+          85.35567037211001
+        ],
+        [
+          "muse-spark-1.2",
+          85.35045143781642
+        ],
+        [
+          "claude-opus-4-8",
+          85.34523250352278
+        ],
+        [
+          "gpt-5.6-luna",
+          84.89118521997808
+        ],
+        [
+          "claude-sonnet-4-6",
+          83.73780074108868
+        ],
+        [
+          "claude-opus-4-6",
+          83.70126820103336
+        ],
+        [
+          "Muse-Glimmer-30B",
+          82.94452272845885
+        ],
+        [
+          "claude-sonnet-5",
+          82.85580084546736
+        ],
+        [
+          "gemini-3.7-flash",
+          79.6252805177183
+        ],
+        [
+          "gpt-5.2",
+          78.22660612702886
+        ],
+        [
+          "gpt-5.3-chat",
+          77.61077188038202
+        ],
+        [
+          "claude-opus-4-5",
+          77.40723344293096
+        ],
+        [
+          "claude-sonnet-4.5",
+          76.95318615938625
+        ],
+        [
+          "o3",
+          76.84358853922029
+        ],
+        [
+          "gpt-5.4-mini",
+          76.29038150409686
+        ],
+        [
+          "gpt-5-2025-08-07",
+          74.28631073534785
+        ],
+        [
+          "Inkling",
+          73.47737591983717
+        ],
+        [
+          "gemini-3.6-flash",
+          73.04942330776056
+        ]
+      ],
+      "open": [
+        [
+          "kimi-k3",
+          97.6358227649914
+        ],
+        [
+          "GLM-5.3",
+          97.19743228432755
+        ],
+        [
+          "Qwen3.8-Max",
+          85.69490110119514
+        ],
+        [
+          "GLM-5.2",
+          80.94045195970983
+        ],
+        [
+          "Kimi-K2.6",
+          79.59396691195658
+        ],
+        [
+          "NVIDIA-Nemotron-3-Ultra-550B-A55B-NVFP4",
+          77.75690204060332
+        ],
+        [
+          "Qwen3.8-27B",
+          76.67136370753093
+        ],
+        [
+          "Kimi-K2-Instruct",
+          76.33735191273942
+        ],
+        [
+          "Kimi-K2-Thinking",
+          74.515943844267
+        ],
+        [
+          "GLM-5",
+          72.93982568759459
+        ],
+        [
+          "GLM-5.1",
+          72.50143520693075
+        ],
+        [
+          "Kimi-K2.5",
+          71.79687907729242
+        ],
+        [
+          "DeepSeek-V4-Flash",
+          70.75309221856897
+        ],
+        [
+          "DeepSeek-V4-Pro",
+          70.56521058399875
+        ],
+        [
+          "DeepSeek-V3.2",
+          68.43066645790931
+        ],
+        [
+          "DeepSeek-R1",
+          67.84614581702417
+        ],
+        [
+          "MiMo-V2.5-Pro",
+          67.35556599342414
+        ],
+        [
+          "Qwen3.5-397B-A17B",
+          66.5831637179688
+        ],
+        [
+          "mistral-medium-3.1",
+          66.48922290068369
+        ],
+        [
+          "DeepSeek-V3-0324",
+          66.28568446323261
+        ],
+        [
+          "DeepSeek-V4-Flash-0731",
+          64.62606335786234
+        ],
+        [
+          "DeepSeek-V3.1",
+          64.34945984030061
+        ],
+        [
+          "DeepSeek-R1-0528",
+          63.59271436772611
+        ],
+        [
+          "GLM-4.7",
+          63.17519962423673
+        ],
+        [
+          "Mistral-Large-3-675B-Instruct-2512",
+          63.10213454412609
+        ]
+      ]
     }
   },
   "unified_closed": [
@@ -1565,23 +1772,24 @@
       "num_benchmarks": 7,
       "cl": 87.5,
       "Artificial Analysis": 66.0,
-      "BenchLM.ai": 76.0,
+      "BenchLM.ai": 79.0,
       "Arena.ai Text": 92.9,
       "SimpleBench.com": 86.6,
       "ARC-AGI-2": 90.0,
-      "Design Arena": 91.5,
+      "Design Arena": 90.8,
       "DeepSWE": null,
       "VendingBench": 48.5,
       "SWE-Marathon": null,
       "FrontierSWE": 56.3,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Claude Opus 5",
       "num_benchmarks": 7,
       "cl": 87.5,
       "Artificial Analysis": 63.0,
-      "BenchLM.ai": 78.0,
+      "BenchLM.ai": 77.0,
       "Arena.ai Text": 91.2,
       "SimpleBench.com": 80.6,
       "ARC-AGI-2": 90.4,
@@ -1590,14 +1798,15 @@
       "VendingBench": 100.0,
       "SWE-Marathon": 100.0,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 100.0
     },
     {
       "name": "Claude Fable 5",
       "num_benchmarks": 6,
       "cl": 75.0,
       "Artificial Analysis": 62.0,
-      "BenchLM.ai": 74.0,
+      "BenchLM.ai": 75.0,
       "Arena.ai Text": 93.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": 89.2,
@@ -1606,14 +1815,15 @@
       "VendingBench": 50.8,
       "SWE-Marathon": 90.0,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 90.5
     },
     {
       "name": "Muse Spark 1.3",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": 62.0,
-      "BenchLM.ai": 65.0,
+      "BenchLM.ai": 59.0,
       "Arena.ai Text": 90.5,
       "SimpleBench.com": 81.8,
       "ARC-AGI-2": null,
@@ -1622,30 +1832,32 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 43.5
+      "CyberGem": 43.5,
+      "EQBench CW": null
     },
     {
       "name": "GPT-5.6 Sol",
       "num_benchmarks": 8,
       "cl": 100.0,
       "Artificial Analysis": 61.0,
-      "BenchLM.ai": 68.0,
+      "BenchLM.ai": 70.0,
       "Arena.ai Text": 89.7,
       "SimpleBench.com": 64.8,
       "ARC-AGI-2": 92.5,
-      "Design Arena": 92.5,
+      "Design Arena": 92.3,
       "DeepSWE": 73.0,
       "VendingBench": 86.0,
       "SWE-Marathon": 85.0,
       "FrontierSWE": 32.2,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 92.1
     },
     {
       "name": "Grok 4.6",
       "num_benchmarks": 8,
       "cl": 100.0,
       "Artificial Analysis": 61.0,
-      "BenchLM.ai": 65.0,
+      "BenchLM.ai": 70.0,
       "Arena.ai Text": 86.3,
       "SimpleBench.com": 75.9,
       "ARC-AGI-2": 67.1,
@@ -1654,14 +1866,15 @@
       "VendingBench": 80.9,
       "SWE-Marathon": 63.8,
       "FrontierSWE": 25.3,
-      "CyberGem": 79.7
+      "CyberGem": 79.7,
+      "EQBench CW": null
     },
     {
       "name": "GPT-6 Astra",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 61.0,
-      "BenchLM.ai": 62.0,
+      "BenchLM.ai": 70.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 95.0,
@@ -1670,46 +1883,49 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Gemini 3.8 Flash",
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": 59.0,
-      "BenchLM.ai": 58.0,
+      "BenchLM.ai": 68.0,
       "Arena.ai Text": 91.4,
       "SimpleBench.com": 82.4,
       "ARC-AGI-2": null,
-      "Design Arena": 85.2,
+      "Design Arena": 86.2,
       "DeepSWE": 74.0,
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Muse Spark 1.2",
       "num_benchmarks": 6,
       "cl": 75.0,
       "Artificial Analysis": 57.0,
-      "BenchLM.ai": 56.0,
+      "BenchLM.ai": 64.0,
       "Arena.ai Text": 92.2,
       "SimpleBench.com": 74.5,
       "ARC-AGI-2": null,
-      "Design Arena": 89.0,
+      "Design Arena": 88.8,
       "DeepSWE": 55.0,
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": 12.0,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 85.4
     },
     {
       "name": "GPT-5.6 Terra",
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": 57.0,
-      "BenchLM.ai": 59.0,
+      "BenchLM.ai": 61.0,
       "Arena.ai Text": 87.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": 83.9,
@@ -1718,14 +1934,15 @@
       "VendingBench": 65.7,
       "SWE-Marathon": 65.0,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 86.1
     },
     {
       "name": "Gemini 3.7 Flash",
       "num_benchmarks": 7,
       "cl": 87.5,
       "Artificial Analysis": 56.0,
-      "BenchLM.ai": 54.0,
+      "BenchLM.ai": 61.0,
       "Arena.ai Text": 90.9,
       "SimpleBench.com": null,
       "ARC-AGI-2": 84.6,
@@ -1734,7 +1951,8 @@
       "VendingBench": null,
       "SWE-Marathon": 45.0,
       "FrontierSWE": 20.3,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 79.6
     },
     {
       "name": "Grok 4.5",
@@ -1750,7 +1968,8 @@
       "VendingBench": 34.8,
       "SWE-Marathon": 58.8,
       "FrontierSWE": null,
-      "CyberGem": 79.0
+      "CyberGem": 79.0,
+      "EQBench CW": 71.8
     },
     {
       "name": "Claude Sonnet 5",
@@ -1766,14 +1985,15 @@
       "VendingBench": 57.0,
       "SWE-Marathon": 60.0,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 82.9
     },
     {
       "name": "GPT-5.6 Luna",
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": 52.0,
-      "BenchLM.ai": 51.0,
+      "BenchLM.ai": 56.0,
       "Arena.ai Text": 85.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": 59.5,
@@ -1782,14 +2002,15 @@
       "VendingBench": 36.6,
       "SWE-Marathon": 48.8,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 84.9
     },
     {
       "name": "Gemini 3.6 Flash",
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": 52.0,
-      "BenchLM.ai": 39.0,
+      "BenchLM.ai": 51.0,
       "Arena.ai Text": 89.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": 60.4,
@@ -1798,14 +2019,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 73.0
     },
     {
       "name": "Gemini 3.1 Pro",
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": 48.0,
-      "BenchLM.ai": 33.0,
+      "BenchLM.ai": 40.0,
       "Arena.ai Text": 90.3,
       "SimpleBench.com": 79.6,
       "ARC-AGI-2": 77.1,
@@ -1814,14 +2036,15 @@
       "VendingBench": 8.1,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 38.8
+      "CyberGem": 38.8,
+      "EQBench CW": null
     },
     {
       "name": "Gemini 3.5 Flash",
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": 47.0,
-      "BenchLM.ai": 44.0,
+      "BenchLM.ai": 51.0,
       "Arena.ai Text": 89.1,
       "SimpleBench.com": 76.7,
       "ARC-AGI-2": 72.1,
@@ -1830,14 +2053,15 @@
       "VendingBench": 48.3,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "GPT-5.3 Codex",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 46.0,
-      "BenchLM.ai": 61.0,
+      "BenchLM.ai": 62.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1846,7 +2070,8 @@
       "VendingBench": 53.1,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Apodex 1.1",
@@ -1862,14 +2087,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Inkling",
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": 42.0,
-      "BenchLM.ai": 39.0,
+      "BenchLM.ai": 41.0,
       "Arena.ai Text": 82.9,
       "SimpleBench.com": null,
       "ARC-AGI-2": 36.5,
@@ -1878,14 +2104,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": 4.1,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 73.5
     },
     {
       "name": "Hy3",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 42.0,
-      "BenchLM.ai": 47.0,
+      "BenchLM.ai": 50.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1894,14 +2121,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Inkling Small",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": 41.0,
-      "BenchLM.ai": 41.0,
+      "BenchLM.ai": 39.0,
       "Arena.ai Text": 78.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": 40.1,
@@ -1910,14 +2138,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 67.3
     },
     {
       "name": "Qwen3.7 Plus",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": 39.0,
-      "BenchLM.ai": 40.0,
+      "BenchLM.ai": 43.0,
       "Arena.ai Text": 88.3,
       "SimpleBench.com": 70.4,
       "ARC-AGI-2": null,
@@ -1926,14 +2155,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Ling 3.0 Flash",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 38.0,
-      "BenchLM.ai": 49.0,
+      "BenchLM.ai": 40.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1942,14 +2172,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Gemini 3.5 Flash-Lite",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": 37.0,
-      "BenchLM.ai": 32.0,
+      "BenchLM.ai": 43.0,
       "Arena.ai Text": 85.7,
       "SimpleBench.com": null,
       "ARC-AGI-2": 10.3,
@@ -1958,14 +2189,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 70.8
     },
     {
       "name": "Grok 4.3",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 37.0,
-      "BenchLM.ai": 6.0,
+      "BenchLM.ai": 25.0,
       "Arena.ai Text": 83.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1974,14 +2206,15 @@
       "VendingBench": 0.3,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
-      "name": "Muse Glimmer",
+      "name": "Muse-Glimmer-30B",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 35.0,
-      "BenchLM.ai": 52.0,
+      "BenchLM.ai": 49.0,
       "Arena.ai Text": 81.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1990,7 +2223,25 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 82.9
+    },
+    {
+      "name": "K-EXAONE 2.0",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 31.0,
+      "BenchLM.ai": 48.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Step 3.7 Flash",
@@ -2006,14 +2257,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Granite 4.2 8B",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 24.0,
-      "BenchLM.ai": 39.0,
+      "BenchLM.ai": 36.0,
       "Arena.ai Text": 68.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2022,7 +2274,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "gpt-oss-120b",
@@ -2038,14 +2291,15 @@
       "VendingBench": 0.0,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 39.6
     },
     {
       "name": "Command A+",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 23.0,
-      "BenchLM.ai": 45.0,
+      "BenchLM.ai": 44.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2054,7 +2308,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Mercury 2",
@@ -2070,7 +2325,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "ERNIE 5.0 Thinking Preview",
@@ -2086,7 +2342,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Trinity Large Thinking",
@@ -2102,7 +2359,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Magistral Medium 1.2",
@@ -2118,7 +2376,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "INTELLECT-3",
@@ -2134,14 +2393,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "MiniCPM5-1B",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 12.0,
-      "BenchLM.ai": 29.0,
+      "BenchLM.ai": 46.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2150,7 +2410,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Ministral 3 8B",
@@ -2166,14 +2427,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "LFM2.5-2.6B",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 11.0,
-      "BenchLM.ai": 42.0,
+      "BenchLM.ai": 36.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2182,7 +2444,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Granite 4.1 8B",
@@ -2198,7 +2461,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Step3 VL 10B",
@@ -2214,14 +2478,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "LFM2.5-8B-A1B",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 8.0,
-      "BenchLM.ai": 47.0,
+      "BenchLM.ai": 45.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2230,7 +2495,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Ring-flash-2.0",
@@ -2246,7 +2512,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "command a 03.2025",
@@ -2262,14 +2529,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Claude Opus 4.7",
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 63.0,
+      "BenchLM.ai": 61.0,
       "Arena.ai Text": 92.6,
       "SimpleBench.com": 61.7,
       "ARC-AGI-2": 75.8,
@@ -2278,14 +2546,15 @@
       "VendingBench": 97.8,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Claude Opus 4.8",
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 61.0,
+      "BenchLM.ai": 63.0,
       "Arena.ai Text": 89.5,
       "SimpleBench.com": 64.8,
       "ARC-AGI-2": 72.1,
@@ -2294,14 +2563,15 @@
       "VendingBench": 51.8,
       "SWE-Marathon": 97.6,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Claude Opus 4.6",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 56.0,
+      "BenchLM.ai": 55.0,
       "Arena.ai Text": 93.1,
       "SimpleBench.com": 67.6,
       "ARC-AGI-2": null,
@@ -2310,7 +2580,8 @@
       "VendingBench": 71.7,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 66.6
+      "CyberGem": 66.6,
+      "EQBench CW": null
     },
     {
       "name": "GPT-5 Pro",
@@ -2326,14 +2597,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 39.4
+      "CyberGem": 39.4,
+      "EQBench CW": null
     },
     {
       "name": "GPT-5.5 Pro",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 65.0,
+      "BenchLM.ai": 64.0,
       "Arena.ai Text": 89.5,
       "SimpleBench.com": 76.9,
       "ARC-AGI-2": 85.0,
@@ -2342,14 +2614,15 @@
       "VendingBench": 67.3,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 81.8
+      "CyberGem": 81.8,
+      "EQBench CW": 85.8
     },
     {
       "name": "Gemini 3 Flash",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 24.0,
+      "BenchLM.ai": 28.0,
       "Arena.ai Text": 88.3,
       "SimpleBench.com": 61.1,
       "ARC-AGI-2": 33.6,
@@ -2358,14 +2631,15 @@
       "VendingBench": 32.5,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Gemini 3 Pro",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 59.0,
+      "BenchLM.ai": 60.0,
       "Arena.ai Text": 90.2,
       "SimpleBench.com": 76.4,
       "ARC-AGI-2": 54.0,
@@ -2374,14 +2648,15 @@
       "VendingBench": 49.0,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Claude Sonnet 4.6",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 49.0,
+      "BenchLM.ai": 45.0,
       "Arena.ai Text": 88.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": 60.4,
@@ -2390,7 +2665,8 @@
       "VendingBench": 64.4,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 65.2
+      "CyberGem": 65.2,
+      "EQBench CW": null
     },
     {
       "name": "GPT-5 mini",
@@ -2406,14 +2682,15 @@
       "VendingBench": 0.0,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "GPT-5.2-Codex",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 53.0,
+      "BenchLM.ai": 52.0,
       "Arena.ai Text": 82.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 72.9,
@@ -2422,7 +2699,8 @@
       "VendingBench": 32.1,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 78.2
     },
     {
       "name": "GPT-5.4 Pro",
@@ -2438,14 +2716,15 @@
       "VendingBench": 54.9,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 79.0
+      "CyberGem": 79.0,
+      "EQBench CW": 85.4
     },
     {
       "name": "GPT-5.4 mini",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 38.0,
+      "BenchLM.ai": 42.0,
       "Arena.ai Text": 84.3,
       "SimpleBench.com": null,
       "ARC-AGI-2": 18.9,
@@ -2454,14 +2733,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 76.3
     },
     {
       "name": "GPT-5.4 nano",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 43.0,
+      "BenchLM.ai": 37.0,
       "Arena.ai Text": 77.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": 5.7,
@@ -2470,14 +2750,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Gemini 2.5 Pro",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 48.0,
+      "BenchLM.ai": 49.0,
       "Arena.ai Text": 84.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": 4.9,
@@ -2486,7 +2767,8 @@
       "VendingBench": 5.1,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "grok 4 fast chat",
@@ -2502,14 +2784,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "grok 4.20 beta 0309 reasoning",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 51.0,
+      "BenchLM.ai": 27.0,
       "Arena.ai Text": 88.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": 65.1,
@@ -2518,7 +2801,8 @@
       "VendingBench": 41.7,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Claude 4.1 Opus",
@@ -2534,14 +2818,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Claude Haiku 4.5",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 52.0,
+      "BenchLM.ai": 27.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 4.0,
@@ -2550,14 +2835,15 @@
       "VendingBench": 4.1,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Claude Opus 4.5",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 36.0,
+      "BenchLM.ai": 44.0,
       "Arena.ai Text": null,
       "SimpleBench.com": 62.0,
       "ARC-AGI-2": null,
@@ -2566,14 +2852,15 @@
       "VendingBench": 44.4,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 50.6
+      "CyberGem": 50.6,
+      "EQBench CW": null
     },
     {
       "name": "Claude Sonnet 4.5",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 46.0,
+      "BenchLM.ai": 45.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 13.6,
@@ -2582,14 +2869,15 @@
       "VendingBench": 34.3,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 28.9
+      "CyberGem": 28.9,
+      "EQBench CW": 77.0
     },
     {
       "name": "GPT-5.1-Codex",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 52.0,
+      "BenchLM.ai": 56.0,
       "Arena.ai Text": 85.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2598,14 +2886,32 @@
       "VendingBench": 13.2,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
+    },
+    {
+      "name": "Gemini 3.1 Flash-Lite",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 43.0,
+      "Arena.ai Text": 81.8,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Muse Spark 1.1",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 59.0,
+      "BenchLM.ai": 63.0,
       "Arena.ai Text": 91.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2614,7 +2920,8 @@
       "VendingBench": 58.3,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 89.5
     },
     {
       "name": "gemini 2.5 flash",
@@ -2630,7 +2937,8 @@
       "VendingBench": 4.9,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 4.8
+      "CyberGem": 4.8,
+      "EQBench CW": null
     },
     {
       "name": "gpt 5 nano",
@@ -2646,7 +2954,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "grok 3 mini",
@@ -2662,7 +2971,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "o1 mini",
@@ -2678,7 +2988,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "o3 mini",
@@ -2694,7 +3005,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     }
   ],
   "unified_open": [
@@ -2712,14 +3024,15 @@
       "VendingBench": 46.2,
       "SWE-Marathon": 96.2,
       "FrontierSWE": 25.9,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 97.6
     },
     {
       "name": "GLM-5.3",
       "num_benchmarks": 7,
       "cl": 87.5,
       "Artificial Analysis": 60.0,
-      "BenchLM.ai": 69.0,
+      "BenchLM.ai": 68.0,
       "Arena.ai Text": 89.5,
       "SimpleBench.com": 66.2,
       "ARC-AGI-2": null,
@@ -2728,30 +3041,32 @@
       "VendingBench": 73.0,
       "SWE-Marathon": 85.0,
       "FrontierSWE": 30.2,
-      "CyberGem": 84.5
+      "CyberGem": 84.5,
+      "EQBench CW": 97.2
     },
     {
       "name": "Qwen3.8-Max",
       "num_benchmarks": 6,
       "cl": 75.0,
       "Artificial Analysis": 58.0,
-      "BenchLM.ai": 71.0,
+      "BenchLM.ai": 68.0,
       "Arena.ai Text": 89.2,
       "SimpleBench.com": 62.5,
       "ARC-AGI-2": null,
-      "Design Arena": 85.2,
+      "Design Arena": 85.3,
       "DeepSWE": 57.0,
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": 15.8,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 85.7
     },
     {
       "name": "GLM-5.3-Flash",
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": 57.0,
-      "BenchLM.ai": 56.0,
+      "BenchLM.ai": 60.0,
       "Arena.ai Text": 88.3,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2760,14 +3075,15 @@
       "VendingBench": null,
       "SWE-Marathon": 77.6,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Qwen3.8-Flash-Next",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 56.0,
-      "BenchLM.ai": 69.0,
+      "BenchLM.ai": 68.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2776,7 +3092,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "GLM-5.2",
@@ -2792,7 +3109,8 @@
       "VendingBench": 74.4,
       "SWE-Marathon": 38.8,
       "FrontierSWE": null,
-      "CyberGem": 77.2
+      "CyberGem": 77.2,
+      "EQBench CW": 80.9
     },
     {
       "name": "DeepSeek V4 Pro",
@@ -2808,7 +3126,8 @@
       "VendingBench": 29.4,
       "SWE-Marathon": 21.2,
       "FrontierSWE": null,
-      "CyberGem": 83.3
+      "CyberGem": 83.3,
+      "EQBench CW": 70.6
     },
     {
       "name": "deepseek v4 flash",
@@ -2824,14 +3143,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 76.7
+      "CyberGem": 76.7,
+      "EQBench CW": 70.8
     },
     {
       "name": "MiniMax-M3",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 45.0,
-      "BenchLM.ai": 40.0,
+      "BenchLM.ai": 43.0,
       "Arena.ai Text": 83.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2840,14 +3160,15 @@
       "VendingBench": 19.3,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 73.1
+      "CyberGem": 73.1,
+      "EQBench CW": null
     },
     {
       "name": "MiMo-V2.5-Pro",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 43.0,
-      "BenchLM.ai": 55.0,
+      "BenchLM.ai": 51.0,
       "Arena.ai Text": 87.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2856,14 +3177,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 67.4
     },
     {
       "name": "Kimi K2.7 Code",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 43.0,
-      "BenchLM.ai": 40.0,
+      "BenchLM.ai": 46.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2872,7 +3194,8 @@
       "VendingBench": 45.5,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "solar pro4",
@@ -2888,14 +3211,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Qwen3.6 Plus",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": 38.0,
-      "BenchLM.ai": 59.0,
+      "BenchLM.ai": 60.0,
       "Arena.ai Text": 86.2,
       "SimpleBench.com": 63.0,
       "ARC-AGI-2": null,
@@ -2904,14 +3228,15 @@
       "VendingBench": 45.7,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Nemotron 3 Ultra",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 38.0,
-      "BenchLM.ai": 20.0,
+      "BenchLM.ai": 22.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2920,7 +3245,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "MiMo-V2-Omni",
@@ -2936,14 +3262,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Qwen3.5 Plus",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 34.0,
-      "BenchLM.ai": 49.0,
+      "BenchLM.ai": 50.0,
       "Arena.ai Text": 87.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2952,7 +3279,8 @@
       "VendingBench": 4.1,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Gemma 4 31B",
@@ -2968,14 +3296,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Mistral Medium 3.5",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 30.0,
-      "BenchLM.ai": 46.0,
+      "BenchLM.ai": 27.0,
       "Arena.ai Text": 81.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2984,14 +3313,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Mistral Small 4",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 20.0,
-      "BenchLM.ai": 43.0,
+      "BenchLM.ai": 41.0,
       "Arena.ai Text": 70.3,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -3000,7 +3330,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Mistral Large 3",
@@ -3016,14 +3347,32 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
+    },
+    {
+      "name": "Nemotron 3 Nano Omni 30B A3B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 15.0,
+      "BenchLM.ai": 47.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Llama 4 Maverick",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 14.0,
-      "BenchLM.ai": 24.0,
+      "BenchLM.ai": 26.0,
       "Arena.ai Text": 11.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -3032,14 +3381,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Llama 4 Scout",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 10.0,
-      "BenchLM.ai": 35.0,
+      "BenchLM.ai": 33.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -3048,7 +3398,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "llama 3.3 70b instruct",
@@ -3064,7 +3415,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Olmo 3.1 32B Think",
@@ -3080,7 +3432,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Olmo 3.1 32B Instruct",
@@ -3096,7 +3449,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Phi-4 Multimodal",
@@ -3112,7 +3466,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "Olmo 3 7B Think",
@@ -3128,14 +3483,15 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "GLM-5",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 55.0,
+      "BenchLM.ai": 50.0,
       "Arena.ai Text": 85.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 4.9,
@@ -3144,7 +3500,8 @@
       "VendingBench": 39.6,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 43.2
+      "CyberGem": 43.2,
+      "EQBench CW": 72.9
     },
     {
       "name": "MiniMax M2.5",
@@ -3160,7 +3517,8 @@
       "VendingBench": 0.0,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 60.4
     },
     {
       "name": "DeepSeek V3",
@@ -3176,7 +3534,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 3.6
+      "CyberGem": 3.6,
+      "EQBench CW": null
     },
     {
       "name": "GLM-4.7",
@@ -3192,14 +3551,15 @@
       "VendingBench": 21.3,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 23.5
+      "CyberGem": 23.5,
+      "EQBench CW": 63.2
     },
     {
       "name": "GLM-5.1",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 44.0,
+      "BenchLM.ai": 50.0,
       "Arena.ai Text": 87.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -3208,7 +3568,8 @@
       "VendingBench": 50.4,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 68.7
+      "CyberGem": 68.7,
+      "EQBench CW": 72.5
     },
     {
       "name": "Kimi K2.5",
@@ -3224,14 +3585,15 @@
       "VendingBench": 10.7,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 41.3
+      "CyberGem": 41.3,
+      "EQBench CW": 71.8
     },
     {
       "name": "Kimi K2.6",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 42.0,
+      "BenchLM.ai": 46.0,
       "Arena.ai Text": 86.3,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -3240,14 +3602,32 @@
       "VendingBench": 55.5,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 79.6
+    },
+    {
+      "name": "MiMo-V2-Flash",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 50.0,
+      "Arena.ai Text": 74.8,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "MiniMax M2.7",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 36.0,
+      "BenchLM.ai": 43.0,
       "Arena.ai Text": 79.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -3256,7 +3636,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     },
     {
       "name": "deepseek r1",
@@ -3272,7 +3653,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 67.8
     },
     {
       "name": "deepseek v3.2 exp thinking",
@@ -3288,14 +3670,15 @@
       "VendingBench": 9.2,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": 68.4
     },
     {
       "name": "gemma 3 4b it",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 36.0,
+      "BenchLM.ai": 35.0,
       "Arena.ai Text": 71.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -3304,7 +3687,8 @@
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null
+      "CyberGem": null,
+      "EQBench CW": null
     }
   ],
   "models_meta": {
@@ -3504,6 +3888,7 @@
       "reasoning": {
         "mandatory": true,
         "supported_efforts": [
+          "max",
           "xhigh",
           "high",
           "medium",
@@ -4340,9 +4725,9 @@
       "active_params_b": 21.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.132,
-        "output": 0.528,
-        "cache_read": 0.033
+        "input": 0.0825,
+        "output": 0.33,
+        "cache_read": 0.0206
       },
       "reasoning": {
         "mandatory": false,
@@ -4497,8 +4882,8 @@
     },
     "Ling 3.0 Flash": {
       "or_id": "inclusionai/ling-3.0-flash",
-      "or_name": "Ling-3.0-flash",
-      "provider": null,
+      "or_name": "inclusionAI: Ling 3.0 Flash",
+      "provider": "inclusionAI",
       "created": "2026-07-23",
       "context_length": 262144,
       "max_output_tokens": 32768,
@@ -4662,7 +5047,7 @@
       "superseded_by": "Grok 4.6",
       "match": "exact"
     },
-    "Muse Glimmer": {
+    "Muse-Glimmer-30B": {
       "or_id": "meta/muse-glimmer-30b",
       "or_name": "Meta: Muse Glimmer 30B",
       "provider": "Meta",
@@ -5046,53 +5431,6 @@
       "superseded_by": null,
       "match": "exact",
       "stale": true
-    },
-    "Granite 4.1 8B": {
-      "or_id": "ibm-granite/granite-4.1-8b",
-      "or_name": "IBM: Granite 4.1 8B",
-      "provider": "IBM",
-      "created": "2026-04-30",
-      "context_length": 131072,
-      "max_output_tokens": 117964,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 8.0,
-      "active_params_b": null,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.05,
-        "output": 0.1,
-        "cache_read": 0.05
-      },
-      "reasoning": null,
-      "supported_parameters": [
-        "frequency_penalty",
-        "logprobs",
-        "max_tokens",
-        "presence_penalty",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "ibm-granite/granite-4.1-8b",
-      "description": "Granite 4.1 8B is a dense, decoder-only 8-billion-parameter language model from IBM, part of the Granite 4.1 family. It supports a 131K-token context window and is designed for enterprise tasks...",
-      "superseded_by": "Granite 4.2 8B",
-      "match": "exact"
     },
     "command a 03.2025": {
       "or_id": "cohere/command-a",
@@ -6081,6 +6419,63 @@
       "superseded_by": "GPT-5.3 Codex",
       "match": "exact"
     },
+    "Gemini 3.1 Flash-Lite": {
+      "or_id": "google/gemini-3.1-flash-lite",
+      "or_name": "Google: Gemini 3.1 Flash Lite",
+      "provider": "Google",
+      "created": "2026-05-07",
+      "context_length": 1048576,
+      "max_output_tokens": 65536,
+      "modality": "text+image+file+audio+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video",
+        "file",
+        "audio"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Gemini",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.25,
+        "output": 1.5,
+        "cache_read": 0.025
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "high",
+          "medium",
+          "low",
+          "minimal"
+        ],
+        "default_effort": "minimal"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "description": "Gemini 3.1 Flash Lite is Google’s GA high-efficiency multimodal model optimized for low-latency, high-volume workloads. It supports text, image, video, audio, and PDF inputs, and is designed for lightweight agentic...",
+      "superseded_by": "Gemini 3.5 Flash-Lite",
+      "match": "exact"
+    },
     "Muse Spark 1.1": {
       "or_id": "meta/muse-spark-1.1",
       "or_name": "Meta: Muse Spark 1.1",
@@ -6471,7 +6866,8 @@
       "hugging_face_id": null,
       "description": "Qwen3.8 Max is the flagship model in Alibaba's Qwen3.8 series, the general-availability successor to the Qwen3.8 Max Preview. It is a multimodal reasoning model intended for complex reasoning, visual understanding,...",
       "superseded_by": null,
-      "match": "exact"
+      "match": "exact",
+      "alias_note": "Listed by EQBench as Qwen/Qwen3.8-2.4T-A95B (same model — HF repo name)"
     },
     "GLM-5.3-Flash": {
       "or_id": "z-ai/glm-5.3-flash",
@@ -6615,9 +7011,9 @@
       "active_params_b": 49.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 1.0223,
-        "output": 2.0445,
-        "cache_read": 0.0852
+        "input": 0.9918,
+        "output": 1.9836,
+        "cache_read": 0.0827
       },
       "reasoning": {
         "mandatory": false,
@@ -6675,9 +7071,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0881,
-        "output": 0.1761,
-        "cache_read": 0.0176
+        "input": 0.0875,
+        "output": 0.175,
+        "cache_read": 0.0175
       },
       "reasoning": {
         "mandatory": false,
@@ -7995,6 +8391,9 @@
     },
     "Qwen3.5 Plus": {
       "superseded_by": "Qwen3.7 Plus"
+    },
+    "Granite 4.1 8B": {
+      "superseded_by": "Granite 4.2 8B"
     },
     "Command A+": {
       "stale": true

@@ -376,6 +376,14 @@ a.hbar:hover .name { color: var(--teal); }
   border: 1px solid color-mix(in srgb, var(--gold, #f5c15a) 35%, transparent);
 }
 
+/* ★ footnote marker: model listed under a different name on a source site
+   (tooltip = alias_note from models_meta) */
+.alias-star {
+  margin-left: .22rem; font-size: .68rem; vertical-align: middle;
+  color: var(--gold, #f5c15a); cursor: help; opacity: .85;
+}
+.alias-star:hover { opacity: 1; }
+
 /* Older rows inside the per-benchmark explorer bar list */
 .hbar.is-older-row { opacity: .5; }
 .hbar.is-older-row:hover { opacity: 1; }

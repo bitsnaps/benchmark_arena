@@ -11,7 +11,7 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 const model = computed(() => modelSlugIndex.value.get(route.params.slug) || null);
@@ -47,6 +47,8 @@ const tierRank = computed(() => (model.value && tier.value ? rankMaps.value[tier
 // release date comes from the OpenRouter catalog snapshot (models_meta.created)
 const successor = computed(() => (model.value ? supersededBy(model.value) : null));
 const released = computed(() => (model.value ? releaseDateOf(model.value) : null));
+// ★ footnote: a source site lists this model under a different name (alias_note)
+const aliasNote = computed(() => (model.value ? metaFor(model.value)?.alias_note || null : null));
 
 // Compare shortcut
 const inCompare = computed(() => !!model.value && compareRows.value.some(r => r.name === model.value.name));
@@ -79,6 +81,7 @@ function addToCompare() {
           <span v-if="released" class="tag-lab">Released {{ released }}</span>
           <span v-if="overallRank" class="tag-lab gold">#{{ overallRank }} overall</span>
           <span v-if="tierRank" class="tag-lab">#{{ tierRank }} in {{ tier === 'closed' ? 'closed' : 'open' }}</span>
+          <span v-if="aliasNote" class="tag-lab gold" style="cursor:help" :title="aliasNote">★ aliased on source</span>
         </div>
       </div>
       <div class="row" style="gap:.6rem">

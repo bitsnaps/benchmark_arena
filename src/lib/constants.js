@@ -29,9 +29,11 @@ export const CORE_BENCHMARKS = [
 
 // One-click selections for the "Avg set" dropdown. `benches: null` means
 // "every benchmark in the snapshot" (resolved at runtime).
+// Deliberately only two presets: niche additions (creative writing, chess, …)
+// are opt-in via the per-benchmark checkboxes — one preset per new benchmark
+// would not scale.
 export const AVG_PRESETS = [
   { id: 'default', label: 'Default (8 core)', benches: CORE_BENCHMARKS },
-  { id: 'creative', label: 'Default + Creative Writing', benches: [...CORE_BENCHMARKS, 'EQBench CW'] },
   { id: 'all', label: 'All benchmarks', benches: null },
 ];
 

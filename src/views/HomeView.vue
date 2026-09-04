@@ -168,8 +168,31 @@ const openModel = (name) =>
         </b-field>
       </div>
       <div class="row mt-sm" style="gap:1.2rem;align-items:center;flex-wrap:wrap">
-        <!-- Avg set: which benchmarks feed the global Score (default = shipped formula) -->
-        <b-dropdown :triggers="['click']" :close-on-click="false" :mobile-modal="false" class="avg-dropdown" aria-role="list" aria-label="Choose which benchmarks count in the global Score">
+        <b-switch v-model="showOlder" size="is-small" type="is-warning" left-label>
+          Older versions
+          <b-tag size="is-small" type="is-warning is-light" rounded>{{ olderCount }}</b-tag>
+        </b-switch>
+        <span v-if="showOlder" class="cell-sub" style="white-space:nowrap">older models shown inline (dimmed, unranked)</span>
+        <div class="row" style="gap:.6rem;align-items:center;flex:1;min-width:240px">
+          <span class="cell-sub" style="white-space:nowrap">Min coverage</span>
+          <input
+            class="cl-slider"
+            type="range"
+            min="0"
+            :max="100"
+            :step="clStep"
+            v-model.number="minCl"
+            aria-label="Minimum coverage level (CL%)"
+          />
+          <b-tag size="is-small" :type="minCl ? 'is-info' : 'is-dark is-light'" rounded>
+            {{ minCl ? 'CL ≥ ' + minCl + '%' : 'any CL' }}
+          </b-tag>
+        </div>
+        <span class="cell-sub">Row opacity = benchmark coverage — hover a row to solidify it</span>
+
+        <!-- Avg set: which benchmarks feed the global Score (default = shipped formula).
+             Parked on the FAR RIGHT so the opened panel can't cover the model-name column. -->
+        <b-dropdown :triggers="['click']" :close-on-click="false" :mobile-modal="false" position="is-bottom-right" class="avg-dropdown" style="margin-left:auto" aria-role="list" aria-label="Choose which benchmarks count in the global Score">
           <template #trigger>
             <button class="button is-small avg-trigger" type="button" :class="isCustomAvg ? 'is-warning' : 'is-dark is-light'">
               <i class="fas fa-sliders"></i>
@@ -210,28 +233,6 @@ const openModel = (name) =>
             <p class="cell-sub" style="margin:.45rem 0 0">Your pick drives Score, CL and the min-coverage filter. At least one benchmark stays selected.</p>
           </div>
         </b-dropdown>
-
-        <b-switch v-model="showOlder" size="is-small" type="is-warning" left-label>
-          Older versions
-          <b-tag size="is-small" type="is-warning is-light" rounded>{{ olderCount }}</b-tag>
-        </b-switch>
-        <span v-if="showOlder" class="cell-sub" style="white-space:nowrap">older models shown inline (dimmed, unranked)</span>
-        <div class="row" style="gap:.6rem;align-items:center;flex:1;min-width:240px">
-          <span class="cell-sub" style="white-space:nowrap">Min coverage</span>
-          <input
-            class="cl-slider"
-            type="range"
-            min="0"
-            :max="100"
-            :step="clStep"
-            v-model.number="minCl"
-            aria-label="Minimum coverage level (CL%)"
-          />
-          <b-tag size="is-small" :type="minCl ? 'is-info' : 'is-dark is-light'" rounded>
-            {{ minCl ? 'CL ≥ ' + minCl + '%' : 'any CL' }}
-          </b-tag>
-        </div>
-        <span class="cell-sub">Row opacity = benchmark coverage — hover a row to solidify it</span>
       </div>
     </div>
 
@@ -279,7 +280,7 @@ const openModel = (name) =>
           50. This offsets selection bias — without it, models evaluated on a few
           favorable leaderboards outrank frontier models tested across the board.
           Missing evals are treated as “no evidence” (neutral), never as a zero.
-          Use the “Avg set” dropdown above to swap which benchmarks feed the Score —
+          Use the “Avg set” dropdown in the toolbar to swap which benchmarks feed the Score —
           the shipped default is unchanged for everyone who never touches it.
         </p>
       </div>

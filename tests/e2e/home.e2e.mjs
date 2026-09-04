@@ -195,9 +195,9 @@ const ok = (msg) => console.log('  ok:', msg);
   }
 
   // ── 1d. Avg-set dropdown: user-selectable average (commit B) ──
-  // Default must stay the shipped 8-core formula; the +Creative preset adds
-  // EQBench CW to the average (custom badge + ?avg= + persistence), and
-  // Reset restores the shipped formula. ≥1 benchmark always stays selected.
+  // Default must stay the shipped 8-core formula; opting EQBench CW in via its
+  // checkbox re-scores (custom badge + ?avg= + persistence), and Reset restores
+  // the shipped formula. ≥1 benchmark always stays selected.
   {
     const eqbThClass = async () => await page
       .locator('.b-table thead th', { hasText: 'EQB' }).first().getAttribute('class');
@@ -227,24 +227,25 @@ const ok = (msg) => console.log('  ok:', msg);
     // trigger is a toggle and close-on-click is disabled by design
     await page.locator('.avg-dropdown .avg-trigger').click();
     await page.waitForTimeout(300);
-    const eqbBox = page.locator('.avg-dropdown .avg-bench-row input').nth(11); // EQBench CW is last in data order
-    const presetItem = page.locator('.avg-dropdown .dropdown-item', { hasText: 'Default + Creative' });
-    if (!(await presetItem.count()) || !(await eqbBox.count()))
+    // checkbox input is opacity:0 — click the visible .b-checkbox label
+    const eqbLabel = page.locator('.avg-dropdown .avg-bench-row .b-checkbox', { hasText: 'EQB' });
+    const defaultPreset = page.locator('.avg-dropdown .dropdown-item', { hasText: 'Default (8 core)' });
+    if (!(await defaultPreset.count()) || !(await eqbLabel.count()))
       fail('avg-set dropdown should list presets and per-benchmark checkboxes');
     else ok('avg-set dropdown lists presets + per-benchmark checkboxes');
-    await presetItem.click();
+    await eqbLabel.click();
     await page.waitForTimeout(500);
 
     // EQB column becomes counted (teal header), badge + URL param + stats follow
-    if (!(await pollTh(true))) fail(`EQB header should gain core-col after preset, got "${await eqbThClass()}"`);
-    else ok('+Creative preset: EQBench CW now counted in the Score');
+    if (!(await pollTh(true))) fail(`EQB header should gain core-col after opt-in, got "${await eqbThClass()}"`);
+    else ok('EQBench CW opt-in: now counted in the Score');
     if (!(await page.locator('.avg-dropdown .tag:has-text("custom")').count()))
-      fail('custom badge missing after +Creative');
-    else ok('custom badge visible after +Creative');
+      fail('custom badge missing after opt-in');
+    else ok('custom badge visible after opt-in');
     if (!page.url().includes('avg=')) fail('?avg= param missing after custom selection');
     else ok('custom mix synced into the URL (?avg=)');
     if (!/9 of them counted/.test(await statSub.innerText()))
-      fail(`stats after preset should say "9 of them counted", got "${await statSub.innerText()}"`);
+      fail(`stats after opt-in should say "9 of them counted", got "${await statSub.innerText()}"`);
     else ok('stats now count 9 benchmarks in the Score');
 
     // persistence: reload → selection survives via localStorage (and URL param)

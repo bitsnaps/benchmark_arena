@@ -179,12 +179,11 @@ describe('user-selectable average (commit B)', () => {
     expect(d.isCustomAvg.value).toBe(false);
   });
 
-  it('creative preset adds EQBench CW to the avg set and re-scores; reset restores', () => {
+  it('adding EQBench CW to the avg set re-scores; reset restores', () => {
     const withEqb = d.pivotAll.value.find(r => r['EQBench CW'] != null);
     if (!withEqb) return; // snapshot without EQB cells → nothing to assert
     const scoreBefore = d.scoreForModel(withEqb);
-    const creative = AVG_PRESETS.find(p => p.id === 'creative');
-    d.applyPreset(creative);
+    d.toggleAvgBench('EQBench CW'); // opt-in via checkbox — no dedicated preset on purpose
     expect(d.isCustomAvg.value).toBe(true);
     expect(d.coreBenchmarks.value).toContain('EQBench CW');
     expect(d.coreBenchmarks.value.length).toBe(MIRROR_CORE.length + 1);
@@ -195,6 +194,10 @@ describe('user-selectable average (commit B)', () => {
     expect(d.isCustomAvg.value).toBe(false);
     expect(d.clForModel(withEqb)).toBe(withEqb.cl);
     expect(d.scoreForModel(withEqb)).toBeCloseTo(scoreBefore, 12);
+  });
+
+  it('presets list only ships Default and All (no per-benchmark presets)', () => {
+    expect(AVG_PRESETS.map(p => p.id).sort()).toEqual(['all', 'default']);
   });
 
   it('custom selection averages only the picked benchmarks (cl recomputed)', () => {

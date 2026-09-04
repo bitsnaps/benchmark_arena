@@ -74,31 +74,32 @@ function avgForModel(row) {
 }
 
 const topOverall = computed(() =>
-  [...pivotAll.value].filter(r => !isSuperseded(r))
+  [...pivotAll.value].filter(r => !isOlder(r))
     .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
 const topClosed = computed(() =>
-  [...pivotClosed.value].filter(r => !isSuperseded(r))
+  [...pivotClosed.value].filter(r => !isOlder(r))
     .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
 const topOpen = computed(() =>
-  [...pivotOpen.value].filter(r => !isSuperseded(r))
+  [...pivotOpen.value].filter(r => !isOlder(r))
     .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
 
 // Per-benchmark leader cards for the overview (current-generation models only)
 const leaders = computed(() => LEADER_BENCHES.map(bench => {
   const rows = [...pivotClosed.value, ...pivotOpen.value]
-    .filter(r => !isSuperseded(r) && r[bench] !== null && r[bench] !== undefined);
+    .filter(r => !isOlder(r) && r[bench] !== null && r[bench] !== undefined);
   const top = rows.reduce((acc, r) =>
     acc === null || (r[bench] ?? -1) > (acc[bench] ?? -1) ? r : acc, null);
   return { bench, short: SHORT[bench] || bench, model: top?.name ?? '—', score: top?.[bench] ?? null, count: rows.length };
 }));
 
 // ── Ranking per tier (independent of current sort/search) ─────────────
-// Ranks are positions among CURRENT-generation models: superseded versions
-// (older release in the same product line, see models_meta.superseded_by)
-// are excluded so rank #1 is always the best current model.
+// Ranks are positions among CURRENT-generation models: older releases —
+// superseded versions of the same product line (models_meta.superseded_by)
+// or stale generations 9+ months past the newest release (models_meta.stale)
+// — are excluded so rank #1 is always the best current model.
 const rankMaps = computed(() => {
   const build = (list) => [...list]
-    .filter(r => !isSuperseded(r))
+    .filter(r => !isOlder(r))
     .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))
     .reduce((map, r, i) => map.set(r.name, i + 1), new Map());
   return { all: build(pivotAll.value), closed: build(pivotClosed.value), open: build(pivotOpen.value) };
@@ -155,6 +156,10 @@ const metaFor = (row) => (row && row.name ? modelsMeta.value[row.name] || null :
 // same-family+variant siblings by release date).
 const supersededBy = (row) => metaFor(row)?.superseded_by || null;
 const isSuperseded = (row) => !!supersededBy(row);
+// "Older" = superseded by a successor OR a stale generation (no successor in
+// the data, but released ≥ 9 months before the newest snapshot release).
+// Both kinds hide behind the Older-versions toggle; neither is ever deleted.
+const isOlder = (row) => isSuperseded(row) || !!metaFor(row)?.stale;
 const releaseDateOf = (row) => metaFor(row)?.created || null;
 const metaCoverage = computed(() => {
   const total = pivotAll.value.length;
@@ -178,6 +183,6 @@ export function useData() {
     avgForModel, topOverall, topClosed, topOpen, leaders,
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
     modelSlugIndex, benchSlugIndex, benchRankIndex,
-    modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, releaseDateOf,
+    modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, isOlder, releaseDateOf,
   };
 }

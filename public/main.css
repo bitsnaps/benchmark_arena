@@ -371,6 +371,11 @@ a.hbar:hover .name { color: var(--teal); }
 .cov-table.is-older-table .rank { filter: grayscale(1); opacity: .7; }
 .cov-table.is-older-table th { color: var(--muted); }
 
+/* Older rows inside the per-benchmark explorer bar list */
+.hbar.is-older-row { opacity: .5; }
+.hbar.is-older-row:hover { opacity: 1; }
+.hbar.is-older-row .rank { filter: grayscale(1); opacity: .7; }
+
 /* ── Min-CL slider ───────────────────────────────────────────────────── */
 .cl-slider {
   -webkit-appearance: none;

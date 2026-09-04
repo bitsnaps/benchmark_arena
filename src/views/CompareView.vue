@@ -19,7 +19,7 @@ const router = useRouter();
 
 const {
   benchmarks, pivotAll, modelSlugIndex, avgForModel, rankMaps, tierOf, isCore,
-  stats, metaFor, metaCoverage, topClosed, topOpen, isSuperseded,
+  stats, metaFor, metaCoverage, topClosed, topOpen, isOlder,
 } = useData();
 const { compareRows, compareMode } = useLeaderboard();
 
@@ -103,7 +103,7 @@ const atCap = computed(() => compareRows.value.length >= MAX);
 // One-click starting points for the empty state (current-generation models only)
 const presets = computed(() => {
   const byAvg = (a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1);
-  const current = pivotAll.value.filter(r => !isSuperseded(r));
+  const current = pivotAll.value.filter(r => !isOlder(r));
   const sorted = [...current].sort(byAvg);
   const duel = [topClosed.value, topOpen.value].filter(Boolean);
   return [
@@ -136,6 +136,7 @@ const sel = computed(() => compareRows.value.map((row) => {
     overallRank: rankMaps.value.all.get(row.name) ?? null,
     tierRank: rankMaps.value[tier]?.get(row.name) ?? null,
     supersededBy: meta?.superseded_by || null,
+    stale: !!meta?.stale,
     released: meta?.created || null,
   };
 }));
@@ -188,9 +189,11 @@ const cmpGroups = computed(() => {
       { key: 'avg', label: 'Composite Avg', hint: `mean of ${stats.value.coreBenchmarks} core evals`, cells: mk('high', (s) => ({ num: s.avg, main: fmtScore(s.avg), color: scoreColor(s.avg), bar: s.avg })) },
       { key: 'rank', label: 'Overall rank', hint: `of ${stats.value.closed + stats.value.open} tracked`, cells: mk('low', (s) => ({ num: s.overallRank, main: s.overallRank ? '#' + s.overallRank : '—', sub: s.tierRank ? `#${s.tierRank} among ${s.tier}` : null })) },
       { key: 'cl', label: 'Coverage', hint: 'share of core evals reported', cells: mk('high', (s) => ({ num: s.row.cl, main: s.row.cl == null ? '—' : Math.round(s.row.cl) + '%', bar: s.row.cl, sub: s.row.num_benchmarks ? `${s.row.num_benchmarks} evals` : null })) },
-      { key: 'status', label: 'Status', hint: 'current vs superseded release', cells: dash((s) => (s.supersededBy
+      { key: 'status', label: 'Status', hint: 'current vs older release', cells: dash((s) => (s.supersededBy
         ? { main: 'Superseded', sub: 'by ' + s.supersededBy, tag: 'warning' }
-        : { main: 'Current', tag: 'teal' })) },
+        : s.stale
+          ? { main: 'Older release', sub: 'stale generation', tag: 'warning' }
+          : { main: 'Current', tag: 'teal' })) },
       { key: 'license', label: 'License', cells: dash((s) => ({ main: s.tier === 'closed' ? 'Closed-source' : 'Open-weight', tag: s.tier === 'closed' ? 'rose' : 'teal' })) },
     ],
   });

@@ -14,7 +14,7 @@ import ComparePanel from '../components/ComparePanel.vue';
 const route = useRoute();
 const router = useRouter();
 
-const { pivotFor, stats, topOverall, topOpen, avgForModel, leaders, coreBenchmarks, nonCoreBenchmarks, isSuperseded, supersededBy } = useData();
+const { pivotFor, stats, topOverall, topOpen, avgForModel, leaders, coreBenchmarks, nonCoreBenchmarks, isOlder, supersededBy } = useData();
 const { searchQuery, compareMode, compareRows, showOlder, minCl } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
@@ -43,8 +43,10 @@ watch(searchQuery, (q) => {
 
 // ── Rows for the active tab ───────────────────────────────────────────
 // Two partitions: current-generation models (the default ranking) and
-// superseded older versions (hidden by default, shown dimmed below).
-// Both respect the search box and the min-CL slider; nothing is deleted.
+// older releases — superseded versions of the same product line plus
+// stale generations (9+ months old, no successor in the data) — hidden
+// by default, shown dimmed below. Both respect the search box and the
+// min-CL slider; nothing is deleted.
 const applyFilters = (list) => {
   const q = searchQuery.value.toLowerCase();
   return list.filter(r =>
@@ -52,18 +54,19 @@ const applyFilters = (list) => {
 };
 
 const rows = computed(() =>
-  applyFilters(pivotFor(tier.value).filter(r => !isSuperseded(r))));
+  applyFilters(pivotFor(tier.value).filter(r => !isOlder(r))));
 
 const olderRows = computed(() => {
   if (!showOlder.value) return [];
-  const older = applyFilters(pivotFor(tier.value).filter(r => isSuperseded(r)));
-  // Group by successor: old versions appear next to the model that replaced them
+  const older = applyFilters(pivotFor(tier.value).filter(r => isOlder(r)));
+  // Group by successor: old versions appear next to the model that replaced
+  // them (stale generations without a successor sort first).
   return older.sort((a, b) =>
-    String(supersededBy(a)).localeCompare(String(supersededBy(b))));
+    String(supersededBy(a) || '').localeCompare(String(supersededBy(b) || '')));
 });
 
-const supersededCount = computed(() =>
-  pivotFor(tier.value).filter(r => isSuperseded(r)).length);
+const olderCount = computed(() =>
+  pivotFor(tier.value).filter(r => isOlder(r)).length);
 
 const openModel = (name) =>
   router.push({ name: 'model', params: { slug: slugify(name) } });
@@ -133,7 +136,7 @@ const openModel = (name) =>
       <div class="row mt-sm" style="gap:1.2rem;align-items:center;flex-wrap:wrap">
         <b-switch v-model="showOlder" size="is-small" type="is-warning" left-label>
           Older versions
-          <b-tag size="is-small" type="is-warning is-light" rounded>{{ supersededCount }}</b-tag>
+          <b-tag size="is-small" type="is-warning is-light" rounded>{{ olderCount }}</b-tag>
         </b-switch>
         <div class="row" style="gap:.6rem;align-items:center;flex:1;min-width:240px">
           <span class="cell-sub" style="white-space:nowrap">Min coverage</span>
@@ -166,7 +169,7 @@ const openModel = (name) =>
           <i class="fas fa-clock-rotate-left" style="color:var(--muted)"></i>
           Older versions ({{ olderRows.length }})
         </h3>
-        <span class="cell-sub">superseded by a newer release of the same product line — excluded from the ranking above</span>
+        <span class="cell-sub">superseded by a newer release of the same line, or a stale generation (9+ months old) — excluded from the ranking above</span>
       </div>
       <PivotTable :rows="olderRows" :tier="tier" variant="older" />
     </div>

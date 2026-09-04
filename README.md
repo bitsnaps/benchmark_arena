@@ -33,6 +33,7 @@ LLM model performance aggregator — scores from 11 public leaderboards, unified
 - **Coverage opacity tiers** — leaderboard rows fade with benchmark coverage (full opacity at ≥7/8 core evals; hover solidifies) so thin data is visible at a glance without hiding anything
 - **Min-CL slider** — hide models below a chosen coverage threshold (step = 1/8 of the core set)
 - **Supersession (auto, no manual "deprecated" flags)** — the scraper groups models into product lines via their OpenRouter id (`family + variant + version`), orders siblings by release date (`created`), and flags every older version with `superseded_by`. Older versions are hidden from the default ranking behind an "Older versions" toggle, listed dimmed with no rank, and their model pages carry a banner linking to the successor. Variant-aware: Gemini *Pro* and *Flash* lines never supersede each other
+- **Stale-generation rule** — old releases with no successor in the data (e.g. Llama 4, gpt-oss-120b) are flagged `stale` when their release date is 9+ months before the newest snapshot release; they hide behind the same toggle. Known same-line pairs the date pass can't reach (undated models like `gemini 3 pro`) are covered by explicit overrides in the scraper. The "Older versions" toggle lives on both the leaderboard and every benchmark explorer page
 
 ## Tech Stack
 
@@ -56,7 +57,9 @@ tokens, reasoning config, tokenizer, knowledge cutoff) matched from
 OpenRouter's public model catalog (`https://openrouter.ai/api/v1/models`),
 with HuggingFace safetensors totals as a fallback for open-weight parameter
 counts. Every older version in a product line also gets a `superseded_by`
-field (derived from release dates — see Supersession under Features).
+field (derived from release dates — see Supersession under Features), and
+successor-less generations released 9+ months before the newest snapshot
+model get a `stale` flag.
 Useful for in-depth side-by-side model comparisons.
 
 ## Dev

@@ -3659,7 +3659,8 @@
       "hugging_face_id": "openai/gpt-oss-120b",
       "description": "gpt-oss-120b is an open-weight, 117B-parameter Mixture-of-Experts (MoE) language model from OpenAI designed for high-reasoning, agentic, and general-purpose production use cases. It activates 5.1B parameters per forward pass and is optimized...",
       "superseded_by": null,
-      "match": "exact"
+      "match": "exact",
+      "stale": true
     },
     "Mercury 2": {
       "or_id": "inception/mercury-2",
@@ -3798,7 +3799,8 @@
       "hugging_face_id": "mistralai/Ministral-3-14B-Instruct-2512",
       "description": "The largest model in the Ministral 3 family, Ministral 3 14B offers frontier capabilities and performance comparable to its larger Mistral Small 3.2 24B counterpart. A powerful and efficient language...",
       "superseded_by": null,
-      "match": "exact"
+      "match": "exact",
+      "stale": true
     },
     "Granite 4.1 8B": {
       "or_id": "ibm-granite/granite-4.1-8b",
@@ -3886,7 +3888,8 @@
       "hugging_face_id": "CohereForAI/c4ai-command-a-03-2025",
       "description": "Command A is an open-weights 111B parameter model with a 256k context window focused on delivering great performance across agentic, multilingual, and coding use cases. Compared to other leading proprietary...",
       "superseded_by": null,
-      "match": "subset"
+      "match": "subset",
+      "stale": true
     },
     "claude opus 4.6": {
       "or_id": "anthropic/claude-opus-4.6",
@@ -4379,9 +4382,9 @@
       "active_params_b": 49.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 1.0275,
-        "output": 2.0549,
-        "cache_read": 0.0856
+        "input": 1.0423,
+        "output": 2.0845,
+        "cache_read": 0.0869
       },
       "reasoning": {
         "mandatory": false,
@@ -4499,9 +4502,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0778,
-        "output": 0.1557,
-        "cache_read": 0.0156
+        "input": 0.0886,
+        "output": 0.1772,
+        "cache_read": 0.0177
       },
       "reasoning": {
         "mandatory": false,
@@ -5009,7 +5012,8 @@
       "hugging_face_id": "",
       "description": "Mistral Large 3 2512 is Mistral’s most capable model to date, featuring a sparse mixture-of-experts architecture with 41B active parameters (675B total), and released under the Apache 2.0 license.",
       "superseded_by": null,
-      "match": "exact"
+      "match": "exact",
+      "stale": true
     },
     "Llama 4 Maverick": {
       "or_id": "meta-llama/llama-4-maverick",
@@ -5058,7 +5062,8 @@
       "hugging_face_id": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
       "description": "Llama 4 Maverick 17B Instruct (128E) is a high-capacity multimodal language model from Meta, built on a mixture-of-experts (MoE) architecture with 128 experts and 17 billion active parameters per forward...",
       "superseded_by": null,
-      "match": "exact"
+      "match": "exact",
+      "stale": true
     },
     "Llama 4 Scout": {
       "or_id": "meta-llama/llama-4-scout",
@@ -5105,7 +5110,8 @@
       "hugging_face_id": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
       "description": "Llama 4 Scout 17B Instruct (16E) is a mixture-of-experts (MoE) language model developed by Meta, activating 17 billion parameters out of a total of 109B. It supports native multimodal input...",
       "superseded_by": null,
-      "match": "exact"
+      "match": "exact",
+      "stale": true
     },
     "llama 3.3 70b instruct": {
       "or_id": "meta-llama/llama-3.3-70b-instruct",
@@ -5153,7 +5159,11 @@
       "hugging_face_id": "meta-llama/Llama-3.3-70B-Instruct",
       "description": "The Meta Llama 3.3 multilingual large language model (LLM) is a pretrained and instruction tuned generative model in 70B (text in/text out). The Llama 3.3 instruction tuned text only model...",
       "superseded_by": null,
-      "match": "exact"
+      "match": "exact",
+      "stale": true
+    },
+    "gemini 3 pro": {
+      "superseded_by": "Gemini 3.1 Pro"
     }
   }
 }

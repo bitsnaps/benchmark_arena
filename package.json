@@ -7,11 +7,17 @@
     "dev": "vite",
     "build": "vite build",
     "deploy": "npm run build && npx gh-pages -d dist",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:leak": "python3 tests/leak_detector.py public/benchmark_results.json",
+    "test:e2e": "node tests/run-e2e.mjs",
+    "test:all": "pnpm run test && pnpm run test:leak && pnpm run test:e2e"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.5",
-    "vite": "^6.3.5"
+    "playwright": "^1.62.1",
+    "vite": "^6.3.5",
+    "vitest": "^4.1.11"
   },
   "dependencies": {
     "buefy": "^3.1.0",

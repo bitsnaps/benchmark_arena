@@ -44,3 +44,6 @@ __screenshots__/
 
 #demos/
 
+
+# e2e artifacts
+tests/e2e/shots/

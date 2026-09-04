@@ -69,6 +69,42 @@ npm install
 npm run dev
 ```
 
+## Testing
+
+Three layers guard the freshness rules (older-generation models staying
+hidden, product lines never hiding each other). **Nothing deploys unless all
+three pass** — CI runs the same gate in `.github/workflows/deploy.yml` before
+the Pages upload. Run it locally before every push:
+
+```bash
+bash scripts/prepush.sh          # the whole gate
+# or layer by layer:
+pnpm run test                    # 1. unit (vitest): store freshness/ranking logic
+pnpm run test:leak               # 2. data leak guard (python, no deps)
+pnpm run test:e2e                # 3. browser e2e (vite preview + playwright)
+```
+
+1. **Unit — `tests/unit/`** — exercises `src/stores/data.js` against the real
+   committed snapshot: rank/leader lists exclude older models, successors
+   resolve, the 2026-09 regression names stay flagged, and the red-line
+   product pairs (`Gemini 3.1 Pro` / `3.8 Flash` / `3.5 Flash-Lite`) stay
+   visible.
+2. **Data leak guard — `tests/leak_detector.py`** — an independent
+   re-implementation of the freshness rules that audits
+   `public/benchmark_results.json` itself: no *visible* row may have a
+   same-line sibling with a newer version, and a bare/edition-named row
+   (`gpt 5.5 instant`, `grok 4 fast chat`) may not outlive a newer release of
+   its family. Also checks JSON contract sanity (superseded_by targets exist,
+   CL ↔ num_benchmarks consistency). This is the layer that catches bad data
+   *before* the UI ever renders it.
+3. **Browser e2e — `tests/e2e/*.e2e.mjs`** — Playwright against a
+   `vite preview` build (`tests/run-e2e.mjs` starts/stops the server):
+   leaderboard tiers, benchmark explorers and compare presets must show zero
+   flagged models by default; the Older-versions toggle reveals exactly the
+   flagged set and hides it again; plus the home/compare interaction suites.
+   All expectations are derived from the snapshot via
+   `tests/helpers/snapshot.mjs` — no hardcoded counts.
+
 ## Build
 
 ```bash

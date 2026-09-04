@@ -6,10 +6,13 @@ on:
     paths:
       - 'src/**'
       - 'public/**'
+      - 'tests/**'
+      - 'scripts/**'
       - 'index.html'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'vite.config.js'
+      - 'vitest.config.js'
       - '.github/workflows/**'
   workflow_dispatch:
 
@@ -38,7 +41,18 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
+      # ── test gate: nothing deploys unless every layer passes ──
+      # 1) unit tests: store freshness/ranking logic against the real snapshot
+      - run: pnpm run test
+      # 2) data leak guard: committed JSON must not contain visible
+      #    older-generation models (independent re-implementation of the rules)
+      - run: pnpm run test:leak
+      # 3) browser e2e: leaderboard/explorer/compare hide older models,
+      #    toggle + red-line product pairs behave
+      - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm run build
+      - run: pnpm run test:e2e
+      # ── deploy ──
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

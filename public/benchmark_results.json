@@ -4116,6 +4116,60 @@
       "superseded_by": "Gemini 3.8 Flash",
       "match": "exact"
     },
+    "gpt 5.5 instant": {
+      "or_id": "openai/gpt-5.5",
+      "or_name": "OpenAI: GPT-5.5",
+      "provider": "OpenAI",
+      "created": "2026-04-24",
+      "context_length": 1050000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2025-12-01",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 5.0,
+        "output": 30.0,
+        "cache_read": 0.5
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": "",
+      "description": "GPT-5.5 is OpenAI’s frontier model designed for complex professional workloads, building on GPT-5.4 with stronger reasoning, higher reliability, and improved token efficiency on hard tasks. It features a 1M+ token...",
+      "superseded_by": "GPT-5.6 Terra",
+      "match": "subset"
+    },
     "Kimi K3": {
       "or_id": "moonshotai/kimi-k3",
       "or_name": "MoonshotAI: Kimi K3",
@@ -4688,6 +4742,7 @@
         "frequency_penalty",
         "include_reasoning",
         "max_tokens",
+        "parallel_tool_calls",
         "presence_penalty",
         "reasoning",
         "response_format",
@@ -5162,8 +5217,59 @@
       "match": "exact",
       "stale": true
     },
+    "Phi-4 Multimodal": {
+      "or_id": "microsoft/phi-4",
+      "or_name": "Microsoft: Phi 4",
+      "provider": "Microsoft",
+      "created": "2025-01-10",
+      "context_length": 16384,
+      "max_output_tokens": 14745,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": "2024-06-30",
+      "total_params_b": 14.7,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.07,
+        "output": 0.14
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "microsoft/phi-4",
+      "description": "[Microsoft Research](/microsoft) Phi-4 is designed to perform well in complex reasoning tasks and can operate efficiently in situations with limited memory or where quick responses are needed. At 14 billion...",
+      "superseded_by": null,
+      "match": "subset",
+      "stale": true
+    },
     "gemini 3 pro": {
       "superseded_by": "Gemini 3.1 Pro"
+    },
+    "grok 4 fast chat": {
+      "superseded_by": "Grok 4.6"
+    },
+    "Mistral": {
+      "stale": true
     }
   }
 }

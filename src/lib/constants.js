@@ -16,6 +16,7 @@ export const SHORT = {
   'FrontierSWE': 'Frontier',
   'CyberGem': 'CyberG',
   'EQBench CW': 'EQB',
+  'LLM Chess': 'Chess',
 };
 
 // Benchmarks counted in the composite Avg column — the DEFAULT selection.
@@ -56,6 +57,7 @@ export const BLURBS = {
   'FrontierSWE': 'Hard, frontier-grade software engineering issues.',
   'CyberGem': 'Cybersecurity challenges in capture-the-flag style.',
   'EQBench CW': 'Creative writing judged by LLM panels (pairwise Elo). Non-core: thin coverage of current-gen models for now.',
+  'LLM Chess': 'Full chess games vs a random player and the Komodo Dragon engine, Elo-anchored by engine levels (NeurIPS FoRLM 2025). Non-core: planning + protocol adherence with wide per-model error bars on small game counts.',
 };
 
 // Leaderboard tier tabs (order matters — "all" first so the overall

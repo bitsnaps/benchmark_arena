@@ -255,3 +255,56 @@ describe('user-selectable average (commit B)', () => {
     d.resetAvgSelection();
   });
 });
+
+describe('LLM Chess cells (non-core, curated aliases)', () => {
+  it('cells exist for 30+ unified rows and stay within the 0-100 rescale', () => {
+    const withChess = d.pivotAll.value.filter(r => r['LLM Chess'] != null);
+    expect(withChess.length).toBeGreaterThanOrEqual(30);
+    for (const r of withChess) {
+      expect(r['LLM Chess'], `"${r.name}" chess cell`).toBeGreaterThanOrEqual(0);
+      expect(r['LLM Chess'], `"${r.name}" chess cell`).toBeLessThanOrEqual(100);
+    }
+  });
+
+  it('rescale anchors: top model ~100, floor model < 15', () => {
+    const top = [...d.pivotAll.value]
+      .filter(r => r['LLM Chess'] != null)
+      .sort((a, b) => b['LLM Chess'] - a['LLM Chess'])[0];
+    expect(top['LLM Chess']).toBeGreaterThan(99);   // gpt-5.6-sol-xhigh 1549.7 raw
+    const floor = rowOf('DeepSeek V3');
+    if (floor) expect(floor['LLM Chess']).toBeLessThan(15); // -579 raw (keep-best over -823)
+  });
+
+  it('curated alias targets carry cells', () => {
+    for (const name of ['Claude Opus 4.5', 'Claude Opus 4.7', 'Claude Opus 4.8',
+      'Claude Sonnet 4.6', 'Claude Haiku 4.5', 'Claude 4.1 Opus',
+      'grok 3 mini', 'grok 4 fast chat', 'Llama 4 Maverick', 'Llama 4 Scout',
+      'llama 3.3 70b instruct', 'GLM-5', 'Kimi K2.5', 'Grok 4.6']) {
+      const r = rowOf(name);
+      if (!r) continue; // absent from snapshot
+      expect(r['LLM Chess'], `chess cell of "${name}"`).not.toBeNull();
+    }
+  });
+
+  it('collision traps: no chess cell leaked onto the wrong rows', () => {
+    // qwen3.8-27b local quants are a DIFFERENT model than Qwen3.8-Max
+    expect(rowOf('Qwen3.8-Max')?.['LLM Chess'] ?? null).toBeNull();
+    // glm-4.7-flash != GLM-4.7
+    expect(rowOf('GLM-4.7')?.['LLM Chess'] ?? null).toBeNull();
+    // standard-tier gpt-5.x entries must not feed the Pro rows
+    for (const name of ['GPT-5.5 Pro', 'GPT-5.4 Pro', 'GPT-5 Pro', 'GPT-5.2-Codex']) {
+      const r = rowOf(name);
+      if (!r) continue;
+      expect(r['LLM Chess'], `chess cell of "${name}"`).toBeNull();
+    }
+  });
+
+  it('chess never feeds the default Score (non-core parity holds)', () => {
+    for (const r of d.pivotAll.value) {
+      const legacy = legacyScore(r);
+      if (legacy === -1) continue;
+      // models whose ONLY non-core difference is chess must still match
+      expect(d.scoreForModel(r)).toBeCloseTo(legacy, 6);
+    }
+  });
+});

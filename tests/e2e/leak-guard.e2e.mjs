@@ -26,10 +26,12 @@ const OLD_NAMES = new Set(M.olderRows().map(r => r.name));
 function fail(msg) { console.error('FAIL:', msg); process.exitCode = 1; }
 const ok = (msg) => console.log('  ok:', msg);
 
-// Rendered model names on a leaderboard/explorer page
+// Rendered model names on a leaderboard/explorer page.
+// NOTE: alias-footnote models render a ★ inside .model-link (presentation
+// only) — strip it so comparisons use the data name (e.g. "grok 4 fast chat★").
 async function visibleModels(page, selector) {
   const texts = await page.locator(selector).allInnerTexts();
-  return texts.map(s => s.trim()).filter(Boolean);
+  return texts.map(s => s.replace(/\u2605/g, '').trim()).filter(Boolean);
 }
 
 const LEADERBOARD_SEL = '.b-table .table tbody tr .model-cell .model-link';
@@ -86,7 +88,7 @@ const EXPLORER_SEL = '.hbar .name';
   // Read the main table row by row: name + whether the row is dimmed (older)
   const rowInfo = await page.locator('.b-table .table tbody tr').evaluateAll(rows =>
     rows.map(tr => ({
-      name: tr.querySelector('.model-cell .model-link')?.textContent.trim() || '',
+      name: (tr.querySelector('.model-cell .model-link')?.textContent || '').replace(/\u2605/g, '').trim(),
       older: tr.classList.contains('is-older-row'),
     })));
   const olderShown = rowInfo.filter(r => r.older).map(r => r.name);

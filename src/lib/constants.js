@@ -18,12 +18,25 @@ export const SHORT = {
   'EQBench CW': 'EQB',
 };
 
-// Benchmarks counted in the composite Avg column
+// Benchmarks counted in the composite Avg column — the DEFAULT selection.
+// Users can override it per browser via the "Avg set" dropdown (stores/data.js);
+// this list stays the shipped ranking formula and the parity-test anchor.
 export const CORE_BENCHMARKS = [
   'Artificial Analysis', 'BenchLM.ai', 'Arena.ai Text',
   'SimpleBench.com', 'ARC-AGI-2', 'Design Arena',
   'SWE-Marathon', 'FrontierSWE',
 ];
+
+// One-click selections for the "Avg set" dropdown. `benches: null` means
+// "every benchmark in the snapshot" (resolved at runtime).
+export const AVG_PRESETS = [
+  { id: 'default', label: 'Default (8 core)', benches: CORE_BENCHMARKS },
+  { id: 'creative', label: 'Default + Creative Writing', benches: [...CORE_BENCHMARKS, 'EQBench CW'] },
+  { id: 'all', label: 'All benchmarks', benches: null },
+];
+
+// localStorage key persisting the user's custom average selection
+export const AVG_STORAGE_KEY = 'arena.avg_selection';
 
 // Benchmarks highlighted with leader cards on the overview
 export const LEADER_BENCHES = ['Artificial Analysis', 'Arena.ai Text', 'ARC-AGI-2', 'SWE-Marathon'];

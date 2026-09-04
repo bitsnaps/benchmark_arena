@@ -1,10 +1,11 @@
 <script setup>
 // Home = the leaderboard. Compact snapshot header, tier tabs, the global
 // pivot table, compare panel, then context: category leaders, methodology.
-// Tier tabs live in the URL as ?tier= (all | closed | open).
+// Tier tabs live in the URL as ?tier=, search as ?q=, and the custom
+// average mix as ?avg= (comma-separated benchmark slugs).
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { TIERS, SHORT } from '../lib/constants.js';
+import { TIERS, SHORT, AVG_PRESETS } from '../lib/constants.js';
 import { slugify, fmtScore, providerColor, initials } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
@@ -14,7 +15,7 @@ import ComparePanel from '../components/ComparePanel.vue';
 const route = useRoute();
 const router = useRouter();
 
-const { pivotFor, stats, topOverall, topOpen, scoreForModel, leaders, coreBenchmarks, nonCoreBenchmarks, isOlder } = useData();
+const { pivotFor, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder } = useData();
 const { searchQuery, compareMode, compareRows, showOlder, minCl } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
@@ -41,6 +42,41 @@ watch(searchQuery, (q) => {
   router.replace({ query: { ...route.query, q: q || undefined } });
 });
 
+// ── Avg set ⇄ ?avg= (custom mixes become shareable links) ────────────
+// The URL param (comma-separated bench slugs) wins over localStorage when
+// both exist. A missing param never resets a stored custom mix — it just
+// means "no explicit request", so we reflect the stored mix into the URL.
+watch([loading, () => route.query.avg], ([ld, v]) => {
+  if (ld) return;
+  const param = typeof v === 'string' ? v : '';
+  const serialized = avgSelection.value ? avgSelection.value.map(slugify).join(',') : '';
+  if (param && param !== serialized) {
+    applyAvgParam(param); // deep link → selection (+ localStorage)
+    return;
+  }
+  if (!param && serialized && !('avg' in route.query)) {
+    router.replace({ query: { ...route.query, avg: serialized } });
+  }
+}, { immediate: true });
+
+watch(avgSelection, (sel) => {
+  const want = sel ? sel.map(slugify).join(',') : undefined;
+  if (route.query.avg !== want) {
+    router.replace({ query: { ...route.query, avg: want } });
+  }
+});
+
+// ── Avg-set dropdown helpers ─────────────────────────────────────────
+const isInSel = (b) => coreBenchmarks.value.includes(b);
+const selectedCount = computed(() => coreBenchmarks.value.length);
+const avgLabel = computed(() => {
+  const pid = avgPresetId.value;
+  if (pid) return AVG_PRESETS.find(p => p.id === pid)?.label ?? 'Default (8 core)';
+  return `Custom (${selectedCount.value})`;
+});
+// Min-CL slider granularity follows the selection size (100/n per bench)
+const clStep = computed(() => 100 / Math.max(1, selectedCount.value));
+
 // ── Rows for the active tab ───────────────────────────────────────────
 // One ranked listing. Older releases — superseded versions of the same
 // product line plus stale generations (9+ months old, no successor in the
@@ -51,7 +87,7 @@ watch(searchQuery, (q) => {
 const applyFilters = (list) => {
   const q = searchQuery.value.toLowerCase();
   return list.filter(r =>
-    (r.cl ?? 0) >= minCl.value && (!q || r.name.toLowerCase().includes(q)));
+    clForModel(r) >= minCl.value && (!q || r.name.toLowerCase().includes(q)));
 };
 
 const rows = computed(() => {
@@ -96,12 +132,12 @@ const openModel = (name) =>
       <div class="stat">
         <div class="lbl">Top overall</div>
         <div class="val" style="font-size:1.15rem">{{ topOverall ? topOverall.name : '—' }}</div>
-        <div class="sub">Score {{ topOverall ? fmtScore(scoreForModel(topOverall)) : '—' }} · CL-weighted, {{ topOverall ? Math.round(topOverall.cl) : '—' }}% coverage</div>
+        <div class="sub">Score {{ topOverall ? fmtScore(scoreForModel(topOverall)) : '—' }} · CL-weighted, {{ topOverall ? Math.round(clForModel(topOverall)) : '—' }}% coverage</div>
       </div>
       <div class="stat">
         <div class="lbl">Top open-weight</div>
         <div class="val" style="font-size:1.15rem">{{ topOpen ? topOpen.name : '—' }}</div>
-        <div class="sub">Score {{ topOpen ? fmtScore(scoreForModel(topOpen)) : '—' }} · CL-weighted, {{ topOpen ? Math.round(topOpen.cl) : '—' }}% coverage</div>
+        <div class="sub">Score {{ topOpen ? fmtScore(scoreForModel(topOpen)) : '—' }} · CL-weighted, {{ topOpen ? Math.round(clForModel(topOpen)) : '—' }}% coverage</div>
       </div>
     </div>
 
@@ -132,6 +168,49 @@ const openModel = (name) =>
         </b-field>
       </div>
       <div class="row mt-sm" style="gap:1.2rem;align-items:center;flex-wrap:wrap">
+        <!-- Avg set: which benchmarks feed the global Score (default = shipped formula) -->
+        <b-dropdown :triggers="['click']" :close-on-click="false" :mobile-modal="false" class="avg-dropdown" aria-role="list" aria-label="Choose which benchmarks count in the global Score">
+          <template #trigger>
+            <button class="button is-small avg-trigger" type="button" :class="isCustomAvg ? 'is-warning' : 'is-dark is-light'">
+              <i class="fas fa-sliders"></i>
+              <span style="margin-left:.5rem">Avg set · {{ avgLabel }}</span>
+              <b-tag v-if="isCustomAvg" type="is-warning" size="is-small" rounded class="ml-2">custom</b-tag>
+            </button>
+          </template>
+
+          <b-dropdown-item
+            v-for="p in AVG_PRESETS"
+            :key="p.id"
+            aria-role="listitem"
+            :class="{ 'is-active-preset': (p.id === 'default' && !isCustomAvg) || avgPresetId === p.id }"
+            @click="applyPreset(p)"
+          >
+            <i class="fas" :class="((p.id === 'default' && !isCustomAvg) || avgPresetId === p.id) ? 'fa-circle-dot' : 'fa-circle-notch'"></i>
+            {{ p.label }}
+          </b-dropdown-item>
+
+          <hr class="dropdown-divider" />
+          <div class="avg-bench-list">
+            <div v-for="b in benchmarks" :key="b" class="avg-bench-row">
+              <b-checkbox
+                :model-value="isInSel(b)"
+                :disabled="isInSel(b) && selectedCount <= 1"
+                @update:model-value="toggleAvgBench(b)"
+              >
+                {{ SHORT[b] || b }}
+              </b-checkbox>
+            </div>
+          </div>
+
+          <hr class="dropdown-divider" />
+          <div style="padding:.4rem .9rem .7rem">
+            <button class="button is-small is-fullwidth" type="button" :disabled="!isCustomAvg" @click="resetAvgSelection">
+              <i class="fas fa-rotate-left"></i>&nbsp;Reset to default
+            </button>
+            <p class="cell-sub" style="margin:.45rem 0 0">Your pick drives Score, CL and the min-coverage filter. At least one benchmark stays selected.</p>
+          </div>
+        </b-dropdown>
+
         <b-switch v-model="showOlder" size="is-small" type="is-warning" left-label>
           Older versions
           <b-tag size="is-small" type="is-warning is-light" rounded>{{ olderCount }}</b-tag>
@@ -143,8 +222,8 @@ const openModel = (name) =>
             class="cl-slider"
             type="range"
             min="0"
-            max="100"
-            step="12.5"
+            :max="100"
+            :step="clStep"
             v-model.number="minCl"
             aria-label="Minimum coverage level (CL%)"
           />
@@ -193,17 +272,19 @@ const openModel = (name) =>
       <div class="panel-lab" style="padding:1.2rem">
         <h3 style="margin:0 0 .4rem">How the Score column works</h3>
         <p style="color:var(--muted);font-size:.92rem">
-          Score is the raw average over the core benchmarks a model actually reports,
-          CL-weighted: it is blended toward a neutral 50 baseline in proportion to the
+          Score is the raw average over the benchmarks in the current avg set ({{ avgLabel.toLowerCase() }}) that a
+          model actually reports, CL-weighted: it is blended toward a neutral 50 baseline in proportion to the
           model's Coverage Level (CL). A fully-covered model (CL 100%) keeps its plain
-          average; a model covering 2 of 8 core evals only keeps 25% of its edge above
+          average; a model covering 2 of {{ selectedCount }} selected evals only keeps {{ Math.round((2 / selectedCount) * 100) }}% of its edge above
           50. This offsets selection bias — without it, models evaluated on a few
           favorable leaderboards outrank frontier models tested across the board.
           Missing evals are treated as “no evidence” (neutral), never as a zero.
+          Use the “Avg set” dropdown above to swap which benchmarks feed the Score —
+          the shipped default is unchanged for everyone who never touches it.
         </p>
       </div>
       <div class="panel-lab" style="padding:1.2rem">
-        <h3 style="margin:0 0 .4rem">Core benchmarks in the average</h3>
+        <h3 style="margin:0 0 .4rem">Benchmarks in the average</h3>
         <div class="chips mt-sm">
           <span class="tag-lab teal" v-for="b in coreBenchmarks" :key="b">{{ SHORT[b] || b }}</span>
           <span class="tag-lab" v-for="b in nonCoreBenchmarks" :key="b">{{ SHORT[b] || b }}</span>

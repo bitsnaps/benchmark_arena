@@ -426,3 +426,34 @@ a.hbar:hover .name { color: var(--teal); }
   border-color: color-mix(in srgb, var(--gold, #f5c15a) 55%, transparent);
   background: color-mix(in srgb, var(--gold, #f5c15a) 12%, transparent);
 }
+
+/* ── Avg-set dropdown (user-selectable average, commit B) ────────────── */
+.avg-trigger {
+  border-radius: 999px;
+  font-weight: 600;
+}
+.avg-trigger.is-warning {
+  border-color: color-mix(in srgb, var(--gold, #f5c15a) 60%, transparent);
+  color: var(--gold, #f5c15a);
+  background: color-mix(in srgb, var(--gold, #f5c15a) 12%, transparent);
+}
+.avg-dropdown .dropdown-menu {
+  min-width: 280px;
+  max-width: 320px;
+}
+.avg-dropdown .dropdown-item.is-active-preset {
+  color: var(--teal, #2ee6c7);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--teal, #2ee6c7) 8%, transparent);
+}
+.avg-bench-list {
+  max-height: 240px;
+  overflow-y: auto;
+  padding: .2rem .9rem;
+}
+.avg-bench-row {
+  padding: .15rem 0;
+}
+.avg-bench-row .b-checkbox {
+  width: 100%;
+}

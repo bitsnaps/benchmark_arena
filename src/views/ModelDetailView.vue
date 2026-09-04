@@ -11,7 +11,7 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 const model = computed(() => modelSlugIndex.value.get(route.params.slug) || null);
@@ -25,6 +25,8 @@ const tier = computed(() => model.value ? tierOf(model.value) : null);
 const avg = computed(() => model.value ? avgForModel(model.value) : null);
 // CL-weighted global score — same metric the leaderboard ranks by
 const wscore = computed(() => model.value ? scoreForModel(model.value) : null);
+// Coverage against the current avg-set selection (not the baked 8-core CL)
+const cl = computed(() => model.value ? clForModel(model.value) : 0);
 
 // Scored / missing benchmarks
 const scored = computed(() => !model.value ? [] : benchmarks.value
@@ -113,8 +115,8 @@ function addToCompare() {
       </div>
       <div class="stat">
         <div class="lbl">Coverage Level</div>
-        <div class="val num">{{ model.cl === null || model.cl === undefined ? '—' : Math.round(model.cl) + '%' }}</div>
-        <div class="sub">of the {{ stats.coreBenchmarks }} core benchmarks</div>
+        <div class="val num">{{ Math.round(cl) + '%' }}</div>
+        <div class="sub">of the {{ stats.coreBenchmarks }} benchmarks in the current avg set</div>
       </div>
       <div class="stat">
         <div class="lbl">Benchmarks scored</div>

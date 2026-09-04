@@ -14,13 +14,14 @@ const props = defineProps({
   tier: { type: String, default: 'all' },
 });
 
-const { benchmarks, nonCoreBenchmarks, stats, scoreForModel, avgForModel, rankOf, tierOf, isCore, benchThAttrs, isOlder, supersededBy, metaFor } = useData();
+const { benchmarks, nonCoreBenchmarks, stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, isCore, benchThAttrs, isOlder, supersededBy, metaFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
-// Hover restores full opacity (see .cov-table rules in main.css).
+// Coverage is recomputed against the current avg-set selection, so a custom
+// mix re-scores row opacity too. Hover restores full opacity (see .cov-table).
 const rowCls = (row) =>
-  [covClass(row.cl), isOlder(row) ? 'is-older-row' : ''].join(' ').trim();
+  [covClass(clForModel(row)), isOlder(row) ? 'is-older-row' : ''].join(' ').trim();
 
 // Tooltip for the inline "older" chip — why this row sits outside the ranking
 const olderTitle = (row) =>
@@ -45,9 +46,9 @@ function byScore(a, b, isAsc) {
 function scoreTitle(row) {
   const raw = avgForModel(row);
   const w = scoreForModel(row);
-  const cl = row.cl ?? 0;
-  if (raw === null || raw === undefined) return 'No core scores';
-  return `Raw avg ${raw.toFixed(1)} · CL ${Math.round(cl)}% → CL-weighted ${w !== null && w !== undefined ? w.toFixed(1) : '—'} (uncovered core benches count as neutral 50)`;
+  const cl = clForModel(row);
+  if (raw === null || raw === undefined) return 'No scores in the selected avg set';
+  return `Raw avg ${raw.toFixed(1)} · CL ${Math.round(cl)}% (${coveredCountForModel(row)} of ${coreBenchmarks.value.length} selected) → CL-weighted ${w !== null && w !== undefined ? w.toFixed(1) : '—'} (uncovered selected benches count as neutral 50)`;
 }
 </script>
 
@@ -120,8 +121,8 @@ function scoreTitle(row) {
       <b-tag
         v-if="props.row.cl !== null && props.row.cl !== undefined"
         size="is-small"
-        :type="clTag(props.row.cl)"
-      >{{ Math.round(props.row.cl) }}%</b-tag>
+        :type="clTag(clForModel(props.row))"
+      >{{ Math.round(clForModel(props.row)) }}%</b-tag>
       <span v-else class="cell-sub">—</span>
     </b-table-column>
 

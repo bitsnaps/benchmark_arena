@@ -194,6 +194,98 @@ const ok = (msg) => console.log('  ok:', msg);
     else ok('slider reset restores all rows');
   }
 
+  // ── 1d. Avg-set dropdown: user-selectable average (commit B) ──
+  // Default must stay the shipped 8-core formula; the +Creative preset adds
+  // EQBench CW to the average (custom badge + ?avg= + persistence), and
+  // Reset restores the shipped formula. ≥1 benchmark always stays selected.
+  {
+    const eqbThClass = async () => await page
+      .locator('.b-table thead th', { hasText: 'EQB' }).first().getAttribute('class');
+    // "noncore-col" CONTAINS "core-col" — anchor the match to a whole class token
+    const CORE_RE = /(^|\s)core-col(\s|$)/;
+    // buefy re-renders column headers async — poll instead of a fixed wait
+    const pollTh = async (wantCore, tries = 12) => {
+      for (let i = 0; i < tries; i++) {
+        const cls = await eqbThClass();
+        if (CORE_RE.test(cls || '') === wantCore) return true;
+        await page.waitForTimeout(250);
+      }
+      return false;
+    };
+    const statSub = page.locator('.home-stats .stat').nth(1).locator('.sub');
+
+    if (!/8 of them counted/.test(await statSub.innerText()))
+      fail(`default stats should say "8 of them counted", got "${await statSub.innerText()}"`);
+    else ok('default avg set: 8 benchmarks counted in the global Score');
+    if (page.url().includes('avg=')) fail('default home URL should not carry ?avg=');
+    else ok('no ?avg= param by default');
+    if (await page.locator('.avg-dropdown .tag:has-text("custom")').count())
+      fail('custom badge should be hidden while the default set is active');
+    else ok('no custom badge by default');
+
+    // open the dropdown once and keep it open for the whole section — the
+    // trigger is a toggle and close-on-click is disabled by design
+    await page.locator('.avg-dropdown .avg-trigger').click();
+    await page.waitForTimeout(300);
+    const eqbBox = page.locator('.avg-dropdown .avg-bench-row input').nth(11); // EQBench CW is last in data order
+    const presetItem = page.locator('.avg-dropdown .dropdown-item', { hasText: 'Default + Creative' });
+    if (!(await presetItem.count()) || !(await eqbBox.count()))
+      fail('avg-set dropdown should list presets and per-benchmark checkboxes');
+    else ok('avg-set dropdown lists presets + per-benchmark checkboxes');
+    await presetItem.click();
+    await page.waitForTimeout(500);
+
+    // EQB column becomes counted (teal header), badge + URL param + stats follow
+    if (!(await pollTh(true))) fail(`EQB header should gain core-col after preset, got "${await eqbThClass()}"`);
+    else ok('+Creative preset: EQBench CW now counted in the Score');
+    if (!(await page.locator('.avg-dropdown .tag:has-text("custom")').count()))
+      fail('custom badge missing after +Creative');
+    else ok('custom badge visible after +Creative');
+    if (!page.url().includes('avg=')) fail('?avg= param missing after custom selection');
+    else ok('custom mix synced into the URL (?avg=)');
+    if (!/9 of them counted/.test(await statSub.innerText()))
+      fail(`stats after preset should say "9 of them counted", got "${await statSub.innerText()}"`);
+    else ok('stats now count 9 benchmarks in the Score');
+
+    // persistence: reload → selection survives via localStorage (and URL param)
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
+    if (!(await pollTh(true))) fail('EQB header lost core-col after reload — persistence broken');
+    else ok('custom mix persists across reload (localStorage + ?avg=)');
+
+    // reset → shipped formula, param gone (menu re-opened after reload)
+    await page.locator('.avg-dropdown .avg-trigger').click();
+    await page.waitForTimeout(300);
+    await page.locator('.avg-dropdown button:has-text("Reset to default")').click();
+    await page.waitForTimeout(500);
+    if (page.url().includes('avg=')) fail('?avg= should be gone after reset');
+    else ok('reset drops the ?avg= param');
+    if (await pollTh(false)) ok('reset restores the shipped 8-core formula');
+    else fail(`EQB header should drop core-col after reset, got "${await eqbThClass()}"`);
+
+    // ≥1 guard: unchecking everything still leaves exactly one selected (locked)
+    const boxes = page.locator('.avg-dropdown .avg-bench-row input[type="checkbox"]');
+    const labels = page.locator('.avg-dropdown .avg-bench-row .b-checkbox');
+    const nBoxes = await boxes.count();
+    for (let i = 0; i < nBoxes; i++) {
+      const box = boxes.nth(i);
+      if ((await box.isChecked()) && !(await box.isDisabled())) await labels.nth(i).click();
+    }
+    await page.waitForTimeout(300);
+    const checkedLeft = await page.locator('.avg-dropdown .avg-bench-row input[type="checkbox"]:checked').count();
+    const lockedLeft = await page.locator('.avg-dropdown .avg-bench-row input[type="checkbox"]:checked:disabled').count();
+    if (checkedLeft < 1 || lockedLeft !== 1)
+      fail(`≥1 guard failed (${checkedLeft} checked, ${lockedLeft} locked)`);
+    else ok('≥1 selection guard holds: last benchmark locks instead of deselecting');
+    // clean up: back to default so the sections below see shipped behavior
+    await page.locator('.avg-dropdown button:has-text("Reset to default")').click();
+    await page.waitForTimeout(400);
+    await page.locator('.page-head h1').click(); // outside click closes the dropdown
+    await page.waitForTimeout(300);
+    if (page.url().includes('avg=')) fail('final cleanup left ?avg= behind');
+    else ok('cleanup: default avg set restored, dropdown closed');
+  }
+
   // ── 2. Tier tabs → ?tier= ──
   await page.click('.tier-tabs .tabs li:nth-child(2) a');
   await page.waitForTimeout(400);

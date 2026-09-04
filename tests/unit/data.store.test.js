@@ -17,8 +17,12 @@ vi.stubGlobal('fetch', vi.fn(async () => ({
 })));
 
 const { ensureLoaded, useData } = await import('../../src/stores/data.js');
-const MIRROR = (await import('../helpers/snapshot.mjs')).makeMirror(snapshot);
+const { AVG_PRESETS } = await import('../../src/lib/constants.js');
+const MIRROR_MOD = await import('../helpers/snapshot.mjs');
+const MIRROR = MIRROR_MOD.makeMirror(snapshot);
 const { META, current, byAvg, byScore } = MIRROR;
+const MIRROR_CORE = MIRROR_MOD.CORE_BENCHMARKS;
+const legacyScore = MIRROR_MOD.scoreForModel; // independent legacy formula
 
 let d;
 beforeAll(async () => {
@@ -160,5 +164,91 @@ describe('CL-weighted global score (selection-bias fix, 2026-09)', () => {
       if (!row) continue;
       expect(row['BenchLM.ai'], `BenchLM.ai score of "${name}"`).not.toBeNull();
     }
+  });
+});
+
+describe('user-selectable average (commit B)', () => {
+  it('PARITY: default selection reproduces the shipped cl + legacy score exactly', () => {
+    // Run FIRST in this describe — later tests mutate the selection.
+    for (const r of d.pivotAll.value) {
+      expect(d.clForModel(r), `client CL of "${r.name}"`).toBe(r.cl ?? 0);
+      const legacy = legacyScore(r); // -1 = no scores in the core set
+      if (legacy === -1) expect(d.scoreForModel(r)).toBeNull();
+      else expect(d.scoreForModel(r), `score of "${r.name}"`).toBeCloseTo(legacy, 6);
+    }
+    expect(d.isCustomAvg.value).toBe(false);
+  });
+
+  it('creative preset adds EQBench CW to the avg set and re-scores; reset restores', () => {
+    const withEqb = d.pivotAll.value.find(r => r['EQBench CW'] != null);
+    if (!withEqb) return; // snapshot without EQB cells → nothing to assert
+    const scoreBefore = d.scoreForModel(withEqb);
+    const creative = AVG_PRESETS.find(p => p.id === 'creative');
+    d.applyPreset(creative);
+    expect(d.isCustomAvg.value).toBe(true);
+    expect(d.coreBenchmarks.value).toContain('EQBench CW');
+    expect(d.coreBenchmarks.value.length).toBe(MIRROR_CORE.length + 1);
+    // coverage now spreads over 9 benches → CL and Score must move
+    expect(d.clForModel(withEqb)).not.toBe(withEqb.cl);
+    expect(d.scoreForModel(withEqb)).not.toBe(scoreBefore);
+    d.resetAvgSelection();
+    expect(d.isCustomAvg.value).toBe(false);
+    expect(d.clForModel(withEqb)).toBe(withEqb.cl);
+    expect(d.scoreForModel(withEqb)).toBeCloseTo(scoreBefore, 12);
+  });
+
+  it('custom selection averages only the picked benchmarks (cl recomputed)', () => {
+    const r = d.pivotAll.value.find(x => x['EQBench CW'] != null);
+    if (!r) return;
+    d.setAvgSelection(['EQBench CW']);
+    expect(d.avgForModel(r)).toBe(r['EQBench CW']);
+    expect(d.clForModel(r)).toBe(100);
+    expect(d.scoreForModel(r)).toBe(r['EQBench CW']); // full coverage keeps the raw avg
+    // 2-bench mix: sparse mean + proportional CL blend
+    d.setAvgSelection(['Artificial Analysis', 'EQBench CW']);
+    const vals = [r['Artificial Analysis'], r['EQBench CW']].filter(v => v != null);
+    const raw = vals.reduce((a, b) => a + b, 0) / vals.length;
+    expect(d.avgForModel(r)).toBeCloseTo(raw, 12);
+    const w = vals.length / 2; // CL = covered/selected
+    expect(d.scoreForModel(r)).toBeCloseTo(w * raw + (1 - w) * 50, 12);
+    d.resetAvgSelection();
+  });
+
+  it('≥1 selection guard: the last selected benchmark can never be removed', () => {
+    d.setAvgSelection(['Artificial Analysis']);
+    expect(d.coreBenchmarks.value).toEqual(['Artificial Analysis']);
+    d.toggleAvgBench('Artificial Analysis'); // refused
+    expect(d.coreBenchmarks.value).toEqual(['Artificial Analysis']);
+    d.toggleAvgBench('Arena.ai Text'); // adding still works
+    expect(d.coreBenchmarks.value.length).toBe(2);
+    d.resetAvgSelection();
+  });
+
+  it('empty/garbage selections fall back to the shipped default', () => {
+    d.setAvgSelection(['EQBench CW']);
+    d.setAvgSelection([]);
+    expect(d.avgSelection.value).toBeNull();
+    expect(d.isCustomAvg.value).toBe(false);
+    expect(d.coreBenchmarks.value.length).toBe(MIRROR_CORE.length);
+    d.setAvgSelection(['Not A Real Bench', 'Artificial Analysis']);
+    expect(d.coreBenchmarks.value).toEqual(['Artificial Analysis']); // unknown names drop out
+    d.resetAvgSelection();
+  });
+
+  it('?avg= deep link resolves bench slugs and ignores garbage params', () => {
+    expect(d.applyAvgParam('eqbench-cw')).toBe(true);
+    expect(d.coreBenchmarks.value).toEqual(['EQBench CW']);
+    expect(d.applyAvgParam('nonsense-slugg')).toBe(false); // state untouched
+    expect(d.coreBenchmarks.value).toEqual(['EQBench CW']);
+    expect(d.applyAvgParam('')).toBe(false);
+    d.resetAvgSelection();
+  });
+
+  it('picking exactly the default set is NOT custom (no badge, no ?avg=)', () => {
+    const def = MIRROR_CORE;
+    d.setAvgSelection(def);
+    expect(d.isCustomAvg.value).toBe(false);
+    expect(d.avgPresetId.value).toBe('default');
+    d.resetAvgSelection();
   });
 });

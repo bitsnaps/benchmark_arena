@@ -18,7 +18,7 @@ const route = useRoute();
 const router = useRouter();
 
 const {
-  benchmarks, pivotAll, modelSlugIndex, scoreForModel, rankMaps, tierOf, isCore,
+  benchmarks, pivotAll, modelSlugIndex, scoreForModel, clForModel, coveredCountForModel, rankMaps, tierOf, isCore,
   stats, metaFor, metaCoverage, topClosed, topOpen, isOlder,
 } = useData();
 const { compareRows, compareMode } = useLeaderboard();
@@ -186,9 +186,9 @@ const cmpGroups = computed(() => {
   groups.push({
     label: 'Headline',
     rows: [
-      { key: 'avg', label: 'Global Score', hint: `CL-weighted blend of ${stats.value.coreBenchmarks} core evals`, cells: mk('high', (s) => ({ num: s.avg, main: fmtScore(s.avg), color: scoreColor(s.avg), bar: s.avg })) },
+      { key: 'avg', label: 'Global Score', hint: `CL-weighted blend of the ${stats.value.coreBenchmarks} benchmarks in the current avg set`, cells: mk('high', (s) => ({ num: s.avg, main: fmtScore(s.avg), color: scoreColor(s.avg), bar: s.avg })) },
       { key: 'rank', label: 'Overall rank', hint: `of ${stats.value.closed + stats.value.open} tracked`, cells: mk('low', (s) => ({ num: s.overallRank, main: s.overallRank ? '#' + s.overallRank : '—', sub: s.tierRank ? `#${s.tierRank} among ${s.tier}` : null })) },
-      { key: 'cl', label: 'Coverage', hint: 'share of core evals reported', cells: mk('high', (s) => ({ num: s.row.cl, main: s.row.cl == null ? '—' : Math.round(s.row.cl) + '%', bar: s.row.cl, sub: s.row.num_benchmarks ? `${s.row.num_benchmarks} evals` : null })) },
+      { key: 'cl', label: 'Coverage', hint: 'share of the current avg set reported', cells: mk('high', (s) => ({ num: clForModel(s.row), main: Math.round(clForModel(s.row)) + '%', bar: clForModel(s.row), sub: `${coveredCountForModel(s.row)} of ${stats.value.coreBenchmarks} selected` })) },
       { key: 'status', label: 'Status', hint: 'current vs older release', cells: dash((s) => (s.supersededBy
         ? { main: 'Superseded', sub: 'by ' + s.supersededBy, tag: 'warning' }
         : s.stale

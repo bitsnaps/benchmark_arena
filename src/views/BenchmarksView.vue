@@ -76,7 +76,7 @@ const openModel = (name) => {
     <div class="page-head">
       <div class="kicker">Performance by eval</div>
       <h1 class="section-title">Benchmarks</h1>
-      <p class="section-sub">One leaderboard lies. Eleven argue. Use the eval that matches the work.</p>
+      <p class="section-sub">One leaderboard lies. {{ benchmarks.length - 1 }} argue. Use the eval that matches the work.</p>
     </div>
 
     <div class="chips" style="margin-bottom:1rem">

@@ -96,25 +96,41 @@ const ok = (msg) => console.log('  ok:', msg);
       if (parseFloat(op) >= 1) fail(`dimmed row opacity should be < 1, got ${op}`);
       else ok(`coverage opacity tiers render (dimmed=${dimmed}, full=${full}, sample opacity=${op})`);
     }
-    // toggle → older section with rank dashes
+    // toggle ON → older models interleave INLINE in the main ranked table
     await page.locator('label.switch:has-text("Older versions")').click();
     await page.waitForTimeout(400);
-    const olderRows = await page.locator('.older-section tbody tr').count();
-    if (!olderRows) fail('older section should render rows after toggle');
-    else {
-      const expectedOlder = ALLROWS.filter(isOld).length;
-      if (olderRows !== expectedOlder) fail(`older section should list ${expectedOlder} rows, got ${olderRows}`);
-      else ok(`older versions toggle reveals ${olderRows} rows (superseded + stale)`);
-      if (!(await page.locator(`.older-section .model-link:text-is("${supInTable.name}")`).count()))
-        fail(`older section should contain "${supInTable.name}"`);
-      else ok(`older section lists "${supInTable.name}"`);
-      if (hasOverride && !(await page.locator('.older-section .model-link:text-is("gemini 3 pro")').count()))
-        fail('older section should contain "gemini 3 pro"');
-      else if (hasOverride) ok('older section lists "gemini 3 pro"');
-      const oldRank = (await page.locator('.older-section tbody tr').first().locator('.rank').innerText()).trim();
-      if (oldRank !== '—') fail(`older rows should show "—" rank, got "${oldRank}"`);
-      else ok('older rows carry no rank (excluded from ranking)');
-    }
+    const expectedOlder = ALLROWS.filter(isOld).length;
+    if (await page.locator('.older-section').count())
+      fail('separate older section rendered (older models must be inline now)');
+    else ok('no separate older section — old models live in the main listing');
+    const olderInline = await page.locator('.b-table .table tbody tr.is-older-row').count();
+    if (olderInline !== expectedOlder)
+      fail(`inline older rows: expected ${expectedOlder}, got ${olderInline}`);
+    else ok(`older versions toggle interleaves ${olderInline} dimmed rows inline (superseded + stale)`);
+    if (!(await page.locator(`.b-table .table tbody tr.is-older-row .model-link:text-is("${supInTable.name}")`).count()))
+      fail(`"${supInTable.name}" should appear inline (dimmed) after toggle`);
+    else ok(`"${supInTable.name}" interleaved into the main ranking`);
+    if (hasOverride && !(await page.locator('.b-table .table tbody tr.is-older-row .model-link:text-is("gemini 3 pro")').count()))
+      fail('override-flagged "gemini 3 pro" should appear inline after toggle');
+    else if (hasOverride) ok('"gemini 3 pro" interleaved into the main ranking');
+    const oldRank = (await page.locator('.b-table .table tbody tr.is-older-row').first().locator('.rank').innerText()).trim();
+    if (oldRank !== '—') fail(`inline older rows should show "—" rank, got "${oldRank}"`);
+    else ok('inline older rows carry no rank (excluded from ranking)');
+    const oldOp = await page.locator('.b-table .table tbody tr.is-older-row').first()
+      .evaluate(el => getComputedStyle(el).opacity);
+    if (parseFloat(oldOp) >= 1) fail(`inline older row should be dimmed, got ${oldOp}`);
+    else ok(`inline older rows render dimmed (opacity=${oldOp})`);
+    if (!(await page.locator('.b-table .table tbody tr.is-older-row .older-chip').count()))
+      fail('inline older rows should carry an "older" chip');
+    else ok('inline older rows carry the "older" chip');
+    // merged table = every model exactly once; top of the table unchanged
+    const totalRows = await page.locator('.b-table .table tbody tr').count();
+    if (totalRows !== ALLROWS.length)
+      fail(`with toggle ON the table should list all ${ALLROWS.length} models, got ${totalRows}`);
+    else ok(`toggle ON: single merged table lists all ${totalRows} models`);
+    const topAfter = await firstName();
+    if (topAfter !== EXPECT.all) fail(`top row after merge = "${topAfter}", expected "${EXPECT.all}"`);
+    else ok(`top row unchanged after merge (${topAfter})`);
     await page.screenshot({ path: SHOTS + '/home-older-versions.png' });
     // hide again before navigating on
     await page.locator('label.switch:has-text("Older versions")').click();

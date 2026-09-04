@@ -359,17 +359,22 @@ a.hbar:hover .name { color: var(--teal); }
 .cov-table tbody tr.cov-min  { opacity: .38; }
 .cov-table tbody tr:hover    { opacity: 1; }
 
-/* ── Older (superseded) versions section ─────────────────────────────── */
-.older-section {
-  border: 1px dashed color-mix(in srgb, var(--muted) 45%, transparent);
-  border-radius: 10px;
-  padding: .9rem 1rem 1rem;
-  background: color-mix(in srgb, var(--panel, #141a24) 55%, transparent);
+/* ── Older (superseded) rows — inline in the main table ──────────────── */
+/* When the Older-versions toggle is on, old models interleave in the same
+   ranked table: dimmed, unranked, with a small "older" chip on the name.
+   Rules sit AFTER the coverage tiers so is-older dimming wins while idle;
+   the explicit :hover rules restore full opacity on mouseover. */
+.cov-table tbody tr.is-older-row { opacity: .55; }
+.cov-table tbody tr.is-older-row:hover { opacity: 1; }
+.cov-table tbody tr.is-older-row .rank { filter: grayscale(1); opacity: .7; }
+.older-chip {
+  display: inline-block; margin-left: .35rem; padding: 0 .35rem;
+  border-radius: 6px; font-size: .62rem; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase; vertical-align: middle;
+  color: var(--gold, #f5c15a); cursor: help;
+  background: color-mix(in srgb, var(--gold, #f5c15a) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold, #f5c15a) 35%, transparent);
 }
-.cov-table.is-older-table tbody tr.is-older-row { opacity: .55; }
-.cov-table.is-older-table tbody tr.is-older-row:hover { opacity: 1; }
-.cov-table.is-older-table .rank { filter: grayscale(1); opacity: .7; }
-.cov-table.is-older-table th { color: var(--muted); }
 
 /* Older rows inside the per-benchmark explorer bar list */
 .hbar.is-older-row { opacity: .5; }

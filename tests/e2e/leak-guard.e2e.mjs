@@ -70,23 +70,40 @@ const EXPLORER_SEL = '.hbar .name';
     }
   }
 
-  // ── 2. Toggle: OFF truly hides, ON reveals exactly the flagged set ──
+  // ── 2. Toggle: OFF truly hides, ON interleaves the flagged set inline ──
   await page.goto(BASE + '#/', { waitUntil: 'networkidle' });
   await page.waitForSelector(LEADERBOARD_SEL);
   const sw = page.locator('label.switch', { hasText: 'Older versions' });
   if (await sw.locator('input').isChecked()) { await sw.click(); await page.waitForTimeout(300); }
-  if (await page.locator('.older-section').count()) fail('older section rendered while toggle is OFF');
-  else ok('toggle OFF: no older section, main table clean');
+  if (await page.locator('.older-section').count()) fail('separate older section rendered (must be inline-only now)');
+  else ok('toggle OFF: no separate section, main table clean');
 
   await sw.click();
   await page.waitForTimeout(400);
-  const olderShown = await visibleModels(page, '.older-section .model-cell .model-link');
+  if (await page.locator('.older-section').count())
+    fail('separate older section rendered while toggle is ON (older models must be INLINE)');
+  else ok('toggle ON: older models render inline in the main table (no separate section)');
+  // Read the main table row by row: name + whether the row is dimmed (older)
+  const rowInfo = await page.locator('.b-table .table tbody tr').evaluateAll(rows =>
+    rows.map(tr => ({
+      name: tr.querySelector('.model-cell .model-link')?.textContent.trim() || '',
+      older: tr.classList.contains('is-older-row'),
+    })));
+  const olderShown = rowInfo.filter(r => r.older).map(r => r.name);
   const expectedOlder = M.olderRows().map(r => r.name);
   if (olderShown.length !== expectedOlder.length)
-    fail(`toggle ON: older section has ${olderShown.length} rows, snapshot flags ${expectedOlder.length}`);
-  else ok(`toggle ON: older section reveals exactly ${olderShown.length} flagged models`);
+    fail(`toggle ON: ${olderShown.length} dimmed older rows, snapshot flags ${expectedOlder.length}`);
+  else ok(`toggle ON: exactly ${olderShown.length} flagged models interleaved inline`);
   const missing = expectedOlder.filter(n => !olderShown.includes(n));
   if (missing.length) fail('toggle ON: missing flagged models: ' + missing.join(' | '));
+  // No over-flagging: every dimmed row must be flagged in the snapshot
+  const misflagged = rowInfo.filter(r => r.older && !OLD_NAMES.has(r.name)).map(r => r.name);
+  if (misflagged.length) fail('toggle ON: dimmed but not flagged in snapshot: ' + misflagged.join(' | '));
+  else ok('dimmed set matches the snapshot flag set exactly');
+  // Inline means interleaved — every model appears exactly once, no dupes
+  const dupes = rowInfo.map(r => r.name).filter((n, i, arr) => n && arr.indexOf(n) !== i);
+  if (dupes.length) fail('toggle ON: duplicated rows: ' + [...new Set(dupes)].join(' | '));
+  else ok('toggle ON: no duplicated rows (older models interleaved, not appended)');
   await page.screenshot({ path: SHOTS + '/leak-guard-older-section.png' });
 
   await sw.click();

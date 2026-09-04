@@ -9,7 +9,7 @@ const compareMode = ref(false);
 const compareRows = ref([]);
 
 // Older (superseded) versions are hidden from the default leaderboard;
-// the toggle surfaces them in a dimmed section below the current ranking.
+// the toggle interleaves them INLINE in the same ranking (dimmed, unranked).
 const showOlder = ref(false);
 // Min-coverage slider (CL %): rows below the threshold are hidden.
 // 0 = show everything. Coverage opacity tiers stay visible otherwise.

@@ -14,7 +14,7 @@ import ComparePanel from '../components/ComparePanel.vue';
 const route = useRoute();
 const router = useRouter();
 
-const { pivotFor, stats, topOverall, topOpen, scoreForModel, leaders, coreBenchmarks, nonCoreBenchmarks, isOlder, supersededBy } = useData();
+const { pivotFor, stats, topOverall, topOpen, scoreForModel, leaders, coreBenchmarks, nonCoreBenchmarks, isOlder } = useData();
 const { searchQuery, compareMode, compareRows, showOlder, minCl } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
@@ -42,27 +42,25 @@ watch(searchQuery, (q) => {
 });
 
 // ── Rows for the active tab ───────────────────────────────────────────
-// Two partitions: current-generation models (the default ranking) and
-// older releases — superseded versions of the same product line plus
-// stale generations (9+ months old, no successor in the data) — hidden
-// by default, shown dimmed below. Both respect the search box and the
-// min-CL slider; nothing is deleted.
+// One ranked listing. Older releases — superseded versions of the same
+// product line plus stale generations (9+ months old, no successor in the
+// data) — are hidden by default; the Older-versions toggle interleaves them
+// INLINE at their natural score position (dimmed, no rank, "older" chip),
+// so there is no separate section to scroll to. Both modes respect the
+// search box and the min-CL slider; nothing is deleted.
 const applyFilters = (list) => {
   const q = searchQuery.value.toLowerCase();
   return list.filter(r =>
     (r.cl ?? 0) >= minCl.value && (!q || r.name.toLowerCase().includes(q)));
 };
 
-const rows = computed(() =>
-  applyFilters(pivotFor(tier.value).filter(r => !isOlder(r))));
-
-const olderRows = computed(() => {
-  if (!showOlder.value) return [];
-  const older = applyFilters(pivotFor(tier.value).filter(r => isOlder(r)));
-  // Group by successor: old versions appear next to the model that replaced
-  // them (stale generations without a successor sort first).
-  return older.sort((a, b) =>
-    String(supersededBy(a) || '').localeCompare(String(supersededBy(b) || '')));
+const rows = computed(() => {
+  const all = applyFilters(pivotFor(tier.value));
+  if (!showOlder.value) return all.filter(r => !isOlder(r));
+  // Toggle on: pre-sort the merged list by the CL-weighted score so older
+  // models sit at their true rank position (the table's interactive sort
+  // takes over from there).
+  return [...all].sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1));
 });
 
 const olderCount = computed(() =>
@@ -138,6 +136,7 @@ const openModel = (name) =>
           Older versions
           <b-tag size="is-small" type="is-warning is-light" rounded>{{ olderCount }}</b-tag>
         </b-switch>
+        <span v-if="showOlder" class="cell-sub" style="white-space:nowrap">older models shown inline (dimmed, unranked)</span>
         <div class="row" style="gap:.6rem;align-items:center;flex:1;min-width:240px">
           <span class="cell-sub" style="white-space:nowrap">Min coverage</span>
           <input
@@ -157,21 +156,9 @@ const openModel = (name) =>
       </div>
     </div>
 
-    <!-- The table -->
+    <!-- The table — older models render inline (dimmed, unranked) when toggled on -->
     <div class="mt">
       <PivotTable :rows="rows" :tier="tier" />
-    </div>
-
-    <!-- Older (superseded) versions — hidden by default, never deleted -->
-    <div v-if="showOlder" class="older-section mt">
-      <div class="row" style="justify-content:space-between;margin-bottom:.5rem">
-        <h3 style="margin:0;font-size:1.02rem">
-          <i class="fas fa-clock-rotate-left" style="color:var(--muted)"></i>
-          Older versions ({{ olderRows.length }})
-        </h3>
-        <span class="cell-sub">superseded by a newer release of the same line, or a stale generation (9+ months old) — excluded from the ranking above</span>
-      </div>
-      <PivotTable :rows="olderRows" :tier="tier" variant="older" />
     </div>
 
     <p class="cell-sub mt-sm" style="text-align:center">

@@ -1,8 +1,9 @@
 <script setup>
 // The global pivot table — one row per model, one column per benchmark.
-// Reused by every leaderboard tier tab (all / closed / open) and by the
-// "Older versions" section (variant="older": rank badge suppressed, rows
-// carry an extra dimming class).
+// Reused by every leaderboard tier tab (all / closed / open). Older models
+// (superseded / stale) render INLINE when the Older-versions toggle is on:
+// they interleave at their natural score position, dimmed (is-older-row),
+// with no rank number and a small "older" chip on the name.
 import { SHORT } from '../lib/constants.js';
 import { fmtScore, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
@@ -11,16 +12,21 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 const props = defineProps({
   rows: { type: Array, required: true },
   tier: { type: String, default: 'all' },
-  variant: { type: String, default: 'main' }, // 'main' | 'older'
 });
 
-const { benchmarks, nonCoreBenchmarks, stats, scoreForModel, avgForModel, rankOf, tierOf, isCore, benchThAttrs } = useData();
+const { benchmarks, nonCoreBenchmarks, stats, scoreForModel, avgForModel, rankOf, tierOf, isCore, benchThAttrs, isOlder, supersededBy } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
 // Hover restores full opacity (see .cov-table rules in main.css).
 const rowCls = (row) =>
-  [covClass(row.cl), props.variant === 'older' ? 'is-older-row' : ''].join(' ').trim();
+  [covClass(row.cl), isOlder(row) ? 'is-older-row' : ''].join(' ').trim();
+
+// Tooltip for the inline "older" chip — why this row sits outside the ranking
+const olderTitle = (row) =>
+  supersededBy(row)
+    ? `superseded by ${supersededBy(row)} — hidden by default, excluded from the ranking`
+    : 'stale generation (9+ months old, no successor in the data) — hidden by default, excluded from the ranking';
 
 // Sorter for the global Score column (nulls always sink to the bottom)
 function byScore(a, b, isAsc) {
@@ -43,7 +49,7 @@ function scoreTitle(row) {
 </script>
 
 <template>
-  <div class="cov-table" :class="{ 'is-older-table': variant === 'older' }">
+  <div class="cov-table">
   <b-table
     :data="rows"
     narrowed
@@ -77,6 +83,7 @@ function scoreTitle(row) {
           <div class="cell-sub">
             {{ providerColor(props.row.name).name }}
             <span v-if="tier === 'all'" class="tier-chip" :class="tierOf(props.row)">{{ tierOf(props.row) === 'closed' ? 'closed' : 'open' }}</span>
+            <span v-if="isOlder(props.row)" class="older-chip" :title="olderTitle(props.row)">older</span>
           </div>
         </div>
       </div>

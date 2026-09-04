@@ -14,7 +14,7 @@ const props = defineProps({
   tier: { type: String, default: 'all' },
 });
 
-const { benchmarks, nonCoreBenchmarks, stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, isCore, benchThAttrs, isOlder, supersededBy, metaFor } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
@@ -100,8 +100,12 @@ function scoreTitle(row) {
       <div class="bar" style="margin-top:.3rem"><i :style="{ width: barWidth(scoreForModel(props.row)) }"></i></div>
     </b-table-column>
 
+    <!-- Hide/Show columns: benchmark columns follow the Avg-set selection 1:1.
+         Identity columns (# / Model / Score / CL) are always visible. Hidden
+         benchmarks stay fully available on the Benchmarks page, model cards
+         and the compare panel — hiding is purely display, nothing is deleted. -->
     <b-table-column
-      v-for="b in benchmarks"
+      v-for="b in coreBenchmarks"
       :key="b"
       :field="b"
       :label="SHORT[b] || b"
@@ -109,8 +113,7 @@ function scoreTitle(row) {
       centered
       numeric
       sortable
-      :header-class="isCore(b) ? 'core-col' : 'noncore-col'"
-      :cell-class="isCore(b) ? '' : 'noncore-cell'"
+      header-class="core-col"
       :th-attrs="benchThAttrs"
       v-slot="props"
     >

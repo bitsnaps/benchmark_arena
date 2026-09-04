@@ -243,8 +243,8 @@ const openModel = (name) =>
 
     <p class="cell-sub mt-sm" style="text-align:center">
       CL = Coverage Level (core benchmarks present / {{ stats.coreBenchmarks }}).
-      Core: {{ coreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.
-      Context-only: {{ nonCoreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.
+      Columns follow the Avg set — shown: {{ coreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.
+      <span v-if="nonCoreBenchmarks.length">Hidden (opt in via the Avg set dropdown): {{ nonCoreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.</span>
     </p>
 
     <ComparePanel />
@@ -290,7 +290,7 @@ const openModel = (name) =>
           <span class="tag-lab teal" v-for="b in coreBenchmarks" :key="b">{{ SHORT[b] || b }}</span>
           <span class="tag-lab" v-for="b in nonCoreBenchmarks" :key="b">{{ SHORT[b] || b }}</span>
         </div>
-        <p class="cell-sub mt-sm">Teal = counted in the global Score. Grey = reported for context only.</p>
+        <p class="cell-sub mt-sm">Teal = counted in the global Score and shown as a table column. Grey = hidden from the table until selected in the Avg set dropdown (still on the Benchmarks page, model cards and compare panel).</p>
       </div>
     </div>
 

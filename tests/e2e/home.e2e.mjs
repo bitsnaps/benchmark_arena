@@ -194,20 +194,29 @@ const ok = (msg) => console.log('  ok:', msg);
     else ok('slider reset restores all rows');
   }
 
-  // ── 1d. Avg-set dropdown: user-selectable average (commit B) ──
-  // Default must stay the shipped 8-core formula; opting EQBench CW in via its
-  // checkbox re-scores (custom badge + ?avg= + persistence), and Reset restores
-  // the shipped formula. ≥1 benchmark always stays selected.
+  // ── 1d. Avg-set dropdown: user-selectable average + hide/show columns ──
+  // Default must stay the shipped 8-core formula. Benchmark COLUMNS follow the
+  // selection 1:1: EQBench CW (non-selected) starts with its column hidden
+  // entirely; opting in via its checkbox makes the column appear (teal),
+  // re-scores (custom badge + ?avg= + persistence), and Reset hides it again.
+  // ≥1 benchmark always stays selected.
   {
-    const eqbThClass = async () => await page
-      .locator('.b-table thead th', { hasText: 'EQB' }).first().getAttribute('class');
-    // "noncore-col" CONTAINS "core-col" — anchor the match to a whole class token
+    const eqbThCount = async () => await page
+      .locator('.b-table thead th', { hasText: 'EQB' }).count();
+    // anchor the match to a whole class token ("noncore-col" contains "core-col")
     const CORE_RE = /(^|\s)core-col(\s|$)/;
-    // buefy re-renders column headers async — poll instead of a fixed wait
-    const pollTh = async (wantCore, tries = 12) => {
+    // buefy re-renders column headers async — poll instead of a fixed wait.
+    // wantVisible=true  → wait for an EQB th carrying core-col
+    // wantVisible=false → wait for the EQB th to disappear completely
+    const pollEqb = async (wantVisible, tries = 12) => {
       for (let i = 0; i < tries; i++) {
-        const cls = await eqbThClass();
-        if (CORE_RE.test(cls || '') === wantCore) return true;
+        const n = await eqbThCount();
+        if (!wantVisible && n === 0) return true;
+        if (wantVisible && n > 0) {
+          const cls = await page.locator('.b-table thead th', { hasText: 'EQB' })
+            .first().getAttribute('class');
+          if (CORE_RE.test(cls || '')) return true;
+        }
         await page.waitForTimeout(250);
       }
       return false;
@@ -217,6 +226,9 @@ const ok = (msg) => console.log('  ok:', msg);
     if (!/8 of them counted/.test(await statSub.innerText()))
       fail(`default stats should say "8 of them counted", got "${await statSub.innerText()}"`);
     else ok('default avg set: 8 benchmarks counted in the global Score');
+    if (await eqbThCount())
+      fail(`EQB column should be hidden while unselected, class="${await page.locator('.b-table thead th', { hasText: 'EQB' }).first().getAttribute('class')}"`);
+    else ok('hide/show columns: EQB column hidden by default (not in the avg set)');
     if (page.url().includes('avg=')) fail('default home URL should not carry ?avg=');
     else ok('no ?avg= param by default');
     if (await page.locator('.avg-dropdown .tag:has-text("custom")').count())
@@ -236,9 +248,9 @@ const ok = (msg) => console.log('  ok:', msg);
     await eqbLabel.click();
     await page.waitForTimeout(500);
 
-    // EQB column becomes counted (teal header), badge + URL param + stats follow
-    if (!(await pollTh(true))) fail(`EQB header should gain core-col after opt-in, got "${await eqbThClass()}"`);
-    else ok('EQBench CW opt-in: now counted in the Score');
+    // EQB column APPEARS as counted (teal header); badge + URL param + stats follow
+    if (!(await pollEqb(true))) fail('EQB column should appear with core-col after opt-in');
+    else ok('EQBench CW opt-in: column appears + counted in the Score');
     if (!(await page.locator('.avg-dropdown .tag:has-text("custom")').count()))
       fail('custom badge missing after opt-in');
     else ok('custom badge visible after opt-in');
@@ -251,7 +263,7 @@ const ok = (msg) => console.log('  ok:', msg);
     // persistence: reload → selection survives via localStorage (and URL param)
     await page.reload({ waitUntil: 'networkidle' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
-    if (!(await pollTh(true))) fail('EQB header lost core-col after reload — persistence broken');
+    if (!(await pollEqb(true))) fail('EQB column lost after reload — persistence broken');
     else ok('custom mix persists across reload (localStorage + ?avg=)');
 
     // reset → shipped formula, param gone (menu re-opened after reload)
@@ -261,8 +273,8 @@ const ok = (msg) => console.log('  ok:', msg);
     await page.waitForTimeout(500);
     if (page.url().includes('avg=')) fail('?avg= should be gone after reset');
     else ok('reset drops the ?avg= param');
-    if (await pollTh(false)) ok('reset restores the shipped 8-core formula');
-    else fail(`EQB header should drop core-col after reset, got "${await eqbThClass()}"`);
+    if (await pollEqb(false)) ok('reset hides the EQB column again (shipped 8-core formula)');
+    else fail('EQB column should disappear after reset');
 
     // ≥1 guard: unchecking everything still leaves exactly one selected (locked)
     const boxes = page.locator('.avg-dropdown .avg-bench-row input[type="checkbox"]');

@@ -11,7 +11,7 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 const model = computed(() => modelSlugIndex.value.get(route.params.slug) || null);
@@ -23,6 +23,8 @@ watchEffect(() => {
 const provider = computed(() => model.value ? providerColor(model.value.name) : null);
 const tier = computed(() => model.value ? tierOf(model.value) : null);
 const avg = computed(() => model.value ? avgForModel(model.value) : null);
+// CL-weighted global score — same metric the leaderboard ranks by
+const wscore = computed(() => model.value ? scoreForModel(model.value) : null);
 
 // Scored / missing benchmarks
 const scored = computed(() => !model.value ? [] : benchmarks.value
@@ -101,9 +103,10 @@ function addToCompare() {
     <!-- Stat tiles -->
     <div class="grid-4 mt">
       <div class="stat">
-        <div class="lbl">Composite Avg</div>
-        <div class="val num" :style="{ color: scoreColor(avg) }">{{ fmtScore(avg) }}</div>
-        <div class="bar mt-sm"><i :style="{ width: barWidth(avg) }"></i></div>
+        <div class="lbl">Global Score</div>
+        <div class="val num" :style="{ color: scoreColor(wscore) }">{{ fmtScore(wscore) }}</div>
+        <div class="sub">CL-weighted · raw avg {{ avg !== null && avg !== undefined ? fmtScore(avg) : '—' }}</div>
+        <div class="bar mt-sm"><i :style="{ width: barWidth(wscore) }"></i></div>
       </div>
       <div class="stat">
         <div class="lbl">Coverage Level</div>
@@ -113,7 +116,7 @@ function addToCompare() {
       <div class="stat">
         <div class="lbl">Benchmarks scored</div>
         <div class="val num">{{ covered }}<span class="sub" style="font-size:1rem"> / {{ benchmarks.length }}</span></div>
-        <div class="sub">missing evals never punished</div>
+        <div class="sub">missing evals count as neutral 50 in the Score</div>
       </div>
       <div class="stat">
         <div class="lbl">Benchmark wins</div>

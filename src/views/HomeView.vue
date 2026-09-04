@@ -14,7 +14,7 @@ import ComparePanel from '../components/ComparePanel.vue';
 const route = useRoute();
 const router = useRouter();
 
-const { pivotFor, stats, topOverall, topOpen, avgForModel, leaders, coreBenchmarks, nonCoreBenchmarks, isOlder, supersededBy } = useData();
+const { pivotFor, stats, topOverall, topOpen, scoreForModel, leaders, coreBenchmarks, nonCoreBenchmarks, isOlder, supersededBy } = useData();
 const { searchQuery, compareMode, compareRows, showOlder, minCl } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
@@ -93,17 +93,17 @@ const openModel = (name) =>
       <div class="stat">
         <div class="lbl">Public leaderboards</div>
         <div class="val num">{{ stats.totalBenchmarks }}</div>
-        <div class="sub">{{ stats.coreBenchmarks }} of them counted in Avg</div>
+        <div class="sub">{{ stats.coreBenchmarks }} of them counted in the global Score</div>
       </div>
       <div class="stat">
         <div class="lbl">Top overall</div>
         <div class="val" style="font-size:1.15rem">{{ topOverall ? topOverall.name : '—' }}</div>
-        <div class="sub">Avg {{ topOverall ? fmtScore(avgForModel(topOverall)) : '—' }} across core evals</div>
+        <div class="sub">Score {{ topOverall ? fmtScore(scoreForModel(topOverall)) : '—' }} · CL-weighted, {{ topOverall ? Math.round(topOverall.cl) : '—' }}% coverage</div>
       </div>
       <div class="stat">
         <div class="lbl">Top open-weight</div>
         <div class="val" style="font-size:1.15rem">{{ topOpen ? topOpen.name : '—' }}</div>
-        <div class="sub">Avg {{ topOpen ? fmtScore(avgForModel(topOpen)) : '—' }} across core evals</div>
+        <div class="sub">Score {{ topOpen ? fmtScore(scoreForModel(topOpen)) : '—' }} · CL-weighted, {{ topOpen ? Math.round(topOpen.cl) : '—' }}% coverage</div>
       </div>
     </div>
 
@@ -204,11 +204,15 @@ const openModel = (name) =>
     <!-- Methodology -->
     <div class="grid-2 mt">
       <div class="panel-lab" style="padding:1.2rem">
-        <h3 style="margin:0 0 .4rem">How the Avg column works</h3>
+        <h3 style="margin:0 0 .4rem">How the Score column works</h3>
         <p style="color:var(--muted);font-size:.92rem">
-          Avg is a plain mean over the core benchmarks a model actually reports, normalized to 0–100.
-          Models are never punished for missing evals — the CL tag shows how much of the core set each
-          model covers, so weigh coverage against the score when two averages look close.
+          Score is the raw average over the core benchmarks a model actually reports,
+          CL-weighted: it is blended toward a neutral 50 baseline in proportion to the
+          model's Coverage Level (CL). A fully-covered model (CL 100%) keeps its plain
+          average; a model covering 2 of 8 core evals only keeps 25% of its edge above
+          50. This offsets selection bias — without it, models evaluated on a few
+          favorable leaderboards outrank frontier models tested across the board.
+          Missing evals are treated as “no evidence” (neutral), never as a zero.
         </p>
       </div>
       <div class="panel-lab" style="padding:1.2rem">
@@ -217,7 +221,7 @@ const openModel = (name) =>
           <span class="tag-lab teal" v-for="b in coreBenchmarks" :key="b">{{ SHORT[b] || b }}</span>
           <span class="tag-lab" v-for="b in nonCoreBenchmarks" :key="b">{{ SHORT[b] || b }}</span>
         </div>
-        <p class="cell-sub mt-sm">Teal = counted in Avg. Grey = reported for context only.</p>
+        <p class="cell-sub mt-sm">Teal = counted in the global Score. Grey = reported for context only.</p>
       </div>
     </div>
 

@@ -90,7 +90,7 @@ const openModel = (name) => {
         <div class="row" style="justify-content:space-between">
           <h2 style="margin:0;font-size:1.2rem">{{ activeBench }}</h2>
           <span class="tag-lab" :class="isCore(activeBench) ? 'teal' : ''">
-            {{ isCore(activeBench) ? 'Core — in Avg' : 'Context only' }}
+            {{ isCore(activeBench) ? 'Core — in global Score' : 'Context only' }}
           </span>
         </div>
         <p style="color:var(--muted)" class="mt-sm">{{ BLURBS[activeBench] }}</p>

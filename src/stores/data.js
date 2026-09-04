@@ -66,6 +66,10 @@ const stats = computed(() => ({
 }));
 
 // ── Composite average over the core benchmarks ────────────────────────
+// Raw sparse mean: plain average of the core scores a model actually has.
+// Biased in favor of low-coverage models (selection bias — a model only
+// shows up on benchmarks where it performs), so it is NOT the ranking
+// metric; see scoreForModel.
 function avgForModel(row) {
   const vals = coreBenchmarks.value
     .map(b => row[b])
@@ -73,15 +77,35 @@ function avgForModel(row) {
   return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
 }
 
+// ── CL-weighted global score (the ranking metric) ─────────────────────
+// Blends the raw sparse average toward a neutral 50 baseline in proportion
+// to the model's Coverage Level (CL = fraction of core benchmarks covered):
+//
+//     score = w * rawAvg + (1 - w) * 50,   w = cl / 100
+//
+// Full coverage (cl=100) → unchanged raw average. A model reporting 2 of 8
+// core benchmarks only keeps 25% of its above-baseline excess, which stops
+// flash/niche models from topping the board on a handful of favorable
+// results. Uncovered benchmarks are treated as "no evidence" (neutral 50),
+// never as a zero.
+const SCORE_PRIOR = 50;
+function scoreForModel(row) {
+  const raw = avgForModel(row);
+  if (raw === null || raw === undefined) return null;
+  const cl = Math.min(100, Math.max(0, row.cl ?? 0));
+  const w = cl / 100;
+  return w * raw + (1 - w) * SCORE_PRIOR;
+}
+
 const topOverall = computed(() =>
   [...pivotAll.value].filter(r => !isOlder(r))
-    .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
+    .sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1))[0] || null);
 const topClosed = computed(() =>
   [...pivotClosed.value].filter(r => !isOlder(r))
-    .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
+    .sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1))[0] || null);
 const topOpen = computed(() =>
   [...pivotOpen.value].filter(r => !isOlder(r))
-    .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))[0] || null);
+    .sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1))[0] || null);
 
 // Per-benchmark leader cards for the overview (current-generation models only)
 const leaders = computed(() => LEADER_BENCHES.map(bench => {
@@ -100,7 +124,7 @@ const leaders = computed(() => LEADER_BENCHES.map(bench => {
 const rankMaps = computed(() => {
   const build = (list) => [...list]
     .filter(r => !isOlder(r))
-    .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))
+    .sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1))
     .reduce((map, r, i) => map.set(r.name, i + 1), new Map());
   return { all: build(pivotAll.value), closed: build(pivotClosed.value), open: build(pivotOpen.value) };
 });
@@ -172,7 +196,7 @@ function benchThAttrs(column) {
   const b = column.field;
   if (!b || b === 'avg' || b === 'rank') return {};
   const core = coreBenchmarks.value.includes(b);
-  return { title: b + (core ? ' (core — counted in Avg)' : ' (not counted in Avg)') };
+  return { title: b + (core ? ' (core — counted in global Score)' : ' (not counted in global Score)') };
 }
 
 export function useData() {
@@ -180,7 +204,7 @@ export function useData() {
     rawData, loading, error, ensureLoaded,
     benchmarks, coreBenchmarks, nonCoreBenchmarks, perBenchData,
     pivotClosed, pivotOpen, pivotAll, pivotFor, stats,
-    avgForModel, topOverall, topClosed, topOpen, leaders,
+    avgForModel, scoreForModel, topOverall, topClosed, topOpen, leaders,
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
     modelSlugIndex, benchSlugIndex, benchRankIndex,
     modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, isOlder, releaseDateOf,

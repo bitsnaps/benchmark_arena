@@ -18,7 +18,7 @@ const route = useRoute();
 const router = useRouter();
 
 const {
-  benchmarks, pivotAll, modelSlugIndex, avgForModel, rankMaps, tierOf, isCore,
+  benchmarks, pivotAll, modelSlugIndex, scoreForModel, rankMaps, tierOf, isCore,
   stats, metaFor, metaCoverage, topClosed, topOpen, isOlder,
 } = useData();
 const { compareRows, compareMode } = useLeaderboard();
@@ -89,7 +89,7 @@ const addOptions = computed(() => {
   const picked = new Set(compareRows.value.map(r => r.name));
   return pivotAll.value
     .filter(r => !picked.has(r.name) && (!q || r.name.toLowerCase().includes(q)))
-    .sort((a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1))
+    .sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1))
     .slice(0, 8);
 });
 function addModel(option) {
@@ -102,9 +102,9 @@ const atCap = computed(() => compareRows.value.length >= MAX);
 
 // One-click starting points for the empty state (current-generation models only)
 const presets = computed(() => {
-  const byAvg = (a, b) => (avgForModel(b) ?? -1) - (avgForModel(a) ?? -1);
+  const byScore = (a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1);
   const current = pivotAll.value.filter(r => !isOlder(r));
-  const sorted = [...current].sort(byAvg);
+  const sorted = [...current].sort(byScore);
   const duel = [topClosed.value, topOpen.value].filter(Boolean);
   return [
     { label: 'Top 3 overall', icon: 'crown', rows: sorted.slice(0, 3) },
@@ -128,11 +128,11 @@ const sel = computed(() => compareRows.value.map((row) => {
   const meta = metaFor(row);
   const price = meta?.pricing_usd_per_1m || null;
   const blended = price ? (3 * (price.input ?? 0) + (price.output ?? 0)) / 4 : null;
-  const avg = avgForModel(row);
+  const wscore = scoreForModel(row);
   const tier = tierOf(row);
   return {
-    row, meta, price, blended, avg, tier,
-    value: avg !== null && avg !== undefined && blended ? avg / blended : null,
+    row, meta, price, blended, avg: wscore, tier,
+    value: wscore !== null && wscore !== undefined && blended ? wscore / blended : null,
     overallRank: rankMaps.value.all.get(row.name) ?? null,
     tierRank: rankMaps.value[tier]?.get(row.name) ?? null,
     supersededBy: meta?.superseded_by || null,
@@ -186,7 +186,7 @@ const cmpGroups = computed(() => {
   groups.push({
     label: 'Headline',
     rows: [
-      { key: 'avg', label: 'Composite Avg', hint: `mean of ${stats.value.coreBenchmarks} core evals`, cells: mk('high', (s) => ({ num: s.avg, main: fmtScore(s.avg), color: scoreColor(s.avg), bar: s.avg })) },
+      { key: 'avg', label: 'Global Score', hint: `CL-weighted blend of ${stats.value.coreBenchmarks} core evals`, cells: mk('high', (s) => ({ num: s.avg, main: fmtScore(s.avg), color: scoreColor(s.avg), bar: s.avg })) },
       { key: 'rank', label: 'Overall rank', hint: `of ${stats.value.closed + stats.value.open} tracked`, cells: mk('low', (s) => ({ num: s.overallRank, main: s.overallRank ? '#' + s.overallRank : '—', sub: s.tierRank ? `#${s.tierRank} among ${s.tier}` : null })) },
       { key: 'cl', label: 'Coverage', hint: 'share of core evals reported', cells: mk('high', (s) => ({ num: s.row.cl, main: s.row.cl == null ? '—' : Math.round(s.row.cl) + '%', bar: s.row.cl, sub: s.row.num_benchmarks ? `${s.row.num_benchmarks} evals` : null })) },
       { key: 'status', label: 'Status', hint: 'current vs older release', cells: dash((s) => (s.supersededBy
@@ -232,7 +232,7 @@ const cmpGroups = computed(() => {
       { key: 'pin', label: 'Input', cells: mk('low', (s) => ({ num: s.price?.input ?? null, main: fmtUsd(s.price?.input) })) },
       { key: 'pout', label: 'Output', cells: mk('low', (s) => ({ num: s.price?.output ?? null, main: fmtUsd(s.price?.output) })) },
       { key: 'pblend', label: 'Blended', hint: '3:1 input:output', cells: mk('low', (s) => ({ num: s.blended || null, main: fmtUsd(s.blended) })) },
-      { key: 'value', label: 'Score per $1M', hint: 'Avg ÷ blended price', cells: mk('high', (s) => ({ num: s.value, main: fmtValue(s.value), sub: s.value ? 'avg pts' : null })) },
+      { key: 'value', label: 'Score per $1M', hint: 'Global Score ÷ blended price', cells: mk('high', (s) => ({ num: s.value, main: fmtValue(s.value), sub: s.value ? 'score pts' : null })) },
     ],
   });
 
@@ -287,7 +287,7 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
                 <span class="av" :style="{ background: providerColor(option.name).color }">{{ initials(option.name) }}</span>
                 <div>
                   <div class="has-text-weight-semibold" style="font-size:.9rem">{{ option.name }}</div>
-                  <div class="cell-sub">{{ providerColor(option.name).name }} · Avg {{ fmtScore(avgForModel(option)) }}</div>
+                  <div class="cell-sub">{{ providerColor(option.name).name }} · Score {{ fmtScore(scoreForModel(option)) }}</div>
                 </div>
               </div>
             </template>
@@ -320,7 +320,7 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
               <span class="av" :style="{ background: providerColor(option.name).color }">{{ initials(option.name) }}</span>
               <div>
                 <div class="has-text-weight-semibold" style="font-size:.9rem">{{ option.name }}</div>
-                <div class="cell-sub">{{ providerColor(option.name).name }} · Avg {{ fmtScore(avgForModel(option)) }}</div>
+                <div class="cell-sub">{{ providerColor(option.name).name }} · Score {{ fmtScore(scoreForModel(option)) }}</div>
               </div>
             </div>
           </template>

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-03 21:36",
+  "timestamp": "2026-09-04 10:25",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -233,82 +233,830 @@
     "BenchLM.ai": {
       "closed": [
         [
-          "Tencent",
-          70.0
+          "Agents-A1",
+          61.05
         ],
         [
-          "Dots Studio",
-          61.0
+          "Agents-A1-F16-GGUF",
+          61.05
         ],
         [
-          "Tencent",
-          45.0
+          "Agents-A1-FP8",
+          61.05
         ],
         [
-          "Ornith AI",
-          62.0
+          "Agents-A1-Q4_K_M-GGUF",
+          61.05
         ],
         [
-          "Thinking Machines Lab",
-          40.0
+          "Agents-A1-Q8_0-GGUF",
+          61.05
         ],
         [
-          "Thinking Machines Lab",
-          41.0
+          "Aion-2.0",
+          49.62
         ],
         [
-          "InternScience",
-          57.0
+          "Apodex 1.1",
+          56.1
         ],
         [
-          "InternScience",
-          57.0
+          "Claude 3 Haiku",
+          21.09
         ],
         [
-          "InternScience",
-          57.0
+          "Claude 3 Opus",
+          40.79
         ],
         [
-          "InternScience",
-          57.0
+          "Claude 3.5 Sonnet",
+          48.68
         ],
         [
-          "InternScience",
-          57.0
+          "Claude 4 Sonnet",
+          41.9
         ],
         [
-          "Apodex",
-          54.0
+          "Claude 4.1 Opus",
+          44.87
         ],
         [
-          "StepFun",
-          46.0
+          "Claude 4.1 Opus Thinking",
+          35.16
         ],
         [
-          "InclusionAI",
-          49.0
+          "Claude Fable 5",
+          82.23
         ],
         [
-          "Ornith AI",
-          49.0
+          "Claude Fable 5.1",
+          82.58
         ],
         [
-          "Microsoft",
-          51.0
+          "Claude Haiku 4.5",
+          57.72
         ],
         [
-          "Ornith AI",
-          41.0
+          "Claude Opus 4.5",
+          63.6
         ],
         [
-          "Inception",
-          43.0
+          "Claude Opus 4.5 Thinking",
+          57.25
+        ],
+        [
+          "Claude Opus 4.6",
+          67.98
+        ],
+        [
+          "Claude Opus 4.7",
+          72.69
+        ],
+        [
+          "Claude Opus 4.8",
+          75.75
+        ],
+        [
+          "Claude Opus 5",
+          82.13
+        ],
+        [
+          "Claude Sonnet 4.5",
+          54.88
+        ],
+        [
+          "Claude Sonnet 4.6",
+          64.57
+        ],
+        [
+          "Claude Sonnet 5",
+          64.82
+        ],
+        [
+          "Command A+",
+          47.72
+        ],
+        [
+          "Exaone 4.0 32B",
+          41.11
+        ],
+        [
+          "GPT-4 Turbo",
+          27.05
+        ],
+        [
+          "GPT-4.1",
+          51.33
+        ],
+        [
+          "GPT-4.1 mini",
+          44.64
+        ],
+        [
+          "GPT-4.1 nano",
+          42.64
+        ],
+        [
+          "GPT-4o",
+          41.19
+        ],
+        [
+          "GPT-4o mini",
+          37.7
+        ],
+        [
+          "GPT-5 (high)",
+          59.76
+        ],
+        [
+          "GPT-5 mini",
+          43.03
+        ],
+        [
+          "GPT-5 nano",
+          46.69
+        ],
+        [
+          "GPT-5.1",
+          53.44
+        ],
+        [
+          "GPT-5.1-Codex",
+          52.68
+        ],
+        [
+          "GPT-5.1-Codex-Max",
+          55.54
+        ],
+        [
+          "GPT-5.2",
+          58.03
+        ],
+        [
+          "GPT-5.2 Instant",
+          60.14
+        ],
+        [
+          "GPT-5.2 Pro",
+          67.63
+        ],
+        [
+          "GPT-5.2-Codex",
+          57.78
+        ],
+        [
+          "GPT-5.3 Codex",
+          65.52
+        ],
+        [
+          "GPT-5.3 Instant",
+          60.03
+        ],
+        [
+          "GPT-5.3-Codex-Spark",
+          58.01
+        ],
+        [
+          "GPT-5.4",
+          72.89
+        ],
+        [
+          "GPT-5.4 Pro",
+          61.74
+        ],
+        [
+          "GPT-5.4 mini",
+          56.79
+        ],
+        [
+          "GPT-5.4 nano",
+          66.62
+        ],
+        [
+          "GPT-5.5",
+          72.99
+        ],
+        [
+          "GPT-5.5 Pro",
+          64.73
+        ],
+        [
+          "GPT-5.6 Luna",
+          65.74
+        ],
+        [
+          "GPT-5.6 Sol",
+          81.78
+        ],
+        [
+          "GPT-5.6 Terra",
+          72.53
+        ],
+        [
+          "GPT-6 Astra",
+          81.88
+        ],
+        [
+          "GPT-OSS 120B",
+          49.35
+        ],
+        [
+          "Gemini 1.0 Pro",
+          21.52
+        ],
+        [
+          "Gemini 1.5 Pro",
+          35.36
+        ],
+        [
+          "Gemini 2.5 Flash",
+          47.8
+        ],
+        [
+          "Gemini 2.5 Pro",
+          57.16
+        ],
+        [
+          "Gemini 3 Flash",
+          59.84
+        ],
+        [
+          "Gemini 3 Pro",
+          67.41
+        ],
+        [
+          "Gemini 3 Pro Deep Think",
+          62.48
+        ],
+        [
+          "Gemini 3.1 Flash-Lite",
+          51.18
+        ],
+        [
+          "Gemini 3.1 Pro",
+          56.49
+        ],
+        [
+          "Gemini 3.5 Flash",
+          64.23
+        ],
+        [
+          "Gemini 3.5 Flash-Lite",
+          64.97
+        ],
+        [
+          "Gemini 3.6 Flash",
+          74.89
+        ],
+        [
+          "Gemini 3.7 Flash",
+          74.99
+        ],
+        [
+          "Gemini 3.8 Flash",
+          75.09
+        ],
+        [
+          "Granite 4.2 8B",
+          42.82
+        ],
+        [
+          "Granite-4.0-350M",
+          39.29
+        ],
+        [
+          "Granite-4.0-H-350M",
+          39.29
+        ],
+        [
+          "Grok 3 [Beta]",
+          40.64
+        ],
+        [
+          "Grok 4",
+          59.44
+        ],
+        [
+          "Grok 4 Fast (Reasoning)",
+          55.84
+        ],
+        [
+          "Grok 4.1",
+          61.1
+        ],
+        [
+          "Grok 4.1 Fast (Reasoning)",
+          59.6
+        ],
+        [
+          "Grok 4.20",
+          61.2
+        ],
+        [
+          "Grok 4.3",
+          63.87
+        ],
+        [
+          "Grok 4.5",
+          74.71
+        ],
+        [
+          "Grok 4.6",
+          74.81
+        ],
+        [
+          "Grok Code Fast 1",
+          37.81
+        ],
+        [
+          "Hy3",
+          67.57
+        ],
+        [
+          "Hy4 preview",
+          78.48
+        ],
+        [
+          "Inkling",
+          66.46
+        ],
+        [
+          "Inkling-Small",
+          63.47
+        ],
+        [
+          "K-Exaone",
+          47.6
+        ],
+        [
+          "LFM2-24B-A2B",
+          18.49
+        ],
+        [
+          "LFM2.5-1.2B-Instruct",
+          15.2
+        ],
+        [
+          "LFM2.5-1.2B-Thinking",
+          15.91
+        ],
+        [
+          "LFM2.5-2.6B",
+          43.13
+        ],
+        [
+          "LFM2.5-8B-A1B",
+          42.03
+        ],
+        [
+          "Ling 2.6 Flash",
+          44.38
+        ],
+        [
+          "Ling 3.0 Flash",
+          53.65
+        ],
+        [
+          "MAI-Thinking-1",
+          50.25
+        ],
+        [
+          "Mercury 2",
+          48.27
+        ],
+        [
+          "MiniCPM5-1B",
+          11.45
+        ],
+        [
+          "Ministral 3 14B (Reasoning)",
+          50.32
+        ],
+        [
+          "Moonshot v1",
+          45.69
+        ],
+        [
+          "Muse Spark",
+          70.8
+        ],
+        [
+          "Muse Spark 1.1",
+          76.45
+        ],
+        [
+          "Muse Spark 1.2",
+          76.55
+        ],
+        [
+          "Nova Pro",
+          19.84
+        ],
+        [
+          "Ornith-1.5-35B-A3B",
+          53.39
+        ],
+        [
+          "Ornith-1.5-397B",
+          67.26
+        ],
+        [
+          "Ornith-1.5-9B",
+          50.27
+        ],
+        [
+          "Qwen 3.6 Max (preview)",
+          60.94
+        ],
+        [
+          "Qwen3.7 Max",
+          71.18
+        ],
+        [
+          "Qwen3.7 Plus",
+          65.4
+        ],
+        [
+          "Sarvam 105B",
+          43.49
+        ],
+        [
+          "Seed 1.6",
+          51.22
+        ],
+        [
+          "Seed 1.6 Flash",
+          45.98
+        ],
+        [
+          "Seed-2.0-Lite",
+          50.82
+        ],
+        [
+          "Seed-2.0-Mini",
+          45.49
+        ],
+        [
+          "Step 3.5 Flash",
+          54.31
+        ],
+        [
+          "Step 3.7 Flash",
+          54.41
+        ],
+        [
+          "Trinity-Large-Preview",
+          57.03
+        ],
+        [
+          "Trinity-Large-Thinking",
+          48.09
+        ],
+        [
+          "Z-1",
+          46.03
+        ],
+        [
+          "ZAYA1-8B",
+          31.09
+        ],
+        [
+          "dots3-note Preview",
+          68.69
+        ],
+        [
+          "o1",
+          48.76
+        ],
+        [
+          "o1-preview",
+          48.66
+        ],
+        [
+          "o1-pro",
+          46.29
+        ],
+        [
+          "o3",
+          46.83
+        ],
+        [
+          "o3-mini",
+          46.85
+        ],
+        [
+          "o3-pro",
+          47.17
+        ],
+        [
+          "o4-mini (high)",
+          50.97
         ]
       ],
       "open": [
         [
-          "Mistral",
-          43.0
+          "DeepSeek Coder 2.0",
+          51.27
+        ],
+        [
+          "DeepSeek LLM 2.0",
+          55.59
+        ],
+        [
+          "DeepSeek R1 Distill Qwen 32B",
+          43.12
+        ],
+        [
+          "DeepSeek V3",
+          44.59
+        ],
+        [
+          "DeepSeek V3.1",
+          53.08
+        ],
+        [
+          "DeepSeek V3.2 (Thinking)",
+          59.25
+        ],
+        [
+          "DeepSeek V4 Pro 0813",
+          61.29
+        ],
+        [
+          "DeepSeek-R1",
+          51.12
+        ],
+        [
+          "DeepSeekMath V2",
+          50.87
+        ],
+        [
+          "GLM-4.5",
+          58.69
+        ],
+        [
+          "GLM-4.5-Air",
+          47.27
+        ],
+        [
+          "GLM-4.6",
+          54.49
+        ],
+        [
+          "GLM-4.7",
+          60.91
+        ],
+        [
+          "GLM-4.7-Flash",
+          50.48
+        ],
+        [
+          "GLM-5",
+          65.68
+        ],
+        [
+          "GLM-5-Turbo",
+          65.79
+        ],
+        [
+          "GLM-5.1",
+          66.91
+        ],
+        [
+          "GLM-5.2",
+          67.01
+        ],
+        [
+          "GLM-5.3",
+          67.11
+        ],
+        [
+          "GLM-5.3-Flash",
+          61.86
+        ],
+        [
+          "GLM-5V-Turbo",
+          62.08
+        ],
+        [
+          "Gemma 3 27B",
+          41.54
+        ],
+        [
+          "Gemma 4 31B",
+          60.15
+        ],
+        [
+          "Kimi K2",
+          26.28
+        ],
+        [
+          "Kimi K2.5 (Reasoning)",
+          60.49
+        ],
+        [
+          "Kimi K2.6",
+          58.91
+        ],
+        [
+          "Kimi K2.7 Code",
+          59.01
+        ],
+        [
+          "Kimi K3",
+          79.65
+        ],
+        [
+          "Llama 3 70B",
+          51.82
+        ],
+        [
+          "Llama 3.1 405B",
+          52.72
+        ],
+        [
+          "Llama 4 Behemoth",
+          40.63
+        ],
+        [
+          "Llama 4 Maverick",
+          22.85
+        ],
+        [
+          "Llama 4 Scout",
+          39.79
+        ],
+        [
+          "MiMo-V2-Flash",
+          53.36
+        ],
+        [
+          "MiMo-V2-Omni",
+          62.14
+        ],
+        [
+          "MiMo-V2-Pro",
+          66.59
+        ],
+        [
+          "MiMo-V2.5",
+          62.24
+        ],
+        [
+          "MiMo-V2.5-Pro",
+          68.86
+        ],
+        [
+          "MiniMax M1 80k",
+          24.27
+        ],
+        [
+          "MiniMax M2.5",
+          58.51
+        ],
+        [
+          "MiniMax M2.7",
+          62.73
+        ],
+        [
+          "MiniMax M3",
+          68.17
+        ],
+        [
+          "Mistral 7B v0.3",
+          40.73
+        ],
+        [
+          "Mistral 8x7B",
+          45.89
+        ],
+        [
+          "Mistral 8x7B v0.2",
+          39.95
+        ],
+        [
+          "Mistral Large 2",
+          42.36
+        ],
+        [
+          "Mistral Large 3",
+          49.78
+        ],
+        [
+          "Mistral Medium 3",
+          43.71
+        ],
+        [
+          "Mistral Small 4",
+          46.52
+        ],
+        [
+          "Mixtral 8x22B Instruct v0.1",
+          49.52
+        ],
+        [
+          "Nemotron 3 Nano 30B",
+          53.98
+        ],
+        [
+          "Nemotron 3 Nano Omni 30B A3B",
+          44.69
+        ],
+        [
+          "Nemotron 3 Super 120B A12B",
+          51.97
+        ],
+        [
+          "Nemotron 3 Ultra",
+          45.42
+        ],
+        [
+          "Nemotron 3.5 Lightning 30B A3B NVFP4",
+          26.23
+        ],
+        [
+          "Nemotron Ultra 253B",
+          45.29
+        ],
+        [
+          "Nemotron-4 15B",
+          45.98
+        ],
+        [
+          "Phi-4",
+          22.73
+        ],
+        [
+          "Qwen2.5 Coder 32B Instruct",
+          34.47
+        ],
+        [
+          "Qwen2.5-1M",
+          50.87
+        ],
+        [
+          "Qwen2.5-72B",
+          53.17
+        ],
+        [
+          "Qwen2.5-VL-32B",
+          40.68
+        ],
+        [
+          "Qwen3 235B 2507 (Reasoning)",
+          59.14
+        ],
+        [
+          "Qwen3.5 397B (Reasoning)",
+          60.64
+        ],
+        [
+          "Qwen3.5 Flash",
+          47.92
+        ],
+        [
+          "Qwen3.5 Plus",
+          48.01
+        ],
+        [
+          "Qwen3.5-122B-A10B",
+          59.51
+        ],
+        [
+          "Qwen3.5-27B",
+          59.71
+        ],
+        [
+          "Qwen3.5-35B-A3B",
+          56.14
+        ],
+        [
+          "Qwen3.6 Plus",
+          64.89
+        ],
+        [
+          "Qwen3.6-27B",
+          53.6
+        ],
+        [
+          "Qwen3.6-35B-A3B",
+          51.4
+        ],
+        [
+          "Qwen3.8 Max",
+          78.32
+        ],
+        [
+          "Qwen3.8-27B",
+          71.73
+        ],
+        [
+          "Qwen3.8-Flash-Next",
+          60.79
+        ],
+        [
+          "Solar Pro 2",
+          41.81
         ]
       ]
     },
@@ -1202,10 +1950,10 @@
   "unified_closed": [
     {
       "name": "Claude Fable 5.1",
-      "num_benchmarks": 6,
-      "cl": 75.0,
+      "num_benchmarks": 7,
+      "cl": 87.5,
       "Artificial Analysis": 66.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 82.6,
       "Arena.ai Text": 92.9,
       "SimpleBench.com": 86.6,
       "ARC-AGI-2": 90.0,
@@ -1218,10 +1966,10 @@
     },
     {
       "name": "Claude Opus 5",
-      "num_benchmarks": 5,
-      "cl": 62.5,
+      "num_benchmarks": 6,
+      "cl": 75.0,
       "Artificial Analysis": 63.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 82.1,
       "Arena.ai Text": 91.2,
       "SimpleBench.com": 80.6,
       "ARC-AGI-2": null,
@@ -1234,10 +1982,10 @@
     },
     {
       "name": "Claude Fable 5",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 5,
+      "cl": 62.5,
       "Artificial Analysis": 62.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 82.2,
       "Arena.ai Text": 93.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1266,10 +2014,10 @@
     },
     {
       "name": "Grok 4.6",
-      "num_benchmarks": 7,
-      "cl": 87.5,
+      "num_benchmarks": 8,
+      "cl": 100.0,
       "Artificial Analysis": 61.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 74.8,
       "Arena.ai Text": 86.3,
       "SimpleBench.com": 75.9,
       "ARC-AGI-2": 67.1,
@@ -1282,10 +2030,10 @@
     },
     {
       "name": "GPT-5.6 Sol",
-      "num_benchmarks": 6,
-      "cl": 75.0,
+      "num_benchmarks": 7,
+      "cl": 87.5,
       "Artificial Analysis": 61.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 81.8,
       "Arena.ai Text": 89.7,
       "SimpleBench.com": 64.8,
       "ARC-AGI-2": null,
@@ -1298,10 +2046,10 @@
     },
     {
       "name": "Gemini 3.8 Flash",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 59.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 75.1,
       "Arena.ai Text": 91.4,
       "SimpleBench.com": 82.4,
       "ARC-AGI-2": null,
@@ -1314,10 +2062,10 @@
     },
     {
       "name": "Muse Spark 1.2",
-      "num_benchmarks": 5,
-      "cl": 62.5,
+      "num_benchmarks": 6,
+      "cl": 75.0,
       "Artificial Analysis": 57.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 76.5,
       "Arena.ai Text": 92.2,
       "SimpleBench.com": 74.5,
       "ARC-AGI-2": null,
@@ -1330,10 +2078,10 @@
     },
     {
       "name": "GPT-5.6 Terra",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 57.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 72.5,
       "Arena.ai Text": 87.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1346,10 +2094,10 @@
     },
     {
       "name": "Gemini 3.7 Flash",
-      "num_benchmarks": 6,
-      "cl": 75.0,
+      "num_benchmarks": 7,
+      "cl": 87.5,
       "Artificial Analysis": 56.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 75.0,
       "Arena.ai Text": 90.9,
       "SimpleBench.com": null,
       "ARC-AGI-2": 84.6,
@@ -1362,10 +2110,10 @@
     },
     {
       "name": "Grok 4.5",
-      "num_benchmarks": 5,
-      "cl": 62.5,
+      "num_benchmarks": 6,
+      "cl": 75.0,
       "Artificial Analysis": 56.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 74.7,
       "Arena.ai Text": 87.8,
       "SimpleBench.com": 70.0,
       "ARC-AGI-2": null,
@@ -1378,10 +2126,10 @@
     },
     {
       "name": "Claude Sonnet 5",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 5,
+      "cl": 62.5,
       "Artificial Analysis": 55.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 64.8,
       "Arena.ai Text": 86.5,
       "SimpleBench.com": 60.6,
       "ARC-AGI-2": null,
@@ -1394,10 +2142,10 @@
     },
     {
       "name": "GPT-5.6 Luna",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 52.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 65.7,
       "Arena.ai Text": 85.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1410,10 +2158,10 @@
     },
     {
       "name": "Gemini 3.6 Flash",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 52.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 74.9,
       "Arena.ai Text": 89.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1426,10 +2174,10 @@
     },
     {
       "name": "Gemini 3.1 Pro",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 48.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 56.5,
       "Arena.ai Text": 90.3,
       "SimpleBench.com": 79.6,
       "ARC-AGI-2": null,
@@ -1442,10 +2190,10 @@
     },
     {
       "name": "Gemini 3.5 Flash",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 47.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 64.2,
       "Arena.ai Text": 89.1,
       "SimpleBench.com": 76.7,
       "ARC-AGI-2": null,
@@ -1461,7 +2209,7 @@
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 44.0,
-      "BenchLM.ai": 54.0,
+      "BenchLM.ai": 56.1,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1474,10 +2222,10 @@
     },
     {
       "name": "Inkling",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 42.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 66.5,
       "Arena.ai Text": 82.9,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1490,10 +2238,10 @@
     },
     {
       "name": "Inkling Small",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 41.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 63.5,
       "Arena.ai Text": 78.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1506,10 +2254,10 @@
     },
     {
       "name": "Qwen3.7 Plus",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 39.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 65.4,
       "Arena.ai Text": 88.3,
       "SimpleBench.com": 70.4,
       "ARC-AGI-2": null,
@@ -1522,10 +2270,10 @@
     },
     {
       "name": "Gemini 3.5 Flash-Lite",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 37.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 65.0,
       "Arena.ai Text": 85.7,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1538,10 +2286,10 @@
     },
     {
       "name": "Grok 4.3",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 37.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 63.9,
       "Arena.ai Text": 83.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1570,10 +2318,10 @@
     },
     {
       "name": "Granite 4.2 8B",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 24.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 42.8,
       "Arena.ai Text": 68.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1618,10 +2366,10 @@
     },
     {
       "name": "Mercury 2",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 22.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 48.3,
       "Arena.ai Text": 68.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1634,10 +2382,10 @@
     },
     {
       "name": "Trinity Large Thinking",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 19.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 48.1,
       "Arena.ai Text": 72.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1682,10 +2430,10 @@
     },
     {
       "name": "Ministral 3 8B",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 11.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 50.3,
       "Arena.ai Text": 51.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1762,10 +2510,10 @@
     },
     {
       "name": "claude opus 4.6",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 68.0,
       "Arena.ai Text": 93.1,
       "SimpleBench.com": 67.6,
       "ARC-AGI-2": null,
@@ -1778,10 +2526,10 @@
     },
     {
       "name": "claude opus 4.7",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 72.7,
       "Arena.ai Text": 92.6,
       "SimpleBench.com": 61.7,
       "ARC-AGI-2": null,
@@ -1794,10 +2542,10 @@
     },
     {
       "name": "claude opus 4.8",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 75.8,
       "Arena.ai Text": 89.5,
       "SimpleBench.com": 64.8,
       "ARC-AGI-2": null,
@@ -1810,10 +2558,10 @@
     },
     {
       "name": "gemini 3 flash",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 59.8,
       "Arena.ai Text": 88.3,
       "SimpleBench.com": 61.1,
       "ARC-AGI-2": null,
@@ -1826,10 +2574,10 @@
     },
     {
       "name": "gemini 3 pro",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 67.4,
       "Arena.ai Text": 90.2,
       "SimpleBench.com": 76.4,
       "ARC-AGI-2": null,
@@ -1876,10 +2624,10 @@
   "unified_open": [
     {
       "name": "Kimi K3",
-      "num_benchmarks": 7,
-      "cl": 87.5,
+      "num_benchmarks": 8,
+      "cl": 100.0,
       "Artificial Analysis": 60.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 79.7,
       "Arena.ai Text": 90.6,
       "SimpleBench.com": 60.7,
       "ARC-AGI-2": 60.4,
@@ -1892,10 +2640,10 @@
     },
     {
       "name": "GLM-5.3",
-      "num_benchmarks": 6,
-      "cl": 75.0,
+      "num_benchmarks": 7,
+      "cl": 87.5,
       "Artificial Analysis": 60.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 67.1,
       "Arena.ai Text": 89.5,
       "SimpleBench.com": 66.2,
       "ARC-AGI-2": null,
@@ -1924,10 +2672,10 @@
     },
     {
       "name": "GLM-5.3-Flash",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 5,
+      "cl": 62.5,
       "Artificial Analysis": 57.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 61.9,
       "Arena.ai Text": 88.3,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1940,10 +2688,10 @@
     },
     {
       "name": "DeepSeek V4 Pro",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 5,
+      "cl": 62.5,
       "Artificial Analysis": 53.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 61.3,
       "Arena.ai Text": 85.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 61.3,
@@ -1956,10 +2704,10 @@
     },
     {
       "name": "GLM-5.2",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 5,
+      "cl": 62.5,
       "Artificial Analysis": 53.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 67.0,
       "Arena.ai Text": 88.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -1988,10 +2736,10 @@
     },
     {
       "name": "MiniMax-M3",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 45.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 68.2,
       "Arena.ai Text": 83.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2004,10 +2752,10 @@
     },
     {
       "name": "MiMo-V2.5-Pro",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 43.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 68.9,
       "Arena.ai Text": 87.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2036,10 +2784,10 @@
     },
     {
       "name": "qwen3.6 plus",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 38.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 64.9,
       "Arena.ai Text": 86.2,
       "SimpleBench.com": 63.0,
       "ARC-AGI-2": null,
@@ -2052,10 +2800,10 @@
     },
     {
       "name": "MiMo-V2-Omni",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 36.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 62.1,
       "Arena.ai Text": 81.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2084,10 +2832,10 @@
     },
     {
       "name": "Gemma 4 31B",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 30.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 60.1,
       "Arena.ai Text": 84.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2132,10 +2880,10 @@
     },
     {
       "name": "Mistral Small 4",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 20.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 46.5,
       "Arena.ai Text": 70.3,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2148,10 +2896,10 @@
     },
     {
       "name": "Mistral Large 3",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 16.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 49.8,
       "Arena.ai Text": 79.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2164,10 +2912,10 @@
     },
     {
       "name": "Llama 4 Maverick",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 14.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 22.9,
       "Arena.ai Text": 11.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2180,10 +2928,10 @@
     },
     {
       "name": "Llama 4 Scout",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 10.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 39.8,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,

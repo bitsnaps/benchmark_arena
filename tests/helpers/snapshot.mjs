@@ -5,6 +5,8 @@
 // Mirror contract (keep in sync with src/stores/data.js):
 //   older  = meta.superseded_by || meta.stale
 //   rank/leader/preset lists exclude older rows; nothing is ever deleted.
+//   score = CL-weighted global score: w*rawAvg + (1-w)*50, w = cl/100
+//   (the store's ranking metric — raw avg is display/context only)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -30,6 +32,15 @@ export function avgForModel(row, core = CORE_BENCHMARKS) {
   return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : -1;
 }
 
+export const SCORE_PRIOR = 50;
+
+export function scoreForModel(row, core = CORE_BENCHMARKS) {
+  const raw = avgForModel(row, core);
+  if (raw === -1) return -1;
+  const cl = Math.min(100, Math.max(0, row.cl ?? 0));
+  return (cl / 100) * raw + (1 - cl / 100) * SCORE_PRIOR;
+}
+
 export function makeMirror(data = loadSnapshot()) {
   const META = data.models_meta || {};
   const closed = data.unified_closed || [];
@@ -42,11 +53,12 @@ export function makeMirror(data = loadSnapshot()) {
   const supersededBy = (name) => (META[name] && META[name].superseded_by) || null;
   const current = (list) => list.filter((r) => !isOlder(r.name));
   const byAvg = (a, b) => avgForModel(b) - avgForModel(a);
+  const byScore = (a, b) => scoreForModel(b) - scoreForModel(a);
 
   return {
-    data, META, closed, open, rows, pivotAll, isOlder, supersededBy, current, byAvg,
+    data, META, closed, open, rows, pivotAll, isOlder, supersededBy, current, byAvg, byScore,
     olderRows: (list = pivotAll) => list.filter((r) => isOlder(r.name)),
-    top: (list) => [...current(list)].sort(byAvg),
+    top: (list) => [...current(list)].sort(byScore),
     clOf: (row) => row.cl ?? 0,
   };
 }

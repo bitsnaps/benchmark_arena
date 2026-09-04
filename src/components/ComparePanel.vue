@@ -8,7 +8,7 @@ import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
 const router = useRouter();
-const { benchmarks, avgForModel, isCore } = useData();
+const { benchmarks, scoreForModel, isCore } = useData();
 const { compareRows, clearCompare, isBest } = useLeaderboard();
 </script>
 
@@ -37,9 +37,9 @@ const { compareRows, clearCompare, isBest } = useLeaderboard();
           >{{ props.row.name }}</router-link>
         </div>
       </b-table-column>
-      <b-table-column field="avg" label="Avg" width="90" centered numeric v-slot="props">
-        <span class="num" :style="{ color: scoreColor(avgForModel(props.row)), fontWeight: 600 }">
-          {{ fmtScore(avgForModel(props.row)) }}
+      <b-table-column field="avg" label="Score" width="90" centered numeric v-slot="props">
+        <span class="num" :style="{ color: scoreColor(scoreForModel(props.row)), fontWeight: 600 }">
+          {{ fmtScore(scoreForModel(props.row)) }}
         </span>
       </b-table-column>
       <b-table-column

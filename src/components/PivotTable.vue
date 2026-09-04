@@ -14,7 +14,7 @@ const props = defineProps({
   variant: { type: String, default: 'main' }, // 'main' | 'older'
 });
 
-const { benchmarks, nonCoreBenchmarks, stats, avgForModel, rankOf, tierOf, isCore, benchThAttrs } = useData();
+const { benchmarks, nonCoreBenchmarks, stats, scoreForModel, avgForModel, rankOf, tierOf, isCore, benchThAttrs } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
@@ -22,14 +22,23 @@ const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 const rowCls = (row) =>
   [covClass(row.cl), props.variant === 'older' ? 'is-older-row' : ''].join(' ').trim();
 
-// Sorter for the computed Avg column (nulls always sink to the bottom)
-function byAvg(a, b, isAsc) {
-  const av = avgForModel(a);
-  const bv = avgForModel(b);
+// Sorter for the global Score column (nulls always sink to the bottom)
+function byScore(a, b, isAsc) {
+  const av = scoreForModel(a);
+  const bv = scoreForModel(b);
   if (av === null && bv === null) return 0;
   if (av === null) return 1;
   if (bv === null) return -1;
   return isAsc ? av - bv : bv - av;
+}
+
+// Tooltip: raw sparse avg + coverage behind the CL-weighted score
+function scoreTitle(row) {
+  const raw = avgForModel(row);
+  const w = scoreForModel(row);
+  const cl = row.cl ?? 0;
+  if (raw === null || raw === undefined) return 'No core scores';
+  return `Raw avg ${raw.toFixed(1)} · CL ${Math.round(cl)}% → CL-weighted ${w !== null && w !== undefined ? w.toFixed(1) : '—'} (uncovered core benches count as neutral 50)`;
 }
 </script>
 
@@ -73,11 +82,11 @@ function byAvg(a, b, isAsc) {
       </div>
     </b-table-column>
 
-    <b-table-column field="avg" label="Avg" width="120" centered numeric sortable :custom-sort="byAvg" v-slot="props">
-      <div class="num" :style="{ color: scoreColor(avgForModel(props.row)), fontWeight: 600 }">
-        {{ fmtScore(avgForModel(props.row)) }}
+    <b-table-column field="avg" label="Score" width="120" centered numeric sortable :custom-sort="byScore" :th-attrs="() => ({ title: 'CL-weighted global score — raw sparse avg blended toward a neutral 50 in proportion to benchmark coverage (CL). Full coverage = raw avg.' })" v-slot="props">
+      <div class="num" :style="{ color: scoreColor(scoreForModel(props.row)), fontWeight: 600 }" :title="scoreTitle(props.row)">
+        {{ fmtScore(scoreForModel(props.row)) }}
       </div>
-      <div class="bar" style="margin-top:.3rem"><i :style="{ width: barWidth(avgForModel(props.row)) }"></i></div>
+      <div class="bar" style="margin-top:.3rem"><i :style="{ width: barWidth(scoreForModel(props.row)) }"></i></div>
     </b-table-column>
 
     <b-table-column

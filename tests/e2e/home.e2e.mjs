@@ -18,10 +18,12 @@ const BASE = process.env.E2E_BASE || 'http://127.0.0.1:4173/benchmark_arena/';
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'public/benchmark_results.json'), 'utf8'));
 const CORE = ['Artificial Analysis','BenchLM.ai','Arena.ai Text','SimpleBench.com','ARC-AGI-2','Design Arena','SWE-Marathon','FrontierSWE'];
 const avg = r => { const v = CORE.map(b => r[b]).filter(x => x != null); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : -1; };
+// CL-weighted global score (mirrors stores/data.js scoreForModel): w*raw + (1-w)*50
+const score = r => { const raw = avg(r); if (raw === -1) return -1; const cl = Math.min(100, Math.max(0, r.cl ?? 0)); return (cl/100)*raw + (1-cl/100)*50; };
 const META = data.models_meta || {};
 const supOf = name => (META[name] && META[name].superseded_by) || null;
 const isOld = r => !!(META[r.name] && (META[r.name].superseded_by || META[r.name].stale));
-const topOf = list => [...list].filter(r => !isOld(r)).sort((a,b)=>avg(b)-avg(a))[0]?.name;
+const topOf = list => [...list].filter(r => !isOld(r)).sort((a,b)=>score(b)-score(a))[0]?.name;
 const slugify = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 const EXPECT = {
   all: topOf([...(data.unified_closed||[]), ...(data.unified_open||[])]),

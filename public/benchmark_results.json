@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-04 10:25",
+  "timestamp": "2026-09-04 11:06",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -1649,39 +1649,167 @@
     "VendingBench": {
       "closed": [
         [
-          "Claude Opus 5",
-          100.0
+          "Claude Fable 5 - High",
+          50.8
         ],
         [
-          "Claude Opus 4.7",
-          97.8
+          "Claude Fable 5.1",
+          48.5
         ],
         [
-          "GPT-5.6 Sol",
-          86.0
+          "Claude Haiku 4.5",
+          4.1
         ],
         [
-          "Grok 4.6",
-          80.9
+          "Claude Opus 4.5",
+          44.4
         ],
         [
           "Claude Opus 4.6",
           71.7
         ],
         [
+          "Claude Opus 4.7",
+          97.8
+        ],
+        [
+          "Claude Opus 4.8 - High",
+          51.8
+        ],
+        [
+          "Claude Opus 5",
+          100.0
+        ],
+        [
+          "Claude Sonnet 4.5",
+          34.3
+        ],
+        [
+          "Claude Sonnet 4.6",
+          64.4
+        ],
+        [
+          "Claude Sonnet 5",
+          57.0
+        ],
+        [
+          "GPT-5 mini",
+          0.0
+        ],
+        [
+          "GPT-5.1",
+          13.2
+        ],
+        [
+          "GPT-5.2",
+          32.1
+        ],
+        [
+          "GPT-5.3-Codex",
+          53.1
+        ],
+        [
+          "GPT-5.4",
+          54.9
+        ],
+        [
           "GPT-5.5",
           67.3
+        ],
+        [
+          "GPT-5.6 Luna",
+          36.6
+        ],
+        [
+          "GPT-5.6 Sol",
+          86.0
         ],
         [
           "GPT-5.6 Terra",
           65.7
         ],
         [
-          "Claude Sonnet 4.6",
-          64.4
+          "GPT-OSS-120b",
+          0.0
+        ],
+        [
+          "Gemini 2.5 Flash",
+          4.9
+        ],
+        [
+          "Gemini 2.5 Pro",
+          5.1
+        ],
+        [
+          "Gemini 3 Flash",
+          32.5
+        ],
+        [
+          "Gemini 3 Pro",
+          49.0
+        ],
+        [
+          "Gemini 3.1 Pro",
+          8.1
+        ],
+        [
+          "Gemini 3.1 Pro Custom Tools",
+          33.8
+        ],
+        [
+          "Gemini 3.5 Flash",
+          48.3
+        ],
+        [
+          "Grok 4.1 Fast",
+          9.9
+        ],
+        [
+          "Grok 4.20",
+          41.7
+        ],
+        [
+          "Grok 4.3",
+          0.3
+        ],
+        [
+          "Grok 4.5",
+          34.8
+        ],
+        [
+          "Grok 4.6",
+          80.9
+        ],
+        [
+          "Muse Spark 1.1",
+          58.3
+        ],
+        [
+          "Qwen 3.6 Max",
+          38.0
         ]
       ],
       "open": [
+        [
+          "DeepSeek-V3.2",
+          9.2
+        ],
+        [
+          "Deepseek V4 Pro",
+          29.4
+        ],
+        [
+          "GLM-4.7",
+          21.3
+        ],
+        [
+          "GLM-5",
+          39.6
+        ],
+        [
+          "GLM-5.1",
+          50.4
+        ],
         [
           "GLM-5.2",
           74.4
@@ -1689,6 +1817,54 @@
         [
           "GLM-5.3",
           73.0
+        ],
+        [
+          "Kimi K2.5",
+          10.7
+        ],
+        [
+          "Kimi K2.6",
+          55.5
+        ],
+        [
+          "Kimi K2.7 Code",
+          45.5
+        ],
+        [
+          "Kimi K3",
+          46.2
+        ],
+        [
+          "MiniMax-M2",
+          1.4
+        ],
+        [
+          "MiniMax-M2.5",
+          0.0
+        ],
+        [
+          "MiniMax-M3",
+          19.3
+        ],
+        [
+          "Qwen 3.5 35B A3B",
+          4.1
+        ],
+        [
+          "Qwen 3.5 Plus",
+          0.0
+        ],
+        [
+          "Qwen 3.6 Plus",
+          45.7
+        ],
+        [
+          "Qwen3 235B A22B Thinking",
+          0.0
+        ],
+        [
+          "Qwen3 Max",
+          0.6
         ]
       ]
     },
@@ -1959,7 +2135,7 @@
       "ARC-AGI-2": 90.0,
       "Design Arena": 90.5,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 48.5,
       "SWE-Marathon": null,
       "FrontierSWE": 56.3,
       "CyberGem": null
@@ -1991,7 +2167,7 @@
       "ARC-AGI-2": null,
       "Design Arena": 88.5,
       "DeepSWE": 70.0,
-      "VendingBench": null,
+      "VendingBench": 50.8,
       "SWE-Marathon": 90.0,
       "FrontierSWE": null,
       "CyberGem": null
@@ -2119,7 +2295,7 @@
       "ARC-AGI-2": null,
       "Design Arena": 83.2,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 34.8,
       "SWE-Marathon": 58.8,
       "FrontierSWE": null,
       "CyberGem": 79.0
@@ -2135,7 +2311,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": 54.0,
-      "VendingBench": null,
+      "VendingBench": 57.0,
       "SWE-Marathon": 60.0,
       "FrontierSWE": null,
       "CyberGem": null
@@ -2151,7 +2327,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": 67.0,
-      "VendingBench": null,
+      "VendingBench": 36.6,
       "SWE-Marathon": 48.8,
       "FrontierSWE": null,
       "CyberGem": null
@@ -2183,7 +2359,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 8.1,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 38.8
@@ -2199,7 +2375,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": 36.0,
-      "VendingBench": null,
+      "VendingBench": 48.3,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null
@@ -2295,7 +2471,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 0.3,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null
@@ -2343,7 +2519,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 0.0,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null
@@ -2551,7 +2727,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": 59.0,
-      "VendingBench": null,
+      "VendingBench": 51.8,
       "SWE-Marathon": 97.6,
       "FrontierSWE": null,
       "CyberGem": null
@@ -2567,7 +2743,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 32.5,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null
@@ -2583,7 +2759,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 49.0,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null
@@ -2633,7 +2809,7 @@
       "ARC-AGI-2": 60.4,
       "Design Arena": 99.5,
       "DeepSWE": 69.0,
-      "VendingBench": null,
+      "VendingBench": 46.2,
       "SWE-Marathon": 96.2,
       "FrontierSWE": 25.9,
       "CyberGem": null
@@ -2697,7 +2873,7 @@
       "ARC-AGI-2": 61.3,
       "Design Arena": null,
       "DeepSWE": 63.0,
-      "VendingBench": null,
+      "VendingBench": 29.4,
       "SWE-Marathon": 21.2,
       "FrontierSWE": null,
       "CyberGem": 83.3
@@ -2745,7 +2921,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 19.3,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 73.1
@@ -2793,7 +2969,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 45.7,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null

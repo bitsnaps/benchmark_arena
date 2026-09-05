@@ -99,7 +99,7 @@ export function fmtUsd(p) {
   p = Number(p);
   if (p === 0) return '$0';
   if (p >= 10) return '$' + Math.round(p);
-  if (p >= 1) return '$' + p.toFixed(2).replace(/0$/, '');
+  if (p >= 1) return '$' + p.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
   return '$' + p.toFixed(p < 0.1 ? 3 : 2).replace(/0+$/, '').replace(/\.$/, '');
 }
 

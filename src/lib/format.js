@@ -112,6 +112,17 @@ export function priceBlend(pr) {
   return out === null ? pr.input : (3 * pr.input + out) / 4;
 }
 
+// Value lens: Score points per 1M blended tokens (Score ÷ blended $/1M).
+// 7.9 = a $10/M model scoring 79.2; 112 = a $0.46/M model scoring 51.9.
+// Higher = more benchmark score per dollar. Unbounded by design — cheap
+// capable models SHOULD dominate this lens. Null-safe.
+export function fmtValue(v) {
+  if (v === null || v === undefined || Number.isNaN(Number(v))) return '—';
+  v = Number(v);
+  if (v >= 100) return String(Math.round(v));
+  return v.toFixed(1).replace(/\.0$/, '');
+}
+
 // Modality chip icon (FontAwesome 7 names, icon pack = fas)
 export function modalityIcon(m) {
   return { text: 'font', image: 'image', audio: 'volume-high', video: 'film', file: 'paperclip' }[m] || 'circle-question';

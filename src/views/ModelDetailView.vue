@@ -4,14 +4,14 @@
 import { computed, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SHORT, BASE_TITLE } from '../lib/constants.js';
-import { fmtScore, fmtUsd, fmtCtx, scoreColor, barWidth, rankClass, providerColor, initials, slugify } from '../lib/format.js';
+import { fmtScore, fmtUsd, fmtValue, fmtCtx, scoreColor, barWidth, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 const model = computed(() => modelSlugIndex.value.get(route.params.slug) || null);
@@ -55,6 +55,8 @@ const aliasNote = computed(() => (model.value ? metaFor(model.value)?.alias_note
 // API pricing (price layer) — OpenRouter list price for this exact row
 const pricing = computed(() => (model.value ? priceFor(model.value) : null));
 const modelCtx = computed(() => (model.value ? metaFor(model.value)?.context_length || null : null));
+// Value lens — Score per 1M blended tokens (same number the Value column sorts by)
+const value = computed(() => (model.value ? valueFor(model.value) : null));
 
 // Compare shortcut
 const inCompare = computed(() => !!model.value && compareRows.value.some(r => r.name === model.value.name));
@@ -200,6 +202,10 @@ function addToCompare() {
           <div class="sub">max tokens per request</div>
         </div>
       </div>
+      <p class="cell-sub mt-sm" v-if="value !== null">
+        <i class="fas fa-scale-balanced"></i>&nbsp;Value lens: <b style="color:var(--teal)">{{ fmtValue(value) }}</b> score points per 1M blended tokens
+        (3:1 in:out) — sort the leaderboard by the <b>Value</b> column to compare cost efficiency.
+      </p>
       <p class="cell-sub mt-sm">
         Router list price for this exact row — the same model is often cheaper first-party
         or via other hosts. Compare sellers on the

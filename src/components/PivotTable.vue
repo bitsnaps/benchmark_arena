@@ -5,7 +5,7 @@
 // they interleave at their natural score position, dimmed (is-older-row),
 // with no rank number and a small "older" chip on the name.
 import { SHORT } from '../lib/constants.js';
-import { fmtScore, fmtUsd, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
+import { fmtScore, fmtUsd, fmtValue, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
@@ -14,7 +14,7 @@ const props = defineProps({
   tier: { type: String, default: 'all' },
 });
 
-const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, priceFor } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, priceFor, valueFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
@@ -52,12 +52,32 @@ function byPrice(a, b, isAsc) {
   return isAsc ? av - bv : bv - av;
 }
 
+// Sorter for the Value column — score per 1M blended tokens; rows without a
+// value (no score or no price, free tiers) sink last in BOTH directions
+function byValue(a, b, isAsc) {
+  const av = valueFor(a);
+  const bv = valueFor(b);
+  if (av === null && bv === null) return 0;
+  if (av === null) return 1;
+  if (bv === null) return -1;
+  return isAsc ? av - bv : bv - av;
+}
+
 // Tooltip for the Price cell: full in / out / cache breakdown
 function priceTitle(row) {
   const p = priceFor(row);
   if (!p) return 'No API price in the OpenRouter catalog snapshot for this row';
   const cache = p.cache_read != null ? ` · cache read ${fmtUsd(p.cache_read)}` : '';
   return `API list price — input ${fmtUsd(p.input)} · output ${fmtUsd(p.output)}${cache} per 1M tokens (OpenRouter snapshot; sorted by a 3:1 in:out blend). Compare sellers on the Providers page.`;
+}
+
+// Tooltip for the Value cell: the exact division behind the number
+function valueTitle(row) {
+  const p = priceFor(row);
+  if (!p || !p.blend || p.blend <= 0) return 'No API price for this row — value needs a blended cost (free tiers are excluded)';
+  const s = scoreForModel(row);
+  if (s === null || s === undefined) return 'No score in the selected avg set — value needs a Score';
+  return `Value lens — Score ${s.toFixed(1)} ÷ blended ${fmtUsd(p.blend)}/1M tokens (3:1 in:out) = ${fmtValue(valueFor(row))} score points per 1M blended tokens. Higher = more benchmark score per dollar. Free tiers are excluded (infinite value is meaningless).`;
 }
 
 // Tooltip: raw sparse avg + coverage behind the CL-weighted score
@@ -127,6 +147,18 @@ function scoreTitle(row) {
     >
       <span v-if="priceFor(props.row)" class="price-cell" :title="priceTitle(props.row)">{{ fmtUsd(priceFor(props.row).input) }}<span class="price-sep">/</span>{{ fmtUsd(priceFor(props.row).output) }}</span>
       <span v-else class="cell-sub" :title="priceTitle(props.row)">—</span>
+    </b-table-column>
+
+    <!-- Value lens: Score per 1M blended tokens (Score ÷ 3:1-blended $/1M).
+         Higher = more benchmark score per dollar. Always-visible identity
+         metadata, like Price — not a benchmark, never feeds the Score.
+         Rows with no score / no price (and free tiers) show an honest dash. -->
+    <b-table-column field="value" label="Value" width="90" centered numeric sortable :custom-sort="byValue"
+      :th-attrs="() => ({ title: 'Value lens — Score per 1M blended tokens (Score ÷ blended $/1M, 3:1 in:out). Higher = more benchmark score per dollar. — = no Score or no API price; free tiers excluded.' })"
+      v-slot="props"
+    >
+      <span v-if="valueFor(props.row) !== null" class="num value-cell" style="font-weight:600" :title="valueTitle(props.row)">{{ fmtValue(valueFor(props.row)) }}</span>
+      <span v-else class="cell-sub value-cell" :title="valueTitle(props.row)">—</span>
     </b-table-column>
 
     <!-- Hide/Show columns: benchmark columns follow the Avg-set selection 1:1.

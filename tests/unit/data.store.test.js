@@ -345,3 +345,61 @@ describe('pricing layer (price column from models_meta.pricing_usd_per_1m)', () 
     }
   });
 });
+
+describe('value lens (Score per 1M blended tokens)', () => {
+  beforeAll(() => d.resetAvgSelection()); // value follows the current avg set — pin the default
+
+  it('anchor: Claude Opus 5 = Score ÷ 10 (blend of $5 in / $25 out)', () => {
+    const row = rowOf('Claude Opus 5');
+    expect(row).toBeTruthy();
+    const p = d.priceFor(row);
+    expect(p.blend).toBeCloseTo(10, 10);
+    expect(d.valueFor(row)).toBeCloseTo(d.scoreForModel(row) / 10, 10);
+  });
+
+  it('value is exactly Score ÷ blend for every priced, scored row', () => {
+    let n = 0;
+    for (const r of d.pivotAll.value) {
+      const p = d.priceFor(r);
+      const s = d.scoreForModel(r);
+      if (!p || !p.blend || p.blend <= 0 || s === null) continue;
+      expect(d.valueFor(r), `value of "${r.name}"`).toBeCloseTo(s / p.blend, 10);
+      n++;
+    }
+    expect(n).toBeGreaterThan(80); // snapshot currently has 87 value rows
+  });
+
+  it('rows without a price or a score resolve to null — never fabricated', () => {
+    expect(d.valueFor({ name: 'definitely-not-a-model' })).toBeNull();
+    const noPrice = d.pivotAll.value.find(r => !d.priceFor(r));
+    if (noPrice) expect(d.valueFor(noPrice)).toBeNull();
+    const noScore = d.pivotAll.value.find(r => d.priceFor(r) && d.scoreForModel(r) === null);
+    if (noScore) expect(d.valueFor(noScore)).toBeNull();
+  });
+
+  it('no Infinity, no zero-or-negative values (free-tier guard holds)', () => {
+    for (const r of d.pivotAll.value) {
+      const v = d.valueFor(r);
+      if (v === null) continue;
+      expect(Number.isFinite(v), `finite value for "${r.name}"`).toBe(true);
+      expect(v).toBeGreaterThan(0);
+    }
+  });
+
+  it('cheap capable models beat expensive ones (DeepSeek V3 ≫ Claude Opus 5)', () => {
+    const cheap = rowOf('DeepSeek V3');
+    const dear = rowOf('Claude Opus 5');
+    if (!cheap || !dear) return;
+    expect(d.valueFor(cheap)).toBeGreaterThan(d.valueFor(dear) * 5);
+  });
+
+  it('value follows the avg-set selection (re-scores with it)', () => {
+    const row = rowOf('Claude Opus 5');
+    const before = d.valueFor(row);
+    d.toggleAvgBench('EQBench CW');
+    const after = d.valueFor(row);
+    expect(after).not.toBeCloseTo(before, 9); // Score moved → value moved with it
+    d.resetAvgSelection();
+    expect(d.valueFor(row)).toBeCloseTo(before, 12);
+  });
+});

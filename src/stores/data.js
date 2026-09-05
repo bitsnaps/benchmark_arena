@@ -324,6 +324,23 @@ const priceFor = (row) => {
   };
 };
 
+// ── Value lens: Score per 1M blended tokens ──────────────────────────────
+// The cost-efficiency view Ibrahim asked for: how much CL-weighted Score a
+// model delivers per unit of blended API spend (Score ÷ 3:1-blended $/1M).
+// Higher is better. Rules baked in:
+//   · uses the CURRENT Score (follows the Avg-set selection like the table)
+//   · rows with no score or no catalog price resolve to null — never
+//     fabricated, rendered as an honest dash
+//   · a zero blend (free tier) yields null, never Infinity — a free model
+//     would otherwise poison the value ranking at the top
+const valueFor = (row) => {
+  const p = priceFor(row);
+  const s = scoreForModel(row);
+  if (!p || !Number.isFinite(p.blend) || p.blend <= 0) return null;
+  if (s === null || s === undefined || !Number.isFinite(s)) return null;
+  return s / p.blend;
+};
+
 // Full benchmark name as native tooltip on column headers
 function benchThAttrs(column) {
   const b = column.field;
@@ -344,6 +361,6 @@ export function useData() {
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
     modelSlugIndex, benchSlugIndex, benchRankIndex,
     modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, isOlder, releaseDateOf,
-    priceFor,
+    priceFor, valueFor,
   };
 }

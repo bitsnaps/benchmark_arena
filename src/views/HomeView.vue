@@ -246,6 +246,7 @@ const openModel = (name) =>
       Columns follow the Avg set — shown: {{ coreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.
       <span v-if="nonCoreBenchmarks.length">Hidden (opt in via the Avg set dropdown): {{ nonCoreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.</span>
       Price = API list price per 1M tokens, in / out (OpenRouter snapshot) — <router-link :to="{ name: 'providers' }">compare sellers</router-link>.
+      Value = Score per 1M blended tokens (3:1 in:out) — sort by it for the cost-efficiency view; free tiers and unpriced rows show a dash.
     </p>
 
     <ComparePanel />

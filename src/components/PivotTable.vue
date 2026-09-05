@@ -5,7 +5,7 @@
 // they interleave at their natural score position, dimmed (is-older-row),
 // with no rank number and a small "older" chip on the name.
 import { SHORT } from '../lib/constants.js';
-import { fmtScore, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
+import { fmtScore, fmtUsd, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
@@ -14,7 +14,7 @@ const props = defineProps({
   tier: { type: String, default: 'all' },
 });
 
-const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, priceFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
@@ -40,6 +40,24 @@ function byScore(a, b, isAsc) {
   if (av === null) return 1;
   if (bv === null) return -1;
   return isAsc ? av - bv : bv - av;
+}
+
+// Sorter for the Price column — 3:1 in:out blend; no-catalog rows sink last
+function byPrice(a, b, isAsc) {
+  const av = priceFor(a)?.blend ?? null;
+  const bv = priceFor(b)?.blend ?? null;
+  if (av === null && bv === null) return 0;
+  if (av === null) return 1;
+  if (bv === null) return -1;
+  return isAsc ? av - bv : bv - av;
+}
+
+// Tooltip for the Price cell: full in / out / cache breakdown
+function priceTitle(row) {
+  const p = priceFor(row);
+  if (!p) return 'No API price in the OpenRouter catalog snapshot for this row';
+  const cache = p.cache_read != null ? ` · cache read ${fmtUsd(p.cache_read)}` : '';
+  return `API list price — input ${fmtUsd(p.input)} · output ${fmtUsd(p.output)}${cache} per 1M tokens (OpenRouter snapshot; sorted by a 3:1 in:out blend). Compare sellers on the Providers page.`;
 }
 
 // Tooltip: raw sparse avg + coverage behind the CL-weighted score
@@ -98,6 +116,17 @@ function scoreTitle(row) {
         {{ fmtScore(scoreForModel(props.row)) }}
       </div>
       <div class="bar" style="margin-top:.3rem"><i :style="{ width: barWidth(scoreForModel(props.row)) }"></i></div>
+    </b-table-column>
+
+    <!-- Price: per-model API metadata (not a benchmark), always visible.
+         OpenRouter list price from models_meta.pricing_usd_per_1m; models
+         without a catalog match show an honest dash. -->
+    <b-table-column field="price" label="Price" width="115" centered sortable :custom-sort="byPrice"
+      :th-attrs="() => ({ title: 'API list price, USD per 1M tokens — input / output (OpenRouter snapshot). Sorted by a 3:1 in:out blend. — = no catalog match.' })"
+      v-slot="props"
+    >
+      <span v-if="priceFor(props.row)" class="price-cell" :title="priceTitle(props.row)">{{ fmtUsd(priceFor(props.row).input) }}<span class="price-sep">/</span>{{ fmtUsd(priceFor(props.row).output) }}</span>
+      <span v-else class="cell-sub" :title="priceTitle(props.row)">—</span>
     </b-table-column>
 
     <!-- Hide/Show columns: benchmark columns follow the Avg-set selection 1:1.

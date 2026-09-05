@@ -103,6 +103,15 @@ export function fmtUsd(p) {
   return '$' + p.toFixed(p < 0.1 ? 3 : 2).replace(/0+$/, '').replace(/\.$/, '');
 }
 
+// Blended API price used to sort the Price column: 3:1 input:output mean
+// (the conventional headline blend — most requests are input-heavy).
+// Null-safe: no input price → null (row sinks when sorting).
+export function priceBlend(pr) {
+  if (!pr || typeof pr.input !== 'number') return null;
+  const out = typeof pr.output === 'number' ? pr.output : null;
+  return out === null ? pr.input : (3 * pr.input + out) / 4;
+}
+
 // Modality chip icon (FontAwesome 7 names, icon pack = fas)
 export function modalityIcon(m) {
   return { text: 'font', image: 'image', audio: 'volume-high', video: 'film', file: 'paperclip' }[m] || 'circle-question';

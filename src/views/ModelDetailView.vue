@@ -4,14 +4,14 @@
 import { computed, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SHORT, BASE_TITLE } from '../lib/constants.js';
-import { fmtScore, scoreColor, barWidth, rankClass, providerColor, initials, slugify } from '../lib/format.js';
+import { fmtScore, fmtUsd, fmtCtx, scoreColor, barWidth, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 const model = computed(() => modelSlugIndex.value.get(route.params.slug) || null);
@@ -51,6 +51,10 @@ const successor = computed(() => (model.value ? supersededBy(model.value) : null
 const released = computed(() => (model.value ? releaseDateOf(model.value) : null));
 // ★ footnote: a source site lists this model under a different name (alias_note)
 const aliasNote = computed(() => (model.value ? metaFor(model.value)?.alias_note || null : null));
+
+// API pricing (price layer) — OpenRouter list price for this exact row
+const pricing = computed(() => (model.value ? priceFor(model.value) : null));
+const modelCtx = computed(() => (model.value ? metaFor(model.value)?.context_length || null : null));
 
 // Compare shortcut
 const inCompare = computed(() => !!model.value && compareRows.value.some(r => r.name === model.value.name));
@@ -165,6 +169,41 @@ function addToCompare() {
 
       <p class="cell-sub mt-sm" v-if="missing.length">
         Not reported on: {{ missing.map(b => SHORT[b] || b).join(', ') }}.
+      </p>
+    </div>
+
+    <!-- API pricing (price layer) -->
+    <div v-if="pricing" class="panel-lab mt" style="padding:1.2rem">
+      <div class="row" style="justify-content:space-between;margin-bottom:.6rem">
+        <h3 style="margin:0;font-size:1.05rem">API pricing</h3>
+        <span class="cell-sub">OpenRouter list price · snapshot {{ stats.lastUpdated }}</span>
+      </div>
+      <div class="grid-4">
+        <div class="stat">
+          <div class="lbl">Input</div>
+          <div class="val num">{{ fmtUsd(pricing.input) }}<span class="sub" style="font-size:.9rem"> /1M tok</span></div>
+          <div class="sub">standard requests</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">Output</div>
+          <div class="val num">{{ fmtUsd(pricing.output) }}<span class="sub" style="font-size:.9rem"> /1M tok</span></div>
+          <div class="sub">generated tokens</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">Cache read</div>
+          <div class="val num">{{ pricing.cache_read != null ? fmtUsd(pricing.cache_read) : '—' }}<span class="sub" style="font-size:.9rem"> /1M tok</span></div>
+          <div class="sub">cached input tokens</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">Context window</div>
+          <div class="val num">{{ fmtCtx(modelCtx) }}</div>
+          <div class="sub">max tokens per request</div>
+        </div>
+      </div>
+      <p class="cell-sub mt-sm">
+        Router list price for this exact row — the same model is often cheaper first-party
+        or via other hosts. Compare sellers on the
+        <router-link :to="{ name: 'providers' }">Providers page</router-link>.
       </p>
     </div>
   </section>

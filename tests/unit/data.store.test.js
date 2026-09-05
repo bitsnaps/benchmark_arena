@@ -308,3 +308,40 @@ describe('LLM Chess cells (non-core, curated aliases)', () => {
     }
   });
 });
+
+describe('pricing layer (price column from models_meta.pricing_usd_per_1m)', () => {
+  it('most catalog-matched models carry a price', () => {
+    const priced = d.pivotAll.value.filter(r => d.priceFor(r));
+    expect(priced.length).toBeGreaterThan(70);
+  });
+
+  it('blend is the 3:1 input:output mean of the row\u2019s own prices', () => {
+    const any = d.pivotAll.value.find(r => d.priceFor(r));
+    expect(any).toBeTruthy();
+    const p = d.priceFor(any);
+    expect(p.blend).toBeCloseTo((3 * p.input + p.output) / 4, 10);
+  });
+
+  it('anchor: Claude Opus 5 at its official $5 / $25 list price', () => {
+    const p = d.priceFor(rowOf('Claude Opus 5'));
+    expect(p).not.toBeNull();
+    expect(p.input).toBe(5.0);
+    expect(p.output).toBe(25.0);
+  });
+
+  it('rows without a catalog match resolve to null — never fabricated', () => {
+    expect(d.priceFor({ name: 'definitely-not-a-model' })).toBeNull();
+    const without = d.pivotAll.value.filter(r => !d.priceFor(r));
+    expect(without.length).toBeGreaterThan(0); // small locals have no API price
+  });
+
+  it('every price is a sane USD-per-1M number (0..1000)', () => {
+    for (const r of d.pivotAll.value) {
+      const p = d.priceFor(r);
+      if (!p) continue;
+      expect(p.input).toBeGreaterThanOrEqual(0);
+      expect(p.input).toBeLessThan(1000);
+      if (p.output !== null) expect(p.output).toBeLessThan(1000);
+    }
+  });
+});

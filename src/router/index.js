@@ -7,6 +7,7 @@
 //   /                     Home = the leaderboard (tier tabs via ?tier=)
 //   /benchmarks/:slug?    Per-benchmark explorer (slug deep links)
 //   /model/:slug          Per-model score card
+//   /providers            Provider & pricing catalog (providers.json)
 //   /compare              Side-by-side comparison (?models=slug,slug)
 //   /leaderboard/...      Legacy redirects → /?tier=...
 
@@ -29,6 +30,11 @@ const routes = [
     path: '/model/:slug',
     name: 'model',
     component: () => import('../views/ModelDetailView.vue'),
+  },
+  {
+    path: '/providers',
+    name: 'providers',
+    component: () => import('../views/ProvidersView.vue'),
   },
   {
     path: '/compare',

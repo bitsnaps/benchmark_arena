@@ -457,3 +457,68 @@ a.hbar:hover .name { color: var(--teal); }
 .avg-bench-row .b-checkbox {
   width: 100%;
 }
+
+/* ── Pricing layer (Price column + Providers page) ────────── */
+.price-cell {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: .92rem;
+  color: var(--text);
+}
+.price-sep { color: var(--faint); margin: 0 .18rem; }
+
+.prov-kind-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+.prov-card { padding: 1rem 1.15rem; }
+.prov-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.02rem;
+  font-weight: 600;
+  margin: 0;
+}
+.prov-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+  margin-top: .55rem;
+}
+.prov-table th {
+  color: var(--faint);
+  font-weight: 600;
+  font-size: .74rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  text-align: right;
+  padding: .3rem .5rem;
+  border-bottom: 1px solid var(--line);
+}
+.prov-table th.left { text-align: left; }
+.prov-table td {
+  padding: .34rem .5rem;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.prov-table tbody tr:last-child td { border-bottom: none; }
+.prov-table tbody tr:hover td { background: rgba(139, 156, 255, 0.05); }
+.prov-table td.left { text-align: left; }
+.prov-model { color: var(--text); font-weight: 500; }
+.prov-id { color: var(--faint); font-size: .78rem; margin-left: .45rem; font-family: 'IBM Plex Mono', monospace; }
+.free-chip {
+  display: inline-block;
+  margin-left: .45rem;
+  padding: 0 .4rem;
+  border-radius: 10px;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  color: var(--teal);
+  background: var(--teal-dim);
+  border: 1px solid rgba(46, 230, 199, 0.35);
+  vertical-align: 1px;
+}

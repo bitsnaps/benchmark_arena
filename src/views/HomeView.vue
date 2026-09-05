@@ -245,6 +245,7 @@ const openModel = (name) =>
       CL = Coverage Level (core benchmarks present / {{ stats.coreBenchmarks }}).
       Columns follow the Avg set — shown: {{ coreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.
       <span v-if="nonCoreBenchmarks.length">Hidden (opt in via the Avg set dropdown): {{ nonCoreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.</span>
+      Price = API list price per 1M tokens, in / out (OpenRouter snapshot) — <router-link :to="{ name: 'providers' }">compare sellers</router-link>.
     </p>
 
     <ComparePanel />

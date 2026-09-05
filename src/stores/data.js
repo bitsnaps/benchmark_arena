@@ -307,6 +307,23 @@ const metaCoverage = computed(() => {
   return { total, withMeta };
 });
 
+// ── Pricing (price layer) ────────────────────────────────────────────────
+// API list price attached by the scraper in models_meta.pricing_usd_per_1m
+// (OpenRouter snapshot, USD per 1M tokens). Rows without a catalog match
+// resolve to null — never fabricated. `blend` is the 3:1 in:out mean used
+// for sorting; `output`/`cache_read` may be null when the catalog lacks them.
+const priceFor = (row) => {
+  const pr = metaFor(row)?.pricing_usd_per_1m;
+  if (!pr || typeof pr.input !== 'number') return null;
+  const out = typeof pr.output === 'number' ? pr.output : null;
+  return {
+    input: pr.input,
+    output: out,
+    cache_read: typeof pr.cache_read === 'number' ? pr.cache_read : null,
+    blend: out === null ? pr.input : (3 * pr.input + out) / 4,
+  };
+};
+
 // Full benchmark name as native tooltip on column headers
 function benchThAttrs(column) {
   const b = column.field;
@@ -327,5 +344,6 @@ export function useData() {
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
     modelSlugIndex, benchSlugIndex, benchRankIndex,
     modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, isOlder, releaseDateOf,
+    priceFor,
   };
 }

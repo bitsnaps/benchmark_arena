@@ -403,3 +403,37 @@ describe('value lens (Score per 1M blended tokens)', () => {
     expect(d.valueFor(row)).toBeCloseTo(before, 12);
   });
 });
+
+describe('curated meta aliases (renames / word-order variants)', () => {
+  it('Claude 4.1 Opus pins to anthropic/claude-opus-4.1 at $15/$75', () => {
+    const row = rowOf('Claude 4.1 Opus');
+    expect(row).toBeTruthy();
+    expect(d.metaFor(row)?.or_id).toBe('anthropic/claude-opus-4.1');
+    const p = d.priceFor(row);
+    expect(p.input).toBe(15.0);
+    expect(p.output).toBe(75.0);
+    // joins the Opus freshness chain like every other older generation
+    expect(d.isOlder(row)).toBe(true);
+  });
+
+  it('Qwen3.8-Max survives the catalog rename to the 0902 revision', () => {
+    const row = rowOf('Qwen3.8-Max');
+    expect(row).toBeTruthy();
+    expect(d.metaFor(row)?.or_id).toBe('qwen/qwen3.8-max-0902');
+    expect(d.priceFor(row).input).toBe(2.0);
+    expect(d.isOlder(row)).toBe(false); // current listing — stays visible
+  });
+
+  it('gemma 3 4b it pins to google/gemma-3-4b-it ($0.05 in)', () => {
+    const row = rowOf('gemma 3 4b it');
+    expect(row).toBeTruthy();
+    expect(d.metaFor(row)?.or_id).toBe('google/gemma-3-4b-it');
+    expect(d.priceFor(row).input).toBe(0.05);
+  });
+
+  it('alias rows absent from the catalog fall back to a dash (no fabrication)', () => {
+    // META_NAME_ALIASES maps by exact catalog id; an id that vanishes from
+    // the catalog must resolve to no meta at all, never to a stub.
+    expect(d.metaFor({ name: 'definitely-not-a-model' })).toBeNull();
+  });
+});

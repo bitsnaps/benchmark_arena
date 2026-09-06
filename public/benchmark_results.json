@@ -5037,9 +5037,9 @@
       "active_params_b": 21.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0825,
-        "output": 0.33,
-        "cache_read": 0.0206
+        "input": 0.132,
+        "output": 0.528,
+        "cache_read": 0.033
       },
       "reasoning": {
         "mandatory": false,
@@ -6592,6 +6592,53 @@
       "superseded_by": "Grok 4.6",
       "match": "subset"
     },
+    "Claude 4.1 Opus": {
+      "or_id": "anthropic/claude-opus-4.1",
+      "or_name": "Anthropic: Claude Opus 4.1",
+      "provider": "Anthropic",
+      "created": "2025-08-05",
+      "context_length": 200000,
+      "max_output_tokens": 32000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "image",
+        "text",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Claude",
+      "knowledge_cutoff": "2025-01-31",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 15.0,
+        "output": 75.0,
+        "cache_read": 1.5
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "stop",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "",
+      "description": "Claude Opus 4.1 is an updated version of Anthropic’s flagship model, offering improved performance in coding, reasoning, and agentic tasks. It achieves 74.5% on SWE-bench Verified and shows notable gains...",
+      "superseded_by": "Claude Opus 5",
+      "match": "alias"
+    },
     "Claude Haiku 4.5": {
       "or_id": "anthropic/claude-haiku-4.5",
       "or_name": "Anthropic: Claude Haiku 4.5",
@@ -7182,10 +7229,10 @@
       "match": "exact"
     },
     "Qwen3.8-Max": {
-      "or_id": "qwen/qwen3.8-max",
-      "or_name": "Qwen: Qwen3.8 Max",
+      "or_id": "qwen/qwen3.8-max-0902",
+      "or_name": "Qwen: Qwen3.8 Max (0902)",
       "provider": "Qwen",
-      "created": "2026-08-03",
+      "created": "2026-09-03",
       "context_length": 1000000,
       "max_output_tokens": 131072,
       "modality": "text+image+video->text",
@@ -7238,10 +7285,9 @@
         "top_p"
       ],
       "hugging_face_id": null,
-      "description": "Qwen3.8 Max is the flagship model in Alibaba's Qwen3.8 series, the general-availability successor to the Qwen3.8 Max Preview. It is a multimodal reasoning model intended for complex reasoning, visual understanding,...",
+      "description": "Qwen3.8 Max 0902 is an updated snapshot of Qwen3.8 Max from Alibaba's Qwen team. It is a 2.4-trillion-parameter mixture-of-experts model that accepts text, image, and video input and returns text,...",
       "superseded_by": null,
-      "match": "exact",
-      "alias_note": "Listed by EQBench as Qwen/Qwen3.8-2.4T-A95B (same model — HF repo name)"
+      "match": "alias"
     },
     "GLM-5.3-Flash": {
       "or_id": "z-ai/glm-5.3-flash",
@@ -7385,9 +7431,9 @@
       "active_params_b": 49.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.9714,
-        "output": 1.9429,
-        "cache_read": 0.081
+        "input": 0.7484,
+        "output": 1.4967,
+        "cache_read": 0.0624
       },
       "reasoning": {
         "mandatory": false,
@@ -7445,9 +7491,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0875,
-        "output": 0.175,
-        "cache_read": 0.0175
+        "input": 0.0819,
+        "output": 0.1638,
+        "cache_read": 0.0164
       },
       "reasoning": {
         "mandatory": false,
@@ -8073,8 +8119,7 @@
       "description": "Llama 4 Maverick 17B Instruct (128E) is a high-capacity multimodal language model from Meta, built on a mixture-of-experts (MoE) architecture with 128 experts and 17 billion active parameters per forward...",
       "superseded_by": null,
       "match": "exact",
-      "stale": true,
-      "alias_note": "LLM Chess lists this model under its HF name llama-4-maverick-17b-128e-instruct"
+      "stale": true
     },
     "Llama 4 Scout": {
       "or_id": "meta-llama/llama-4-scout",
@@ -8122,8 +8167,7 @@
       "description": "Llama 4 Scout 17B Instruct (16E) is a mixture-of-experts (MoE) language model developed by Meta, activating 17 billion parameters out of a total of 109B. It supports native multimodal input...",
       "superseded_by": null,
       "match": "exact",
-      "stale": true,
-      "alias_note": "LLM Chess lists this model under its HF name llama4-scout-17b-instruct-v1:0"
+      "stale": true
     },
     "llama 3.3 70b instruct": {
       "or_id": "meta-llama/llama-3.3-70b-instruct",
@@ -8759,12 +8803,57 @@
       "match": "subset",
       "stale": true
     },
+    "gemma 3 4b it": {
+      "or_id": "google/gemma-3-4b-it",
+      "or_name": "Google: Gemma 3 4B",
+      "provider": "Google",
+      "created": "2025-03-13",
+      "context_length": 131072,
+      "max_output_tokens": 16384,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Gemini",
+      "knowledge_cutoff": "2024-08-31",
+      "total_params_b": 4.0,
+      "active_params_b": null,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.05,
+        "output": 0.1
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "google/gemma-3-4b-it",
+      "description": "Gemma 3 introduces multimodality, supporting vision-language input and text outputs. It handles context windows up to 128k tokens, understands over 140 languages, and offers improved math, reasoning, and chat capabilities,...",
+      "superseded_by": null,
+      "match": "alias",
+      "stale": true
+    },
     "Gemini 3 Pro": {
       "superseded_by": "Gemini 3.1 Pro"
     },
     "grok 4 fast chat": {
-      "superseded_by": "Grok 4.6",
-      "alias_note": "LLM Chess lists this model as grok-4-fast-non-reasoning (its non-reasoning/chat variant)"
+      "superseded_by": "Grok 4.6"
     },
     "Qwen3.5 Plus": {
       "superseded_by": "Qwen3.7 Plus"

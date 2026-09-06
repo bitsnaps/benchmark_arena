@@ -458,6 +458,26 @@ describe('hugging face identity (open-weight repo links)', () => {
     expect(d.metaFor(rowOf('Granite 4.1 8B'))?.params_source).toBe('huggingface');
   });
 
+  it('catalog-absent open models get a minimal meta record with their verified HF id', () => {
+    // MiMo-V2-Flash never matched OpenRouter (or_id=None, no record existed
+    // at all) — the override stage creates the record instead of skipping it
+    const mimo = d.metaFor(rowOf('MiMo-V2-Flash'));
+    expect(mimo?.hugging_face_id).toBe('XiaomiMiMo/MiMo-V2-Flash');
+    expect(mimo?.total_params_b).toBeGreaterThan(0); // safetensors-backed
+    expect(mimo?.or_id ?? null).toBeNull();
+    // a record created purely for identity must not fabricate a price
+    expect(d.priceFor(rowOf('MiMo-V2-Flash'))).toBeNull();
+    expect(d.hfUrlFor(rowOf('MiMo-V2-Flash'))).toBe('https://huggingface.co/XiaomiMiMo/MiMo-V2-Flash');
+  });
+
+  it('prefix-display pins: shortened row names keep their official full-name repo', () => {
+    expect(d.metaFor(rowOf('K-EXAONE 2.0'))?.hugging_face_id).toBe('LGAI-EXAONE/K-EXAONE-2.0-750B-A37B');
+    expect(d.metaFor(rowOf('Nemotron 3 Nano Omni 30B A3B'))?.hugging_face_id)
+      .toBe('nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16');
+    // verified-absent stays honest: 401 + not in HF search => no link
+    expect(d.metaFor(rowOf('MiMo-V2-Omni'))?.hugging_face_id ?? null).toBeNull();
+  });
+
   it('every non-null HF id is a well-formed org/repo pair', () => {
     for (const [name, m] of Object.entries(META)) {
       const id = m.hugging_face_id;

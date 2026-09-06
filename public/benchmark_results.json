@@ -5055,9 +5055,9 @@
       "active_params_b": 21.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.132,
-        "output": 0.528,
-        "cache_read": 0.033
+        "input": 0.0825,
+        "output": 0.33,
+        "cache_read": 0.0206
       },
       "reasoning": {
         "mandatory": false,
@@ -7472,9 +7472,7 @@
         "top_p"
       ],
       "hugging_face_id": "zai-org/GLM-5.2",
-      "or_free_variants": [
-        "z-ai/glm-5.2:free"
-      ],
+      "or_free_variants": null,
       "description": "GLM 5.2 is a large-scale reasoning model from Z.ai. It supports text input and output with a 1M-token context window, and is suited for long-horizon agent workflows, project-level software engineering,...",
       "superseded_by": "GLM-5.3",
       "match": "exact"
@@ -7499,9 +7497,9 @@
       "active_params_b": 49.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.7078,
-        "output": 1.4157,
-        "cache_read": 0.059
+        "input": 0.6572,
+        "output": 1.3144,
+        "cache_read": 0.0548
       },
       "reasoning": {
         "mandatory": false,
@@ -7560,9 +7558,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0811,
-        "output": 0.1621,
-        "cache_read": 0.0162
+        "input": 0.0802,
+        "output": 0.1604,
+        "cache_read": 0.016
       },
       "reasoning": {
         "mandatory": false,
@@ -8969,6 +8967,71 @@
     },
     "Command A+": {
       "stale": true
+    },
+    "MiMo-V2-Flash": {
+      "hugging_face_id": "XiaomiMiMo/MiMo-V2-Flash",
+      "total_params_b": 309.8,
+      "params_source": "huggingface"
+    },
+    "MiniCPM5-1B": {
+      "hugging_face_id": "openbmb/MiniCPM5-1B",
+      "total_params_b": 1.1,
+      "params_source": "huggingface"
+    },
+    "LFM2.5-2.6B": {
+      "hugging_face_id": "LiquidAI/LFM2.5-2.6B",
+      "total_params_b": 2.7,
+      "params_source": "huggingface"
+    },
+    "LFM2.5-8B-A1B": {
+      "hugging_face_id": "LiquidAI/LFM2.5-8B-A1B",
+      "total_params_b": 8.5,
+      "params_source": "huggingface"
+    },
+    "Olmo 3 7B Think": {
+      "hugging_face_id": "allenai/Olmo-3-7B-Think",
+      "total_params_b": 7.3,
+      "params_source": "huggingface"
+    },
+    "Olmo 3.1 32B Instruct": {
+      "hugging_face_id": "allenai/Olmo-3.1-32B-Instruct",
+      "total_params_b": 32.2,
+      "params_source": "huggingface"
+    },
+    "Olmo 3.1 32B Think": {
+      "hugging_face_id": "allenai/Olmo-3.1-32B-Think",
+      "total_params_b": 32.2,
+      "params_source": "huggingface"
+    },
+    "INTELLECT-3": {
+      "hugging_face_id": "PrimeIntellect/INTELLECT-3",
+      "total_params_b": 106.9,
+      "params_source": "huggingface"
+    },
+    "Ring-flash-2.0": {
+      "hugging_face_id": "inclusionAI/Ring-flash-2.0",
+      "total_params_b": 102.9,
+      "params_source": "huggingface"
+    },
+    "Step3 VL 10B": {
+      "hugging_face_id": "stepfun-ai/Step3-VL-10B",
+      "total_params_b": 10.2,
+      "params_source": "huggingface"
+    },
+    "Qwen3.8-Flash-Next": {
+      "hugging_face_id": "Qwen/Qwen3.8-Flash-Next",
+      "total_params_b": 180.0,
+      "params_source": "huggingface"
+    },
+    "K-EXAONE 2.0": {
+      "hugging_face_id": "LGAI-EXAONE/K-EXAONE-2.0-750B-A37B",
+      "total_params_b": 749.4,
+      "params_source": "huggingface"
+    },
+    "Nemotron 3 Nano Omni 30B A3B": {
+      "hugging_face_id": "nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16",
+      "total_params_b": 33.0,
+      "params_source": "huggingface"
     }
   }
 }

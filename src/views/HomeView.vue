@@ -1,12 +1,13 @@
 <script setup>
 // Home = the leaderboard. Compact snapshot header, tier tabs, the global
 // pivot table, compare panel, then context: category leaders, methodology.
-// Tier tabs live in the URL as ?tier=, search as ?q=, and the custom
-// average mix as ?avg= (comma-separated benchmark slugs).
+// Tier tabs live in the URL as ?tier=, search as ?q=, the custom average
+// mix as ?avg= (comma-separated benchmark slugs), and the availability
+// filters as ?free=1 / ?price=<max blend> / ?seller=<provider slug>.
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { TIERS, SHORT, AVG_PRESETS } from '../lib/constants.js';
-import { slugify, fmtScore, providerColor, initials } from '../lib/format.js';
+import { slugify, fmtScore, fmtUsd, providerColor, initials } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 import PivotTable from '../components/PivotTable.vue';
@@ -15,8 +16,8 @@ import ComparePanel from '../components/ComparePanel.vue';
 const route = useRoute();
 const router = useRouter();
 
-const { pivotFor, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder } = useData();
-const { searchQuery, compareMode, compareRows, showOlder, minCl } = useLeaderboard();
+const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor } = useData();
+const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
 const tier = computed(() =>
@@ -77,17 +78,110 @@ const avgLabel = computed(() => {
 // Min-CL slider granularity follows the selection size (100/n per bench)
 const clStep = computed(() => 100 / Math.max(1, selectedCount.value));
 
+// ── Availability filters (free toggle / price slider / seller pick) ────
+// All three compose with search, tier, avg-set and the coverage controls.
+// The slider maps its 0–100 position onto $/1M with a power curve so the
+// sub-$1 range (where most models live) keeps usable resolution; the top
+// position means "any price" and never hides rows.
+const priceMax = computed(() => {
+  let m = 0;
+  for (const r of pivotAll.value) {
+    const p = priceFor(r);
+    if (p && p.blend > m) m = p.blend;
+  }
+  return Math.max(1, Math.ceil(m));
+});
+const priceFromT = (t) => priceMax.value * Math.pow(t / 100, 2.6);
+const tFromPrice = (p) =>
+  Math.round(100 * Math.pow(Math.min(p, priceMax.value) / priceMax.value, 1 / 2.6));
+const priceSlider = computed({
+  get: () => (maxPrice.value == null ? 100 : tFromPrice(maxPrice.value)),
+  set: (v) => {
+    maxPrice.value = v >= 100 ? null : Math.round(priceFromT(v) * 100) / 100;
+  },
+});
+const priceTag = computed(() =>
+  maxPrice.value == null ? 'any price' : '≤ ' + fmtUsd(maxPrice.value));
+
+// Free-listing count for the toggle tag: current tier, current generation
+const freeCount = computed(() =>
+  pivotFor(tier.value).filter(r => !isOlder(r) && hasFreeListingFor(r)).length);
+
+// Seller dropdown options: every seller that lists at least one
+// current-generation model, busiest first (tier-independent)
+const sellerOptions = computed(() => {
+  const counts = new Map();
+  for (const r of pivotAll.value) {
+    if (isOlder(r)) continue;
+    for (const a of availableAtFor(r)) {
+      const e = counts.get(a.p) || { n: a.n, c: 0 };
+      e.c += 1;
+      counts.set(a.p, e);
+    }
+  }
+  return [...counts.entries()]
+    .map(([p, e]) => ({ p, n: e.n, c: e.c }))
+    .sort((a, b) => b.c - a.c || a.n.localeCompare(b.n));
+});
+
+// ── Availability filters ⇄ URL (?free=1 / ?price= / ?seller=) ─────────
+watch(freeOnly, (on) => {
+  const want = on ? '1' : undefined;
+  if (route.query.free !== want) router.replace({ query: { ...route.query, free: want } });
+});
+watch(() => route.query.free, (v) => {
+  const on = v === '1' || v === 'true';
+  if (on !== freeOnly.value) freeOnly.value = on;
+}, { immediate: true });
+
+watch(maxPrice, (p) => {
+  const want = p == null ? undefined : String(p);
+  if (route.query.price !== want) router.replace({ query: { ...route.query, price: want } });
+});
+watch(() => route.query.price, (v) => {
+  const num = typeof v === 'string' && v !== '' && Number.isFinite(parseFloat(v)) ? parseFloat(v) : null;
+  const eff = num != null && num > 0 ? num : null;
+  if (eff !== maxPrice.value) maxPrice.value = eff;
+}, { immediate: true });
+
+watch(sellerId, (s) => {
+  const want = s || undefined;
+  if (route.query.seller !== want) router.replace({ query: { ...route.query, seller: want } });
+});
+watch([loading, () => route.query.seller], ([ld, v]) => {
+  if (ld) return;
+  const param = typeof v === 'string' ? v : '';
+  const known = param === '' || sellerOptions.value.some(s => s.p === param);
+  // any ?seller= value is authoritative: known slugs apply, unknown ones
+  // (stale share links) reset to "any" and get dropped from the URL
+  const next = known ? param : '';
+  if (next !== sellerId.value) sellerId.value = next;
+  if (!known && param) router.replace({ query: { ...route.query, seller: undefined } });
+}, { immediate: true });
+
 // ── Rows for the active tab ───────────────────────────────────────────
 // One ranked listing. Older releases — superseded versions of the same
 // product line plus stale generations (9+ months old, no successor in the
 // data) — are hidden by default; the Older-versions toggle interleaves them
 // INLINE at their natural score position (dimmed, no rank, "older" chip),
-// so there is no separate section to scroll to. Both modes respect the
-// search box and the min-CL slider; nothing is deleted.
+// so there is no separate section to scroll to. All modes respect the
+// search box, the min-CL slider and the availability filters (free toggle,
+// max-price slider, seller pick); nothing is deleted.
 const applyFilters = (list) => {
   const q = searchQuery.value.toLowerCase();
-  return list.filter(r =>
-    clForModel(r) >= minCl.value && (!q || r.name.toLowerCase().includes(q)));
+  const mp = maxPrice.value;
+  return list.filter(r => {
+    if (clForModel(r) < minCl.value) return false;
+    if (q && !r.name.toLowerCase().includes(q)) return false;
+    if (freeOnly.value && !hasFreeListingFor(r)) return false;
+    if (sellerId.value && !availableAtFor(r).some(a => a.p === sellerId.value)) return false;
+    if (mp != null) {
+      // free listings count as $0 so a free row survives any cap
+      const p = filterPriceFor(r);
+      if (p === null || p > mp) return false;
+    }
+    return true;
+  });
 };
 
 const rows = computed(() => {
@@ -188,6 +282,38 @@ const openModel = (name) =>
             {{ minCl ? 'CL ≥ ' + minCl + '%' : 'any CL' }}
           </b-tag>
         </div>
+
+        <!-- Availability filters (stats-18): free listings, price cap, seller.
+             Free ≠ unlimited — every "free" claim is a rate-limited free tier. -->
+        <b-switch v-model="freeOnly" size="is-small" type="is-success" left-label
+                  title="Show only models with a free listing at some seller — free tiers are rate-limited, not unlimited">
+          Free
+          <b-tag size="is-small" :type="freeOnly ? 'is-success' : 'is-success is-light'" rounded>{{ freeCount }}</b-tag>
+        </b-switch>
+        <div class="row" style="gap:.6rem;align-items:center;flex:1;min-width:230px"
+             title="Cap the blended API price (3:1 in:out, USD per 1M tokens). Free listings count as $0; unpriced rows hide while the cap is on.">
+          <span class="cell-sub" style="white-space:nowrap">Max price</span>
+          <input
+            class="cl-slider"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            v-model.number="priceSlider"
+            aria-label="Maximum blended price per 1M tokens"
+          />
+          <b-tag size="is-small" :type="maxPrice != null ? 'is-info' : 'is-dark is-light'" rounded>
+            {{ priceTag }}
+          </b-tag>
+        </div>
+        <div class="row" style="gap:.4rem;align-items:center">
+          <span class="cell-sub" style="white-space:nowrap">At seller</span>
+          <b-select v-model="sellerId" size="is-small" aria-label="Filter by seller catalog">
+            <option value="">Any seller</option>
+            <option v-for="s in sellerOptions" :key="s.p" :value="s.p">{{ s.n }} ({{ s.c }})</option>
+          </b-select>
+        </div>
+
         <span class="cell-sub">Row opacity = benchmark coverage — hover a row to solidify it</span>
 
         <!-- Avg set: which benchmarks feed the global Score (default = shipped formula).
@@ -248,6 +374,8 @@ const openModel = (name) =>
       Price = API list price per 1M tokens, in / out (OpenRouter snapshot) — <router-link :to="{ name: 'providers' }">compare sellers</router-link>.
       Value = Score per 1M blended tokens (3:1 in:out) — sort by it for the cost-efficiency view; free tiers and unpriced rows show a dash.
       <span class="hf-chip" style="cursor:default">HF</span> = the model's Hugging Face repo (open-weight models with a verified repo).
+      <span class="free-chip" style="cursor:default" title="Free tier — rate limits apply, not unlimited">free</span> = a free listing at some seller (hover for where);
+      <span class="avail-chip" style="cursor:default">N sellers</span> = other catalogs listing the model — the full per-seller view is on its model page.
     </p>
 
     <ComparePanel />

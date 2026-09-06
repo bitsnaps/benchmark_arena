@@ -14,7 +14,7 @@ const props = defineProps({
   tier: { type: String, default: 'all' },
 });
 
-const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
@@ -31,6 +31,31 @@ const olderTitle = (row) =>
 
 // ★ footnote: source sites list this model under a different (e.g. HF repo) name
 const aliasNote = (row) => metaFor(row)?.alias_note || null;
+
+// ── Availability chips ("available at" layer, stats-18) ────────────────
+// free chip: the row has a FREE LISTING at some seller — free ≠ unlimited,
+// the tooltip carries the rate-limit caveat and names the free sellers.
+// sellers chip: shown when the model reaches ≥2 catalogs, or sits in exactly
+// one catalog that is NOT OpenRouter (available despite no router match) —
+// OpenRouter-only rows stay chip-free so the default table stays quiet.
+const FREE_CAVEAT = 'free tier — rate limits apply, not unlimited';
+function freeTitle(row) {
+  const sellers = availableAtFor(row).filter(a => a.free).map(a => a.n);
+  return `Free listing at ${sellers.join(' · ')} — ${FREE_CAVEAT}`;
+}
+function availCount(row) {
+  const n = availableAtFor(row).length;
+  if (n < 2) {
+    const orOnly = n === 1 && availableAtFor(row)[0].p === 'openrouter';
+    return orOnly ? null : (n === 1 ? 1 : null);
+  }
+  return n;
+}
+function availTitle(row) {
+  const list = availableAtFor(row)
+    .map(a => (a.free ? `${a.n} (free listing)` : a.n));
+  return `Available at ${list.length} seller${list.length === 1 ? '' : 's'}: ${list.join(' · ')}. Full per-seller view on the model page.`;
+}
 
 // Sorter for the global Score column (nulls always sink to the bottom)
 function byScore(a, b, isAsc) {
@@ -129,6 +154,8 @@ function scoreTitle(row) {
             <a v-if="hfUrlFor(props.row)" class="hf-chip" :href="hfUrlFor(props.row)"
                target="_blank" rel="noopener noreferrer" @click.stop
                :title="'Hugging Face: ' + hfIdFor(props.row)">HF</a>
+            <span v-if="hasFreeListingFor(props.row)" class="free-chip" :title="freeTitle(props.row)">free</span>
+            <span v-if="availCount(props.row)" class="avail-chip" :title="availTitle(props.row)">{{ availCount(props.row) }} sellers</span>
           </div>
         </div>
       </div>

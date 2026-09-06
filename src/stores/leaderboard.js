@@ -1,6 +1,7 @@
 // ── Leaderboard UI store (module-level singleton) ─────────────────────
 // Cross-view state: search filter + side-by-side compare selection +
-// freshness/coverage controls (older versions toggle, min-CL slider).
+// freshness/coverage controls (older versions toggle, min-CL slider) +
+// seller-side controls (free-listing toggle, max-price slider, seller pick).
 
 import { ref, watch } from 'vue';
 
@@ -14,6 +15,16 @@ const showOlder = ref(false);
 // Min-coverage slider (CL %): rows below the threshold are hidden.
 // 0 = show everything. Coverage opacity tiers stay visible otherwise.
 const minCl = ref(0);
+
+// ── Availability filters (stats-18 "available at" layer) ──────────────
+// freeOnly: keep rows with a FREE LISTING at some seller (free ≠ unlimited
+// — rate limits apply; the UI carries the caveat wherever "free" shows).
+// maxPrice: keep rows whose 3:1 blended $/1M is at most this, with free
+// listings counting as $0 (so the two filters compose). null = no cap.
+// sellerId: keep rows listed by that provider's catalog ('' = any).
+const freeOnly = ref(false);
+const maxPrice = ref(null);
+const sellerId = ref('');
 
 // Leaving compare mode resets the selection
 watch(compareMode, (on) => {
@@ -36,5 +47,9 @@ const isBest = (bench, row) => {
 };
 
 export function useLeaderboard() {
-  return { searchQuery, compareMode, compareRows, showOlder, minCl, isSameModel, canCheck, clearCompare, isBest };
+  return {
+    searchQuery, compareMode, compareRows, showOlder, minCl,
+    freeOnly, maxPrice, sellerId,
+    isSameModel, canCheck, clearCompare, isBest,
+  };
 }

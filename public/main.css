@@ -538,4 +538,40 @@ a.hbar:hover .name { color: var(--teal); }
   background: var(--teal-dim);
   border: 1px solid rgba(46, 230, 199, 0.35);
   vertical-align: 1px;
+  cursor: help;
+}
+
+/* ── Availability chips + model-card seller rows (stats-18) ─────────────
+   "available at" layer: the leaderboard shows compact signals (free chip
+   above, sellers chip here), the model card lists every seller in full. */
+.avail-chip {
+  display: inline-block;
+  margin-left: .35rem;
+  padding: 0 .35rem;
+  border-radius: 10px;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  color: var(--gold);
+  background: var(--gold-dim);
+  border: 1px solid rgba(245, 193, 90, 0.35);
+  vertical-align: 1px;
+  cursor: help;
+  white-space: nowrap;
+}
+.avail-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .45rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.avail-row:last-of-type { border-bottom: 0; }
+.avail-seller { color: var(--text); font-weight: 600; font-size: .92rem; }
+.avail-side { display: flex; align-items: center; gap: .55rem; white-space: nowrap; }
+.avail-price {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .85rem;
+  color: var(--muted);
 }

@@ -11968,7 +11968,9 @@
           "id": "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",
           "in": 0.0,
           "out": 0.0,
-          "ctx": null
+          "ctx": null,
+          "free": true,
+          "base": "together_ai/meta-llama/Llama-3.3-70B-Instruct-Turbo"
         },
         {
           "id": "together_ai/google/gemma-3n-E4B-it",
@@ -14775,8 +14777,8 @@
         {
           "id": "deepseek/deepseek-v4-flash",
           "name": "DeepSeek: DeepSeek V4 Flash 0423",
-          "in": 0.0797,
-          "out": 0.1593,
+          "in": 0.0794,
+          "out": 0.1588,
           "cache": 0.0159,
           "ctx": 1024000
         },
@@ -15894,9 +15896,9 @@
         {
           "id": "deepseek/deepseek-v4-pro",
           "name": "DeepSeek: DeepSeek V4 Pro 0423",
-          "in": 0.6368,
-          "out": 1.2737,
-          "cache": 0.0531,
+          "in": 0.6267,
+          "out": 1.2535,
+          "cache": 0.0522,
           "ctx": 1024000
         },
         {

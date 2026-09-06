@@ -351,6 +351,29 @@ const hfUrlFor = (row) => {
   return id ? 'https://huggingface.co/' + id : null;
 };
 
+// ── Availability ("available at" cross-seller view) ──────────────────────
+// models_meta.available_at — sellers whose catalogs list this model, baked
+// by the scraper (exact normalized id matches + curated pins only; a seller
+// whose catalog omits the model is never fabricated). Each entry:
+//   { p, n, in?, out?, free? } — provider slug/name, its own list price
+//   when stated, and free=true for a FREE LISTING at that seller.
+// free ≠ unlimited: free tiers are rate-limited — the UI carries the caveat,
+// the data never claims more than "free".
+const availableAtFor = (row) => metaFor(row)?.available_at ?? [];
+const hasFreeListingFor = (row) => availableAtFor(row).some(a => a.free);
+const sellerCountFor = (row) => availableAtFor(row).length;
+
+// Price the leaderboard filters key off: a free listing counts as $0 so the
+// Free toggle and the max-price slider compose ("show me what I can run for
+// ≤ $X" — a free listing always qualifies). Unpriced rows without a free
+// listing resolve to null: no price on record, no claim — hidden once the
+// slider is engaged, shown when it is not.
+const filterPriceFor = (row) => {
+  if (hasFreeListingFor(row)) return 0;
+  const p = priceFor(row);
+  return p ? p.blend : null;
+};
+
 // Full benchmark name as native tooltip on column headers
 function benchThAttrs(column) {
   const b = column.field;
@@ -372,5 +395,6 @@ export function useData() {
     modelSlugIndex, benchSlugIndex, benchRankIndex,
     modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, isOlder, releaseDateOf,
     priceFor, valueFor, hfIdFor, hfUrlFor,
+    availableAtFor, hasFreeListingFor, sellerCountFor, filterPriceFor,
   };
 }

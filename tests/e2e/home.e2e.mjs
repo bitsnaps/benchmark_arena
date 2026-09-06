@@ -167,7 +167,9 @@ const ok = (msg) => console.log('  ok:', msg);
   // ── 1c. Min-CL slider filters thin-coverage rows ──
   {
     const before = await page.locator('.b-table .table tbody tr').count();
-    await page.locator('input.cl-slider').evaluate(el => {
+    // two range inputs share .cl-slider since stats-18 (min-CL + max-price) —
+    // pin the coverage one by its aria-label
+    await page.locator('input.cl-slider[aria-label="Minimum coverage level (CL%)"]').evaluate(el => {
       el.value = '50';
       el.dispatchEvent(new Event('input'));
     });
@@ -184,7 +186,7 @@ const ok = (msg) => console.log('  ok:', msg);
     if (!(await page.locator('text=CL ≥ 50%').count())) fail('slider value tag should read CL ≥ 50%');
     else ok('slider tag reads CL ≥ 50%');
     // reset so tier-tab expectations below are unaffected
-    await page.locator('input.cl-slider').evaluate(el => {
+    await page.locator('input.cl-slider[aria-label="Minimum coverage level (CL%)"]').evaluate(el => {
       el.value = '0';
       el.dispatchEvent(new Event('input'));
     });

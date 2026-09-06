@@ -11,7 +11,7 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 const model = computed(() => modelSlugIndex.value.get(route.params.slug) || null);
@@ -60,6 +60,18 @@ const value = computed(() => (model.value ? valueFor(model.value) : null));
 // Hugging Face repo — open-weight models only (null for closed / unverified)
 const hfId = computed(() => (model.value ? hfIdFor(model.value) : null));
 const hfUrl = computed(() => (model.value ? hfUrlFor(model.value) : null));
+
+// ── Available at (stats-18 cross-seller view) ────────────────────────────
+// Every seller whose catalog lists this model, with its own list price and
+// free-listing flags, exactly as baked in models_meta.available_at. OpenRouter
+// first (the reference router), then alphabetical — the scraper ordered them.
+const availability = computed(() => (model.value ? availableAtFor(model.value) : []));
+const freeSellers = computed(() => availability.value.filter(a => a.free));
+const FREE_CAVEAT = 'Free tier — rate limits apply, not unlimited';
+const availPrice = (a) => {
+  if (typeof a.in !== 'number') return null;
+  return `${fmtUsd(a.in)} / ${typeof a.out === 'number' ? fmtUsd(a.out) : '—'}`;
+};
 
 // Compare shortcut
 const inCompare = computed(() => !!model.value && compareRows.value.some(r => r.name === model.value.name));
@@ -217,6 +229,41 @@ function addToCompare() {
         Router list price for this exact row — the same model is often cheaper first-party
         or via other hosts. Compare sellers on the
         <router-link :to="{ name: 'providers' }">Providers page</router-link>.
+      </p>
+    </div>
+
+    <!-- Available at (cross-seller view): every catalog that lists this
+         model, with its own list price and free-listing flags. Sellers
+         without published prices (keyless /v1/models APIs) show a dash. -->
+    <div v-if="availability.length" class="panel-lab mt" style="padding:1.2rem">
+      <div class="row" style="justify-content:space-between;margin-bottom:.6rem">
+        <h3 style="margin:0;font-size:1.05rem">Available at <span class="cell-sub">({{ availability.length }} {{ availability.length === 1 ? 'seller' : 'sellers' }})</span></h3>
+        <span class="cell-sub">each seller's list catalog · snapshot {{ stats.lastUpdated }}</span>
+      </div>
+
+      <div v-for="a in availability" :key="a.p" class="avail-row">
+        <div class="name" style="min-width:0">
+          <span class="avail-seller">{{ a.n }}</span>
+          <span class="cell-sub" style="margin-left:.5rem">{{ a.p }}</span>
+        </div>
+        <div class="avail-side">
+          <span v-if="a.free" class="free-chip" :title="FREE_CAVEAT">free</span>
+          <span v-if="availPrice(a)" class="num avail-price" :title="a.n + ' list price, USD per 1M tokens (in / out)'">{{ availPrice(a) }}</span>
+          <span v-else-if="!a.free" class="cell-sub" title="This seller's catalog does not publish prices">—</span>
+        </div>
+      </div>
+
+      <p class="cell-sub mt-sm">
+        <template v-if="freeSellers.length">
+          <i class="fas fa-circle-info"></i>&nbsp;Free listing at {{ freeSellers.map(a => a.n).join(' · ') }} —
+          free tiers are rate-limited, not unlimited; where a seller shows both a price and a free chip,
+          the price is its paid tier and the chip marks a separate free listing.
+        </template>
+        <template v-else>
+          <i class="fas fa-circle-info"></i>&nbsp;Prices are each seller's own list snapshot —
+          the leaderboard Price column keeps using the OpenRouter row.
+        </template>
+        Full catalogs on the <router-link :to="{ name: 'providers' }">Providers page</router-link>.
       </p>
     </div>
   </section>

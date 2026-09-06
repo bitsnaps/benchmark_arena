@@ -505,3 +505,106 @@ describe('hugging face identity (open-weight repo links)', () => {
     expect(d.hfUrlFor({ name: 'definitely-not-a-model' })).toBeNull();
   });
 });
+
+describe('availability ("available at" cross-seller layer)', () => {
+  // anchors chosen from the committed snapshot — a data refresh that moves
+  // these must be a conscious decision, not a silent match drift
+
+  it('snapshot contract: every available_at entry is well-formed', () => {
+    let withSellers = 0;
+    let withFree = 0;
+    for (const [name, m] of Object.entries(META)) {
+      if (!m.available_at) continue;
+      withSellers += 1;
+      expect(Array.isArray(m.available_at), name).toBe(true);
+      expect(m.available_at.length, `${name}: no empty lists — omit the field instead`).toBeGreaterThan(0);
+      const slugs = new Set();
+      for (const a of m.available_at) {
+        expect(typeof a.p, `${name} entry slug`).toBe('string');
+        expect(typeof a.n, `${name} entry name`).toBe('string');
+        expect(slugs.has(a.p), `${name}: duplicate seller ${a.p}`).toBe(false);
+        slugs.add(a.p);
+        if (typeof a.in === 'number') expect(a.in, `${name}@${a.p}`).toBeGreaterThanOrEqual(0);
+        if (a.free) withFree += 1;
+      }
+    }
+    expect(withSellers).toBeGreaterThan(80); // baked matcher must keep its coverage
+    expect(withFree).toBeGreaterThanOrEqual(8);
+  });
+
+  it('free listings: explicit flags only, and free never fabricates a price', () => {
+    for (const [name, m] of Object.entries(META)) {
+      for (const a of m.available_at || []) {
+        if (a.free) {
+          // free comes from an explicit listing: -free/:free suffix or an
+          // OpenRouter :free twin — a priced row may carry both (paid tier +
+          // separate free listing), but an unpriced free entry never invents 0s
+          if (typeof a.in !== 'number') {
+            expect(a.in ?? null, `${name}@${a.p}`).toBeNull();
+          }
+        }
+      }
+    }
+  });
+
+  it('anchor: deepseek v4 flash is free at OpenCode Zen and OrcaRouter', () => {
+    const row = rowOf('deepseek v4 flash');
+    const a = d.availableAtFor(row);
+    const zen = a.find(x => x.p === 'opencode-zen');
+    const orca = a.find(x => x.p === 'orcarouter');
+    expect(zen?.free, 'zen free flag').toBe(true);
+    expect(orca?.free, 'orcarouter free flag').toBe(true);
+    expect(d.hasFreeListingFor(row)).toBe(true);
+    expect(a[0].p).toBe('openrouter'); // reference router always sorts first
+    expect(a.length).toBeGreaterThanOrEqual(10); // widely hosted model
+  });
+
+  it('anchor: OpenRouter :free twins surface as a free listing at OpenRouter', () => {
+    // per-model free sellers from the committed snapshot (Hy3 is free at
+    // OrcaRouter via its "-free" twin; the others via OpenRouter ":free" ids)
+    const EXPECT = {
+      'Inkling': ['openrouter'],
+      'Nemotron 3 Ultra': ['openrouter'],
+      'Hy3': ['orcarouter'],
+    };
+    for (const [name, sellers] of Object.entries(EXPECT)) {
+      const row = rowOf(name);
+      if (!row) continue;
+      expect(d.hasFreeListingFor(row), name).toBe(true);
+      const freeSlugs = d.availableAtFor(row).filter(a => a.free).map(a => a.p);
+      for (const s of sellers) {
+        expect(freeSlugs, `${name} free at ${s}`).toContain(s);
+      }
+    }
+  });
+
+  it('identity-only rows match by name route without fabricating sellers', () => {
+    // MiMo-V2-Flash is absent from the OpenRouter catalog (no or_id) — the
+    // name route may only attach exact normalized id matches it truly has
+    const row = rowOf('MiMo-V2-Flash');
+    const a = d.availableAtFor(row);
+    expect(Array.isArray(a)).toBe(true);
+    // verified absent from OpenRouter → never an OpenRouter entry
+    for (const e of a) expect(e.p).not.toBe('openrouter');
+    // anchor: exact normalized name match on a real catalog row (Novita),
+    // not a fuzzy hop — a data refresh that moves this is a conscious change
+    expect(a.map(e => e.p)).toContain('novita-ai');
+  });
+
+  it('filterPriceFor: free counts as $0, priced rows use the 3:1 blend, unpriced sink', () => {
+    const flash = rowOf('deepseek v4 flash');
+    expect(d.filterPriceFor(flash)).toBe(0); // free listing wins the slider
+    const priced = d.pivotAll.value.find(r => !d.hasFreeListingFor(r) && d.priceFor(r));
+    if (priced) expect(d.filterPriceFor(priced)).toBeCloseTo(d.priceFor(priced).blend, 10);
+    const unpriced = d.pivotAll.value.find(r => !d.hasFreeListingFor(r) && !d.priceFor(r));
+    if (unpriced) expect(d.filterPriceFor(unpriced)).toBeNull();
+  });
+
+  it('sellerCountFor + null-safe helpers', () => {
+    expect(d.sellerCountFor(rowOf('deepseek v4 flash'))).toBeGreaterThanOrEqual(10);
+    expect(d.availableAtFor({ name: 'definitely-not-a-model' })).toEqual([]);
+    expect(d.hasFreeListingFor({ name: 'definitely-not-a-model' })).toBe(false);
+    expect(d.sellerCountFor({ name: 'definitely-not-a-model' })).toBe(0);
+    expect(d.filterPriceFor({ name: 'definitely-not-a-model' })).toBeNull();
+  });
+});

@@ -247,6 +247,7 @@ const openModel = (name) =>
       <span v-if="nonCoreBenchmarks.length">Hidden (opt in via the Avg set dropdown): {{ nonCoreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.</span>
       Price = API list price per 1M tokens, in / out (OpenRouter snapshot) — <router-link :to="{ name: 'providers' }">compare sellers</router-link>.
       Value = Score per 1M blended tokens (3:1 in:out) — sort by it for the cost-efficiency view; free tiers and unpriced rows show a dash.
+      <span class="hf-chip" style="cursor:default">HF</span> = the model's Hugging Face repo (open-weight models with a verified repo).
     </p>
 
     <ComparePanel />

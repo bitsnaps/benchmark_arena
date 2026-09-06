@@ -437,3 +437,51 @@ describe('curated meta aliases (renames / word-order variants)', () => {
     expect(d.metaFor({ name: 'definitely-not-a-model' })).toBeNull();
   });
 });
+
+describe('hugging face identity (open-weight repo links)', () => {
+  it('catalog-sourced ids: DeepSeek V3 and GLM-5.3 carry their HF repos', () => {
+    expect(d.metaFor(rowOf('DeepSeek V3'))?.hugging_face_id).toBe('deepseek-ai/DeepSeek-V3');
+    expect(d.metaFor(rowOf('GLM-5.3'))?.hugging_face_id).toBe('zai-org/GLM-5.3');
+  });
+
+  it('closed models have no HF id — never guessed', () => {
+    for (const name of ['Claude Opus 5', 'GPT-5.5 Pro', 'Gemini 3.1 Pro', 'Grok 4.6']) {
+      expect(d.metaFor(rowOf(name))?.hugging_face_id ?? null).toBeNull();
+    }
+  });
+
+  it('curated overrides fill open rows the catalog leaves empty (verified ids)', () => {
+    expect(d.metaFor(rowOf('Granite 4.1 8B'))?.hugging_face_id).toBe('ibm-granite/granite-4.1-8b');
+    expect(d.metaFor(rowOf('Mistral Large 3'))?.hugging_face_id).toBe('mistralai/Mistral-Large-3-675B-Instruct-2512');
+    // the override stage also tops up safetensors param counts
+    expect(d.metaFor(rowOf('Granite 4.1 8B'))?.total_params_b).toBe(8.8);
+    expect(d.metaFor(rowOf('Granite 4.1 8B'))?.params_source).toBe('huggingface');
+  });
+
+  it('every non-null HF id is a well-formed org/repo pair', () => {
+    for (const [name, m] of Object.entries(META)) {
+      const id = m.hugging_face_id;
+      if (!id) continue;
+      expect(id, name).toMatch(/^[A-Za-z0-9][A-Za-z0-9.\-]*\/[A-Za-z0-9][A-Za-z0-9.\-_]*$/);
+    }
+  });
+
+  it('free variants persist on the record but never become a price', () => {
+    // :free catalog twins are stored raw for the future per-provider
+    // "free at which seller" feature — data only, nothing renders them
+    const inkling = d.metaFor(rowOf('Inkling'));
+    expect(inkling?.or_free_variants).toEqual(['thinkingmachines/inkling:free']);
+    expect(d.priceFor(rowOf('Inkling'))).not.toBeNull(); // paid listing untouched
+    for (const [name, m] of Object.entries(META)) {
+      for (const fid of m.or_free_variants || []) {
+        expect(fid.endsWith(':free'), `${name}: ${fid}`).toBe(true);
+      }
+    }
+  });
+
+  it('hfUrlFor builds the huggingface.co link; helpers null-safe', () => {
+    expect(d.hfUrlFor(rowOf('DeepSeek V3'))).toBe('https://huggingface.co/deepseek-ai/DeepSeek-V3');
+    expect(d.hfIdFor({ name: 'definitely-not-a-model' })).toBeNull();
+    expect(d.hfUrlFor({ name: 'definitely-not-a-model' })).toBeNull();
+  });
+});

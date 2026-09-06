@@ -341,6 +341,16 @@ const valueFor = (row) => {
   return s / p.blend;
 };
 
+// ── Hugging Face identity (open-weight models) ───────────────────────────
+// models_meta.hugging_face_id — the model's HF repo ("org/repo"), sourced
+// from the OpenRouter catalog plus curated verified overrides. null for
+// closed models and open rows we could not verify — never guessed.
+const hfIdFor = (row) => metaFor(row)?.hugging_face_id || null;
+const hfUrlFor = (row) => {
+  const id = hfIdFor(row);
+  return id ? 'https://huggingface.co/' + id : null;
+};
+
 // Full benchmark name as native tooltip on column headers
 function benchThAttrs(column) {
   const b = column.field;
@@ -361,6 +371,6 @@ export function useData() {
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
     modelSlugIndex, benchSlugIndex, benchRankIndex,
     modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, isOlder, releaseDateOf,
-    priceFor, valueFor,
+    priceFor, valueFor, hfIdFor, hfUrlFor,
   };
 }

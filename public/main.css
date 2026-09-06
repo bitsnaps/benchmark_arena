@@ -274,6 +274,23 @@ a:hover { color: #7ff3df; }
 .tier-chip.closed { background: var(--rose-dim); color: var(--rose); }
 .tier-chip.open { background: var(--teal-dim); color: var(--teal); }
 
+/* Hugging Face chip in table model cells (open-weight models with a
+   verified HF repo — links to huggingface.co/<org/repo>) */
+.hf-chip {
+  font-size: .6rem; font-weight: 800; letter-spacing: .05em;
+  padding: .05rem .32rem; margin-left: .35rem; border-radius: 6px;
+  background: var(--teal-dim); color: var(--teal);
+  text-decoration: none; vertical-align: 1px;
+}
+.hf-chip:hover { background: var(--teal); color: #06231d; text-decoration: none; }
+/* full repo id rendered as a clickable tag on the model card header */
+.hf-link {
+  font-family: var(--mono, ui-monospace, monospace); font-weight: 600;
+  text-decoration: none; max-width: 320px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom;
+}
+.hf-link:hover { color: var(--teal) !important; border-color: var(--teal) !important; }
+
 /* ── Model pages / deep links ─────────────────────────────── */
 .crumbs { display: flex; align-items: center; gap: .5rem; margin-bottom: 1rem; }
 .crumb { color: var(--faint); font-size: .82rem; font-weight: 600; text-decoration: none; }

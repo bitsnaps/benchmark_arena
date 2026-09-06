@@ -14,7 +14,7 @@ const props = defineProps({
   tier: { type: String, default: 'all' },
 });
 
-const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, priceFor, valueFor } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
@@ -126,6 +126,9 @@ function scoreTitle(row) {
             {{ providerColor(props.row.name).name }}
             <span v-if="tier === 'all'" class="tier-chip" :class="tierOf(props.row)">{{ tierOf(props.row) === 'closed' ? 'closed' : 'open' }}</span>
             <span v-if="isOlder(props.row)" class="older-chip" :title="olderTitle(props.row)">older</span>
+            <a v-if="hfUrlFor(props.row)" class="hf-chip" :href="hfUrlFor(props.row)"
+               target="_blank" rel="noopener noreferrer" @click.stop
+               :title="'Hugging Face: ' + hfIdFor(props.row)">HF</a>
           </div>
         </div>
       </div>

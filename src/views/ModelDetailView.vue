@@ -11,7 +11,7 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 const model = computed(() => modelSlugIndex.value.get(route.params.slug) || null);
@@ -57,6 +57,9 @@ const pricing = computed(() => (model.value ? priceFor(model.value) : null));
 const modelCtx = computed(() => (model.value ? metaFor(model.value)?.context_length || null : null));
 // Value lens — Score per 1M blended tokens (same number the Value column sorts by)
 const value = computed(() => (model.value ? valueFor(model.value) : null));
+// Hugging Face repo — open-weight models only (null for closed / unverified)
+const hfId = computed(() => (model.value ? hfIdFor(model.value) : null));
+const hfUrl = computed(() => (model.value ? hfUrlFor(model.value) : null));
 
 // Compare shortcut
 const inCompare = computed(() => !!model.value && compareRows.value.some(r => r.name === model.value.name));
@@ -90,6 +93,10 @@ function addToCompare() {
           <span v-if="overallRank" class="tag-lab gold">#{{ overallRank }} overall</span>
           <span v-if="tierRank" class="tag-lab">#{{ tierRank }} in {{ tier === 'closed' ? 'closed' : 'open' }}</span>
           <span v-if="aliasNote" class="tag-lab gold" style="cursor:help" :title="aliasNote">★ aliased on source</span>
+          <a v-if="hfUrl" class="tag-lab hf-link" :href="hfUrl" target="_blank" rel="noopener noreferrer"
+             :title="'Open ' + hfId + ' on Hugging Face'">
+            <i class="fas fa-cube" aria-hidden="true"></i>&nbsp;{{ hfId }}
+          </a>
         </div>
       </div>
       <div class="row" style="gap:.6rem">

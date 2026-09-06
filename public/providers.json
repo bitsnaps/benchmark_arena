@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-05",
+  "as_of": "2026-09-06",
   "kinds": [
     "first-party",
     "cloud",
@@ -8,562 +8,10 @@
   ],
   "sources": {
     "catalog": "LiteLLM model_prices_and_context_window.json (community catalog)",
-    "aggregator": "OpenRouter /api/v1/models (router list price)"
+    "aggregator": "OpenRouter /api/v1/models (router list price)",
+    "apis": "keyless /v1/models catalogs: NVIDIA NIM · OpenCode Zen · OrcaRouter"
   },
   "providers": [
-    {
-      "id": "google-ai-studio",
-      "name": "Google AI Studio",
-      "kind": "first-party",
-      "models": [
-        {
-          "id": "gemini/gemini-exp-1114",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-exp-1206",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 2097152
-        },
-        {
-          "id": "gemini/gemma-3-27b-it",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini/gemma-4-26b-a4b-it",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 262144
-        },
-        {
-          "id": "gemini/gemma-4-31b-it",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 262144
-        },
-        {
-          "id": "gemini/learnlm-1.5-pro-experimental",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 32767
-        },
-        {
-          "id": "gemini/lyria-3-clip-preview",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini/lyria-3-pro-preview",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 131072
-        },
-        {
-          "id": "palm/chat-bison",
-          "in": 0.125,
-          "out": 0.125,
-          "ctx": 8192
-        },
-        {
-          "id": "palm/chat-bison-001",
-          "in": 0.125,
-          "out": 0.125,
-          "ctx": 8192
-        },
-        {
-          "id": "gemini-2.0-flash-lite",
-          "in": 0.075,
-          "out": 0.3,
-          "cache": 0.0187,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.0-flash-lite-001",
-          "in": 0.075,
-          "out": 0.3,
-          "cache": 0.0187,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.0-flash-lite",
-          "in": 0.075,
-          "out": 0.3,
-          "cache": 0.0187,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.0-flash-lite-001",
-          "in": 0.075,
-          "out": 0.3,
-          "cache": 0.0187,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.0-flash",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-flash-lite",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-flash-lite-preview-06-17",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-flash-lite-preview-09-2025",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-flash-lite-latest",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.0-flash",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.0-flash-001",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-lite",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-lite-preview-06-17",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-lite-preview-09-2025",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-flash-lite-latest",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.0-flash-001",
-          "in": 0.15,
-          "out": 0.6,
-          "cache": 0.0375,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-gemma-2-27b-it",
-          "in": 0.35,
-          "out": 1.05,
-          "ctx": 8192
-        },
-        {
-          "id": "gemini/gemini-gemma-2-9b-it",
-          "in": 0.35,
-          "out": 1.05,
-          "ctx": 8192
-        },
-        {
-          "id": "gemini-3.1-flash-lite",
-          "in": 0.25,
-          "out": 1.5,
-          "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3.1-flash-lite-preview",
-          "in": 0.25,
-          "out": 1.5,
-          "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.1-flash-lite",
-          "in": 0.25,
-          "out": 1.5,
-          "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.1-flash-lite-preview",
-          "in": 0.25,
-          "out": 1.5,
-          "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-flash-native-audio-latest",
-          "in": 0.5,
-          "out": 2.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-flash-native-audio-preview-09-2025",
-          "in": 0.5,
-          "out": 2.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-flash-native-audio-preview-12-2025",
-          "in": 0.5,
-          "out": 2.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-native-audio-latest",
-          "in": 0.5,
-          "out": 2.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-native-audio-preview-09-2025",
-          "in": 0.5,
-          "out": 2.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-native-audio-preview-12-2025",
-          "in": 0.5,
-          "out": 2.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-flash",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-flash-preview-09-2025",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3.5-flash-lite",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-exp-1206",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-flash-latest",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-robotics-er-1.5-preview",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-preview-09-2025",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.5-flash-lite",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-flash-latest",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-robotics-er-1.5-preview",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3-flash-preview",
-          "in": 0.5,
-          "out": 3.0,
-          "cache": 0.05,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3-flash-preview",
-          "in": 0.5,
-          "out": 3.0,
-          "cache": 0.05,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3.6-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3.7-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3.8-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.6-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.7-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.8-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3.1-flash-live-preview",
-          "in": 0.75,
-          "out": 4.5,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini/gemini-3.1-flash-live-preview",
-          "in": 0.75,
-          "out": 4.5,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini/gemini-robotics-er-1.6-preview",
-          "in": 1.0,
-          "out": 5.0,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini-3.5-flash",
-          "in": 1.5,
-          "out": 9.0,
-          "cache": 0.15,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-omni-flash-preview",
-          "in": 1.5,
-          "out": 9.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.5-flash",
-          "in": 1.5,
-          "out": 9.0,
-          "cache": 0.15,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-omni-1.1-flash",
-          "in": 1.5,
-          "out": 9.0,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini/gemini-omni-flash-preview",
-          "in": 1.5,
-          "out": 9.0,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini-2.5-computer-use-preview-10-2025",
-          "in": 1.25,
-          "out": 10.0,
-          "ctx": 128000
-        },
-        {
-          "id": "gemini-2.5-pro",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-pro-latest",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-computer-use-preview-10-2025",
-          "in": 1.25,
-          "out": 10.0,
-          "ctx": 128000
-        },
-        {
-          "id": "gemini/gemini-2.5-pro",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-pro-latest",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-robotics-er-2-preview",
-          "in": 2.0,
-          "out": 10.0,
-          "cache": 0.2,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini/gemini-robotics-er-2-streaming-preview",
-          "in": 2.0,
-          "out": 10.0,
-          "ctx": null
-        },
-        {
-          "id": "gemini-3-pro-preview",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3.1-pro-preview",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3.1-pro-preview-customtools",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3-pro-preview",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.1-pro-preview",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.1-pro-preview-customtools",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-pro-preview-tts",
-          "in": 1.0,
-          "out": 20.0,
-          "cache": 0.125,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-pro-preview-tts",
-          "in": 1.0,
-          "out": 20.0,
-          "cache": 0.125,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.5-live-translate-preview",
-          "in": 3.5,
-          "out": 21.0,
-          "ctx": null
-        }
-      ]
-    },
     {
       "id": "openai",
       "name": "OpenAI",
@@ -1587,6 +1035,517 @@
       ]
     },
     {
+      "id": "google-ai-studio",
+      "name": "Google AI Studio",
+      "kind": "first-party",
+      "models": [
+        {
+          "id": "gemini/gemini-exp-1114",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-exp-1206",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 2097152
+        },
+        {
+          "id": "gemini/gemma-3-27b-it",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini/gemma-4-26b-a4b-it",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 262144
+        },
+        {
+          "id": "gemini/gemma-4-31b-it",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 262144
+        },
+        {
+          "id": "gemini/learnlm-1.5-pro-experimental",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 32767
+        },
+        {
+          "id": "gemini/lyria-3-clip-preview",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini/lyria-3-pro-preview",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini/lyria-3.5-clip-preview",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini/lyria-3.5-pro-preview",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 131072
+        },
+        {
+          "id": "palm/chat-bison",
+          "in": 0.125,
+          "out": 0.125,
+          "ctx": 8192
+        },
+        {
+          "id": "palm/chat-bison-001",
+          "in": 0.125,
+          "out": 0.125,
+          "ctx": 8192
+        },
+        {
+          "id": "gemini-2.0-flash-lite",
+          "in": 0.075,
+          "out": 0.3,
+          "cache": 0.0187,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.0-flash-lite-001",
+          "in": 0.075,
+          "out": 0.3,
+          "cache": 0.0187,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.0-flash-lite",
+          "in": 0.075,
+          "out": 0.3,
+          "cache": 0.0187,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.0-flash-lite-001",
+          "in": 0.075,
+          "out": 0.3,
+          "cache": 0.0187,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.0-flash",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.025,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.5-flash-lite",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.5-flash-lite-preview-06-17",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.5-flash-lite-preview-09-2025",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-flash-lite-latest",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.0-flash",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.025,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.0-flash-001",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.025,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-flash-lite",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-flash-lite-preview-06-17",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-flash-lite-preview-09-2025",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-flash-lite-latest",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.0-flash-001",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.0375,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-gemma-2-27b-it",
+          "in": 0.35,
+          "out": 1.05,
+          "ctx": 8192
+        },
+        {
+          "id": "gemini/gemini-gemma-2-9b-it",
+          "in": 0.35,
+          "out": 1.05,
+          "ctx": 8192
+        },
+        {
+          "id": "gemini-3.1-flash-lite",
+          "in": 0.25,
+          "out": 1.5,
+          "cache": 0.025,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3.1-flash-lite-preview",
+          "in": 0.25,
+          "out": 1.5,
+          "cache": 0.025,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.1-flash-lite",
+          "in": 0.25,
+          "out": 1.5,
+          "cache": 0.025,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.1-flash-lite-preview",
+          "in": 0.25,
+          "out": 1.5,
+          "cache": 0.025,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.5-flash",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.5-flash-preview-09-2025",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3.5-flash-lite",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-exp-1206",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-flash-latest",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-robotics-er-1.5-preview",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-flash",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-flash-preview-09-2025",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.5-flash-lite",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-flash-latest",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-robotics-er-1.5-preview",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3-flash-preview",
+          "in": 0.5,
+          "out": 3.0,
+          "cache": 0.05,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3-flash-preview",
+          "in": 0.5,
+          "out": 3.0,
+          "cache": 0.05,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3.6-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3.7-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3.8-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.6-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.7-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.8-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-robotics-er-1.6-preview",
+          "in": 1.0,
+          "out": 5.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini-3.5-flash",
+          "in": 1.5,
+          "out": 9.0,
+          "cache": 0.15,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-omni-flash-preview",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.5-flash",
+          "in": 1.5,
+          "out": 9.0,
+          "cache": 0.15,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-omni-1.1-flash",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini/gemini-omni-flash-preview",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini-2.5-computer-use-preview-10-2025",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "gemini-2.5-pro",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-pro-latest",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-computer-use-preview-10-2025",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "gemini/gemini-2.5-pro",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-pro-latest",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-robotics-er-2-preview",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini/gemini-robotics-er-2-streaming-preview",
+          "in": 2.0,
+          "out": 10.0,
+          "ctx": null
+        },
+        {
+          "id": "gemini-3-pro-preview",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3.1-pro-preview",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3.1-pro-preview-customtools",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3-pro-preview",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.1-pro-preview",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.1-pro-preview-customtools",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.5-pro-preview-tts",
+          "in": 1.0,
+          "out": 20.0,
+          "cache": 0.125,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-pro-preview-tts",
+          "in": 1.0,
+          "out": 20.0,
+          "cache": 0.125,
+          "ctx": 1048576
+        }
+      ]
+    },
+    {
       "id": "mistral",
       "name": "Mistral",
       "kind": "first-party",
@@ -1626,12 +1585,14 @@
           "id": "mistral/ministral-3b-2512",
           "in": 0.1,
           "out": 0.1,
+          "cache": 0.01,
           "ctx": 131072
         },
         {
           "id": "mistral/ministral-3b-latest",
           "in": 0.1,
           "out": 0.1,
+          "cache": 0.01,
           "ctx": 131072
         },
         {
@@ -1695,12 +1656,14 @@
           "id": "mistral/ministral-14b-2512",
           "in": 0.2,
           "out": 0.2,
+          "cache": 0.02,
           "ctx": 262144
         },
         {
           "id": "mistral/ministral-14b-latest",
           "in": 0.2,
           "out": 0.2,
+          "cache": 0.02,
           "ctx": 262144
         },
         {
@@ -2495,6 +2458,13 @@
           "in": 10.0,
           "out": 50.0,
           "cache": 1.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "claude-mythos-5-1",
+          "in": 10.0,
+          "out": 50.0,
+          "cache": 0.25,
           "ctx": 1000000
         },
         {
@@ -5106,6 +5076,20 @@
           "ctx": 128000
         },
         {
+          "id": "azure/gpt-6-astra",
+          "in": 10.0,
+          "out": 50.0,
+          "cache": 1.0,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/us/gpt-6-astra",
+          "in": 11.0,
+          "out": 55.0,
+          "cache": 1.1,
+          "ctx": 922000
+        },
+        {
           "id": "azure/o1",
           "in": 15.0,
           "out": 60.0,
@@ -5882,6 +5866,13 @@
           "ctx": null
         },
         {
+          "id": "azure_ai/FW-Nemotron-Lightning-3.5-30B-A3B",
+          "in": 0.06,
+          "out": 0.22,
+          "cache": 0.01,
+          "ctx": 262144
+        },
+        {
           "id": "azure_ai/mistral-nemo",
           "in": 0.15,
           "out": 0.15,
@@ -6031,6 +6022,12 @@
           "in": 0.2,
           "out": 0.78,
           "ctx": 10000000
+        },
+        {
+          "id": "azure_ai/Codestral-2501",
+          "in": 0.3,
+          "out": 0.9,
+          "ctx": 256000
         },
         {
           "id": "azure_ai/jamba-instruct",
@@ -6308,6 +6305,13 @@
           "ctx": 128000
         },
         {
+          "id": "azure_ai/grok-4.6",
+          "in": 2.0,
+          "out": 6.0,
+          "cache": 0.5,
+          "ctx": 200000
+        },
+        {
           "id": "azure_ai/mistral-large-2407",
           "in": 2.0,
           "out": 6.0,
@@ -6325,6 +6329,13 @@
           "out": 6.6,
           "cache": 0.21,
           "ctx": 1048576
+        },
+        {
+          "id": "azure_ai/MAI-Thinking-1",
+          "in": 2.0,
+          "out": 8.0,
+          "cache": 0.2,
+          "ctx": 256000
         },
         {
           "id": "azure_ai/claude-sonnet-5",
@@ -6524,11 +6535,25 @@
           "ctx": 128000
         },
         {
+          "id": "databricks/databricks-glm-5-3-flash",
+          "in": 0.15,
+          "out": 0.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
           "id": "databricks/databricks-gpt-oss-120b",
           "in": 0.15,
           "out": 0.6,
           "cache": 0.15,
           "ctx": 131072
+        },
+        {
+          "id": "databricks/databricks-qwen3-next-80b-a3b-instruct",
+          "in": 0.15,
+          "out": 1.2,
+          "cache": 0.15,
+          "ctx": null
         },
         {
           "id": "databricks/databricks-gpt-5-4-nano",
@@ -6594,10 +6619,24 @@
           "ctx": 272000
         },
         {
+          "id": "databricks/databricks-qwen35-122b-a10b",
+          "in": 0.22,
+          "out": 2.2,
+          "cache": 0.22,
+          "ctx": 262144
+        },
+        {
           "id": "databricks/databricks-gemini-2-5-flash",
           "in": 0.3,
           "out": 2.5,
           "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "databricks/databricks-gemini-3-5-flash-lite",
+          "in": 0.375,
+          "out": 3.125,
+          "cache": 0.0375,
           "ctx": 1048576
         },
         {
@@ -6613,6 +6652,13 @@
           "out": 3.75,
           "cache": 0.0625,
           "ctx": 1048576
+        },
+        {
+          "id": "databricks/databricks-inkling",
+          "in": 1.0,
+          "out": 4.05,
+          "cache": 0.17,
+          "ctx": 1000000
         },
         {
           "id": "databricks/databricks-gpt-5-4-mini",
@@ -6636,6 +6682,13 @@
           "ctx": 1000000
         },
         {
+          "id": "databricks/databricks-glm-5-3",
+          "in": 1.4,
+          "out": 4.4,
+          "cache": 0.26,
+          "ctx": 1048576
+        },
+        {
           "id": "databricks/databricks-claude-haiku-4-5",
           "in": 1.0,
           "out": 5.0,
@@ -6643,10 +6696,31 @@
           "ctx": 200000
         },
         {
+          "id": "databricks/databricks-gpt-5-6-luna",
+          "in": 1.0,
+          "out": 6.0,
+          "cache": 0.1,
+          "ctx": 922000
+        },
+        {
+          "id": "databricks/databricks-grok-4-6",
+          "in": 2.5,
+          "out": 7.5,
+          "cache": 0.625,
+          "ctx": 500000
+        },
+        {
           "id": "databricks/databricks-gemini-2-5-pro",
           "in": 1.25,
           "out": 10.0,
           "cache": 0.125,
+          "ctx": 1048576
+        },
+        {
+          "id": "databricks/databricks-gemini-3-6-flash",
+          "in": 1.875,
+          "out": 9.375,
+          "cache": 0.1875,
           "ctx": 1048576
         },
         {
@@ -6671,6 +6745,13 @@
           "ctx": 272000
         },
         {
+          "id": "databricks/databricks-gemini-3-5-flash",
+          "in": 1.875,
+          "out": 11.25,
+          "cache": 0.1875,
+          "ctx": 1048576
+        },
+        {
           "id": "databricks/databricks-gpt-5-2",
           "in": 1.75,
           "out": 14.0,
@@ -6679,13 +6760,6 @@
         },
         {
           "id": "databricks/databricks-gpt-5-2-codex",
-          "in": 1.75,
-          "out": 14.0,
-          "cache": 0.175,
-          "ctx": 272000
-        },
-        {
-          "id": "databricks/databricks-gpt-5-3-codex",
           "in": 1.75,
           "out": 14.0,
           "cache": 0.175,
@@ -6710,7 +6784,14 @@
           "in": 2.5,
           "out": 15.0,
           "cache": 0.25,
-          "ctx": 272000
+          "ctx": 922000
+        },
+        {
+          "id": "databricks/databricks-gpt-5-6-terra",
+          "in": 2.5,
+          "out": 15.0,
+          "cache": 0.25,
+          "ctx": 922000
         },
         {
           "id": "databricks/databricks-claude-3-7-sonnet",
@@ -6769,6 +6850,13 @@
           "ctx": 128000
         },
         {
+          "id": "databricks/databricks-gpt-5-6-sol",
+          "in": 4.0,
+          "out": 20.0,
+          "cache": 0.4,
+          "ctx": 922000
+        },
+        {
           "id": "databricks/databricks-claude-opus-4-5",
           "in": 5.0,
           "out": 25.0,
@@ -6808,6 +6896,13 @@
           "in": 10.0001,
           "out": 50.0,
           "cache": 1.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "databricks/databricks-claude-fable-5-1",
+          "in": 10.0001,
+          "out": 50.0,
+          "cache": 0.25,
           "ctx": 1000000
         },
         {
@@ -7074,9 +7169,9 @@
         },
         {
           "id": "watsonx/ibm/granite-4-h-small",
-          "in": 0.06,
-          "out": 0.25,
-          "ctx": 20480
+          "in": 0.0636,
+          "out": 0.265,
+          "ctx": 131072
         },
         {
           "id": "watsonx/ibm/granite-3-3-8b-instruct",
@@ -7104,9 +7199,9 @@
         },
         {
           "id": "watsonx/mistralai/mistral-small-3-1-24b-instruct-2503",
-          "in": 0.1,
-          "out": 0.3,
-          "ctx": 32000
+          "in": 0.106,
+          "out": 0.318,
+          "ctx": 131072
         },
         {
           "id": "watsonx/meta-llama/llama-3-2-11b-vision-instruct",
@@ -7127,12 +7222,6 @@
           "ctx": 128000
         },
         {
-          "id": "watsonx/openai/gpt-oss-120b",
-          "in": 0.15,
-          "out": 0.6,
-          "ctx": 8192
-        },
-        {
           "id": "watsonx/ibm/granite-ttm-1024-96-r2",
           "in": 0.38,
           "out": 0.38,
@@ -7149,6 +7238,12 @@
           "in": 0.38,
           "out": 0.38,
           "ctx": 512
+        },
+        {
+          "id": "watsonx/openai/gpt-oss-120b",
+          "in": 0.159,
+          "out": 0.636,
+          "ctx": 131072
         },
         {
           "id": "watsonx/google/flan-t5-xl-3b",
@@ -7170,21 +7265,39 @@
         },
         {
           "id": "watsonx/meta-llama/llama-3-3-70b-instruct",
-          "in": 0.71,
-          "out": 0.71,
-          "ctx": 128000
+          "in": 0.7526,
+          "out": 0.7526,
+          "ctx": 131072
         },
         {
           "id": "watsonx/meta-llama/llama-4-maverick-17b",
-          "in": 0.35,
-          "out": 1.4,
-          "ctx": 128000
+          "in": 0.371,
+          "out": 1.484,
+          "ctx": 131072
+        },
+        {
+          "id": "watsonx/meta-llama/llama-4-maverick-17b-128e-instruct-fp8",
+          "in": 0.371,
+          "out": 1.484,
+          "ctx": 131072
         },
         {
           "id": "watsonx/sdaia/allam-1-13b-instruct",
           "in": 1.8,
           "out": 1.8,
           "ctx": 8192
+        },
+        {
+          "id": "watsonx/bigscience/mt0-xxl",
+          "in": 1.908,
+          "out": 1.908,
+          "ctx": 4096
+        },
+        {
+          "id": "watsonx/bigscience/mt0-xxl-13b",
+          "in": 1.908,
+          "out": 1.908,
+          "ctx": 4096
         },
         {
           "id": "watsonx/meta-llama/llama-3-2-90b-vision-instruct",
@@ -7203,12 +7316,6 @@
           "in": 3.0,
           "out": 10.0,
           "ctx": 128000
-        },
-        {
-          "id": "watsonx/bigscience/mt0-xxl-13b",
-          "in": 500.0,
-          "out": 2000.0,
-          "ctx": 8192
         },
         {
           "id": "watsonx/core42/jais-13b-chat",
@@ -8245,7 +8352,21 @@
           "ctx": 1048576
         },
         {
+          "id": "fireworks_ai/accounts/fireworks/models/deepseek-v4-flash-vision-exp",
+          "in": 0.22,
+          "out": 0.66,
+          "cache": 0.007,
+          "ctx": 1048576
+        },
+        {
           "id": "fireworks_ai/deepseek-v4-flash-0731",
+          "in": 0.22,
+          "out": 0.66,
+          "cache": 0.007,
+          "ctx": 1048576
+        },
+        {
+          "id": "fireworks_ai/deepseek-v4-flash-vision-exp",
           "in": 0.22,
           "out": 0.66,
           "cache": 0.007,
@@ -10934,6 +11055,905 @@
       ]
     },
     {
+      "id": "nvidia-nim",
+      "name": "NVIDIA NIM",
+      "kind": "serverless",
+      "models": [
+        {
+          "id": "01-ai/yi-large",
+          "name": "01-ai/yi-large",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "adept/fuyu-8b",
+          "name": "adept/fuyu-8b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "ai21labs/jamba-1.5-large-instruct",
+          "name": "ai21labs/jamba-1.5-large-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "aisingapore/sea-lion-7b-instruct",
+          "name": "aisingapore/sea-lion-7b-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "bigcode/starcoder2-15b",
+          "name": "bigcode/starcoder2-15b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "databricks/dbrx-instruct",
+          "name": "databricks/dbrx-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "deepseek-ai/deepseek-coder-6.7b-instruct",
+          "name": "deepseek-ai/deepseek-coder-6.7b-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "deepseek-ai/deepseek-v4-flash-0731",
+          "name": "deepseek-ai/deepseek-v4-flash-0731",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "deepseek-ai/deepseek-v4-pro-0813",
+          "name": "deepseek-ai/deepseek-v4-pro-0813",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/codegemma-1.1-7b",
+          "name": "google/codegemma-1.1-7b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/codegemma-7b",
+          "name": "google/codegemma-7b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/deplot",
+          "name": "google/deplot",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/diffusiongemma-26b-a4b-it",
+          "name": "google/diffusiongemma-26b-a4b-it",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/gemma-2b",
+          "name": "google/gemma-2b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/gemma-3-12b-it",
+          "name": "google/gemma-3-12b-it",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/gemma-3-4b-it",
+          "name": "google/gemma-3-4b-it",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/gemma-4-31b-it",
+          "name": "google/gemma-4-31b-it",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/recurrentgemma-2b",
+          "name": "google/recurrentgemma-2b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "ibm/granite-3.0-3b-a800m-instruct",
+          "name": "ibm/granite-3.0-3b-a800m-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "ibm/granite-3.0-8b-instruct",
+          "name": "ibm/granite-3.0-8b-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "ibm/granite-34b-code-instruct",
+          "name": "ibm/granite-34b-code-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "ibm/granite-8b-code-instruct",
+          "name": "ibm/granite-8b-code-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "meta/codellama-70b",
+          "name": "meta/codellama-70b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "meta/llama-3.2-11b-vision-instruct",
+          "name": "meta/llama-3.2-11b-vision-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "meta/llama-3.2-90b-vision-instruct",
+          "name": "meta/llama-3.2-90b-vision-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "meta/llama-guard-4-12b",
+          "name": "meta/llama-guard-4-12b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "meta/llama2-70b",
+          "name": "meta/llama2-70b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "meta/muse-glimmer-30b",
+          "name": "meta/muse-glimmer-30b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "microsoft/kosmos-2",
+          "name": "microsoft/kosmos-2",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "microsoft/phi-3-vision-128k-instruct",
+          "name": "microsoft/phi-3-vision-128k-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "microsoft/phi-3.5-moe-instruct",
+          "name": "microsoft/phi-3.5-moe-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "minimaxai/minimax-m3",
+          "name": "minimaxai/minimax-m3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "mistralai/codestral-22b-instruct-v0.1",
+          "name": "mistralai/codestral-22b-instruct-v0.1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "mistralai/mistral-7b-instruct-v0.3",
+          "name": "mistralai/mistral-7b-instruct-v0.3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "mistralai/mistral-large",
+          "name": "mistralai/mistral-large",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "mistralai/mistral-large-2-instruct",
+          "name": "mistralai/mistral-large-2-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "mistralai/mistral-nemotron",
+          "name": "mistralai/mistral-nemotron",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "mistralai/mixtral-8x22b-v0.1",
+          "name": "mistralai/mixtral-8x22b-v0.1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "moonshotai/kimi-k2.6",
+          "name": "moonshotai/kimi-k2.6",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "moonshotai/kimi-k3",
+          "name": "moonshotai/kimi-k3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nv-mistralai/mistral-nemo-12b-instruct",
+          "name": "nv-mistralai/mistral-nemo-12b-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/ai-synthetic-video-detector",
+          "name": "nvidia/ai-synthetic-video-detector",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/cosmos-reason2-8b",
+          "name": "nvidia/cosmos-reason2-8b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/embed-qa-4",
+          "name": "nvidia/embed-qa-4",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/ising-calibration-1.5-31b",
+          "name": "nvidia/ising-calibration-1.5-31b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.1-nemoguard-8b-content-safety",
+          "name": "nvidia/llama-3.1-nemoguard-8b-content-safety",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.1-nemoguard-8b-topic-control",
+          "name": "nvidia/llama-3.1-nemoguard-8b-topic-control",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-51b-instruct",
+          "name": "nvidia/llama-3.1-nemotron-51b-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-70b-instruct",
+          "name": "nvidia/llama-3.1-nemotron-70b-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+          "name": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+          "name": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+          "name": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.2-nv-embedqa-1b-v1",
+          "name": "nvidia/llama-3.2-nv-embedqa-1b-v1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-nemotron-embed-vl-1b-v2",
+          "name": "nvidia/llama-nemotron-embed-vl-1b-v2",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama3-chatqa-1.5-70b",
+          "name": "nvidia/llama3-chatqa-1.5-70b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+          "name": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3-embed-1b",
+          "name": "nvidia/nemotron-3-embed-1b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "name": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3-super-120b-a12b",
+          "name": "nvidia/nemotron-3-super-120b-a12b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3-ultra-550b-a55b",
+          "name": "nvidia/nemotron-3-ultra-550b-a55b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3.5-content-safety",
+          "name": "nvidia/nemotron-3.5-content-safety",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3.5-lightning-30b-a3b",
+          "name": "nvidia/nemotron-3.5-lightning-30b-a3b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-4-340b-instruct",
+          "name": "nvidia/nemotron-4-340b-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-4-340b-reward",
+          "name": "nvidia/nemotron-4-340b-reward",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-nano-3-30b-a3b",
+          "name": "nvidia/nemotron-nano-3-30b-a3b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-parse",
+          "name": "nvidia/nemotron-parse",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/neva-22b",
+          "name": "nvidia/neva-22b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nv-embedqa-mistral-7b-v2",
+          "name": "nvidia/nv-embedqa-mistral-7b-v2",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nvclip",
+          "name": "nvidia/nvclip",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/riva-translate-4b-instruct",
+          "name": "nvidia/riva-translate-4b-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/riva-translate-4b-instruct-v1.1",
+          "name": "nvidia/riva-translate-4b-instruct-v1.1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/riva-translate-4b-instruct-v2",
+          "name": "nvidia/riva-translate-4b-instruct-v2",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/vila",
+          "name": "nvidia/vila",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-oss-20b",
+          "name": "openai/gpt-oss-20b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "poolside/laguna-xs-2.1",
+          "name": "poolside/laguna-xs-2.1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "snowflake/arctic-embed-l",
+          "name": "snowflake/arctic-embed-l",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "writer/palmyra-creative-122b",
+          "name": "writer/palmyra-creative-122b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "writer/palmyra-fin-70b-32k",
+          "name": "writer/palmyra-fin-70b-32k",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "writer/palmyra-med-70b",
+          "name": "writer/palmyra-med-70b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "writer/palmyra-med-70b-32k",
+          "name": "writer/palmyra-med-70b-32k",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "zyphra/zamba2-7b-instruct",
+          "name": "zyphra/zamba2-7b-instruct",
+          "in": null,
+          "out": null,
+          "ctx": null
+        }
+      ]
+    },
+    {
+      "id": "nebius",
+      "name": "Nebius",
+      "kind": "serverless",
+      "models": [
+        {
+          "id": "nebius/Qwen/Qwen2.5-Coder-7B",
+          "in": 0.01,
+          "out": 0.03,
+          "ctx": 32768
+        },
+        {
+          "id": "nebius/Qwen/Qwen2-VL-7B-Instruct",
+          "in": 0.02,
+          "out": 0.06,
+          "ctx": 131072
+        },
+        {
+          "id": "nebius/meta-llama/Llama-Guard-3-8B",
+          "in": 0.02,
+          "out": 0.06,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/meta-llama/Meta-Llama-3.1-8B-Instruct",
+          "in": 0.02,
+          "out": 0.06,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/mistralai/Mistral-Nemo-Instruct-2407",
+          "in": 0.04,
+          "out": 0.12,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/Qwen/Qwen2.5-32B-Instruct",
+          "in": 0.06,
+          "out": 0.2,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+          "in": 0.06,
+          "out": 0.24,
+          "ctx": 262144
+        },
+        {
+          "id": "nebius/nvidia/Nemotron-3-Nano-Omni",
+          "in": 0.06,
+          "out": 0.24,
+          "ctx": 262144
+        },
+        {
+          "id": "nebius/nvidia/Nemotron-3_5-Lightning",
+          "in": 0.06,
+          "out": 0.24,
+          "ctx": 1048576
+        },
+        {
+          "id": "nebius/Qwen/Qwen3-14B",
+          "in": 0.08,
+          "out": 0.24,
+          "ctx": 32768
+        },
+        {
+          "id": "nebius/Qwen/Qwen3-4B",
+          "in": 0.08,
+          "out": 0.24,
+          "ctx": 32768
+        },
+        {
+          "id": "nebius/Qwen/Qwen3-30B-A3B",
+          "in": 0.1,
+          "out": 0.3,
+          "ctx": 32768
+        },
+        {
+          "id": "nebius/Qwen/Qwen3-30B-A3B-Instruct-2507",
+          "in": 0.1,
+          "out": 0.3,
+          "ctx": 262144
+        },
+        {
+          "id": "nebius/Qwen/Qwen3-32B",
+          "in": 0.1,
+          "out": 0.3,
+          "ctx": 40960
+        },
+        {
+          "id": "nebius/google/gemma-3-27b-it",
+          "in": 0.1,
+          "out": 0.3,
+          "ctx": 110000
+        },
+        {
+          "id": "nebius/nvidia/Cosmos3-Super-Reasoner",
+          "in": 0.1,
+          "out": 0.3,
+          "ctx": 262144
+        },
+        {
+          "id": "nebius/deepseek-ai/DeepSeek-V4-Flash",
+          "in": 0.14,
+          "out": 0.28,
+          "ctx": 1048576
+        },
+        {
+          "id": "nebius/deepseek-ai/DeepSeek-V4-Flash-0731",
+          "in": 0.14,
+          "out": 0.28,
+          "ctx": 1024000
+        },
+        {
+          "id": "nebius/nvidia/Llama-3.3-Nemotron-Super-49B-v1",
+          "in": 0.1,
+          "out": 0.4,
+          "ctx": 131072
+        },
+        {
+          "id": "nebius/NousResearch/Hermes-4-70B",
+          "in": 0.13,
+          "out": 0.4,
+          "ctx": 131072
+        },
+        {
+          "id": "nebius/Qwen/Qwen2-VL-72B-Instruct",
+          "in": 0.13,
+          "out": 0.4,
+          "ctx": 131072
+        },
+        {
+          "id": "nebius/Qwen/Qwen2.5-72B-Instruct",
+          "in": 0.13,
+          "out": 0.4,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/meta-llama/Llama-3.3-70B-Instruct",
+          "in": 0.13,
+          "out": 0.4,
+          "ctx": 131072
+        },
+        {
+          "id": "nebius/meta-llama/Meta-Llama-3.1-70B-Instruct",
+          "in": 0.13,
+          "out": 0.4,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/Qwen/QwQ-32B",
+          "in": 0.15,
+          "out": 0.45,
+          "ctx": 32768
+        },
+        {
+          "id": "nebius/zai-org/GLM-5.3-Flash",
+          "in": 0.15,
+          "out": 0.5,
+          "ctx": 1024000
+        },
+        {
+          "id": "nebius/openai/gpt-oss-120b",
+          "in": 0.15,
+          "out": 0.6,
+          "ctx": 131072
+        },
+        {
+          "id": "nebius/Qwen/Qwen3-235B-A22B",
+          "in": 0.2,
+          "out": 0.6,
+          "ctx": 262144
+        },
+        {
+          "id": "nebius/Qwen/Qwen3-235B-A22B-Instruct-2507",
+          "in": 0.2,
+          "out": 0.6,
+          "ctx": 262144
+        },
+        {
+          "id": "nebius/Qwen/Qwen2.5-VL-72B-Instruct",
+          "in": 0.25,
+          "out": 0.75,
+          "ctx": 32000
+        },
+        {
+          "id": "nebius/deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+          "in": 0.25,
+          "out": 0.75,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/nvidia/nemotron-3-super-120b-a12b",
+          "in": 0.3,
+          "out": 0.9,
+          "ctx": 262144
+        },
+        {
+          "id": "nebius/Qwen/Qwen3-Next-80B-A3B-Thinking",
+          "in": 0.15,
+          "out": 1.2,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/MiniMaxAI/MiniMax-M2.5",
+          "in": 0.3,
+          "out": 1.2,
+          "ctx": 196608
+        },
+        {
+          "id": "nebius/MiniMaxAI/MiniMax-M3",
+          "in": 0.3,
+          "out": 1.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "nebius/openbmb/MiniCPM-V-4_5",
+          "in": 0.658,
+          "out": 1.11,
+          "ctx": 32000
+        },
+        {
+          "id": "nebius/deepseek-ai/DeepSeek-V3",
+          "in": 0.5,
+          "out": 1.5,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/deepseek-ai/DeepSeek-V3-0324",
+          "in": 0.5,
+          "out": 1.5,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/nvidia/Llama-3.1-Nemotron-Ultra-253B-v1",
+          "in": 0.6,
+          "out": 1.8,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/nvidia/Llama-3_1-Nemotron-Ultra-253B-v1",
+          "in": 0.6,
+          "out": 1.8,
+          "ctx": 131072
+        },
+        {
+          "id": "nebius/deepseek-ai/DeepSeek-R1",
+          "in": 0.8,
+          "out": 2.4,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/deepseek-ai/DeepSeek-R1-0528",
+          "in": 0.8,
+          "out": 2.4,
+          "ctx": 164000
+        },
+        {
+          "id": "nebius/NousResearch/Hermes-3-Llama-3.1-405B",
+          "in": 1.0,
+          "out": 3.0,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/NousResearch/Hermes-4-405B",
+          "in": 1.0,
+          "out": 3.0,
+          "ctx": 131072
+        },
+        {
+          "id": "nebius/meta-llama/Meta-Llama-3.1-405B-Instruct",
+          "in": 1.0,
+          "out": 3.0,
+          "ctx": 128000
+        },
+        {
+          "id": "nebius/nvidia/Nemotron-3-Ultra-550b-a55b",
+          "in": 1.0,
+          "out": 3.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "nebius/Qwen/Qwen3.5-397B-A17B",
+          "in": 0.6,
+          "out": 3.6,
+          "ctx": 262144
+        },
+        {
+          "id": "nebius/moonshotai/Kimi-K2.6",
+          "in": 0.95,
+          "out": 4.0,
+          "ctx": 262144
+        },
+        {
+          "id": "nebius/moonshotai/Kimi-K2.7-Code",
+          "in": 0.95,
+          "out": 4.0,
+          "ctx": 262144
+        },
+        {
+          "id": "nebius/deepseek-ai/DeepSeek-V4-Pro",
+          "in": 1.75,
+          "out": 3.5,
+          "ctx": 1048576
+        },
+        {
+          "id": "nebius/zai-org/GLM-5.1",
+          "in": 1.4,
+          "out": 4.4,
+          "ctx": 202752
+        },
+        {
+          "id": "nebius/zai-org/GLM-5.2",
+          "in": 1.4,
+          "out": 4.4,
+          "ctx": 1048576
+        },
+        {
+          "id": "nebius/moonshotai/Kimi-K3",
+          "in": 3.0,
+          "out": 15.0,
+          "ctx": 1024000
+        }
+      ]
+    },
+    {
       "id": "together-ai",
       "name": "Together AI",
       "kind": "serverless",
@@ -11702,175 +12722,6 @@
           "out": 4.4,
           "cache": 0.26,
           "ctx": 262144
-        }
-      ]
-    },
-    {
-      "id": "nebius",
-      "name": "Nebius",
-      "kind": "serverless",
-      "models": [
-        {
-          "id": "nebius/Qwen/Qwen2.5-Coder-7B",
-          "in": 0.01,
-          "out": 0.03,
-          "ctx": 32768
-        },
-        {
-          "id": "nebius/Qwen/Qwen2-VL-7B-Instruct",
-          "in": 0.02,
-          "out": 0.06,
-          "ctx": 131072
-        },
-        {
-          "id": "nebius/meta-llama/Llama-Guard-3-8B",
-          "in": 0.02,
-          "out": 0.06,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/meta-llama/Meta-Llama-3.1-8B-Instruct",
-          "in": 0.02,
-          "out": 0.06,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/mistralai/Mistral-Nemo-Instruct-2407",
-          "in": 0.04,
-          "out": 0.12,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/Qwen/Qwen2.5-32B-Instruct",
-          "in": 0.06,
-          "out": 0.2,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/google/gemma-3-27b-it",
-          "in": 0.06,
-          "out": 0.2,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/Qwen/Qwen3-14B",
-          "in": 0.08,
-          "out": 0.24,
-          "ctx": 32768
-        },
-        {
-          "id": "nebius/Qwen/Qwen3-4B",
-          "in": 0.08,
-          "out": 0.24,
-          "ctx": 32768
-        },
-        {
-          "id": "nebius/Qwen/Qwen3-30B-A3B",
-          "in": 0.1,
-          "out": 0.3,
-          "ctx": 32768
-        },
-        {
-          "id": "nebius/Qwen/Qwen3-32B",
-          "in": 0.1,
-          "out": 0.3,
-          "ctx": 32768
-        },
-        {
-          "id": "nebius/nvidia/Llama-3.3-Nemotron-Super-49B-v1",
-          "in": 0.1,
-          "out": 0.4,
-          "ctx": 131072
-        },
-        {
-          "id": "nebius/Qwen/Qwen2-VL-72B-Instruct",
-          "in": 0.13,
-          "out": 0.4,
-          "ctx": 131072
-        },
-        {
-          "id": "nebius/Qwen/Qwen2.5-72B-Instruct",
-          "in": 0.13,
-          "out": 0.4,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/Qwen/Qwen2.5-VL-72B-Instruct",
-          "in": 0.13,
-          "out": 0.4,
-          "ctx": 131072
-        },
-        {
-          "id": "nebius/meta-llama/Llama-3.3-70B-Instruct",
-          "in": 0.13,
-          "out": 0.4,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/meta-llama/Meta-Llama-3.1-70B-Instruct",
-          "in": 0.13,
-          "out": 0.4,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/Qwen/QwQ-32B",
-          "in": 0.15,
-          "out": 0.45,
-          "ctx": 32768
-        },
-        {
-          "id": "nebius/Qwen/Qwen3-235B-A22B",
-          "in": 0.2,
-          "out": 0.6,
-          "ctx": 262144
-        },
-        {
-          "id": "nebius/deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-          "in": 0.25,
-          "out": 0.75,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/deepseek-ai/DeepSeek-V3",
-          "in": 0.5,
-          "out": 1.5,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/deepseek-ai/DeepSeek-V3-0324",
-          "in": 0.5,
-          "out": 1.5,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/nvidia/Llama-3.1-Nemotron-Ultra-253B-v1",
-          "in": 0.6,
-          "out": 1.8,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/deepseek-ai/DeepSeek-R1",
-          "in": 0.8,
-          "out": 2.4,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/deepseek-ai/DeepSeek-R1-0528",
-          "in": 0.8,
-          "out": 2.4,
-          "ctx": 164000
-        },
-        {
-          "id": "nebius/NousResearch/Hermes-3-Llama-3.1-405B",
-          "in": 1.0,
-          "out": 3.0,
-          "ctx": 128000
-        },
-        {
-          "id": "nebius/meta-llama/Meta-Llama-3.1-405B-Instruct",
-          "in": 1.0,
-          "out": 3.0,
-          "ctx": 128000
         }
       ]
     },
@@ -13009,6 +13860,13 @@
           "in": 0.95,
           "out": 3.15,
           "ctx": null
+        },
+        {
+          "id": "baseten/zai-org/GLM-5.3",
+          "in": 1.4,
+          "out": 4.4,
+          "cache": 0.14,
+          "ctx": 1048576
         }
       ]
     },
@@ -13721,14 +14579,6 @@
           "free": true
         },
         {
-          "id": "z-ai/glm-5.2:free",
-          "name": "Z.ai: GLM 5.2 (free)",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 256000,
-          "free": true
-        },
-        {
           "id": "mistralai/mistral-nemo",
           "name": "Mistral: Mistral Nemo",
           "in": 0.019,
@@ -13788,6 +14638,14 @@
           "ctx": 32768
         },
         {
+          "id": "~deepseek/deepseek-v4-flash-latest",
+          "name": "DeepSeek V4 Flash Latest",
+          "in": 0.045,
+          "out": 0.09,
+          "cache": 0.009,
+          "ctx": 1048576
+        },
+        {
           "id": "upstage/solar-pro4",
           "name": "Upstage: Solar Pro 4",
           "in": 0.03,
@@ -13796,19 +14654,19 @@
           "ctx": 524288
         },
         {
+          "id": "deepseek/deepseek-v4-flash-0731",
+          "name": "DeepSeek: DeepSeek V4 Flash 0731",
+          "in": 0.05,
+          "out": 0.1,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
           "id": "google/gemma-3-4b-it",
           "name": "Google: Gemma 3 4B",
           "in": 0.05,
           "out": 0.1,
           "ctx": 131072
-        },
-        {
-          "id": "~deepseek/deepseek-v4-flash-latest",
-          "name": "DeepSeek V4 Flash Latest",
-          "in": 0.05,
-          "out": 0.1,
-          "cache": 0.01,
-          "ctx": 1048576
         },
         {
           "id": "openai/gpt-oss-20b",
@@ -13915,6 +14773,14 @@
           "ctx": 60000
         },
         {
+          "id": "deepseek/deepseek-v4-flash",
+          "name": "DeepSeek: DeepSeek V4 Flash 0423",
+          "in": 0.0797,
+          "out": 0.1593,
+          "cache": 0.0159,
+          "ctx": 1024000
+        },
+        {
           "id": "inclusionai/ling-3.0-flash-fin",
           "name": "inclusionAI: Ling 3.0 Flash Fin",
           "in": 0.06,
@@ -13928,14 +14794,6 @@
           "in": 0.0481,
           "out": 0.193,
           "ctx": 128000
-        },
-        {
-          "id": "deepseek/deepseek-v4-flash-0731",
-          "name": "DeepSeek: DeepSeek V4 Flash 0731",
-          "in": 0.065,
-          "out": 0.18,
-          "cache": 0.016,
-          "ctx": 1048576
         },
         {
           "id": "google/gemini-2.5-flash-lite:batch",
@@ -13982,14 +14840,6 @@
           "in": 0.1,
           "out": 0.15,
           "ctx": 262144
-        },
-        {
-          "id": "deepseek/deepseek-v4-flash",
-          "name": "DeepSeek: DeepSeek V4 Flash 0423",
-          "in": 0.0867,
-          "out": 0.1733,
-          "cache": 0.0173,
-          "ctx": 1024000
         },
         {
           "id": "poolside/laguna-s-2.1",
@@ -14207,6 +15057,14 @@
           "ctx": 262144
         },
         {
+          "id": "tencent/hy3",
+          "name": "Tencent: Hy3",
+          "in": 0.0825,
+          "out": 0.33,
+          "cache": 0.0206,
+          "ctx": 262144
+        },
+        {
           "id": "deepseek/deepseek-v4-flash-0731:batch",
           "name": "DeepSeek: DeepSeek V4 Flash 0731 (batch)",
           "in": 0.14,
@@ -14357,14 +15215,6 @@
           "ctx": 1048575
         },
         {
-          "id": "tencent/hy3",
-          "name": "Tencent: Hy3",
-          "in": 0.132,
-          "out": 0.528,
-          "cache": 0.033,
-          "ctx": 262144
-        },
-        {
           "id": "deepseek/deepseek-v3.2",
           "name": "DeepSeek: DeepSeek V3.2",
           "in": 0.269,
@@ -14506,14 +15356,7 @@
           "name": "TheDrummer: UnslopNemo 12B",
           "in": 0.4,
           "out": 0.4,
-          "ctx": 32768
-        },
-        {
-          "id": "qwen/qwen3.5-35b-a3b",
-          "name": "Qwen: Qwen3.5-35B-A3B",
-          "in": 0.08,
-          "out": 0.75,
-          "ctx": 262144
+          "ctx": 1024000
         },
         {
           "id": "google/gemini-3.1-flash-lite:batch",
@@ -14922,6 +15765,14 @@
           "ctx": 524288
         },
         {
+          "id": "qwen/qwen3.5-35b-a3b",
+          "name": "Qwen: Qwen3.5-35B-A3B",
+          "in": 0.3125,
+          "out": 1.25,
+          "cache": 0.1562,
+          "ctx": 256000
+        },
+        {
           "id": "deepseek/deepseek-r1-distill-llama-70b",
           "name": "DeepSeek: R1 Distill Llama 70B",
           "in": 0.8,
@@ -15039,6 +15890,14 @@
           "out": 1.5,
           "cache": 0.04,
           "ctx": 131072
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek: DeepSeek V4 Pro 0423",
+          "in": 0.6368,
+          "out": 1.2737,
+          "cache": 0.0531,
+          "ctx": 1024000
         },
         {
           "id": "mistralai/mistral-large-2512",
@@ -15214,6 +16073,14 @@
           "ctx": 262144
         },
         {
+          "id": "deepseek/deepseek-v4-pro-0813",
+          "name": "DeepSeek: DeepSeek V4 Pro 0813",
+          "in": 0.5795,
+          "out": 1.7384,
+          "cache": 0.0193,
+          "ctx": 1024000
+        },
+        {
           "id": "mistralai/devstral-2512",
           "name": "Mistral: Devstral 2 2512",
           "in": 0.4,
@@ -15321,6 +16188,13 @@
           "ctx": 262144
         },
         {
+          "id": "qwen/qwen3.5-397b-a17b",
+          "name": "Qwen: Qwen3.5 397B A17B",
+          "in": 0.39,
+          "out": 2.34,
+          "ctx": 262144
+        },
+        {
           "id": "minimax/minimax-m1",
           "name": "MiniMax: MiniMax M1",
           "in": 0.55,
@@ -15403,14 +16277,6 @@
           "in": 0.57,
           "out": 2.3,
           "ctx": 131072
-        },
-        {
-          "id": "deepseek/deepseek-v4-pro",
-          "name": "DeepSeek: DeepSeek V4 Pro 0423",
-          "in": 0.9613,
-          "out": 1.9227,
-          "cache": 0.0801,
-          "ctx": 1024000
         },
         {
           "id": "anthropic/claude-haiku-4.5:batch",
@@ -15617,14 +16483,6 @@
           "ctx": 1048576
         },
         {
-          "id": "qwen/qwen3.5-397b-a17b",
-          "name": "Qwen: Qwen3.5 397B A17B",
-          "in": 0.55,
-          "out": 3.5,
-          "cache": 0.225,
-          "ctx": 262144
-        },
-        {
           "id": "moonshotai/kimi-k2.7-code",
           "name": "MoonshotAI: Kimi K2.7 Code",
           "in": 0.66,
@@ -15638,14 +16496,6 @@
           "in": 0.4,
           "out": 4.0,
           "ctx": 131072
-        },
-        {
-          "id": "deepseek/deepseek-v4-pro-0813",
-          "name": "DeepSeek: DeepSeek V4 Pro 0813",
-          "in": 1.1207,
-          "out": 3.362,
-          "cache": 0.0374,
-          "ctx": 1024000
         },
         {
           "id": "google/gemini-3.6-flash",
@@ -15693,14 +16543,6 @@
           "out": 3.75,
           "cache": 0.075,
           "ctx": 1048576
-        },
-        {
-          "id": "~z-ai/glm-latest",
-          "name": "Z.ai: GLM Latest",
-          "in": 1.15,
-          "out": 3.5,
-          "cache": 0.1,
-          "ctx": 262144
         },
         {
           "id": "qwen/qwen3-max",
@@ -15764,6 +16606,14 @@
           "out": 4.05,
           "cache": 0.17,
           "ctx": 524288
+        },
+        {
+          "id": "~z-ai/glm-latest",
+          "name": "Z.ai: GLM Latest",
+          "in": 1.17,
+          "out": 3.96,
+          "cache": 0.234,
+          "ctx": 262144
         },
         {
           "id": "z-ai/glm-5-turbo",
@@ -16411,6 +17261,14 @@
           "ctx": 1000000
         },
         {
+          "id": "~moonshotai/kimi-latest",
+          "name": "MoonshotAI Kimi Latest",
+          "in": 2.55,
+          "out": 12.75,
+          "cache": 0.256,
+          "ctx": 1048576
+        },
+        {
           "id": "openai/gpt-5.2",
           "name": "OpenAI: GPT-5.2",
           "in": 1.75,
@@ -16441,14 +17299,6 @@
           "out": 14.0,
           "cache": 0.175,
           "ctx": 400000
-        },
-        {
-          "id": "~moonshotai/kimi-latest",
-          "name": "MoonshotAI Kimi Latest",
-          "in": 2.5,
-          "out": 14.0,
-          "cache": 0.29,
-          "ctx": 1048576
         },
         {
           "id": "openai/gpt-5.4",
@@ -16816,6 +17666,1378 @@
           "in": 150.0,
           "out": 600.0,
           "ctx": 200000
+        }
+      ]
+    },
+    {
+      "id": "orcarouter",
+      "name": "OrcaRouter",
+      "kind": "aggregator",
+      "models": [
+        {
+          "id": "openai/text-embedding-3-small",
+          "name": "openai/text-embedding-3-small",
+          "in": 0.02,
+          "out": 0.02,
+          "ctx": null
+        },
+        {
+          "id": "google/gemini-embedding-001",
+          "name": "google/gemini-embedding-001",
+          "in": 0.15,
+          "out": 0.0,
+          "ctx": null
+        },
+        {
+          "id": "qwen/qwen3.7-flash",
+          "name": "Qwen: Qwen3.7 Flash",
+          "in": 0.03,
+          "out": 0.13,
+          "ctx": 1000000
+        },
+        {
+          "id": "openai/gpt-oss-120b",
+          "name": "OpenAI: gpt-oss-120b",
+          "in": 0.03,
+          "out": 0.17,
+          "ctx": 131072
+        },
+        {
+          "id": "openai/text-embedding-ada-002",
+          "name": "openai/text-embedding-ada-002",
+          "in": 0.1,
+          "out": 0.1,
+          "ctx": null
+        },
+        {
+          "id": "openai/text-embedding-3-large",
+          "name": "openai/text-embedding-3-large",
+          "in": 0.13,
+          "out": 0.13,
+          "ctx": null
+        },
+        {
+          "id": "z-ai/glm-5.3-flash",
+          "name": "Z.ai: GLM 5.3 Flash",
+          "in": 0.075,
+          "out": 0.25,
+          "ctx": 1000000
+        },
+        {
+          "id": "google/gemma-4-26b-a4b-it",
+          "name": "Google: Gemma 4 26B A4B ",
+          "in": 0.06,
+          "out": 0.33,
+          "ctx": 262144
+        },
+        {
+          "id": "google/gemini-embedding-2-preview",
+          "name": "google/gemini-embedding-2-preview",
+          "in": 0.2,
+          "out": 0.2,
+          "ctx": null
+        },
+        {
+          "id": "deepseek/deepseek-chat",
+          "name": "DeepSeek: DeepSeek V3",
+          "in": 0.147,
+          "out": 0.295,
+          "ctx": 1048576
+        },
+        {
+          "id": "deepseek/deepseek-reasoner",
+          "name": "deepseek/deepseek-reasoner",
+          "in": 0.147,
+          "out": 0.295,
+          "ctx": 1048576
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash",
+          "name": "DeepSeek: DeepSeek V4 Flash",
+          "in": 0.147,
+          "out": 0.295,
+          "ctx": 1048576
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash-0731",
+          "name": "DeepSeek: DeepSeek V4 Flash 0731",
+          "in": 0.147,
+          "out": 0.295,
+          "ctx": 1048576
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash-vision-exp",
+          "name": "DeepSeek: DeepSeek V4 Flash Vision (Exp)",
+          "in": 0.147,
+          "out": 0.295,
+          "ctx": 1048576
+        },
+        {
+          "id": "openai/gpt-5-nano",
+          "name": "OpenAI: GPT-5 Nano",
+          "in": 0.05,
+          "out": 0.4,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5-nano-2025-08-07",
+          "name": "openai/gpt-5-nano-2025-08-07",
+          "in": 0.05,
+          "out": 0.4,
+          "ctx": 400000
+        },
+        {
+          "id": "google/gemini-2.5-flash-lite",
+          "name": "Google: Gemini 2.5 Flash Lite",
+          "in": 0.1,
+          "out": 0.4,
+          "ctx": 1048576
+        },
+        {
+          "id": "openai/gpt-4.1-nano",
+          "name": "OpenAI: GPT-4.1 Nano",
+          "in": 0.1,
+          "out": 0.4,
+          "ctx": 1047576
+        },
+        {
+          "id": "openai/gpt-4.1-nano-2025-04-14",
+          "name": "openai/gpt-4.1-nano-2025-04-14",
+          "in": 0.1,
+          "out": 0.4,
+          "ctx": 1047576
+        },
+        {
+          "id": "qwen/qwen3.5-flash",
+          "name": "qwen/qwen3.5-flash",
+          "in": 0.1,
+          "out": 0.4,
+          "ctx": 1048576
+        },
+        {
+          "id": "qwen/qwen3.5-flash-2026-02-23",
+          "name": "qwen/qwen3.5-flash-2026-02-23",
+          "in": 0.1,
+          "out": 0.4,
+          "ctx": 1048576
+        },
+        {
+          "id": "google/gemma-4-31b-it",
+          "name": "Google: Gemma 4 31B",
+          "in": 0.13,
+          "out": 0.38,
+          "ctx": null
+        },
+        {
+          "id": "qwen/qwen3.5-35b-a3b",
+          "name": "Qwen: Qwen3.5-35B-A3B",
+          "in": 0.057,
+          "out": 0.459,
+          "ctx": 32768
+        },
+        {
+          "id": "qwen/qwen3.8-flash",
+          "name": "Qwen: Qwen3.8 Flash",
+          "in": 0.15,
+          "out": 0.47,
+          "ctx": 1000000
+        },
+        {
+          "id": "openai/gpt-4o-mini",
+          "name": "OpenAI: GPT-4o-mini",
+          "in": 0.15,
+          "out": 0.6,
+          "ctx": 128000
+        },
+        {
+          "id": "openai/gpt-4o-mini-2024-07-18",
+          "name": "OpenAI: GPT-4o-mini (2024-07-18)",
+          "in": 0.15,
+          "out": 0.6,
+          "ctx": 128000
+        },
+        {
+          "id": "tencent/hy3",
+          "name": "Tencent: Hy3",
+          "in": 0.18,
+          "out": 0.59,
+          "ctx": 262144
+        },
+        {
+          "id": "qwen/qwen3.5-27b",
+          "name": "Qwen: Qwen3.5-27B",
+          "in": 0.086,
+          "out": 0.688,
+          "ctx": 32768
+        },
+        {
+          "id": "qwen/qwen3.5-plus",
+          "name": "qwen/qwen3.5-plus",
+          "in": 0.115,
+          "out": 0.688,
+          "ctx": 1048576
+        },
+        {
+          "id": "qwen/qwen3.5-plus-2026-02-15",
+          "name": "qwen/qwen3.5-plus-2026-02-15",
+          "in": 0.115,
+          "out": 0.688,
+          "ctx": 1048576
+        },
+        {
+          "id": "qwen/qwen3-vl-8b-instruct",
+          "name": "Qwen: Qwen3 VL 8B Instruct",
+          "in": 0.18,
+          "out": 0.7,
+          "ctx": 131072
+        },
+        {
+          "id": "qwen/qwen3.5-122b-a10b",
+          "name": "Qwen: Qwen3.5-122B-A10B",
+          "in": 0.115,
+          "out": 0.917,
+          "ctx": 32768
+        },
+        {
+          "id": "qwen/qwen3.5-397b-a17b",
+          "name": "Qwen: Qwen3.5 397B A17B",
+          "in": 0.172,
+          "out": 1.032,
+          "ctx": 32768
+        },
+        {
+          "id": "z-ai/glm-4.5-air",
+          "name": "Z.ai: GLM 4.5 Air",
+          "in": 0.2,
+          "out": 1.1,
+          "ctx": 128000
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek: DeepSeek V4 Pro",
+          "in": 0.442,
+          "out": 0.884,
+          "ctx": 1048576
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro-0813",
+          "name": "DeepSeek: DeepSeek V4 Pro 0813",
+          "in": 0.442,
+          "out": 0.884,
+          "ctx": 1048576
+        },
+        {
+          "id": "codex-auto-review",
+          "name": "codex-auto-review",
+          "in": 0.2,
+          "out": 1.2,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5.6-luna",
+          "name": "OpenAI: GPT-5.6 Luna",
+          "in": 0.2,
+          "out": 1.2,
+          "ctx": 1050000
+        },
+        {
+          "id": "openai/gpt-5.4-nano",
+          "name": "OpenAI: GPT-5.4 Nano",
+          "in": 0.2,
+          "out": 1.25,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.4-nano-2026-03-17",
+          "name": "openai/gpt-5.4-nano-2026-03-17",
+          "in": 0.2,
+          "out": 1.25,
+          "ctx": null
+        },
+        {
+          "id": "minimax/minimax-m2.5",
+          "name": "MiniMax: MiniMax M2.5",
+          "in": 0.3,
+          "out": 1.2,
+          "ctx": 204800
+        },
+        {
+          "id": "minimax/minimax-m2.7",
+          "name": "MiniMax: MiniMax M2.7",
+          "in": 0.3,
+          "out": 1.2,
+          "ctx": 204800
+        },
+        {
+          "id": "minimax/minimax-m3",
+          "name": "MiniMax: MiniMax M3",
+          "in": 0.3,
+          "out": 1.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "qwen/qwen3.6-35b-a3b",
+          "name": "Qwen: Qwen3.6 35B A3B",
+          "in": 0.248,
+          "out": 1.485,
+          "ctx": 262144
+        },
+        {
+          "id": "google/gemini-3.1-flash-lite",
+          "name": "google/gemini-3.1-flash-lite",
+          "in": 0.25,
+          "out": 1.5,
+          "ctx": null
+        },
+        {
+          "id": "google/gemini-3.1-flash-lite-preview",
+          "name": "Google: Gemini 3.1 Flash Lite Preview",
+          "in": 0.25,
+          "out": 1.5,
+          "ctx": 1048576
+        },
+        {
+          "id": "google/gemini-flash-lite-latest",
+          "name": "google/gemini-flash-lite-latest",
+          "in": 0.25,
+          "out": 1.5,
+          "ctx": null
+        },
+        {
+          "id": "qwen/qwen3.6-flash",
+          "name": "Qwen: Qwen3.6 Flash",
+          "in": 0.25,
+          "out": 1.5,
+          "ctx": 1048576
+        },
+        {
+          "id": "qwen/qwen3.6-flash-2026-04-16",
+          "name": "qwen/qwen3.6-flash-2026-04-16",
+          "in": 0.25,
+          "out": 1.5,
+          "ctx": 1048576
+        },
+        {
+          "id": "qwen/qwen3.7-plus",
+          "name": "Qwen: Qwen3.7 Plus",
+          "in": 0.35,
+          "out": 1.42,
+          "ctx": 1000000
+        },
+        {
+          "id": "qwen/qwen3-max",
+          "name": "Qwen: Qwen3 Max",
+          "in": 0.359,
+          "out": 1.434,
+          "ctx": 262144
+        },
+        {
+          "id": "gpt-5.6-luna",
+          "name": "gpt-5.6-luna",
+          "in": 0.2,
+          "out": 1.6,
+          "ctx": 1050000
+        },
+        {
+          "id": "qwen/qwen3.6-plus-2026-04-02",
+          "name": "qwen/qwen3.6-plus-2026-04-02",
+          "in": 0.276,
+          "out": 1.651,
+          "ctx": 1048576
+        },
+        {
+          "id": "openai/gpt-3.5-turbo",
+          "name": "OpenAI: GPT-3.5 Turbo",
+          "in": 0.5,
+          "out": 1.5,
+          "ctx": 16385
+        },
+        {
+          "id": "openai/gpt-3.5-turbo-0125",
+          "name": "openai/gpt-3.5-turbo-0125",
+          "in": 0.5,
+          "out": 1.5,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-4.1-mini",
+          "name": "OpenAI: GPT-4.1 Mini",
+          "in": 0.4,
+          "out": 1.6,
+          "ctx": 1047576
+        },
+        {
+          "id": "openai/gpt-4.1-mini-2025-04-14",
+          "name": "openai/gpt-4.1-mini-2025-04-14",
+          "in": 0.4,
+          "out": 1.6,
+          "ctx": 1047576
+        },
+        {
+          "id": "qwen/qwen3-vl-235b-a22b-instruct",
+          "name": "Qwen: Qwen3 VL 235B A22B Instruct",
+          "in": 0.4,
+          "out": 1.6,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5-mini",
+          "name": "OpenAI: GPT-5 Mini",
+          "in": 0.25,
+          "out": 2.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5-mini-2025-08-07",
+          "name": "openai/gpt-5-mini-2025-08-07",
+          "in": 0.25,
+          "out": 2.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.1-codex-mini",
+          "name": "OpenAI: GPT-5.1-Codex-Mini",
+          "in": 0.25,
+          "out": 2.0,
+          "ctx": 400000
+        },
+        {
+          "id": "qwen/qwen3-vl-8b-thinking",
+          "name": "Qwen: Qwen3 VL 8B Thinking",
+          "in": 0.18,
+          "out": 2.1,
+          "ctx": 131072
+        },
+        {
+          "id": "qwen/qwen3.8-27b",
+          "name": "Qwen: Qwen3.8 27B",
+          "in": 0.33,
+          "out": 2.4,
+          "ctx": 262144
+        },
+        {
+          "id": "google/gemini-2.5-flash",
+          "name": "Google: Gemini 2.5 Flash",
+          "in": 0.3,
+          "out": 2.5,
+          "ctx": 1048576
+        },
+        {
+          "id": "google/gemini-3.5-flash-lite",
+          "name": "Google: Gemini 3.5 Flash-Lite",
+          "in": 0.3,
+          "out": 2.5,
+          "ctx": 1048576
+        },
+        {
+          "id": "z-ai/glm-4.5",
+          "name": "Z.ai: GLM 4.5",
+          "in": 0.6,
+          "out": 2.2,
+          "ctx": 128000
+        },
+        {
+          "id": "z-ai/glm-4.6",
+          "name": "Z.ai: GLM 4.6",
+          "in": 0.6,
+          "out": 2.2,
+          "ctx": 200000
+        },
+        {
+          "id": "z-ai/glm-4.7",
+          "name": "Z.ai: GLM 4.7",
+          "in": 0.6,
+          "out": 2.2,
+          "ctx": 200000
+        },
+        {
+          "id": "minimax/minimax-m2.5-highspeed",
+          "name": "MiniMax M2.5 highspeed",
+          "in": 0.6,
+          "out": 2.4,
+          "ctx": 204800
+        },
+        {
+          "id": "minimax/minimax-m2.7-highspeed",
+          "name": "MiniMax M2.7 highspeed",
+          "in": 0.6,
+          "out": 2.4,
+          "ctx": 204800
+        },
+        {
+          "id": "openai/gpt-3.5-turbo-1106",
+          "name": "openai/gpt-3.5-turbo-1106",
+          "in": 1.0,
+          "out": 2.0,
+          "ctx": null
+        },
+        {
+          "id": "obsidian/gemma-4-26B-A4B",
+          "name": "Gemma 4 26B A4B",
+          "in": 0.25,
+          "out": 2.9,
+          "ctx": 262144
+        },
+        {
+          "id": "google/gemini-3-flash-preview",
+          "name": "Google: Gemini 3 Flash Preview",
+          "in": 0.5,
+          "out": 3.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "google/gemini-flash-latest",
+          "name": "google/gemini-flash-latest",
+          "in": 0.5,
+          "out": 3.0,
+          "ctx": null
+        },
+        {
+          "id": "qwen/qwen3.6-plus",
+          "name": "Qwen: Qwen3.6 Plus",
+          "in": 0.5,
+          "out": 3.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "kimi/kimi-k2.5",
+          "name": "kimi/kimi-k2.5",
+          "in": 0.6,
+          "out": 3.0,
+          "ctx": 262144
+        },
+        {
+          "id": "grok/grok-4.3",
+          "name": "grok/grok-4.3",
+          "in": 1.25,
+          "out": 2.5,
+          "ctx": 1000000
+        },
+        {
+          "id": "z-ai/glm-5",
+          "name": "Z.ai: GLM 5",
+          "in": 1.0,
+          "out": 3.2,
+          "ctx": 200000
+        },
+        {
+          "id": "qwen/qwen3-max-preview",
+          "name": "qwen/qwen3-max-preview",
+          "in": 0.861,
+          "out": 3.441,
+          "ctx": 262144
+        },
+        {
+          "id": "qwen/qwen3-vl-235b-a22b-thinking",
+          "name": "Qwen: Qwen3 VL 235B A22B Thinking",
+          "in": 0.4,
+          "out": 4.0,
+          "ctx": 131072
+        },
+        {
+          "id": "google/gemini-3.6-flash",
+          "name": "Google: Gemini 3.6 Flash",
+          "in": 0.75,
+          "out": 3.75,
+          "ctx": 1048576
+        },
+        {
+          "id": "google/gemini-3.8-flash",
+          "name": "Google: Gemini 3.8 Flash",
+          "in": 0.75,
+          "out": 3.75,
+          "ctx": 1048576
+        },
+        {
+          "id": "obsidian/Qwen3.6-35B-A3B",
+          "name": "Qwen3.6 35B A3B",
+          "in": 0.31,
+          "out": 4.21,
+          "ctx": 262144
+        },
+        {
+          "id": "obsidian/Qwen3.8-27B",
+          "name": "Qwen3.8 27B",
+          "in": 0.4,
+          "out": 4.21,
+          "ctx": 262144
+        },
+        {
+          "id": "kimi/kimi-k2.6",
+          "name": "kimi/kimi-k2.6",
+          "in": 0.95,
+          "out": 4.0,
+          "ctx": 262144
+        },
+        {
+          "id": "kimi/kimi-k2.7-code",
+          "name": "MoonshotAI: Kimi K2.7 Code",
+          "in": 0.95,
+          "out": 4.0,
+          "ctx": 262144
+        },
+        {
+          "id": "qwen/qwen3.7-max",
+          "name": "Qwen3.7 Max",
+          "in": 1.25,
+          "out": 3.75,
+          "ctx": 1000000
+        },
+        {
+          "id": "qwen/qwen3.7-max-2026-05-20",
+          "name": "Qwen3.7 Max (2026-05-20)",
+          "in": 1.25,
+          "out": 3.75,
+          "ctx": 1000000
+        },
+        {
+          "id": "z-ai/glm-5.3",
+          "name": "Z.ai: GLM 5.3",
+          "in": 1.26,
+          "out": 3.96,
+          "ctx": 1000000
+        },
+        {
+          "id": "openai/gpt-5.4-mini",
+          "name": "OpenAI: GPT-5.4 Mini",
+          "in": 0.75,
+          "out": 4.5,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.4-mini-2026-03-17",
+          "name": "openai/gpt-5.4-mini-2026-03-17",
+          "in": 0.75,
+          "out": 4.5,
+          "ctx": null
+        },
+        {
+          "id": "meta/muse-spark-1.1",
+          "name": "Meta: Muse Spark 1.1",
+          "in": 1.25,
+          "out": 4.25,
+          "ctx": 1048576
+        },
+        {
+          "id": "meta/muse-spark-1.2",
+          "name": "Meta: Muse Spark 1.2",
+          "in": 1.25,
+          "out": 4.25,
+          "ctx": 1048576
+        },
+        {
+          "id": "z-ai/glm-5.1",
+          "name": "Z.ai: GLM 5.1",
+          "in": 1.4,
+          "out": 4.4,
+          "ctx": 200000
+        },
+        {
+          "id": "z-ai/glm-5.2",
+          "name": "Z.ai: GLM 5.2",
+          "in": 1.4,
+          "out": 4.4,
+          "ctx": 1000000
+        },
+        {
+          "id": "anthropic/claude-haiku-4.5",
+          "name": "Anthropic: Claude Haiku 4.5",
+          "in": 1.0,
+          "out": 5.0,
+          "ctx": 200000
+        },
+        {
+          "id": "google/gemini-robotics-er-1.6-preview",
+          "name": "google/gemini-robotics-er-1.6-preview",
+          "in": 1.0,
+          "out": 5.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-3.5-turbo-16k",
+          "name": "OpenAI: GPT-3.5 Turbo 16k",
+          "in": 3.0,
+          "out": 4.0,
+          "ctx": 16385
+        },
+        {
+          "id": "grok/grok-4.5",
+          "name": "xAI: Grok 4.5",
+          "in": 2.0,
+          "out": 6.0,
+          "ctx": 500000
+        },
+        {
+          "id": "grok/grok-4.6",
+          "name": "SpaceXAI: Grok 4.6",
+          "in": 2.0,
+          "out": 6.0,
+          "ctx": 500000
+        },
+        {
+          "id": "qwen/qwen3.8-max",
+          "name": "Qwen: Qwen3.8 Max",
+          "in": 2.0,
+          "out": 6.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "qwen/qwen3.8-max-0902",
+          "name": "Qwen: Qwen3.8 Max (0902)",
+          "in": 2.0,
+          "out": 6.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "openai/gpt-4.1",
+          "name": "OpenAI: GPT-4.1",
+          "in": 2.0,
+          "out": 8.0,
+          "ctx": 1047576
+        },
+        {
+          "id": "openai/gpt-4.1-2025-04-14",
+          "name": "openai/gpt-4.1-2025-04-14",
+          "in": 2.0,
+          "out": 8.0,
+          "ctx": 1047576
+        },
+        {
+          "id": "openai/gpt-image-1-mini",
+          "name": "openai/gpt-image-1-mini",
+          "in": 2.0,
+          "out": 8.0,
+          "ctx": null
+        },
+        {
+          "id": "google/gemini-2.5-flash-preview-tts",
+          "name": "google/gemini-2.5-flash-preview-tts",
+          "in": 0.5,
+          "out": 10.0,
+          "ctx": null
+        },
+        {
+          "id": "google/gemini-3.5-flash",
+          "name": "Gemini 3.5 Flash",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "openai/gpt-5",
+          "name": "OpenAI: GPT-5",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5-2025-08-07",
+          "name": "openai/gpt-5-2025-08-07",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5-chat-latest",
+          "name": "openai/gpt-5-chat-latest",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5-search-api",
+          "name": "openai/gpt-5-search-api",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5-search-api-2025-10-14",
+          "name": "openai/gpt-5-search-api-2025-10-14",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5.1",
+          "name": "OpenAI: GPT-5.1",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.1-2025-11-13",
+          "name": "openai/gpt-5.1-2025-11-13",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.1-chat-latest",
+          "name": "openai/gpt-5.1-chat-latest",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5.1-codex",
+          "name": "OpenAI: GPT-5.1-Codex",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 400000
+        },
+        {
+          "id": "anthropic/claude-sonnet-5",
+          "name": "Anthropic: Claude Sonnet 5",
+          "in": 2.0,
+          "out": 10.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "openai/gpt-4o",
+          "name": "OpenAI: GPT-4o",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "openai/gpt-4o-2024-08-06",
+          "name": "OpenAI: GPT-4o (2024-08-06)",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "openai/gpt-4o-2024-11-20",
+          "name": "OpenAI: GPT-4o (2024-11-20)",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "openai/gpt-4o-mini-tts",
+          "name": "openai/gpt-4o-mini-tts",
+          "in": 0.6,
+          "out": 12.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-4o-mini-tts-2025-03-20",
+          "name": "openai/gpt-4o-mini-tts-2025-03-20",
+          "in": 0.6,
+          "out": 12.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-4o-mini-tts-2025-12-15",
+          "name": "openai/gpt-4o-mini-tts-2025-12-15",
+          "in": 0.6,
+          "out": 12.0,
+          "ctx": null
+        },
+        {
+          "id": "google/gemini-3.1-pro-preview",
+          "name": "Google: Gemini 3.1 Pro Preview",
+          "in": 2.0,
+          "out": 12.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "openai/gpt-5.6-terra",
+          "name": "OpenAI: GPT-5.6 Terra",
+          "in": 2.0,
+          "out": 12.0,
+          "ctx": 1050000
+        },
+        {
+          "id": "openai/gpt-5.2",
+          "name": "OpenAI: GPT-5.2",
+          "in": 1.75,
+          "out": 14.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.2-2025-12-11",
+          "name": "openai/gpt-5.2-2025-12-11",
+          "in": 1.75,
+          "out": 14.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.2-chat-latest",
+          "name": "openai/gpt-5.2-chat-latest",
+          "in": 1.75,
+          "out": 14.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5.2-codex",
+          "name": "OpenAI: GPT-5.2-Codex",
+          "in": 1.75,
+          "out": 14.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.3-codex",
+          "name": "OpenAI: GPT-5.3-Codex",
+          "in": 1.75,
+          "out": 14.0,
+          "ctx": 400000
+        },
+        {
+          "id": "google/gemini-2.5-pro",
+          "name": "Google: Gemini 2.5 Pro",
+          "in": 2.5,
+          "out": 15.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "anthropic/claude-sonnet-4.6",
+          "name": "Anthropic: Claude Sonnet 4.6",
+          "in": 3.0,
+          "out": 15.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "kimi/kimi-k3",
+          "name": "MoonshotAI: Kimi K3",
+          "in": 3.0,
+          "out": 15.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "openai/gpt-4o-2024-05-13",
+          "name": "OpenAI: GPT-4o (2024-05-13)",
+          "in": 5.0,
+          "out": 15.0,
+          "ctx": 128000
+        },
+        {
+          "id": "google/gemini-2.5-pro-preview-tts",
+          "name": "google/gemini-2.5-pro-preview-tts",
+          "in": 1.0,
+          "out": 20.0,
+          "ctx": null
+        },
+        {
+          "id": "google/gemini-3.1-flash-tts-preview",
+          "name": "google/gemini-3.1-flash-tts-preview",
+          "in": 1.0,
+          "out": 20.0,
+          "ctx": null
+        },
+        {
+          "id": "google/gemini-3.1-pro-preview-customtools",
+          "name": "Google: Gemini 3.1 Pro Preview Custom Tools",
+          "in": 4.0,
+          "out": 18.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "google/gemini-pro-latest",
+          "name": "google/gemini-pro-latest",
+          "in": 4.0,
+          "out": 18.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5.6-sol",
+          "name": "OpenAI: GPT-5.6 Sol",
+          "in": 4.0,
+          "out": 20.0,
+          "ctx": 1050000
+        },
+        {
+          "id": "openai/gpt-5.4",
+          "name": "OpenAI: GPT-5.4",
+          "in": 5.0,
+          "out": 22.5,
+          "ctx": 1050000
+        },
+        {
+          "id": "openai/gpt-5.4-2026-03-05",
+          "name": "openai/gpt-5.4-2026-03-05",
+          "in": 5.0,
+          "out": 22.5,
+          "ctx": 1050000
+        },
+        {
+          "id": "anthropic/claude-opus-4.5",
+          "name": "Anthropic: Claude Opus 4.5",
+          "in": 5.0,
+          "out": 25.0,
+          "ctx": 200000
+        },
+        {
+          "id": "anthropic/claude-opus-4.6",
+          "name": "Anthropic: Claude Opus 4.6",
+          "in": 5.0,
+          "out": 25.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "anthropic/claude-opus-4.7",
+          "name": "Anthropic: Claude Opus 4.7",
+          "in": 5.0,
+          "out": 25.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "anthropic/claude-opus-4.8",
+          "name": "Anthropic: Claude Opus 4.8",
+          "in": 5.0,
+          "out": 25.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "anthropic/claude-opus-5",
+          "name": "Anthropic: Claude Opus 5",
+          "in": 5.0,
+          "out": 25.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "openai/tts-1",
+          "name": "openai/tts-1",
+          "in": 15.0,
+          "out": 15.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/tts-1-1106",
+          "name": "openai/tts-1-1106",
+          "in": 15.0,
+          "out": 15.0,
+          "ctx": null
+        },
+        {
+          "id": "google/gemini-2.5-flash-image",
+          "name": "Google: Nano Banana (Gemini 2.5 Flash Image)",
+          "in": 0.3,
+          "out": 30.0,
+          "ctx": 32768
+        },
+        {
+          "id": "openai/gpt-5.5",
+          "name": "OpenAI: GPT-5.5",
+          "in": 5.0,
+          "out": 30.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-image-2",
+          "name": "openai/gpt-image-2",
+          "in": 8.0,
+          "out": 30.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-4-turbo",
+          "name": "OpenAI: GPT-4 Turbo",
+          "in": 10.0,
+          "out": 30.0,
+          "ctx": 128000
+        },
+        {
+          "id": "openai/gpt-4-turbo-2024-04-09",
+          "name": "openai/gpt-4-turbo-2024-04-09",
+          "in": 10.0,
+          "out": 30.0,
+          "ctx": 128000
+        },
+        {
+          "id": "openai/gpt-image-1.5",
+          "name": "openai/gpt-image-1.5",
+          "in": 8.0,
+          "out": 32.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-image-1",
+          "name": "openai/gpt-image-1",
+          "in": 5.0,
+          "out": 40.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5.5-2026-04-23",
+          "name": "openai/gpt-5.5-2026-04-23",
+          "in": 10.0,
+          "out": 45.0,
+          "ctx": null
+        },
+        {
+          "id": "anthropic/claude-fable-5",
+          "name": "Anthropic: Claude Fable 5",
+          "in": 10.0,
+          "out": 50.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "anthropic/claude-fable-5.1",
+          "name": "Anthropic: Claude Fable 5.1",
+          "in": 10.0,
+          "out": 50.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "openai/gpt-6-astra",
+          "name": "OpenAI: GPT-6 Astra",
+          "in": 10.0,
+          "out": 50.0,
+          "ctx": 1050000
+        },
+        {
+          "id": "openai/tts-1-hd",
+          "name": "openai/tts-1-hd",
+          "in": 30.0,
+          "out": 30.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/tts-1-hd-1106",
+          "name": "openai/tts-1-hd-1106",
+          "in": 30.0,
+          "out": 30.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-4",
+          "name": "OpenAI: GPT-4",
+          "in": 30.0,
+          "out": 60.0,
+          "ctx": 8191
+        },
+        {
+          "id": "openai/gpt-4-0613",
+          "name": "openai/gpt-4-0613",
+          "in": 30.0,
+          "out": 60.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5-pro",
+          "name": "OpenAI: GPT-5 Pro",
+          "in": 15.0,
+          "out": 120.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5-pro-2025-10-06",
+          "name": "openai/gpt-5-pro-2025-10-06",
+          "in": 15.0,
+          "out": 120.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.2-pro",
+          "name": "OpenAI: GPT-5.2 Pro",
+          "in": 21.0,
+          "out": 168.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.2-pro-2025-12-11",
+          "name": "openai/gpt-5.2-pro-2025-12-11",
+          "in": 21.0,
+          "out": 168.0,
+          "ctx": 400000
+        },
+        {
+          "id": "openai/gpt-5.5-pro",
+          "name": "OpenAI: GPT-5.5 Pro",
+          "in": 30.0,
+          "out": 180.0,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-5.4-pro",
+          "name": "OpenAI: GPT-5.4 Pro",
+          "in": 60.0,
+          "out": 270.0,
+          "ctx": 1050000
+        },
+        {
+          "id": "openai/gpt-5.4-pro-2026-03-05",
+          "name": "openai/gpt-5.4-pro-2026-03-05",
+          "in": 60.0,
+          "out": 270.0,
+          "ctx": 1050000
+        },
+        {
+          "id": "openai/gpt-5.5-pro-2026-04-23",
+          "name": "openai/gpt-5.5-pro-2026-04-23",
+          "in": 60.0,
+          "out": 270.0,
+          "ctx": null
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash-free",
+          "name": "DeepSeek: DeepSeek V4 Flash (Free)",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "deepseek/deepseek-v4-flash"
+        },
+        {
+          "id": "google/gemini-3-pro-image-preview",
+          "name": "Google: Nano Banana Pro (Gemini 3 Pro Image Preview)",
+          "in": null,
+          "out": null,
+          "ctx": 65536
+        },
+        {
+          "id": "google/gemini-3.1-flash-image-preview",
+          "name": "Google: Nano Banana 2 (Gemini 3.1 Flash Image Preview)",
+          "in": null,
+          "out": null,
+          "ctx": 65536
+        },
+        {
+          "id": "google/imagen-4.0-fast-generate-001",
+          "name": "google/imagen-4.0-fast-generate-001",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/imagen-4.0-generate-001",
+          "name": "google/imagen-4.0-generate-001",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/imagen-4.0-ultra-generate-001",
+          "name": "google/imagen-4.0-ultra-generate-001",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "grok/grok-imagine-image",
+          "name": "grok/grok-imagine-image",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kling/kling-3-turbo",
+          "name": "Kling: Kling 3.0 Turbo",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kling/kling-v2-1-master",
+          "name": "kling/kling-v2-1-master",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kling/kling-v2-5-turbo",
+          "name": "kling/kling-v2-5-turbo",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kling/kling-v2-6",
+          "name": "kling/kling-v2-6",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kling/kling-v2-master",
+          "name": "kling/kling-v2-master",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kling/kling-v3",
+          "name": "kling/kling-v3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kling/kling-v3-omni",
+          "name": "kling/kling-v3-omni",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kling/kling-video-o1",
+          "name": "kling/kling-video-o1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "minimax/minimax-h3",
+          "name": "MiniMax: MiniMax-H3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "orca/dub",
+          "name": "OrcaDub: OrcaDub 1.0",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "orcarouter/free",
+          "name": "orcarouter/free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true
+        },
+        {
+          "id": "orcarouter/fusion",
+          "name": "orcarouter/fusion",
+          "in": null,
+          "out": null,
+          "ctx": 1000000
+        },
+        {
+          "id": "orcarouter/fusion-flash",
+          "name": "orcarouter/fusion-flash",
+          "in": null,
+          "out": null,
+          "ctx": 262144
+        },
+        {
+          "id": "orcarouter/fusion-mini",
+          "name": "orcarouter/fusion-mini",
+          "in": null,
+          "out": null,
+          "ctx": 1000000
+        },
+        {
+          "id": "qwen/qwen3.8-27b-free",
+          "name": "Qwen: Qwen3.8 27B (free)",
+          "in": null,
+          "out": null,
+          "ctx": 65536,
+          "free": true,
+          "base": "qwen/qwen3.8-27b"
+        },
+        {
+          "id": "tencent/hy3-free",
+          "name": "Tencent: Hy3 (Free)",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "tencent/hy3"
         }
       ]
     },
@@ -17424,6 +19646,517 @@
       ]
     },
     {
+      "id": "opencode-zen",
+      "name": "OpenCode Zen",
+      "kind": "aggregator",
+      "models": [
+        {
+          "id": "big-pickle",
+          "name": "big-pickle",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-fable-5",
+          "name": "claude-fable-5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-fable-5-1",
+          "name": "claude-fable-5-1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-haiku-4-5",
+          "name": "claude-haiku-4-5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-opus-4-5",
+          "name": "claude-opus-4-5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-opus-4-6",
+          "name": "claude-opus-4-6",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-opus-4-7",
+          "name": "claude-opus-4-7",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-opus-4-8",
+          "name": "claude-opus-4-8",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-opus-5",
+          "name": "claude-opus-5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-sonnet-4",
+          "name": "claude-sonnet-4",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-sonnet-4-5",
+          "name": "claude-sonnet-4-5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-sonnet-4-6",
+          "name": "claude-sonnet-4-6",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "claude-sonnet-5",
+          "name": "claude-sonnet-5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "deepseek-v4-flash",
+          "name": "deepseek-v4-flash",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "deepseek-v4-flash-free",
+          "name": "deepseek-v4-flash-free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "deepseek-v4-flash"
+        },
+        {
+          "id": "deepseek-v4-flash-vision-exp",
+          "name": "deepseek-v4-flash-vision-exp",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "deepseek-v4-pro",
+          "name": "deepseek-v4-pro",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gemini-3-flash",
+          "name": "gemini-3-flash",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gemini-3.1-pro",
+          "name": "gemini-3.1-pro",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gemini-3.5-flash",
+          "name": "gemini-3.5-flash",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gemini-3.5-flash-lite",
+          "name": "gemini-3.5-flash-lite",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gemini-3.6-flash",
+          "name": "gemini-3.6-flash",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gemini-3.7-flash",
+          "name": "gemini-3.7-flash",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gemini-3.8-flash",
+          "name": "gemini-3.8-flash",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "glm-5",
+          "name": "glm-5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "glm-5.1",
+          "name": "glm-5.1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "glm-5.2",
+          "name": "glm-5.2",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "glm-5.3",
+          "name": "glm-5.3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "glm-5.3-flash",
+          "name": "glm-5.3-flash",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5",
+          "name": "gpt-5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5-codex",
+          "name": "gpt-5-codex",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5-nano",
+          "name": "gpt-5-nano",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.1",
+          "name": "gpt-5.1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.1-codex",
+          "name": "gpt-5.1-codex",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.1-codex-max",
+          "name": "gpt-5.1-codex-max",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.1-codex-mini",
+          "name": "gpt-5.1-codex-mini",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.2",
+          "name": "gpt-5.2",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.2-codex",
+          "name": "gpt-5.2-codex",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.3-codex",
+          "name": "gpt-5.3-codex",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.3-codex-spark",
+          "name": "gpt-5.3-codex-spark",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.4",
+          "name": "gpt-5.4",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.4-mini",
+          "name": "gpt-5.4-mini",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.4-nano",
+          "name": "gpt-5.4-nano",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.4-pro",
+          "name": "gpt-5.4-pro",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.5",
+          "name": "gpt-5.5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.5-pro",
+          "name": "gpt-5.5-pro",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.6-luna",
+          "name": "gpt-5.6-luna",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.6-sol",
+          "name": "gpt-5.6-sol",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-5.6-terra",
+          "name": "gpt-5.6-terra",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "gpt-6-astra",
+          "name": "gpt-6-astra",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "grok-4.5",
+          "name": "grok-4.5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "grok-4.6",
+          "name": "grok-4.6",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "grok-build-0.1",
+          "name": "grok-build-0.1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kimi-k2.5",
+          "name": "kimi-k2.5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kimi-k2.6",
+          "name": "kimi-k2.6",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kimi-k2.7-code",
+          "name": "kimi-k2.7-code",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "kimi-k3",
+          "name": "kimi-k3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "ling-3.0-flash-fin-free",
+          "name": "ling-3.0-flash-fin-free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "ling-3.0-flash-fin"
+        },
+        {
+          "id": "mimo-v2.5-free",
+          "name": "mimo-v2.5-free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "mimo-v2.5"
+        },
+        {
+          "id": "minimax-m2.5",
+          "name": "minimax-m2.5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "minimax-m2.7",
+          "name": "minimax-m2.7",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "minimax-m3",
+          "name": "minimax-m3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "muse-spark-1.2",
+          "name": "muse-spark-1.2",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "muse-spark-1.2-contributor-free",
+          "name": "muse-spark-1.2-contributor-free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "muse-spark-1.2-contributor"
+        },
+        {
+          "id": "muse-spark-1.3",
+          "name": "muse-spark-1.3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "muse-spark-1.3-contributor-free",
+          "name": "muse-spark-1.3-contributor-free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "muse-spark-1.3-contributor"
+        },
+        {
+          "id": "nemotron-3-ultra-free",
+          "name": "nemotron-3-ultra-free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "nemotron-3-ultra"
+        },
+        {
+          "id": "nemotron-3.5-lightning-free",
+          "name": "nemotron-3.5-lightning-free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "nemotron-3.5-lightning"
+        },
+        {
+          "id": "qwen3.5-plus",
+          "name": "qwen3.5-plus",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "qwen3.6-plus",
+          "name": "qwen3.6-plus",
+          "in": null,
+          "out": null,
+          "ctx": null
+        }
+      ]
+    },
+    {
       "id": "w-b-inference-gateway",
       "name": "W&B Inference Gateway",
       "kind": "aggregator",
@@ -17445,6 +20178,18 @@
           "in": 0.03,
           "out": 0.13,
           "ctx": 131072
+        },
+        {
+          "id": "wandb/Qwen/Qwen3-235B-A22B-Instruct-2507",
+          "in": 0.1,
+          "out": 0.1,
+          "ctx": 262144
+        },
+        {
+          "id": "wandb/Qwen/Qwen3-235B-A22B-Thinking-2507",
+          "in": 0.1,
+          "out": 0.1,
+          "ctx": 262144
         },
         {
           "id": "wandb/openai/gpt-oss-120b",
@@ -17496,6 +20241,12 @@
           "in": 0.1,
           "out": 0.34,
           "ctx": 262144
+        },
+        {
+          "id": "wandb/meta-llama/Llama-4-Scout-17B-16E-Instruct",
+          "in": 0.17,
+          "out": 0.66,
+          "ctx": 64000
         },
         {
           "id": "wandb/MiniMaxAI/MiniMax-M3",
@@ -17588,6 +20339,12 @@
           "ctx": 1048576
         },
         {
+          "id": "wandb/deepseek-ai/DeepSeek-V3-0324",
+          "in": 1.14,
+          "out": 2.75,
+          "ctx": 161000
+        },
+        {
           "id": "wandb/moonshotai/Kimi-K2.6",
           "in": 0.65,
           "out": 3.41,
@@ -17609,16 +20366,10 @@
           "ctx": 262144
         },
         {
-          "id": "wandb/Qwen/Qwen3-235B-A22B-Instruct-2507",
-          "in": 10000.0,
-          "out": 10000.0,
-          "ctx": 262144
-        },
-        {
-          "id": "wandb/Qwen/Qwen3-235B-A22B-Thinking-2507",
-          "in": 10000.0,
-          "out": 10000.0,
-          "ctx": 262144
+          "id": "wandb/deepseek-ai/DeepSeek-R1-0528",
+          "in": 1.35,
+          "out": 5.4,
+          "ctx": 161000
         },
         {
           "id": "wandb/microsoft/Phi-4-mini-instruct",
@@ -17627,28 +20378,10 @@
           "ctx": 128000
         },
         {
-          "id": "wandb/meta-llama/Llama-4-Scout-17B-16E-Instruct",
-          "in": 17000.0,
-          "out": 66000.0,
-          "ctx": 64000
-        },
-        {
           "id": "wandb/zai-org/GLM-4.5",
           "in": 55000.0,
           "out": 200000.0,
           "ctx": 131072
-        },
-        {
-          "id": "wandb/deepseek-ai/DeepSeek-V3-0324",
-          "in": 114000.0,
-          "out": 275000.0,
-          "ctx": 161000
-        },
-        {
-          "id": "wandb/deepseek-ai/DeepSeek-R1-0528",
-          "in": 135000.0,
-          "out": 540000.0,
-          "ctx": 161000
         }
       ]
     },

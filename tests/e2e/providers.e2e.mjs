@@ -55,6 +55,50 @@ const run = async () => {
     if (sub.includes(String(biggest.models.length))) ok(`"${biggest.name}" card reports ${biggest.models.length} models`);
     else fail(`"${biggest.name}" count text "${sub.trim()}" lacks ${biggest.models.length}`);
 
+    // ── 2b. Keyless API providers (stats-17: NVIDIA NIM / OpenCode Zen / OrcaRouter)
+    const apiProv = (name) => catalog.providers.find(p => p.name === name);
+    const isFree = (m) => !!m.free || (m.in === 0 && (m.out ?? 0) === 0);
+
+    const nim = apiProv('NVIDIA NIM');
+    if (nim && nim.models.length >= 80) ok(`"NVIDIA NIM" card carries ${nim.models.length} rows`);
+    else fail(`NVIDIA NIM card missing or thin: ${nim?.models.length}`);
+
+    const zen = apiProv('OpenCode Zen');
+    const zenFree = zen ? zen.models.filter(isFree) : [];
+    if (zen && zenFree.length >= 5 && zenFree.every(m => m.base)) {
+      ok(`"OpenCode Zen" free listings carry their base id (${zenFree.length})`);
+    } else fail(`OpenCode Zen free listings wrong: ${zenFree.length} free`);
+
+    const orca = apiProv('OrcaRouter');
+    const orcaPriced = orca ? orca.models.filter(m => m.in != null) : [];
+    const orcaFree = orca ? orca.models.filter(isFree) : [];
+    if (orca && orcaPriced.length > 100 && orcaFree.length >= 4) {
+      ok(`"OrcaRouter" card priced=${orcaPriced.length} free=${orcaFree.length}`);
+    } else fail(`OrcaRouter wrong: priced=${orcaPriced.length} free=${orcaFree.length}`);
+
+    // card sub-line reports its free count
+    const zenCard = page.locator('.prov-card', { has: page.locator('.prov-name', { hasText: 'OpenCode Zen' }) });
+    const zenSub = await zenCard.locator('span.cell-sub').first().innerText();
+    if (zenSub.includes(`${zenFree.length} free`)) ok(`OpenCode Zen card reports "${zenFree.length} free"`);
+    else fail(`OpenCode Zen card sub lacks free count: "${zenSub.trim()}"`);
+
+    // header stats line mentions free listings
+    const statsLine = await page.locator('span.cell-sub', { hasText: 'catalog rows' }).first().innerText();
+    if (/free listings/.test(statsLine)) ok(`header stats mention free listings ("${statsLine.trim()}")`);
+    else fail(`header stats lack free count: "${statsLine.trim()}"`);
+
+    // an unpriced NVIDIA row renders an honest dash (no fabricated price)
+    const nimCard = page.locator('.prov-card', { has: page.locator('.prov-name', { hasText: 'NVIDIA NIM' }) });
+    const nimDash = await nimCard.locator('.prov-table tbody tr').first().locator('td.num').first().innerText();
+    if (nimDash.trim() === '—') ok('NVIDIA NIM row shows an honest dash (no fabricated price)');
+    else fail(`NVIDIA NIM price cell: "${nimDash}"`);
+
+    // free chip tooltip carries the rate-limit caveat (free ≠ unlimited)
+    const freeChip = zenCard.locator('.free-chip').first();
+    const tip = await freeChip.getAttribute('title');
+    if (tip && /rate limit/i.test(tip)) ok(`free chip tooltip carries the rate-limit caveat`);
+    else fail(`free chip tooltip wrong: ${tip}`);
+
     // ── 3. Search narrows across providers ──────────────────────────
     const q = 'opus';
     await page.fill('input.input', q);

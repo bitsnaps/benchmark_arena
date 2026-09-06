@@ -42,6 +42,23 @@ const grouped = computed(() => kinds.value
 
 const totalShown = computed(() => filtered.value.reduce((a, p) => a + p.shown.length, 0));
 const totalRows = computed(() => (rawData.value?.providers || []).reduce((a, p) => a + p.models.length, 0));
+const totalFree = computed(() => (rawData.value?.providers || [])
+  .reduce((a, p) => a + p.models.filter(isFreeRow).length, 0));
+
+// A row is a free listing when the catalog marked it (free flag from the
+// '-free'/':free' id suffix or a zero price). Free ≠ unlimited — every one
+// of these APIs keeps its rate limits to itself, so the UI only ever claims
+// "free" and the tooltip carries the caveat.
+function isFreeRow(m) {
+  return !!m.free || (m.in === 0 && (m.out ?? 0) === 0);
+}
+function freeCount(p) {
+  return p.shown.filter(isFreeRow).length;
+}
+function freeTitle(m) {
+  const base = m.base ? ` — free listing of ${m.base}` : '';
+  return `Free tier — rate limits apply, not unlimited${base}`;
+}
 
 const KIND_LABEL = {
   'first-party': 'First-party labs',
@@ -81,7 +98,7 @@ const KIND_BLURB = {
     <div class="row mt" style="gap:.6rem;align-items:center">
       <b-input v-model="q" placeholder="Filter models or providers — e.g. opus, qwen, fireworks"
         icon="magnifying-glass" size="is-small" style="max-width:380px" />
-      <span class="cell-sub">{{ totalShown }} of {{ totalRows }} catalog rows</span>
+      <span class="cell-sub">{{ totalShown }} of {{ totalRows }} catalog rows · {{ totalFree }} free listings</span>
     </div>
 
     <b-message v-if="error" type="is-danger" has-icon icon="triangle-exclamation" title="Error">
@@ -99,7 +116,7 @@ const KIND_BLURB = {
         <div v-for="p in g.providers" :key="p.id" class="panel-lab prov-card">
           <div class="row" style="justify-content:space-between">
             <h3 class="prov-name">{{ p.name }}</h3>
-            <span class="cell-sub">{{ p.shown.length }} model{{ p.shown.length === 1 ? '' : 's' }}</span>
+            <span class="cell-sub">{{ p.shown.length }} model{{ p.shown.length === 1 ? '' : 's' }}<template v-if="freeCount(p)"> · {{ freeCount(p) }} free</template></span>
           </div>
           <table class="prov-table">
             <thead>
@@ -115,7 +132,7 @@ const KIND_BLURB = {
                 <td class="left">
                   <span class="prov-model">{{ m.name || m.id }}</span>
                   <span v-if="m.name && m.id !== m.name" class="prov-id">{{ m.id }}</span>
-                  <span v-if="m.in === 0 && (m.out ?? 0) === 0" class="free-chip">free</span>
+                  <span v-if="isFreeRow(m)" class="free-chip" :title="freeTitle(m)">free</span>
                 </td>
                 <td class="num">{{ fmtUsd(m.in) }}</td>
                 <td class="num">{{ fmtUsd(m.out) }}</td>
@@ -127,8 +144,9 @@ const KIND_BLURB = {
       </div>
 
       <p class="cell-sub mt" style="text-align:center">
-        Catalog: {{ sources.catalog }} · Aggregator section: {{ sources.aggregator }}.
+        Catalog: {{ sources.catalog }} · Aggregator section: {{ sources.aggregator }}<template v-if="sources.apis"> · {{ sources.apis }}</template>.
         Prices move often — refresh the snapshot before budgeting anything serious.
+        Free listings are rate-limited, not unlimited.
       </p>
     </template>
   </section>

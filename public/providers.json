@@ -11626,7 +11626,9 @@
           "out": null,
           "ctx": null
         }
-      ]
+      ],
+      "free_tier": true,
+      "edge_rtt_ms": 173
     },
     {
       "id": "nebius",
@@ -14777,9 +14779,9 @@
         {
           "id": "deepseek/deepseek-v4-flash",
           "name": "DeepSeek: DeepSeek V4 Flash 0423",
-          "in": 0.0794,
-          "out": 0.1588,
-          "cache": 0.0159,
+          "in": 0.0791,
+          "out": 0.1582,
+          "cache": 0.0158,
           "ctx": 1024000
         },
         {
@@ -15886,20 +15888,20 @@
           "ctx": 1000000
         },
         {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek: DeepSeek V4 Pro 0423",
+          "in": 0.6167,
+          "out": 1.2333,
+          "cache": 0.0514,
+          "ctx": 1024000
+        },
+        {
           "id": "meta/muse-glimmer-30b:batch",
           "name": "Meta: Muse Glimmer 30B (batch)",
           "in": 0.35,
           "out": 1.5,
           "cache": 0.04,
           "ctx": 131072
-        },
-        {
-          "id": "deepseek/deepseek-v4-pro",
-          "name": "DeepSeek: DeepSeek V4 Pro 0423",
-          "in": 0.6267,
-          "out": 1.2535,
-          "cache": 0.0522,
-          "ctx": 1024000
         },
         {
           "id": "mistralai/mistral-large-2512",
@@ -19041,7 +19043,8 @@
           "free": true,
           "base": "tencent/hy3"
         }
-      ]
+      ],
+      "edge_rtt_ms": 309
     },
     {
       "id": "vercel-ai-gateway",
@@ -20156,7 +20159,8 @@
           "out": null,
           "ctx": null
         }
-      ]
+      ],
+      "edge_rtt_ms": 508
     },
     {
       "id": "w-b-inference-gateway",

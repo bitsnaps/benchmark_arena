@@ -5,6 +5,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildMatrix, sortMatrixRows, DEFAULT_COLUMNS } from '../../src/lib/pivot.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SHOTS = path.join(REPO, 'tests', 'e2e', 'shots');
@@ -121,7 +122,83 @@ const run = async () => {
     else fail(`price cell not USD-formatted: "${firstNum}"`);
     await page.screenshot({ path: SHOTS + '/providers.png', fullPage: false });
 
-    // ── 5. Console cleanliness ──────────────────────────────────────
+    // ── 5. Compare pivot tab (stats-18) ─────────────────
+    // Expected matrix is derived from the committed providers.json using the
+    // SAME matcher the app ships — the check is honest, not hardcoded.
+    await page.click('.tabs li >> text=Compare');
+    await page.waitForSelector('.pm-table', { timeout: 10000 });
+    ok('Compare tab renders the pivot table');
+
+    const { rows: mxRows } = buildMatrix(catalog.providers, DEFAULT_COLUMNS);
+    const mx = sortMatrixRows(mxRows);
+    const expectRows = mx.length;
+    const expectNimFree = mx.filter(r => r.cells['nvidia-nim']?.free).length;
+    const expectCols = DEFAULT_COLUMNS.length;
+
+    const headCols = await page.locator('.pm-table thead th').count();
+    if (headCols === expectCols + 1) ok(`pivot header: ${expectCols} provider columns + Model`);
+    else fail(`pivot header columns: expected ${expectCols + 1}, got ${headCols}`);
+
+    const domRows = await page.locator('.pm-table tbody tr').count();
+    if (domRows === expectRows) ok(`pivot renders all ${domRows} canonical model rows`);
+    else fail(`pivot rows: expected ${expectRows}, got ${domRows}`);
+
+    const coverage = await page.locator('.pm-coverage').innerText();
+    if (coverage.includes(`${expectRows} canonical models`) && coverage.includes('duplicate ids collapsed'))
+      ok(`coverage line honest ("${coverage.replace(/\s+/g, ' ').trim()}")`);
+    else fail(`coverage line wrong: "${coverage.trim()}"`);
+
+    const nimChips = await page.locator('.pm-table .free-chip').count();
+    if (nimChips >= expectNimFree) ok(`pivot free chips ≥ NIM's ${expectNimFree} free-tier cells (${nimChips})`);
+    else fail(`free chips: expected ≥ ${expectNimFree}, got ${nimChips}`);
+
+    const cheapestCells = await page.locator('.pm-cell.is-cheapest').count();
+    if (cheapestCells > 0) ok(`cheapest-cell highlight active on ${cheapestCells} rows`);
+    else fail('no cheapest-cell highlight found');
+
+    // free-only toggle narrows the matrix (NIM carries most rows free, so
+    // compare against rows minus non-free leftovers)
+    const beforeFree = domRows;
+    await page.click('.pm-controls >> text=free only');
+    await page.waitForTimeout(400);
+    const afterFree = await page.locator('.pm-table tbody tr').count();
+    const expectFreeRows = mx.filter(r => Object.values(r.cells).some(c => c.free)).length;
+    if (afterFree === expectFreeRows && afterFree < beforeFree)
+      ok(`free toggle narrows to ${afterFree} rows with a free cell`);
+    else fail(`free toggle: expected ${expectFreeRows} rows, got ${afterFree}`);
+    await page.click('.pm-controls >> text=free only'); // off again
+    await page.waitForTimeout(300);
+
+    // search narrows pivot rows by name/id
+    await page.fill('input.input', 'gpt-oss');
+    await page.waitForTimeout(400);
+    const gptOss = await page.locator('.pm-table tbody tr').count();
+    const expectGO = mx.filter(r => r.search.includes('gpt-oss')).length;
+    if (gptOss === expectGO && gptOss > 0 && gptOss < expectRows)
+      ok(`pivot search "gpt-oss" narrows to ${gptOss} rows`);
+    else fail(`pivot search: expected ${expectGO}, got ${gptOss}`);
+    await page.fill('input.input', '');
+    await page.waitForTimeout(300);
+
+    // provider picker: deselect down to 2 columns, table follows
+    await page.click('.pm-chip:has-text("Fireworks AI")');
+    await page.click('.pm-chip:has-text("DeepInfra")');
+    await page.click('.pm-chip:has-text("Together AI")');
+    await page.click('.pm-chip:has-text("Groq")');
+    await page.waitForTimeout(400);
+    const headCols2 = await page.locator('.pm-table thead th').count();
+    if (headCols2 === 1 + (expectCols - 4)) ok(`provider picker trims columns to ${headCols2 - 1}`);
+    else fail(`provider picker: expected ${expectCols - 3} columns total, got ${headCols2 - 1} headers`);
+    await page.click('.pm-controls >> text=reset');
+    await page.waitForTimeout(300);
+
+    // back to tab 1: cards still render
+    await page.click('.tabs li >> text=By provider');
+    await page.waitForSelector('.prov-card', { timeout: 10000 });
+    ok('switching back to By provider keeps the card view intact');
+    await page.screenshot({ path: SHOTS + '/providers-compare.png' });
+
+    // ── 6. Console cleanliness ──────────────────────────────────────
     const real = consoleErrors.filter(e => !/favicon|Download the Vue Devtools/i.test(e));
     if (!real.length) ok('zero console errors on the providers page');
     else fail(`console errors: ${real.slice(0, 3).join(' | ')}`);

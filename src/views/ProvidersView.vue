@@ -195,6 +195,7 @@ function sortBy(pid) {
     sortPid.value = pid;
     sortAsc.value = true;
   }
+  page.value = 1; // sorted order changes — start from the top
 }
 const sortedRows = computed(() => {
   const rows = visibleRows.value;
@@ -209,6 +210,26 @@ const sortedRows = computed(() => {
     return sortAsc.value ? av - bv : bv - av;
   });
 });
+
+// ── Pagination (stats-20) ────────────────────────────────────────
+// Manual client-side paging over the sorted pivot rows (plain table, no
+// b-table here). Size persists; 0 = All (the pre-pagination full scroll).
+// Any filter/search/sort change lands back on page 1.
+const PM_PAGE_KEY = 'arena.pagesize.pivot';
+const pageSize = ref(50);
+try {
+  const saved = parseInt(localStorage.getItem(PM_PAGE_KEY), 10);
+  if (!isNaN(saved) && [0, 25, 50, 100].includes(saved)) pageSize.value = saved;
+} catch { /* private mode */ }
+watch(pageSize, (v) => { try { localStorage.setItem(PM_PAGE_KEY, String(v)); } catch { /* ignore */ } });
+const page = ref(1);
+const totalPages = computed(() => (pageSize.value === 0
+  ? 1 : Math.max(1, Math.ceil(sortedRows.value.length / pageSize.value))));
+const pagedRows = computed(() => (pageSize.value === 0
+  ? sortedRows.value
+  : sortedRows.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value)));
+const gotoPage = (p) => { page.value = Math.min(Math.max(1, p), totalPages.value); };
+watch([q, freeOnly, showBatch, sliderVal, selected], () => { page.value = 1; });
 
 function cellTitle(r, pid) {
   const c = r.cells[pid];
@@ -361,7 +382,7 @@ const colHeaderTitle = (p) => {
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="r in sortedRows" :key="r.key">
+                <tr v-for="r in pagedRows" :key="r.key">
                   <td class="left pm-model-col">
                     <!-- one name format: the full model name; the raw API id
                          lives in the hover tooltip (stats-19) -->
@@ -379,13 +400,30 @@ const colHeaderTitle = (p) => {
                     <span v-else class="pm-absent" :title="`${p.name} — not carried`">·</span>
                   </td>
                 </tr>
-                <tr v-if="!sortedRows.length">
+                <tr v-if="!pagedRows.length">
                   <td :colspan="selProviders.length + 1" class="cell-sub" style="text-align:center;padding:1.2rem">
                     No models match the current filters — relax the search, price cap or column set.
                   </td>
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <!-- stats-20: pager — totals stay in the coverage line above -->
+          <div class="row pm-pager mt-sm" style="align-items:center" v-if="sortedRows.length">
+            <span class="cell-sub">rows per page</span>
+            <b-select v-model.number="pageSize" size="is-small" aria-label="rows per page">
+              <option :value="25">25</option>
+              <option :value="50">50</option>
+              <option :value="100">100</option>
+              <option :value="0">All</option>
+            </b-select>
+            <span class="is-flex-grow-1"></span>
+            <button type="button" class="button is-small" :disabled="page <= 1"
+              @click="gotoPage(page - 1)" aria-label="Previous page">‹</button>
+            <span class="cell-sub pm-page-label">Page {{ page }} of {{ totalPages }}</span>
+            <button type="button" class="button is-small" :disabled="page >= totalPages"
+              @click="gotoPage(page + 1)" aria-label="Next page">›</button>
           </div>
 
           <p class="cell-sub mt-sm" style="max-width:88ch">

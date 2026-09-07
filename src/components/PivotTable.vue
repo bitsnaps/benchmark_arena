@@ -8,11 +8,28 @@ import { SHORT } from '../lib/constants.js';
 import { fmtScore, fmtUsd, fmtValue, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
+import { computed, ref, watch } from 'vue';
 
 const props = defineProps({
   rows: { type: Array, required: true },
   tier: { type: String, default: 'all' },
 });
+
+// ── Pagination (stats-20) ────────────────────────────────────────────
+// Client-side paging over the already-filtered leaderboard rows. Page size
+// persists across visits; 0 = All (full scroll, the pre-pagination behavior).
+const PAGE_KEY = 'arena.pagesize.home';
+const pageSize = ref(50);
+try {
+  const saved = parseInt(localStorage.getItem(PAGE_KEY), 10);
+  if (!isNaN(saved) && [0, 20, 50, 100].includes(saved)) pageSize.value = saved;
+} catch { /* private mode */ }
+watch(pageSize, (v) => { try { localStorage.setItem(PAGE_KEY, String(v)); } catch { /* ignore */ } });
+const page = ref(1);
+const perPage = computed(() => (pageSize.value === 0
+  ? Math.max(props.rows.length, 1) : pageSize.value));
+// filter/tab changes reshape the list — land back on the first page
+watch(() => props.rows.length, () => { page.value = 1; });
 
 const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
@@ -128,6 +145,15 @@ function scoreTitle(row) {
 
 <template>
   <div class="cov-table">
+  <div class="row page-size" style="justify-content:flex-end;align-items:center;gap:.45rem;margin-bottom:.35rem">
+    <span class="cell-sub">rows per page</span>
+    <b-select v-model.number="pageSize" size="is-small" aria-label="rows per page">
+      <option :value="20">20</option>
+      <option :value="50">50</option>
+      <option :value="100">100</option>
+      <option :value="0">All</option>
+    </b-select>
+  </div>
   <b-table
     :data="rows"
     narrowed
@@ -142,6 +168,14 @@ function scoreTitle(row) {
     :custom-is-checked="isSameModel"
     checkbox-position="left"
     :default-sort="['avg', 'desc']"
+    paginated
+    :per-page="perPage"
+    v-model:current-page="page"
+    pagination-position="bottom"
+    aria-next-label="Next page"
+    aria-previous-label="Previous page"
+    aria-page-label="Page"
+    aria-current-label="Current page"
   >
     <b-table-column field="rank" label="#" width="56" centered v-slot="props">
       <div class="rank" :class="rankClass(rankOf(tier, props.row))">{{ rankOf(tier, props.row) ?? '—' }}</div>

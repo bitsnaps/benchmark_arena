@@ -143,6 +143,34 @@ const run = async () => {
     if (headCols === expectCols + 1) ok(`pivot header: ${expectCols} provider columns + Model`);
     else fail(`pivot header columns: expected ${expectCols + 1}, got ${headCols}`);
 
+    // ── pagination (stats-20): default 50/page, prev/next, then All ──
+    await page.waitForSelector('.pm-pager select', { timeout: 10000 });
+    const p1Rows = await page.locator('.pm-table tbody tr').count();
+    if (p1Rows === 50) ok('pager defaults to 50 rows on page 1');
+    else fail(`pager default page size: expected 50 rows, got ${p1Rows}`);
+    let label = (await page.locator('.pm-page-label').innerText()).trim();
+    if (label === `Page 1 of ${Math.ceil(mx.length / 50)}`)
+      ok(`pager label honest ("${label}")`);
+    else fail(`pager label: expected "Page 1 of ${Math.ceil(mx.length / 50)}", got "${label}"`);
+    const p1First = await page.locator('.pm-table tbody tr .prov-model').first().innerText();
+    await page.click('.pm-pager button[aria-label="Next page"]');
+    await page.waitForTimeout(300);
+    const p2First = await page.locator('.pm-table tbody tr .prov-model').first().innerText();
+    label = (await page.locator('.pm-page-label').innerText()).trim();
+    if (label === `Page 2 of ${Math.ceil(mx.length / 50)}` && p1First !== p2First)
+      ok(`next page flips rows ("${p1First}" → "${p2First}")`);
+    else fail(`next page: label "${label}", first "${p2First}"`);
+    // a filter change must land back on page 1
+    await page.fill('input.input', 'opus');
+    await page.waitForTimeout(400);
+    label = (await page.locator('.pm-page-label').innerText()).trim();
+    if (label.startsWith('Page 1 of')) ok('filter change resets to page 1');
+    else fail(`filter reset: expected page 1, got "${label}"`);
+    await page.fill('input.input', '');
+    await page.waitForTimeout(300);
+    await page.selectOption('.pm-pager select', '0'); // All — legacy expectations below
+    await page.waitForTimeout(300);
+
     const domRows = await page.locator('.pm-table tbody tr').count();
     if (domRows === expectRows) ok(`pivot renders ${domRows} canonical rows by default (batch hidden)`);
     else fail(`pivot rows: expected ${expectRows}, got ${domRows}`);

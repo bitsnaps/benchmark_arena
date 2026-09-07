@@ -84,6 +84,11 @@ const ok = (msg) => console.log('  ok:', msg);
   try {
     await page.goto(BASE, { waitUntil: 'networkidle' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
 
     // ── 1. Header order: SCORE, PRICE, VALUE, then the 8 core columns ──
     const headers = (await page.locator('.b-table thead th').allInnerTexts()).map(s => s.trim().toUpperCase());

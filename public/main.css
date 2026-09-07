@@ -604,6 +604,8 @@ a.hbar:hover .name { color: var(--teal); }
 .pm-chip-n { color: var(--faint); font-weight: 500; margin-left: .3rem; font-size: .72rem; }
 .pm-price-label { min-width: 11ch; display: inline-block; }
 .pm-coverage { text-align: right; }
+.pm-page-label { white-space: nowrap; margin: 0 .5rem; }
+.page-size select, .pm-pager select { width: auto; }
 .pm-wrap { overflow-x: auto; margin-top: .55rem; }
 .pm-table { min-width: 760px; }
 .pm-table th.pm-h {

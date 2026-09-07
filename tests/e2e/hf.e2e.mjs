@@ -51,6 +51,11 @@ const ok = (msg) => console.log('  ok:', msg);
   try {
     await page.goto(BASE, { waitUntil: 'networkidle' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
 
     // ── 1. chip count on the leaderboard = visible rows with an HF id ──
     const chips = await page.locator('.b-table .hf-chip').count();
@@ -98,6 +103,11 @@ const ok = (msg) => console.log('  ok:', msg);
     // ── 5. closed model card: no HF link ──
     await page.goto(BASE, { waitUntil: 'networkidle' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
     await closedRow.locator('.model-link').first().click();
     await page.waitForSelector('.model-head', { timeout: 10000 });
     const closedCard = await page.locator('.model-head a.hf-link').count();
@@ -107,6 +117,11 @@ const ok = (msg) => console.log('  ok:', msg);
     // ── 6. ":free" stays data-only — never rendered anywhere on the page ──
     await page.goto(BASE, { waitUntil: 'networkidle' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
     const bodyText = await page.locator('body').innerText();
     const anyFreeMeta = Object.values(META).some(m => (m.or_free_variants || []).length > 0);
     if (!bodyText.includes(':free')) ok('no ":free" variant leaks into the UI');

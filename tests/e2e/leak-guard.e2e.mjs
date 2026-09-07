@@ -53,6 +53,11 @@ const EXPLORER_SEL = '.hbar .name';
   ]) {
     await page.goto(BASE + route, { waitUntil: 'networkidle' });
     await page.waitForSelector(LEADERBOARD_SEL, { timeout: 10000 });
+    // stats-20: pager defaults to 50/page — flip to All so the red-line
+    // trio (which spans the full ranking) is guaranteed to be in the DOM
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+    await page.waitForTimeout(300);
     const shown = await visibleModels(page, LEADERBOARD_SEL);
     const leaked = shown.filter(n => OLD_NAMES.has(n));
     if (leaked.length) fail(`${label}: older models visible by default: ${leaked.join(' | ')}`);
@@ -85,6 +90,10 @@ const EXPLORER_SEL = '.hbar .name';
   if (await page.locator('.older-section').count())
     fail('separate older section rendered while toggle is ON (older models must be INLINE)');
   else ok('toggle ON: older models render inline in the main table (no separate section)');
+  // stats-20: flip the pager to All so every row is in the DOM for this scan
+  await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+  await page.selectOption('.page-size select', '0').catch(() => {});
+  await page.waitForTimeout(300);
   // Read the main table row by row: name + whether the row is dimmed (older)
   const rowInfo = await page.locator('.b-table .table tbody tr').evaluateAll(rows =>
     rows.map(tr => ({

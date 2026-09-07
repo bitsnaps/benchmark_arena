@@ -86,6 +86,11 @@ const expectCount = async (page, selector, expected, label) => {
     // ── 1. default leaderboard: free + sellers chips match the snapshot ──
     await page.goto(BASE, { waitUntil: 'load' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 15000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
     await expectCount(page, '.b-table .table tbody tr', visible.length, 'default rows');
     await expectCount(page, '.b-table .free-chip', freeRows.length, 'free chips');
     const availChipRows = visible.filter(r => {
@@ -117,11 +122,21 @@ const expectCount = async (page, selector, expected, label) => {
     // ── 3. ?free=1 deep link pre-filters (hash router: params live after #/) ──
     await page.goto(BASE + '#/?free=1', { waitUntil: 'load' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 15000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
     await expectCount(page, '.b-table .table tbody tr', freeRows.length, 'rows with ?free=1');
 
     // ── 4. ?price= cap: blended price ≤ cap, free counts as $0 ──
     await page.goto(`${BASE}#/?price=${CAP}`, { waitUntil: 'load' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 15000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
     await expectCount(page, '.b-table .table tbody tr', capRows.length, `rows with ?price=${CAP}`);
     // b-tag renders Bulma's .tag class — price cap tag shows "≤ $0.50"
     const tagText = (await page.locator('.tag', { hasText: '≤' }).first().innerText()).trim();
@@ -131,20 +146,40 @@ const expectCount = async (page, selector, expected, label) => {
     // ── 5. ?seller= filter: only rows the seller's catalog lists ──
     await page.goto(`${BASE}#/?seller=${ZEN}`, { waitUntil: 'load' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 15000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
     await expectCount(page, '.b-table .table tbody tr', zenRows.length, `rows with ?seller=${ZEN}`);
     // unknown slug is IGNORED (never applied) — full listing stays visible
     await page.goto(`${BASE}#/?seller=no-such-seller`, { waitUntil: 'load' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 15000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
     await expectCount(page, '.b-table .table tbody tr', visible.length, 'rows with unknown ?seller (ignored, full list)');
 
     // ── 6. filters compose: ?free=1&price= ──
     await page.goto(`${BASE}#/?free=1&price=${CAP}`, { waitUntil: 'load' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 15000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
     await expectCount(page, '.b-table .table tbody tr', bothRows.length, 'rows with ?free=1&price=' + CAP);
 
     // ── 7. model card: full "Available at" panel ──
     await page.goto(BASE, { waitUntil: 'load' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 15000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
     await page.locator('.model-link', { hasText: ANCHOR.name }).first().click();
     await page.waitForSelector('.model-head', { timeout: 10000 });
     await page.waitForSelector('.avail-row', { timeout: 10000 });

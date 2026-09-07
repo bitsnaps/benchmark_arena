@@ -50,6 +50,11 @@ const ok = (msg) => console.log('  ok:', msg);
   // ── 1. Home IS the leaderboard ──
   await page.goto(BASE, { waitUntil: 'networkidle' });
   await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+  await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+  await page.selectOption('.page-size select', '0').catch(() => {});
+
   ok('home renders the leaderboard table directly');
   if (await page.locator('.hero-lab').count()) fail('hero/overview page should be gone');
   const navTexts = (await page.locator('.navbar-start a').allInnerTexts()).map(s => s.trim());
@@ -162,6 +167,11 @@ const ok = (msg) => console.log('  ok:', msg);
     }
     await page.goto(BASE, { waitUntil: 'networkidle' });
     await page.waitForSelector('.b-table .table tbody tr');
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
   }
 
   // ── 1c. Min-CL slider filters thin-coverage rows ──
@@ -265,6 +275,11 @@ const ok = (msg) => console.log('  ok:', msg);
     // persistence: reload → selection survives via localStorage (and URL param)
     await page.reload({ waitUntil: 'networkidle' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+    await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+    await page.selectOption('.page-size select', '0').catch(() => {});
+
     if (!(await pollEqb(true))) fail('EQB column lost after reload — persistence broken');
     else ok('custom mix persists across reload (localStorage + ?avg=)');
 
@@ -315,6 +330,11 @@ const ok = (msg) => console.log('  ok:', msg);
   // ── 3. Legacy /#/leaderboard/x redirects ──
   await page.goto(BASE + '#/leaderboard/open', { waitUntil: 'networkidle' });
   await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+  await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+  await page.selectOption('.page-size select', '0').catch(() => {});
+
   if (!page.url().includes('tier=open')) fail('legacy #/leaderboard/open should redirect to ?tier=open, got ' + page.url());
   else ok('legacy #/leaderboard/open → #/?tier=open');
   if (!/Open-weight/i.test(await page.locator('.tier-tabs .tabs li.is-active a').innerText())) fail('redirected page should show Open-weight active');
@@ -441,6 +461,11 @@ const ok = (msg) => console.log('  ok:', msg);
   // ── 8. Compare flow on home + full comparison page ──
   await page.goto(BASE, { waitUntil: 'networkidle' });
   await page.waitForSelector('.b-table .table tbody tr');
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+  await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+  await page.selectOption('.page-size select', '0').catch(() => {});
+
   await page.locator('label.switch:has-text("Compare")').click();
   await page.locator('.b-table .table tbody tr .b-checkbox input').nth(0).click({ force: true });
   await page.locator('.b-table .table tbody tr .b-checkbox input').nth(1).click({ force: true });
@@ -474,11 +499,21 @@ const ok = (msg) => console.log('  ok:', msg);
   // ── 10. Screenshots + mobile ──
   await page.goto(BASE, { waitUntil: 'networkidle' });
   await page.waitForSelector('.b-table .table tbody tr');
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+  await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+  await page.selectOption('.page-size select', '0').catch(() => {});
+
   await page.screenshot({ path: SHOTS + '/home-desktop.png' });
   const mob = await browser.newPage({ viewport: { width: 390, height: 844 } });
   mob.on('pageerror', e => errors.push('mobile pageerror: ' + e.message));
   await mob.goto(BASE, { waitUntil: 'networkidle' });
   await mob.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
+// stats-20: pagination default is 50/page — flip to All so the legacy
+// row-count expectations (which assume every row in the DOM) still hold
+  await mob.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
+  await mob.selectOption('.page-size select', '0').catch(() => {});
+
   await mob.screenshot({ path: SHOTS + '/home-mobile.png' });
   await mob.goto(BASE + '#/model/' + slugify(EXPECT.all), { waitUntil: 'networkidle' });
   await mob.waitForSelector('.model-head', { timeout: 10000 });

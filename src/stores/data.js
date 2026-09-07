@@ -308,18 +308,34 @@ const metaCoverage = computed(() => {
 });
 
 // ── Pricing (price layer) ────────────────────────────────────────────────
-// API list price attached by the scraper in models_meta.pricing_usd_per_1m
-// (OpenRouter snapshot, USD per 1M tokens). Rows without a catalog match
-// resolve to null — never fabricated. `blend` is the 3:1 in:out mean used
-// for sorting; `output`/`cache_read` may be null when the catalog lacks them.
+// API list price per 1M tokens. Source preference (stats-19): the AA list
+// price (models_meta.pricing_aa_usd_per_1m — the lab's own price, no
+// routing margin) when present, else the OpenRouter snapshot
+// (pricing_usd_per_1m). `source` records which one fed the row so the UI
+// tooltips stay honest. Rows without either resolve to null — never
+// fabricated. `blend` is the 3:1 in:out mean used for sorting;
+// `output`/`cache_read` may be null when the source lacks them.
 const priceFor = (row) => {
-  const pr = metaFor(row)?.pricing_usd_per_1m;
+  const meta = metaFor(row);
+  const aa = meta?.pricing_aa_usd_per_1m;
+  if (aa && typeof aa.input === 'number') {
+    const out = typeof aa.output === 'number' ? aa.output : null;
+    return {
+      input: aa.input,
+      output: out,
+      cache_read: typeof aa.cache_read === 'number' ? aa.cache_read : null,
+      source: 'aa',
+      blend: out === null ? aa.input : (3 * aa.input + out) / 4,
+    };
+  }
+  const pr = meta?.pricing_usd_per_1m;
   if (!pr || typeof pr.input !== 'number') return null;
   const out = typeof pr.output === 'number' ? pr.output : null;
   return {
     input: pr.input,
     output: out,
     cache_read: typeof pr.cache_read === 'number' ? pr.cache_read : null,
+    source: 'openrouter',
     blend: out === null ? pr.input : (3 * pr.input + out) / 4,
   };
 };

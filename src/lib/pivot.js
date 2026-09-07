@@ -22,6 +22,27 @@
 
 import { priceBlend } from './format.js';
 
+// ── Pricing-mode variants (stats-19) ────────────────────────────────────
+// OpenRouter's ':batch' ids are async/batch endpoints of the SAME model at
+// a discounted price — pricing modes, not models. They glue their suffix in
+// normKey (separate rows, per the variant discipline) but hide behind the
+// providers listing "batch variants" toggle so the default view compares
+// standard endpoints. Note '-beta'/'-online' ids are NOT variants — they
+// are part of real model names (grok-3-beta, sonar-small-online).
+export function isBatchId(id) {
+  return !!id && /:batch$/i.test(String(id).trim());
+}
+
+// Accepts a catalog row ({ id, name }) or a pivot row ({ ids[], name }).
+// A pivot row is a batch row when EVERY joined id is a batch id (batch ids
+// glue their own normKey, so they never mix with base-model ids).
+export function isBatchRow(r) {
+  if (!r) return false;
+  const ids = Array.isArray(r.ids) ? r.ids : (r.id != null ? [r.id] : []);
+  if (ids.length) return ids.every(isBatchId);
+  return /\(batch\)\s*$/i.test(String(r.name || '').trim());
+}
+
 // Join key for a catalog id (or a name fallback). Null-safe.
 export function normKey(raw) {
   if (!raw) return null;

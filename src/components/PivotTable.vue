@@ -32,6 +32,12 @@ const olderTitle = (row) =>
 // ★ footnote: source sites list this model under a different (e.g. HF repo) name
 const aliasNote = (row) => metaFor(row)?.alias_note || null;
 
+// The model's short API id (org/model) — stats-19: listings present only the
+// full name; the id lives on the model card and in hover tooltips.
+const apiIdOf = (row) => metaFor(row)?.or_id || null;
+const modelLinkTitle = (row) =>
+  `Open ${row.name}'s score card${apiIdOf(row) ? ' · API id: ' + apiIdOf(row) : ''}`;
+
 // ── Availability chips ("available at" layer, stats-18) ────────────────
 // free chip: the row has a FREE LISTING at some seller — free ≠ unlimited,
 // the tooltip carries the rate-limit caveat and names the free sellers.
@@ -88,12 +94,17 @@ function byValue(a, b, isAsc) {
   return isAsc ? av - bv : bv - av;
 }
 
-// Tooltip for the Price cell: full in / out / cache breakdown
+// Tooltip for the Price cell: source (AA list price when available — the
+// lab's own price, no routing margin — else the OpenRouter snapshot) + the
+// full in / out / cache breakdown
 function priceTitle(row) {
   const p = priceFor(row);
-  if (!p) return 'No API price in the OpenRouter catalog snapshot for this row';
+  if (!p) return 'No API price on record for this row';
+  const src = p.source === 'aa'
+    ? 'Artificial Analysis list price — the lab\u2019s own price, no routing margin'
+    : 'OpenRouter snapshot — router list price';
   const cache = p.cache_read != null ? ` · cache read ${fmtUsd(p.cache_read)}` : '';
-  return `API list price — input ${fmtUsd(p.input)} · output ${fmtUsd(p.output)}${cache} per 1M tokens (OpenRouter snapshot; sorted by a 3:1 in:out blend). Compare sellers on the Providers page.`;
+  return `API list price — input ${fmtUsd(p.input)} · output ${fmtUsd(p.output)}${cache} per 1M tokens (${src}; sorted by a 3:1 in:out blend). Compare sellers on the Providers page.`;
 }
 
 // Tooltip for the Value cell: the exact division behind the number
@@ -145,7 +156,7 @@ function scoreTitle(row) {
           <router-link
             class="model-link has-text-weight-semibold"
             :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
-            :title="'Open ' + props.row.name + '\'s score card'"
+            :title="modelLinkTitle(props.row)"
           >{{ props.row.name }}<span v-if="aliasNote(props.row)" class="alias-star" :title="aliasNote(props.row)">★</span></router-link>
           <div class="cell-sub">
             {{ providerColor(props.row.name).name }}
@@ -169,10 +180,11 @@ function scoreTitle(row) {
     </b-table-column>
 
     <!-- Price: per-model API metadata (not a benchmark), always visible.
-         OpenRouter list price from models_meta.pricing_usd_per_1m; models
-         without a catalog match show an honest dash. -->
+         AA list price when available (the lab's own, no routing margin),
+         else the OpenRouter snapshot; models with no price on record show
+         an honest dash. -->
     <b-table-column field="price" label="Price" width="115" centered sortable :custom-sort="byPrice"
-      :th-attrs="() => ({ title: 'API list price, USD per 1M tokens — input / output (OpenRouter snapshot). Sorted by a 3:1 in:out blend. — = no catalog match.' })"
+      :th-attrs="() => ({ title: 'API list price, USD per 1M tokens — input / output. Artificial Analysis list price when available (no routing margin); OpenRouter snapshot otherwise. Sorted by a 3:1 in:out blend. — = no price on record.' })"
       v-slot="props"
     >
       <span v-if="priceFor(props.row)" class="price-cell" :title="priceTitle(props.row)">{{ fmtUsd(priceFor(props.row).input) }}<span class="price-sep">/</span>{{ fmtUsd(priceFor(props.row).output) }}</span>

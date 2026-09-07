@@ -22,7 +22,14 @@ const score = r => { const raw = avg(r); if (raw === -1) return -1; const cl = M
 const META = data.models_meta || {};
 const isOld = r => !!(META[r.name] && (META[r.name].superseded_by || META[r.name].stale));
 const blend = name => {
-  const pr = META[name] && META[name].pricing_usd_per_1m;
+  const m = META[name] || {};
+  // stats-19: AA list price wins when present (same rule as the store)
+  const aa = m.pricing_aa_usd_per_1m;
+  if (aa && typeof aa.input === 'number') {
+    const out = typeof aa.output === 'number' ? aa.output : null;
+    return out === null ? aa.input : (3 * aa.input + out) / 4;
+  }
+  const pr = m.pricing_usd_per_1m;
   if (!pr || typeof pr.input !== 'number') return null;
   const out = typeof pr.output === 'number' ? pr.output : null;
   return out === null ? pr.input : (3 * pr.input + out) / 4;

@@ -316,10 +316,32 @@ describe('pricing layer (price column from models_meta.pricing_usd_per_1m)', () 
   });
 
   it('blend is the 3:1 input:output mean of the row\u2019s own prices', () => {
-    const any = d.pivotAll.value.find(r => d.priceFor(r));
+    const any = d.pivotAll.value.find(r => {
+      const p = d.priceFor(r);
+      return p && p.output !== null;
+    });
     expect(any).toBeTruthy();
     const p = d.priceFor(any);
     expect(p.blend).toBeCloseTo((3 * p.input + p.output) / 4, 10);
+  });
+
+  it('every priced row records its source — aa (AA list price) or openrouter', () => {
+    let aa = 0, or = 0;
+    for (const r of d.pivotAll.value) {
+      const p = d.priceFor(r);
+      if (!p) continue;
+      expect(['aa', 'openrouter']).toContain(p.source);
+      if (p.source === 'aa') {
+        aa++;
+        // the aa branch must surface the AA record verbatim
+        const rec = d.metaFor(r).pricing_aa_usd_per_1m;
+        expect(p.input).toBe(rec.input);
+      } else {
+        or++;
+        expect(d.metaFor(r).pricing_usd_per_1m).toBeTruthy();
+      }
+    }
+    expect(aa).toBeGreaterThan(0); // stats-19: the AA layer is populated
   });
 
   it('anchor: Claude Opus 5 at its official $5 / $25 list price', () => {
@@ -465,8 +487,13 @@ describe('hugging face identity (open-weight repo links)', () => {
     expect(mimo?.hugging_face_id).toBe('XiaomiMiMo/MiMo-V2-Flash');
     expect(mimo?.total_params_b).toBeGreaterThan(0); // safetensors-backed
     expect(mimo?.or_id ?? null).toBeNull();
-    // a record created purely for identity must not fabricate a price
-    expect(d.priceFor(rowOf('MiMo-V2-Flash'))).toBeNull();
+    // no OpenRouter price can be fabricated for a record the catalog never
+    // matched — but stats-19's AA layer may attach a REAL mined list price
+    expect(mimo?.pricing_usd_per_1m ?? null).toBeNull();
+    const aa = d.priceFor(rowOf('MiMo-V2-Flash'));
+    expect(aa?.source).toBe('aa'); // mined from Artificial Analysis, not guessed
+    expect(aa?.input).toBe(0.1);
+    expect(aa?.output).toBe(0.3);
     expect(d.hfUrlFor(rowOf('MiMo-V2-Flash'))).toBe('https://huggingface.co/XiaomiMiMo/MiMo-V2-Flash');
   });
 

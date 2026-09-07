@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildMatrix, sortMatrixRows, DEFAULT_COLUMNS } from '../../src/lib/pivot.js';
+import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS } from '../../src/lib/pivot.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SHOTS = path.join(REPO, 'tests', 'e2e', 'shots');
@@ -130,7 +130,11 @@ const run = async () => {
     ok('Compare tab renders the pivot table');
 
     const { rows: mxRows } = buildMatrix(catalog.providers, DEFAULT_COLUMNS);
-    const mx = sortMatrixRows(mxRows);
+    const mxAll = sortMatrixRows(mxRows);
+    // stats-19: batch pricing variants are hidden by default — the DOM shows
+    // only standard-endpoint rows until the toggle is switched on
+    const mx = mxAll.filter(r => !isBatchRow(r));
+    const batchRows = mxAll.length - mx.length;
     const expectRows = mx.length;
     const expectNimFree = mx.filter(r => r.cells['nvidia-nim']?.free).length;
     const expectCols = DEFAULT_COLUMNS.length;
@@ -140,11 +144,24 @@ const run = async () => {
     else fail(`pivot header columns: expected ${expectCols + 1}, got ${headCols}`);
 
     const domRows = await page.locator('.pm-table tbody tr').count();
-    if (domRows === expectRows) ok(`pivot renders all ${domRows} canonical model rows`);
+    if (domRows === expectRows) ok(`pivot renders ${domRows} canonical rows by default (batch hidden)`);
     else fail(`pivot rows: expected ${expectRows}, got ${domRows}`);
 
+    // batch-variants toggle reveals the hidden pricing-mode rows (stats-19)
+    await page.click('.pm-controls label:has-text("batch variants")');
+    await page.waitForTimeout(400);
+    const withBatch = await page.locator('.pm-table tbody tr').count();
+    if (withBatch === mxAll.length && batchRows > 0)
+      ok(`batch toggle reveals all ${withBatch} rows (+${batchRows} pricing variants)`);
+    else fail(`batch toggle: expected ${mxAll.length} rows, got ${withBatch}`);
+    await page.click('.pm-controls label:has-text("batch variants")'); // off again
+    await page.waitForTimeout(300);
+    const backRows = await page.locator('.pm-table tbody tr').count();
+    if (backRows === expectRows) ok(`batch toggle off restores ${backRows} rows`);
+    else fail(`batch toggle off: expected ${expectRows}, got ${backRows}`);
+
     const coverage = await page.locator('.pm-coverage').innerText();
-    if (coverage.includes(`${expectRows} canonical models`) && coverage.includes('duplicate ids collapsed'))
+    if (coverage.includes(`${mxAll.length} canonical models`) && coverage.includes('duplicate ids collapsed') && coverage.includes('batch variants hidden'))
       ok(`coverage line honest ("${coverage.replace(/\s+/g, ' ').trim()}")`);
     else fail(`coverage line wrong: "${coverage.trim()}"`);
 

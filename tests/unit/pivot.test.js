@@ -13,6 +13,8 @@ import {
   filterMatrix,
   latencyTier,
   latencyClass,
+  isBatchId,
+  isBatchRow,
   DEFAULT_COLUMNS,
 } from '../../src/lib/pivot.js';
 
@@ -257,5 +259,38 @@ describe('DEFAULT_COLUMNS', () => {
       'openrouter', 'orcarouter', 'opencode-zen', 'nvidia-nim',
       'fireworks-ai', 'deepinfra', 'together-ai', 'groq',
     ]);
+  });
+});
+
+describe('batch pricing-variant detection (stats-19 toggle)', () => {
+  it('flags only :batch-suffixed ids', () => {
+    expect(isBatchId('openai/gpt-5:batch')).toBe(true);
+    expect(isBatchId('GPT-5:batch')).toBe(true);
+    expect(isBatchId('openai/gpt-5')).toBe(false);
+    expect(isBatchId('')).toBe(false);
+    expect(isBatchId(null)).toBe(false);
+  });
+
+  it('never flags real model names that merely end in similar words', () => {
+    // '-beta'/'-online' are part of genuine model names, NOT pricing modes
+    expect(isBatchId('x-ai/grok-3-beta')).toBe(false);
+    expect(isBatchId('perplexity/sonar-small-online')).toBe(false);
+  });
+
+  it('catalog rows are batch rows when their id is a batch id', () => {
+    expect(isBatchRow({ id: 'openai/gpt-5:batch', name: 'GPT-5 batch' })).toBe(true);
+    expect(isBatchRow({ id: 'openai/gpt-5', name: 'GPT-5' })).toBe(false);
+  });
+
+  it('pivot rows are batch rows only when EVERY joined id is a batch id', () => {
+    expect(isBatchRow({ ids: ['openai/gpt-5:batch'], name: null })).toBe(true);
+    expect(isBatchRow({ ids: ['openai/gpt-5', 'openai/gpt-5:batch'], name: null })).toBe(false);
+  });
+
+  it('falls back to the (batch) display-name marker when no ids exist', () => {
+    expect(isBatchRow({ name: 'GPT-5 (batch)' })).toBe(true);
+    expect(isBatchRow({ name: 'GPT-5' })).toBe(false);
+    expect(isBatchRow(null)).toBe(false);
+    expect(isBatchRow({})).toBe(false);
   });
 });

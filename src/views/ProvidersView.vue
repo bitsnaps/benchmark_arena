@@ -8,15 +8,15 @@
 //                         src/lib/pivot.js (org-strip normalization + free-
 //                         twin attach; see the lib header for discipline).
 // Filters compose inside the Compare tab: search (shared), provider picker,
-// free-only toggle, max-price slider. Free ≠ unlimited — every free chip
-// carries the rate-limit caveat, and unpriced catalogs (NVIDIA NIM rows,
-// OpenCode Zen) render honest dashes, never fabricated prices.
+// free-only toggle, max-price slider, batch-variants toggle. Free ≠ unlimited
+// — every free chip carries the rate-limit caveat, and unpriced catalogs
+// (NVIDIA NIM rows, OpenCode Zen) render honest dashes, never fabricated prices.
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { fmtUsd, fmtCtx } from '../lib/format.js';
 import {
   buildMatrix, sortMatrixRows, filterMatrix, rowBlend, cellBlend, cheapestPid,
-  latencyClass, DEFAULT_COLUMNS,
+  latencyClass, isBatchRow, DEFAULT_COLUMNS,
 } from '../lib/pivot.js';
 import { useProviders } from '../stores/providers.js';
 
@@ -128,6 +128,10 @@ function resetColumns() {
 }
 
 const freeOnly = ref(false);
+// stats-19: pricing-mode variants (OpenRouter ':batch' ids — async endpoints
+// of the SAME model at a discount) are hidden by default so the default view
+// compares standard endpoints; the toggle reveals them.
+const showBatch = ref(false);
 
 const matrix = computed(() => {
   if (!rawData.value || !selected.value) return null;
@@ -155,9 +159,16 @@ const maxPrice = computed(() => {
 const maxPriceLabel = computed(() =>
   maxPrice.value == null ? 'any price' : `≤ ${fmtUsd(maxPrice.value)}/1M blended`);
 
-const visibleRows = computed(() => matrix.value
-  ? filterMatrix(matrix.value.rows, { q: q.value, freeOnly: freeOnly.value, maxPrice: maxPrice.value })
-  : []);
+const visibleRows = computed(() => {
+  if (!matrix.value) return [];
+  const rows = filterMatrix(matrix.value.rows,
+    { q: q.value, freeOnly: freeOnly.value, maxPrice: maxPrice.value });
+  return showBatch.value ? rows : rows.filter(r => !isBatchRow(r));
+});
+// Batch rows currently hidden by the default (toggle off) — surfaced in the
+// coverage line so the hidden rows stay accounted for.
+const batchHidden = computed(() => matrix.value
+  ? matrix.value.rows.filter(r => isBatchRow(r)).length : 0);
 
 const selProviders = computed(() =>
   (selected.value ? [...selected.value].map(id => byId.value[id]).filter(Boolean) : []));
@@ -210,6 +221,14 @@ function cellTitle(r, pid) {
   }
   if (c.free) return `${who} — free tier, rate limits apply (not unlimited); the API exposes no price`;
   return `${who} — listed; the API exposes no price`;
+}
+// Row hover tooltip: the full name is the only displayed format (stats-19);
+// the raw API id(s) behind this canonical row surface here instead.
+function rowTitle(r) {
+  const ids = (r.ids || []).filter(Boolean);
+  const idBit = ids.length ? `API id: ${ids.join(', ')}` : `Row key: ${r.key}`;
+  const batch = isBatchRow(r) ? ' (batch pricing variant)' : '';
+  return `${r.name || r.key}${batch} — ${idBit}`;
 }
 const isCheapest = (r, pid) => {
   const cp = cheapestPid(r);
@@ -314,6 +333,8 @@ const colHeaderTitle = (p) => {
 
           <div class="row pm-controls mt-sm" style="align-items:center">
             <b-switch v-model="freeOnly" size="is-small">free only</b-switch>
+            <b-switch v-model="showBatch" size="is-small"
+              title="Show ':batch' pricing variants — async endpoints of the same model at a discounted price">batch variants</b-switch>
             <span class="cell-sub" style="margin-left:.4rem">max price</span>
             <b-slider v-model="sliderVal" :min="0" :max="100" :step="1" size="is-small"
               :tooltip="false" aria-label="maximum blended price per 1M tokens" style="max-width:240px" />
@@ -323,7 +344,7 @@ const colHeaderTitle = (p) => {
               {{ matrix ? matrix.coverage.models : 0 }} canonical models ·
               {{ selProviders.length }} columns ·
               {{ matrix ? matrix.coverage.collapsed : 0 }} duplicate ids collapsed ·
-              {{ visibleRows.length }} shown
+              {{ visibleRows.length }} shown<span v-if="!showBatch && batchHidden"> · {{ batchHidden }} batch variants hidden</span>
             </span>
           </div>
 
@@ -342,8 +363,9 @@ const colHeaderTitle = (p) => {
               <tbody>
                 <tr v-for="r in sortedRows" :key="r.key">
                   <td class="left pm-model-col">
-                    <span class="prov-model">{{ r.name || r.key }}</span>
-                    <span v-if="r.name && r.firstId && r.firstId !== r.name" class="prov-id">{{ r.firstId }}</span>
+                    <!-- one name format: the full model name; the raw API id
+                         lives in the hover tooltip (stats-19) -->
+                    <span class="prov-model" :title="rowTitle(r)">{{ r.name || r.key }}</span>
                   </td>
                   <td v-for="p in selProviders" :key="p.id" class="num pm-cell"
                     :class="[latencyClass(r.cells[p.id] && r.cells[p.id].latency), { 'is-cheapest': isCheapest(r, p.id) }]">
@@ -370,9 +392,11 @@ const colHeaderTitle = (p) => {
             Rows are canonical models joined across sellers by normalized id — org prefix and
             punctuation stripped; <code>-free</code>/<code>:free</code> twins attach to their
             base model as a free tier. The highlighted cell is the cheapest known blend (3:1
-            in:out) per row. NVIDIA NIM is a free tier (rate-limited); OpenCode Zen lists
-            without prices. Latency coloring is wired but idle — none of these catalogs
-            publishes per-model latency yet, so values stay gray until a real source exists.
+            in:out) per row. <code>:batch</code> pricing variants (async endpoints of the same
+            model at a discount) are hidden behind the <b>batch variants</b> toggle. NVIDIA NIM
+            is a free tier (rate-limited); OpenCode Zen lists without prices. Latency coloring
+            is wired but idle — none of these catalogs publishes per-model latency yet, so
+            values stay gray until a real source exists.
           </p>
         </template>
       </b-tab-item>

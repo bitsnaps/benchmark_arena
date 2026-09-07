@@ -52,9 +52,14 @@ const released = computed(() => (model.value ? releaseDateOf(model.value) : null
 // ★ footnote: a source site lists this model under a different name (alias_note)
 const aliasNote = computed(() => (model.value ? metaFor(model.value)?.alias_note || null : null));
 
-// API pricing (price layer) — OpenRouter list price for this exact row
+// API pricing (price layer) — AA list price when on record (the lab's own,
+// no routing margin), else the OpenRouter snapshot. Source surfaces in the
+// panel label so the number is never misattributed.
 const pricing = computed(() => (model.value ? priceFor(model.value) : null));
 const modelCtx = computed(() => (model.value ? metaFor(model.value)?.context_length || null : null));
+// stats-19: the raw API id (org/model) — the card is where the short format
+// lives now; listings present only the full name.
+const orId = computed(() => (model.value ? metaFor(model.value)?.or_id || null : null));
 // Value lens — Score per 1M blended tokens (same number the Value column sorts by)
 const value = computed(() => (model.value ? valueFor(model.value) : null));
 // Hugging Face repo — open-weight models only (null for closed / unverified)
@@ -98,6 +103,8 @@ function addToCompare() {
       <span class="av lg" :style="{ background: provider.color }">{{ initials(model.name) }}</span>
       <div class="grow">
         <h1 class="section-title" style="margin:0">{{ model.name }}</h1>
+        <div v-if="orId" class="cell-sub prov-id" style="margin-top:.15rem"
+          :title="'Raw API id — the short format behind the full name shown in listings'">API id: {{ orId }}</div>
         <div class="row mt-sm" style="gap:.4rem">
           <span class="tag-lab">{{ provider.name }}</span>
           <span class="tag-lab" :class="tier === 'closed' ? 'rose' : 'teal'">{{ tier === 'closed' ? 'Closed-source' : 'Open-weight' }}</span>
@@ -197,7 +204,7 @@ function addToCompare() {
     <div v-if="pricing" class="panel-lab mt" style="padding:1.2rem">
       <div class="row" style="justify-content:space-between;margin-bottom:.6rem">
         <h3 style="margin:0;font-size:1.05rem">API pricing</h3>
-        <span class="cell-sub">OpenRouter list price · snapshot {{ stats.lastUpdated }}</span>
+        <span class="cell-sub">{{ pricing.source === 'aa' ? 'Artificial Analysis list price · no routing margin' : 'OpenRouter list price' }} · snapshot {{ stats.lastUpdated }}</span>
       </div>
       <div class="grid-4">
         <div class="stat">
@@ -226,8 +233,9 @@ function addToCompare() {
         (3:1 in:out) — sort the leaderboard by the <b>Value</b> column to compare cost efficiency.
       </p>
       <p class="cell-sub mt-sm">
-        Router list price for this exact row — the same model is often cheaper first-party
-        or via other hosts. Compare sellers on the
+        {{ pricing.source === 'aa'
+          ? 'List price recorded by Artificial Analysis — the lab\u2019s own price, without a router\u2019s margin. The same model can still be cheaper first-party or via other hosts — compare sellers on the'
+          : 'Router list price for this exact row — the same model is often cheaper first-party or via other hosts. Compare sellers on the' }}
         <router-link :to="{ name: 'providers' }">Providers page</router-link>.
       </p>
     </div>

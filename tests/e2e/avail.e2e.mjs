@@ -34,6 +34,12 @@ const visible = rows.filter(r => !isOld(r));
 const avail = m => m?.available_at ?? [];
 const hasFree = m => avail(m).some(a => a.free);
 const blend = m => {
+  // stats-19: AA list price wins when present (same rule as the store)
+  const aa = m?.pricing_aa_usd_per_1m;
+  if (aa && typeof aa.input === 'number') {
+    const out = typeof aa.output === 'number' ? aa.output : null;
+    return out === null ? aa.input : (3 * aa.input + out) / 4;
+  }
   const pr = m?.pricing_usd_per_1m;
   if (!pr || typeof pr.input !== 'number') return null;
   const out = typeof pr.output === 'number' ? pr.output : null;

@@ -143,29 +143,41 @@ const run = async () => {
     if (headCols === expectCols + 1) ok(`pivot header: ${expectCols} provider columns + Model`);
     else fail(`pivot header columns: expected ${expectCols + 1}, got ${headCols}`);
 
-    // ── pagination (stats-20): default 50/page, prev/next, then All ──
-    await page.waitForSelector('.pm-pager select', { timeout: 10000 });
+    // ── pagination (stats-21): bottom-right pager, page numbers between
+    // the two arrows, app-wide shared size ────────────────────────────
+    await page.waitForSelector('.pm-pager .app-pager', { timeout: 10000 });
     const p1Rows = await page.locator('.pm-table tbody tr').count();
     if (p1Rows === 50) ok('pager defaults to 50 rows on page 1');
     else fail(`pager default page size: expected 50 rows, got ${p1Rows}`);
-    let label = (await page.locator('.pm-page-label').innerText()).trim();
-    if (label === `Page 1 of ${Math.ceil(mx.length / 50)}`)
-      ok(`pager label honest ("${label}")`);
-    else fail(`pager label: expected "Page 1 of ${Math.ceil(mx.length / 50)}", got "${label}"`);
+    const prevArrow = page.locator('.pm-pager [aria-label="Previous page"]');
+    const nextArrow = page.locator('.pm-pager [aria-label="Next page"]');
+    // page numbers only — Buefy's arrows are PaginationButtons too (icon-only
+    // innerText), so scope to the numbered list
+    const pageNums = (await page.locator('.pm-pager .pagination-list .pagination-link').allInnerTexts()).map(s => s.trim());
+    const ellipsis = await page.locator('.pm-pager .pagination-ellipsis').count();
+    const lastPage = String(Math.ceil(mx.length / 50));
+    if (await prevArrow.count() === 1 && await nextArrow.count() === 1
+        && pageNums[0] === '1' && pageNums[pageNums.length - 1] === lastPage && ellipsis > 0)
+      ok(`page numbers sit between the two arrows (${pageNums.join(' ')} of ${lastPage})`);
+    else fail(`pager structure wrong: prev=${await prevArrow.count()} next=${await nextArrow.count()} nums=${pageNums.join(' ')} ellipsis=${ellipsis}`);
+    const currentLabel = async () => {
+      const cur = page.locator('.pm-pager .pagination-list .pagination-link.is-current');
+      return (await cur.count()) ? (await cur.innerText()).trim() : '1'; // nav hides when everything fits one page
+    };
     const p1First = await page.locator('.pm-table tbody tr .prov-model').first().innerText();
-    await page.click('.pm-pager button[aria-label="Next page"]');
+    await nextArrow.click();
     await page.waitForTimeout(300);
     const p2First = await page.locator('.pm-table tbody tr .prov-model').first().innerText();
-    label = (await page.locator('.pm-page-label').innerText()).trim();
-    if (label === `Page 2 of ${Math.ceil(mx.length / 50)}` && p1First !== p2First)
-      ok(`next page flips rows ("${p1First}" → "${p2First}")`);
-    else fail(`next page: label "${label}", first "${p2First}"`);
-    // a filter change must land back on page 1
+    if ((await currentLabel()) === '2' && p1First !== p2First)
+      ok(`next arrow flips rows ("${p1First}" → "${p2First}")`);
+    else fail(`next arrow: current="${await currentLabel()}", first "${p2First}"`);
+    // a filter change must land back on page 1 (and the pager quiets down
+    // once the filtered result fits a single page)
     await page.fill('input.input', 'opus');
     await page.waitForTimeout(400);
-    label = (await page.locator('.pm-page-label').innerText()).trim();
-    if (label.startsWith('Page 1 of')) ok('filter change resets to page 1');
-    else fail(`filter reset: expected page 1, got "${label}"`);
+    const navQuieted = await page.locator('.pm-pager nav.pagination').count() === 0;
+    if ((await currentLabel()) === '1' && navQuieted) ok('filter change resets to page 1 (single-page result quiets the pager)');
+    else fail(`filter reset: expected page 1 + quiet pager, got "${await currentLabel()}" navHidden=${navQuieted}`);
     await page.fill('input.input', '');
     await page.waitForTimeout(300);
     await page.selectOption('.pm-pager select', '0'); // All — legacy expectations below
@@ -242,6 +254,54 @@ const run = async () => {
     await page.waitForSelector('.prov-card', { timeout: 10000 });
     ok('switching back to By provider keeps the card view intact');
     await page.screenshot({ path: SHOTS + '/providers-compare.png' });
+
+    // ── 5b. Per-provider card pagination (stats-21) ─────────────────
+    // Shared size is still "All" here → every card renders its full table.
+    const bigCard = page.locator('.prov-card', { has: page.locator('.prov-name', { hasText: biggest.name }) });
+    const fullRows = await bigCard.locator('.prov-table tbody tr').count();
+    if (fullRows === biggest.models.length)
+      ok(`"All" size renders the full ${fullRows}-row table in "${biggest.name}"`);
+    else fail(`card All rows: expected ${biggest.models.length}, got ${fullRows}`);
+
+    // 50/page: the oversized card pages, small cards stay quiet
+    await page.selectOption('.prov-size select', '50');
+    await page.waitForTimeout(300);
+    const pagedRows50 = await bigCard.locator('.prov-table tbody tr').count();
+    if (pagedRows50 === 50) ok(`card table pages to 50 of ${biggest.models.length} rows`);
+    else fail(`card page size: expected 50 rows, got ${pagedRows50}`);
+    if (await bigCard.locator('.app-pager').count() === 1)
+      ok('oversized card carries the pager (bottom-right, no repeated size select)');
+    else fail(`card pager count: expected 1, got ${await bigCard.locator('.app-pager').count()}`);
+    // a card that fits on one page stays pager-free — pick the biggest
+    // provider still under the page size, with a unique name to match by
+    const small = catalog.providers
+      .filter(p => p.models.length > 0 && p.models.length < 50 && p.name !== biggest.name)
+      .filter(p => catalog.providers.filter(x => x.name.includes(p.name)).length === 1)
+      .sort((a, b) => b.models.length - a.models.length)[0];
+    const smallCard = page.locator('.prov-card', { has: page.locator('.prov-name', { hasText: small.name }) });
+    const smallRows = await smallCard.locator('.prov-table tbody tr').count();
+    if (smallRows === small.models.length && await smallCard.locator('.app-pager').count() === 0)
+      ok(`card that fits one page ("${small.name}", ${small.models.length} rows) stays pager-free`);
+    else fail(`small card wrong: "${small.name}" rows=${smallRows}/${small.models.length} pager=${await smallCard.locator('.app-pager').count()}`);
+
+    // card next arrow flips rows
+    const c1First = await bigCard.locator('.prov-table tbody tr .prov-model').first().innerText();
+    await bigCard.locator('[aria-label="Next page"]').click();
+    await page.waitForTimeout(300);
+    const c2First = await bigCard.locator('.prov-table tbody tr .prov-model').first().innerText();
+    const cCur = (await bigCard.locator('.pagination-list .pagination-link.is-current').innerText()).trim();
+    if (cCur === '2' && c1First !== c2First)
+      ok(`card next arrow flips rows ("${c1First}" → "${c2First}")`);
+    else fail(`card next: current=${cCur}, "${c1First}" → "${c2First}"`);
+
+    // search wipes card pages — the card restarts at page 1 when refilled
+    await page.fill('input.input', 'opus');
+    await page.waitForTimeout(400);
+    await page.fill('input.input', '');
+    await page.waitForTimeout(400);
+    const cCurReset = (await bigCard.locator('.pagination-list .pagination-link.is-current').innerText()).trim();
+    if (cCurReset === '1') ok('search round-trip resets the card to page 1');
+    else fail(`card reset: expected page 1, got "${cCurReset}"`);
 
     // ── 6. Console cleanliness ──────────────────────────────────────
     const real = consoleErrors.filter(e => !/favicon|Download the Vue Devtools/i.test(e));

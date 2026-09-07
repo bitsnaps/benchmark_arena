@@ -8,6 +8,8 @@ import { SHORT } from '../lib/constants.js';
 import { fmtScore, fmtUsd, fmtValue, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
+import { usePageSize } from '../lib/pager.js';
+import AppPager from './AppPager.vue';
 import { computed, ref, watch } from 'vue';
 
 const props = defineProps({
@@ -15,16 +17,11 @@ const props = defineProps({
   tier: { type: String, default: 'all' },
 });
 
-// ── Pagination (stats-20) ────────────────────────────────────────────
-// Client-side paging over the already-filtered leaderboard rows. Page size
-// persists across visits; 0 = All (full scroll, the pre-pagination behavior).
-const PAGE_KEY = 'arena.pagesize.home';
-const pageSize = ref(50);
-try {
-  const saved = parseInt(localStorage.getItem(PAGE_KEY), 10);
-  if (!isNaN(saved) && [0, 20, 50, 100].includes(saved)) pageSize.value = saved;
-} catch { /* private mode */ }
-watch(pageSize, (v) => { try { localStorage.setItem(PAGE_KEY, String(v)); } catch { /* ignore */ } });
+// ── Pagination (stats-20, unified in stats-21) ────────────────────────────────────────────
+// Client-side paging over the already-filtered leaderboard rows. The page
+// size is the app-wide shared setting (lib/pager.js — same options, same
+// default and the same value on every table); 0 = All (full scroll).
+const pageSize = usePageSize();
 const page = ref(1);
 const perPage = computed(() => (pageSize.value === 0
   ? Math.max(props.rows.length, 1) : pageSize.value));
@@ -145,15 +142,6 @@ function scoreTitle(row) {
 
 <template>
   <div class="cov-table">
-  <div class="row page-size" style="justify-content:flex-end;align-items:center;gap:.45rem;margin-bottom:.35rem">
-    <span class="cell-sub">rows per page</span>
-    <b-select v-model.number="pageSize" size="is-small" aria-label="rows per page">
-      <option :value="20">20</option>
-      <option :value="50">50</option>
-      <option :value="100">100</option>
-      <option :value="0">All</option>
-    </b-select>
-  </div>
   <b-table
     :data="rows"
     narrowed
@@ -271,6 +259,12 @@ function scoreTitle(row) {
         <b-icon icon="magnifying-glass" size="is-medium" />
         <p class="mt-2">No models match your filter.</p>
       </div>
+    </template>
+
+    <!-- stats-21: the one pager — bottom-right, page numbers between the
+         arrows, shared app-wide page size -->
+    <template #pagination>
+      <AppPager v-model:page="page" :total="rows.length" aria-label="Leaderboard pagination" />
     </template>
   </b-table>
   </div>

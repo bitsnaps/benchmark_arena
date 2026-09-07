@@ -14,6 +14,8 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { fmtUsd, fmtCtx } from '../lib/format.js';
+import { usePageSize } from '../lib/pager.js';
+import AppPager from '../components/AppPager.vue';
 import {
   buildMatrix, sortMatrixRows, filterMatrix, rowBlend, cellBlend, cheapestPid,
   latencyClass, isBatchRow, DEFAULT_COLUMNS,
@@ -211,25 +213,30 @@ const sortedRows = computed(() => {
   });
 });
 
-// ── Pagination (stats-20) ────────────────────────────────────────
+// ── Pagination (stats-20, unified in stats-21) ────────────────────────────────────────
 // Manual client-side paging over the sorted pivot rows (plain table, no
-// b-table here). Size persists; 0 = All (the pre-pagination full scroll).
-// Any filter/search/sort change lands back on page 1.
-const PM_PAGE_KEY = 'arena.pagesize.pivot';
-const pageSize = ref(50);
-try {
-  const saved = parseInt(localStorage.getItem(PM_PAGE_KEY), 10);
-  if (!isNaN(saved) && [0, 25, 50, 100].includes(saved)) pageSize.value = saved;
-} catch { /* private mode */ }
-watch(pageSize, (v) => { try { localStorage.setItem(PM_PAGE_KEY, String(v)); } catch { /* ignore */ } });
+// b-table here). The page size is the app-wide shared setting from
+// lib/pager.js; 0 = All (the pre-pagination full scroll). Any
+// filter/search/sort change lands back on page 1.
+const pageSize = usePageSize();
 const page = ref(1);
-const totalPages = computed(() => (pageSize.value === 0
-  ? 1 : Math.max(1, Math.ceil(sortedRows.value.length / pageSize.value))));
 const pagedRows = computed(() => (pageSize.value === 0
   ? sortedRows.value
   : sortedRows.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value)));
-const gotoPage = (p) => { page.value = Math.min(Math.max(1, p), totalPages.value); };
 watch([q, freeOnly, showBatch, sliderVal, selected], () => { page.value = 1; });
+
+// Per-provider cards (tab 1) page their own model tables with the same
+// pager and the same app-wide page size; cards that fit on one page stay
+// quiet. Each card owns its page pointer; any search/size change wipes them
+// so nobody lands on an empty page.
+const cardPages = ref({});
+const pageOf = (p) => cardPages.value[p.id] || 1;
+const setCardPage = (p, n) => { cardPages.value = { ...cardPages.value, [p.id]: n }; };
+const pagedShown = (p) => (pageSize.value === 0
+  ? p.shown
+  : p.shown.slice((pageOf(p) - 1) * pageSize.value, pageOf(p) * pageSize.value));
+const needsPager = (p) => pageSize.value !== 0 && p.shown.length > pageSize.value;
+watch([q, pageSize], () => { cardPages.value = {} });
 
 function cellTitle(r, pid) {
   const c = r.cells[pid];
@@ -288,6 +295,18 @@ const colHeaderTitle = (p) => {
       <b-input v-model="q" placeholder="Filter models or providers — e.g. opus, qwen, fireworks"
         icon="magnifying-glass" size="is-small" style="max-width:380px" />
       <span class="cell-sub">{{ totalShown }} of {{ totalRows }} catalog rows · {{ totalFree }} free listings</span>
+      <span class="is-flex-grow-1"></span>
+      <!-- stats-21: one app-wide page size — this view inherits it; the
+           cards below render their own pagers without repeating the control -->
+      <div class="prov-size" style="display:flex;align-items:center;gap:.45rem">
+        <span class="cell-sub">rows per page</span>
+        <b-select v-model.number="pageSize" size="is-small" aria-label="rows per page">
+          <option :value="20">20</option>
+          <option :value="50">50</option>
+          <option :value="100">100</option>
+          <option :value="0">All</option>
+        </b-select>
+      </div>
     </div>
 
     <b-message v-if="error" type="is-danger" has-icon icon="triangle-exclamation" title="Error">
@@ -321,7 +340,7 @@ const colHeaderTitle = (p) => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="m in p.shown" :key="p.id + m.id">
+                  <tr v-for="m in pagedShown(p)" :key="p.id + m.id">
                     <td class="left">
                       <span class="prov-model">{{ m.name || m.id }}</span>
                       <span v-if="m.name && m.id !== m.name" class="prov-id">{{ m.id }}</span>
@@ -333,6 +352,13 @@ const colHeaderTitle = (p) => {
                   </tr>
                 </tbody>
               </table>
+
+              <!-- stats-21: oversized cards page their model table with the
+                   one pager (bottom-right, numbers between the arrows); the
+                   rows-per-page control lives once, at the top of this tab -->
+              <AppPager v-if="needsPager(p)" :show-size="false"
+                :total="p.shown.length" :page="pageOf(p)" @update:page="setCardPage(p, $event)"
+                :aria-label="p.name + ' pagination'" />
             </div>
           </div>
         </template>
@@ -409,21 +435,10 @@ const colHeaderTitle = (p) => {
             </table>
           </div>
 
-          <!-- stats-20: pager — totals stay in the coverage line above -->
-          <div class="row pm-pager mt-sm" style="align-items:center" v-if="sortedRows.length">
-            <span class="cell-sub">rows per page</span>
-            <b-select v-model.number="pageSize" size="is-small" aria-label="rows per page">
-              <option :value="25">25</option>
-              <option :value="50">50</option>
-              <option :value="100">100</option>
-              <option :value="0">All</option>
-            </b-select>
-            <span class="is-flex-grow-1"></span>
-            <button type="button" class="button is-small" :disabled="page <= 1"
-              @click="gotoPage(page - 1)" aria-label="Previous page">‹</button>
-            <span class="cell-sub pm-page-label">Page {{ page }} of {{ totalPages }}</span>
-            <button type="button" class="button is-small" :disabled="page >= totalPages"
-              @click="gotoPage(page + 1)" aria-label="Next page">›</button>
+          <!-- stats-21: unified bottom-right pager — totals stay in the
+               coverage line above -->
+          <div class="pm-pager mt-sm" v-if="sortedRows.length">
+            <AppPager v-model:page="page" :total="sortedRows.length" aria-label="Compare pagination" />
           </div>
 
           <p class="cell-sub mt-sm" style="max-width:88ch">

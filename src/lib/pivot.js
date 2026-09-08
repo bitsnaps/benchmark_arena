@@ -67,18 +67,38 @@ export const DEFAULT_COLUMNS = [
   'groq',
 ];
 
-// buildMatrix(providers, selectedIds) → { rows, coverage }
-//   rows: [{ key, name, firstId, ids, search, cells: { [providerId]: cell } }]
+// ttftIndexFromMeta(meta) → Map<normalizedId, seconds>
+//   stats-24: AA median time-to-first-token (models_meta.aa_ttft_seconds,
+//   mined by bench_scraper.py from Artificial Analysis) joined into the
+//   pivot by normalized API id — normKey(meta.or_id) first (the canonical
+//   OpenRouter id), normKey(meta key) as fallback. Latency is a per-MODEL
+//   property (AA measures the model, not a listing), so one row carries one
+//   value across all of its cells. Honest gaps stay null.
+export function ttftIndexFromMeta(meta) {
+  const idx = new Map();
+  for (const [name, m] of Object.entries(meta || {})) {
+    const sec = m && m.aa_ttft_seconds;
+    if (sec == null || Number.isNaN(Number(sec))) continue;
+    const byId = normKey(m.or_id);
+    if (byId && !idx.has(byId)) idx.set(byId, Number(sec));
+    const byName = normKey(name);
+    if (byName && !idx.has(byName)) idx.set(byName, Number(sec));
+  }
+  return idx;
+}
+
+// buildMatrix(providers, selectedIds, meta = {}) → { rows, coverage }
+//   rows: [{ key, name, firstId, ids, search, latency, cells: { [providerId]: cell } }]
 //   cell: { in, out, ctx, listed, free, freeBase?, latency }
 //     price fields null when the API exposes no pricing (honest dash);
 //     free=true when a free listing exists in this cell (suffix twin, a
 //     zero-priced listing, or a provider-level free tier like NVIDIA NIM);
-//     latency reserved — no catalog exposes per-model latency yet (see
-//     bench_scraper.py stats-18 note), always null until a source appears.
+//     latency = AA median TTFT seconds (models_meta.aa_ttft_seconds via the
+//     optional meta arg — see ttftIndexFromMeta), null when unmeasured.
 //   coverage: { models, cells, collapsed, sellers }
 //     collapsed = intra-provider id pairs that normalized to the same key
 //     (deduped — first priced row wins, dupes counted, never silently mixed).
-export function buildMatrix(providers, selectedIds) {
+export function buildMatrix(providers, selectedIds, meta = {}) {
   const sel = selectedIds
     .map((id) => providers.find((p) => p.id === id))
     .filter(Boolean);
@@ -174,6 +194,26 @@ export function buildMatrix(providers, selectedIds) {
     r.search = ((r.name || '') + ' ' + r.ids.join(' ') + ' ' + r.key).toLowerCase();
   }
 
+  // stats-24 — latency pass: resolve the row's AA TTFT once (first id that
+  // joins), then stamp every cell of the row. Cells of unmeasured models
+  // keep null and render uncolored.
+  if (meta && Object.keys(meta).length) {
+    const ttftById = ttftIndexFromMeta(meta);
+    if (ttftById.size) {
+      for (const r of list) {
+        let sec = null;
+        for (const id of r.ids) {
+          const hit = ttftById.get(normKey(id));
+          if (hit != null) { sec = hit; break; }
+        }
+        if (sec == null) sec = ttftById.get(r.key) ?? null;
+        if (sec == null) continue;
+        r.latency = sec;
+        for (const pid of Object.keys(r.cells)) r.cells[pid].latency = sec;
+      }
+    }
+  }
+
   return {
     rows: list,
     coverage: { models: list.length, cells: cellCount, collapsed, sellers: sel.length },
@@ -240,10 +280,9 @@ export function filterMatrix(rows, { q = '', freeOnly = false, maxPrice = null }
   });
 }
 
-// Latency color ladder (seconds, TTFT-style). No catalog exposes per-model
-// latency today (probed 2026-09-07 — see bench_scraper.py); cells carry
-// latency: null and render uncolored. When a real source appears, set
-// cell.latency and these tiers color the price value automatically:
+// Latency color ladder (seconds, TTFT-style), fed since stats-24 by AA's
+// median time-to-first-token (models_meta.aa_ttft_seconds → cell.latency
+// via buildMatrix). Unmeasured models carry null and render uncolored:
 //   < 1.5s → 'fast' (green) · < 3.5s → 'ok' (amber) · ≥ 3.5s → 'slow' (red)
 export function latencyTier(sec) {
   if (sec == null || Number.isNaN(Number(sec))) return null;

@@ -93,6 +93,16 @@ export function fmtB(b) {
   return (Math.round(b * 10) / 10) + 'B';
 }
 
+// Seconds (latency-style): 0.376 → "0.38 s", 2.7 → "2.69 s" (2 dp below 10),
+// 28.653 → "28.7 s" (1 dp), 161.647 → "162 s" (0 dp ≥ 100). Null → "—".
+export function fmtSec(sec) {
+  if (sec === null || sec === undefined || Number.isNaN(Number(sec))) return '—';
+  const s = Number(sec);
+  if (s >= 100) return Math.round(s) + ' s';
+  if (s >= 10) return s.toFixed(1) + ' s';
+  return s.toFixed(2) + ' s';
+}
+
 // USD per 1M tokens: 10 → "$10", 3.5 → "$3.50", 0.03 → "$0.03", 0 → "$0"
 export function fmtUsd(p) {
   if (p === null || p === undefined || Number.isNaN(Number(p))) return '—';

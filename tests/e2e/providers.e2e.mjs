@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS, cellBlend } from '../../src/lib/pivot.js';
+import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS, cellBlend, latencyTier } from '../../src/lib/pivot.js';
 import { capFromSlider } from '../../src/lib/priceFilter.js';
 import { fmtUsd } from '../../src/lib/format.js';
 
@@ -14,6 +14,8 @@ const SHOTS = path.join(REPO, 'tests', 'e2e', 'shots');
 const BASE = process.env.E2E_BASE || 'http://127.0.0.1:4173/benchmark_arena/';
 
 const catalog = JSON.parse(fs.readFileSync(path.join(REPO, 'public/providers.json'), 'utf8'));
+const benchDoc = JSON.parse(fs.readFileSync(path.join(REPO, 'public/benchmark_results.json'), 'utf8'));
+const modelsMeta = benchDoc.models_meta || {};
 const KIND_LABEL = {
   'first-party': 'First-party labs',
   'cloud': 'Cloud platforms',
@@ -408,6 +410,38 @@ const run = async () => {
     const cheapestCells = await page.locator('.pm-cell.is-cheapest').count();
     if (cheapestCells > 0) ok(`cheapest-cell highlight active on ${cheapestCells} rows`);
     else fail('no cheapest-cell highlight found');
+
+    // ── 5a. stats-24: AA TTFT latency tint ────────────────────────────
+    // Expected tints derived from the SAME meta-aware join the app runs —
+    // counts are exact, not vibes (batch rows are hidden in this view state).
+    const { rows: latRows } = buildMatrix(catalog.providers, DEFAULT_COLUMNS, modelsMeta);
+    const latVisible = latRows.filter(r => !isBatchRow(r) && r.latency != null);
+    const tierCount = (t) => latVisible
+      .filter(r => latencyTier(r.latency) === t)
+      .reduce((n, r) => n + Object.keys(r.cells).length, 0);
+    const expectLat = latVisible.reduce((n, r) => n + Object.keys(r.cells).length, 0);
+    const domLat = await page.locator('.pm-table td.lat-fast, .pm-table td.lat-ok, .pm-table td.lat-slow').count();
+    if (domLat === expectLat && expectLat > 0) ok(`latency tint active on exactly ${domLat} measured cells`);
+    else fail(`latency tint: expected ${expectLat} tinted cells, got ${domLat}`);
+    for (const [tier, sel] of [['fast', 'lat-fast'], ['ok', 'lat-ok'], ['slow', 'lat-slow']]) {
+      const got = await page.locator(`.pm-table td.${sel}`).count();
+      const exp = tierCount(tier);
+      if (got === exp && exp > 0) ok(`${tier} tier tints ${got} cells (< ${tier === 'fast' ? '1.5' : tier === 'ok' ? '3.5' : '∞'} s)`);
+      else fail(`${tier} tier: expected ${exp} cells, got ${got}`);
+    }
+    // tooltip exposes the exact AA median on a known measured row
+    const fableRow = page.locator('.pm-table tbody tr', { has: page.locator('.prov-model', { hasText: 'Claude Fable 5.1' }) });
+    const fableTitle = await fableRow.locator('td.lat-slow .price-cell').first().getAttribute('title');
+    if (fableTitle && fableTitle.includes('AA TTFT 6.55 s') && fableTitle.includes('Artificial Analysis'))
+      ok(`cell tooltip carries the AA median ("...${fableTitle.split('AA TTFT')[1]}")`);
+    else fail(`cell tooltip missing TTFT: "${fableTitle}"`);
+    // legend documents the ladder with three tier chips
+    const legendChips = await page.locator('p .legend-chip').count();
+    const legendText = (await page.locator('p.cell-sub.mt-sm').last().innerText()).replace(/\s+/g, ' ');
+    if (legendChips === 3 && legendText.includes('Latency tint') && legendText.includes('Unmeasured models stay gray'))
+      ok('legend documents the ladder (3 tier chips, honest-gap note)');
+    else fail(`legend wrong: chips=${legendChips} text="${legendText.slice(0, 120)}"`);
+
 
     // free-only toggle narrows the matrix (NIM carries most rows free, so
     // compare against rows minus non-free leftovers)

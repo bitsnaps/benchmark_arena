@@ -16,9 +16,10 @@
 // OpenCode Zen) render honest dashes, never fabricated prices.
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { fmtUsd, fmtCtx } from '../lib/format.js';
+import { fmtUsd, fmtCtx, fmtSec } from '../lib/format.js';
 import { passesPricing, priceUniverseBlend, usePriceFilter } from '../lib/priceFilter.js';
 import { usePageSize } from '../lib/pager.js';
+import { useData } from '../stores/data.js';
 import AppPager from '../components/AppPager.vue';
 import PriceFilterControls from '../components/PriceFilterControls.vue';
 import {
@@ -29,6 +30,11 @@ import { useProviders } from '../stores/providers.js';
 
 const { rawData, loading, error, ensureProvidersLoaded } = useProviders();
 onMounted(ensureProvidersLoaded);
+// stats-24: AA TTFT lives in benchmark_results.json (models_meta), not in
+// providers.json — pull the data store too (module singleton; the fetch is
+// shared with the home view and happens once per session).
+const { rawData: benchRaw, ensureLoaded } = useData();
+onMounted(ensureLoaded);
 
 const asOf = computed(() => rawData.value?.as_of || null);
 const sources = computed(() => rawData.value?.sources || {});
@@ -215,6 +221,9 @@ const KIND_BLURB = {
 const PICKER_KEY = 'providers-compare-columns';
 const allProviders = computed(() => rawData.value?.providers || []);
 const byId = computed(() => Object.fromEntries(allProviders.value.map(p => [p.id, p])));
+// stats-24: AA median TTFT lives in models_meta (bench_scraper.py mining);
+// fed into the pivot join so the pre-built latency color ladder activates.
+const modelsMeta = computed(() => benchRaw.value?.models_meta || {});
 
 const selected = ref(null); // Set<providerId>
 const initSelected = () => {
@@ -249,7 +258,7 @@ const showBatch = ref(false);
 
 const matrix = computed(() => {
   if (!rawData.value || !selected.value) return null;
-  const built = buildMatrix(allProviders.value, [...selected.value]);
+  const built = buildMatrix(allProviders.value, [...selected.value], modelsMeta.value);
   return { ...built, rows: sortMatrixRows(built.rows) };
 });
 
@@ -336,13 +345,15 @@ function cellTitle(r, pid) {
   const c = r.cells[pid];
   if (!c) return '';
   const who = byId.value[pid]?.name || pid;
+  // stats-24: AA median TTFT (per-model — the same value on every seller cell)
+  const lat = c.latency != null ? ` · AA TTFT ${fmtSec(c.latency)} (median, Artificial Analysis)` : '';
   if (c.in != null) {
     const ctx = c.ctx ? ` · ctx ${fmtCtx(c.ctx)}` : '';
     const fr = c.free ? ' · free tier available (rate-limited)' : '';
-    return `${who} — ${fmtUsd(c.in)} in / ${fmtUsd(c.out)} out per 1M tokens${ctx}${fr}`;
+    return `${who} — ${fmtUsd(c.in)} in / ${fmtUsd(c.out)} out per 1M tokens${ctx}${fr}${lat}`;
   }
-  if (c.free) return `${who} — free tier, rate limits apply (not unlimited); the API exposes no price`;
-  return `${who} — listed; the API exposes no price`;
+  if (c.free) return `${who} — free tier, rate limits apply (not unlimited); the API exposes no price${lat}`;
+  return `${who} — listed; the API exposes no price${lat}`;
 }
 // Row hover tooltip: the full name is the only displayed format (stats-19);
 // the raw API id(s) behind this canonical row surface here instead.
@@ -579,9 +590,13 @@ const colHeaderTitle = (p) => {
             base model as a free tier. The highlighted cell is the cheapest known blend (3:1
             in:out) per row. <code>:batch</code> pricing variants (async endpoints of the same
             model at a discount) are hidden behind the <b>batch variants</b> toggle. NVIDIA NIM
-            is a free tier (rate-limited); OpenCode Zen lists without prices. Latency coloring
-            is wired but idle — none of these catalogs publishes per-model latency yet, so
-            values stay gray until a real source exists.
+            is a free tier (rate-limited); OpenCode Zen lists without prices.
+            <b>Latency tint</b> (stats-24): price cells are colored by AA's median
+            time-to-first-token — measured by Artificial Analysis, 60 models —
+            <span class="lat-fast legend-chip">&lt; 1.5 s</span>
+            <span class="lat-ok legend-chip">1.5–3.5 s</span>
+            <span class="lat-slow legend-chip">≥ 3.5 s</span>;
+            hover any cell for the exact value. Unmeasured models stay gray.
           </p>
         </template>
       </b-tab-item>

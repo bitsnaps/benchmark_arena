@@ -709,7 +709,18 @@ a.hbar:hover .name { color: var(--teal); }
 }
 .pm-cell.is-cheapest .price-cell { font-weight: 700; color: var(--teal); }
 .pm-absent { color: var(--faint); opacity: .4; }
-/* Latency ladder — wired but idle (no catalog exposes per-model latency yet) */
+/* Latency ladder — live since stats-24 (AA median TTFT via models_meta) */
 .lat-fast .price-cell, .price-cell.lat-fast { color: var(--green); }
 .lat-ok .price-cell, .price-cell.lat-ok { color: var(--gold); }
 .lat-slow .price-cell, .price-cell.lat-slow { color: var(--rose); }
+/* Tier chips inside the Compare legend paragraph (stats-24) */
+.legend-chip {
+  display: inline-block;
+  padding: 0 0.45em;
+  border-radius: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.legend-chip.lat-fast { background: rgba(var(--green-rgb, 46, 230, 122), 0.12); color: var(--green); }
+.legend-chip.lat-ok { background: rgba(var(--gold-rgb, 255, 193, 7), 0.12); color: var(--gold); }
+.legend-chip.lat-slow { background: rgba(var(--rose-rgb, 255, 99, 132), 0.12); color: var(--rose); }

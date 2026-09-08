@@ -13,6 +13,7 @@ import {
   filterMatrix,
   latencyTier,
   latencyClass,
+  ttftIndexFromMeta,
   isBatchId,
   isBatchRow,
   DEFAULT_COLUMNS,
@@ -233,7 +234,7 @@ describe('filterMatrix (composable Compare-tab filters)', () => {
   });
 });
 
-describe('latency ladder (reserved — no source exposes per-model latency yet)', () => {
+describe('latency ladder (AA median TTFT feeds it since stats-24)', () => {
   it('tiers seconds honestly', () => {
     expect(latencyTier(null)).toBe(null);
     expect(latencyTier(undefined)).toBe(null);
@@ -250,6 +251,48 @@ describe('latency ladder (reserved — no source exposes per-model latency yet)'
     expect(latencyClass(2)).toBe('lat-ok');
     expect(latencyClass(9)).toBe('lat-slow');
     expect(latencyClass(null)).toBe('');
+  });
+});
+
+describe('TTFT join — AA median latency into matrix cells (stats-24)', () => {
+  const meta = {
+    'Claude Fable 5.1': { or_id: 'anthropic/claude-fable-5.1', aa_ttft_seconds: 6.548 },
+    'GPT-5.6 Terra': { or_id: 'openai/gpt-5.6-terra', aa_ttft_seconds: 1.629 },
+    'No-lat Model': { or_id: 'vendor/no-lat' },   // mined record without a TTFT value
+    'Bad-lat Model': { aa_ttft_seconds: 'oops' }, // malformed value must be skipped
+  };
+
+  it('indexes by normalized or_id and name, skipping unmeasured/malformed records', () => {
+    const idx = ttftIndexFromMeta(meta);
+    expect(idx.get('claudefable51')).toBe(6.548);
+    expect(idx.get('gpt56terra')).toBe(1.629);
+    expect(idx.has('nolatmodel')).toBe(false);
+    expect(idx.has('badlatmodel')).toBe(false);
+  });
+
+  it('is tolerant of null/undefined meta (buildMatrix 2-arg calls unchanged)', () => {
+    expect(ttftIndexFromMeta(null).size).toBe(0);
+    expect(ttftIndexFromMeta(undefined).size).toBe(0);
+    const { rows } = buildMatrix(
+      [mkProv('p1', [{ id: 'a/m1', name: 'M1', in: 1, out: 2 }])],
+      ['p1'],
+    );
+    expect(rows[0].cells.p1.latency).toBe(null);
+  });
+
+  it('stamps every cell of a matched row — variant ids (dash vs dot) join too', () => {
+    const provs = [
+      mkProv('p1', [{ id: 'anthropic/claude-fable-5.1', name: 'OpenRouter: Claude Fable 5.1', in: 10, out: 50 }]),
+      mkProv('p2', [{ id: 'anthropic/claude-fable-5-1', name: 'Anthropic: Claude Fable 5.1', in: 12, out: 60 }]),
+      mkProv('p3', [{ id: 'vendor/unmeasured', name: 'Unmeasured Model', in: 1, out: 2 }]),
+    ];
+    const { rows } = buildMatrix(provs, ['p1', 'p2', 'p3'], meta);
+    const fable = rows.find(r => r.key === 'claudefable51');
+    expect(fable.latency).toBe(6.548);
+    expect(fable.cells.p1.latency).toBe(6.548);
+    expect(fable.cells.p2.latency).toBe(6.548);
+    const other = rows.find(r => r.key === 'unmeasured');
+    expect(other.cells.p3.latency).toBe(null);
   });
 });
 

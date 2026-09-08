@@ -4,7 +4,8 @@
 import { computed, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SHORT, BASE_TITLE } from '../lib/constants.js';
-import { fmtScore, fmtUsd, fmtValue, fmtCtx, scoreColor, barWidth, rankClass, providerColor, initials, slugify } from '../lib/format.js';
+import { fmtScore, fmtUsd, fmtValue, fmtCtx, fmtSec, scoreColor, barWidth, rankClass, providerColor, initials, slugify } from '../lib/format.js';
+import { latencyClass } from '../lib/pivot.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
@@ -62,6 +63,9 @@ const modelCtx = computed(() => (model.value ? metaFor(model.value)?.context_len
 const orId = computed(() => (model.value ? metaFor(model.value)?.or_id || null : null));
 // Value lens — Score per 1M blended tokens (same number the Value column sorts by)
 const value = computed(() => (model.value ? valueFor(model.value) : null));
+// stats-24: AA median time-to-first-token (seconds, models_meta.aa_ttft_seconds)
+// — the same source that tints Compare pivot cells; null when unmeasured.
+const ttft = computed(() => (model.value ? metaFor(model.value)?.aa_ttft_seconds ?? null : null));
 // Hugging Face repo — open-weight models only (null for closed / unverified)
 const hfId = computed(() => (model.value ? hfIdFor(model.value) : null));
 const hfUrl = computed(() => (model.value ? hfUrlFor(model.value) : null));
@@ -231,6 +235,11 @@ function addToCompare() {
       <p class="cell-sub mt-sm" v-if="value !== null">
         <i class="fas fa-scale-balanced"></i>&nbsp;Value lens: <b style="color:var(--teal)">{{ fmtValue(value) }}</b> score points per 1M blended tokens
         (3:1 in:out) — sort the leaderboard by the <b>Value</b> column to compare cost efficiency.
+      </p>
+      <p class="cell-sub mt-sm" v-if="ttft != null">
+        <i class="fas fa-bolt"></i>&nbsp;Median TTFT: <span :class="['legend-chip', latencyClass(ttft)]" style="font-size:1.02rem">{{ fmtSec(ttft) }}</span>
+        — median time to first token measured by Artificial Analysis
+        (fast &lt; 1.5 s · ok &lt; 3.5 s · slow at or above; the same measure tints the Compare grid).
       </p>
       <p class="cell-sub mt-sm">
         {{ pricing.source === 'aa'

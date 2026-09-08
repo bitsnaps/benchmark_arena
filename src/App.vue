@@ -73,7 +73,7 @@ function goCompare() {
         <!-- Footer -->
         <footer class="footer-lab mt">
           <div class="row" style="justify-content:space-between">
-            <span>Benchmark Arena · Vue 3 + Buefy/Bulma · snapshot {{ stats.lastUpdated }}</span>
+            <span>Benchmark Arena · snapshot {{ stats.lastUpdated }}</span>
             <span>Data from {{ stats.totalBenchmarks }} public leaderboards · not an official ranking</span>
           </div>
         </footer>

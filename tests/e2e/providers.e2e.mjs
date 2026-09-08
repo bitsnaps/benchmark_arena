@@ -429,12 +429,15 @@ const run = async () => {
       if (got === exp && exp > 0) ok(`${tier} tier tints ${got} cells (< ${tier === 'fast' ? '1.5' : tier === 'ok' ? '3.5' : '∞'} s)`);
       else fail(`${tier} tier: expected ${exp} cells, got ${got}`);
     }
-    // tooltip exposes the exact AA median on a known measured row
+    // stats-25: Buefy b-tooltip (append-to-body) — hover the trigger and read
+    // the teleported .tooltip-content (native titles are gone from cells)
     const fableRow = page.locator('.pm-table tbody tr', { has: page.locator('.prov-model', { hasText: 'Claude Fable 5.1' }) });
-    const fableTitle = await fableRow.locator('td.lat-slow .price-cell').first().getAttribute('title');
-    if (fableTitle && fableTitle.includes('AA TTFT 6.55 s') && fableTitle.includes('Artificial Analysis'))
-      ok(`cell tooltip carries the AA median ("...${fableTitle.split('AA TTFT')[1]}")`);
-    else fail(`cell tooltip missing TTFT: "${fableTitle}"`);
+    await fableRow.locator('td.lat-slow .b-tooltip').first().hover();
+    await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
+    const fableTip = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
+    if (fableTip.includes('AA TTFT 6.55 s') && fableTip.includes('Artificial Analysis'))
+      ok(`cell tooltip (b-tooltip) carries the AA median ("...${fableTip.split('AA TTFT')[1]}")`);
+    else fail(`cell tooltip missing TTFT: "${fableTip}"`);
     // legend documents the ladder with three tier chips
     const legendChips = await page.locator('p .legend-chip').count();
     const legendText = (await page.locator('p.cell-sub.mt-sm').last().innerText()).replace(/\s+/g, ' ');

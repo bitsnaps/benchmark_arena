@@ -560,9 +560,18 @@ const colHeaderTitle = (p) => {
                   <td v-for="p in selProviders" :key="p.id" class="num pm-cell"
                     :class="[latencyClass(r.cells[p.id] && r.cells[p.id].latency), { 'is-cheapest': isCheapest(r, p.id) }]">
                     <template v-if="r.cells[p.id]">
-                      <span v-if="r.cells[p.id].in != null" class="price-cell" :title="cellTitle(r, p.id)">
-                        {{ fmtUsd(r.cells[p.id].in) }}<span class="price-sep">/</span>{{ fmtUsd(r.cells[p.id].out) }}
-                      </span>
+                      <!-- stats-25: Buefy tooltip on priced cells — native
+                           titles need a ~1s OS hover and never show on touch;
+                           append-to-body escapes the scroll wrapper, is-auto
+                           picks the safest side near viewport edges. Dash
+                           cells keep native titles (same content). -->
+                      <b-tooltip v-if="r.cells[p.id].in != null"
+                        :label="cellTitle(r, p.id)" type="is-dark" multilined
+                        :delay="100" append-to-body>
+                        <span class="price-cell">
+                          {{ fmtUsd(r.cells[p.id].in) }}<span class="price-sep">/</span>{{ fmtUsd(r.cells[p.id].out) }}
+                        </span>
+                      </b-tooltip>
                       <span v-else class="cell-sub" :title="cellTitle(r, p.id)">—</span>
                       <span v-if="r.cells[p.id].free" class="free-chip" :title="freeTitle(r.cells[p.id])">free</span>
                     </template>

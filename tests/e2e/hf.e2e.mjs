@@ -31,8 +31,14 @@ for (const r of [...(data.unified_closed || []), ...(data.unified_open || [])]) 
 const visible = rows.filter(r => !isOld(r));
 const withHf = visible.filter(r => META[r.name] && META[r.name].hugging_face_id);
 
-// anchors: a stable open model with a repo + a stable closed model without
-const OPEN = withHf.find(r => r.name === 'DeepSeek V3') || withHf[0];
+// anchors: a stable open model with a repo + a stable closed model without.
+// Prefer an anchor whose name is not a substring of another row's name —
+// fresh refreshes reorder rows and name families grow ("Inkling" vs
+// "Inkling Small" bit this spec once).
+const nameUnique = (n) => !rows.some(r => r.name !== n && r.name.includes(n));
+const OPEN = withHf.find(r => r.name === 'DeepSeek V3' && nameUnique('DeepSeek V3'))
+  || withHf.find(r => nameUnique(r.name))
+  || withHf[0];
 const CLOSED = visible.find(r => r.name === 'Claude Opus 5') || visible.find(r => !(META[r.name] && META[r.name].hugging_face_id));
 const OPEN_HF = META[OPEN.name].hugging_face_id;
 const OPEN_URL = 'https://huggingface.co/' + OPEN_HF;
@@ -64,8 +70,9 @@ const ok = (msg) => console.log('  ok:', msg);
 
     // ── 2. open anchor row: chip href + tooltip carry the exact repo ──
     // exact-name match: 'Inkling' must not hit the 'Inkling Small' row
-    // (substring hasText — fresh ranks reordered them, stats-22 lesson)
-    const exact = (name) => new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
+    // (substring hasText — fresh ranks reordered them, stats-22 lesson);
+    // the alias note may legally trail the name as a ★ inside .model-link
+    const exact = (name) => new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(★)?$`);
     const openRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: exact(OPEN.name) }) }).first();
     const chip = openRow.locator('a.hf-chip').first();
     if ((await chip.count()) === 0) {

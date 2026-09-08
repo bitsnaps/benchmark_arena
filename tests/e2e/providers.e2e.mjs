@@ -69,6 +69,75 @@ const run = async () => {
       ok('Labs carries its cards directly (no redundant first-party sub-header)');
     else fail(`kind sub-headers: expected ${catalog.kinds.length - 1}, got ${kindTitles}`);
 
+    // stats-22 round 2: header summary stats — seller count chip + model total
+    const provN = (await provSection.locator('.prov-sec-n').innerText()).trim();
+    const labN = (await labSection.locator('.prov-sec-n').innerText()).trim();
+    if (provN === String(provCount) && labN === String(labCount))
+      ok(`header count chips match (${provCount} providers / ${labCount} labs)`);
+    else fail(`count chips wrong: "${provN}" / "${labN}"`);
+    const sumRows = (ps) => ps.reduce((a, p) => a + p.models.length, 0);
+    const thirdParty = catalog.providers.filter(p => p.kind !== 'first-party');
+    const labsOnly = catalog.providers.filter(p => p.kind === 'first-party');
+    const provStats = await provSection.locator('.prov-sec-stats').innerText();
+    const labStats = await labSection.locator('.prov-sec-stats').innerText();
+    if (provStats.includes(`${sumRows(thirdParty)} models`) && labStats.includes(`${sumRows(labsOnly)} models`))
+      ok(`header stats carry model totals (Providers ${sumRows(thirdParty)}, Labs ${sumRows(labsOnly)})`);
+    else fail(`header stats wrong: "${provStats.trim()}" / "${labStats.trim()}"`);
+
+    // ── 2c. stats-22 round 2: collapsible behavior ─────────────
+    await page.click('button:has-text("Collapse all")');
+    await page.waitForTimeout(250);
+    if (await page.locator('.prov-card:visible').count() === 0)
+      ok('collapse all hides every card');
+    else fail(`collapse all: ${await page.locator('.prov-card:visible').count()} cards still visible`);
+    if (await page.locator('.prov-section-head').count() === 2)
+      ok('both section headers (with their stats) stay visible when collapsed');
+    else fail(`headers after collapse: ${await page.locator('.prov-section-head').count()}`);
+    const ariaClosed = await labSection.locator('.prov-section-head').getAttribute('aria-expanded');
+    if (ariaClosed === 'false') ok('aria-expanded flips on collapse');
+    else fail(`aria-expanded after collapse: "${ariaClosed}"`);
+
+    // state persists across reload
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForSelector('.prov-section-head', { timeout: 10000 });
+    if (await page.locator('.prov-card:visible').count() === 0)
+      ok('collapsed state persists across reload');
+    else fail(`persistence: ${await page.locator('.prov-card:visible').count()} cards visible after reload`);
+
+    await page.click('button:has-text("Expand all")');
+    await page.waitForTimeout(250);
+    const visAll = await page.locator('.prov-card:visible').count();
+    if (visAll === catalog.providers.length) ok(`expand all restores all ${visAll} cards`);
+    else fail(`expand all: ${visAll}/${catalog.providers.length} visible`);
+
+    // single-section toggle: only Labs folds, Providers stays open
+    await labSection.locator('.prov-section-head').click();
+    await page.waitForTimeout(250);
+    const labsVis = await labSection.locator('.prov-card:visible').count();
+    const provsVis = await provSection.locator('.prov-card:visible').count();
+    if (labsVis === 0 && provsVis === provCount)
+      ok(`section header toggles independently (Labs folded, Providers keeps ${provsVis})`);
+    else fail(`single toggle: labsVisible=${labsVis} provsVisible=${provsVis} (expected 0/${provCount})`);
+    await labSection.locator('.prov-section-head').click();
+    await page.waitForTimeout(250);
+
+    // an active search force-expands so matches are never hidden; clearing
+    // the search restores the stored (collapsed) state
+    await page.click('button:has-text("Collapse all")');
+    await page.waitForTimeout(250);
+    await page.fill('input.input', 'opus');
+    await page.waitForTimeout(400);
+    const visSearch = await page.locator('.prov-card:visible').count();
+    if (visSearch > 0) ok(`search force-expands sections (${visSearch} cards visible while searching)`);
+    else fail('search while collapsed hid all matches');
+    await page.fill('input.input', '');
+    await page.waitForTimeout(400);
+    if (await page.locator('.prov-card:visible').count() === 0)
+      ok('clearing the search restores the stored collapsed state');
+    else fail('cleared search did not restore collapsed state');
+    await page.click('button:has-text("Expand all")'); // restore for the specs below
+    await page.waitForTimeout(250);
+
     // The biggest provider's card shows its full model count
     const biggest = [...catalog.providers].sort((a, b) => b.models.length - a.models.length)[0];
     const card = page.locator('.prov-card', { has: page.locator('.prov-name', { hasText: biggest.name }) });

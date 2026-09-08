@@ -501,6 +501,54 @@ a.hbar:hover .name { color: var(--teal); }
   color: var(--text);
 }
 .prov-super .prov-kind-title { font-size: 1.02rem; }
+/* stats-22 round 2: collapsible sections — header button with chevron +
+   count chip + summary stats; expand/collapse-all pill buttons */
+.prov-section-head {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  background: none;
+  border: none;
+  padding: .45rem .5rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.prov-section-head:hover { background: rgba(139, 156, 255, 0.06); }
+.prov-chevron { color: var(--faint); font-size: .8rem; width: 1rem; text-align: center; }
+.prov-sec-n {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--teal);
+  background: var(--teal-dim);
+  border: 1px solid rgba(46, 230, 199, 0.35);
+  border-radius: 10px;
+  padding: 0 .45rem;
+}
+.prov-sec-stats { white-space: nowrap; }
+.prov-sec-desc {
+  color: var(--faint);
+  font-size: .8rem;
+  margin-left: auto;
+  text-align: right;
+}
+@media (max-width: 860px) { .prov-sec-desc { display: none; } }
+.prov-section-body { padding: 0 .25rem; }
+.prov-expbtn {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: rgba(139, 156, 255, 0.08);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: .22rem .65rem;
+  cursor: pointer;
+}
+.prov-expbtn:hover:not(:disabled) { background: rgba(139, 156, 255, 0.16); color: var(--text); }
+.prov-expbtn:disabled { opacity: .45; cursor: default; }
 .prov-card { padding: 1rem 1.15rem; }
 .prov-name {
   font-family: 'Outfit', sans-serif;

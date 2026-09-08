@@ -85,6 +85,7 @@ const superGroups = computed(() => {
       blurb: 'Third-party operators serving many labs\u2019 models',
       noun: 'providers', providers,
       rows: providers.reduce((a, p) => a + p.models.length, 0),
+      free: providers.reduce((a, p) => a + freeCount(p), 0),
       groups: kindGroups.map(g => ({
         kind: g.kind, label: KIND_LABEL[g.kind] || g.kind,
         blurb: KIND_BLURB[g.kind] || '', providers: g.providers,
@@ -97,11 +98,47 @@ const superGroups = computed(() => {
       blurb: KIND_BLURB[LAB_KIND], noun: 'labs',
       providers: labs,
       rows: labs.reduce((a, p) => a + p.models.length, 0),
+      free: labs.reduce((a, p) => a + freeCount(p), 0),
       groups: [{ kind: LAB_KIND, label: '', blurb: '', providers: labs }],
     });
   }
   return out;
 });
+
+// ── stats-22 (round 2): collapsible sections — Ibrahim: "place them
+// (providers, labs...) in collapsible content with a brief summary stats at
+// the header and expand/collapse all buttons". Each section folds to its
+// header (which carries the stats); state persists per device; an active
+// search force-expands so matches are never hidden.
+const GROUPS_KEY = 'arena.providers.groups';
+const collapsed = ref({ providers: false, labs: false });
+try {
+  const savedGroups = JSON.parse(localStorage.getItem(GROUPS_KEY) || '{}');
+  for (const key of ['providers', 'labs'])
+    if (typeof savedGroups[key] === 'boolean') collapsed.value[key] = savedGroups[key];
+} catch { /* fresh visit / private mode */ }
+function persistGroups() {
+  try { localStorage.setItem(GROUPS_KEY, JSON.stringify(collapsed.value)); } catch { /* private mode */ }
+}
+function toggleSection(key) {
+  collapsed.value = { ...collapsed.value, [key]: !collapsed.value[key] };
+  persistGroups();
+}
+const expandAll = () => {
+  collapsed.value = { providers: false, labs: false };
+  persistGroups();
+};
+const collapseAll = () => {
+  collapsed.value = { providers: true, labs: true };
+  persistGroups();
+};
+const allExpanded = computed(() => superGroups.value.every(s => !collapsed.value[s.id]));
+const allCollapsed = computed(() => superGroups.value.every(s => !!collapsed.value[s.id]));
+// Search overlay: while the term is non-empty the sections display as
+// expanded regardless of the stored state (header clicks keep writing to
+// the store, so the choice applies once the search is cleared).
+const searching = computed(() => !!norm(q.value).trim());
+const isCollapsed = (key) => (searching.value ? false : !!collapsed.value[key]);
 
 // Compare picker: chips clustered Providers / Labs in the same order.
 const pickerProviders = computed(() => allProviders.value.filter(p => p.kind !== LAB_KIND));
@@ -361,55 +398,68 @@ const colHeaderTitle = (p) => {
       <!-- ── Tab 1: the original per-provider listing ─────────────────── -->
       <b-tab-item label="By provider">
         <template v-if="!loading && !error">
-          <!-- stats-22: labs vs providers regroup — Providers first, Labs below -->
+          <!-- stats-22 round 2: expand/collapse all -->
+          <div v-if="superGroups.length" class="row mt-sm" style="gap:.45rem;align-items:center">
+            <button type="button" class="prov-expbtn" :disabled="allExpanded" @click="expandAll">Expand all</button>
+            <button type="button" class="prov-expbtn" :disabled="allCollapsed" @click="collapseAll">Collapse all</button>
+          </div>
+
+          <!-- stats-22: labs vs providers regroup — collapsible sections,
+              each header carries brief summary stats -->
           <div v-for="sg in superGroups" :key="sg.id" class="prov-super mt">
-            <div class="row" style="gap:.6rem;align-items:baseline">
+            <button type="button" class="prov-section-head" @click="toggleSection(sg.id)"
+              :aria-expanded="!isCollapsed(sg.id)">
+              <i class="fas prov-chevron" :class="isCollapsed(sg.id) ? 'fa-chevron-right' : 'fa-chevron-down'"></i>
               <h2 class="prov-super-title">{{ sg.title }}</h2>
-              <span class="cell-sub">{{ sg.blurb }} · {{ sg.providers.length }} {{ sg.noun }} · {{ sg.rows }} catalog rows</span>
-            </div>
+              <span class="prov-sec-n">{{ sg.providers.length }}</span>
+              <span class="cell-sub prov-sec-stats">{{ sg.rows }} models · {{ sg.free }} free</span>
+              <span class="prov-sec-desc">{{ sg.blurb }}</span>
+            </button>
 
-            <template v-for="g in sg.groups" :key="sg.id + ':' + g.kind">
-              <div v-if="g.label" class="row mt" style="gap:.6rem;align-items:baseline">
-                <h3 class="prov-kind-title">{{ g.label }}</h3>
-                <span class="cell-sub">{{ g.blurb }} · {{ g.providers.length }} providers</span>
-              </div>
-
-              <div v-for="p in g.providers" :key="p.id" class="panel-lab prov-card">
-                <div class="row" style="justify-content:space-between">
-                  <h3 class="prov-name">{{ p.name }}</h3>
-                  <span class="cell-sub">{{ p.shown.length }} model{{ p.shown.length === 1 ? '' : 's' }}<template v-if="freeCount(p)"> · {{ freeCount(p) }} free</template></span>
+            <div v-show="!isCollapsed(sg.id)" class="prov-section-body">
+              <template v-for="g in sg.groups" :key="sg.id + ':' + g.kind">
+                <div v-if="g.label" class="row mt" style="gap:.6rem;align-items:baseline">
+                  <h3 class="prov-kind-title">{{ g.label }}</h3>
+                  <span class="cell-sub">{{ g.blurb }} · {{ g.providers.length }} providers</span>
                 </div>
-                <table class="prov-table">
-                  <thead>
-                    <tr>
-                      <th class="left">Model</th>
-                      <th>$/1M in</th>
-                      <th>$/1M out</th>
-                      <th>Context</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="m in pagedShown(p)" :key="p.id + m.id">
-                      <td class="left">
-                        <span class="prov-model">{{ m.name || m.id }}</span>
-                        <span v-if="m.name && m.id !== m.name" class="prov-id">{{ m.id }}</span>
-                        <span v-if="isFreeRow(m, p)" class="free-chip" :title="freeTitle(m)">free</span>
-                      </td>
-                      <td class="num">{{ fmtUsd(m.in) }}</td>
-                      <td class="num">{{ fmtUsd(m.out) }}</td>
-                      <td class="num cell-sub">{{ fmtCtx(m.ctx) }}</td>
-                    </tr>
-                  </tbody>
-                </table>
 
-                <!-- stats-21: oversized cards page their model table with the
-                     one pager (bottom-right, numbers between the arrows); the
-                     rows-per-page control lives once, at the top of this tab -->
-                <AppPager v-if="needsPager(p)" :show-size="false"
-                  :total="p.shown.length" :page="pageOf(p)" @update:page="setCardPage(p, $event)"
-                  :aria-label="p.name + ' pagination'" />
-              </div>
-            </template>
+                <div v-for="p in g.providers" :key="p.id" class="panel-lab prov-card">
+                  <div class="row" style="justify-content:space-between">
+                    <h3 class="prov-name">{{ p.name }}</h3>
+                    <span class="cell-sub">{{ p.shown.length }} model{{ p.shown.length === 1 ? '' : 's' }}<template v-if="freeCount(p)"> · {{ freeCount(p) }} free</template></span>
+                  </div>
+                  <table class="prov-table">
+                    <thead>
+                      <tr>
+                        <th class="left">Model</th>
+                        <th>$/1M in</th>
+                        <th>$/1M out</th>
+                        <th>Context</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="m in pagedShown(p)" :key="p.id + m.id">
+                        <td class="left">
+                          <span class="prov-model">{{ m.name || m.id }}</span>
+                          <span v-if="m.name && m.id !== m.name" class="prov-id">{{ m.id }}</span>
+                          <span v-if="isFreeRow(m, p)" class="free-chip" :title="freeTitle(m)">free</span>
+                        </td>
+                        <td class="num">{{ fmtUsd(m.in) }}</td>
+                        <td class="num">{{ fmtUsd(m.out) }}</td>
+                        <td class="num cell-sub">{{ fmtCtx(m.ctx) }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <!-- stats-21: oversized cards page their model table with the
+                       one pager (bottom-right, numbers between the arrows); the
+                       rows-per-page control lives once, at the top of this tab -->
+                  <AppPager v-if="needsPager(p)" :show-size="false"
+                    :total="p.shown.length" :page="pageOf(p)" @update:page="setCardPage(p, $event)"
+                    :aria-label="p.name + ' pagination'" />
+                </div>
+              </template>
+            </div>
           </div>
         </template>
       </b-tab-item>

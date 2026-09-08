@@ -640,6 +640,14 @@ a.hbar:hover .name { color: var(--teal); }
   gap: .35rem .45rem;
   align-items: center;
 }
+/* stats-23: By-provider pricing filters — the same reusable widget as the
+   Compare row (.pm-controls), same look; a separate class keeps the tabs'
+   DOM scoping (and the e2e selectors) unambiguous. */
+.pv-controls {
+  flex-wrap: wrap;
+  gap: .35rem .45rem;
+  align-items: center;
+}
 .pm-chip {
   cursor: pointer;
   user-select: none;

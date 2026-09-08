@@ -7,17 +7,22 @@
 //                         pickable at a glance. Rows are joined by
 //                         src/lib/pivot.js (org-strip normalization + free-
 //                         twin attach; see the lib header for discipline).
-// Filters compose inside the Compare tab: search (shared), provider picker,
-// free-only toggle, max-price slider, batch-variants toggle. Free ≠ unlimited
-// — every free chip carries the rate-limit caveat, and unpriced catalogs
-// (NVIDIA NIM rows, OpenCode Zen) render honest dashes, never fabricated prices.
+// Filters compose on both tabs: search is shared, and the pricing filters
+// (free-only toggle + max-price slider) are ONE reusable widget bound to a
+// single shared state (lib/priceFilter.js, stats-23) — the By-provider tab
+// and the Compare tab always agree. The Compare tab adds the provider
+// picker and the batch-variants toggle. Free ≠ unlimited — every free chip
+// carries the rate-limit caveat, and unpriced catalogs (NVIDIA NIM rows,
+// OpenCode Zen) render honest dashes, never fabricated prices.
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { fmtUsd, fmtCtx } from '../lib/format.js';
+import { passesPricing, priceUniverseBlend, usePriceFilter } from '../lib/priceFilter.js';
 import { usePageSize } from '../lib/pager.js';
 import AppPager from '../components/AppPager.vue';
+import PriceFilterControls from '../components/PriceFilterControls.vue';
 import {
-  buildMatrix, sortMatrixRows, filterMatrix, rowBlend, cellBlend, cheapestPid,
+  buildMatrix, sortMatrixRows, filterMatrix, cellBlend, cheapestPid,
   latencyClass, isBatchRow, DEFAULT_COLUMNS,
 } from '../lib/pivot.js';
 import { useProviders } from '../stores/providers.js';
@@ -45,19 +50,49 @@ watch(tab, (t) => {
 });
 watch(() => route.query.view, (v) => { tab.value = v === 'compare' ? 1 : 0; });
 
+// ── Pricing filters (stats-23): one shared state for both tabs ────────
+// The free-only toggle and the max-price slider are the SAME widget on
+// both tabs (PriceFilterControls → lib/priceFilter.js singleton), so a
+// cap set on either tab applies everywhere. The slider's $ scale spans
+// the whole catalog — the superset both tabs draw from — so one slider
+// position means the same cap on either tab.
+const { freeOnly, sliderVal, maxPrice } = usePriceFilter();
+// 3:1 in:out blend for one catalog row — the same cellBlend convention the
+// Compare pivot uses (free → $0, unpriced → null, never fabricated).
+const rowBlendOf = (m, p) => cellBlend({ in: m.in, out: m.out, free: isFreeRow(m, p) });
+const catalogMaxBlend = computed(() => {
+  let m = 1;
+  for (const p of (rawData.value?.providers || []))
+    for (const mod of p.models) {
+      const b = rowBlendOf(mod, p);
+      if (b != null && b > m) m = b;
+    }
+  return Math.max(1, Math.ceil(m));
+});
+watch(catalogMaxBlend, (v) => { priceUniverseBlend.value = v; }, { immediate: true });
+
 // ── Tab 1: per-provider cards ─────────────────────────────────────────
-// Filter across all providers at once: a row survives when the model id (or
-// display name) matches; a provider survives while ≥1 of its rows does.
-// Matching the provider name keeps every row of that provider (browse mode).
+// Filter across all providers at once: a row survives when it passes the
+// pricing filters AND — given a search term — the model id (or display
+// name) matches; a provider survives while ≥1 of its rows does. A provider
+// whose NAME matches keeps every surviving row of its own (browse mode).
+// With no filter active the catalog returns untouched (fast path).
 const filtered = computed(() => {
   const all = rawData.value?.providers || [];
   const term = norm(q.value).trim();
-  if (!term) return all.map(p => ({ ...p, shown: p.models }));
+  const pricing = { freeOnly: freeOnly.value, maxPrice: maxPrice.value };
+  const pass = (p, m) => passesPricing(m,
+    { blend: rowBlendOf(m, p), free: isFreeRow(m, p) }, pricing);
+  if (!term && !pricing.freeOnly && pricing.maxPrice == null)
+    return all.map(p => ({ ...p, shown: p.models }));
   return all
     .map(p => {
-      if (norm(p.name).includes(term)) return { ...p, shown: p.models };
-      const shown = p.models.filter(m =>
-        norm(m.id).includes(term) || (m.name && norm(m.name).includes(term)));
+      const browse = !!term && norm(p.name).includes(term);
+      const shown = p.models.filter(m => pass(p, m) &&
+        (browse || !term || norm(m.id).includes(term) ||
+          (m.name && norm(m.name).includes(term))));
+      // a provider with no surviving rows drops off the page — pricing
+      // filters can empty even a name-matched (browse mode) seller
       return shown.length ? { ...p, shown } : null;
     })
     .filter(Boolean);
@@ -206,10 +241,10 @@ function resetColumns() {
   try { localStorage.removeItem(PICKER_KEY); } catch { /* private mode */ }
 }
 
-const freeOnly = ref(false);
 // stats-19: pricing-mode variants (OpenRouter ':batch' ids — async endpoints
 // of the SAME model at a discount) are hidden by default so the default view
-// compares standard endpoints; the toggle reveals them.
+// compares standard endpoints; the toggle reveals them. (The pricing filters
+// themselves live once, above — freeOnly/sliderVal/maxPrice are shared.)
 const showBatch = ref(false);
 
 const matrix = computed(() => {
@@ -217,26 +252,6 @@ const matrix = computed(() => {
   const built = buildMatrix(allProviders.value, [...selected.value]);
   return { ...built, rows: sortMatrixRows(built.rows) };
 });
-
-// Price slider: 0..100 mapped CUBICALLY onto the row-blend range so the
-// interesting sub-$10 zone gets most of the track; 100 (default) = no cap.
-const SLIDER_EXP = 3;
-const sliderVal = ref(100);
-const sliderMaxPrice = computed(() => {
-  if (!matrix.value) return 1;
-  let m = 1;
-  for (const r of matrix.value.rows) {
-    const b = rowBlend(r);
-    if (b != null && b > m) m = b;
-  }
-  return Math.max(1, Math.ceil(m));
-});
-const maxPrice = computed(() => {
-  if (sliderVal.value >= 100) return null;
-  return Math.round(sliderMaxPrice.value * Math.pow(sliderVal.value / 100, SLIDER_EXP) * 100) / 100;
-});
-const maxPriceLabel = computed(() =>
-  maxPrice.value == null ? 'any price' : `≤ ${fmtUsd(maxPrice.value)}/1M blended`);
 
 const visibleRows = computed(() => {
   if (!matrix.value) return [];
@@ -313,7 +328,9 @@ const pagedShown = (p) => (pageSize.value === 0
   ? p.shown
   : p.shown.slice((pageOf(p) - 1) * pageSize.value, pageOf(p) * pageSize.value));
 const needsPager = (p) => pageSize.value !== 0 && p.shown.length > pageSize.value;
-watch([q, pageSize], () => { cardPages.value = {} });
+// filter changes (search, size, pricing) wipe card page pointers so
+// nobody lands on an empty page after the list reshapes
+watch([q, pageSize, freeOnly, sliderVal], () => { cardPages.value = {} });
 
 function cellTitle(r, pid) {
   const c = r.cells[pid];
@@ -363,6 +380,7 @@ const colHeaderTitle = (p) => {
           Who sells which model, at what price — USD per 1M tokens, input / output.
           Sellers are grouped into third-party <b>Providers</b> (cloud, serverless,
           aggregators) and first-party <b>Labs</b> — the reference price for each model.
+          The free-only and max-price filters sit on both tabs and stay in sync.
           Or switch to "Compare" for the pivot view: one row per model, one column
           per seller, cheapest cell highlighted.
         </p>
@@ -398,6 +416,13 @@ const colHeaderTitle = (p) => {
       <!-- ── Tab 1: the original per-provider listing ─────────────────── -->
       <b-tab-item label="By provider">
         <template v-if="!loading && !error">
+          <!-- stats-23: the pricing filters — the SAME reusable widget as the
+               Compare tab (PriceFilterControls → lib/priceFilter.js), one
+               shared state, so both tabs always agree -->
+          <div v-if="superGroups.length" class="row pv-controls mt-sm">
+            <PriceFilterControls />
+          </div>
+
           <!-- stats-22 round 2: expand/collapse all -->
           <div v-if="superGroups.length" class="row mt-sm" style="gap:.45rem;align-items:center">
             <button type="button" class="prov-expbtn" :disabled="allExpanded" @click="expandAll">Expand all</button>
@@ -488,13 +513,11 @@ const colHeaderTitle = (p) => {
           </div>
 
           <div class="row pm-controls mt-sm" style="align-items:center">
-            <b-switch v-model="freeOnly" size="is-small">free only</b-switch>
+            <!-- stats-23: the same pricing widget as the By-provider tab —
+                 one shared state, the tabs always agree -->
+            <PriceFilterControls />
             <b-switch v-model="showBatch" size="is-small"
               title="Show ':batch' pricing variants — async endpoints of the same model at a discounted price">batch variants</b-switch>
-            <span class="cell-sub" style="margin-left:.4rem">max price</span>
-            <b-slider v-model="sliderVal" :min="0" :max="100" :step="1" size="is-small"
-              :tooltip="false" aria-label="maximum blended price per 1M tokens" style="max-width:240px" />
-            <span class="cell-sub pm-price-label">{{ maxPriceLabel }}</span>
             <span class="is-flex-grow-1"></span>
             <span class="cell-sub pm-coverage">
               {{ matrix ? matrix.coverage.models : 0 }} canonical models ·

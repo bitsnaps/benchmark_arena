@@ -21,6 +21,7 @@
 //      quality stays visible instead of silently lying.
 
 import { priceBlend } from './format.js';
+import { passesPricing } from './priceFilter.js';
 
 // ── Pricing-mode variants (stats-19) ────────────────────────────────────
 // OpenRouter's ':batch' ids are async/batch endpoints of the SAME model at
@@ -224,19 +225,18 @@ export function cheapestPid(row) {
 // Row filters for the Compare tab. All composable (the point of stats-18):
 //   q        — substring over name + every joined seller id + key
 //   freeOnly — keep rows with ≥1 free cell (any selected seller)
-//   maxPrice — keep rows whose cheapest known blend ≤ maxPrice; free cells
-//              blend to 0 so free rows always survive a price cap, while
-//              rows with no price at all are hidden (nothing to compare).
+//   maxPrice — keep rows whose cheapest known blend ≤ maxPrice
+// The pricing half (freeOnly + maxPrice) is the SHARED contract from
+// lib/priceFilter.js — the By-provider tab filters its catalog rows with
+// the exact same predicate, so the two tabs can never drift (stats-23).
 export function filterMatrix(rows, { q = '', freeOnly = false, maxPrice = null } = {}) {
   const term = String(q).trim().toLowerCase();
   return rows.filter((r) => {
     if (term && !r.search.includes(term)) return false;
-    if (freeOnly && !Object.values(r.cells).some((c) => c.free)) return false;
-    if (maxPrice != null) {
-      const b = rowBlend(r);
-      if (b === null || b > maxPrice) return false;
-    }
-    return true;
+    return passesPricing(r, {
+      blend: rowBlend(r),
+      free: Object.values(r.cells).some((c) => c.free),
+    }, { freeOnly, maxPrice });
   });
 }
 

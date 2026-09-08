@@ -5,7 +5,9 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS } from '../../src/lib/pivot.js';
+import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS, cellBlend } from '../../src/lib/pivot.js';
+import { capFromSlider } from '../../src/lib/priceFilter.js';
+import { fmtUsd } from '../../src/lib/format.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SHOTS = path.join(REPO, 'tests', 'e2e', 'shots');
@@ -210,6 +212,111 @@ const run = async () => {
     if (/^\$\d/.test(firstNum.trim())) ok(`price cell formatted (${firstNum.trim()})`);
     else fail(`price cell not USD-formatted: "${firstNum}"`);
     await page.screenshot({ path: SHOTS + '/providers.png', fullPage: false });
+
+    // ── 4b. stats-23: pricing filters on By provider (shared with Compare) ──
+    // The controls are the SAME reusable widget as the Compare tab's — one
+    // component (PriceFilterControls) over one shared state (lib/priceFilter.js
+    // singleton). Expectations derive from the committed catalog with the
+    // shipped helpers — honest, not hardcoded.
+    await page.waitForSelector('.pv-controls', { timeout: 10000 });
+    ok('By provider carries the pricing-filter controls (free only + max price)');
+
+    await page.selectOption('.prov-size select', '0'); // All — full tables for honest counting
+    await page.waitForTimeout(300);
+
+    const isFreeListing = (p, m) => !!m.free || !!p.free_tier || (m.in === 0 && (m.out ?? 0) === 0);
+    const blendOf = (p, m) => cellBlend({ in: m.in, out: m.out, free: isFreeListing(p, m) });
+    const allRows = catalog.providers.reduce((a, p) => a + p.models.length, 0);
+    const freeSets = catalog.providers
+      .map(p => ({ p, rows: p.models.filter(m => isFreeListing(p, m)) }))
+      .filter(x => x.rows.length);
+    const freeRowsExp = freeSets.reduce((a, x) => a + x.rows.length, 0);
+
+    // free only: sellers narrow to those with ≥1 free listing, every shown
+    // row is free, and every shown row carries its free chip
+    await page.click('.pv-controls >> text=free only');
+    await page.waitForTimeout(400);
+    const freeCards = await page.locator('.prov-card').count();
+    const freeRowsDom = await page.locator('.prov-card .prov-table tbody tr').count();
+    const freeChips = await page.locator('.prov-card .prov-table .free-chip').count();
+    if (freeCards === freeSets.length && freeRowsDom === freeRowsExp && freeChips === freeRowsExp)
+      ok(`free toggle narrows By provider to ${freeCards} sellers / ${freeRowsDom} free rows (chips honest)`);
+    else fail(`free toggle: cards ${freeCards}/${freeSets.length} rows ${freeRowsDom}/${freeRowsExp} chips ${freeChips}/${freeRowsExp}`);
+
+    // the header totals line tracks the filter
+    const freeTotals = await page.locator('span.cell-sub', { hasText: 'catalog rows' }).first().innerText();
+    if (freeTotals.includes(`${freeRowsExp} of ${allRows} catalog rows`))
+      ok(`totals line tracks the free filter ("${freeTotals.trim()}")`);
+    else fail(`totals line wrong: "${freeTotals.trim()}"`);
+
+    await page.click('.pv-controls >> text=free only'); // off again
+    await page.waitForTimeout(300);
+    const restoredCards = await page.locator('.prov-card').count();
+    if (restoredCards === catalog.providers.length)
+      ok(`free toggle off restores all ${restoredCards} seller cards`);
+    else fail(`free toggle off: expected ${catalog.providers.length} cards, got ${restoredCards}`);
+
+    // price cap: slider at mid-track → cubic cap over the catalog scale;
+    // unpriced rows hide (OpenCode Zen non-free), pricier sellers drop out
+    const blends = catalog.providers
+      .flatMap(p => p.models.map(m => blendOf(p, m)))
+      .filter(b => b != null);
+    const universeMax = Math.max(1, Math.ceil(Math.max(...blends)));
+    const cap = capFromSlider(50, universeMax);
+    const capSets = catalog.providers
+      .map(p => ({ p, rows: p.models.filter(m => { const b = blendOf(p, m); return b != null && b <= cap; }) }))
+      .filter(x => x.rows.length);
+    const capRows = capSets.reduce((a, x) => a + x.rows.length, 0);
+    await page.locator('.pv-controls [role="slider"]').first().focus();
+    for (let i = 0; i < 50; i++) await page.keyboard.press('ArrowLeft');
+    await page.waitForTimeout(400);
+    const capLabel = await page.locator('.pv-controls .pm-price-label').innerText();
+    const capRowsDom = await page.locator('.prov-card .prov-table tbody tr').count();
+    if (capRowsDom === capRows && capLabel === '≤ ' + fmtUsd(cap) + '/1M blended')
+      ok(`price cap "${capLabel}" narrows to ${capRowsDom} rows blending ≤ ${fmtUsd(cap)}`);
+    else fail(`price cap: label "${capLabel}" rows ${capRowsDom}/${capRows} (expected ≤ ${fmtUsd(cap)})`);
+
+    // composition: free only + cap → the free rows (they blend to $0) —
+    // exactly the free-only set from before
+    await page.click('.pv-controls >> text=free only');
+    await page.waitForTimeout(400);
+    const bothRowsDom = await page.locator('.prov-card .prov-table tbody tr').count();
+    if (bothRowsDom === freeRowsExp)
+      ok(`free only + cap compose: ${bothRowsDom} rows (free blends to $0, survives any cap)`);
+    else fail(`composed filters: expected ${freeRowsExp} rows, got ${bothRowsDom}`);
+
+    // shared state travels: Compare reflects freeOnly + cap set on Tab 1
+    const pivotFreeExp = buildMatrix(catalog.providers, DEFAULT_COLUMNS).rows
+      .filter(r => !isBatchRow(r) && Object.values(r.cells).some(c => c.free)).length;
+    await page.click('.tabs li >> text=Compare');
+    await page.waitForSelector('.pm-table', { timeout: 10000 });
+    const covText = await page.locator('.pm-coverage').innerText();
+    if (covText.includes(`${pivotFreeExp} shown`))
+      ok(`Compare inherits Tab 1's filter state (${pivotFreeExp} free rows shown)`);
+    else fail(`Compare did not inherit state: "${covText.replace(/\s+/g, ' ').trim()}"`);
+
+    // ...and back: clearing it on Compare restores the cap-only view on Tab 1
+    await page.click('.pm-controls >> text=free only'); // off, on the Compare tab
+    await page.waitForTimeout(300);
+    await page.click('.tabs li >> text=By provider');
+    await page.waitForSelector('.prov-card', { timeout: 10000 });
+    const backRowsDom = await page.locator('.prov-card .prov-table tbody tr').count();
+    const backLabel = await page.locator('.pv-controls .pm-price-label').innerText();
+    if (backRowsDom === capRows && backLabel === '≤ ' + fmtUsd(cap) + '/1M blended')
+      ok('Compare toggle-off carries back: Tab 1 shows the cap-only view again');
+    else fail(`state round-trip: rows ${backRowsDom}/${capRows} label "${backLabel}"`);
+
+    // restore the shared state for the shipped sections below
+    await page.locator('.pv-controls [role="slider"]').first().focus();
+    for (let i = 0; i < 50; i++) await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(300);
+    const anyLabel = await page.locator('.pv-controls .pm-price-label').innerText();
+    const fullRowsDom = await page.locator('.prov-card .prov-table tbody tr').count();
+    if (anyLabel === 'any price' && fullRowsDom === allRows)
+      ok(`cap cleared: ${fullRowsDom} catalog rows back, label "any price"`);
+    else fail(`cap clear: label "${anyLabel}" rows ${fullRowsDom}/${allRows}`);
+    await page.selectOption('.prov-size select', '50');
+    await page.waitForTimeout(300);
 
     // ── 5. Compare pivot tab (stats-18) ─────────────────
     // Expected matrix is derived from the committed providers.json using the

@@ -43,11 +43,31 @@ const run = async () => {
     if (cards === catalog.providers.length) ok(`all ${cards} provider cards rendered`);
     else fail(`provider cards: expected ${catalog.providers.length}, got ${cards}`);
 
-    for (const kind of catalog.kinds) {
+    // ── 2a. stats-22 labs vs providers regroup: two super-sections ──
+    const superTitles = (await page.locator('.prov-super-title').allInnerTexts()).map(s => s.trim());
+    if (superTitles.join('|') === 'Providers|Labs')
+      ok('super-sections render in order: Providers, then Labs');
+    else fail(`super-sections wrong: "${superTitles.join('", "')}"`);
+    const provCount = catalog.providers.filter(p => p.kind !== 'first-party').length;
+    const labCount = catalog.providers.length - provCount;
+    const provSection = page.locator('.prov-super', { has: page.locator('.prov-super-title', { hasText: 'Providers' }) });
+    const labSection = page.locator('.prov-super', { has: page.locator('.prov-super-title', { hasText: 'Labs' }) });
+    const provCards = await provSection.locator('.prov-card').count();
+    const labCards = await labSection.locator('.prov-card').count();
+    if (provCards === provCount) ok(`Providers section holds all ${provCards} third-party sellers`);
+    else fail(`Providers section: expected ${provCount} cards, got ${provCards}`);
+    if (labCards === labCount) ok(`Labs section holds all ${labCount} first-party labs`);
+    else fail(`Labs section: expected ${labCount} cards, got ${labCards}`);
+
+    for (const kind of catalog.kinds.filter(k => k !== 'first-party')) {
       const title = page.locator('.prov-kind-title', { hasText: KIND_LABEL[kind] });
-      if (await title.count() === 1) ok(`kind section "${KIND_LABEL[kind]}" present`);
-      else fail(`kind section "${KIND_LABEL[kind]}" missing`);
+      if (await title.count() === 1) ok(`kind sub-section "${KIND_LABEL[kind]}" present under Providers`);
+      else fail(`kind sub-section "${KIND_LABEL[kind]}" missing`);
     }
+    const kindTitles = await page.locator('.prov-kind-title').count();
+    if (kindTitles === catalog.kinds.length - 1)
+      ok('Labs carries its cards directly (no redundant first-party sub-header)');
+    else fail(`kind sub-headers: expected ${catalog.kinds.length - 1}, got ${kindTitles}`);
 
     // The biggest provider's card shows its full model count
     const biggest = [...catalog.providers].sort((a, b) => b.models.length - a.models.length)[0];
@@ -237,7 +257,12 @@ const run = async () => {
     await page.fill('input.input', '');
     await page.waitForTimeout(300);
 
-    // provider picker: deselect down to 2 columns, table follows
+    // provider picker: chips clustered Providers / Labs (stats-22)
+    // (innerTexts come back uppercase — the label is CSS text-transformed)
+    const chipGroups = (await page.locator('.pm-chip-group').allInnerTexts()).map(s => s.trim().toLowerCase());
+    if (chipGroups.join('|') === 'providers|labs') ok('picker chips clustered: Providers, then Labs');
+    else fail(`picker clusters wrong: "${chipGroups.join('", "')}"`);
+    // deselect down to 2 columns, table follows
     await page.click('.pm-chip:has-text("Fireworks AI")');
     await page.click('.pm-chip:has-text("DeepInfra")');
     await page.click('.pm-chip:has-text("Together AI")');

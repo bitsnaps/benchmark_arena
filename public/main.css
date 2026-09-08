@@ -491,6 +491,16 @@ a.hbar:hover .name { color: var(--teal); }
   margin: 0;
   color: var(--text);
 }
+/* stats-22: labs vs providers regroup — super-section headers above the
+   kind sub-headers; Labs cards sit directly under their super-header */
+.prov-super-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.38rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+.prov-super .prov-kind-title { font-size: 1.02rem; }
 .prov-card { padding: 1rem 1.15rem; }
 .prov-name {
   font-family: 'Outfit', sans-serif;
@@ -602,6 +612,17 @@ a.hbar:hover .name { color: var(--teal); }
   background: rgba(139, 156, 255, 0.12);
 }
 .pm-chip-n { color: var(--faint); font-weight: 500; margin-left: .3rem; font-size: .72rem; }
+/* stats-22: picker chips clustered Providers / Labs */
+.pm-chip-group {
+  color: var(--faint);
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  margin: 0 .3rem 0 .55rem;
+  white-space: nowrap;
+}
+.pm-chip-group + .pm-chip { margin-left: .1rem; }
 .pm-price-label { min-width: 11ch; display: inline-block; }
 .pm-coverage { text-align: right; }
 .pm-page-label { white-space: nowrap; margin: 0 .5rem; }

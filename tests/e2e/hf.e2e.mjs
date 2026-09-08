@@ -63,7 +63,10 @@ const ok = (msg) => console.log('  ok:', msg);
     else fail(`HF chips = ${chips}, expected ${withHf.length} (visible rows with hugging_face_id)`);
 
     // ── 2. open anchor row: chip href + tooltip carry the exact repo ──
-    const openRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: OPEN.name }) }).first();
+    // exact-name match: 'Inkling' must not hit the 'Inkling Small' row
+    // (substring hasText — fresh ranks reordered them, stats-22 lesson)
+    const exact = (name) => new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
+    const openRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: exact(OPEN.name) }) }).first();
     const chip = openRow.locator('a.hf-chip').first();
     if ((await chip.count()) === 0) {
       fail(`"${OPEN.name}" row has no HF chip`);
@@ -77,7 +80,7 @@ const ok = (msg) => console.log('  ok:', msg);
     }
 
     // ── 3. closed anchor row: no chip, ever ──
-    const closedRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: CLOSED.name }) }).first();
+    const closedRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: exact(CLOSED.name) }) }).first();
     const closedChips = await closedRow.locator('a.hf-chip').count();
     if (closedChips === 0) ok(`closed model "${CLOSED.name}" renders no HF chip`);
     else fail(`closed model "${CLOSED.name}" unexpectedly renders ${closedChips} HF chip(s)`);

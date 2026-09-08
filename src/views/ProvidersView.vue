@@ -63,9 +63,49 @@ const filtered = computed(() => {
     .filter(Boolean);
 });
 
-const grouped = computed(() => kinds.value
-  .map(kind => ({ kind, providers: filtered.value.filter(p => p.kind === kind) }))
-  .filter(g => g.providers.length));
+// ── stats-22: labs vs providers regroup ──────────────────────────────
+// The approved taxonomy split: third-party "Providers" (cloud / serverless /
+// aggregator kinds, still sub-grouped) come first; first-party "Labs" — the
+// lab's own API, the reference price for each model — sit in their own
+// section below. Unknown kinds (a future catalog addition) land on the
+// provider side under their raw label, so a fresh scrape can't break the
+// page structure.
+const LAB_KIND = 'first-party';
+const superGroups = computed(() => {
+  const kindGroups = kinds.value
+    .filter(k => k !== LAB_KIND)
+    .map(kind => ({ kind, providers: filtered.value.filter(p => p.kind === kind) }))
+    .filter(g => g.providers.length);
+  const labs = filtered.value.filter(p => p.kind === LAB_KIND);
+  const out = [];
+  if (kindGroups.length) {
+    const providers = kindGroups.flatMap(g => g.providers);
+    out.push({
+      id: 'providers', title: 'Providers',
+      blurb: 'Third-party operators serving many labs\u2019 models',
+      noun: 'providers', providers,
+      rows: providers.reduce((a, p) => a + p.models.length, 0),
+      groups: kindGroups.map(g => ({
+        kind: g.kind, label: KIND_LABEL[g.kind] || g.kind,
+        blurb: KIND_BLURB[g.kind] || '', providers: g.providers,
+      })),
+    });
+  }
+  if (labs.length) {
+    out.push({
+      id: 'labs', title: 'Labs',
+      blurb: KIND_BLURB[LAB_KIND], noun: 'labs',
+      providers: labs,
+      rows: labs.reduce((a, p) => a + p.models.length, 0),
+      groups: [{ kind: LAB_KIND, label: '', blurb: '', providers: labs }],
+    });
+  }
+  return out;
+});
+
+// Compare picker: chips clustered Providers / Labs in the same order.
+const pickerProviders = computed(() => allProviders.value.filter(p => p.kind !== LAB_KIND));
+const pickerLabs = computed(() => allProviders.value.filter(p => p.kind === LAB_KIND));
 
 const totalShown = computed(() => filtered.value.reduce((a, p) => a + p.shown.length, 0));
 const totalRows = computed(() => (rawData.value?.providers || []).reduce((a, p) => a + p.models.length, 0));
@@ -284,8 +324,10 @@ const colHeaderTitle = (p) => {
         <h1 class="section-title" style="margin:0">AI Providers &amp; Pricing</h1>
         <p class="cell-sub mt-sm" style="max-width:64ch">
           Who sells which model, at what price — USD per 1M tokens, input / output.
-          Browse seller by seller under "By provider", or switch to "Compare" for the
-          pivot view: one row per model, one column per seller, cheapest cell highlighted.
+          Sellers are grouped into third-party <b>Providers</b> (cloud, serverless,
+          aggregators) and first-party <b>Labs</b> — the reference price for each model.
+          Or switch to "Compare" for the pivot view: one row per model, one column
+          per seller, cheapest cell highlighted.
         </p>
       </div>
       <span v-if="asOf" class="tag-lab">prices as of {{ asOf }}</span>
@@ -319,47 +361,55 @@ const colHeaderTitle = (p) => {
       <!-- ── Tab 1: the original per-provider listing ─────────────────── -->
       <b-tab-item label="By provider">
         <template v-if="!loading && !error">
-          <div v-for="g in grouped" :key="g.kind" class="mt">
+          <!-- stats-22: labs vs providers regroup — Providers first, Labs below -->
+          <div v-for="sg in superGroups" :key="sg.id" class="prov-super mt">
             <div class="row" style="gap:.6rem;align-items:baseline">
-              <h2 class="prov-kind-title">{{ KIND_LABEL[g.kind] || g.kind }}</h2>
-              <span class="cell-sub">{{ KIND_BLURB[g.kind] }} · {{ g.providers.length }} providers</span>
+              <h2 class="prov-super-title">{{ sg.title }}</h2>
+              <span class="cell-sub">{{ sg.blurb }} · {{ sg.providers.length }} {{ sg.noun }} · {{ sg.rows }} catalog rows</span>
             </div>
 
-            <div v-for="p in g.providers" :key="p.id" class="panel-lab prov-card">
-              <div class="row" style="justify-content:space-between">
-                <h3 class="prov-name">{{ p.name }}</h3>
-                <span class="cell-sub">{{ p.shown.length }} model{{ p.shown.length === 1 ? '' : 's' }}<template v-if="freeCount(p)"> · {{ freeCount(p) }} free</template></span>
+            <template v-for="g in sg.groups" :key="sg.id + ':' + g.kind">
+              <div v-if="g.label" class="row mt" style="gap:.6rem;align-items:baseline">
+                <h3 class="prov-kind-title">{{ g.label }}</h3>
+                <span class="cell-sub">{{ g.blurb }} · {{ g.providers.length }} providers</span>
               </div>
-              <table class="prov-table">
-                <thead>
-                  <tr>
-                    <th class="left">Model</th>
-                    <th>$/1M in</th>
-                    <th>$/1M out</th>
-                    <th>Context</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="m in pagedShown(p)" :key="p.id + m.id">
-                    <td class="left">
-                      <span class="prov-model">{{ m.name || m.id }}</span>
-                      <span v-if="m.name && m.id !== m.name" class="prov-id">{{ m.id }}</span>
-                      <span v-if="isFreeRow(m, p)" class="free-chip" :title="freeTitle(m)">free</span>
-                    </td>
-                    <td class="num">{{ fmtUsd(m.in) }}</td>
-                    <td class="num">{{ fmtUsd(m.out) }}</td>
-                    <td class="num cell-sub">{{ fmtCtx(m.ctx) }}</td>
-                  </tr>
-                </tbody>
-              </table>
 
-              <!-- stats-21: oversized cards page their model table with the
-                   one pager (bottom-right, numbers between the arrows); the
-                   rows-per-page control lives once, at the top of this tab -->
-              <AppPager v-if="needsPager(p)" :show-size="false"
-                :total="p.shown.length" :page="pageOf(p)" @update:page="setCardPage(p, $event)"
-                :aria-label="p.name + ' pagination'" />
-            </div>
+              <div v-for="p in g.providers" :key="p.id" class="panel-lab prov-card">
+                <div class="row" style="justify-content:space-between">
+                  <h3 class="prov-name">{{ p.name }}</h3>
+                  <span class="cell-sub">{{ p.shown.length }} model{{ p.shown.length === 1 ? '' : 's' }}<template v-if="freeCount(p)"> · {{ freeCount(p) }} free</template></span>
+                </div>
+                <table class="prov-table">
+                  <thead>
+                    <tr>
+                      <th class="left">Model</th>
+                      <th>$/1M in</th>
+                      <th>$/1M out</th>
+                      <th>Context</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="m in pagedShown(p)" :key="p.id + m.id">
+                      <td class="left">
+                        <span class="prov-model">{{ m.name || m.id }}</span>
+                        <span v-if="m.name && m.id !== m.name" class="prov-id">{{ m.id }}</span>
+                        <span v-if="isFreeRow(m, p)" class="free-chip" :title="freeTitle(m)">free</span>
+                      </td>
+                      <td class="num">{{ fmtUsd(m.in) }}</td>
+                      <td class="num">{{ fmtUsd(m.out) }}</td>
+                      <td class="num cell-sub">{{ fmtCtx(m.ctx) }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <!-- stats-21: oversized cards page their model table with the
+                     one pager (bottom-right, numbers between the arrows); the
+                     rows-per-page control lives once, at the top of this tab -->
+                <AppPager v-if="needsPager(p)" :show-size="false"
+                  :total="p.shown.length" :page="pageOf(p)" @update:page="setCardPage(p, $event)"
+                  :aria-label="p.name + ' pagination'" />
+              </div>
+            </template>
           </div>
         </template>
       </b-tab-item>
@@ -367,9 +417,18 @@ const colHeaderTitle = (p) => {
       <!-- ── Tab 2: Compare pivot — models × providers ────────────────── -->
       <b-tab-item label="Compare">
         <template v-if="!loading && !error && selected">
+          <!-- stats-22: chips clustered Providers / Labs, same order as tab 1 -->
           <div class="row pm-controls mt">
             <span class="cell-sub">Columns:</span>
-            <button v-for="p in allProviders" :key="p.id" type="button"
+            <span class="pm-chip-group">Providers</span>
+            <button v-for="p in pickerProviders" :key="p.id" type="button"
+              class="pm-chip" :class="{ 'is-on': selected.has(p.id) }"
+              :title="`${p.kind} · ${p.models.length} catalog rows${p.free_tier ? ' · whole catalog free, rate-limited' : ''}`"
+              @click="toggleProvider(p.id)">
+              {{ p.name }}<span class="pm-chip-n">{{ p.models.length }}</span>
+            </button>
+            <span class="pm-chip-group">Labs</span>
+            <button v-for="p in pickerLabs" :key="p.id" type="button"
               class="pm-chip" :class="{ 'is-on': selected.has(p.id) }"
               :title="`${p.kind} · ${p.models.length} catalog rows${p.free_tier ? ' · whole catalog free, rate-limited' : ''}`"
               @click="toggleProvider(p.id)">

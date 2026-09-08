@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-04 23:08",
+  "timestamp": "2026-09-08 11:00",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -30,205 +30,205 @@
       "closed": [
         [
           "Claude Fable 5.1 (max with fallback)",
-          56.99999999999999
-        ],
-        [
-          "GPT-6 Astra (max)",
-          55.00000000000001
-        ],
-        [
-          "GPT-6 Astra (xhigh)",
-          54.0
-        ],
-        [
-          "Claude Opus 5 (max)",
           54.0
         ],
         [
           "Claude Fable 5.1 (xhigh with fallback)",
-          54.0
-        ],
-        [
-          "Claude Opus 5 (xhigh)",
           53.0
         ],
         [
-          "GPT-6 Astra (high)",
+          "GPT-6 Astra (max)",
           53.0
         ],
         [
-          "Claude Fable 5 (with fallback)",
+          "GPT-6 Astra (xhigh)",
           53.0
-        ],
-        [
-          "Muse Spark 1.3 (max)",
-          53.0
-        ],
-        [
-          "GPT-6 Astra (medium)",
-          52.0
-        ],
-        [
-          "Claude Opus 5 (high)",
-          52.0
         ],
         [
           "Claude Fable 5.1 (high with fallback)",
-          52.0
-        ],
-        [
-          "Muse Spark 1.3 (xhigh)",
-          52.0
-        ],
-        [
-          "GPT-5.6 Sol (max)",
           51.0
         ],
         [
-          "Grok 4.6 (high)",
+          "GPT-6 Astra (high)",
           51.0
+        ],
+        [
+          "Claude Opus 5 (max)",
+          51.0
+        ],
+        [
+          "Claude Fable 5 (with fallback)",
+          50.0
+        ],
+        [
+          "GPT-6 Astra (medium)",
+          50.0
+        ],
+        [
+          "Claude Opus 5 (xhigh)",
+          50.0
         ],
         [
           "Claude Fable 5.1 (medium with fallback)",
-          50.0
-        ],
-        [
-          "GPT-5.6 Sol (xhigh)",
-          50.0
-        ],
-        [
-          "Claude Opus 5 (medium)",
-          50.0
-        ],
-        [
-          "Grok 4.6 (xhigh)",
           49.0
         ],
         [
-          "GPT-6 Astra (low)",
-          49.0
-        ],
-        [
-          "Grok 4.6 (medium)",
+          "Claude Opus 5 (high)",
           48.0
         ],
         [
-          "GPT-5.6 Sol (high)",
+          "Muse Spark 1.3 (max)",
           48.0
         ],
         [
-          "GPT-6 Astra (Non-reasoning)",
-          48.0
+          "GPT-5.6 Sol (max)",
+          47.0
         ],
         [
           "Claude Fable 5.1 (low with fallback)",
-          48.0
+          47.0
         ],
         [
-          "Gemini 3.8 Flash (high)",
-          47.0
+          "GPT-6 Astra (low)",
+          46.0
+        ],
+        [
+          "GPT-6 Astra (Non-reasoning)",
+          45.0
+        ],
+        [
+          "Muse Spark 1.3 (xhigh)",
+          45.0
+        ],
+        [
+          "Claude Opus 5 (medium)",
+          45.0
+        ],
+        [
+          "Grok 4.6 (high)",
+          44.0
+        ],
+        [
+          "Grok 4.6 (xhigh)",
+          44.0
+        ],
+        [
+          "GPT-5.6 Sol (xhigh)",
+          44.0
+        ],
+        [
+          "Grok 4.6 (medium)",
+          43.0
+        ],
+        [
+          "GPT-5.6 Sol (high)",
+          42.0
+        ],
+        [
+          "GPT-5.6 Terra (max)",
+          42.0
         ]
       ],
       "open": [
         [
-          "Kimi K3 (max)",
-          50.0
-        ],
-        [
           "GLM-5.3 (max)",
-          49.0
+          45.0
         ],
         [
-          "Qwen3.8 Max",
-          47.0
-        ],
-        [
-          "Qwen3.8 2.4T A95B",
-          47.0
-        ],
-        [
-          "GLM-5.3-Flash",
-          46.0
+          "Kimi K3 (max)",
+          44.0
         ],
         [
           "Qwen3.8-Flash-Next",
-          46.0
+          42.0
+        ],
+        [
+          "GLM-5.3-Flash",
+          42.0
+        ],
+        [
+          "Qwen3.8 Max",
+          40.0
+        ],
+        [
+          "Qwen3.8 2.4T A95B",
+          40.0
         ],
         [
           "GLM-5.2 (max)",
-          43.0
-        ],
-        [
-          "DeepSeek V4 Pro 0813 (max)",
-          42.0
-        ],
-        [
-          "Qwen3.8 27B (xhigh)",
-          42.0
-        ],
-        [
-          "DeepSeek V4 Flash Vision (max)",
-          42.0
-        ],
-        [
-          "DeepSeek V4 Flash 0731 (max)",
-          41.0
-        ],
-        [
-          "Kimi K3 (low)",
           39.0
         ],
         [
-          "DeepSeek V4 Pro (max)",
+          "DeepSeek V4 Pro 0813 (max)",
           36.0
         ],
         [
-          "MiniMax-M3",
-          36.0
+          "DeepSeek V4 Flash Vision (max)",
+          35.0
+        ],
+        [
+          "DeepSeek V4 Flash 0731 (max)",
+          35.0
+        ],
+        [
+          "Kimi K3 (low)",
+          34.0
+        ],
+        [
+          "Qwen3.8 27B (xhigh)",
+          34.0
+        ],
+        [
+          "DeepSeek V4 Pro (max)",
+          31.0
         ],
         [
           "Qwen3.8 27B (medium)",
-          35.0
+          31.0
         ],
         [
           "DeepSeek V4 Pro (high)",
-          35.0
+          30.0
         ],
         [
-          "Kimi K2.7 Code",
-          34.0
+          "MiniMax-M3",
+          30.0
         ],
         [
           "Qwen3.8 27B (low)",
-          34.0
+          28.999999999999996
         ],
         [
           "Solar Pro 4",
-          33.0
+          28.000000000000004
         ],
         [
           "MiMo-V2.5-Pro",
-          33.0
+          26.0
         ],
         [
-          "Nemotron 3 Ultra",
-          30.0
-        ],
-        [
-          "MiMo-V2.5",
-          30.0
+          "Kimi K2.7 Code",
+          26.0
         ],
         [
           "MiMo-V2-Omni-0327",
-          28.999999999999996
+          25.0
         ],
         [
           "Solar Open2 250B",
-          28.999999999999996
+          25.0
         ],
         [
-          "Qwen3.6 27B",
-          28.999999999999996
+          "MiMo-V2-Omni",
+          24.0
+        ],
+        [
+          "Nemotron 3 Ultra",
+          23.0
+        ],
+        [
+          "MiMo-V2-Flash (Feb 2026)",
+          22.0
         ]
       ]
     },
@@ -312,7 +312,7 @@
         ],
         [
           "Claude Opus 4.6",
-          54.0
+          55.0
         ],
         [
           "Gemini 3.1 Pro",
@@ -651,6 +651,14 @@
           86.6
         ],
         [
+          "GPT-6 Astra Pro",
+          86.5
+        ],
+        [
+          "GPT-6 Astra",
+          83.6
+        ],
+        [
           "Gemini 3.8 Flash",
           82.4
         ],
@@ -737,14 +745,6 @@
         [
           "GPT-5 Pro",
           61.6
-        ],
-        [
-          "Gemini 3 Flash Preview",
-          61.1
-        ],
-        [
-          "Claude Sonnet 5",
-          60.6
         ]
       ],
       "open": [
@@ -763,10 +763,6 @@
         [
           "Kimi K3 (max)",
           60.7
-        ],
-        [
-          "Qwen 3.8 27B",
-          60.2
         ]
       ]
     },
@@ -955,28 +951,40 @@
     "Design Arena": {
       "closed": [
         [
-          "GPT-5.6 Sol (XHigh)",
+          "GPT-6 Astra (xhigh)",
+          95.33333333333334
+        ],
+        [
+          "Muse Spark 1.3 (xhigh)",
+          93.83333333333333
+        ],
+        [
+          "GPT-5.6 Sol (xhigh)",
           92.33333333333333
         ],
         [
           "Claude Fable 5.1",
-          91.0
+          90.83333333333333
         ],
         [
           "Claude Opus 5",
-          90.5
+          90.16666666666666
         ],
         [
           "GPT-5.6 Sol (Medium)",
-          90.0
+          89.66666666666666
         ],
         [
           "Muse Spark 1.2",
-          88.83333333333333
+          88.5
         ],
         [
           "Claude Fable 5",
-          88.33333333333333
+          88.0
+        ],
+        [
+          "Gemini 3.8 Flash",
+          87.16666666666667
         ],
         [
           "Gemini 3.7 Flash",
@@ -984,41 +992,29 @@
         ],
         [
           "Grok 4.6",
-          86.0
-        ],
-        [
-          "Gemini 3.8 Flash",
-          85.83333333333333
+          85.5
         ],
         [
           "Gemini 3.6 Flash",
-          85.0
-        ],
-        [
-          "Claude Opus 4.7",
-          84.83333333333334
-        ],
-        [
-          "Claude Opus 4.6",
           84.66666666666667
         ],
         [
-          "Claude Opus 4.6 (Thinking)",
-          84.16666666666667
+          "Claude Opus 4.6",
+          84.5
         ]
       ],
       "open": [
         [
           "Kimi K3",
-          99.16666666666667
+          99.0
         ],
         [
           "GLM-5.3",
-          89.5
+          89.0
         ],
         [
           "GLM 5.2",
-          86.66666666666667
+          86.16666666666667
         ],
         [
           "Qwen3.8 Max",
@@ -1026,11 +1022,11 @@
         ],
         [
           "GLM-5.3-Flash",
-          84.83333333333334
+          84.66666666666667
         ],
         [
           "Llama 4 Scout",
-          1.3333333333333335
+          1.1666666666666667
         ]
       ]
     },
@@ -1317,11 +1313,19 @@
           97.6
         ],
         [
+          "Claude Fable 5.1 (max)",
+          91.2
+        ],
+        [
           "Claude Fable 5 (max)",
           90.0
         ],
         [
           "GPT-5.6-sol (max)",
+          85.0
+        ],
+        [
+          "GPT-6 Astra (max)",
           85.0
         ],
         [
@@ -1563,206 +1567,206 @@
     "EQBench CW": {
       "closed": [
         [
-          "claude-opus-5",
+          "gpt-6-astra",
           100.0
         ],
         [
+          "claude-fable-5-1",
+          99.42970619685319
+        ],
+        [
+          "claude-opus-5",
+          97.7952034217628
+        ],
+        [
           "gpt-5.6-sol",
-          92.06721987370179
+          89.79072254188095
         ],
         [
           "claude-fable-5",
-          90.45456917697406
+          88.3242527623606
         ],
         [
           "muse-spark-1.1",
-          89.51516100412297
+          87.38224960537705
         ],
         [
           "claude-opus-4-7",
-          89.05589478628465
+          86.92397779927694
+        ],
+        [
+          "muse-spark-1.3",
+          86.84250725597026
         ],
         [
           "gpt-5.6-terra",
-          86.11241584468452
+          84.0317735118896
         ],
         [
           "gpt-5.5",
-          85.79927978706749
+          83.68552370283618
         ],
         [
           "gpt-5.4",
-          85.35567037211001
-        ],
-        [
-          "muse-spark-1.2",
-          85.35045143781642
+          83.28326289525943
         ],
         [
           "claude-opus-4-8",
-          85.34523250352278
+          83.26289525943275
+        ],
+        [
+          "muse-spark-1.2",
+          83.26289525943275
         ],
         [
           "gpt-5.6-luna",
-          84.89118521997808
+          82.78425581750598
         ],
         [
           "claude-sonnet-4-6",
-          83.73780074108868
+          81.68440348286572
         ],
         [
           "claude-opus-4-6",
-          83.70126820103336
-        ],
-        [
-          "Muse-Glimmer-30B",
-          82.94452272845885
+          81.67931157390905
         ],
         [
           "claude-sonnet-5",
-          82.85580084546736
+          80.98681195580222
+        ],
+        [
+          "Muse-Glimmer-30B",
+          80.94607668414888
+        ],
+        [
+          "gemini-3.8-flash",
+          78.90931310148174
         ],
         [
           "gemini-3.7-flash",
-          79.6252805177183
+          77.49885432048474
         ],
         [
           "gpt-5.2",
-          78.22660612702886
+          76.36845053210448
         ],
         [
           "gpt-5.3-chat",
-          77.61077188038202
+          75.69631854982433
         ],
         [
           "claude-opus-4-5",
-          77.40723344293096
+          75.52319364529762
         ],
         [
           "claude-sonnet-4.5",
-          76.95318615938625
+          75.07510565711085
         ],
         [
           "o3",
-          76.84358853922029
-        ],
-        [
-          "gpt-5.4-mini",
-          76.29038150409686
-        ],
-        [
-          "gpt-5-2025-08-07",
-          74.28631073534785
-        ],
-        [
-          "Inkling",
-          73.47737591983717
-        ],
-        [
-          "gemini-3.6-flash",
-          73.04942330776056
+          74.97835938693416
         ]
       ],
       "open": [
         [
           "kimi-k3",
-          97.6358227649914
+          95.24924894342888
         ],
         [
           "GLM-5.3",
-          97.19743228432755
+          94.91827486124548
         ],
         [
           "Qwen3.8-Max",
-          85.69490110119514
+          83.55313406996284
         ],
         [
           "GLM-5.2",
-          80.94045195970983
+          79.06716227913844
         ],
         [
           "Kimi-K2.6",
-          79.59396691195658
+          77.46321095778806
         ],
         [
           "NVIDIA-Nemotron-3-Ultra-550B-A55B-NVFP4",
-          77.75690204060332
+          75.83380009165435
         ],
         [
           "Qwen3.8-27B",
-          76.67136370753093
+          74.76959111971078
         ],
         [
           "Kimi-K2-Instruct",
-          76.33735191273942
+          74.47935230918071
         ],
         [
           "Kimi-K2-Thinking",
-          74.515943844267
+          72.7073679922603
         ],
         [
           "GLM-5",
-          72.93982568759459
+          71.15942766943326
         ],
         [
           "GLM-5.1",
-          72.50143520693075
+          70.73679922602983
         ],
         [
           "Kimi-K2.5",
-          71.79687907729242
+          70.05448342583634
         ],
         [
           "DeepSeek-V4-Flash",
-          70.75309221856897
+          69.03100972554611
         ],
         [
           "DeepSeek-V4-Pro",
-          70.56521058399875
+          68.84770100310605
         ],
         [
           "DeepSeek-V3.2",
-          68.43066645790931
+          66.7651102398289
         ],
         [
           "DeepSeek-R1",
-          67.84614581702417
+          66.19481643668212
         ],
         [
           "MiMo-V2.5-Pro",
-          67.35556599342414
+          65.71108508579866
         ],
         [
           "Qwen3.5-397B-A17B",
-          66.5831637179688
+          64.96257446916849
         ],
         [
           "mistral-medium-3.1",
-          66.48922290068369
+          64.87092010794846
         ],
         [
           "DeepSeek-V3-0324",
-          66.28568446323261
+          64.67742756759509
         ],
         [
           "DeepSeek-V4-Flash-0731",
-          64.62606335786234
+          63.05820051937472
         ],
         [
           "DeepSeek-V3.1",
-          64.34945984030061
+          62.793421253627976
         ],
         [
           "DeepSeek-R1-0528",
-          63.59271436772611
+          62.06018636386781
         ],
         [
           "GLM-4.7",
-          63.17519962423673
+          61.65283364733438
         ],
         [
           "Mistral-Large-3-675B-Instruct-2512",
-          63.10213454412609
+          61.57645501298437
         ]
       ]
     },
@@ -1976,17 +1980,17 @@
   "unified_closed": [
     {
       "name": "Claude Fable 5.1",
-      "num_benchmarks": 7,
-      "cl": 87.5,
-      "Artificial Analysis": 57.0,
+      "num_benchmarks": 8,
+      "cl": 100.0,
+      "Artificial Analysis": 54.0,
       "BenchLM.ai": 79.0,
       "Arena.ai Text": 92.9,
       "SimpleBench.com": 86.6,
       "ARC-AGI-2": 90.0,
-      "Design Arena": 91.0,
+      "Design Arena": 90.8,
       "DeepSWE": null,
       "VendingBench": 48.5,
-      "SWE-Marathon": null,
+      "SWE-Marathon": 91.2,
       "FrontierSWE": 56.3,
       "CyberGem": null,
       "EQBench CW": null,
@@ -1994,81 +1998,81 @@
     },
     {
       "name": "GPT-6 Astra",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": 55.0,
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": 53.0,
       "BenchLM.ai": 70.0,
       "Arena.ai Text": null,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 83.6,
       "ARC-AGI-2": 95.0,
-      "Design Arena": null,
+      "Design Arena": 95.3,
       "DeepSWE": 74.0,
       "VendingBench": null,
-      "SWE-Marathon": null,
+      "SWE-Marathon": 85.0,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": null,
+      "EQBench CW": 100.0,
       "LLM Chess": null
     },
     {
       "name": "Claude Opus 5",
       "num_benchmarks": 7,
       "cl": 87.5,
-      "Artificial Analysis": 54.0,
+      "Artificial Analysis": 51.0,
       "BenchLM.ai": 77.0,
       "Arena.ai Text": 91.2,
       "SimpleBench.com": 80.6,
       "ARC-AGI-2": 90.4,
-      "Design Arena": 90.5,
+      "Design Arena": 90.2,
       "DeepSWE": 74.0,
       "VendingBench": 100.0,
       "SWE-Marathon": 100.0,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 100.0,
+      "EQBench CW": 97.8,
       "LLM Chess": 89.0
     },
     {
       "name": "Claude Fable 5",
       "num_benchmarks": 6,
       "cl": 75.0,
-      "Artificial Analysis": 53.0,
+      "Artificial Analysis": 50.0,
       "BenchLM.ai": 75.0,
       "Arena.ai Text": 93.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": 89.2,
-      "Design Arena": 88.3,
+      "Design Arena": 88.0,
       "DeepSWE": 70.0,
       "VendingBench": 50.8,
       "SWE-Marathon": 90.0,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 90.5,
+      "EQBench CW": 88.3,
       "LLM Chess": null
     },
     {
       "name": "Muse Spark 1.3",
-      "num_benchmarks": 4,
-      "cl": 50.0,
-      "Artificial Analysis": 53.0,
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": 48.0,
       "BenchLM.ai": 59.0,
       "Arena.ai Text": 90.5,
       "SimpleBench.com": 81.8,
       "ARC-AGI-2": null,
-      "Design Arena": null,
+      "Design Arena": 93.8,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 43.5,
-      "EQBench CW": null,
+      "EQBench CW": 86.8,
       "LLM Chess": null
     },
     {
       "name": "GPT-5.6 Sol",
       "num_benchmarks": 8,
       "cl": 100.0,
-      "Artificial Analysis": 51.0,
+      "Artificial Analysis": 47.0,
       "BenchLM.ai": 70.0,
       "Arena.ai Text": 89.7,
       "SimpleBench.com": 64.8,
@@ -2079,19 +2083,19 @@
       "SWE-Marathon": 85.0,
       "FrontierSWE": 32.2,
       "CyberGem": null,
-      "EQBench CW": 92.1,
+      "EQBench CW": 89.8,
       "LLM Chess": 100.0
     },
     {
       "name": "Grok 4.6",
       "num_benchmarks": 8,
       "cl": 100.0,
-      "Artificial Analysis": 51.0,
+      "Artificial Analysis": 44.0,
       "BenchLM.ai": 70.0,
       "Arena.ai Text": 86.3,
       "SimpleBench.com": 75.9,
       "ARC-AGI-2": 67.1,
-      "Design Arena": 86.0,
+      "Design Arena": 85.5,
       "DeepSWE": 67.0,
       "VendingBench": 80.9,
       "SWE-Marathon": 63.8,
@@ -2101,28 +2105,10 @@
       "LLM Chess": 53.9
     },
     {
-      "name": "Muse Spark 1.2",
-      "num_benchmarks": 6,
-      "cl": 75.0,
-      "Artificial Analysis": 47.0,
-      "BenchLM.ai": 64.0,
-      "Arena.ai Text": 92.2,
-      "SimpleBench.com": 74.5,
-      "ARC-AGI-2": null,
-      "Design Arena": 88.8,
-      "DeepSWE": 55.0,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": 12.0,
-      "CyberGem": null,
-      "EQBench CW": 85.4,
-      "LLM Chess": null
-    },
-    {
       "name": "GPT-5.6 Terra",
       "num_benchmarks": 5,
       "cl": 62.5,
-      "Artificial Analysis": 47.0,
+      "Artificial Analysis": 42.0,
       "BenchLM.ai": 61.0,
       "Arena.ai Text": 87.1,
       "SimpleBench.com": null,
@@ -2133,32 +2119,32 @@
       "SWE-Marathon": 65.0,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 86.1,
+      "EQBench CW": 84.0,
       "LLM Chess": 89.3
     },
     {
       "name": "Gemini 3.8 Flash",
       "num_benchmarks": 5,
       "cl": 62.5,
-      "Artificial Analysis": 47.0,
+      "Artificial Analysis": 41.0,
       "BenchLM.ai": 68.0,
       "Arena.ai Text": 91.4,
       "SimpleBench.com": 82.4,
       "ARC-AGI-2": null,
-      "Design Arena": 85.8,
+      "Design Arena": 87.2,
       "DeepSWE": 74.0,
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": null,
+      "EQBench CW": 78.9,
       "LLM Chess": null
     },
     {
       "name": "Gemini 3.7 Flash",
       "num_benchmarks": 7,
       "cl": 87.5,
-      "Artificial Analysis": 45.0,
+      "Artificial Analysis": 40.0,
       "BenchLM.ai": 61.0,
       "Arena.ai Text": 90.9,
       "SimpleBench.com": null,
@@ -2169,14 +2155,32 @@
       "SWE-Marathon": 45.0,
       "FrontierSWE": 20.3,
       "CyberGem": null,
-      "EQBench CW": 79.6,
+      "EQBench CW": 77.5,
       "LLM Chess": 81.5
+    },
+    {
+      "name": "Muse Spark 1.2",
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": 40.0,
+      "BenchLM.ai": 64.0,
+      "Arena.ai Text": 92.2,
+      "SimpleBench.com": 74.5,
+      "ARC-AGI-2": null,
+      "Design Arena": 88.5,
+      "DeepSWE": 55.0,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": 12.0,
+      "CyberGem": null,
+      "EQBench CW": 83.3,
+      "LLM Chess": null
     },
     {
       "name": "Grok 4.5",
       "num_benchmarks": 6,
       "cl": 75.0,
-      "Artificial Analysis": 45.0,
+      "Artificial Analysis": 39.0,
       "BenchLM.ai": 63.0,
       "Arena.ai Text": 87.8,
       "SimpleBench.com": 70.0,
@@ -2187,14 +2191,14 @@
       "SWE-Marathon": 58.8,
       "FrontierSWE": null,
       "CyberGem": 79.0,
-      "EQBench CW": 71.8,
+      "EQBench CW": 70.1,
       "LLM Chess": null
     },
     {
       "name": "Claude Sonnet 5",
       "num_benchmarks": 5,
       "cl": 62.5,
-      "Artificial Analysis": 45.0,
+      "Artificial Analysis": 38.0,
       "BenchLM.ai": 66.0,
       "Arena.ai Text": 86.5,
       "SimpleBench.com": 60.6,
@@ -2205,14 +2209,14 @@
       "SWE-Marathon": 60.0,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 82.9,
+      "EQBench CW": 81.0,
       "LLM Chess": 69.0
     },
     {
       "name": "GPT-5.6 Luna",
       "num_benchmarks": 5,
       "cl": 62.5,
-      "Artificial Analysis": 43.0,
+      "Artificial Analysis": 38.0,
       "BenchLM.ai": 56.0,
       "Arena.ai Text": 85.1,
       "SimpleBench.com": null,
@@ -2223,50 +2227,14 @@
       "SWE-Marathon": 48.8,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 84.9,
+      "EQBench CW": 82.8,
       "LLM Chess": 84.8
-    },
-    {
-      "name": "Gemini 3.6 Flash",
-      "num_benchmarks": 5,
-      "cl": 62.5,
-      "Artificial Analysis": 40.0,
-      "BenchLM.ai": 51.0,
-      "Arena.ai Text": 89.2,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 60.4,
-      "Design Arena": 85.0,
-      "DeepSWE": 47.0,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 73.0,
-      "LLM Chess": 81.0
-    },
-    {
-      "name": "Gemini 3.1 Pro",
-      "num_benchmarks": 5,
-      "cl": 62.5,
-      "Artificial Analysis": 38.0,
-      "BenchLM.ai": 40.0,
-      "Arena.ai Text": 90.3,
-      "SimpleBench.com": 79.6,
-      "ARC-AGI-2": 77.1,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": 8.1,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": 38.8,
-      "EQBench CW": null,
-      "LLM Chess": 98.4
     },
     {
       "name": "Gemini 3.5 Flash",
       "num_benchmarks": 5,
       "cl": 62.5,
-      "Artificial Analysis": 38.0,
+      "Artificial Analysis": 34.0,
       "BenchLM.ai": 51.0,
       "Arena.ai Text": 89.1,
       "SimpleBench.com": 76.7,
@@ -2281,10 +2249,28 @@
       "LLM Chess": 75.1
     },
     {
+      "name": "Gemini 3.6 Flash",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": 34.0,
+      "BenchLM.ai": 51.0,
+      "Arena.ai Text": 89.2,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": 60.4,
+      "Design Arena": 84.7,
+      "DeepSWE": 47.0,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 71.3,
+      "LLM Chess": 81.0
+    },
+    {
       "name": "GPT-5.3 Codex",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 37.0,
+      "Artificial Analysis": 33.0,
       "BenchLM.ai": 62.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
@@ -2299,29 +2285,29 @@
       "LLM Chess": 79.3
     },
     {
+      "name": "Gemini 3.1 Pro",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": 30.0,
+      "BenchLM.ai": 40.0,
+      "Arena.ai Text": 90.3,
+      "SimpleBench.com": 79.6,
+      "ARC-AGI-2": 77.1,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 8.1,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 38.8,
+      "EQBench CW": null,
+      "LLM Chess": 98.4
+    },
+    {
       "name": "Apodex 1.1",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 35.0,
+      "Artificial Analysis": 30.0,
       "BenchLM.ai": 53.0,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Hy3",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 33.0,
-      "BenchLM.ai": 50.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2338,7 +2324,7 @@
       "name": "Inkling",
       "num_benchmarks": 5,
       "cl": 62.5,
-      "Artificial Analysis": 32.0,
+      "Artificial Analysis": 26.0,
       "BenchLM.ai": 41.0,
       "Arena.ai Text": 82.9,
       "SimpleBench.com": null,
@@ -2349,14 +2335,14 @@
       "SWE-Marathon": null,
       "FrontierSWE": 4.1,
       "CyberGem": null,
-      "EQBench CW": 73.5,
+      "EQBench CW": 71.7,
       "LLM Chess": null
     },
     {
       "name": "Inkling Small",
       "num_benchmarks": 4,
       "cl": 50.0,
-      "Artificial Analysis": 32.0,
+      "Artificial Analysis": 26.0,
       "BenchLM.ai": 39.0,
       "Arena.ai Text": 78.0,
       "SimpleBench.com": null,
@@ -2367,14 +2353,14 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 67.3,
+      "EQBench CW": 65.7,
       "LLM Chess": null
     },
     {
       "name": "Qwen3.7 Plus",
       "num_benchmarks": 4,
       "cl": 50.0,
-      "Artificial Analysis": 31.0,
+      "Artificial Analysis": 26.0,
       "BenchLM.ai": 43.0,
       "Arena.ai Text": 88.3,
       "SimpleBench.com": 70.4,
@@ -2389,10 +2375,28 @@
       "LLM Chess": null
     },
     {
+      "name": "Hy3",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 26.0,
+      "BenchLM.ai": 50.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
       "name": "Grok 4.3",
       "num_benchmarks": 3,
       "cl": 37.5,
-      "Artificial Analysis": 29.0,
+      "Artificial Analysis": 25.0,
       "BenchLM.ai": 25.0,
       "Arena.ai Text": 83.5,
       "SimpleBench.com": null,
@@ -2407,28 +2411,10 @@
       "LLM Chess": 42.9
     },
     {
-      "name": "Gemini 3.5 Flash-Lite",
-      "num_benchmarks": 4,
-      "cl": 50.0,
-      "Artificial Analysis": 28.0,
-      "BenchLM.ai": 43.0,
-      "Arena.ai Text": 85.7,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 10.3,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 70.8,
-      "LLM Chess": null
-    },
-    {
       "name": "Ling 3.0 Flash",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 27.0,
+      "Artificial Analysis": 25.0,
       "BenchLM.ai": 40.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
@@ -2443,28 +2429,28 @@
       "LLM Chess": null
     },
     {
-      "name": "Muse-Glimmer-30B",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": 24.0,
-      "BenchLM.ai": 49.0,
-      "Arena.ai Text": 81.1,
+      "name": "Gemini 3.5 Flash-Lite",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 23.0,
+      "BenchLM.ai": 43.0,
+      "Arena.ai Text": 85.7,
       "SimpleBench.com": null,
-      "ARC-AGI-2": null,
+      "ARC-AGI-2": 10.3,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 82.9,
+      "EQBench CW": 69.0,
       "LLM Chess": null
     },
     {
       "name": "K-EXAONE 2.0",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 23.0,
+      "Artificial Analysis": 20.0,
       "BenchLM.ai": 48.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
@@ -2482,7 +2468,7 @@
       "name": "Step 3.7 Flash",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 23.0,
+      "Artificial Analysis": 19.0,
       "BenchLM.ai": 46.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
@@ -2497,10 +2483,28 @@
       "LLM Chess": null
     },
     {
+      "name": "Muse-Glimmer-30B",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": 18.0,
+      "BenchLM.ai": 49.0,
+      "Arena.ai Text": 81.1,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 80.9,
+      "LLM Chess": null
+    },
+    {
       "name": "Granite 4.2 8B",
       "num_benchmarks": 3,
       "cl": 37.5,
-      "Artificial Analysis": 17.0,
+      "Artificial Analysis": 15.0,
       "BenchLM.ai": 36.0,
       "Arena.ai Text": 68.0,
       "SimpleBench.com": null,
@@ -2515,28 +2519,10 @@
       "LLM Chess": null
     },
     {
-      "name": "gpt-oss-120b",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": 16.0,
-      "BenchLM.ai": 45.0,
-      "Arena.ai Text": 69.5,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": 0.0,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 39.6,
-      "LLM Chess": 26.4
-    },
-    {
       "name": "Command A+",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 16.0,
+      "Artificial Analysis": 14.0,
       "BenchLM.ai": 44.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
@@ -2554,7 +2540,7 @@
       "name": "ERNIE 5.0 Thinking Preview",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 16.0,
+      "Artificial Analysis": 14.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 84.0,
       "SimpleBench.com": null,
@@ -2572,7 +2558,7 @@
       "name": "Mercury 2",
       "num_benchmarks": 3,
       "cl": 37.5,
-      "Artificial Analysis": 15.0,
+      "Artificial Analysis": 12.0,
       "BenchLM.ai": 43.0,
       "Arena.ai Text": 68.8,
       "SimpleBench.com": null,
@@ -2587,22 +2573,22 @@
       "LLM Chess": null
     },
     {
-      "name": "Trinity Large Thinking",
+      "name": "gpt-oss-120b",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 12.0,
-      "BenchLM.ai": 41.0,
-      "Arena.ai Text": 72.2,
+      "BenchLM.ai": 45.0,
+      "Arena.ai Text": 69.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 0.0,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
+      "EQBench CW": 38.7,
+      "LLM Chess": 26.4
     },
     {
       "name": "Magistral Medium 1.2",
@@ -2623,12 +2609,156 @@
       "LLM Chess": null
     },
     {
+      "name": "Trinity Large Thinking",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": 11.0,
+      "BenchLM.ai": 41.0,
+      "Arena.ai Text": 72.2,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
       "name": "INTELLECT-3",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 10.0,
+      "Artificial Analysis": 11.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 70.2,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "MiniCPM5-1B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 9.0,
+      "BenchLM.ai": 46.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "LFM2.5-2.6B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 8.0,
+      "BenchLM.ai": 36.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "Step3 VL 10B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 8.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 69.1,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "Granite 4.1 8B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 7.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 62.5,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "LFM2.5-8B-A1B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 7.0,
+      "BenchLM.ai": 45.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "Ring-flash-2.0",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 7.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 64.8,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "command a 03.2025",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 7.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 69.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -2659,150 +2789,6 @@
       "LLM Chess": null
     },
     {
-      "name": "MiniCPM5-1B",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 6.0,
-      "BenchLM.ai": 46.0,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "LFM2.5-2.6B",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 5.0,
-      "BenchLM.ai": 36.0,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Step3 VL 10B",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 4.0,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 69.1,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Granite 4.1 8B",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 3.0,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 62.5,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "LFM2.5-8B-A1B",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 3.0,
-      "BenchLM.ai": 45.0,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Ring-flash-2.0",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 3.0,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 64.8,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "command a 03.2025",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 2.0,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 69.8,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Claude Opus 4.7",
-      "num_benchmarks": 5,
-      "cl": 62.5,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 61.0,
-      "Arena.ai Text": 92.6,
-      "SimpleBench.com": 61.7,
-      "ARC-AGI-2": 75.8,
-      "Design Arena": 84.8,
-      "DeepSWE": null,
-      "VendingBench": 97.8,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": 64.2
-    },
-    {
       "name": "Claude Opus 4.8",
       "num_benchmarks": 5,
       "cl": 62.5,
@@ -2829,7 +2815,7 @@
       "Arena.ai Text": 93.1,
       "SimpleBench.com": 67.6,
       "ARC-AGI-2": null,
-      "Design Arena": 84.7,
+      "Design Arena": 84.5,
       "DeepSWE": null,
       "VendingBench": 71.7,
       "SWE-Marathon": null,
@@ -2837,6 +2823,24 @@
       "CyberGem": 66.6,
       "EQBench CW": null,
       "LLM Chess": 43.7
+    },
+    {
+      "name": "Claude Opus 4.7",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 61.0,
+      "Arena.ai Text": 92.6,
+      "SimpleBench.com": 61.7,
+      "ARC-AGI-2": 75.8,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 97.8,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": 64.2
     },
     {
       "name": "GPT-5 Pro",
@@ -2871,7 +2875,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 81.8,
-      "EQBench CW": 85.8,
+      "EQBench CW": 83.7,
       "LLM Chess": null
     },
     {
@@ -2961,7 +2965,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 78.2,
+      "EQBench CW": 76.4,
       "LLM Chess": null
     },
     {
@@ -2969,7 +2973,7 @@
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 59.0,
+      "BenchLM.ai": 58.0,
       "Arena.ai Text": 88.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 83.3,
@@ -2979,7 +2983,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 79.0,
-      "EQBench CW": 85.4,
+      "EQBench CW": 83.3,
       "LLM Chess": null
     },
     {
@@ -2997,7 +3001,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 76.3,
+      "EQBench CW": 74.4,
       "LLM Chess": 52.8
     },
     {
@@ -3073,24 +3077,6 @@
       "LLM Chess": null
     },
     {
-      "name": "Claude 4.1 Opus",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 45.0,
-      "Arena.ai Text": null,
-      "SimpleBench.com": 60.0,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": 33.8
-    },
-    {
       "name": "Claude Haiku 4.5",
       "num_benchmarks": 2,
       "cl": 25.0,
@@ -3141,7 +3127,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 28.9,
-      "EQBench CW": 77.0,
+      "EQBench CW": 75.1,
       "LLM Chess": 40.1
     },
     {
@@ -3195,7 +3181,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 89.5,
+      "EQBench CW": 87.4,
       "LLM Chess": null
     },
     {
@@ -3291,69 +3277,51 @@
   ],
   "unified_open": [
     {
-      "name": "Kimi K3",
-      "num_benchmarks": 8,
-      "cl": 100.0,
-      "Artificial Analysis": 50.0,
-      "BenchLM.ai": 72.0,
-      "Arena.ai Text": 90.6,
-      "SimpleBench.com": 60.7,
-      "ARC-AGI-2": 60.4,
-      "Design Arena": 99.2,
-      "DeepSWE": 69.0,
-      "VendingBench": 46.2,
-      "SWE-Marathon": 96.2,
-      "FrontierSWE": 25.9,
-      "CyberGem": null,
-      "EQBench CW": 97.6,
-      "LLM Chess": null
-    },
-    {
       "name": "GLM-5.3",
       "num_benchmarks": 7,
       "cl": 87.5,
-      "Artificial Analysis": 49.0,
+      "Artificial Analysis": 45.0,
       "BenchLM.ai": 68.0,
       "Arena.ai Text": 89.5,
       "SimpleBench.com": 66.2,
       "ARC-AGI-2": null,
-      "Design Arena": 89.5,
+      "Design Arena": 89.0,
       "DeepSWE": 69.0,
       "VendingBench": 73.0,
       "SWE-Marathon": 85.0,
       "FrontierSWE": 30.2,
       "CyberGem": 84.5,
-      "EQBench CW": 97.2,
+      "EQBench CW": 94.9,
       "LLM Chess": null
     },
     {
-      "name": "Qwen3.8-Max",
-      "num_benchmarks": 6,
-      "cl": 75.0,
-      "Artificial Analysis": 47.0,
-      "BenchLM.ai": 68.0,
-      "Arena.ai Text": 89.2,
-      "SimpleBench.com": 62.5,
-      "ARC-AGI-2": null,
-      "Design Arena": 85.2,
-      "DeepSWE": 57.0,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": 15.8,
+      "name": "Kimi K3",
+      "num_benchmarks": 8,
+      "cl": 100.0,
+      "Artificial Analysis": 44.0,
+      "BenchLM.ai": 72.0,
+      "Arena.ai Text": 90.6,
+      "SimpleBench.com": 60.7,
+      "ARC-AGI-2": 60.4,
+      "Design Arena": 99.0,
+      "DeepSWE": 69.0,
+      "VendingBench": 46.2,
+      "SWE-Marathon": 96.2,
+      "FrontierSWE": 25.9,
       "CyberGem": null,
-      "EQBench CW": 85.7,
+      "EQBench CW": 95.2,
       "LLM Chess": null
     },
     {
       "name": "GLM-5.3-Flash",
       "num_benchmarks": 5,
       "cl": 62.5,
-      "Artificial Analysis": 46.0,
+      "Artificial Analysis": 42.0,
       "BenchLM.ai": 60.0,
       "Arena.ai Text": 88.3,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 84.8,
+      "Design Arena": 84.7,
       "DeepSWE": 63.0,
       "VendingBench": null,
       "SWE-Marathon": 77.6,
@@ -3366,7 +3334,7 @@
       "name": "Qwen3.8-Flash-Next",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 46.0,
+      "Artificial Analysis": 42.0,
       "BenchLM.ai": 68.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
@@ -3381,28 +3349,46 @@
       "LLM Chess": null
     },
     {
+      "name": "Qwen3.8-Max",
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": 40.0,
+      "BenchLM.ai": 68.0,
+      "Arena.ai Text": 89.2,
+      "SimpleBench.com": 62.5,
+      "ARC-AGI-2": null,
+      "Design Arena": 85.2,
+      "DeepSWE": 57.0,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": 15.8,
+      "CyberGem": null,
+      "EQBench CW": 83.6,
+      "LLM Chess": null
+    },
+    {
       "name": "GLM-5.2",
       "num_benchmarks": 6,
       "cl": 75.0,
-      "Artificial Analysis": 43.0,
+      "Artificial Analysis": 39.0,
       "BenchLM.ai": 60.0,
       "Arena.ai Text": 88.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": 22.8,
-      "Design Arena": 86.7,
+      "Design Arena": 86.2,
       "DeepSWE": 44.0,
       "VendingBench": 74.4,
       "SWE-Marathon": 38.8,
       "FrontierSWE": null,
       "CyberGem": 77.2,
-      "EQBench CW": 80.9,
+      "EQBench CW": 79.1,
       "LLM Chess": null
     },
     {
       "name": "DeepSeek V4 Pro",
       "num_benchmarks": 5,
       "cl": 62.5,
-      "Artificial Analysis": 42.0,
+      "Artificial Analysis": 36.0,
       "BenchLM.ai": 56.0,
       "Arena.ai Text": 85.8,
       "SimpleBench.com": null,
@@ -3413,14 +3399,14 @@
       "SWE-Marathon": 21.2,
       "FrontierSWE": null,
       "CyberGem": 83.3,
-      "EQBench CW": 70.6,
+      "EQBench CW": 68.8,
       "LLM Chess": null
     },
     {
       "name": "deepseek v4 flash",
       "num_benchmarks": 4,
       "cl": 50.0,
-      "Artificial Analysis": 41.0,
+      "Artificial Analysis": 35.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 82.5,
       "SimpleBench.com": 61.1,
@@ -3431,14 +3417,14 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 76.7,
-      "EQBench CW": 70.8,
+      "EQBench CW": 69.0,
       "LLM Chess": null
     },
     {
       "name": "MiniMax-M3",
       "num_benchmarks": 3,
       "cl": 37.5,
-      "Artificial Analysis": 36.0,
+      "Artificial Analysis": 30.0,
       "BenchLM.ai": 43.0,
       "Arena.ai Text": 83.5,
       "SimpleBench.com": null,
@@ -3453,10 +3439,46 @@
       "LLM Chess": null
     },
     {
+      "name": "solar pro4",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 28.0,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 73.4,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "MiMo-V2.5-Pro",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": 26.0,
+      "BenchLM.ai": 51.0,
+      "Arena.ai Text": 87.4,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 65.7,
+      "LLM Chess": null
+    },
+    {
       "name": "Kimi K2.7 Code",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 34.0,
+      "Artificial Analysis": 26.0,
       "BenchLM.ai": 46.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
@@ -3471,30 +3493,12 @@
       "LLM Chess": null
     },
     {
-      "name": "MiMo-V2.5-Pro",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": 33.0,
-      "BenchLM.ai": 51.0,
-      "Arena.ai Text": 87.4,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 67.4,
-      "LLM Chess": null
-    },
-    {
-      "name": "solar pro4",
+      "name": "MiMo-V2-Omni",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 33.0,
+      "Artificial Analysis": 24.0,
       "BenchLM.ai": null,
-      "Arena.ai Text": 73.4,
+      "Arena.ai Text": 81.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -3510,7 +3514,7 @@
       "name": "Nemotron 3 Ultra",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 30.0,
+      "Artificial Analysis": 23.0,
       "BenchLM.ai": 22.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
@@ -3528,7 +3532,7 @@
       "name": "Qwen3.6 Plus",
       "num_benchmarks": 4,
       "cl": 50.0,
-      "Artificial Analysis": 29.0,
+      "Artificial Analysis": 22.0,
       "BenchLM.ai": 60.0,
       "Arena.ai Text": 86.2,
       "SimpleBench.com": 63.0,
@@ -3543,28 +3547,10 @@
       "LLM Chess": null
     },
     {
-      "name": "MiMo-V2-Omni",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 28.0,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 81.5,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
       "name": "Qwen3.5 Plus",
       "num_benchmarks": 3,
       "cl": 37.5,
-      "Artificial Analysis": 26.0,
+      "Artificial Analysis": 19.0,
       "BenchLM.ai": 50.0,
       "Arena.ai Text": 87.1,
       "SimpleBench.com": null,
@@ -3579,12 +3565,12 @@
       "LLM Chess": null
     },
     {
-      "name": "Mistral Medium 3.5",
+      "name": "Gemma 4 31B",
       "num_benchmarks": 3,
       "cl": 37.5,
-      "Artificial Analysis": 23.0,
-      "BenchLM.ai": 27.0,
-      "Arena.ai Text": 81.1,
+      "Artificial Analysis": 17.0,
+      "BenchLM.ai": 49.0,
+      "Arena.ai Text": 84.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -3597,12 +3583,12 @@
       "LLM Chess": null
     },
     {
-      "name": "Gemma 4 31B",
+      "name": "Mistral Medium 3.5",
       "num_benchmarks": 3,
       "cl": 37.5,
-      "Artificial Analysis": 22.0,
-      "BenchLM.ai": 49.0,
-      "Arena.ai Text": 84.8,
+      "Artificial Analysis": 15.0,
+      "BenchLM.ai": 27.0,
+      "Arena.ai Text": 81.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -3618,7 +3604,7 @@
       "name": "Mistral Small 4",
       "num_benchmarks": 3,
       "cl": 37.5,
-      "Artificial Analysis": 13.0,
+      "Artificial Analysis": 11.0,
       "BenchLM.ai": 41.0,
       "Arena.ai Text": 70.3,
       "SimpleBench.com": null,
@@ -3651,6 +3637,24 @@
       "LLM Chess": null
     },
     {
+      "name": "Nemotron 3 Nano Omni 30B A3B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 10.0,
+      "BenchLM.ai": 47.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
       "name": "Llama 4 Maverick",
       "num_benchmarks": 3,
       "cl": 37.5,
@@ -3669,46 +3673,10 @@
       "LLM Chess": 31.3
     },
     {
-      "name": "Nemotron 3 Nano Omni 30B A3B",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 9.0,
-      "BenchLM.ai": 47.0,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Llama 4 Scout",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": 5.0,
-      "BenchLM.ai": 33.0,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": 1.3,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": 18.7
-    },
-    {
       "name": "llama 3.3 70b instruct",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 4.0,
+      "Artificial Analysis": 8.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 64.2,
       "SimpleBench.com": null,
@@ -3726,7 +3694,7 @@
       "name": "Olmo 3.1 32B Think",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 2.0,
+      "Artificial Analysis": 7.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 59.4,
       "SimpleBench.com": null,
@@ -3741,10 +3709,28 @@
       "LLM Chess": null
     },
     {
+      "name": "Llama 4 Scout",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": 6.0,
+      "BenchLM.ai": 33.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": 1.2,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": 18.7
+    },
+    {
       "name": "Olmo 3 7B Think",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 1.0,
+      "Artificial Analysis": 6.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 62.6,
       "SimpleBench.com": null,
@@ -3762,7 +3748,7 @@
       "name": "Olmo 3.1 32B Instruct",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 1.0,
+      "Artificial Analysis": 6.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 66.2,
       "SimpleBench.com": null,
@@ -3780,7 +3766,7 @@
       "name": "Phi-4 Multimodal",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 1.0,
+      "Artificial Analysis": 6.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 54.8,
       "SimpleBench.com": null,
@@ -3809,7 +3795,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 43.2,
-      "EQBench CW": 72.9,
+      "EQBench CW": 71.2,
       "LLM Chess": 22.9
     },
     {
@@ -3827,7 +3813,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 60.4,
+      "EQBench CW": 59.0,
       "LLM Chess": null
     },
     {
@@ -3863,7 +3849,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 23.5,
-      "EQBench CW": 63.2,
+      "EQBench CW": 61.7,
       "LLM Chess": null
     },
     {
@@ -3881,7 +3867,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 68.7,
-      "EQBench CW": 72.5,
+      "EQBench CW": 70.7,
       "LLM Chess": null
     },
     {
@@ -3899,7 +3885,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": 41.3,
-      "EQBench CW": 71.8,
+      "EQBench CW": 70.1,
       "LLM Chess": 40.0
     },
     {
@@ -3917,7 +3903,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 79.6,
+      "EQBench CW": 77.5,
       "LLM Chess": null
     },
     {
@@ -3971,7 +3957,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 67.8,
+      "EQBench CW": 66.2,
       "LLM Chess": 47.9
     },
     {
@@ -3989,7 +3975,7 @@
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 68.4,
+      "EQBench CW": 66.8,
       "LLM Chess": null
     },
     {
@@ -4066,6 +4052,13 @@
       "description": "Claude Fable 5.1 improves on Claude Fable 5 across the board, with the biggest gains in agentic coding, long-running agentic workflows, and knowledge work: long code refactors, front-end and visual...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 10,
+        "output": 50,
+        "cache_read": 0.25
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 6.548,
       "available_at": [
         {
           "p": "openrouter",
@@ -4101,14 +4094,7 @@
           "in": 10.0,
           "out": 50.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 10,
-        "output": 50,
-        "cache_read": 0.25
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.861
+      ]
     },
     "GPT-6 Astra": {
       "or_id": "openai/gpt-6-astra",
@@ -4164,6 +4150,13 @@
       "description": "GPT-6 Astra is OpenAI's flagship model for demanding end-to-end work. It is suited for advanced analysis, software engineering, deep research, scientific work, and document creation, with particular strengths in long-horizon...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 10,
+        "output": 50,
+        "cache_read": 1
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 161.647,
       "available_at": [
         {
           "p": "openrouter",
@@ -4193,14 +4186,7 @@
           "in": 10.0,
           "out": 50.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 10,
-        "output": 50,
-        "cache_read": 1
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 133.042
+      ]
     },
     "Claude Opus 5": {
       "or_id": "anthropic/claude-opus-5",
@@ -4258,6 +4244,13 @@
       "description": "Claude Opus 5 is Anthropic’s flagship model for demanding reasoning, coding, and long-horizon agentic work. It is particularly strong at end-to-end software tasks, code review and bug finding, visual analysis...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 5,
+        "output": 25,
+        "cache_read": 0.5
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 28.653,
       "available_at": [
         {
           "p": "openrouter",
@@ -4299,14 +4292,7 @@
           "in": 5.0,
           "out": 25.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 5,
-        "output": 25,
-        "cache_read": 0.5
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 32.669
+      ]
     },
     "Claude Fable 5": {
       "or_id": "anthropic/claude-fable-5",
@@ -4363,6 +4349,13 @@
       "description": "Claude Fable 5 is a Mythos-class model from Anthropic, built for autonomous knowledge work and coding. It supports text, image, and file inputs with text output, with reasoning support and...",
       "superseded_by": "Claude Fable 5.1",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 10,
+        "output": 50,
+        "cache_read": 1
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 83.297,
       "available_at": [
         {
           "p": "openrouter",
@@ -4404,14 +4397,7 @@
           "in": 10.0,
           "out": 50.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 10,
-        "output": 50,
-        "cache_read": 1
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 88.793
+      ]
     },
     "Muse Spark 1.3": {
       "or_id": "meta/muse-spark-1.3",
@@ -4472,6 +4458,13 @@
       "description": "Muse Spark 1.3 is a multimodal reasoning model from Meta for long-running agentic, multi-agent, and coding workflows. It is designed to keep track of information across extended tasks, work through...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 1.25,
+        "output": 4.25,
+        "cache_read": 0.15
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 26.924,
       "available_at": [
         {
           "p": "openrouter",
@@ -4489,14 +4482,7 @@
           "p": "opencode-zen",
           "n": "OpenCode Zen"
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1.25,
-        "output": 4.25,
-        "cache_read": 0.15
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 22.92
+      ]
     },
     "GPT-5.6 Sol": {
       "or_id": "openai/gpt-5.6-sol",
@@ -4553,6 +4539,13 @@
       "description": "GPT-5.6 Sol is the flagship model in OpenAI's GPT-5.6 series. It is suited for complex reasoning, coding, and agentic workflows, and is particularly strong at command-line and multi-step coding tasks...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 4,
+        "output": 20,
+        "cache_read": 0.4
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.685,
       "available_at": [
         {
           "p": "openrouter",
@@ -4582,14 +4575,7 @@
           "in": 4.0,
           "out": 20.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 4,
-        "output": 20,
-        "cache_read": 0.4
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.882
+      ]
     },
     "Grok 4.6": {
       "or_id": "x-ai/grok-4.6",
@@ -4649,6 +4635,13 @@
       "description": "Grok 4.6 is SpaceXAI's smartest model with frontier performance on coding, knowledge work, and STEM.",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 2,
+        "output": 6,
+        "cache_read": 0.5
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 34.107,
       "available_at": [
         {
           "p": "openrouter",
@@ -4678,14 +4671,288 @@
           "in": 2.0,
           "out": 6.0
         }
+      ]
+    },
+    "GPT-5.6 Terra": {
+      "or_id": "openai/gpt-5.6-terra",
+      "or_name": "OpenAI: GPT-5.6 Terra",
+      "provider": "OpenAI",
+      "created": "2026-07-09",
+      "context_length": 1050000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
       ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2026-02-16",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 2.0,
+        "output": 12.0,
+        "cache_read": 0.2
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-5.6 Terra is a balanced model in OpenAI's GPT-5.6 series, positioned between the flagship Sol tier and the cost-efficient Luna tier. It is suited for everyday coding, reasoning, and agentic...",
+      "superseded_by": null,
+      "match": "exact",
       "pricing_aa_usd_per_1m": {
         "input": 2,
-        "output": 6,
-        "cache_read": 0.5
+        "output": 12,
+        "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 43.089
+      "aa_ttft_seconds": 1.629,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 2.0,
+          "out": 12.0
+        },
+        {
+          "p": "azure-openai",
+          "n": "Azure OpenAI",
+          "in": 2.0,
+          "out": 12.0
+        },
+        {
+          "p": "openai",
+          "n": "OpenAI",
+          "in": 2.0,
+          "out": 12.0
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 2.0,
+          "out": 12.0
+        }
+      ]
+    },
+    "Gemini 3.8 Flash": {
+      "or_id": "google/gemini-3.8-flash",
+      "or_name": "Google: Gemini 3.8 Flash",
+      "provider": "Google",
+      "created": "2026-09-02",
+      "context_length": 1048576,
+      "max_output_tokens": 65536,
+      "modality": "text+image+file+audio+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video",
+        "file",
+        "audio"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Gemini",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.75,
+        "output": 3.75,
+        "cache_read": 0.075
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Gemini 3.8 Flash is Google's most intelligent Flash model with significant gains from 3.7 Flash across software engineering, agentic tasks, and multi-step reasoning.",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.75,
+        "output": 3.75,
+        "cache_read": 0.075
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 8.294,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.75,
+          "out": 3.75
+        },
+        {
+          "p": "google-ai-studio",
+          "n": "Google AI Studio",
+          "in": 0.75,
+          "out": 3.75
+        },
+        {
+          "p": "google-vertex-ai",
+          "n": "Google Vertex AI",
+          "in": 0.75,
+          "out": 3.75
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 0.75,
+          "out": 3.75
+        }
+      ]
+    },
+    "Gemini 3.7 Flash": {
+      "or_id": "google/gemini-3.7-flash",
+      "or_name": "Google: Gemini 3.7 Flash",
+      "provider": "Google",
+      "created": "2026-08-13",
+      "context_length": 1048576,
+      "max_output_tokens": 65536,
+      "modality": "text+image+file+audio+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video",
+        "file",
+        "audio"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Gemini",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.75,
+        "output": 3.75,
+        "cache_read": 0.075
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Gemini 3.7 Flash is a multimodal model from Google for fast agentic workflows, coding, and complex multi-step reasoning. It is designed for tasks that require responsive performance and reliable multi-step...",
+      "superseded_by": "Gemini 3.8 Flash",
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.75,
+        "output": 3.75,
+        "cache_read": 0.075
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 9.706,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.75,
+          "out": 3.75
+        },
+        {
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 0.75,
+          "out": 3.75
+        },
+        {
+          "p": "google-ai-studio",
+          "n": "Google AI Studio",
+          "in": 0.75,
+          "out": 3.75
+        },
+        {
+          "p": "google-vertex-ai",
+          "n": "Google Vertex AI",
+          "in": 0.75,
+          "out": 3.75
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        }
+      ]
     },
     "Muse Spark 1.2": {
       "or_id": "meta/muse-spark-1.2",
@@ -4745,6 +5012,13 @@
       "description": "Muse Spark 1.2 is a reasoning model from Meta, designed for complex agentic tasks. It accepts text, images, video, audio, and PDF documents, returns text, and offers a 1M-token context...",
       "superseded_by": "Muse Spark 1.3",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 1.25,
+        "output": 4.25,
+        "cache_read": 0.15
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 14.687,
       "available_at": [
         {
           "p": "openrouter",
@@ -4768,295 +5042,7 @@
           "in": 1.25,
           "out": 4.25
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1.25,
-        "output": 4.25,
-        "cache_read": 0.15
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 14.722
-    },
-    "GPT-5.6 Terra": {
-      "or_id": "openai/gpt-5.6-terra",
-      "or_name": "OpenAI: GPT-5.6 Terra",
-      "provider": "OpenAI",
-      "created": "2026-07-09",
-      "context_length": 1050000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "file",
-        "image",
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2026-02-16",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 2.0,
-        "output": 12.0,
-        "cache_read": 0.2
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "max",
-          "xhigh",
-          "high",
-          "medium",
-          "low",
-          "none"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "GPT-5.6 Terra is a balanced model in OpenAI's GPT-5.6 series, positioned between the flagship Sol tier and the cost-efficient Luna tier. It is suited for everyday coding, reasoning, and agentic...",
-      "superseded_by": null,
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 2.0,
-          "out": 12.0
-        },
-        {
-          "p": "azure-openai",
-          "n": "Azure OpenAI",
-          "in": 2.0,
-          "out": 12.0
-        },
-        {
-          "p": "openai",
-          "n": "OpenAI",
-          "in": 2.0,
-          "out": 12.0
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 2.0,
-          "out": 12.0
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 2,
-        "output": 12,
-        "cache_read": 0.2
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.613
-    },
-    "Gemini 3.8 Flash": {
-      "or_id": "google/gemini-3.8-flash",
-      "or_name": "Google: Gemini 3.8 Flash",
-      "provider": "Google",
-      "created": "2026-09-02",
-      "context_length": 1048576,
-      "max_output_tokens": 65536,
-      "modality": "text+image+file+audio+video->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "video",
-        "file",
-        "audio"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Gemini",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.75,
-        "output": 3.75,
-        "cache_read": 0.075
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "high",
-          "medium",
-          "low"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_p"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "Gemini 3.8 Flash is Google's most intelligent Flash model with significant gains from 3.7 Flash across software engineering, agentic tasks, and multi-step reasoning.",
-      "superseded_by": null,
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.75,
-          "out": 3.75
-        },
-        {
-          "p": "google-ai-studio",
-          "n": "Google AI Studio",
-          "in": 0.75,
-          "out": 3.75
-        },
-        {
-          "p": "google-vertex-ai",
-          "n": "Google Vertex AI",
-          "in": 0.75,
-          "out": 3.75
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 0.75,
-          "out": 3.75
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.75,
-        "output": 3.75,
-        "cache_read": 0.075
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 8.294
-    },
-    "Gemini 3.7 Flash": {
-      "or_id": "google/gemini-3.7-flash",
-      "or_name": "Google: Gemini 3.7 Flash",
-      "provider": "Google",
-      "created": "2026-08-13",
-      "context_length": 1048576,
-      "max_output_tokens": 65536,
-      "modality": "text+image+file+audio+video->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "video",
-        "file",
-        "audio"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Gemini",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.75,
-        "output": 3.75,
-        "cache_read": 0.075
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "high",
-          "medium",
-          "low"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_p"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "Gemini 3.7 Flash is a multimodal model from Google for fast agentic workflows, coding, and complex multi-step reasoning. It is designed for tasks that require responsive performance and reliable multi-step...",
-      "superseded_by": "Gemini 3.8 Flash",
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.75,
-          "out": 3.75
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 0.75,
-          "out": 3.75
-        },
-        {
-          "p": "google-ai-studio",
-          "n": "Google AI Studio",
-          "in": 0.75,
-          "out": 3.75
-        },
-        {
-          "p": "google-vertex-ai",
-          "n": "Google Vertex AI",
-          "in": 0.75,
-          "out": 3.75
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.75,
-        "output": 3.75,
-        "cache_read": 0.075
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 9.602
+      ]
     },
     "Grok 4.5": {
       "or_id": "x-ai/grok-4.5",
@@ -5113,6 +5099,13 @@
       "description": "Grok 4.5 is a model from SpaceXAI with frontier performance on coding, knowledge work, and STEM.",
       "superseded_by": "Grok 4.6",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 2,
+        "output": 6,
+        "cache_read": 0.3
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 10.28,
       "available_at": [
         {
           "p": "openrouter",
@@ -5136,14 +5129,7 @@
           "in": 2.0,
           "out": 6.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 2,
-        "output": 6,
-        "cache_read": 0.3
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 10.883
+      ]
     },
     "Claude Sonnet 5": {
       "or_id": "anthropic/claude-sonnet-5",
@@ -5200,6 +5186,13 @@
       "description": "Sonnet 5 is Anthropic's most capable Sonnet-class model, with frontier performance across coding, agents, and professional work. It supports adaptive thinking with selectable reasoning effort levels (low, medium, high, max,...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 2,
+        "output": 10,
+        "cache_read": 0.2
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.357,
       "available_at": [
         {
           "p": "openrouter",
@@ -5241,14 +5234,7 @@
           "in": 2.0,
           "out": 10.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 2,
-        "output": 10,
-        "cache_read": 0.2
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.362
+      ]
     },
     "GPT-5.6 Luna": {
       "or_id": "openai/gpt-5.6-luna",
@@ -5305,6 +5291,13 @@
       "description": "GPT-5.6 Luna is a fast, cost-efficient model in OpenAI's GPT-5.6 series. It is suited for high-volume, latency-sensitive tasks such as chat, classification, and lightweight agentic workflows, providing capable reasoning for...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.2,
+        "output": 1.2,
+        "cache_read": 0.02
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.775,
       "available_at": [
         {
           "p": "openrouter",
@@ -5334,14 +5327,108 @@
           "in": 0.2,
           "out": 1.6
         }
+      ]
+    },
+    "Gemini 3.5 Flash": {
+      "or_id": "google/gemini-3.5-flash",
+      "or_name": "Google: Gemini 3.5 Flash",
+      "provider": "Google",
+      "created": "2026-05-19",
+      "context_length": 1048576,
+      "max_output_tokens": 65536,
+      "modality": "text+image+file+audio+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video",
+        "file",
+        "audio"
       ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Gemini",
+      "knowledge_cutoff": "2025-01-01",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 1.5,
+        "output": 9.0,
+        "cache_read": 0.15
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "high",
+          "medium",
+          "low",
+          "minimal"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Gemini 3.5 Flash is Google's high-efficiency multimodal model, bringing near-Pro level coding and reasoning at Flash-tier cost and speed. It is highly optimized for coding proficiency and parallel agentic execution...",
+      "superseded_by": "Gemini 3.8 Flash",
+      "match": "exact",
       "pricing_aa_usd_per_1m": {
-        "input": 0.2,
-        "output": 1.2,
-        "cache_read": 0.02
+        "input": 1.5,
+        "output": 9,
+        "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.774
+      "aa_ttft_seconds": 16.584,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 1.5,
+          "out": 9.0
+        },
+        {
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 1.5,
+          "out": 9.0
+        },
+        {
+          "p": "google-ai-studio",
+          "n": "Google AI Studio",
+          "in": 1.5,
+          "out": 9.0
+        },
+        {
+          "p": "google-vertex-ai",
+          "n": "Google Vertex AI",
+          "in": 1.5,
+          "out": 9.0
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 1.5,
+          "out": 9.0
+        }
+      ]
     },
     "Gemini 3.6 Flash": {
       "or_id": "google/gemini-3.6-flash",
@@ -5400,6 +5487,13 @@
       "description": "Gemini 3.6 Flash is a high-efficiency model from Google for coding, agentic workflows, and web and app development. It is designed to produce polished outputs with fewer unnecessary edits and...",
       "superseded_by": "Gemini 3.8 Flash",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.75,
+        "output": 3.75,
+        "cache_read": 0.15
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 14.039,
       "available_at": [
         {
           "p": "openrouter",
@@ -5429,14 +5523,87 @@
           "in": 0.75,
           "out": 3.75
         }
+      ]
+    },
+    "GPT-5.3 Codex": {
+      "or_id": "openai/gpt-5.3-codex",
+      "or_name": "OpenAI: GPT-5.3-Codex",
+      "provider": "OpenAI",
+      "created": "2026-02-24",
+      "context_length": 400000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
       ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 1.75,
+        "output": 14.0,
+        "cache_read": 0.175
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-5.3-Codex is OpenAI’s most advanced agentic coding model, combining the frontier software engineering performance of GPT-5.2-Codex with the broader reasoning and professional knowledge capabilities of GPT-5.2. It achieves state-of-the-art results...",
+      "superseded_by": null,
+      "match": "exact",
       "pricing_aa_usd_per_1m": {
-        "input": 0.75,
-        "output": 3.75,
-        "cache_read": 0.15
+        "input": 1.75,
+        "output": 14,
+        "cache_read": 0.175
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 15.502
+      "aa_ttft_seconds": 62.357,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 1.75,
+          "out": 14.0
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 1.75,
+          "out": 14.0
+        }
+      ]
     },
     "Gemini 3.1 Pro": {
       "or_id": "google/gemini-3.1-pro-preview",
@@ -5521,281 +5688,6 @@
         }
       ]
     },
-    "Gemini 3.5 Flash": {
-      "or_id": "google/gemini-3.5-flash",
-      "or_name": "Google: Gemini 3.5 Flash",
-      "provider": "Google",
-      "created": "2026-05-19",
-      "context_length": 1048576,
-      "max_output_tokens": 65536,
-      "modality": "text+image+file+audio+video->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "video",
-        "file",
-        "audio"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Gemini",
-      "knowledge_cutoff": "2025-01-01",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 1.5,
-        "output": 9.0,
-        "cache_read": 0.15
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "high",
-          "medium",
-          "low",
-          "minimal"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_p"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "Gemini 3.5 Flash is Google's high-efficiency multimodal model, bringing near-Pro level coding and reasoning at Flash-tier cost and speed. It is highly optimized for coding proficiency and parallel agentic execution...",
-      "superseded_by": "Gemini 3.8 Flash",
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 1.5,
-          "out": 9.0
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 1.5,
-          "out": 9.0
-        },
-        {
-          "p": "google-ai-studio",
-          "n": "Google AI Studio",
-          "in": 1.5,
-          "out": 9.0
-        },
-        {
-          "p": "google-vertex-ai",
-          "n": "Google Vertex AI",
-          "in": 1.5,
-          "out": 9.0
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 1.5,
-          "out": 9.0
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1.5,
-        "output": 9,
-        "cache_read": 0.15
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 16.752
-    },
-    "GPT-5.3 Codex": {
-      "or_id": "openai/gpt-5.3-codex",
-      "or_name": "OpenAI: GPT-5.3-Codex",
-      "provider": "OpenAI",
-      "created": "2026-02-24",
-      "context_length": 400000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 1.75,
-        "output": 14.0,
-        "cache_read": 0.175
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "xhigh",
-          "high",
-          "medium",
-          "low",
-          "none"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "structured_outputs",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "GPT-5.3-Codex is OpenAI’s most advanced agentic coding model, combining the frontier software engineering performance of GPT-5.2-Codex with the broader reasoning and professional knowledge capabilities of GPT-5.2. It achieves state-of-the-art results...",
-      "superseded_by": null,
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 1.75,
-          "out": 14.0
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 1.75,
-          "out": 14.0
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1.75,
-        "output": 14,
-        "cache_read": 0.175
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 62.357
-    },
-    "Hy3": {
-      "or_id": "tencent/hy3",
-      "or_name": "Tencent: Hy3",
-      "provider": "Tencent",
-      "created": "2026-07-06",
-      "context_length": 262144,
-      "max_output_tokens": 128000,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 295.0,
-      "active_params_b": 21.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.132,
-        "output": 0.528,
-        "cache_read": 0.033
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "high",
-          "low",
-          "none"
-        ],
-        "default_effort": "high"
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "max_completion_tokens",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "reasoning_effort",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_p"
-      ],
-      "hugging_face_id": "tencent/Hy3",
-      "or_free_variants": null,
-      "description": "Hy3 is a 295B-parameter Mixture-of-Experts model from Tencent (21B active, 192 experts with top-8 routing) built for reasoning, agentic workflows, and real-world production use. It supports a configurable reasoning effort:...",
-      "superseded_by": null,
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.0825,
-          "out": 0.33
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 0.14,
-          "out": 0.58
-        },
-        {
-          "p": "novita-ai",
-          "n": "Novita AI",
-          "in": 0.14,
-          "out": 0.58
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 0.18,
-          "out": 0.59,
-          "free": true
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.136,
-        "output": 0.554,
-        "cache_read": 0.034
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.563
-    },
     "Inkling": {
       "or_id": "thinkingmachines/inkling",
       "or_name": "Thinking Machines: Inkling",
@@ -5860,6 +5752,13 @@
       "description": "Inkling is an open-weight multimodal mixture-of-experts model from Thinking Machines Lab, with 41B active parameters out of 975B total. It is designed for general-purpose reasoning, coding, agentic and tool-use systems,...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 1,
+        "output": 4.05,
+        "cache_read": 0.17
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.56,
       "available_at": [
         {
           "p": "openrouter",
@@ -5886,14 +5785,7 @@
           "in": 1.0,
           "out": 4.05
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1,
-        "output": 4.05,
-        "cache_read": 0.17
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.586
+      ]
     },
     "Inkling Small": {
       "or_id": "thinkingmachines/inkling-small",
@@ -5960,6 +5852,13 @@
       "description": "Inkling Small is an open-weight multimodal mixture-of-experts model from Thinking Machines Lab, with 12B active parameters out of 276B total. It is positioned as the smaller, more efficient member of...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.3,
+        "output": 1.2,
+        "cache_read": 0.06
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.121,
       "available_at": [
         {
           "p": "openrouter",
@@ -5980,14 +5879,7 @@
           "in": 0.5,
           "out": 1.2
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.3,
-        "output": 1.2,
-        "cache_read": 0.06
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.015
+      ]
     },
     "Qwen3.7 Plus": {
       "or_id": "qwen/qwen3.7-plus",
@@ -6042,6 +5934,13 @@
       "description": "Qwen3.7-Plus is a cost-effective model in Alibaba's Qwen3.7 series. It supports text and image input with text output, building on the series' text capabilities with a comprehensive upgrade to its...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.4,
+        "output": 1.6,
+        "cache_read": 0.04
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.161,
       "available_at": [
         {
           "p": "openrouter",
@@ -6061,14 +5960,101 @@
           "in": 0.32,
           "out": 1.28
         }
+      ]
+    },
+    "Hy3": {
+      "or_id": "tencent/hy3",
+      "or_name": "Tencent: Hy3",
+      "provider": "Tencent",
+      "created": "2026-07-06",
+      "context_length": 262144,
+      "max_output_tokens": 128000,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
       ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 295.0,
+      "active_params_b": 21.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.132,
+        "output": 0.528,
+        "cache_read": 0.033
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "high",
+          "low",
+          "none"
+        ],
+        "default_effort": "high"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "tencent/Hy3",
+      "or_free_variants": null,
+      "description": "Hy3 is a 295B-parameter Mixture-of-Experts model from Tencent (21B active, 192 experts with top-8 routing) built for reasoning, agentic workflows, and real-world production use. It supports a configurable reasoning effort:...",
+      "superseded_by": null,
+      "match": "exact",
       "pricing_aa_usd_per_1m": {
-        "input": 0.4,
-        "output": 1.6,
-        "cache_read": 0.04
+        "input": 0.136,
+        "output": 0.554,
+        "cache_read": 0.034
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.161
+      "aa_ttft_seconds": 2.562,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.0825,
+          "out": 0.33
+        },
+        {
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 0.14,
+          "out": 0.58
+        },
+        {
+          "p": "novita-ai",
+          "n": "Novita AI",
+          "in": 0.14,
+          "out": 0.58
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 0.18,
+          "out": 0.59,
+          "free": true
+        }
+      ]
     },
     "Grok 4.3": {
       "or_id": "x-ai/grok-4.3",
@@ -6126,6 +6112,13 @@
       "description": "Grok 4.3 is a reasoning model from SpaceXAI. It accepts text and image inputs with text output, and is suited for agentic workflows, instruction-following tasks, and applications requiring high factual...",
       "superseded_by": "Grok 4.6",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 1.25,
+        "output": 2.5,
+        "cache_read": 0.2
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 10.049,
       "available_at": [
         {
           "p": "openrouter",
@@ -6151,14 +6144,89 @@
           "in": 1.25,
           "out": 2.5
         }
+      ]
+    },
+    "Ling 3.0 Flash": {
+      "or_id": "inclusionai/ling-3.0-flash",
+      "or_name": "inclusionAI: Ling 3.0 Flash",
+      "provider": "inclusionAI",
+      "created": "2026-07-23",
+      "context_length": 262144,
+      "max_output_tokens": 32768,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
       ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 5.1,
+      "active_params_b": null,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.021,
+        "output": 0.063,
+        "cache_read": 0.0042
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "inclusionAI/Ling-3.0-flash",
+      "or_free_variants": null,
+      "description": "*Ling-3.0-flash* is a *124B-parameter Mixture-of-Experts (MoE) model*, with approximately *5.1B parameters activated per token*. The model is designed with *token efficiency and production-scale agentic inference* as key priorities, enabling developers...",
+      "superseded_by": null,
+      "match": "exact",
       "pricing_aa_usd_per_1m": {
-        "input": 1.25,
-        "output": 2.5,
-        "cache_read": 0.2
+        "input": 0.075,
+        "output": 0.22,
+        "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 10.057
+      "aa_ttft_seconds": 2.511,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.021,
+          "out": 0.063
+        },
+        {
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 0.06,
+          "out": 0.18
+        },
+        {
+          "p": "novita-ai",
+          "n": "Novita AI",
+          "in": 0.06,
+          "out": 0.18
+        }
+      ]
     },
     "Gemini 3.5 Flash-Lite": {
       "or_id": "google/gemini-3.5-flash-lite",
@@ -6217,6 +6285,13 @@
       "description": "Gemini 3.5 Flash Lite is a high-efficiency model from Google with upgraded agentic capabilities. It is suited for subagents that execute focused tasks within complex, multi-agent workflows.",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.3,
+        "output": 2.5,
+        "cache_read": 0.03
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 7.345,
       "available_at": [
         {
           "p": "openrouter",
@@ -6246,43 +6321,42 @@
           "in": 0.3,
           "out": 2.5
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.3,
-        "output": 2.5,
-        "cache_read": 0.03
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 7.345
+      ]
     },
-    "Ling 3.0 Flash": {
-      "or_id": "inclusionai/ling-3.0-flash",
-      "or_name": "inclusionAI: Ling 3.0 Flash",
-      "provider": "inclusionAI",
-      "created": "2026-07-23",
-      "context_length": 262144,
-      "max_output_tokens": 32768,
-      "modality": "text->text",
+    "Step 3.7 Flash": {
+      "or_id": "stepfun/step-3.7-flash",
+      "or_name": "StepFun: Step 3.7 Flash",
+      "provider": "StepFun",
+      "created": "2026-05-28",
+      "context_length": 256000,
+      "max_output_tokens": 230400,
+      "modality": "text+image+video->text",
       "input_modalities": [
-        "text"
+        "text",
+        "image",
+        "video"
       ],
       "output_modalities": [
         "text"
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": 5.1,
-      "active_params_b": null,
+      "total_params_b": 11.0,
+      "active_params_b": 11.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.021,
-        "output": 0.063,
-        "cache_read": 0.0042
+        "input": 0.2,
+        "output": 1.15,
+        "cache_read": 0.04
       },
       "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
+        "mandatory": true,
+        "supported_efforts": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "medium"
       },
       "supported_parameters": [
         "frequency_penalty",
@@ -6293,10 +6367,12 @@
         "min_p",
         "presence_penalty",
         "reasoning",
+        "reasoning_effort",
         "repetition_penalty",
         "response_format",
         "seed",
         "stop",
+        "structured_outputs",
         "temperature",
         "tool_choice",
         "tools",
@@ -6304,38 +6380,38 @@
         "top_logprobs",
         "top_p"
       ],
-      "hugging_face_id": "inclusionAI/Ling-3.0-flash",
+      "hugging_face_id": "stepfun-ai/Step-3.7-Flash",
       "or_free_variants": null,
-      "description": "*Ling-3.0-flash* is a *124B-parameter Mixture-of-Experts (MoE) model*, with approximately *5.1B parameters activated per token*. The model is designed with *token efficiency and production-scale agentic inference* as key priorities, enabling developers...",
+      "description": "Step 3.7 Flash is StepFun's latest high-efficiency multimodal Mixture-of-Experts model. It pairs a 196B-parameter language backbone with a vision encoder for native image and video understanding, activating roughly 11B parameters...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.2,
+        "output": 1.15,
+        "cache_read": 0.04
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.846,
       "available_at": [
         {
           "p": "openrouter",
           "n": "OpenRouter",
-          "in": 0.021,
-          "out": 0.063
+          "in": 0.2,
+          "out": 1.15
         },
         {
           "p": "deepinfra",
           "n": "DeepInfra",
-          "in": 0.06,
-          "out": 0.18
+          "in": 0.2,
+          "out": 1.15
         },
         {
           "p": "novita-ai",
           "n": "Novita AI",
-          "in": 0.06,
-          "out": 0.18
+          "in": 0.2,
+          "out": 1.15
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.075,
-        "output": 0.22,
-        "cache_read": 0.015
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.511
+      ]
     },
     "Muse-Glimmer-30B": {
       "or_id": "meta/muse-glimmer-30b",
@@ -6430,96 +6506,6 @@
         }
       ]
     },
-    "Step 3.7 Flash": {
-      "or_id": "stepfun/step-3.7-flash",
-      "or_name": "StepFun: Step 3.7 Flash",
-      "provider": "StepFun",
-      "created": "2026-05-28",
-      "context_length": 256000,
-      "max_output_tokens": 230400,
-      "modality": "text+image+video->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "video"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 11.0,
-      "active_params_b": 11.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.2,
-        "output": 1.15,
-        "cache_read": 0.04
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "high",
-          "medium",
-          "low"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "reasoning_effort",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "stepfun-ai/Step-3.7-Flash",
-      "or_free_variants": null,
-      "description": "Step 3.7 Flash is StepFun's latest high-efficiency multimodal Mixture-of-Experts model. It pairs a 196B-parameter language backbone with a vision encoder for native image and video understanding, activating roughly 11B parameters...",
-      "superseded_by": null,
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.2,
-          "out": 1.15
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 0.2,
-          "out": 1.15
-        },
-        {
-          "p": "novita-ai",
-          "n": "Novita AI",
-          "in": 0.2,
-          "out": 1.15
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.2,
-        "output": 1.15,
-        "cache_read": 0.04
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.888
-    },
     "Granite 4.2 8B": {
       "or_id": "ibm-granite/granite-4.2-8b",
       "or_name": "IBM: Granite 4.2 8B",
@@ -6580,6 +6566,13 @@
       "description": "Granite 4.2 8B is a dense reasoning model from IBM. It is suited for mathematics, code generation, multilingual dialogue, and agentic workflows that need multi-step reasoning. It supports full, low-effort,...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.06,
+        "output": 0.25,
+        "cache_read": 0.015
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.576,
       "available_at": [
         {
           "p": "openrouter",
@@ -6587,14 +6580,80 @@
           "in": 0.1,
           "out": 0.15
         }
+      ]
+    },
+    "Mercury 2": {
+      "or_id": "inception/mercury-2",
+      "or_name": "Inception: Mercury 2",
+      "provider": "Inception",
+      "created": "2026-03-04",
+      "context_length": 128000,
+      "max_output_tokens": 50000,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
       ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.25,
+        "output": 0.75,
+        "cache_read": 0.025
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Mercury 2 is an extremely fast reasoning LLM, and the first reasoning diffusion LLM (dLLM). Instead of generating tokens sequentially, Mercury 2 produces and refines multiple tokens in parallel, achieving...",
+      "superseded_by": null,
+      "match": "exact",
       "pricing_aa_usd_per_1m": {
-        "input": 0.06,
-        "output": 0.25,
-        "cache_read": 0.015
+        "input": 0.25,
+        "output": 0.75,
+        "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.6
+      "aa_ttft_seconds": 4.299,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.25,
+          "out": 0.75
+        },
+        {
+          "p": "inception",
+          "n": "Inception",
+          "in": 0.25,
+          "out": 0.75
+        }
+      ]
     },
     "gpt-oss-120b": {
       "or_id": "openai/gpt-oss-120b",
@@ -6780,79 +6839,6 @@
         }
       ]
     },
-    "Mercury 2": {
-      "or_id": "inception/mercury-2",
-      "or_name": "Inception: Mercury 2",
-      "provider": "Inception",
-      "created": "2026-03-04",
-      "context_length": 128000,
-      "max_output_tokens": 50000,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.25,
-        "output": 0.75,
-        "cache_read": 0.025
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "high",
-          "medium",
-          "low",
-          "none"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "Mercury 2 is an extremely fast reasoning LLM, and the first reasoning diffusion LLM (dLLM). Instead of generating tokens sequentially, Mercury 2 produces and refines multiple tokens in parallel, achieving...",
-      "superseded_by": null,
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.25,
-          "out": 0.75
-        },
-        {
-          "p": "inception",
-          "n": "Inception",
-          "in": 0.25,
-          "out": 0.75
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.25,
-        "output": 0.75,
-        "cache_read": 0.025
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.373
-    },
     "Trinity Large Thinking": {
       "or_id": "arcee-ai/trinity-large-thinking",
       "or_name": "Arcee AI: Trinity Large Thinking",
@@ -6897,6 +6883,13 @@
       "description": "Trinity Large Thinking is a powerful open source reasoning model from the team at Arcee AI. It shows strong performance in PinchBench, agentic workloads, and reasoning tasks. Launch video: https://youtu.be/Gc82AXLa0Rg?si=4RLn6WBz33qT--B7...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.25,
+        "output": 0.9,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.927,
       "available_at": [
         {
           "p": "openrouter",
@@ -6904,81 +6897,7 @@
           "in": 0.25,
           "out": 0.8
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.25,
-        "output": 0.9,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.982
-    },
-    "Ministral 3 8B": {
-      "or_id": "mistralai/ministral-14b-2512",
-      "or_name": "Mistral: Ministral 3 14B 2512",
-      "provider": "Mistral",
-      "created": "2025-12-02",
-      "context_length": 262144,
-      "max_output_tokens": 209715,
-      "modality": "text+image->text",
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Mistral",
-      "knowledge_cutoff": null,
-      "total_params_b": 13.9,
-      "active_params_b": null,
-      "params_source": "huggingface",
-      "pricing_usd_per_1m": {
-        "input": 0.2,
-        "output": 0.2,
-        "cache_read": 0.02
-      },
-      "reasoning": null,
-      "supported_parameters": [
-        "frequency_penalty",
-        "max_tokens",
-        "presence_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_p"
-      ],
-      "hugging_face_id": "mistralai/Ministral-3-14B-Instruct-2512",
-      "or_free_variants": null,
-      "description": "The largest model in the Ministral 3 family, Ministral 3 14B offers frontier capabilities and performance comparable to its larger Mistral Small 3.2 24B counterpart. A powerful and efficient language...",
-      "superseded_by": null,
-      "match": "exact",
-      "stale": true,
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.2,
-          "out": 0.2
-        },
-        {
-          "p": "mistral",
-          "n": "Mistral",
-          "in": 0.2,
-          "out": 0.2
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.15,
-        "output": 0.15,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.758
+      ]
     },
     "command a 03.2025": {
       "or_id": "cohere/command-a",
@@ -7037,110 +6956,72 @@
         }
       ]
     },
-    "Claude Opus 4.7": {
-      "or_id": "anthropic/claude-opus-4.7",
-      "or_name": "Anthropic: Claude Opus 4.7",
-      "provider": "Anthropic",
-      "created": "2026-04-16",
-      "context_length": 1000000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
+    "Ministral 3 8B": {
+      "or_id": "mistralai/ministral-14b-2512",
+      "or_name": "Mistral: Ministral 3 14B 2512",
+      "provider": "Mistral",
+      "created": "2025-12-02",
+      "context_length": 262144,
+      "max_output_tokens": 209715,
+      "modality": "text+image->text",
       "input_modalities": [
         "text",
-        "image",
-        "file"
+        "image"
       ],
       "output_modalities": [
         "text"
       ],
-      "tokenizer": "Claude",
+      "tokenizer": "Mistral",
       "knowledge_cutoff": null,
-      "total_params_b": null,
+      "total_params_b": 13.9,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 5.0,
-        "output": 25.0,
-        "cache_read": 0.5
+        "input": 0.2,
+        "output": 0.2,
+        "cache_read": 0.02
       },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "max",
-          "xhigh",
-          "high",
-          "medium",
-          "low"
-        ],
-        "default_effort": "high"
-      },
+      "reasoning": null,
       "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
+        "frequency_penalty",
         "max_tokens",
-        "reasoning",
-        "reasoning_effort",
+        "presence_penalty",
         "response_format",
+        "seed",
         "stop",
         "structured_outputs",
+        "temperature",
         "tool_choice",
         "tools",
-        "verbosity"
+        "top_p"
       ],
-      "hugging_face_id": null,
+      "hugging_face_id": "mistralai/Ministral-3-14B-Instruct-2512",
       "or_free_variants": null,
-      "description": "Opus 4.7 is the next generation of Anthropic's Opus family, built for long-running, asynchronous agents. Building on the coding and agentic strengths of Opus 4.6, it delivers stronger performance on...",
-      "superseded_by": "Claude Opus 5",
+      "description": "The largest model in the Ministral 3 family, Ministral 3 14B offers frontier capabilities and performance comparable to its larger Mistral Small 3.2 24B counterpart. A powerful and efficient language...",
+      "superseded_by": null,
       "match": "exact",
+      "stale": true,
+      "pricing_aa_usd_per_1m": {
+        "input": 0.15,
+        "output": 0.15,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.767,
       "available_at": [
         {
           "p": "openrouter",
           "n": "OpenRouter",
-          "in": 5.0,
-          "out": 25.0
+          "in": 0.2,
+          "out": 0.2
         },
         {
-          "p": "anthropic",
-          "n": "Anthropic",
-          "in": 5.0,
-          "out": 25.0
-        },
-        {
-          "p": "azure-ai-foundry",
-          "n": "Azure AI Foundry",
-          "in": 5.0,
-          "out": 25.0
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 5.0,
-          "out": 25.0
-        },
-        {
-          "p": "google-vertex-ai",
-          "n": "Google Vertex AI",
-          "in": 5.0,
-          "out": 25.0
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 5.0,
-          "out": 25.0
+          "p": "mistral",
+          "n": "Mistral",
+          "in": 0.2,
+          "out": 0.2
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 5,
-        "output": 25,
-        "cache_read": 0.5
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.051
+      ]
     },
     "Claude Opus 4.8": {
       "or_id": "anthropic/claude-opus-4.8",
@@ -7198,6 +7079,13 @@
       "description": "Claude Opus 4.8 is Anthropic's most capable generally available model in the Opus family. It supports text, image, and file inputs with text output, with reasoning support and a 1M-token...",
       "superseded_by": "Claude Opus 5",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 5,
+        "output": 25,
+        "cache_read": 0.5
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 18.481,
       "available_at": [
         {
           "p": "openrouter",
@@ -7239,14 +7127,7 @@
           "in": 5.0,
           "out": 25.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 5,
-        "output": 25,
-        "cache_read": 0.5
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 28.065
+      ]
     },
     "Claude Opus 4.6": {
       "or_id": "anthropic/claude-opus-4.6",
@@ -7305,6 +7186,13 @@
       "description": "Opus 4.6 is Anthropic’s strongest model for coding and long-running professional tasks. It is built for agents that operate across entire workflows rather than single prompts, making it especially effective...",
       "superseded_by": "Claude Opus 5",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 5,
+        "output": 25,
+        "cache_read": 0.5
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.052,
       "available_at": [
         {
           "p": "openrouter",
@@ -7346,14 +7234,112 @@
           "in": 5.0,
           "out": 25.0
         }
+      ]
+    },
+    "Claude Opus 4.7": {
+      "or_id": "anthropic/claude-opus-4.7",
+      "or_name": "Anthropic: Claude Opus 4.7",
+      "provider": "Anthropic",
+      "created": "2026-04-16",
+      "context_length": 1000000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
       ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Claude",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 5.0,
+        "output": 25.0,
+        "cache_read": 0.5
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "high"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Opus 4.7 is the next generation of Anthropic's Opus family, built for long-running, asynchronous agents. Building on the coding and agentic strengths of Opus 4.6, it delivers stronger performance on...",
+      "superseded_by": "Claude Opus 5",
+      "match": "exact",
       "pricing_aa_usd_per_1m": {
         "input": 5,
         "output": 25,
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.134
+      "aa_ttft_seconds": 1.161,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 5.0,
+          "out": 25.0
+        },
+        {
+          "p": "anthropic",
+          "n": "Anthropic",
+          "in": 5.0,
+          "out": 25.0
+        },
+        {
+          "p": "azure-ai-foundry",
+          "n": "Azure AI Foundry",
+          "in": 5.0,
+          "out": 25.0
+        },
+        {
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 5.0,
+          "out": 25.0
+        },
+        {
+          "p": "google-vertex-ai",
+          "n": "Google Vertex AI",
+          "in": 5.0,
+          "out": 25.0
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 5.0,
+          "out": 25.0
+        }
+      ]
     },
     "GPT-5 Pro": {
       "or_id": "openai/gpt-5-pro",
@@ -7634,6 +7620,13 @@
       "description": "Sonnet 4.6 is Anthropic's most capable Sonnet-class model yet, with frontier performance across coding, agents, and professional work. It excels at iterative development, complex codebase navigation, end-to-end project management with...",
       "superseded_by": "Claude Sonnet 5",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 3,
+        "output": 15,
+        "cache_read": 0.3
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.837,
       "available_at": [
         {
           "p": "openrouter",
@@ -7681,14 +7674,7 @@
           "in": 3.0,
           "out": 15.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.682
+      ]
     },
     "GPT-5 mini": {
       "or_id": "openai/gpt-5-mini",
@@ -7743,6 +7729,13 @@
       "description": "GPT-5 Mini is a compact version of GPT-5, designed to handle lighter-weight reasoning tasks. It provides the same instruction-following and safety-tuning benefits as GPT-5, but with reduced latency and cost....",
       "superseded_by": "GPT-5.4 mini",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.25,
+        "output": 2,
+        "cache_read": 0.025
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 69.124,
       "available_at": [
         {
           "p": "openrouter",
@@ -7774,14 +7767,7 @@
           "in": 0.25,
           "out": 2.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.25,
-        "output": 2,
-        "cache_read": 0.025
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 109.397
+      ]
     },
     "GPT-5.2-Codex": {
       "or_id": "openai/gpt-5.2-codex",
@@ -7904,6 +7890,12 @@
       "description": "GPT-5.4 Pro is OpenAI's most advanced model, building on GPT-5.4's unified architecture with enhanced reasoning capabilities for complex, high-stakes tasks. It features a 1M+ token context window (922K input, 128K...",
       "superseded_by": "GPT-5.5 Pro",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 30,
+        "output": 180,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
       "available_at": [
         {
           "p": "openrouter",
@@ -7921,13 +7913,7 @@
           "in": 60.0,
           "out": 270.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 30,
-        "output": 180,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis"
+      ]
     },
     "GPT-5.4 mini": {
       "or_id": "openai/gpt-5.4-mini",
@@ -7983,6 +7969,13 @@
       "description": "GPT-5.4 mini brings the core capabilities of GPT-5.4 to a faster, more efficient model optimized for high-throughput workloads. It supports text and image inputs with strong performance across reasoning, coding,...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.75,
+        "output": 4.5,
+        "cache_read": 0.075
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 4.341,
       "available_at": [
         {
           "p": "openrouter",
@@ -8018,14 +8011,7 @@
           "in": 0.75,
           "out": 4.5
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.75,
-        "output": 4.5,
-        "cache_read": 0.075
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 7.211
+      ]
     },
     "GPT-5.4 nano": {
       "or_id": "openai/gpt-5.4-nano",
@@ -8081,6 +8067,13 @@
       "description": "GPT-5.4 nano is the most lightweight and cost-efficient variant of the GPT-5.4 family, optimized for speed-critical and high-volume tasks. It supports text and image inputs and is designed for low-latency...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.2,
+        "output": 1.25,
+        "cache_read": 0.02
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 4.432,
       "available_at": [
         {
           "p": "openrouter",
@@ -8116,14 +8109,7 @@
           "in": 0.2,
           "out": 1.25
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.2,
-        "output": 1.25,
-        "cache_read": 0.02
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.388
+      ]
     },
     "Gemini 2.5 Pro": {
       "or_id": "google/gemini-2.5-pro",
@@ -8176,6 +8162,13 @@
       "description": "Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking” capabilities, enabling it to reason through responses with enhanced accuracy...",
       "superseded_by": "Gemini 3.1 Pro",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 1.25,
+        "output": 10,
+        "cache_read": 0.125
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 23.19,
       "available_at": [
         {
           "p": "openrouter",
@@ -8207,14 +8200,7 @@
           "in": 2.5,
           "out": 10.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 22.324
+      ]
     },
     "grok 4.20 beta 0309 reasoning": {
       "or_id": "x-ai/grok-4.20",
@@ -8280,92 +8266,6 @@
           "out": 2.5
         }
       ]
-    },
-    "Claude 4.1 Opus": {
-      "or_id": "anthropic/claude-opus-4.1",
-      "or_name": "Anthropic: Claude Opus 4.1",
-      "provider": "Anthropic",
-      "created": "2025-08-05",
-      "context_length": 200000,
-      "max_output_tokens": 32000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Claude",
-      "knowledge_cutoff": "2025-01-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 15.0,
-        "output": 75.0,
-        "cache_read": 1.5
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "stop",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_p"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "Claude Opus 4.1 is an updated version of Anthropic’s flagship model, offering improved performance in coding, reasoning, and agentic tasks. It achieves 74.5% on SWE-bench Verified and shows notable gains...",
-      "superseded_by": "Claude Opus 5",
-      "match": "alias",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 15.0,
-          "out": 75.0
-        },
-        {
-          "p": "anthropic",
-          "n": "Anthropic",
-          "in": 15.0,
-          "out": 75.0
-        },
-        {
-          "p": "azure-ai-foundry",
-          "n": "Azure AI Foundry",
-          "in": 15.0,
-          "out": 75.0
-        },
-        {
-          "p": "google-vertex-ai",
-          "n": "Google Vertex AI",
-          "in": 15.0,
-          "out": 75.0
-        },
-        {
-          "p": "vercel-ai-gateway",
-          "n": "Vercel AI Gateway",
-          "in": 15.0,
-          "out": 75.0
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 15,
-        "output": 75,
-        "cache_read": 1.5
-      },
-      "price_source": "artificialanalysis"
     },
     "Claude Haiku 4.5": {
       "or_id": "anthropic/claude-haiku-4.5",
@@ -8523,6 +8423,13 @@
       "description": "Claude Opus 4.5 is Anthropic’s frontier reasoning model optimized for complex software engineering, agentic workflows, and long-horizon computer use. It offers strong multimodal capabilities, competitive performance across real-world coding and...",
       "superseded_by": "Claude Opus 5",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 5,
+        "output": 25,
+        "cache_read": 0.5
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 12.83,
       "available_at": [
         {
           "p": "openrouter",
@@ -8570,14 +8477,7 @@
           "in": 5.0,
           "out": 25.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 5,
-        "output": 25,
-        "cache_read": 0.5
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 16.964
+      ]
     },
     "Claude Sonnet 4.5": {
       "or_id": "anthropic/claude-sonnet-4.5",
@@ -8804,6 +8704,13 @@
       "description": "Gemini 3.1 Flash Lite is Google’s GA high-efficiency multimodal model optimized for low-latency, high-volume workloads. It supports text, image, video, audio, and PDF inputs, and is designed for lightweight agentic...",
       "superseded_by": "Gemini 3.5 Flash-Lite",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.25,
+        "output": 1.5,
+        "cache_read": 0.025
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 5.25,
       "available_at": [
         {
           "p": "openrouter",
@@ -8835,14 +8742,7 @@
           "in": 0.25,
           "out": 1.5
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.25,
-        "output": 1.5,
-        "cache_read": 0.025
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.327
+      ]
     },
     "Muse Spark 1.1": {
       "or_id": "meta/muse-spark-1.1",
@@ -8902,6 +8802,12 @@
       "description": "Muse Spark 1.1 is a multimodal reasoning model from Meta, built for agentic tasks. It accepts text, images, video, audio, and PDF documents and returns text, with a 1M-token context...",
       "superseded_by": "Muse Spark 1.3",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 1.25,
+        "output": 4.25,
+        "cache_read": 0.15
+      },
+      "price_source": "artificialanalysis",
       "available_at": [
         {
           "p": "openrouter",
@@ -8921,13 +8827,7 @@
           "in": 1.25,
           "out": 4.25
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1.25,
-        "output": 4.25,
-        "cache_read": 0.15
-      },
-      "price_source": "artificialanalysis"
+      ]
     },
     "gemini 2.5 flash": {
       "or_id": "google/gemini-2.5-flash",
@@ -9182,6 +9082,123 @@
         }
       ]
     },
+    "GLM-5.3": {
+      "or_id": "z-ai/glm-5.3",
+      "or_name": "Z.ai: GLM 5.3",
+      "provider": "Z.ai",
+      "created": "2026-08-18",
+      "context_length": 1048576,
+      "max_output_tokens": 943718,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 753.3,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 1.4,
+        "output": 4.4,
+        "cache_read": 0.26
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "max",
+          "high",
+          "low"
+        ],
+        "default_effort": "max"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "zai-org/GLM-5.3",
+      "or_free_variants": null,
+      "description": "GLM-5.3 is a large-scale reasoning model from Z.ai, built for complex software engineering and long-horizon agent tasks. It supports text input and output with a 1M-token context window, and improves...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 1.4,
+        "output": 4.4,
+        "cache_read": 0.26
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.437,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 1.4,
+          "out": 4.4
+        },
+        {
+          "p": "baseten",
+          "n": "Baseten",
+          "in": 1.4,
+          "out": 4.4
+        },
+        {
+          "p": "friendliai",
+          "n": "FriendliAI",
+          "in": 1.26,
+          "out": 3.96
+        },
+        {
+          "p": "novita-ai",
+          "n": "Novita AI",
+          "in": 1.4,
+          "out": 4.4
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 1.26,
+          "out": 3.96
+        },
+        {
+          "p": "together-ai",
+          "n": "Together AI",
+          "in": 1.4,
+          "out": 4.4
+        },
+        {
+          "p": "z-ai",
+          "n": "Z.ai",
+          "in": 1.4,
+          "out": 4.4
+        }
+      ]
+    },
     "Kimi K3": {
       "or_id": "moonshotai/kimi-k3",
       "or_name": "MoonshotAI: Kimi K3",
@@ -9244,6 +9261,13 @@
       "description": "Kimi K3 is a 2.8T parameter open-weight multimodal reasoning model from Moonshot AI. It is suited for complex coding, knowledge work, and long-horizon agentic workflows, and is particularly strong at...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 3,
+        "output": 15,
+        "cache_read": 0.3
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 3.393,
       "available_at": [
         {
           "p": "openrouter",
@@ -9301,38 +9325,33 @@
           "in": 3.0,
           "out": 15.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 3,
-        "output": 15,
-        "cache_read": 0.3
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.259
+      ]
     },
-    "GLM-5.3": {
-      "or_id": "z-ai/glm-5.3",
-      "or_name": "Z.ai: GLM 5.3",
+    "GLM-5.3-Flash": {
+      "or_id": "z-ai/glm-5.3-flash",
+      "or_name": "Z.ai: GLM 5.3 Flash",
       "provider": "Z.ai",
-      "created": "2026-08-18",
+      "created": "2026-08-26",
       "context_length": 1048576,
-      "max_output_tokens": 943718,
-      "modality": "text->text",
+      "max_output_tokens": 131072,
+      "modality": "text+image+video->text",
       "input_modalities": [
-        "text"
+        "text",
+        "image",
+        "video"
       ],
       "output_modalities": [
         "text"
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": 753.3,
+      "total_params_b": 321.3,
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 1.4,
-        "output": 4.4,
-        "cache_read": 0.26
+        "input": 0.075,
+        "output": 0.25,
+        "cache_read": 0.015
       },
       "reasoning": {
         "mandatory": true,
@@ -9350,7 +9369,6 @@
         "logprobs",
         "max_tokens",
         "min_p",
-        "parallel_tool_calls",
         "presence_penalty",
         "reasoning",
         "reasoning_effort",
@@ -9366,35 +9384,36 @@
         "top_logprobs",
         "top_p"
       ],
-      "hugging_face_id": "zai-org/GLM-5.3",
+      "hugging_face_id": "zai-org/GLM-5.3-Flash",
       "or_free_variants": null,
-      "description": "GLM-5.3 is a large-scale reasoning model from Z.ai, built for complex software engineering and long-horizon agent tasks. It supports text input and output with a 1M-token context window, and improves...",
+      "description": "GLM-5.3-Flash is a native multimodal model from Z.ai. It is suited for efficient coding and long-horizon agent tasks. Its hybrid sparse and linear attention architecture maintains accurate long-context behavior while...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.15,
+        "output": 0.5,
+        "cache_read": 0.026
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.511,
       "available_at": [
         {
           "p": "openrouter",
           "n": "OpenRouter",
-          "in": 1.4,
-          "out": 4.4
-        },
-        {
-          "p": "baseten",
-          "n": "Baseten",
-          "in": 1.4,
-          "out": 4.4
+          "in": 0.075,
+          "out": 0.25
         },
         {
           "p": "friendliai",
           "n": "FriendliAI",
-          "in": 1.26,
-          "out": 3.96
+          "in": 0.15,
+          "out": 0.5
         },
         {
-          "p": "novita-ai",
-          "n": "Novita AI",
-          "in": 1.4,
-          "out": 4.4
+          "p": "nebius",
+          "n": "Nebius",
+          "in": 0.15,
+          "out": 0.5
         },
         {
           "p": "opencode-zen",
@@ -9403,29 +9422,22 @@
         {
           "p": "orcarouter",
           "n": "OrcaRouter",
-          "in": 1.26,
-          "out": 3.96
+          "in": 0.075,
+          "out": 0.25
         },
         {
           "p": "together-ai",
           "n": "Together AI",
-          "in": 1.4,
-          "out": 4.4
+          "in": 0.15,
+          "out": 0.5
         },
         {
           "p": "z-ai",
           "n": "Z.ai",
-          "in": 1.4,
-          "out": 4.4
+          "in": 0.15,
+          "out": 0.5
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1.4,
-        "output": 4.4,
-        "cache_read": 0.26
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.309
+      ]
     },
     "Qwen3.8-Max": {
       "or_id": "qwen/qwen3.8-max-0902",
@@ -9501,119 +9513,8 @@
           "in": 2.0,
           "out": 6.0
         }
-      ]
-    },
-    "GLM-5.3-Flash": {
-      "or_id": "z-ai/glm-5.3-flash",
-      "or_name": "Z.ai: GLM 5.3 Flash",
-      "provider": "Z.ai",
-      "created": "2026-08-26",
-      "context_length": 1048576,
-      "max_output_tokens": 131072,
-      "modality": "text+image+video->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "video"
       ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 321.3,
-      "active_params_b": null,
-      "params_source": "huggingface",
-      "pricing_usd_per_1m": {
-        "input": 0.075,
-        "output": 0.25,
-        "cache_read": 0.015
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "max",
-          "high",
-          "low"
-        ],
-        "default_effort": "max"
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "reasoning_effort",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "zai-org/GLM-5.3-Flash",
-      "or_free_variants": null,
-      "description": "GLM-5.3-Flash is a native multimodal model from Z.ai. It is suited for efficient coding and long-horizon agent tasks. Its hybrid sparse and linear attention architecture maintains accurate long-context behavior while...",
-      "superseded_by": null,
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.075,
-          "out": 0.25
-        },
-        {
-          "p": "friendliai",
-          "n": "FriendliAI",
-          "in": 0.15,
-          "out": 0.5
-        },
-        {
-          "p": "nebius",
-          "n": "Nebius",
-          "in": 0.15,
-          "out": 0.5
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 0.075,
-          "out": 0.25
-        },
-        {
-          "p": "together-ai",
-          "n": "Together AI",
-          "in": 0.15,
-          "out": 0.5
-        },
-        {
-          "p": "z-ai",
-          "n": "Z.ai",
-          "in": 0.15,
-          "out": 0.5
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.15,
-        "output": 0.5,
-        "cache_read": 0.026
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.504
+      "alias_note": "Listed by EQBench as Qwen/Qwen3.8-2.4T-A95B (same model — HF repo name)"
     },
     "GLM-5.2": {
       "or_id": "z-ai/glm-5.2",
@@ -9675,6 +9576,13 @@
       "description": "GLM 5.2 is a large-scale reasoning model from Z.ai. It supports text input and output with a 1M-token context window, and is suited for long-horizon agent workflows, project-level software engineering,...",
       "superseded_by": "GLM-5.3",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 1.4,
+        "output": 4.4,
+        "cache_read": 0.26
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.906,
       "available_at": [
         {
           "p": "openrouter",
@@ -9758,14 +9666,7 @@
           "in": 1.4,
           "out": 4.4
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1.4,
-        "output": 4.4,
-        "cache_read": 0.26
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.791
+      ]
     },
     "DeepSeek V4 Pro": {
       "or_id": "deepseek/deepseek-v4-pro",
@@ -9827,6 +9728,13 @@
       "description": "DeepSeek V4 Pro is a large-scale Mixture-of-Experts model from DeepSeek with 1.6T total parameters and 49B activated parameters, supporting a 1M-token context window. It is designed for advanced reasoning, coding,...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.435,
+        "output": 0.87,
+        "cache_read": 0.0036
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.709,
       "available_at": [
         {
           "p": "openrouter",
@@ -9904,14 +9812,7 @@
           "in": 1.15,
           "out": 2.55
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.435,
-        "output": 0.87,
-        "cache_read": 0.0036
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.625
+      ]
     },
     "deepseek v4 flash": {
       "or_id": "deepseek/deepseek-v4-flash",
@@ -10120,12 +10021,17 @@
         "top_p"
       ],
       "hugging_face_id": "MiniMaxAI/Minimax-M3",
-      "or_free_variants": [
-        "minimax/minimax-m3:free"
-      ],
+      "or_free_variants": null,
       "description": "MiniMax-M3 is a multimodal foundation model from MiniMax. It supports text, image, and video inputs with text output, a 1M-token context window, and is suited for long-horizon agentic work, coding,...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.3,
+        "output": 1.2,
+        "cache_read": 0.06
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.311,
       "available_at": [
         {
           "p": "openrouter",
@@ -10196,14 +10102,147 @@
           "in": 0.23,
           "out": 0.96
         }
+      ]
+    },
+    "solar pro4": {
+      "or_id": "upstage/solar-pro4",
+      "or_name": "Upstage: Solar Pro 4",
+      "provider": "Upstage",
+      "created": "2026-08-10",
+      "context_length": 524288,
+      "max_output_tokens": 131072,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
       ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.03,
+        "output": 0.12,
+        "cache_read": 0.006
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Solar Pro 4 is Upstage's cost-efficient large language model, featuring a 524K context window. It is built for long-horizon tasks and agentic workflows, with strong capabilities in office productivity, document-intensive...",
+      "superseded_by": null,
+      "match": "exact",
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.03,
+          "out": 0.12
+        }
+      ]
+    },
+    "MiMo-V2.5-Pro": {
+      "or_id": "xiaomi/mimo-v2.5-pro",
+      "or_name": "Xiaomi: MiMo-V2.5-Pro",
+      "provider": "Xiaomi",
+      "created": "2026-04-22",
+      "context_length": 1048576,
+      "max_output_tokens": 131072,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 1023.2,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.435,
+        "output": 0.87,
+        "cache_read": 0.0036
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "XiaomiMiMo/MiMo-V2.5-Pro",
+      "or_free_variants": null,
+      "description": "MiMo-V2.5-Pro is Xiaomi’s flagship model, delivering strong performance in general agentic capabilities, complex software engineering, and long-horizon tasks, with top rankings on benchmarks such as ClawEval, GDPVal, and SWE-bench Pro....",
+      "superseded_by": null,
+      "match": "exact",
       "pricing_aa_usd_per_1m": {
-        "input": 0.3,
-        "output": 1.2,
-        "cache_read": 0.06
+        "input": 0.435,
+        "output": 0.87,
+        "cache_read": 0.0036
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.333
+      "aa_ttft_seconds": 3.429,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.435,
+          "out": 0.87
+        },
+        {
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 1.0,
+          "out": 3.0
+        },
+        {
+          "p": "novita-ai",
+          "n": "Novita AI",
+          "in": 0.522,
+          "out": 1.044
+        }
+      ]
     },
     "Kimi K2.7 Code": {
       "or_id": "moonshotai/kimi-k2.7-code",
@@ -10226,9 +10265,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.66,
-        "output": 3.4,
-        "cache_read": 0.18
+        "input": 0.71,
+        "output": 3.5,
+        "cache_read": 0.15
       },
       "reasoning": {
         "mandatory": true,
@@ -10262,6 +10301,13 @@
       "description": "MoonshotAI: Kimi K2.7 Code is a coding-focused model in Moonshot AI's Kimi K2 family, built to complete end-to-end programming tasks reliably over long contexts. It uses a native multimodal mixture-of-experts...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.95,
+        "output": 4,
+        "cache_read": 0.19
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.961,
       "available_at": [
         {
           "p": "openrouter",
@@ -10332,153 +10378,6 @@
           "n": "W&B Inference Gateway",
           "in": 0.71,
           "out": 3.5
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.95,
-        "output": 4,
-        "cache_read": 0.19
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.936
-    },
-    "MiMo-V2.5-Pro": {
-      "or_id": "xiaomi/mimo-v2.5-pro",
-      "or_name": "Xiaomi: MiMo-V2.5-Pro",
-      "provider": "Xiaomi",
-      "created": "2026-04-22",
-      "context_length": 1048576,
-      "max_output_tokens": 131072,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 1023.2,
-      "active_params_b": null,
-      "params_source": "huggingface",
-      "pricing_usd_per_1m": {
-        "input": 0.435,
-        "output": 0.87,
-        "cache_read": 0.0036
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "XiaomiMiMo/MiMo-V2.5-Pro",
-      "or_free_variants": null,
-      "description": "MiMo-V2.5-Pro is Xiaomi’s flagship model, delivering strong performance in general agentic capabilities, complex software engineering, and long-horizon tasks, with top rankings on benchmarks such as ClawEval, GDPVal, and SWE-bench Pro....",
-      "superseded_by": null,
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.435,
-          "out": 0.87
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 1.0,
-          "out": 3.0
-        },
-        {
-          "p": "novita-ai",
-          "n": "Novita AI",
-          "in": 0.522,
-          "out": 1.044
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.435,
-        "output": 0.87,
-        "cache_read": 0.0036
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.428
-    },
-    "solar pro4": {
-      "or_id": "upstage/solar-pro4",
-      "or_name": "Upstage: Solar Pro 4",
-      "provider": "Upstage",
-      "created": "2026-08-10",
-      "context_length": 524288,
-      "max_output_tokens": 131072,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.03,
-        "output": 0.12,
-        "cache_read": 0.006
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "max_tokens",
-        "parallel_tool_calls",
-        "presence_penalty",
-        "reasoning",
-        "response_format",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_p"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "Solar Pro 4 is Upstage's cost-efficient large language model, featuring a 524K context window. It is built for long-horizon tasks and agentic workflows, with strong capabilities in office productivity, document-intensive...",
-      "superseded_by": null,
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.03,
-          "out": 0.12
         }
       ]
     },
@@ -10620,6 +10519,13 @@
       "description": "Qwen 3.6 Plus builds on a hybrid architecture that combines efficient linear attention with sparse mixture-of-experts routing, enabling strong scalability and high-performance inference. Compared to the 3.5 series, it delivers...",
       "superseded_by": "Qwen3.7 Plus",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.5,
+        "output": 3,
+        "cache_read": 0.05
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.111,
       "available_at": [
         {
           "p": "openrouter",
@@ -10643,90 +10549,7 @@
           "in": 0.5,
           "out": 3.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.5,
-        "output": 3,
-        "cache_read": 0.05
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.027
-    },
-    "Mistral Medium 3.5": {
-      "or_id": "mistralai/mistral-medium-3-5",
-      "or_name": "Mistral: Mistral Medium 3.5",
-      "provider": "Mistral",
-      "created": "2026-04-30",
-      "context_length": 262144,
-      "max_output_tokens": 209715,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Mistral",
-      "knowledge_cutoff": null,
-      "total_params_b": 128.0,
-      "active_params_b": null,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 1.5,
-        "output": 7.5
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "high",
-          "none"
-        ],
-        "default_effort": "high"
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "max_tokens",
-        "presence_penalty",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_p"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "Mistral Medium 3.5 is a dense 128B instruction-following model from Mistral AI. It supports text and image inputs with text output, and is designed for agentic workflows, coding, and complex...",
-      "superseded_by": null,
-      "match": "exact",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 1.5,
-          "out": 7.5
-        },
-        {
-          "p": "mistral",
-          "n": "Mistral",
-          "in": 1.5,
-          "out": 7.5
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1.5,
-        "output": 7.5,
-        "cache_read": 0.15
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.249
+      ]
     },
     "Gemma 4 31B": {
       "or_id": "google/gemma-4-31b-it",
@@ -10855,6 +10678,82 @@
         }
       ]
     },
+    "Mistral Medium 3.5": {
+      "or_id": "mistralai/mistral-medium-3-5",
+      "or_name": "Mistral: Mistral Medium 3.5",
+      "provider": "Mistral",
+      "created": "2026-04-30",
+      "context_length": 262144,
+      "max_output_tokens": 209715,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Mistral",
+      "knowledge_cutoff": null,
+      "total_params_b": 128.0,
+      "active_params_b": null,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 1.5,
+        "output": 7.5
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "high",
+          "none"
+        ],
+        "default_effort": "high"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Mistral Medium 3.5 is a dense 128B instruction-following model from Mistral AI. It supports text and image inputs with text output, and is designed for agentic workflows, coding, and complex...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 1.5,
+        "output": 7.5,
+        "cache_read": 0.15
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.268,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 1.5,
+          "out": 7.5
+        },
+        {
+          "p": "mistral",
+          "n": "Mistral",
+          "in": 1.5,
+          "out": 7.5
+        }
+      ]
+    },
     "Mistral Small 4": {
       "or_id": "mistralai/mistral-small-2603",
       "or_name": "Mistral: Mistral Small 4",
@@ -10910,6 +10809,13 @@
       "description": "Mistral Small 4 is the next major release in the Mistral Small family, unifying the capabilities of several flagship Mistral models into a single system. It combines strong reasoning from...",
       "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.15,
+        "output": 0.6,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.729,
       "available_at": [
         {
           "p": "openrouter",
@@ -10923,14 +10829,7 @@
           "in": 0.15,
           "out": 0.6
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.733
+      ]
     },
     "Mistral Large 3": {
       "or_id": "mistralai/mistral-large-2512",
@@ -10978,6 +10877,13 @@
       "superseded_by": null,
       "match": "exact",
       "stale": true,
+      "pricing_aa_usd_per_1m": {
+        "input": 0.5,
+        "output": 1.5,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.012,
       "available_at": [
         {
           "p": "openrouter",
@@ -10991,14 +10897,7 @@
           "in": 0.5,
           "out": 1.5
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.5,
-        "output": 1.5,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.001
+      ]
     },
     "Llama 4 Maverick": {
       "or_id": "meta-llama/llama-4-maverick",
@@ -11050,6 +10949,13 @@
       "superseded_by": null,
       "match": "exact",
       "stale": true,
+      "pricing_aa_usd_per_1m": {
+        "input": 0.26,
+        "output": 0.91,
+        "cache_read": 0.245
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.895,
       "available_at": [
         {
           "p": "openrouter",
@@ -11064,83 +10970,7 @@
           "out": 0.6
         }
       ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.26,
-        "output": 0.91,
-        "cache_read": 0.245
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.905
-    },
-    "Llama 4 Scout": {
-      "or_id": "meta-llama/llama-4-scout",
-      "or_name": "Meta: Llama 4 Scout",
-      "provider": "Meta",
-      "created": "2025-04-05",
-      "context_length": 327680,
-      "max_output_tokens": 16384,
-      "modality": "text+image->text",
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Llama4",
-      "knowledge_cutoff": "2024-08-31",
-      "total_params_b": 109.0,
-      "active_params_b": null,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.1,
-        "output": 0.3
-      },
-      "reasoning": null,
-      "supported_parameters": [
-        "frequency_penalty",
-        "logit_bias",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_p"
-      ],
-      "hugging_face_id": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
-      "or_free_variants": null,
-      "description": "Llama 4 Scout 17B Instruct (16E) is a mixture-of-experts (MoE) language model developed by Meta, activating 17 billion parameters out of a total of 109B. It supports native multimodal input...",
-      "superseded_by": null,
-      "match": "exact",
-      "stale": true,
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.1,
-          "out": 0.3
-        },
-        {
-          "p": "vercel-ai-gateway",
-          "n": "Vercel AI Gateway",
-          "in": 0.1,
-          "out": 0.3
-        }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.19,
-        "output": 0.68,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.834
+      "alias_note": "LLM Chess lists this model under its HF name llama-4-maverick-17b-128e-instruct"
     },
     "llama 3.3 70b instruct": {
       "or_id": "meta-llama/llama-3.3-70b-instruct",
@@ -11259,6 +11089,77 @@
           "out": 0.71
         }
       ]
+    },
+    "Llama 4 Scout": {
+      "or_id": "meta-llama/llama-4-scout",
+      "or_name": "Meta: Llama 4 Scout",
+      "provider": "Meta",
+      "created": "2025-04-05",
+      "context_length": 327680,
+      "max_output_tokens": 16384,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Llama4",
+      "knowledge_cutoff": "2024-08-31",
+      "total_params_b": 109.0,
+      "active_params_b": null,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.1,
+        "output": 0.3
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+      "or_free_variants": null,
+      "description": "Llama 4 Scout 17B Instruct (16E) is a mixture-of-experts (MoE) language model developed by Meta, activating 17 billion parameters out of a total of 109B. It supports native multimodal input...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "pricing_aa_usd_per_1m": {
+        "input": 0.19,
+        "output": 0.68,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.841,
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.1,
+          "out": 0.3
+        },
+        {
+          "p": "vercel-ai-gateway",
+          "n": "Vercel AI Gateway",
+          "in": 0.1,
+          "out": 0.3
+        }
+      ],
+      "alias_note": "LLM Chess lists this model under its HF name llama4-scout-17b-instruct-v1:0"
     },
     "Phi-4 Multimodal": {
       "or_id": "microsoft/phi-4",
@@ -11381,6 +11282,13 @@
       "description": "GLM-5 is Z.ai’s flagship open-source foundation model engineered for complex systems design and long-horizon agent workflows. Built for expert developers, it delivers production-grade performance on large-scale programming tasks, rivaling leading...",
       "superseded_by": "GLM-5.3",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 1,
+        "output": 3.2,
+        "cache_read": 0.2
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.42,
       "available_at": [
         {
           "p": "openrouter",
@@ -11422,14 +11330,7 @@
           "in": 1.0,
           "out": 3.2
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 1,
-        "output": 3.2,
-        "cache_read": 0.2
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.427
+      ]
     },
     "MiniMax M2.5": {
       "or_id": "minimax/minimax-m2.5",
@@ -11588,6 +11489,12 @@
       "superseded_by": null,
       "match": "exact",
       "stale": true,
+      "pricing_aa_usd_per_1m": {
+        "input": 0.32,
+        "output": 0.89,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
       "available_at": [
         {
           "p": "openrouter",
@@ -11607,13 +11514,7 @@
           "in": 0.147,
           "out": 0.295
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.36,
-        "output": 0.89,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis"
+      ]
     },
     "GLM-4.7": {
       "or_id": "z-ai/glm-4.7",
@@ -11669,6 +11570,13 @@
       "description": "GLM-4.7 is Z.ai’s latest flagship model, featuring upgrades in two key areas: enhanced programming capabilities and more stable multi-step reasoning/execution. It demonstrates significant improvements in executing complex agent tasks while...",
       "superseded_by": "GLM-5.3",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.6,
+        "output": 2.2,
+        "cache_read": 0.6
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.305,
       "available_at": [
         {
           "p": "openrouter",
@@ -11712,14 +11620,7 @@
           "in": 0.6,
           "out": 2.2
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.6,
-        "output": 2.2,
-        "cache_read": 0.6
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.362
+      ]
     },
     "GLM-5.1": {
       "or_id": "z-ai/glm-5.1",
@@ -11999,6 +11900,13 @@
       "description": "Kimi K2.6 is Moonshot AI's next-generation multimodal model, designed for long-horizon coding, coding-driven UI/UX generation, and multi-agent orchestration. It handles complex end-to-end coding tasks across Python, Rust, and Go, and...",
       "superseded_by": "Kimi K2.7 Code",
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.95,
+        "output": 4,
+        "cache_read": 0.16
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.588,
       "available_at": [
         {
           "p": "openrouter",
@@ -12068,14 +11976,7 @@
           "in": 0.65,
           "out": 3.41
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.95,
-        "output": 4,
-        "cache_read": 0.16
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.05
+      ]
     },
     "MiniMax M2.7": {
       "or_id": "minimax/minimax-m2.7",
@@ -12128,9 +12029,7 @@
         "top_p"
       ],
       "hugging_face_id": "MiniMaxAI/MiniMax-M2.7",
-      "or_free_variants": [
-        "minimax/minimax-m2.7:free"
-      ],
+      "or_free_variants": null,
       "description": "MiniMax-M2.7 is a next-generation large language model designed for autonomous, real-world productivity and continuous improvement. Built to actively participate in its own evolution, M2.7 integrates advanced agentic capabilities through multi-agent...",
       "superseded_by": null,
       "match": "exact",
@@ -12457,7 +12356,8 @@
       ]
     },
     "grok 4 fast chat": {
-      "superseded_by": "Grok 4.6"
+      "superseded_by": "Grok 4.6",
+      "alias_note": "LLM Chess lists this model as grok-4-fast-non-reasoning (its non-reasoning/chat variant)"
     },
     "Qwen3.5 Plus": {
       "superseded_by": "Qwen3.7 Plus",
@@ -12479,6 +12379,13 @@
       "hugging_face_id": "ibm-granite/granite-4.1-8b",
       "total_params_b": 8.8,
       "params_source": "huggingface",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.05,
+        "output": 0.1,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.809,
       "available_at": [
         {
           "p": "w-b-inference-gateway",
@@ -12486,17 +12393,17 @@
           "in": 0.05,
           "out": 0.1
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.05,
-        "output": 0.1,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.8
+      ]
     },
     "Command A+": {
       "stale": true,
+      "pricing_aa_usd_per_1m": {
+        "input": 0,
+        "output": 0,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.376,
       "available_at": [
         {
           "p": "openrouter",
@@ -12510,19 +12417,18 @@
           "in": 2.5,
           "out": 10.0
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0,
-        "output": 0,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.384
+      ]
     },
     "MiMo-V2-Flash": {
       "hugging_face_id": "XiaomiMiMo/MiMo-V2-Flash",
       "total_params_b": 309.8,
       "params_source": "huggingface",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.1,
+        "output": 0.3,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
       "available_at": [
         {
           "p": "novita-ai",
@@ -12530,13 +12436,7 @@
           "in": 0.11,
           "out": 0.33
         }
-      ],
-      "pricing_aa_usd_per_1m": {
-        "input": 0.1,
-        "output": 0.3,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis"
+      ]
     },
     "MiniCPM5-1B": {
       "hugging_face_id": "openbmb/MiniCPM5-1B",
@@ -12553,7 +12453,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.151
+      "aa_ttft_seconds": 3.549
     },
     "LFM2.5-8B-A1B": {
       "hugging_face_id": "LiquidAI/LFM2.5-8B-A1B",
@@ -12626,7 +12526,7 @@
         "cache_read": 0.016
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.614
+      "aa_ttft_seconds": 2.673
     },
     "K-EXAONE 2.0": {
       "hugging_face_id": "LGAI-EXAONE/K-EXAONE-2.0-750B-A37B",

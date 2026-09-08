@@ -427,13 +427,16 @@ describe('value lens (Score per 1M blended tokens)', () => {
 });
 
 describe('curated meta aliases (renames / word-order variants)', () => {
-  it('Claude 4.1 Opus pins to anthropic/claude-opus-4.1 at $15/$75', () => {
-    const row = rowOf('Claude 4.1 Opus');
+  it('Claude Opus 4.5 pins to anthropic/claude-opus-4.5 at $5/$25', () => {
+    // (stats-22 re-point: Claude 4.1 Opus aged off the leaderboards in the
+    // 2026-09-08 refresh — Opus 4.5 carries the same assertions: curated pin,
+    // real price, older-generation freshness chain)
+    const row = rowOf('Claude Opus 4.5');
     expect(row).toBeTruthy();
-    expect(d.metaFor(row)?.or_id).toBe('anthropic/claude-opus-4.1');
+    expect(d.metaFor(row)?.or_id).toBe('anthropic/claude-opus-4.5');
     const p = d.priceFor(row);
-    expect(p.input).toBe(15.0);
-    expect(p.output).toBe(75.0);
+    expect(p.input).toBe(5.0);
+    expect(p.output).toBe(25.0);
     // joins the Opus freshness chain like every other older generation
     expect(d.isOlder(row)).toBe(true);
   });

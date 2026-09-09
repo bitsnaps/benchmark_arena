@@ -345,9 +345,12 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
           <div v-for="s in sel" :key="s.row.name" class="cmp-cell cmp-headcell">
             <div class="row" style="justify-content:space-between;align-items:flex-start;flex-wrap:nowrap">
               <span class="av" :style="{ background: providerColor(s.row.name).color }">{{ initials(s.row.name) }}</span>
-              <button class="cmp-x" title="Remove from comparison" @click="removeModel(s.row.name)">
-                <i class="fas fa-xmark"></i>
-              </button>
+              <!-- stats-26: Buefy tooltip (append-to-body — the grid scrolls) -->
+              <b-tooltip label="Remove from comparison" type="is-dark" :delay="100" append-to-body>
+                <button class="cmp-x" @click="removeModel(s.row.name)">
+                  <i class="fas fa-xmark"></i>
+                </button>
+              </b-tooltip>
             </div>
             <router-link class="model-link has-text-weight-semibold" :to="{ name: 'model', params: { slug: slugify(s.row.name) } }">
               {{ s.row.name }}

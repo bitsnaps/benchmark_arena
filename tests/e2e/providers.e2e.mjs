@@ -188,10 +188,18 @@ const run = async () => {
     else fail(`NVIDIA NIM price cell: "${nimDash}"`);
 
     // free chip tooltip carries the rate-limit caveat (free ≠ unlimited)
+    // stats-26: Buefy b-tooltip — hover the chip, read the .tooltip-content
     const freeChip = zenCard.locator('.free-chip').first();
-    const tip = await freeChip.getAttribute('title');
-    if (tip && /rate limit/i.test(tip)) ok(`free chip tooltip carries the rate-limit caveat`);
+    await freeChip.hover();
+    await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
+    const tip = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
+    if (/rate limit/i.test(tip)) ok(`free chip tooltip carries the rate-limit caveat`);
     else fail(`free chip tooltip wrong: ${tip}`);
+    await page.mouse.move(0, 0); // close the tooltip before the next probe
+    // hovering the chip scrolled deep into the card list — go back up, or
+    // the sticky navbar covers the header controls for the steps below
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(200);
 
     // ── 3. Search narrows across providers ──────────────────────────
     const q = 'opus';
@@ -379,6 +387,10 @@ const run = async () => {
     await page.fill('input.input', '');
     await page.waitForTimeout(300);
     await page.selectOption('.pm-pager select', '0'); // All — legacy expectations below
+    // the All-view flush mounts ~1k teleported tooltips — wait for it to settle
+    await page.waitForFunction(
+      (exp) => document.querySelectorAll('.pm-table tbody tr').length === exp,
+      expectRows, { timeout: 20000 }).catch(() => {});
     await page.waitForTimeout(300);
 
     const domRows = await page.locator('.pm-table tbody tr').count();

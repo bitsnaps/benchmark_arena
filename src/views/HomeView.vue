@@ -285,14 +285,18 @@ const openModel = (name) =>
 
         <!-- Availability filters (stats-18): free listings, price cap, seller.
              Free ≠ unlimited — every "free" claim is a rate-limited free tier. -->
-        <b-switch v-model="freeOnly" size="is-small" type="is-success" left-label
-                  title="Show only models with a free listing at some seller — free tiers are rate-limited, not unlimited">
-          Free
-          <b-tag size="is-small" :type="freeOnly ? 'is-success' : 'is-success is-light'" rounded>{{ freeCount }}</b-tag>
-        </b-switch>
-        <div class="row" style="gap:.6rem;align-items:center;flex:1;min-width:230px"
-             title="Cap the blended API price (3:1 in:out, USD per 1M tokens). Free listings count as $0; unpriced rows hide while the cap is on.">
-          <span class="cell-sub" style="white-space:nowrap">Max price</span>
+        <!-- stats-26: control hints as Buefy tooltips -->
+        <b-tooltip label="Show only models with a free listing at some seller — free tiers are rate-limited, not unlimited"
+          type="is-dark" multilined :delay="100">
+          <b-switch v-model="freeOnly" size="is-small" type="is-success" left-label>
+            Free
+            <b-tag size="is-small" :type="freeOnly ? 'is-success' : 'is-success is-light'" rounded>{{ freeCount }}</b-tag>
+          </b-switch>
+        </b-tooltip>
+        <b-tooltip label="Cap the blended API price (3:1 in:out, USD per 1M tokens). Free listings count as $0; unpriced rows hide while the cap is on."
+          type="is-dark" multilined :delay="100" style="flex:1;min-width:230px">
+          <div class="row" style="gap:.6rem;align-items:center">
+            <span class="cell-sub" style="white-space:nowrap">Max price</span>
           <input
             class="cl-slider"
             type="range"
@@ -305,7 +309,8 @@ const openModel = (name) =>
           <b-tag size="is-small" :type="maxPrice != null ? 'is-info' : 'is-dark is-light'" rounded>
             {{ priceTag }}
           </b-tag>
-        </div>
+          </div>
+        </b-tooltip>
         <div class="row" style="gap:.4rem;align-items:center">
           <span class="cell-sub" style="white-space:nowrap">At seller</span>
           <b-select v-model="sellerId" size="is-small" aria-label="Filter by seller catalog">
@@ -374,7 +379,7 @@ const openModel = (name) =>
       Price = API list price per 1M tokens, in / out (OpenRouter snapshot) — <router-link :to="{ name: 'providers' }">compare sellers</router-link>.
       Value = Score per 1M blended tokens (3:1 in:out) — sort by it for the cost-efficiency view; free tiers and unpriced rows show a dash.
       <span class="hf-chip" style="cursor:default">HF</span> = the model's Hugging Face repo (open-weight models with a verified repo).
-      <span class="free-chip" style="cursor:default" title="Free tier — rate limits apply, not unlimited">free</span> = a free listing at some seller (hover for where);
+      <b-tooltip label="Free tier — rate limits apply, not unlimited" type="is-dark" :delay="100"><span class="free-chip" style="cursor:default">free</span></b-tooltip> = a free listing at some seller (hover for where);
       <span class="avail-chip" style="cursor:default">N sellers</span> = other catalogs listing the model — the full per-seller view is on its model page.
     </p>
 

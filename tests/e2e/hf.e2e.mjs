@@ -79,11 +79,16 @@ const ok = (msg) => console.log('  ok:', msg);
       fail(`"${OPEN.name}" row has no HF chip`);
     } else {
       const href = await chip.getAttribute('href');
-      const title = await chip.getAttribute('title');
+      // stats-26: chip tooltip is a Buefy b-tooltip — hover + read content
+      await chip.hover();
+      await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
+      const title = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ').trim();
+      await page.mouse.move(0, 0);
+      await page.evaluate(() => window.scrollTo(0, 0)); // hover scrolled deep — reset before the click below
       if (href === OPEN_URL) ok(`"${OPEN.name}" chip links to ${href}`);
       else fail(`"${OPEN.name}" chip href = "${href}", expected "${OPEN_URL}"`);
       if (title === 'Hugging Face: ' + OPEN_HF) ok('chip tooltip shows the full repo id');
-      else fail(`chip title = "${title}", expected "Hugging Face: ${OPEN_HF}"`);
+      else fail(`chip tooltip = "${title}", expected "Hugging Face: ${OPEN_HF}"`);
     }
 
     // ── 3. closed anchor row: no chip, ever ──

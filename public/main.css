@@ -724,3 +724,10 @@ a.hbar:hover .name { color: var(--teal); }
 .legend-chip.lat-fast { background: rgba(var(--green-rgb, 46, 230, 122), 0.12); color: var(--green); }
 .legend-chip.lat-ok { background: rgba(var(--gold-rgb, 255, 193, 7), 0.12); color: var(--gold); }
 .legend-chip.lat-slow { background: rgba(var(--rose-rgb, 255, 99, 132), 0.12); color: var(--rose); }
+
+/* ── stats-26: Buefy tooltip wrappers on full-width rows ────────────────
+   b-tooltip renders an inline-flex root; rows that must stretch to the
+   container width (model-card hbars, benchmark ranking rows, top-3 kv
+   rows) get the .tt-block class so the trigger fills the row again. */
+.tt-block { display: flex; width: 100%; }
+.tt-block > .tooltip-trigger { width: 100%; }

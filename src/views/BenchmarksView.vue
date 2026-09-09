@@ -100,14 +100,17 @@ const openModel = (name) => {
       </div>
       <div class="panel-lab" style="padding:1.2rem">
         <div class="lbl">Top 3 at a glance</div>
-        <div class="kv row-click" v-for="(r, i) in currentTop3" :key="r.tier + r.name"
-          :title="'Open ' + r.name + '\'s score card'" @click="openModel(r.name)">
-          <span class="k">
-            <span class="rank" :class="rankClass(i + 1)" style="display:inline-grid;margin-right:.45rem">{{ i + 1 }}</span>
-            {{ r.name }}
-          </span>
-          <span class="num">{{ fmtScore(r.score) }}</span>
-        </div>
+        <!-- stats-26: Buefy tooltip; tt-block keeps the row full-width -->
+        <b-tooltip v-for="(r, i) in currentTop3" :key="r.tier + r.name"
+          :label="'Open ' + r.name + '\'s score card'" type="is-dark" :delay="100" class="tt-block">
+          <div class="kv row-click" @click="openModel(r.name)">
+            <span class="k">
+              <span class="rank" :class="rankClass(i + 1)" style="display:inline-grid;margin-right:.45rem">{{ i + 1 }}</span>
+              {{ r.name }}
+            </span>
+            <span class="num">{{ fmtScore(r.score) }}</span>
+          </div>
+        </b-tooltip>
       </div>
     </div>
 
@@ -127,16 +130,20 @@ const openModel = (name) => {
         </div>
       </div>
       <div style="max-height:520px;overflow:auto">
-        <div v-for="(r, i) in rankingRows" :key="r.tier + r.name" class="hbar row-click"
-          :class="{ 'is-older-row': r.older }"
-          :title="'Open ' + r.name + '\'s score card'" @click="openModel(r.name)">
-          <div class="name">
-            <span class="rank" :class="rankClass(r.rank)" style="display:inline-grid;margin-right:.45rem">{{ r.rank ?? '—' }}</span>
-            {{ r.name }}
+        <!-- stats-26: Buefy tooltip (append-to-body escapes the scrolling
+             ranking list); tt-block keeps the row full-width -->
+        <b-tooltip v-for="(r, i) in rankingRows" :key="r.tier + r.name"
+          :label="'Open ' + r.name + '\'s score card'" type="is-dark" :delay="100"
+          append-to-body class="tt-block">
+          <div class="hbar row-click" :class="{ 'is-older-row': r.older }" @click="openModel(r.name)">
+            <div class="name">
+              <span class="rank" :class="rankClass(r.rank)" style="display:inline-grid;margin-right:.45rem">{{ r.rank ?? '—' }}</span>
+              {{ r.name }}
+            </div>
+            <div class="track"><i :style="{ width: r.pct + '%', background: trackColor(r.older ? 1 : i) }"></i></div>
+            <div class="num" :style="{ color: !r.older && i === 0 ? 'var(--teal)' : 'inherit' }">{{ fmtScore(r.score) }}</div>
           </div>
-          <div class="track"><i :style="{ width: r.pct + '%', background: trackColor(r.older ? 1 : i) }"></i></div>
-          <div class="num" :style="{ color: !r.older && i === 0 ? 'var(--teal)' : 'inherit' }">{{ fmtScore(r.score) }}</div>
-        </div>
+        </b-tooltip>
       </div>
     </div>
   </section>

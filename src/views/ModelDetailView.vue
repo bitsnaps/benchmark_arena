@@ -107,19 +107,25 @@ function addToCompare() {
       <span class="av lg" :style="{ background: provider.color }">{{ initials(model.name) }}</span>
       <div class="grow">
         <h1 class="section-title" style="margin:0">{{ model.name }}</h1>
-        <div v-if="orId" class="cell-sub prov-id" style="margin-top:.15rem"
-          :title="'Raw API id — the short format behind the full name shown in listings'">API id: {{ orId }}</div>
+        <!-- stats-26: Buefy tooltip on the raw API id -->
+        <b-tooltip v-if="orId" label="Raw API id — the short format behind the full name shown in listings"
+          type="is-dark" :delay="100">
+          <div class="cell-sub prov-id" style="margin-top:.15rem">API id: {{ orId }}</div>
+        </b-tooltip>
         <div class="row mt-sm" style="gap:.4rem">
           <span class="tag-lab">{{ provider.name }}</span>
           <span class="tag-lab" :class="tier === 'closed' ? 'rose' : 'teal'">{{ tier === 'closed' ? 'Closed-source' : 'Open-weight' }}</span>
           <span v-if="released" class="tag-lab">Released {{ released }}</span>
           <span v-if="overallRank" class="tag-lab gold">#{{ overallRank }} overall</span>
           <span v-if="tierRank" class="tag-lab">#{{ tierRank }} in {{ tier === 'closed' ? 'closed' : 'open' }}</span>
-          <span v-if="aliasNote" class="tag-lab gold" style="cursor:help" :title="aliasNote">★ aliased on source</span>
-          <a v-if="hfUrl" class="tag-lab hf-link" :href="hfUrl" target="_blank" rel="noopener noreferrer"
-             :title="'Open ' + hfId + ' on Hugging Face'">
-            <i class="fas fa-cube" aria-hidden="true"></i>&nbsp;{{ hfId }}
-          </a>
+          <b-tooltip v-if="aliasNote" :label="aliasNote" type="is-dark" multilined :delay="100">
+            <span class="tag-lab gold" style="cursor:help">★ aliased on source</span>
+          </b-tooltip>
+          <b-tooltip v-if="hfUrl" :label="'Open ' + hfId + ' on Hugging Face'" type="is-dark" :delay="100">
+            <a class="tag-lab hf-link" :href="hfUrl" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-cube" aria-hidden="true"></i>&nbsp;{{ hfId }}
+            </a>
+          </b-tooltip>
         </div>
       </div>
       <div class="row" style="gap:.6rem">
@@ -173,13 +179,18 @@ function addToCompare() {
         <span class="cell-sub">rank badge = position among all {{ stats.closed + stats.open }} tracked models</span>
       </div>
 
-      <router-link
+      <!-- stats-26: row hover opens a Buefy tooltip; tt-block keeps the
+           flex row full-width inside the inline-flex tooltip wrapper -->
+      <b-tooltip
         v-for="s in scored"
         :key="s.bench"
-        class="hbar row-click"
-        :to="{ name: 'benchmarks', params: { slug: slugify(s.bench) } }"
-        :title="'Open the ' + s.bench + ' explorer'"
+        :label="'Open the ' + s.bench + ' explorer'"
+        type="is-dark" :delay="100" class="tt-block"
       >
+        <router-link
+          class="hbar row-click"
+          :to="{ name: 'benchmarks', params: { slug: slugify(s.bench) } }"
+        >
         <div class="name">
           <span class="rank" :class="rankClass(s.rank)" v-if="s.rank" style="display:inline-grid;margin-right:.45rem">{{ s.rank }}</span>
           <span v-else class="rank" style="display:inline-grid;margin-right:.45rem">—</span>
@@ -188,7 +199,8 @@ function addToCompare() {
         </div>
         <div class="track"><i :style="{ width: barWidth(s.score), background: 'linear-gradient(90deg,#4f6dff,#2ee6c7)' }"></i></div>
         <div class="num" :style="{ color: scoreColor(s.score), fontWeight: s.rank === 1 ? 700 : 500 }">{{ fmtScore(s.score) }}</div>
-      </router-link>
+        </router-link>
+      </b-tooltip>
 
       <div v-for="b in missing" :key="b" class="hbar missing">
         <div class="name">
@@ -264,9 +276,10 @@ function addToCompare() {
           <span class="cell-sub" style="margin-left:.5rem">{{ a.p }}</span>
         </div>
         <div class="avail-side">
-          <span v-if="a.free" class="free-chip" :title="FREE_CAVEAT">free</span>
-          <span v-if="availPrice(a)" class="num avail-price" :title="a.n + ' list price, USD per 1M tokens (in / out)'">{{ availPrice(a) }}</span>
-          <span v-else-if="!a.free" class="cell-sub" title="This seller's catalog does not publish prices">—</span>
+          <!-- stats-26: Buefy tooltips on the free chip / list price / dash -->
+          <b-tooltip v-if="a.free" :label="FREE_CAVEAT" type="is-dark" :delay="100"><span class="free-chip">free</span></b-tooltip>
+          <b-tooltip v-if="availPrice(a)" :label="a.n + ' list price, USD per 1M tokens (in / out)'" type="is-dark" :delay="100"><span class="num avail-price">{{ availPrice(a) }}</span></b-tooltip>
+          <b-tooltip v-else-if="!a.free" label="This seller's catalog does not publish prices" type="is-dark" :delay="100"><span class="cell-sub">—</span></b-tooltip>
         </div>
       </div>
 

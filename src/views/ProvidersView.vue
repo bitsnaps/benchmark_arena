@@ -374,6 +374,9 @@ const colHeaderTitle = (p) => {
     bits.push(`edge RTT ${p.edge_rtt_ms} ms from scrape node (network round-trip, NOT model latency)`);
   return bits.join(' · ');
 };
+// stats-26: column-picker chip hover (kind + catalog size + free-tier note)
+const pickerTitle = (p) =>
+  `${p.kind} · ${p.models.length} catalog rows${p.free_tier ? ' · whole catalog free, rate-limited' : ''}`;
 </script>
 
 <template>
@@ -478,7 +481,9 @@ const colHeaderTitle = (p) => {
                         <td class="left">
                           <span class="prov-model">{{ m.name || m.id }}</span>
                           <span v-if="m.name && m.id !== m.name" class="prov-id">{{ m.id }}</span>
-                          <span v-if="isFreeRow(m, p)" class="free-chip" :title="freeTitle(m)">free</span>
+                          <b-tooltip v-if="isFreeRow(m, p)" :label="freeTitle(m)" type="is-dark" :delay="100">
+                            <span class="free-chip">free</span>
+                          </b-tooltip>
                         </td>
                         <td class="num">{{ fmtUsd(m.in) }}</td>
                         <td class="num">{{ fmtUsd(m.out) }}</td>
@@ -507,28 +512,34 @@ const colHeaderTitle = (p) => {
           <div class="row pm-controls mt">
             <span class="cell-sub">Columns:</span>
             <span class="pm-chip-group">Providers</span>
-            <button v-for="p in pickerProviders" :key="p.id" type="button"
-              class="pm-chip" :class="{ 'is-on': selected.has(p.id) }"
-              :title="`${p.kind} · ${p.models.length} catalog rows${p.free_tier ? ' · whole catalog free, rate-limited' : ''}`"
-              @click="toggleProvider(p.id)">
-              {{ p.name }}<span class="pm-chip-n">{{ p.models.length }}</span>
-            </button>
+            <b-tooltip v-for="p in pickerProviders" :key="p.id" :label="pickerTitle(p)"
+              type="is-dark" multilined :delay="100">
+              <button type="button" class="pm-chip" :class="{ 'is-on': selected.has(p.id) }"
+                @click="toggleProvider(p.id)">
+                {{ p.name }}<span class="pm-chip-n">{{ p.models.length }}</span>
+              </button>
+            </b-tooltip>
             <span class="pm-chip-group">Labs</span>
-            <button v-for="p in pickerLabs" :key="p.id" type="button"
-              class="pm-chip" :class="{ 'is-on': selected.has(p.id) }"
-              :title="`${p.kind} · ${p.models.length} catalog rows${p.free_tier ? ' · whole catalog free, rate-limited' : ''}`"
-              @click="toggleProvider(p.id)">
-              {{ p.name }}<span class="pm-chip-n">{{ p.models.length }}</span>
-            </button>
-            <button type="button" class="pm-chip" title="Restore the default shortlist" @click="resetColumns">reset</button>
+            <b-tooltip v-for="p in pickerLabs" :key="p.id" :label="pickerTitle(p)"
+              type="is-dark" multilined :delay="100">
+              <button type="button" class="pm-chip" :class="{ 'is-on': selected.has(p.id) }"
+                @click="toggleProvider(p.id)">
+                {{ p.name }}<span class="pm-chip-n">{{ p.models.length }}</span>
+              </button>
+            </b-tooltip>
+            <b-tooltip label="Restore the default shortlist" type="is-dark" :delay="100">
+              <button type="button" class="pm-chip" @click="resetColumns">reset</button>
+            </b-tooltip>
           </div>
 
           <div class="row pm-controls mt-sm" style="align-items:center">
             <!-- stats-23: the same pricing widget as the By-provider tab —
                  one shared state, the tabs always agree -->
             <PriceFilterControls />
-            <b-switch v-model="showBatch" size="is-small"
-              title="Show ':batch' pricing variants — async endpoints of the same model at a discounted price">batch variants</b-switch>
+            <b-tooltip label="Show ':batch' pricing variants — async endpoints of the same model at a discounted price"
+              type="is-dark" multilined :delay="100">
+              <b-switch v-model="showBatch" size="is-small">batch variants</b-switch>
+            </b-tooltip>
             <span class="is-flex-grow-1"></span>
             <span class="cell-sub pm-coverage">
               {{ matrix ? matrix.coverage.models : 0 }} canonical models ·
@@ -545,8 +556,13 @@ const colHeaderTitle = (p) => {
                   <th class="left pm-model-col">Model</th>
                   <th v-for="p in selProviders" :key="p.id" class="pm-h"
                     :class="{ 'is-sorted': sortPid === p.id }"
-                    :title="colHeaderTitle(p)" @click="sortBy(p.id)">
-                    {{ p.name }}<span v-if="sortPid === p.id" class="pm-sort-arrow">{{ sortAsc ? ' ↑' : ' ↓' }}</span>
+                    @click="sortBy(p.id)">
+                    <!-- stats-26: inline tooltip (no append-to-body — is-auto
+                         opens it downward INSIDE the scroll wrap, and every
+                         teleported instance is quadratic-cost at "All" size) -->
+                    <b-tooltip :label="colHeaderTitle(p)" type="is-dark" multilined :delay="100">
+                      {{ p.name }}<span v-if="sortPid === p.id" class="pm-sort-arrow">{{ sortAsc ? ' ↑' : ' ↓' }}</span>
+                    </b-tooltip>
                   </th>
                 </tr>
               </thead>
@@ -555,16 +571,21 @@ const colHeaderTitle = (p) => {
                   <td class="left pm-model-col">
                     <!-- one name format: the full model name; the raw API id
                          lives in the hover tooltip (stats-19) -->
-                    <span class="prov-model" :title="rowTitle(r)">{{ r.name || r.key }}</span>
+                    <!-- stats-26: inline tooltip — see the header note on the
+                         append-to-body cost tradeoff -->
+                    <b-tooltip :label="rowTitle(r)" type="is-dark" multilined :delay="100">
+                      <span class="prov-model">{{ r.name || r.key }}</span>
+                    </b-tooltip>
                   </td>
                   <td v-for="p in selProviders" :key="p.id" class="num pm-cell"
                     :class="[latencyClass(r.cells[p.id] && r.cells[p.id].latency), { 'is-cheapest': isCheapest(r, p.id) }]">
                     <template v-if="r.cells[p.id]">
-                      <!-- stats-25: Buefy tooltip on priced cells — native
-                           titles need a ~1s OS hover and never show on touch;
-                           append-to-body escapes the scroll wrapper, is-auto
-                           picks the safest side near viewport edges. Dash
-                           cells keep native titles (same content). -->
+                      <!-- stats-25/26: EVERY cell hover is a Buefy tooltip —
+                           native titles need a ~1s OS hover and never show on
+                           touch; append-to-body escapes the scroll wrapper,
+                           is-auto picks the safest side near viewport edges.
+                           Priced cells, dashes, chips, row names and column
+                           headers all share the same recipe. -->
                       <b-tooltip v-if="r.cells[p.id].in != null"
                         :label="cellTitle(r, p.id)" type="is-dark" multilined
                         :delay="100" append-to-body>
@@ -572,9 +593,21 @@ const colHeaderTitle = (p) => {
                           {{ fmtUsd(r.cells[p.id].in) }}<span class="price-sep">/</span>{{ fmtUsd(r.cells[p.id].out) }}
                         </span>
                       </b-tooltip>
-                      <span v-else class="cell-sub" :title="cellTitle(r, p.id)">—</span>
-                      <span v-if="r.cells[p.id].free" class="free-chip" :title="freeTitle(r.cells[p.id])">free</span>
+                      <b-tooltip v-else :label="cellTitle(r, p.id)" type="is-dark" multilined
+                        :delay="100" append-to-body>
+                        <span class="cell-sub">—</span>
+                      </b-tooltip>
+                      <b-tooltip v-if="r.cells[p.id].free" :label="freeTitle(r.cells[p.id])"
+                        type="is-dark" :delay="100" append-to-body>
+                        <span class="free-chip">free</span>
+                      </b-tooltip>
                     </template>
+                    <!-- stats-26 tradeoff: the absent dot is the one marker that
+                         KEEPS its native title — at "All" page size the Compare
+                         grid would mount ~4.5k extra append-to-body tooltip
+                         instances (each with its own ResizeObserver + teleported
+                         node) and Buefy's appendToBody machinery deadlocks the
+                         renderer at that scale; a dot tooltip is not worth it -->
                     <span v-else class="pm-absent" :title="`${p.name} — not carried`">·</span>
                   </td>
                 </tr>

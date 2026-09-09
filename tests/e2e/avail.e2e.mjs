@@ -101,11 +101,18 @@ const expectCount = async (page, selector, expected, label) => {
     await expectCount(page, '.b-table .avail-chip', availChipRows.length, 'sellers chips');
 
     // anchor row: free chip tooltip names the sellers + the caveat
+    // (stats-26: Buefy b-tooltip — hover the chip, read .tooltip-content)
     const anchorRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: ANCHOR.name }) }).first();
-    const chipTitle = await anchorRow.locator('.free-chip').first().getAttribute('title');
-    if (chipTitle && chipTitle.includes('rate limits apply') && chipTitle.includes(ANCHOR_ZEN ? 'OpenCode Zen' : '·')) {
+    const anchorChip = anchorRow.locator('.free-chip').first();
+    await anchorChip.hover();
+    await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
+    const chipTitle = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
+    await page.mouse.move(0, 0);
+    await page.evaluate(() => window.scrollTo(0, 0)); // hover scrolled deep — navbar covers the header controls otherwise
+    await page.waitForTimeout(200);
+    if (chipTitle.includes('rate limits apply') && chipTitle.includes(ANCHOR_ZEN ? 'OpenCode Zen' : '·')) {
       ok('anchor free chip tooltip carries the caveat + sellers');
-    } else fail(`anchor free chip title = "${chipTitle}"`);
+    } else fail(`anchor free chip tooltip = "${chipTitle}"`);
 
     // ── 2. Free toggle click filters exactly the free rows ──
     await page.locator('label.switch', { hasText: 'Free' }).first().click();
@@ -191,7 +198,12 @@ const expectCount = async (page, selector, expected, label) => {
     const zenRow = page.locator('.avail-row', { has: page.locator('.avail-seller', { hasText: 'OpenCode Zen' }) }).first();
     if (await zenRow.locator('.free-chip').count()) ok('Zen seller row carries the free chip');
     else fail('Zen seller row missing free chip');
-    const zenChipTitle = await zenRow.locator('.free-chip').getAttribute('title');
+    // stats-26: the chip tooltip is a Buefy b-tooltip = exact caveat
+    await zenRow.locator('.free-chip').hover();
+    await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
+    const zenChipTitle = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ').trim();
+    await page.mouse.move(0, 0);
+    await page.evaluate(() => window.scrollTo(0, 0));
     if (zenChipTitle === 'Free tier — rate limits apply, not unlimited') ok('free chip tooltip = exact caveat');
     else fail(`free chip tooltip = "${zenChipTitle}"`);
     // a priced seller row shows in / out

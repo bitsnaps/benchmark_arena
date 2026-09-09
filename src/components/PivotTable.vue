@@ -51,6 +51,13 @@ const aliasNote = (row) => metaFor(row)?.alias_note || null;
 const apiIdOf = (row) => metaFor(row)?.or_id || null;
 const modelLinkTitle = (row) =>
   `Open ${row.name}'s score card${apiIdOf(row) ? ' · API id: ' + apiIdOf(row) : ''}`;
+// stats-26: the ★ alias note merges into the link's Buefy tooltip — a nested
+// tooltip on the star would open two tooltips at once when hovered
+const linkTip = (row) =>
+  modelLinkTitle(row) + (aliasNote(row) ? ' · ★ ' + aliasNote(row) : '');
+// stats-26: full benchmark name as the header tooltip (same text benchThAttrs
+// produced, reused so the wording lives in exactly one place)
+const benchThLabel = (b) => benchThAttrs({ field: b }).title || b;
 
 // ── Availability chips ("available at" layer, stats-18) ────────────────
 // free chip: the row has a FREE LISTING at some seller — free ≠ unlimited,
@@ -169,60 +176,73 @@ function scoreTitle(row) {
       <div class="rank" :class="rankClass(rankOf(tier, props.row))">{{ rankOf(tier, props.row) ?? '—' }}</div>
     </b-table-column>
 
-    <b-table-column field="name" label="Model" sticky width="240" sortable v-slot="props">
+    <b-table-column field="name" label="Model" sticky width="240" sortable>
+      <template #default="props">
       <div class="model-cell">
         <span class="av" :style="{ background: providerColor(props.row.name).color }">
           {{ initials(props.row.name) }}
         </span>
         <div>
-          <router-link
-            class="model-link has-text-weight-semibold"
-            :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
-            :title="modelLinkTitle(props.row)"
-          >{{ props.row.name }}<span v-if="aliasNote(props.row)" class="alias-star" :title="aliasNote(props.row)">★</span></router-link>
+          <!-- stats-26: Buefy tooltip — link info + the ★ alias note merged
+               into one label (nested tooltips would fire together) -->
+          <b-tooltip :label="linkTip(props.row)" type="is-dark" multilined :delay="100" append-to-body>
+            <router-link
+              class="model-link has-text-weight-semibold"
+              :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
+            >{{ props.row.name }}<span v-if="aliasNote(props.row)" class="alias-star">★</span></router-link>
+          </b-tooltip>
           <div class="cell-sub">
             {{ providerColor(props.row.name).name }}
             <span v-if="tier === 'all'" class="tier-chip" :class="tierOf(props.row)">{{ tierOf(props.row) === 'closed' ? 'closed' : 'open' }}</span>
-            <span v-if="isOlder(props.row)" class="older-chip" :title="olderTitle(props.row)">older</span>
-            <a v-if="hfUrlFor(props.row)" class="hf-chip" :href="hfUrlFor(props.row)"
-               target="_blank" rel="noopener noreferrer" @click.stop
-               :title="'Hugging Face: ' + hfIdFor(props.row)">HF</a>
-            <span v-if="hasFreeListingFor(props.row)" class="free-chip" :title="freeTitle(props.row)">free</span>
-            <span v-if="availCount(props.row)" class="avail-chip" :title="availTitle(props.row)">{{ availCount(props.row) }} sellers</span>
+            <b-tooltip v-if="isOlder(props.row)" :label="olderTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip">older</span></b-tooltip>
+            <b-tooltip v-if="hfUrlFor(props.row)" :label="'Hugging Face: ' + hfIdFor(props.row)" type="is-dark" :delay="100" append-to-body><a class="hf-chip" :href="hfUrlFor(props.row)" target="_blank" rel="noopener noreferrer" @click.stop>HF</a></b-tooltip>
+            <b-tooltip v-if="hasFreeListingFor(props.row)" :label="freeTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="free-chip">free</span></b-tooltip>
+            <b-tooltip v-if="availCount(props.row)" :label="availTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="avail-chip">{{ availCount(props.row) }} sellers</span></b-tooltip>
           </div>
         </div>
       </div>
+      </template>
     </b-table-column>
 
-    <b-table-column field="avg" label="Score" width="120" centered numeric sortable :custom-sort="byScore" :th-attrs="() => ({ title: 'CL-weighted global score — raw sparse avg blended toward a neutral 50 in proportion to benchmark coverage (CL). Full coverage = raw avg.' })" v-slot="props">
-      <div class="num" :style="{ color: scoreColor(scoreForModel(props.row)), fontWeight: 600 }" :title="scoreTitle(props.row)">
-        {{ fmtScore(scoreForModel(props.row)) }}
-      </div>
-      <div class="bar" style="margin-top:.3rem"><i :style="{ width: barWidth(scoreForModel(props.row)) }"></i></div>
+    <b-table-column field="avg" label="Score" width="120" centered numeric sortable :custom-sort="byScore">
+      <template #header>
+        <!-- stats-26: header hint as Buefy tooltip (native th title retired) -->
+        <b-tooltip label="CL-weighted global score — raw sparse avg blended toward a neutral 50 in proportion to benchmark coverage (CL). Full coverage = raw avg." type="is-dark" multilined :delay="100" append-to-body>Score</b-tooltip>
+      </template>
+      <template #default="props">
+        <div class="num" :style="{ color: scoreColor(scoreForModel(props.row)), fontWeight: 600 }">
+          <b-tooltip :label="scoreTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body>{{ fmtScore(scoreForModel(props.row)) }}</b-tooltip>
+        </div>
+        <div class="bar" style="margin-top:.3rem"><i :style="{ width: barWidth(scoreForModel(props.row)) }"></i></div>
+      </template>
     </b-table-column>
 
     <!-- Price: per-model API metadata (not a benchmark), always visible.
          AA list price when available (the lab's own, no routing margin),
          else the OpenRouter snapshot; models with no price on record show
          an honest dash. -->
-    <b-table-column field="price" label="Price" width="115" centered sortable :custom-sort="byPrice"
-      :th-attrs="() => ({ title: 'API list price, USD per 1M tokens — input / output. Artificial Analysis list price when available (no routing margin); OpenRouter snapshot otherwise. Sorted by a 3:1 in:out blend. — = no price on record.' })"
-      v-slot="props"
-    >
-      <span v-if="priceFor(props.row)" class="price-cell" :title="priceTitle(props.row)">{{ fmtUsd(priceFor(props.row).input) }}<span class="price-sep">/</span>{{ fmtUsd(priceFor(props.row).output) }}</span>
-      <span v-else class="cell-sub" :title="priceTitle(props.row)">—</span>
+    <b-table-column field="price" label="Price" width="115" centered sortable :custom-sort="byPrice">
+      <template #header>
+        <b-tooltip label="API list price, USD per 1M tokens — input / output. Artificial Analysis list price when available (no routing margin); OpenRouter snapshot otherwise. Sorted by a 3:1 in:out blend. — = no price on record." type="is-dark" multilined :delay="100" append-to-body>Price</b-tooltip>
+      </template>
+      <template #default="props">
+        <b-tooltip v-if="priceFor(props.row)" :label="priceTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="price-cell">{{ fmtUsd(priceFor(props.row).input) }}<span class="price-sep">/</span>{{ fmtUsd(priceFor(props.row).output) }}</span></b-tooltip>
+        <b-tooltip v-else :label="priceTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="cell-sub">—</span></b-tooltip>
+      </template>
     </b-table-column>
 
     <!-- Value lens: Score per 1M blended tokens (Score ÷ 3:1-blended $/1M).
          Higher = more benchmark score per dollar. Always-visible identity
          metadata, like Price — not a benchmark, never feeds the Score.
          Rows with no score / no price (and free tiers) show an honest dash. -->
-    <b-table-column field="value" label="Value" width="90" centered numeric sortable :custom-sort="byValue"
-      :th-attrs="() => ({ title: 'Value lens — Score per 1M blended tokens (Score ÷ blended $/1M, 3:1 in:out). Higher = more benchmark score per dollar. — = no Score or no API price; free tiers excluded.' })"
-      v-slot="props"
-    >
-      <span v-if="valueFor(props.row) !== null" class="num value-cell" style="font-weight:600" :title="valueTitle(props.row)">{{ fmtValue(valueFor(props.row)) }}</span>
-      <span v-else class="cell-sub value-cell" :title="valueTitle(props.row)">—</span>
+    <b-table-column field="value" label="Value" width="90" centered numeric sortable :custom-sort="byValue">
+      <template #header>
+        <b-tooltip label="Value lens — Score per 1M blended tokens (Score ÷ blended $/1M, 3:1 in:out). Higher = more benchmark score per dollar. — = no Score or no API price; free tiers excluded." type="is-dark" multilined :delay="100" append-to-body>Value</b-tooltip>
+      </template>
+      <template #default="props">
+        <b-tooltip v-if="valueFor(props.row) !== null" :label="valueTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="num value-cell" style="font-weight:600">{{ fmtValue(valueFor(props.row)) }}</span></b-tooltip>
+        <b-tooltip v-else :label="valueTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="cell-sub value-cell">—</span></b-tooltip>
+      </template>
     </b-table-column>
 
     <!-- Hide/Show columns: benchmark columns follow the Avg-set selection 1:1.
@@ -239,10 +259,14 @@ function scoreTitle(row) {
       numeric
       sortable
       header-class="core-col"
-      :th-attrs="benchThAttrs"
-      v-slot="props"
     >
-      <span :style="{ color: scoreColor(props.row[b]), fontWeight: 500 }">{{ fmtScore(props.row[b]) }}</span>
+      <template #header>
+        <!-- stats-26: full benchmark name as a Buefy header tooltip -->
+        <b-tooltip :label="benchThLabel(b)" type="is-dark" multilined :delay="100" append-to-body>{{ SHORT[b] || b }}</b-tooltip>
+      </template>
+      <template #default="props">
+        <span :style="{ color: scoreColor(props.row[b]), fontWeight: 500 }">{{ fmtScore(props.row[b]) }}</span>
+      </template>
     </b-table-column>
 
     <b-table-column field="cl" label="CL" width="80" centered sortable v-slot="props">

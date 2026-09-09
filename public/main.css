@@ -731,3 +731,31 @@ a.hbar:hover .name { color: var(--teal); }
    rows) get the .tt-block class so the trigger fills the row again. */
 .tt-block { display: flex; width: 100%; }
 .tt-block > .tooltip-trigger { width: 100%; }
+
+/* ── stats-27: NEW badge — freshly released models ──────────────────────
+   Date-based flag from models_meta.created (release date per OpenRouter),
+   window user-adjustable (7/14/30 days, lib/newFlag.js singleton). Indigo
+   — distinct from the teal free chip, gold sellers chip and the latency
+   ladder. Same pill anatomy as the other chips. */
+.new-chip {
+  display: inline-block;
+  margin-left: .45rem;
+  padding: 0 .4rem;
+  border-radius: 10px;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--indigo);
+  background: var(--indigo-dim);
+  border: 1px solid rgba(139, 156, 255, 0.4);
+  vertical-align: 1px;
+  cursor: help;
+  white-space: nowrap;
+}
+/* Model-card header variant — the card's tag row uses .tag-lab pills */
+.tag-lab.new-tag {
+  color: var(--indigo);
+  background: var(--indigo-dim);
+  border: 1px solid rgba(139, 156, 255, 0.4);
+  cursor: help;
+}

@@ -174,6 +174,33 @@ const ok = (msg) => console.log('  ok:', msg);
 
   }
 
+  // ── 1b+. stats-27: NEW badge — release-date flag with a shared window ──
+  // Expected set derived from the committed snapshot through the SAME lib
+  // the app ships (isNewModel); the fresh browser profile runs the shipped
+  // default window (7 days). Older rows are hidden by default and excluded
+  // here — the badge only flags rows the table actually renders.
+  const { isNewModel: freshWithin } = await import('../../src/lib/newFlag.js');
+  const expNew7 = ALLROWS.filter(r => !isOld(r) && freshWithin((META[r.name] || {}).created || null)).length;
+  const expNew30 = ALLROWS.filter(r => !isOld(r) && freshWithin((META[r.name] || {}).created || null, Date.now(), 30)).length;
+  const homeNew7 = await page.locator('.cov-table .new-chip').count();
+  if (homeNew7 === expNew7 && homeNew7 > 0)
+    ok(`home NEW badges match the lib-derived count at the 7-day window (${homeNew7})`);
+  else fail(`home NEW badges: expected ${expNew7}, got ${homeNew7}`);
+  // the shared window selector lives in the home toolbar — widen to 30 and
+  // the SAME table re-flags without any data change
+  const NEW_SELECT = 'select[aria-label="How recent a release must be to show the NEW badge"]';
+  await page.selectOption(NEW_SELECT, '30');
+  await page.waitForTimeout(400);
+  const homeNew30 = await page.locator('.cov-table .new-chip').count();
+  if (homeNew30 === expNew30 && homeNew30 > homeNew7)
+    ok(`window selector → 30 days re-flags ${homeNew30} rows (was ${homeNew7})`);
+  else fail(`window switch: expected ${expNew30} badges at 30d (was ${homeNew7}), got ${homeNew30}`);
+  await page.selectOption(NEW_SELECT, '7');
+  await page.waitForTimeout(300);
+  if (await page.locator('.cov-table .new-chip').count() === homeNew7)
+    ok('window back to 7 days restores the tighter flag set');
+  else fail('window reset to 7d did not restore the badge count');
+
   // ── 1c. Min-CL slider filters thin-coverage rows ──
   {
     const before = await page.locator('.b-table .table tbody tr').count();

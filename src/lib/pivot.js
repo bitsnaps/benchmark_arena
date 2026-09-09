@@ -22,6 +22,7 @@
 
 import { priceBlend } from './format.js';
 import { passesPricing } from './priceFilter.js';
+import { createdIndexFromMeta, createdForRow } from './newFlag.js';
 
 // ── Pricing-mode variants (stats-19) ────────────────────────────────────
 // OpenRouter's ':batch' ids are async/batch endpoints of the SAME model at
@@ -88,13 +89,16 @@ export function ttftIndexFromMeta(meta) {
 }
 
 // buildMatrix(providers, selectedIds, meta = {}) → { rows, coverage }
-//   rows: [{ key, name, firstId, ids, search, latency, cells: { [providerId]: cell } }]
+//   rows: [{ key, name, firstId, ids, search, latency, created, cells: { [providerId]: cell } }]
 //   cell: { in, out, ctx, listed, free, freeBase?, latency }
 //     price fields null when the API exposes no pricing (honest dash);
 //     free=true when a free listing exists in this cell (suffix twin, a
 //     zero-priced listing, or a provider-level free tier like NVIDIA NIM);
 //     latency = AA median TTFT seconds (models_meta.aa_ttft_seconds via the
 //     optional meta arg — see ttftIndexFromMeta), null when unmeasured.
+//     created = models_meta.created release date (stats-27, same optional
+//     meta arg — the raw date; the NEW-badge window is applied at render
+//     time by lib/newFlag.js), null when the model has no date on record.
 //   coverage: { models, cells, collapsed, sellers }
 //     collapsed = intra-provider id pairs that normalized to the same key
 //     (deduped — first priced row wins, dupes counted, never silently mixed).
@@ -197,6 +201,10 @@ export function buildMatrix(providers, selectedIds, meta = {}) {
   // stats-24 — latency pass: resolve the row's AA TTFT once (first id that
   // joins), then stamp every cell of the row. Cells of unmeasured models
   // keep null and render uncolored.
+  // stats-27 — same meta pass stamps the row's release date (models_meta
+  // .created, first joining id wins, row key fallback): the raw date only —
+  // the NEW-badge window is user-adjustable and applied at render time, so
+  // changing it never rebuilds the matrix.
   if (meta && Object.keys(meta).length) {
     const ttftById = ttftIndexFromMeta(meta);
     if (ttftById.size) {
@@ -210,6 +218,13 @@ export function buildMatrix(providers, selectedIds, meta = {}) {
         if (sec == null) continue;
         r.latency = sec;
         for (const pid of Object.keys(r.cells)) r.cells[pid].latency = sec;
+      }
+    }
+    const createdById = createdIndexFromMeta(meta);
+    if (createdById.size) {
+      for (const r of list) {
+        const created = createdForRow(r, createdById);
+        if (created) r.created = created;
       }
     }
   }

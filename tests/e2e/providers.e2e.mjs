@@ -5,8 +5,9 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS, cellBlend, latencyTier } from '../../src/lib/pivot.js';
+import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS, cellBlend, latencyTier, normKey } from '../../src/lib/pivot.js';
 import { capFromSlider } from '../../src/lib/priceFilter.js';
+import { isNewModel, createdIndexFromMeta } from '../../src/lib/newFlag.js';
 import { fmtUsd } from '../../src/lib/format.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -552,6 +553,97 @@ const run = async () => {
     const cCurReset = (await bigCard.locator('.pagination-list .pagination-link.is-current').innerText()).trim();
     if (cCurReset === '1') ok('search round-trip resets the card to page 1');
     else fail(`card reset: expected page 1, got "${cCurReset}"`);
+
+    // ── 5c. stats-27: NEW badge — release-date flag with a shared window ──
+    // Expected sets derived from the committed JSONs through the SAME lib
+    // the app ships; the fresh profile runs the shipped 7-day default.
+    // Tab 1 first: back to "All" so every card renders its full table and
+    // the count is exact (5b left the shared size at 50).
+    await page.selectOption('.prov-size select', '0');
+    await page.waitForTimeout(400);
+    const createdIdx = createdIndexFromMeta(modelsMeta);
+    const expCardNew = catalog.providers.reduce((n, p) =>
+      n + p.models.filter(m => isNewModel(createdIdx.get(normKey(m.id)) || null)).length, 0);
+    const cardNew = await page.locator('.prov-card .new-chip').count();
+    if (cardNew === expCardNew) ok(`provider-card NEW badges match the lib-derived count (${cardNew} listings of fresh models)`);
+    else fail(`card NEW badges: expected ${expCardNew}, got ${cardNew}`);
+
+    // hover one card badge — Buefy tooltip carries the release date + source
+    const freshPick = catalog.providers
+      .flatMap(p => p.models.map(m => ({ p, m, created: createdIdx.get(normKey(m.id)) })))
+      .find(x => x.created && isNewModel(x.created));
+    if (freshPick) {
+      const pickCard = page.locator('.prov-card', { has: page.locator('.prov-name', { hasText: freshPick.p.name }) });
+      const pickRow = pickCard.locator('tr', { has: page.locator('.prov-model', { hasText: freshPick.m.name || freshPick.m.id }) });
+      await page.mouse.move(0, 400); // park away — stale tooltip ghosts (stats-26 lesson)
+      await pickRow.locator('.new-chip').first().hover();
+      await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
+      const tip = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
+      if (tip.includes(`Released ${freshPick.created}`) && tip.includes('per OpenRouter'))
+        ok(`card badge tooltip carries the date + source ("${tip.split('—')[0].trim()}")`);
+      else fail(`card badge tooltip wrong: "${tip}"`);
+    } else fail('no fresh listing found in the committed catalog — badge check vacuous');
+
+    // Compare rows: r.created stamped by buildMatrix; badge as a sibling of
+    // the row-name tooltip. All size (shared) → every non-batch row renders.
+    await page.click('.tabs li >> text=Compare');
+    await page.waitForSelector('.pm-table', { timeout: 10000 });
+    const { rows: newMxRows } = buildMatrix(catalog.providers, DEFAULT_COLUMNS, modelsMeta);
+    const expNew7 = sortMatrixRows(newMxRows).filter(r => !isBatchRow(r) && isNewModel(r.created));
+    await page.waitForFunction(
+      (exp) => document.querySelectorAll('.pm-table tbody tr .new-chip').length === exp,
+      expNew7.length, { timeout: 15000 }).catch(() => {});
+    const rowNew7 = await page.locator('.pm-table tbody tr .new-chip').count();
+    if (rowNew7 === expNew7.length) ok(`Compare NEW badges match at the 7-day window (${rowNew7} rows)`);
+    else fail(`Compare NEW badges: expected ${expNew7.length}, got ${rowNew7}`);
+
+    // one unique-named badged row: hover its badge (sibling tooltip)
+    const nameCounts = new Map();
+    for (const r of newMxRows) nameCounts.set(r.name, (nameCounts.get(r.name) || 0) + 1);
+    const uniqNew = expNew7.find(r => r.name && nameCounts.get(r.name) === 1);
+    if (uniqNew) {
+      const nRow = page.locator('.pm-table tbody tr', { has: page.locator('.prov-model', { hasText: uniqNew.name }) });
+      await page.mouse.move(0, 400);
+      await nRow.locator('.new-chip').first().hover();
+      await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
+      const tip = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
+      if (tip.includes(`Released ${uniqNew.created}`) && tip.includes('flagged NEW for 7 days'))
+        ok(`row badge tooltip honest for "${uniqNew.name}" (released ${uniqNew.created}, 7-day window)`);
+      else fail(`row badge tooltip wrong: "${tip}"`);
+    }
+
+    // the shared window selector on the Compare controls: widen → re-flag
+    // (expected counts come from the FULL matrix — filtering the 7d subset
+    // would trivially return the same rows)
+    const nonBatch = sortMatrixRows(newMxRows).filter(r => !isBatchRow(r));
+    const expNew30 = nonBatch.filter(r => isNewModel(r.created, Date.now(), 30)).length;
+    const NEW_SELECT = '.pm-controls select[aria-label="How recent a release must be to show the NEW badge"]';
+    await page.mouse.move(0, 400);
+    await page.selectOption(NEW_SELECT, '30');
+    await page.waitForFunction(
+      (exp) => document.querySelectorAll('.pm-table tbody tr .new-chip').length === exp,
+      expNew30, { timeout: 15000 }).catch(() => {});
+    const rowNew30 = await page.locator('.pm-table tbody tr .new-chip').count();
+    if (rowNew30 === expNew30 && rowNew30 > rowNew7)
+      ok(`window selector → 30 days re-flags ${rowNew30} rows (was ${rowNew7}) — same data, wider window`);
+    else fail(`window switch: expected ${expNew30} badges at 30d (was ${rowNew7}), got ${rowNew30}`);
+
+    // persistence: pick 14 days, reload — the choice survives per device
+    const expNew14 = nonBatch.filter(r => isNewModel(r.created, Date.now(), 14)).length;
+    await page.selectOption(NEW_SELECT, '14');
+    await page.waitForTimeout(300);
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForSelector('.pm-table', { timeout: 15000 });
+    await page.waitForFunction(
+      (exp) => document.querySelectorAll('.pm-table tbody tr .new-chip').length === exp,
+      expNew14, { timeout: 15000 }).catch(() => {});
+    const rowNew14 = await page.locator('.pm-table tbody tr .new-chip').count();
+    if (rowNew14 === expNew14 && rowNew14 >= rowNew7)
+      ok(`window choice survives a reload (${rowNew14} badges at the persisted 14-day window)`);
+    else fail(`persistence: expected ${expNew14} badges after reload, got ${rowNew14}`);
+    // leave the shipped default behind for the rest of the run
+    await page.selectOption(NEW_SELECT, '7');
+    await page.waitForTimeout(300);
 
     // ── 6. Console cleanliness ──────────────────────────────────────
     const real = consoleErrors.filter(e => !/favicon|Download the Vue Devtools/i.test(e));

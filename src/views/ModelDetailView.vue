@@ -6,6 +6,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { SHORT, BASE_TITLE } from '../lib/constants.js';
 import { fmtScore, fmtUsd, fmtValue, fmtCtx, fmtSec, scoreColor, barWidth, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { latencyClass } from '../lib/pivot.js';
+import { isNewModel, newBadgeTitle } from '../lib/newFlag.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
@@ -52,6 +53,9 @@ const successor = computed(() => (model.value ? supersededBy(model.value) : null
 const released = computed(() => (model.value ? releaseDateOf(model.value) : null));
 // ★ footnote: a source site lists this model under a different name (alias_note)
 const aliasNote = computed(() => (model.value ? metaFor(model.value)?.alias_note || null : null));
+// stats-27: NEW badge — released within the user-adjustable window (shared
+// lib/newFlag.js singleton); the Released tag beside it keeps the exact date.
+const isNew = computed(() => (model.value ? isNewModel(released.value) : false));
 
 // API pricing (price layer) — AA list price when on record (the lab's own,
 // no routing margin), else the OpenRouter snapshot. Source surfaces in the
@@ -115,6 +119,10 @@ function addToCompare() {
         <div class="row mt-sm" style="gap:.4rem">
           <span class="tag-lab">{{ provider.name }}</span>
           <span class="tag-lab" :class="tier === 'closed' ? 'rose' : 'teal'">{{ tier === 'closed' ? 'Closed-source' : 'Open-weight' }}</span>
+          <!-- stats-27: NEW badge (window-flagged); the exact date stays on the Released tag -->
+          <b-tooltip v-if="isNew" :label="newBadgeTitle(released)" type="is-dark" :delay="100">
+            <span class="tag-lab new-tag">NEW</span>
+          </b-tooltip>
           <span v-if="released" class="tag-lab">Released {{ released }}</span>
           <span v-if="overallRank" class="tag-lab gold">#{{ overallRank }} overall</span>
           <span v-if="tierRank" class="tag-lab">#{{ tierRank }} in {{ tier === 'closed' ? 'closed' : 'open' }}</span>

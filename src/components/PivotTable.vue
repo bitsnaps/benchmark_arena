@@ -6,6 +6,7 @@
 // with no rank number and a small "older" chip on the name.
 import { SHORT } from '../lib/constants.js';
 import { fmtScore, fmtUsd, fmtValue, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
+import { isNewModel, newBadgeTitle } from '../lib/newFlag.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 import { usePageSize } from '../lib/pager.js';
@@ -28,7 +29,7 @@ const perPage = computed(() => (pageSize.value === 0
 // filter/tab changes reshape the list — land back on the first page
 watch(() => props.rows.length, () => { page.value = 1; });
 
-const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
@@ -45,6 +46,11 @@ const olderTitle = (row) =>
 
 // ★ footnote: source sites list this model under a different (e.g. HF repo) name
 const aliasNote = (row) => metaFor(row)?.alias_note || null;
+
+// stats-27: NEW badge — release date (models_meta.created) within the
+// user-adjustable window (lib/newFlag.js singleton, default 7 days). No
+// date on record → no badge, honest gap.
+const isNewRow = (row) => isNewModel(releaseDateOf(row));
 
 // The model's short API id (org/model) — stats-19: listings present only the
 // full name; the id lives on the model card and in hover tooltips.
@@ -194,6 +200,7 @@ function scoreTitle(row) {
           <div class="cell-sub">
             {{ providerColor(props.row.name).name }}
             <span v-if="tier === 'all'" class="tier-chip" :class="tierOf(props.row)">{{ tierOf(props.row) === 'closed' ? 'closed' : 'open' }}</span>
+            <b-tooltip v-if="isNewRow(props.row)" :label="newBadgeTitle(releaseDateOf(props.row))" type="is-dark" multilined :delay="100" append-to-body><span class="new-chip">NEW</span></b-tooltip>
             <b-tooltip v-if="isOlder(props.row)" :label="olderTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip">older</span></b-tooltip>
             <b-tooltip v-if="hfUrlFor(props.row)" :label="'Hugging Face: ' + hfIdFor(props.row)" type="is-dark" :delay="100" append-to-body><a class="hf-chip" :href="hfUrlFor(props.row)" target="_blank" rel="noopener noreferrer" @click.stop>HF</a></b-tooltip>
             <b-tooltip v-if="hasFreeListingFor(props.row)" :label="freeTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="free-chip">free</span></b-tooltip>

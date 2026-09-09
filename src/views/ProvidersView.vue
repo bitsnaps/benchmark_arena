@@ -22,9 +22,11 @@ import { usePageSize } from '../lib/pager.js';
 import { useData } from '../stores/data.js';
 import AppPager from '../components/AppPager.vue';
 import PriceFilterControls from '../components/PriceFilterControls.vue';
+import NewWindowSelect from '../components/NewWindowSelect.vue';
+import { isNewModel, newBadgeTitle, createdIndexFromMeta } from '../lib/newFlag.js';
 import {
   buildMatrix, sortMatrixRows, filterMatrix, cellBlend, cheapestPid,
-  latencyClass, isBatchRow, DEFAULT_COLUMNS,
+  latencyClass, isBatchRow, normKey, DEFAULT_COLUMNS,
 } from '../lib/pivot.js';
 import { useProviders } from '../stores/providers.js';
 
@@ -203,6 +205,14 @@ function freeTitle(mOrCell) {
   const base = mOrCell.base || mOrCell.freeBase;
   return `Free tier — rate limits apply, not unlimited${base ? ` — free listing of ${base}` : ''}`;
 }
+
+// ── stats-27: NEW badge — release-date flag (models_meta.created) ──────
+// Catalog rows (tab 1) join the meta date index by normalized API id;
+// Compare rows carry r.created, stamped by buildMatrix's meta pass. The
+// window is the shared singleton — the badge reacts to the "New badge"
+// selector without touching the data. No date on record → no badge.
+const createdIdx = computed(() => createdIndexFromMeta(modelsMeta.value));
+const isFreshListing = (m) => isNewModel(createdIdx.value.get(normKey(m.id)) || null);
 
 const KIND_LABEL = {
   'first-party': 'First-party labs',
@@ -435,6 +445,8 @@ const pickerTitle = (p) =>
                shared state, so both tabs always agree -->
           <div v-if="superGroups.length" class="row pv-controls mt-sm">
             <PriceFilterControls />
+            <!-- stats-27: NEW-badge window — the shared singleton control -->
+            <NewWindowSelect />
           </div>
 
           <!-- stats-22 round 2: expand/collapse all -->
@@ -481,6 +493,11 @@ const pickerTitle = (p) =>
                         <td class="left">
                           <span class="prov-model">{{ m.name || m.id }}</span>
                           <span v-if="m.name && m.id !== m.name" class="prov-id">{{ m.id }}</span>
+                          <!-- stats-27: NEW badge — released within the shared window -->
+                          <b-tooltip v-if="isFreshListing(m)" :label="newBadgeTitle(createdIdx.get(normKey(m.id)))"
+                            type="is-dark" :delay="100" append-to-body>
+                            <span class="new-chip">NEW</span>
+                          </b-tooltip>
                           <b-tooltip v-if="isFreeRow(m, p)" :label="freeTitle(m)" type="is-dark" :delay="100">
                             <span class="free-chip">free</span>
                           </b-tooltip>
@@ -536,6 +553,9 @@ const pickerTitle = (p) =>
             <!-- stats-23: the same pricing widget as the By-provider tab —
                  one shared state, the tabs always agree -->
             <PriceFilterControls />
+            <!-- stats-27: NEW-badge window — the shared singleton control;
+                 the same setting the By-provider tab and the home toolbar use -->
+            <NewWindowSelect />
             <b-tooltip label="Show ':batch' pricing variants — async endpoints of the same model at a discounted price"
               type="is-dark" multilined :delay="100">
               <b-switch v-model="showBatch" size="is-small">batch variants</b-switch>
@@ -575,6 +595,14 @@ const pickerTitle = (p) =>
                          append-to-body cost tradeoff -->
                     <b-tooltip :label="rowTitle(r)" type="is-dark" multilined :delay="100">
                       <span class="prov-model">{{ r.name || r.key }}</span>
+                    </b-tooltip>
+                    <!-- stats-27: NEW badge — sibling of the name tooltip (a
+                         nested tooltip would fire together with it); only a
+                         handful of rows badge, so the append-to-body budget
+                         stays trivial -->
+                    <b-tooltip v-if="isNewModel(r.created)" :label="newBadgeTitle(r.created)"
+                      type="is-dark" :delay="100" append-to-body>
+                      <span class="new-chip">NEW</span>
                     </b-tooltip>
                   </td>
                   <td v-for="p in selProviders" :key="p.id" class="num pm-cell"

@@ -12,6 +12,7 @@ import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 import PivotTable from '../components/PivotTable.vue';
 import ComparePanel from '../components/ComparePanel.vue';
+import NewWindowSelect from '../components/NewWindowSelect.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -318,6 +319,11 @@ const openModel = (name) =>
             <option v-for="s in sellerOptions" :key="s.p" :value="s.p">{{ s.n }} ({{ s.c }})</option>
           </b-select>
         </div>
+
+        <!-- stats-27: how fresh a release must be to carry the NEW badge —
+             ONE shared window (lib/newFlag.js), the same setting the
+             Providers tabs and model cards read -->
+        <NewWindowSelect />
 
         <span class="cell-sub">Row opacity = benchmark coverage — hover a row to solidify it</span>
 

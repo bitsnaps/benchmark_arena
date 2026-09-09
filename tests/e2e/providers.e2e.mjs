@@ -8,7 +8,8 @@ import { fileURLToPath } from 'node:url';
 import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS, cellBlend, latencyTier, normKey } from '../../src/lib/pivot.js';
 import { capFromSlider } from '../../src/lib/priceFilter.js';
 import { isNewModel, createdIndexFromMeta } from '../../src/lib/newFlag.js';
-import { fmtUsd } from '../../src/lib/format.js';
+import { fmtUsd, fmtSec } from '../../src/lib/format.js';
+import { ttftIndexFromMeta } from '../../src/lib/pivot.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SHOTS = path.join(REPO, 'tests', 'e2e', 'shots');
@@ -443,14 +444,18 @@ const run = async () => {
       else fail(`${tier} tier: expected ${exp} cells, got ${got}`);
     }
     // stats-25: Buefy b-tooltip (append-to-body) — hover the trigger and read
-    // the teleported .tooltip-content (native titles are gone from cells)
+    // the teleported .tooltip-content (native titles are gone from cells).
+    // Expected seconds derived from the committed meta via the SAME join the
+    // app runs (stats-28: AA re-measures TTFT every scrape — never pin it).
+    const ttftIdx = ttftIndexFromMeta(modelsMeta);
+    const fableSec = ttftIdx.get(normKey('Claude Fable 5.1'));
     const fableRow = page.locator('.pm-table tbody tr', { has: page.locator('.prov-model', { hasText: 'Claude Fable 5.1' }) });
     await fableRow.locator('td.lat-slow .b-tooltip').first().hover();
     await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
     const fableTip = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
-    if (fableTip.includes('AA TTFT 6.55 s') && fableTip.includes('Artificial Analysis'))
+    if (fableSec != null && fableTip.includes(`AA TTFT ${fmtSec(fableSec)}`) && fableTip.includes('Artificial Analysis'))
       ok(`cell tooltip (b-tooltip) carries the AA median ("...${fableTip.split('AA TTFT')[1]}")`);
-    else fail(`cell tooltip missing TTFT: "${fableTip}"`);
+    else fail(`cell tooltip missing TTFT (expected ${fableSec}): "${fableTip}"`);
     // legend documents the ladder with three tier chips
     const legendChips = await page.locator('p .legend-chip').count();
     const legendText = (await page.locator('p.cell-sub.mt-sm').last().innerText()).replace(/\s+/g, ' ');

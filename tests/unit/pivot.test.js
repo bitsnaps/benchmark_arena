@@ -43,6 +43,18 @@ describe('normKey', () => {
     expect(normKey('openai/gpt-6-astra')).toBe('gpt6astra');
   });
 
+  it('keeps dated snapshot ids separate from their base (stats-28 discipline)', () => {
+    // A dated revision is a DISTINCT model ("DeepSeek V4 Pro 0813" vs
+    // "DeepSeek V4 Pro") — the frontend join must never fold the snapshot
+    // into the base, matching the scraper's stats-28 normalize discipline
+    expect(normKey('deepseek/deepseek-v4-pro-0813')).toBe('deepseekv4pro0813');
+    expect(normKey('deepseek/deepseek-v4-pro')).toBe('deepseekv4pro');
+    expect(normKey('deepseek/deepseek-v4-pro-0813'))
+      .not.toBe(normKey('deepseek/deepseek-v4-pro'));
+    expect(normKey('dashscope/deepseek-v4-flash-0731')).toBe('deepseekv4flash0731');
+    expect(normKey('deepseek/deepseek-v4-flash-vision-exp')).toBe('deepseekv4flashvisionexp');
+  });
+
   it('is null-safe', () => {
     expect(normKey(null)).toBe(null);
     expect(normKey('')).toBe(null);

@@ -413,7 +413,12 @@ def scrape_artificial_analysis():
     cacheHitPrice per model record — the labs' own list prices, no routing
     margin. They ride the module stash + AA_PRICING_CACHE into
     apply_aa_pricing() (models_meta), and the full payloads also carry
-    medianTimeToFirstTokenSeconds (per-model latency — future layer).
+    medianTimeToFirstTokenSeconds (per-model latency — stats-24 layer).
+
+    stats-28 (2026-09-09): AA reordered the flight payload — model records
+    now open with "slug":"…","shortName":"…" and the display name moved
+    from "name" to "shortName"; the old name→shortName→slug anchor matched
+    nothing, which darkened BOTH the pricing and the TTFT layers.
     """
     url = "https://artificialanalysis.ai/leaderboards/models"
     print(f"  Scraping all models via JS eval (table + flight-payload pricing)...")
@@ -422,11 +427,12 @@ def scrape_artificial_analysis():
     # Fetch up to 300 rows to cover the full leaderboard.
     #
     # Flight-payload mining: model records look like
-    #   \"name\":\"GLM-4.5V (Non-reasoning)\",\"shortName\":\"…\",\"slug\":\"…\",
-    #   ...,\"price1mInputTokens\":0.6,\"price1mOutputTokens\":1.8,\"cacheHitPrice\":…
-    # anchored on the name→shortName→slug adjacency unique to model records.
-    # The forward scan stops at the NEXT record boundary (\"shortName\": or
-    # \"name\":) so a record without price keys can never steal its
+    #   "slug":"glm-4-5v","shortName":"GLM-4.5V (Non-reasoning)",
+    #   ...,"price1mInputTokens":0.6,"price1mOutputTokens":1.8,"cacheHitPrice":…
+    # anchored on the slug→shortName adjacency unique to model records
+    # (stats-28 layout; shortName IS the display name the table uses).
+    # The forward scan stops at the NEXT record boundary ("slug": or
+    # "shortName":) so a record without price keys can never steal its
     # neighbour's numbers. Duplicate arrays in the payload dedupe by name —
     # first valued record wins, conflicts counted.
     js = r"""(function(){
@@ -442,13 +448,13 @@ def scrape_artificial_analysis():
   }
   var s = parts.join('\n');
   var pricing = {}, conflicts = 0;
-  var re = /\\"name\\":\\"([^"\\]{2,150})\\",\\"shortName\\":\\"[^"\\]*\\",\\"slug\\":\\"[^"\\]*\\"/g;
+  var re = /\\"slug\\":\\"[^"\\]*\\",\\"shortName\\":\\"([^"\\]{2,150})\\"/g;
   var m;
   while ((m = re.exec(s)) !== null) {
     var name = m[1];
-    var seg = s.slice(m.index + m[0].length, m.index + m[0].length + 3000);
-    var stopA = seg.indexOf('\\"shortName\\":');
-    var stopB = seg.indexOf('\\"name\\":\\"');
+    var seg = s.slice(m.index + m[0].length, m.index + m[0].length + 4500);
+    var stopA = seg.indexOf('\\"slug\\":');
+    var stopB = seg.indexOf('\\"shortName\\":');
     var stops = [stopA, stopB].filter(function(x){ return x >= 0; });
     if (stops.length) seg = seg.slice(0, Math.min.apply(null, stops));
     var grab = function(key) {
@@ -478,7 +484,9 @@ def scrape_artificial_analysis():
   }
   return JSON.stringify({models: models, pricing: pricing, conflicts: conflicts});
 })()"""
-    data = load_and_eval(url, js, wait_ms=8000)
+    # stats-28: the flight payload now streams late — at 8s the script tags
+    # hold ~3KB (no model records); the full ~1.5MB payload lands by ~20s.
+    data = load_and_eval(url, js, wait_ms=20000)
     models = []
     pricing = {}
     conflicts = 0
@@ -3768,11 +3776,14 @@ def clean_display_name(name):
 def normalize_model_name(name):
     """
     Normalize model names for cross-benchmark matching.
-    Strips: org artifacts, API-mode parentheticals, config-level parentheticals.
+    Strips: org artifacts, API-mode parentheticals, config-level parentheticals,
+            bare effort words (high/low/… — stats-28).
     Normalizes: hyphens↔spaces, case of variant suffixes, version prefixes,
-                spacing between letters/digits, parenthetical style variants.
+                spacing between letters/digits, parenthetical style variants,
+                full-date tokens to their MMDD tail (20260813 → 0813).
     Keeps meaningful model-name suffixes (Pro, Ultra, Flash, Code, etc.)
-    since they often denote distinct model variants.
+    and 4-digit date suffixes ("0813", "0731") — dated snapshots are distinct
+    models, never merged into their base (stats-28).
     """
     n = clean_model_name(name).strip()
 
@@ -3813,10 +3824,33 @@ def normalize_model_name(name):
     # "v5.2" ↔ "5.2", "V3" ↔ "3"
     n = re.sub(r'\bv(\d)', r'\1', n, flags=re.IGNORECASE)
 
-    # ── Strip release-date suffixes (e.g., "0731", "20260731", "0813") ──
-    # These appear after model names like "DeepSeek V4 Flash 0731 (Max)"
-    # Must run BEFORE version detection to avoid parsing "0731" as version 731.0
-    n = re.sub(r'\s+(?:20)?\d{4}\b', '', n)
+    # ── Canonicalize full-date tokens to their MMDD tail (20260813 -> 0813) ──
+    # Arena spells the 0813 snapshot "deepseek v4 pro high 20260813"; OpenRouter
+    # lists the same model as deepseek-v4-pro-0813. Folding the century part
+    # makes both spellings join the same (distinct) dated row. The hyphenated
+    # spelling ("GPT-5.6 Luna 2026-07-30") folds too, before the generic
+    # hyphen->space pass would shatter it into "2026 07 30".
+    n = re.sub(r'\s+(?:19|20)\d{2}(\d{4})(?!\d)', r' \1', n)
+    n = re.sub(r'\s+(?:19|20)\d{2}-(\d{2})-(\d{2})(?!\d)', r' \1\2', n)
+
+    # ── KEEP 4-digit date suffixes — they are model identity, not noise ──
+    # (stats-28) Dated snapshots are DISTINCT models: "DeepSeek V4 Pro 0813"
+    # vs "DeepSeek V4 Pro", "DeepSeek V4 Flash 0731" vs "DeepSeek V4 Flash",
+    # "GPT-4 0613" vs "GPT-4". The old blanket strip (`\s+(?:20)?\d{4}\b`,
+    # added pre-stats-24) erased that distinction and silently merged each
+    # variant's benchmark scores into the base row (max per cell), so the
+    # newer snapshot was invisible in the unified tables — Ibrahim, 2026-09-09:
+    # "I don't see any distinction between DeepSeek V4 Pro and DeepSeek V4
+    # Pro 0813". Catalog slugs were never affected (hyphenated tails never
+    # matched this space-separated pattern), so the meta layer already kept
+    # them apart; only the unified-table layer needed the fix.
+
+    # ── Strip bare effort words (stats-28) — same noise as their paren forms ──
+    # Arena appends effort levels without parens: "deepseek v4 pro high
+    # 20260813", "deepseek v4 flash high preview". Mirrors the
+    # (high)/(low)/(medium)/(none)/… paren rule above; trailing "max" keeps
+    # its own dedicated rule below (established "Qwen3.8 Max" convention).
+    n = re.sub(r'\s+(?:xhigh|x-high|high|medium|low|minimal|adaptive|none)\b', ' ', n, flags=re.IGNORECASE)
 
     # ── Strip parameter-size suffixes (open-weight technical designations) ──
     # "Qwen 3.8 2.4T" → "Qwen 3.8", "Model 397B" → "Model"

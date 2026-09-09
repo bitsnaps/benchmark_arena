@@ -47,3 +47,4 @@ __screenshots__/
 
 # e2e artifacts
 tests/e2e/shots/
+test-results/

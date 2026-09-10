@@ -37,6 +37,11 @@ const routes = [
     component: () => import('../views/ProvidersView.vue'),
   },
   {
+    path: '/value',
+    name: 'value',
+    component: () => import('../views/ValueView.vue'),
+  },
+  {
     path: '/compare',
     name: 'compare',
     component: () => import('../views/CompareView.vue'),

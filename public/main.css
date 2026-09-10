@@ -759,3 +759,70 @@ a.hbar:hover .name { color: var(--teal); }
   border: 1px solid rgba(139, 156, 255, 0.4);
   cursor: help;
 }
+
+/* ── Value map (stats-31) — interactive quality-per-dollar scatter ────── */
+.vm-controls { padding: .9rem 1rem; display: flex; flex-direction: column; gap: .55rem; }
+.vm-row { display: flex; flex-wrap: wrap; gap: 1rem 1.4rem; align-items: center; }
+.vm-pick { display: inline-flex; align-items: center; gap: .5rem; }
+.vm-lab {
+  color: var(--muted); font-size: .72rem; text-transform: uppercase;
+  letter-spacing: .08em; font-weight: 700; white-space: nowrap;
+}
+.vm-wrap { position: relative; padding: .9rem .5rem .2rem; }
+.value-map { width: 100%; height: auto; display: block; }
+.value-map .vgrid { stroke: var(--line); stroke-opacity: .5; stroke-width: 1; }
+.value-map .vaxl { stroke: var(--line-2); stroke-width: 1.2; }
+.value-map .vtick { fill: var(--muted); font-size: 11px; }
+.value-map .vaxtitle { fill: var(--muted); font-size: 12.5px; font-weight: 600; }
+.value-map .vfrontier {
+  fill: none; stroke: var(--teal); stroke-width: 1.7;
+  stroke-dasharray: 7 5; stroke-opacity: .85;
+}
+.value-map .vhalo { fill: none; stroke: var(--teal); stroke-opacity: .65; stroke-width: 1.6; }
+.value-map .vpt { cursor: pointer; fill-opacity: .82; }
+.value-map .vpt.old { fill-opacity: .16; stroke-width: 1.4; }
+.value-map .vpt.newm { stroke-width: 2.2; }
+.value-map .vpt:hover { fill-opacity: 1; }
+.vm-empty { padding: 3rem 1rem; text-align: center; color: var(--muted); }
+.vtip {
+  position: absolute; z-index: 30; pointer-events: none;
+  min-width: 230px; max-width: 300px;
+  background: var(--surface-3); border: 1px solid var(--line-2);
+  border-radius: 10px; padding: .6rem .75rem .55rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .5);
+}
+.vt-head { display: flex; gap: .45rem; align-items: center; flex-wrap: wrap; }
+.vt-name { font-weight: 700; font-size: .95rem; }
+.vt-sub { color: var(--muted); font-size: .78rem; margin: .1rem 0 .45rem; }
+.vt-row {
+  display: flex; justify-content: space-between; gap: 1rem;
+  font-size: .8rem; padding: .13rem 0;
+}
+.vt-row span { color: var(--muted); white-space: nowrap; }
+.vt-row b { font-weight: 600; text-align: right; }
+.vt-hint { margin-top: .45rem; color: var(--faint); font-size: .72rem; font-style: italic; }
+.vnew-chip {
+  font-size: .64rem; font-weight: 800; letter-spacing: .06em;
+  color: var(--gold); background: var(--gold-dim);
+  border: 1px solid rgba(245, 193, 90, .45); border-radius: 8px;
+  padding: 0 .35rem; vertical-align: 1px;
+}
+.vold-chip {
+  font-size: .64rem; font-weight: 700; letter-spacing: .06em;
+  color: var(--muted); background: var(--surface-2);
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 0 .35rem; vertical-align: 1px;
+}
+.vm-frontier {
+  display: flex; flex-wrap: wrap; gap: .4rem .45rem; align-items: center;
+  justify-content: center; margin-top: .7rem;
+}
+.vm-legend {
+  display: flex; flex-wrap: wrap; gap: .4rem .95rem;
+  justify-content: center; margin-top: .7rem;
+}
+.vm-lg {
+  display: inline-flex; align-items: center; gap: .35rem;
+  color: var(--muted); font-size: .78rem;
+}
+.vm-lg i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }

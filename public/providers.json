@@ -587,6 +587,556 @@
       ]
     },
     {
+      "id": "google-ai-studio",
+      "name": "Google AI Studio",
+      "kind": "first-party",
+      "models": [
+        {
+          "id": "gemini/gemini-exp-1114",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-exp-1206",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 2097152
+        },
+        {
+          "id": "gemini/gemma-3-27b-it",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 131072,
+          "name": "Google: Gemma 3 27B"
+        },
+        {
+          "id": "gemini/gemma-4-26b-a4b-it",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 262144,
+          "name": "Google: Gemma 4 26B A4B "
+        },
+        {
+          "id": "gemini/gemma-4-31b-it",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 262144,
+          "name": "Google: Gemma 4 31B"
+        },
+        {
+          "id": "gemini/learnlm-1.5-pro-experimental",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 32767
+        },
+        {
+          "id": "gemini/lyria-3-clip-preview",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 131072,
+          "name": "Google: Lyria 3 Clip Preview"
+        },
+        {
+          "id": "gemini/lyria-3-pro-preview",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 131072,
+          "name": "Google: Lyria 3 Pro Preview"
+        },
+        {
+          "id": "gemini/lyria-3.5",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/lyria-3.5-clip-preview",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini/lyria-3.5-pro-preview",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 131072
+        },
+        {
+          "id": "palm/chat-bison",
+          "in": 0.125,
+          "out": 0.125,
+          "ctx": 8192
+        },
+        {
+          "id": "palm/chat-bison-001",
+          "in": 0.125,
+          "out": 0.125,
+          "ctx": 8192
+        },
+        {
+          "id": "gemini-2.0-flash-lite",
+          "in": 0.075,
+          "out": 0.3,
+          "cache": 0.0187,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.0-flash-lite-001",
+          "in": 0.075,
+          "out": 0.3,
+          "cache": 0.0187,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.0-flash-lite",
+          "in": 0.075,
+          "out": 0.3,
+          "cache": 0.0187,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.0-flash-lite-001",
+          "in": 0.075,
+          "out": 0.3,
+          "cache": 0.0187,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.0-flash",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.025,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.5-flash-lite",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576,
+          "name": "Google: Gemini 2.5 Flash Lite"
+        },
+        {
+          "id": "gemini-2.5-flash-lite-preview-06-17",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.5-flash-lite-preview-09-2025",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-flash-lite-latest",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.0-flash",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.025,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.0-flash-001",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.025,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-flash-lite",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576,
+          "name": "Google: Gemini 2.5 Flash Lite"
+        },
+        {
+          "id": "gemini/gemini-2.5-flash-lite-preview-06-17",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-flash-lite-preview-09-2025",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-flash-lite-latest",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-2.0-flash-001",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.0375,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-gemma-2-27b-it",
+          "in": 0.35,
+          "out": 1.05,
+          "ctx": 8192
+        },
+        {
+          "id": "gemini/gemini-gemma-2-9b-it",
+          "in": 0.35,
+          "out": 1.05,
+          "ctx": 8192
+        },
+        {
+          "id": "gemini-3.1-flash-lite",
+          "in": 0.25,
+          "out": 1.5,
+          "cache": 0.025,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.1 Flash Lite"
+        },
+        {
+          "id": "gemini-3.1-flash-lite-preview",
+          "in": 0.25,
+          "out": 1.5,
+          "cache": 0.025,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.1 Flash Lite Preview"
+        },
+        {
+          "id": "gemini/gemini-3.1-flash-lite",
+          "in": 0.25,
+          "out": 1.5,
+          "cache": 0.025,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.1 Flash Lite"
+        },
+        {
+          "id": "gemini/gemini-3.1-flash-lite-preview",
+          "in": 0.25,
+          "out": 1.5,
+          "cache": 0.025,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.1 Flash Lite Preview"
+        },
+        {
+          "id": "gemini-2.5-flash",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576,
+          "name": "Google: Gemini 2.5 Flash"
+        },
+        {
+          "id": "gemini-2.5-flash-preview-09-2025",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3.5-flash-lite",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-exp-1206",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-flash-latest",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576,
+          "name": "Google Gemini Flash Latest"
+        },
+        {
+          "id": "gemini-robotics-er-1.5-preview",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-flash",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576,
+          "name": "Google: Gemini 2.5 Flash"
+        },
+        {
+          "id": "gemini/gemini-2.5-flash-preview-09-2025",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.5-flash-lite",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-flash-latest",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576,
+          "name": "Google Gemini Flash Latest"
+        },
+        {
+          "id": "gemini/gemini-robotics-er-1.5-preview",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3-flash-preview",
+          "in": 0.5,
+          "out": 3.0,
+          "cache": 0.05,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3 Flash Preview"
+        },
+        {
+          "id": "gemini/gemini-3-flash-preview",
+          "in": 0.5,
+          "out": 3.0,
+          "cache": 0.05,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3 Flash Preview"
+        },
+        {
+          "id": "gemini-3.6-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.6 Flash"
+        },
+        {
+          "id": "gemini-3.7-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.7 Flash"
+        },
+        {
+          "id": "gemini-3.8-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.8 Flash"
+        },
+        {
+          "id": "gemini/gemini-3.6-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.6 Flash"
+        },
+        {
+          "id": "gemini/gemini-3.7-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.7 Flash"
+        },
+        {
+          "id": "gemini/gemini-3.8-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.8 Flash"
+        },
+        {
+          "id": "gemini/gemini-robotics-er-1.6-preview",
+          "in": 1.0,
+          "out": 5.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini-3.5-flash",
+          "in": 1.5,
+          "out": 9.0,
+          "cache": 0.15,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.5 Flash"
+        },
+        {
+          "id": "gemini-omni-flash-preview",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.5-flash",
+          "in": 1.5,
+          "out": 9.0,
+          "cache": 0.15,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.5 Flash"
+        },
+        {
+          "id": "gemini/gemini-omni-1.1-flash",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini/gemini-omni-flash-preview",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini-2.5-computer-use-preview-10-2025",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "gemini-2.5-pro",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 1048576,
+          "name": "Google: Gemini 2.5 Pro"
+        },
+        {
+          "id": "gemini-pro-latest",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 1048576,
+          "name": "Google Gemini Pro Latest"
+        },
+        {
+          "id": "gemini/gemini-2.5-computer-use-preview-10-2025",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "gemini/gemini-2.5-pro",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 1048576,
+          "name": "Google: Gemini 2.5 Pro"
+        },
+        {
+          "id": "gemini/gemini-pro-latest",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 1048576,
+          "name": "Google Gemini Pro Latest"
+        },
+        {
+          "id": "gemini/gemini-robotics-er-2-preview",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini/gemini-robotics-er-2-streaming-preview",
+          "in": 2.0,
+          "out": 10.0,
+          "ctx": null
+        },
+        {
+          "id": "gemini-3-pro-preview",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini-3.1-pro-preview",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.1 Pro Preview"
+        },
+        {
+          "id": "gemini-3.1-pro-preview-customtools",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.1 Pro Preview Custom Tools"
+        },
+        {
+          "id": "gemini/gemini-3-pro-preview",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-3.1-pro-preview",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.1 Pro Preview"
+        },
+        {
+          "id": "gemini/gemini-3.1-pro-preview-customtools",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.1 Pro Preview Custom Tools"
+        },
+        {
+          "id": "gemini-2.5-pro-preview-tts",
+          "in": 1.0,
+          "out": 20.0,
+          "cache": 0.125,
+          "ctx": 1048576
+        },
+        {
+          "id": "gemini/gemini-2.5-pro-preview-tts",
+          "in": 1.0,
+          "out": 20.0,
+          "cache": 0.125,
+          "ctx": 1048576
+        }
+      ]
+    },
+    {
       "id": "alibaba-dashscope",
       "name": "Alibaba (DashScope)",
       "kind": "first-party",
@@ -1100,550 +1650,6 @@
           "cache": 0.5,
           "ctx": 991808,
           "name": "Qwen: Qwen3.7 Max"
-        }
-      ]
-    },
-    {
-      "id": "google-ai-studio",
-      "name": "Google AI Studio",
-      "kind": "first-party",
-      "models": [
-        {
-          "id": "gemini/gemini-exp-1114",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-exp-1206",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 2097152
-        },
-        {
-          "id": "gemini/gemma-3-27b-it",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 131072,
-          "name": "Google: Gemma 3 27B"
-        },
-        {
-          "id": "gemini/gemma-4-26b-a4b-it",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 262144,
-          "name": "Google: Gemma 4 26B A4B "
-        },
-        {
-          "id": "gemini/gemma-4-31b-it",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 262144,
-          "name": "Google: Gemma 4 31B"
-        },
-        {
-          "id": "gemini/learnlm-1.5-pro-experimental",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 32767
-        },
-        {
-          "id": "gemini/lyria-3-clip-preview",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 131072,
-          "name": "Google: Lyria 3 Clip Preview"
-        },
-        {
-          "id": "gemini/lyria-3-pro-preview",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 131072,
-          "name": "Google: Lyria 3 Pro Preview"
-        },
-        {
-          "id": "gemini/lyria-3.5-clip-preview",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini/lyria-3.5-pro-preview",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 131072
-        },
-        {
-          "id": "palm/chat-bison",
-          "in": 0.125,
-          "out": 0.125,
-          "ctx": 8192
-        },
-        {
-          "id": "palm/chat-bison-001",
-          "in": 0.125,
-          "out": 0.125,
-          "ctx": 8192
-        },
-        {
-          "id": "gemini-2.0-flash-lite",
-          "in": 0.075,
-          "out": 0.3,
-          "cache": 0.0187,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.0-flash-lite-001",
-          "in": 0.075,
-          "out": 0.3,
-          "cache": 0.0187,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.0-flash-lite",
-          "in": 0.075,
-          "out": 0.3,
-          "cache": 0.0187,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.0-flash-lite-001",
-          "in": 0.075,
-          "out": 0.3,
-          "cache": 0.0187,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.0-flash",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-flash-lite",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576,
-          "name": "Google: Gemini 2.5 Flash Lite"
-        },
-        {
-          "id": "gemini-2.5-flash-lite-preview-06-17",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.5-flash-lite-preview-09-2025",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-flash-lite-latest",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.0-flash",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.0-flash-001",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-lite",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576,
-          "name": "Google: Gemini 2.5 Flash Lite"
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-lite-preview-06-17",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-lite-preview-09-2025",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-flash-lite-latest",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-2.0-flash-001",
-          "in": 0.15,
-          "out": 0.6,
-          "cache": 0.0375,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-gemma-2-27b-it",
-          "in": 0.35,
-          "out": 1.05,
-          "ctx": 8192
-        },
-        {
-          "id": "gemini/gemini-gemma-2-9b-it",
-          "in": 0.35,
-          "out": 1.05,
-          "ctx": 8192
-        },
-        {
-          "id": "gemini-3.1-flash-lite",
-          "in": 0.25,
-          "out": 1.5,
-          "cache": 0.025,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.1 Flash Lite"
-        },
-        {
-          "id": "gemini-3.1-flash-lite-preview",
-          "in": 0.25,
-          "out": 1.5,
-          "cache": 0.025,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.1 Flash Lite Preview"
-        },
-        {
-          "id": "gemini/gemini-3.1-flash-lite",
-          "in": 0.25,
-          "out": 1.5,
-          "cache": 0.025,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.1 Flash Lite"
-        },
-        {
-          "id": "gemini/gemini-3.1-flash-lite-preview",
-          "in": 0.25,
-          "out": 1.5,
-          "cache": 0.025,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.1 Flash Lite Preview"
-        },
-        {
-          "id": "gemini-2.5-flash",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576,
-          "name": "Google: Gemini 2.5 Flash"
-        },
-        {
-          "id": "gemini-2.5-flash-preview-09-2025",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3.5-flash-lite",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-exp-1206",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-flash-latest",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576,
-          "name": "Google Gemini Flash Latest"
-        },
-        {
-          "id": "gemini-robotics-er-1.5-preview",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-flash",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576,
-          "name": "Google: Gemini 2.5 Flash"
-        },
-        {
-          "id": "gemini/gemini-2.5-flash-preview-09-2025",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.5-flash-lite",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-flash-latest",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.03,
-          "ctx": 1048576,
-          "name": "Google Gemini Flash Latest"
-        },
-        {
-          "id": "gemini/gemini-robotics-er-1.5-preview",
-          "in": 0.3,
-          "out": 2.5,
-          "cache": 0.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3-flash-preview",
-          "in": 0.5,
-          "out": 3.0,
-          "cache": 0.05,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3 Flash Preview"
-        },
-        {
-          "id": "gemini/gemini-3-flash-preview",
-          "in": 0.5,
-          "out": 3.0,
-          "cache": 0.05,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3 Flash Preview"
-        },
-        {
-          "id": "gemini-3.6-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.6 Flash"
-        },
-        {
-          "id": "gemini-3.7-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.7 Flash"
-        },
-        {
-          "id": "gemini-3.8-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.8 Flash"
-        },
-        {
-          "id": "gemini/gemini-3.6-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.6 Flash"
-        },
-        {
-          "id": "gemini/gemini-3.7-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.7 Flash"
-        },
-        {
-          "id": "gemini/gemini-3.8-flash",
-          "in": 0.75,
-          "out": 3.75,
-          "cache": 0.075,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.8 Flash"
-        },
-        {
-          "id": "gemini/gemini-robotics-er-1.6-preview",
-          "in": 1.0,
-          "out": 5.0,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini-3.5-flash",
-          "in": 1.5,
-          "out": 9.0,
-          "cache": 0.15,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.5 Flash"
-        },
-        {
-          "id": "gemini-omni-flash-preview",
-          "in": 1.5,
-          "out": 9.0,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.5-flash",
-          "in": 1.5,
-          "out": 9.0,
-          "cache": 0.15,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.5 Flash"
-        },
-        {
-          "id": "gemini/gemini-omni-1.1-flash",
-          "in": 1.5,
-          "out": 9.0,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini/gemini-omni-flash-preview",
-          "in": 1.5,
-          "out": 9.0,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini-2.5-computer-use-preview-10-2025",
-          "in": 1.25,
-          "out": 10.0,
-          "ctx": 128000
-        },
-        {
-          "id": "gemini-2.5-pro",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 1048576,
-          "name": "Google: Gemini 2.5 Pro"
-        },
-        {
-          "id": "gemini-pro-latest",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 1048576,
-          "name": "Google Gemini Pro Latest"
-        },
-        {
-          "id": "gemini/gemini-2.5-computer-use-preview-10-2025",
-          "in": 1.25,
-          "out": 10.0,
-          "ctx": 128000
-        },
-        {
-          "id": "gemini/gemini-2.5-pro",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 1048576,
-          "name": "Google: Gemini 2.5 Pro"
-        },
-        {
-          "id": "gemini/gemini-pro-latest",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 1048576,
-          "name": "Google Gemini Pro Latest"
-        },
-        {
-          "id": "gemini/gemini-robotics-er-2-preview",
-          "in": 2.0,
-          "out": 10.0,
-          "cache": 0.2,
-          "ctx": 131072
-        },
-        {
-          "id": "gemini/gemini-robotics-er-2-streaming-preview",
-          "in": 2.0,
-          "out": 10.0,
-          "ctx": null
-        },
-        {
-          "id": "gemini-3-pro-preview",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini-3.1-pro-preview",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.1 Pro Preview"
-        },
-        {
-          "id": "gemini-3.1-pro-preview-customtools",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.1 Pro Preview Custom Tools"
-        },
-        {
-          "id": "gemini/gemini-3-pro-preview",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-3.1-pro-preview",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.1 Pro Preview"
-        },
-        {
-          "id": "gemini/gemini-3.1-pro-preview-customtools",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3.1 Pro Preview Custom Tools"
-        },
-        {
-          "id": "gemini-2.5-pro-preview-tts",
-          "in": 1.0,
-          "out": 20.0,
-          "cache": 0.125,
-          "ctx": 1048576
-        },
-        {
-          "id": "gemini/gemini-2.5-pro-preview-tts",
-          "in": 1.0,
-          "out": 20.0,
-          "cache": 0.125,
-          "ctx": 1048576
         }
       ]
     },
@@ -3524,6 +3530,12 @@
           "ctx": 128000
         },
         {
+          "id": "bedrock_mantle/openai.gpt-oss-safeguard-20b",
+          "in": 0.07,
+          "out": 0.2,
+          "ctx": 131072
+        },
+        {
           "id": "amazon-nova/nova-lite-v1",
           "in": 0.06,
           "out": 0.24,
@@ -3574,13 +3586,7 @@
         },
         {
           "id": "bedrock_mantle/openai.gpt-oss-20b",
-          "in": 0.075,
-          "out": 0.3,
-          "ctx": 131072
-        },
-        {
-          "id": "bedrock_mantle/openai.gpt-oss-safeguard-20b",
-          "in": 0.075,
+          "in": 0.07,
           "out": 0.3,
           "ctx": 131072
         },
@@ -5611,14 +5617,14 @@
           "in": 0.2,
           "out": 0.5,
           "cache": 0.05,
-          "ctx": 2000000
+          "ctx": 128000
         },
         {
           "id": "vertex_ai/xai/grok-4.1-fast-reasoning",
           "in": 0.2,
           "out": 0.5,
           "cache": 0.05,
-          "ctx": 2000000
+          "ctx": 128000
         },
         {
           "id": "vertex_ai/google/gemma-4-26b-a4b-it-maas",
@@ -5817,6 +5823,28 @@
           "name": "Google: Gemini 3 Flash Preview"
         },
         {
+          "id": "vertex_ai/xai/grok-4.20-non-reasoning",
+          "in": 1.25,
+          "out": 2.5,
+          "cache": 0.2,
+          "ctx": 2000000
+        },
+        {
+          "id": "vertex_ai/xai/grok-4.20-reasoning",
+          "in": 1.25,
+          "out": 2.5,
+          "cache": 0.2,
+          "ctx": 2000000
+        },
+        {
+          "id": "vertex_ai/xai/grok-4.3",
+          "in": 1.25,
+          "out": 2.5,
+          "cache": 0.2,
+          "ctx": 200000,
+          "name": "SpaceXAI: Grok 4.3"
+        },
+        {
           "id": "vertex_ai/mistral-small-2503",
           "in": 1.0,
           "out": 3.0,
@@ -5924,18 +5952,12 @@
           "ctx": 128000
         },
         {
-          "id": "vertex_ai/xai/grok-4.20-non-reasoning",
+          "id": "vertex_ai/xai/grok-4.6",
           "in": 2.0,
           "out": 6.0,
-          "cache": 0.2,
-          "ctx": 2000000
-        },
-        {
-          "id": "vertex_ai/xai/grok-4.20-reasoning",
-          "in": 2.0,
-          "out": 6.0,
-          "cache": 0.2,
-          "ctx": 2000000
+          "cache": 0.5,
+          "ctx": 524288,
+          "name": "SpaceXAI: Grok 4.6"
         },
         {
           "id": "vertex_ai/jamba-1.5-large",
@@ -6238,10 +6260,16 @@
           "ctx": 128000
         },
         {
+          "id": "azure_ai/model-router",
+          "in": 0.14,
+          "out": 0.0,
+          "ctx": 200000
+        },
+        {
           "id": "azure_ai/model_router",
           "in": 0.14,
           "out": 0.0,
-          "ctx": null
+          "ctx": 200000
         },
         {
           "id": "azure_ai/FW-Nemotron-Lightning-3.5-30B-A3B",
@@ -6538,6 +6566,20 @@
           "name": "MoonshotAI: Kimi K2.5"
         },
         {
+          "id": "azure_ai/grok-4-20-non-reasoning",
+          "in": 1.25,
+          "out": 2.5,
+          "cache": 1.25,
+          "ctx": 262000
+        },
+        {
+          "id": "azure_ai/grok-4-20-reasoning",
+          "in": 1.25,
+          "out": 2.5,
+          "cache": 1.25,
+          "ctx": 262000
+        },
+        {
           "id": "azure_ai/grok-4.3",
           "in": 1.25,
           "out": 2.5,
@@ -6740,6 +6782,12 @@
           "name": "Anthropic: Claude Sonnet 5"
         },
         {
+          "id": "azure_ai/cohere-command-a",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 131072
+        },
+        {
           "id": "azure_ai/mistral-large",
           "in": 4.0,
           "out": 12.0,
@@ -6862,6 +6910,14 @@
           "out": 30.0,
           "cache": 0.5,
           "ctx": 1050000
+        },
+        {
+          "id": "azure_ai/gpt-chat-latest",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 272000,
+          "name": "OpenAI: GPT Chat Latest"
         },
         {
           "id": "azure_ai/claude-fable-5",
@@ -12246,7 +12302,7 @@
         }
       ],
       "free_tier": true,
-      "edge_rtt_ms": 169
+      "edge_rtt_ms": 172
     },
     {
       "id": "nebius",
@@ -15703,22 +15759,6 @@
           "ctx": 65536
         },
         {
-          "id": "z-ai/glm-5.3-flash",
-          "name": "Z.ai: GLM 5.3 Flash",
-          "in": 0.07,
-          "out": 0.2333,
-          "cache": 0.014,
-          "ctx": 1048576
-        },
-        {
-          "id": "~z-ai/glm-flash-latest",
-          "name": "Z.ai: GLM Flash Latest",
-          "in": 0.07,
-          "out": 0.2333,
-          "cache": 0.014,
-          "ctx": 1048576
-        },
-        {
           "id": "ibm-granite/granite-4.2-8b",
           "name": "IBM: Granite 4.2 8B",
           "in": 0.06,
@@ -15736,6 +15776,14 @@
         {
           "id": "z-ai/glm-5.3-flash:batch",
           "name": "Z.ai: GLM 5.3 Flash (batch)",
+          "in": 0.075,
+          "out": 0.25,
+          "cache": 0.015,
+          "ctx": 1048576
+        },
+        {
+          "id": "~z-ai/glm-flash-latest",
+          "name": "Z.ai: GLM Flash Latest",
           "in": 0.075,
           "out": 0.25,
           "cache": 0.015,
@@ -16009,6 +16057,14 @@
           "ctx": 1000000
         },
         {
+          "id": "z-ai/glm-5.3-flash",
+          "name": "Z.ai: GLM 5.3 Flash",
+          "in": 0.15,
+          "out": 0.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
           "id": "tencent/hy3",
           "name": "Tencent: Hy3",
           "in": 0.132,
@@ -16068,6 +16124,14 @@
           "in": 0.15,
           "out": 0.6,
           "ctx": 128000
+        },
+        {
+          "id": "deepseek/deepseek-v4.1-flash",
+          "name": "DeepSeek: DeepSeek V4.1 Flash",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.003,
+          "ctx": 1048576
         },
         {
           "id": "mistralai/mistral-small-2603",
@@ -17313,7 +17377,7 @@
           "in": 0.966,
           "out": 3.036,
           "cache": 0.1932,
-          "ctx": 1048576
+          "ctx": 1000000
         },
         {
           "id": "qwen/qwen3.5-397b-a17b",
@@ -17345,6 +17409,14 @@
           "in": 0.4,
           "out": 4.0,
           "ctx": 131072
+        },
+        {
+          "id": "~z-ai/glm-latest",
+          "name": "Z.ai: GLM Latest",
+          "in": 1.085,
+          "out": 3.41,
+          "cache": 0.2015,
+          "ctx": 1024000
         },
         {
           "id": "google/gemini-3.6-flash",
@@ -17392,14 +17464,6 @@
           "out": 3.75,
           "cache": 0.075,
           "ctx": 1048576
-        },
-        {
-          "id": "~z-ai/glm-latest",
-          "name": "Z.ai: GLM Latest",
-          "in": 1.113,
-          "out": 3.498,
-          "cache": 0.2067,
-          "ctx": 1024000
         },
         {
           "id": "qwen/qwen3-max",
@@ -19881,7 +19945,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 312
+      "edge_rtt_ms": 599
     },
     {
       "id": "vercel-ai-gateway",
@@ -21038,7 +21102,7 @@
           "ctx": null
         }
       ],
-      "edge_rtt_ms": 536
+      "edge_rtt_ms": 568
     },
     {
       "id": "w-b-inference-gateway",

@@ -28,18 +28,52 @@ def main():
     pub = json.load(open(PUB))
     dl = json.load(open(DL))
     mp, md = pub["models_meta"], dl["models_meta"]
-    shared = set(mp) & set(md)
-    dl_only = set(md) - set(mp)
-    pub_only = set(mp) - set(md)
-    print(f"meta keys: shared={len(shared)} new-from-scrape={len(dl_only)} public-only-kept={len(pub_only)}")
+
+    # stats-30: case-insensitive key join + casing adoption. Public meta stays
+    # the base (hand-baked available_at layer), but where the fresh scrape
+    # spells a shared key differently and the public key is all-lowercase,
+    # the scraper's canonical casing is adopted (key renamed, record kept).
+    def lower_index(d):
+        idx = {}
+        for k in d:
+            idx.setdefault(k.lower(), []).append(k)
+        return idx
+
+    pub_l, dl_l = lower_index(mp), lower_index(md)
+    shared_l = set(pub_l) & set(dl_l)
+    dl_only = [k for k in md if k.lower() not in shared_l]
+    pub_only = [k for k in mp if k.lower() not in shared_l]
+    ambiguous = {kk for kk in shared_l if len(pub_l[kk]) > 1 or len(dl_l[kk]) > 1}
+    print(f"meta keys: shared={sum(len(dl_l[kk]) for kk in shared_l)} "
+          f"new-from-scrape={len(dl_only)} public-only-kept={len(pub_only)}")
     if dl_only:
         print("  adding:", ", ".join(sorted(dl_only)[:8]) + (" ..." if len(dl_only) > 8 else ""))
     if pub_only:
         print("  keeping (curated):", ", ".join(sorted(pub_only)[:8]) + (" ..." if len(pub_only) > 8 else ""))
+    if ambiguous:
+        print(f"  WARNING: {len(ambiguous)} case-ambiguous key group(s) — exact-match only")
+
+    # adopt scraper key casing on 1:1 shared pairs where the public key is
+    # all-lowercase (stats-30 display-casing canon)
+    key_moves = {}
+    for kk in shared_l - ambiguous:
+        pk, dk = pub_l[kk][0], dl_l[kk][0]
+        if pk != dk and pk == pk.lower():
+            if dk in mp:
+                print(f"  [Casing] SKIP key rename {pk!r} -> {dk!r} (collision)")
+                continue
+            key_moves[pk] = dk
+    for old, new in key_moves.items():
+        mp[new] = mp.pop(old)
+    if key_moves:
+        print(f"  [Casing] adopted scraper casing on {len(key_moves)} meta key(s): "
+              + ", ".join(f"{o!r}->{n!r}" for o, n in sorted(key_moves.items())[:6])
+              + (" ..." if len(key_moves) > 6 else ""))
 
     n_aa = n_or = n_rows_touched = 0
-    for k in shared:
-        rec, src = mp[k], md[k]
+    for kk in shared_l - ambiguous:
+        pk, dk = pub_l[kk][0], dl_l[kk][0]
+        rec, src = mp[key_moves.get(pk, pk)], md[dk]
         touched = False
         for f in AA_FIELDS:
             v = src.get(f)
@@ -59,7 +93,6 @@ def main():
             n_rows_touched += 1
     for k in dl_only:
         mp[k] = md[k]
-
     pub["models_meta"] = mp
     for path, obj in ((PUB, pub), (DL, pub)):
         with open(path, "w") as f:

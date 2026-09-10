@@ -3773,6 +3773,129 @@ def clean_display_name(name):
     return n
 
 
+# ── stats-30: display-casing canon ──────────────────────────────────────
+# Vendor (OpenRouter or_name) casing is the site convention. Scraped source
+# names sometimes arrive all-lowercase ("deepseek v4 flash") and the shortest-
+# variant display rule then bakes that casing into rows and meta keys.
+# This pass re-cases ONLY all-lowercase names (surgical — mixed-case names are
+# the convention's source and are never touched) by aligning tokens to the
+# vendor or_name where available, else a brand map. Matching/joins are
+# unaffected: normKey is case-insensitive; ids, slugs and URLs are untouched
+# (slugify lowercases, so casing-only renames keep every deep link valid).
+BRAND_CASING = {
+    'gpt': 'GPT', 'ai': 'AI', 'deepseek': 'DeepSeek', 'llama': 'Llama',
+    'qwen': 'Qwen', 'gemma': 'Gemma', 'grok': 'Grok', 'glm': 'GLM',
+    'mimo': 'MiMo', 'olmo': 'OLMo', 'kimi': 'Kimi', 'minimax': 'MiniMax',
+    'ernie': 'ERNIE', 'gemini': 'Gemini', 'claude': 'Claude',
+    # OpenAI's official style keeps these lowercase ("o3 Mini", "GPT-4o"):
+    'o1': 'o1', 'o3': 'o3', 'o4': 'o4', '4o': '4o',
+}
+KEEP_LOWER = {'it'}  # HF-style "-it" suffix (gemma-3-4b-it) stays lowercase
+
+
+def _vendor_casing_registry(models_meta):
+    """normalize_model_name(meta key) -> vendor or_name (casing reference)."""
+    reg = {}
+    for k, rec in (models_meta or {}).items():
+        if rec.get('or_name'):
+            reg.setdefault(normalize_model_name(k), rec['or_name'])
+    return reg
+
+
+def _casing_fallback_word(w):
+    """Brand-map -> keep-lower -> digit-led unit case -> capitalize first."""
+    lw = w.lower()
+    if lw in BRAND_CASING:
+        return BRAND_CASING[lw]
+    if lw in KEEP_LOWER:
+        return w
+    if w and w[0].isdigit():
+        m = re.match(r'^(\d[\d.]*)([a-z]+)$', lw)
+        return m.group(1) + m.group(2).upper() if m else w  # 4b -> 4B, 120b -> 120B
+    return w[0].upper() + w[1:] if w else w  # mini -> Mini
+
+
+def canonicalize_model_casing(name, reg):
+    """All-lowercase display names -> vendor-aligned casing. Others untouched."""
+    if not name or name != name.lower():
+        return name
+    vendor = reg.get(normalize_model_name(name))
+    if vendor:
+        v = re.sub(r'^[^:]{1,24}:\s*', '', vendor)  # strip "Vendor: " prefix
+        v_tokens = [t for t in re.split(r'[\s-]+', v) if t]
+        used = set()
+        parts = []
+        for part in re.split(r'(\s+|-)', name):
+            if not part or re.match(r'^[\s-]+$', part):
+                parts.append(part)
+                continue
+            repl = None
+            for i, vt in enumerate(v_tokens):
+                if i not in used and vt.lower() == part.lower():
+                    repl = vt
+                    used.add(i)
+                    break
+            parts.append(repl if repl else _casing_fallback_word(part))
+        fixed = ''.join(parts)
+        # alignment only re-cases (wording is structurally preserved), so the
+        # result always equals the input case-insensitively
+        return fixed
+    return ''.join(
+        part if (not part or re.match(r'^[\s-]+$', part)) else _casing_fallback_word(part)
+        for part in re.split(r'(\s+|-)', name)
+    )
+
+
+def canonicalize_display_casing(all_results, closed_table, open_table, models_meta):
+    """Re-case all-lowercase display names across the published document.
+
+    Touches: unified row names, per-benchmark row names, models_meta keys and
+    superseded_by references. Meta renames are collision-safe (an existing
+    differently-cased twin is never clobbered). Matching layers (normKey joins,
+    or_id, slugs) are untouched. Returns the number of renamed strings.
+    """
+    reg = _vendor_casing_registry(models_meta)
+
+    def canon(n):
+        return canonicalize_model_casing(n, reg)
+
+    n_renamed = 0
+    for row in closed_table + open_table:
+        c = canon(row['name'])
+        if c != row['name']:
+            row['name'] = c
+            n_renamed += 1
+    for bdata in all_results.values():
+        for cat in ('closed', 'open'):
+            new = []
+            for n, s in bdata[cat]:
+                c = canon(n)
+                if c != n:
+                    n_renamed += 1
+                new.append((c, s))
+            bdata[cat] = new
+
+    if models_meta:
+        renames = {}
+        for k in list(models_meta):
+            c = canon(k)
+            if c != k:
+                if c in models_meta:
+                    print(f"  [Casing] SKIP meta key {k!r} -> {c!r} (collision)")
+                    continue
+                renames[k] = c
+        for old, newk in renames.items():
+            models_meta[newk] = models_meta.pop(old)
+            n_renamed += 1
+        for rec in models_meta.values():
+            tgt = rec.get('superseded_by')
+            if tgt:
+                c = renames.get(tgt) or (canon(tgt) if tgt == tgt.lower() else None)
+                if c and c != tgt:
+                    rec['superseded_by'] = c
+    return n_renamed
+
+
 def normalize_model_name(name):
     """
     Normalize model names for cross-benchmark matching.
@@ -4729,6 +4852,16 @@ def main():
             'closed': [(n, _rescale_score(s, bname, all_s)) for n, s in bdata["closed"]],
             'open': [(n, _rescale_score(s, bname, all_s)) for n, s in bdata["open"]],
         }
+
+    # stats-30: display-casing canon (vendor-aligned) — after all name-keyed
+    # annotations, before reporting/publish, so rows, per-benchmark lists and
+    # meta keys ship with one consistent casing convention
+    try:
+        n_casing = canonicalize_display_casing(all_results, closed_table, open_table, models_meta)
+        if n_casing:
+            print(f"  [Casing] canonicalized {n_casing} all-lowercase display name(s) (vendor-aligned)")
+    except Exception as e:
+        print(f"  [Casing] canonicalization failed (non-fatal): {e}")
 
     # Format and display
     report = format_results(all_results, closed_table, open_table, all_benchmarks, avg_benchmarks)

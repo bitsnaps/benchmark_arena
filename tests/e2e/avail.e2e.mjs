@@ -55,7 +55,7 @@ const zenRows = visible.filter(r => avail(META[r.name]).some(a => a.p === ZEN));
 const bothRows = visible.filter(r => hasFree(META[r.name]) && filterPrice(META[r.name]) !== null && filterPrice(META[r.name]) <= CAP);
 
 // anchor: a widely hosted model with free listings
-const ANCHOR = visible.find(r => r.name === 'deepseek v4 flash') || freeRows[0];
+const ANCHOR = visible.find(r => r.name === 'DeepSeek V4 Flash') || freeRows[0];
 const ANCHOR_AVAIL = META[ANCHOR.name].available_at || [];
 const ANCHOR_ZEN = ANCHOR_AVAIL.find(a => a.p === ZEN);
 

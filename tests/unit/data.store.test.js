@@ -89,7 +89,7 @@ describe('freshness filtering (older models hidden by default)', () => {
   });
 
   it('REGRESSION: 2026-09 visible-old-model bug stays fixed', () => {
-    for (const name of ['gpt 5.5 instant', 'grok 4 fast chat', 'Phi-4 Multimodal', 'Mistral']) {
+    for (const name of ['gpt 5.5 instant', 'Grok 4 Fast Chat', 'Phi-4 Multimodal', 'Mistral']) {
       const row = rowOf(name);
       if (!row) continue; // absent from snapshot → nothing to assert
       expect(d.isOlder(row), `"${name}" must be flagged older`).toBe(true);
@@ -278,8 +278,8 @@ describe('LLM Chess cells (non-core, curated aliases)', () => {
   it('curated alias targets carry cells', () => {
     for (const name of ['Claude Opus 4.5', 'Claude Opus 4.7', 'Claude Opus 4.8',
       'Claude Sonnet 4.6', 'Claude Haiku 4.5', 'Claude 4.1 Opus',
-      'grok 3 mini', 'grok 4 fast chat', 'Llama 4 Maverick', 'Llama 4 Scout',
-      'llama 3.3 70b instruct', 'GLM-5', 'Kimi K2.5', 'Grok 4.6']) {
+      'Grok 3 Mini', 'Grok 4 Fast Chat', 'Llama 4 Maverick', 'Llama 4 Scout',
+      'Llama 3.3 70B Instruct', 'GLM-5', 'Kimi K2.5', 'Grok 4.6']) {
       const r = rowOf(name);
       if (!r) continue; // absent from snapshot
       expect(r['LLM Chess'], `chess cell of "${name}"`).not.toBeNull();
@@ -450,7 +450,7 @@ describe('curated meta aliases (renames / word-order variants)', () => {
   });
 
   it('gemma 3 4b it pins to google/gemma-3-4b-it ($0.05 in)', () => {
-    const row = rowOf('gemma 3 4b it');
+    const row = rowOf('Gemma 3 4B it');
     expect(row).toBeTruthy();
     expect(d.metaFor(row)?.or_id).toBe('google/gemma-3-4b-it');
     expect(d.priceFor(row).input).toBe(0.05);
@@ -577,8 +577,8 @@ describe('availability ("available at" cross-seller layer)', () => {
     }
   });
 
-  it('anchor: deepseek v4 flash is free at OpenCode Zen and OrcaRouter', () => {
-    const row = rowOf('deepseek v4 flash');
+  it('anchor: DeepSeek V4 Flash is free at OpenCode Zen and OrcaRouter', () => {
+    const row = rowOf('DeepSeek V4 Flash');
     const a = d.availableAtFor(row);
     const zen = a.find(x => x.p === 'opencode-zen');
     const orca = a.find(x => x.p === 'orcarouter');
@@ -622,7 +622,7 @@ describe('availability ("available at" cross-seller layer)', () => {
   });
 
   it('filterPriceFor: free counts as $0, priced rows use the 3:1 blend, unpriced sink', () => {
-    const flash = rowOf('deepseek v4 flash');
+    const flash = rowOf('DeepSeek V4 Flash');
     expect(d.filterPriceFor(flash)).toBe(0); // free listing wins the slider
     const priced = d.pivotAll.value.find(r => !d.hasFreeListingFor(r) && d.priceFor(r));
     if (priced) expect(d.filterPriceFor(priced)).toBeCloseTo(d.priceFor(priced).blend, 10);
@@ -631,7 +631,7 @@ describe('availability ("available at" cross-seller layer)', () => {
   });
 
   it('sellerCountFor + null-safe helpers', () => {
-    expect(d.sellerCountFor(rowOf('deepseek v4 flash'))).toBeGreaterThanOrEqual(10);
+    expect(d.sellerCountFor(rowOf('DeepSeek V4 Flash'))).toBeGreaterThanOrEqual(10);
     expect(d.availableAtFor({ name: 'definitely-not-a-model' })).toEqual([]);
     expect(d.hasFreeListingFor({ name: 'definitely-not-a-model' })).toBe(false);
     expect(d.sellerCountFor({ name: 'definitely-not-a-model' })).toBe(0);

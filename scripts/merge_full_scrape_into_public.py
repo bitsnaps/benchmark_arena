@@ -24,20 +24,40 @@ def main():
     pub = json.load(open(PUB))
     dl = json.load(open(DL))
     mp, md = pub["models_meta"], dl["models_meta"]
-    shared = set(mp) & set(md)
-    dl_only = set(md) - set(mp)
-    pub_only = set(mp) - set(md)
-    print(f"meta keys: shared={len(shared)} new-from-scrape={len(dl_only)} public-only-kept={len(pub_only)}")
+
+    # stats-30: case-insensitive key join. The scrape doc owns key casing now
+    # (display-casing canon in bench_scraper.py), so casing-only drift between
+    # the fresh doc and the public meta must not fork a record into two
+    # (stale lowercase key + fresh canon key). available_at follows the record.
+    def lower_index(d):
+        idx = {}
+        for k in d:
+            idx.setdefault(k.lower(), []).append(k)
+        return idx
+
+    pub_l, dl_l = lower_index(mp), lower_index(md)
+    shared_l = set(pub_l) & set(dl_l)
+    dl_only = [k for k in md if k.lower() not in shared_l]
+    pub_only = [k for k in mp if k.lower() not in shared_l]
+    ambiguous = {kk for kk in shared_l if len(pub_l[kk]) > 1 or len(dl_l[kk]) > 1}
+    recased = sum(1 for kk in shared_l - ambiguous
+                  if dl_l[kk][0] != pub_l[kk][0])
+    print(f"meta keys: shared={sum(len(dl_l[kk]) for kk in shared_l)} "
+          f"new-from-scrape={len(dl_only)} public-only-kept={len(pub_only)} "
+          f"recased-on-adopt={recased}")
     if dl_only:
         print("  adding:", ", ".join(sorted(dl_only)[:8]) + (" ..." if len(dl_only) > 8 else ""))
     if pub_only:
         print("  dropping (cells gone upstream):", ", ".join(sorted(pub_only)[:8]) + (" ..." if len(pub_only) > 8 else ""))
+    if ambiguous:
+        print(f"  WARNING: {len(ambiguous)} case-ambiguous key group(s) — exact-match only")
 
     restored = 0
-    for k in shared:
-        old = mp[k].get("available_at")
+    for kk in shared_l - ambiguous:
+        pk, dk = pub_l[kk][0], dl_l[kk][0]
+        old = mp[pk].get("available_at")
         if old:
-            md[k]["available_at"] = old
+            md[dk]["available_at"] = old
             restored += 1
     for k in pub_only:
         rec = mp[k]

@@ -71,4 +71,4 @@ export const MUST_STAY_VISIBLE = ['Gemini 3.1 Pro', 'Gemini 3.8 Flash', 'Gemini 
 // Curated regression list: these shipped as "visible old models" bugs
 // (2026-09 user report). The generic leak rules below now cover them, but
 // they stay asserted by name so the exact regression can never return.
-export const MUST_BE_HIDDEN = ['gpt 5.5 instant', 'grok 4 fast chat', 'Phi-4 Multimodal', 'Mistral'];
+export const MUST_BE_HIDDEN = ['gpt 5.5 instant', 'Grok 4 Fast Chat', 'Phi-4 Multimodal', 'Mistral'];

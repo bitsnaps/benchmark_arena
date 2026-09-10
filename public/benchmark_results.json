@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-09 19:17",
+  "timestamp": "2026-09-10 02:45",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -139,10 +139,6 @@
           44.0
         ],
         [
-          "Qwen3.8-Flash-Next",
-          42.0
-        ],
-        [
           "GLM-5.3-Flash",
           42.0
         ],
@@ -152,6 +148,10 @@
         ],
         [
           "Qwen3.8 2.4T A95B",
+          40.0
+        ],
+        [
+          "Qwen3.8-Flash-Next",
           40.0
         ],
         [
@@ -183,10 +183,6 @@
           31.0
         ],
         [
-          "Qwen3.8 27B (medium)",
-          31.0
-        ],
-        [
           "DeepSeek V4 Pro (high)",
           30.0
         ],
@@ -200,6 +196,10 @@
         ],
         [
           "Solar Pro 4",
+          28.000000000000004
+        ],
+        [
+          "Qwen3.8 27B (medium)",
           28.000000000000004
         ],
         [
@@ -952,11 +952,11 @@
       "closed": [
         [
           "GPT-6 Astra (xhigh)",
-          96.16666666666667
+          96.33333333333334
         ],
         [
           "Muse Spark 1.3 (xhigh)",
-          94.5
+          94.33333333333334
         ],
         [
           "GPT-5.6 Sol (xhigh)",
@@ -964,7 +964,7 @@
         ],
         [
           "Claude Fable 5.1",
-          90.66666666666666
+          90.5
         ],
         [
           "Claude Opus 5",
@@ -972,7 +972,7 @@
         ],
         [
           "GPT-5.6 Sol (Medium)",
-          89.33333333333333
+          89.16666666666667
         ],
         [
           "Muse Spark 1.2",
@@ -983,11 +983,11 @@
           87.83333333333333
         ],
         [
-          "Gemini 3.8 Flash",
-          87.0
+          "Gemini 3.7 Flash",
+          86.83333333333333
         ],
         [
-          "Gemini 3.7 Flash",
+          "Gemini 3.8 Flash",
           86.83333333333333
         ],
         [
@@ -1018,7 +1018,7 @@
         ],
         [
           "Qwen3.8 Max",
-          84.83333333333334
+          85.0
         ],
         [
           "GLM-5.3-Flash",
@@ -1995,7 +1995,7 @@
       "Arena.ai Text": 92.9,
       "SimpleBench.com": 86.6,
       "ARC-AGI-2": 90.0,
-      "Design Arena": 90.7,
+      "Design Arena": 90.5,
       "DeepSWE": null,
       "VendingBench": 34.9,
       "SWE-Marathon": 91.2,
@@ -2013,7 +2013,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 83.6,
       "ARC-AGI-2": 95.0,
-      "Design Arena": 96.2,
+      "Design Arena": 96.3,
       "DeepSWE": 74.0,
       "VendingBench": 100.0,
       "SWE-Marathon": 85.0,
@@ -2067,7 +2067,7 @@
       "Arena.ai Text": 90.5,
       "SimpleBench.com": 81.8,
       "ARC-AGI-2": null,
-      "Design Arena": 94.5,
+      "Design Arena": 94.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2139,7 +2139,7 @@
       "Arena.ai Text": 91.4,
       "SimpleBench.com": 82.4,
       "ARC-AGI-2": null,
-      "Design Arena": 87.0,
+      "Design Arena": 86.8,
       "DeepSWE": 74.0,
       "VendingBench": 32.8,
       "SWE-Marathon": null,
@@ -3339,10 +3339,28 @@
       "LLM Chess": null
     },
     {
+      "name": "Qwen3.8-Max",
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": 40.0,
+      "BenchLM.ai": 67.0,
+      "Arena.ai Text": 89.2,
+      "SimpleBench.com": 62.5,
+      "ARC-AGI-2": null,
+      "Design Arena": 85.0,
+      "DeepSWE": 57.0,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": 15.8,
+      "CyberGem": null,
+      "EQBench CW": 83.6,
+      "LLM Chess": null
+    },
+    {
       "name": "Qwen3.8-Flash-Next",
       "num_benchmarks": 2,
       "cl": 25.0,
-      "Artificial Analysis": 42.0,
+      "Artificial Analysis": 40.0,
       "BenchLM.ai": 59.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
@@ -3354,24 +3372,6 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Qwen3.8-Max",
-      "num_benchmarks": 6,
-      "cl": 75.0,
-      "Artificial Analysis": 40.0,
-      "BenchLM.ai": 67.0,
-      "Arena.ai Text": 89.2,
-      "SimpleBench.com": 62.5,
-      "ARC-AGI-2": null,
-      "Design Arena": 84.8,
-      "DeepSWE": 57.0,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": 15.8,
-      "CyberGem": null,
-      "EQBench CW": 83.6,
       "LLM Chess": null
     },
     {
@@ -4120,7 +4120,7 @@
         "cache_read": 0.25
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 6.777,
+      "aa_ttft_seconds": 7.434,
       "available_at": [
         {
           "p": "openrouter",
@@ -4312,7 +4312,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 30.478,
+      "aa_ttft_seconds": 28.653,
       "available_at": [
         {
           "p": "openrouter",
@@ -4417,7 +4417,7 @@
         "cache_read": 1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 92.222,
+      "aa_ttft_seconds": 107.284,
       "available_at": [
         {
           "p": "openrouter",
@@ -4607,7 +4607,7 @@
         "cache_read": 0.4
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.896,
+      "aa_ttft_seconds": 2.975,
       "available_at": [
         {
           "p": "openrouter",
@@ -4703,7 +4703,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 36.693,
+      "aa_ttft_seconds": 37.789,
       "available_at": [
         {
           "p": "openrouter",
@@ -4796,7 +4796,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.071,
+      "aa_ttft_seconds": 2.107,
       "available_at": [
         {
           "p": "openrouter",
@@ -4983,7 +4983,7 @@
         "cache_read": 0.075
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 9.417,
+      "aa_ttft_seconds": 9.924,
       "available_at": [
         {
           "p": "openrouter",
@@ -5166,7 +5166,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 12.717,
+      "aa_ttft_seconds": 14.852,
       "available_at": [
         {
           "p": "openrouter",
@@ -5253,7 +5253,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.387,
+      "aa_ttft_seconds": 1.424,
       "available_at": [
         {
           "p": "openrouter",
@@ -5358,7 +5358,7 @@
         "cache_read": 0.02
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.771,
+      "aa_ttft_seconds": 1.806,
       "available_at": [
         {
           "p": "openrouter",
@@ -5754,8 +5754,8 @@
       "or_name": "Thinking Machines: Inkling",
       "provider": "Thinking Machines",
       "created": "2026-07-17",
-      "context_length": 524288,
-      "max_output_tokens": 471859,
+      "context_length": 1048576,
+      "max_output_tokens": 32768,
       "modality": "text+image+audio->text",
       "input_modalities": [
         "text",
@@ -5819,7 +5819,7 @@
         "cache_read": 0.17
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.689,
+      "aa_ttft_seconds": 2.654,
       "available_at": [
         {
           "p": "openrouter",
@@ -5919,7 +5919,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.12,
+      "aa_ttft_seconds": 2.196,
       "available_at": [
         {
           "p": "openrouter",
@@ -6001,7 +6001,7 @@
         "cache_read": 0.04
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.167,
+      "aa_ttft_seconds": 2.253,
       "available_at": [
         {
           "p": "openrouter",
@@ -6043,9 +6043,9 @@
       "active_params_b": 21.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0825,
-        "output": 0.33,
-        "cache_read": 0.0206
+        "input": 0.132,
+        "output": 0.528,
+        "cache_read": 0.033
       },
       "reasoning": {
         "mandatory": false,
@@ -6088,7 +6088,7 @@
         "cache_read": 0.034
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.634,
+      "aa_ttft_seconds": 2.643,
       "available_at": [
         {
           "p": "openrouter",
@@ -6179,7 +6179,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 12.17,
+      "aa_ttft_seconds": 12.234,
       "available_at": [
         {
           "p": "openrouter",
@@ -6267,7 +6267,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.556,
+      "aa_ttft_seconds": 2.569,
       "available_at": [
         {
           "p": "openrouter",
@@ -6352,7 +6352,7 @@
         "cache_read": 0.03
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 8.009,
+      "aa_ttft_seconds": 8.933,
       "available_at": [
         {
           "p": "openrouter",
@@ -6452,7 +6452,7 @@
         "cache_read": 0.04
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.849,
+      "aa_ttft_seconds": 2.857,
       "available_at": [
         {
           "p": "openrouter",
@@ -6633,7 +6633,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.594,
+      "aa_ttft_seconds": 0.619,
       "available_at": [
         {
           "p": "openrouter",
@@ -6700,7 +6700,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.04,
+      "aa_ttft_seconds": 4.642,
       "available_at": [
         {
           "p": "openrouter",
@@ -6950,7 +6950,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.971,
+      "aa_ttft_seconds": 1.06,
       "available_at": [
         {
           "p": "openrouter",
@@ -7186,7 +7186,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.052,
+      "aa_ttft_seconds": 2.036,
       "available_at": [
         {
           "p": "openrouter",
@@ -7291,7 +7291,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.565,
+      "aa_ttft_seconds": 1.583,
       "available_at": [
         {
           "p": "openrouter",
@@ -7530,7 +7530,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 6.123,
+      "aa_ttft_seconds": 6.093,
       "available_at": [
         {
           "p": "openrouter",
@@ -7627,7 +7627,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.122,
+      "aa_ttft_seconds": 2.47,
       "available_at": [
         {
           "p": "openrouter",
@@ -7736,7 +7736,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 73.856,
+      "aa_ttft_seconds": 87.689,
       "available_at": [
         {
           "p": "openrouter",
@@ -7976,7 +7976,7 @@
         "cache_read": 0.075
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 6.267,
+      "aa_ttft_seconds": 8.512,
       "available_at": [
         {
           "p": "openrouter",
@@ -8074,7 +8074,7 @@
         "cache_read": 0.02
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.935,
+      "aa_ttft_seconds": 5.397,
       "available_at": [
         {
           "p": "openrouter",
@@ -8169,7 +8169,7 @@
         "cache_read": 0.125
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 22.651,
+      "aa_ttft_seconds": 23.23,
       "available_at": [
         {
           "p": "openrouter",
@@ -8365,7 +8365,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 17.498,
+      "aa_ttft_seconds": 18.111,
       "available_at": [
         {
           "p": "openrouter",
@@ -8646,7 +8646,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.775,
+      "aa_ttft_seconds": 5.933,
       "available_at": [
         {
           "p": "openrouter",
@@ -9136,7 +9136,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.861,
+      "aa_ttft_seconds": 2.972,
       "available_at": [
         {
           "p": "openrouter",
@@ -9254,7 +9254,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.792,
+      "aa_ttft_seconds": 3.836,
       "available_at": [
         {
           "p": "openrouter",
@@ -9336,9 +9336,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.075,
-        "output": 0.25,
-        "cache_read": 0.015
+        "input": 0.07,
+        "output": 0.2333,
+        "cache_read": 0.014
       },
       "reasoning": {
         "mandatory": true,
@@ -9382,7 +9382,7 @@
         "cache_read": 0.026
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.472,
+      "aa_ttft_seconds": 2.533,
       "available_at": [
         {
           "p": "openrouter",
@@ -9508,8 +9508,8 @@
       "or_name": "Z.ai: GLM 5.2",
       "provider": "Z.ai",
       "created": "2026-06-16",
-      "context_length": 1024000,
-      "max_output_tokens": 128000,
+      "context_length": 1048576,
+      "max_output_tokens": 131072,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -9523,9 +9523,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.28,
-        "output": 0.88,
-        "cache_read": 0.052
+        "input": 0.966,
+        "output": 3.036,
+        "cache_read": 0.1932
       },
       "reasoning": {
         "mandatory": false,
@@ -9569,7 +9569,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.076,
+      "aa_ttft_seconds": 2.083,
       "available_at": [
         {
           "p": "openrouter",
@@ -9660,8 +9660,8 @@
       "or_name": "DeepSeek: DeepSeek V4 Pro 0813",
       "provider": "DeepSeek",
       "created": "2026-08-12",
-      "context_length": 1048576,
-      "max_output_tokens": 393216,
+      "context_length": 1024000,
+      "max_output_tokens": 384000,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -9675,9 +9675,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.5795,
-        "output": 1.7384,
-        "cache_read": 0.0184
+        "input": 1.0494,
+        "output": 3.1482,
+        "cache_read": 0.035
       },
       "reasoning": {
         "mandatory": false,
@@ -9721,7 +9721,7 @@
         "cache_read": 0.044
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.616
+      "aa_ttft_seconds": 1.5
     },
     "DeepSeek V4 Flash 0731": {
       "or_id": "deepseek/deepseek-v4-flash-0731",
@@ -9791,7 +9791,7 @@
         "cache_read": 0.014
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.152
+      "aa_ttft_seconds": 1.111
     },
     "DeepSeek V4 Pro": {
       "or_id": "deepseek/deepseek-v4-pro",
@@ -9813,9 +9813,9 @@
       "active_params_b": 49.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.87,
-        "output": 1.74,
-        "cache_read": 0.0725
+        "input": 0.9553,
+        "output": 1.9105,
+        "cache_read": 0.0796
       },
       "reasoning": {
         "mandatory": false,
@@ -9859,7 +9859,7 @@
         "cache_read": 0.0036
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.722,
+      "aa_ttft_seconds": 1.709,
       "available_at": [
         {
           "p": "openrouter",
@@ -10002,7 +10002,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.794,
+      "aa_ttft_seconds": 1.826,
       "available_at": [
         {
           "p": "openrouter",
@@ -10193,7 +10193,7 @@
         "cache_read": 0.0036
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.401,
+      "aa_ttft_seconds": 3.47,
       "available_at": [
         {
           "p": "openrouter",
@@ -10278,7 +10278,7 @@
         "cache_read": 0.19
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.961,
+      "aa_ttft_seconds": 3.005,
       "available_at": [
         {
           "p": "openrouter",
@@ -10503,7 +10503,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.189,
+      "aa_ttft_seconds": 2.208,
       "available_at": [
         {
           "p": "openrouter",
@@ -10594,7 +10594,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.089,
+      "aa_ttft_seconds": 1.098,
       "available_at": [
         {
           "p": "openrouter",
@@ -10723,7 +10723,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.268,
+      "aa_ttft_seconds": 2.331,
       "available_at": [
         {
           "p": "openrouter",
@@ -10800,7 +10800,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.738,
+      "aa_ttft_seconds": 0.73,
       "available_at": [
         {
           "p": "openrouter",
@@ -11061,7 +11061,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.863,
+      "aa_ttft_seconds": 0.872,
       "alias_note": "LLM Chess lists this model under its HF name llama4-scout-17b-instruct-v1:0",
       "available_at": [
         {
@@ -11129,7 +11129,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.843,
+      "aa_ttft_seconds": 0.859,
       "available_at": [
         {
           "p": "openrouter",
@@ -11212,7 +11212,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.446,
+      "aa_ttft_seconds": 1.452,
       "available_at": [
         {
           "p": "openrouter",
@@ -11261,8 +11261,8 @@
       "or_name": "MiniMax: MiniMax M2.5",
       "provider": "MiniMax",
       "created": "2026-02-12",
-      "context_length": 200000,
-      "max_output_tokens": 128000,
+      "context_length": 204800,
+      "max_output_tokens": 131072,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -11276,9 +11276,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.27,
-        "output": 1.08,
-        "cache_read": 0.027
+        "input": 0.3,
+        "output": 1.2,
+        "cache_read": 0.03
       },
       "reasoning": {
         "mandatory": true,
@@ -11371,8 +11371,8 @@
       "or_name": "DeepSeek: DeepSeek V3",
       "provider": "DeepSeek",
       "created": "2024-12-26",
-      "context_length": 163840,
-      "max_output_tokens": 16384,
+      "context_length": 128000,
+      "max_output_tokens": 16000,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -11386,8 +11386,8 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.32,
-        "output": 0.89
+        "input": 0.2574,
+        "output": 1.0287
       },
       "reasoning": null,
       "supported_parameters": [
@@ -11500,7 +11500,7 @@
         "cache_read": 0.6
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.341,
+      "aa_ttft_seconds": 1.34,
       "available_at": [
         {
           "p": "openrouter",
@@ -11607,7 +11607,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.941,
+      "aa_ttft_seconds": 1.945,
       "available_at": [
         {
           "p": "openrouter",
@@ -11843,7 +11843,7 @@
         "cache_read": 0.16
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.805,
+      "aa_ttft_seconds": 2.8,
       "available_at": [
         {
           "p": "openrouter",
@@ -12236,9 +12236,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.07,
-        "output": 0.14,
-        "cache_read": 0.014
+        "input": 0.0886,
+        "output": 0.1772,
+        "cache_read": 0.0177
       },
       "reasoning": {
         "mandatory": false,
@@ -12476,7 +12476,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.808,
+      "aa_ttft_seconds": 0.814,
       "available_at": [
         {
           "p": "w-b-inference-gateway",
@@ -12494,7 +12494,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.379,
+      "aa_ttft_seconds": 0.401,
       "available_at": [
         {
           "p": "openrouter",
@@ -12568,7 +12568,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.545
+      "aa_ttft_seconds": 3.16
     },
     "LFM2.5-8B-A1B": {
       "hugging_face_id": "LiquidAI/LFM2.5-8B-A1B",
@@ -12641,7 +12641,7 @@
         "cache_read": 0.016
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.679
+      "aa_ttft_seconds": 2.666
     },
     "K-EXAONE 2.0": {
       "hugging_face_id": "LGAI-EXAONE/K-EXAONE-2.0-750B-A37B",

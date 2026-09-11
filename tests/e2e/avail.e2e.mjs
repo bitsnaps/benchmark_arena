@@ -54,10 +54,22 @@ const ZEN = 'opencode-zen';
 const zenRows = visible.filter(r => avail(META[r.name]).some(a => a.p === ZEN));
 const bothRows = visible.filter(r => hasFree(META[r.name]) && filterPrice(META[r.name]) !== null && filterPrice(META[r.name]) <= CAP);
 
-// anchor: a widely hosted model with free listings
-const ANCHOR = visible.find(r => r.name === 'DeepSeek V4 Flash') || freeRows[0];
-const ANCHOR_AVAIL = META[ANCHOR.name].available_at || [];
+// anchor: the most widely hosted VISIBLE model with a free listing —
+// derived from the snapshot, never a pinned name (a pinned anchor goes
+// stale exactly when the data improves: stats-32 — 'DeepSeek V4 Flash'
+// was the free-Zen anchor until it was correctly flagged Older).
+const bySellers = (a, b) => avail(META[b.name]).length - avail(META[a.name]).length;
+const ANCHOR = [...freeRows].sort(bySellers)[0] || null;
+const ANCHOR_AVAIL = ANCHOR ? (META[ANCHOR.name].available_at || []) : [];
 const ANCHOR_ZEN = ANCHOR_AVAIL.find(a => a.p === ZEN);
+const ANCHOR_FREE = ANCHOR_AVAIL.filter(a => a.free);
+// Zen free-chip UI state: needs a model whose ZEN listing is FREE — no
+// visible model may qualify on a given snapshot (stats-32: the only
+// free-Zen row, the April 'DeepSeek V4 Flash' SKU, is now correctly
+// Older). Deep-link that row's model card instead; skip the Zen-specific
+// assertions with a note when the snapshot has no free-Zen listing.
+const slugify = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+const ZEN_ROW = rows.find(r => avail(META[r.name]).some(a => a.p === ZEN && a.free)) || null;
 
 function fail(msg) { console.error('FAIL:', msg); process.exitCode = 1; }
 const ok = (msg) => console.log('  ok:', msg);
@@ -100,19 +112,23 @@ const expectCount = async (page, selector, expected, label) => {
     });
     await expectCount(page, '.b-table .avail-chip', availChipRows.length, 'sellers chips');
 
-    // anchor row: free chip tooltip names the sellers + the caveat
+    // anchor row: free chip tooltip names the free sellers + the caveat
     // (stats-26: Buefy b-tooltip — hover the chip, read .tooltip-content)
-    const anchorRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: ANCHOR.name }) }).first();
-    const anchorChip = anchorRow.locator('.free-chip').first();
-    await anchorChip.hover();
-    await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
-    const chipTitle = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
-    await page.mouse.move(0, 0);
-    await page.evaluate(() => window.scrollTo(0, 0)); // hover scrolled deep — navbar covers the header controls otherwise
-    await page.waitForTimeout(200);
-    if (chipTitle.includes('rate limits apply') && chipTitle.includes(ANCHOR_ZEN ? 'OpenCode Zen' : '·')) {
-      ok('anchor free chip tooltip carries the caveat + sellers');
-    } else fail(`anchor free chip tooltip = "${chipTitle}"`);
+    if (ANCHOR) {
+      const anchorRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: ANCHOR.name }) }).first();
+      const anchorChip = anchorRow.locator('.free-chip').first();
+      await anchorChip.hover();
+      await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
+      const chipTitle = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
+      await page.mouse.move(0, 0);
+      await page.evaluate(() => window.scrollTo(0, 0)); // hover scrolled deep — navbar covers the header controls otherwise
+      await page.waitForTimeout(200);
+      // the tooltip lists the FREE sellers (not every seller) — require
+      // each free seller's display name + the caveat
+      if (chipTitle.includes('rate limits apply') && ANCHOR_FREE.every(a => chipTitle.includes(a.n))) {
+        ok(`anchor (${ANCHOR.name}) free chip tooltip carries the caveat + free sellers`);
+      } else fail(`anchor free chip tooltip = "${chipTitle}"`);
+    } else ok('no visible free-listed model in this snapshot — chip tooltip block skipped');
 
     // ── 2. Free toggle click filters exactly the free rows ──
     await page.locator('label.switch', { hasText: 'Free' }).first().click();
@@ -179,7 +195,8 @@ const expectCount = async (page, selector, expected, label) => {
 
     await expectCount(page, '.b-table .table tbody tr', bothRows.length, 'rows with ?free=1&price=' + CAP);
 
-    // ── 7. model card: full "Available at" panel ──
+    // ── 7. model card: full "Available at" panel (main anchor) ──
+    if (ANCHOR) {
     await page.goto(BASE, { waitUntil: 'load' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 15000 });
 // stats-20: pagination default is 50/page — flip to All so the legacy
@@ -190,13 +207,30 @@ const expectCount = async (page, selector, expected, label) => {
     await page.locator('.model-link', { hasText: ANCHOR.name }).first().click();
     await page.waitForSelector('.model-head', { timeout: 10000 });
     await page.waitForSelector('.avail-row', { timeout: 10000 });
-    await expectCount(page, '.avail-row', ANCHOR_AVAIL.length, 'model card seller rows');
+    await expectCount(page, '.avail-row', ANCHOR_AVAIL.length, `model card seller rows (${ANCHOR.name})`);
     const panelText = await page.locator('section').innerText();
     if (panelText.includes('Available at')) ok('panel heading present');
     else fail('model card has no "Available at" heading');
-    // Zen row: free chip + caveat; unpriced sellers show a dash
+    // a priced seller row shows in / out
+    const pricedEntry = ANCHOR_AVAIL.find(a => typeof a.in === 'number' && a.p !== 'openrouter');
+    if (pricedEntry) {
+      const pricedRow = page.locator('.avail-row', { has: page.locator('.avail-seller', { hasText: pricedEntry.n }) }).first();
+      const priceText = await pricedRow.locator('.avail-price').innerText();
+      if (priceText.includes('/')) ok(`priced seller row shows in/out: "${priceText.trim()}"`);
+      else fail(`priced seller row text = "${priceText}", expected "in / out"`);
+    }
+    // footer caveat — tied to ANY free listing, not Zen-specific
+    if (ANCHOR_FREE.length && panelText.includes('rate-limited, not unlimited')) ok('panel footer carries the free ≠ unlimited caveat');
+    else if (ANCHOR_FREE.length) fail('panel footer missing the rate-limit caveat');
+    } else ok('no anchor in this snapshot — model card block skipped');
+
+    // ── 8. Zen free-chip UI state on a card whose ZEN listing is free ──
+    if (ZEN_ROW) {
+    await page.goto(`${BASE}#/model/${slugify(ZEN_ROW.name)}`, { waitUntil: 'load' });
+    await page.waitForSelector('.model-head', { timeout: 10000 });
+    await page.waitForSelector('.avail-row', { timeout: 10000 });
     const zenRow = page.locator('.avail-row', { has: page.locator('.avail-seller', { hasText: 'OpenCode Zen' }) }).first();
-    if (await zenRow.locator('.free-chip').count()) ok('Zen seller row carries the free chip');
+    if (await zenRow.locator('.free-chip').count()) ok(`Zen seller row carries the free chip (${ZEN_ROW.name})`);
     else fail('Zen seller row missing free chip');
     // stats-26: the chip tooltip is a Buefy b-tooltip = exact caveat
     await zenRow.locator('.free-chip').hover();
@@ -206,17 +240,7 @@ const expectCount = async (page, selector, expected, label) => {
     await page.evaluate(() => window.scrollTo(0, 0));
     if (zenChipTitle === 'Free tier — rate limits apply, not unlimited') ok('free chip tooltip = exact caveat');
     else fail(`free chip tooltip = "${zenChipTitle}"`);
-    // a priced seller row shows in / out
-    const pricedEntry = ANCHOR_AVAIL.find(a => typeof a.in === 'number' && a.p !== 'openrouter');
-    if (pricedEntry) {
-      const pricedRow = page.locator('.avail-row', { has: page.locator('.avail-seller', { hasText: pricedEntry.n }) }).first();
-      const priceText = await pricedRow.locator('.avail-price').innerText();
-      if (priceText.includes('/')) ok(`priced seller row shows in/out: "${priceText.trim()}"`);
-      else fail(`priced seller row text = "${priceText}", expected "in / out"`);
-    }
-    // footer caveat
-    if (ANCHOR_ZEN && panelText.includes('rate-limited, not unlimited')) ok('panel footer carries the free ≠ unlimited caveat');
-    else if (ANCHOR_ZEN) fail('panel footer missing the rate-limit caveat');
+    } else ok('no free OpenCode Zen listing in this snapshot — Zen chip block skipped');
 
     await page.screenshot({ path: path.join(SHOTS, 'avail-panel.png'), fullPage: false });
   } catch (e) {

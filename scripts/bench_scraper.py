@@ -2829,24 +2829,40 @@ def collect_model_metadata(unified_rows, or_models=None):
 _SERIES_NOISE_SUFFIX = re.compile(
     r"-(latest|preview|free|reasoning|thinking|batch|high|exp.*)$")
 _SERIES_CANON_DATE = re.compile(r"-\d{8}$")
+# stats-32: 4-digit MMDD snapshot tails ("-0731", "-0813", "-0613", "-0528" …)
+# fold into the base so a dated snapshot groups with its base product line.
+# Calendar-plausible ONLY (month 01-12, day 01-31): checkpoint-style tails
+# ("minimax-m1-6402") and bare years ("gpt-x-2026") are never stripped.
+_SERIES_MMDD_DATE = re.compile(r"-(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])$")
 _SERIES_DOTTED_VER = re.compile(r"(\d+(?:\.\d+)+)")
-_SERIES_SINGLE_VER = re.compile(r"(?:^|-)(\d+)(?:-|$)")
+# stats-32: optional "v" before a single version segment ("deepseek-v4-pro").
+# Only 'v' is a version marker — "kimi-k3" stays unparseable by design.
+_SERIES_SINGLE_VER = re.compile(r"(?:^|-)v?(\d+)(?:-|$)")
 
 
 def parse_series(or_id):
-    """'openai/gpt-5.4-pro' -> ('gpt', 'pro', (5, 4)) — or None when unparseable."""
+    """'openai/gpt-5.4-pro' -> ('gpt', 'pro', (5, 4)) — or None when unparseable.
+
+    stats-32: 4-digit MMDD snapshot tails are folded into the base before
+    family parsing so 'deepseek/deepseek-v4-flash-0731' groups with
+    'deepseek/deepseek-v4-flash', and a 'v'-prefixed single version
+    ('deepseek/deepseek-v4-pro') now parses. The MMDD-stripped base is tried
+    first with the raw base as fallback, so no existing parse regresses
+    (catalog-wide dry run: 2 new supersession links, 0 removed).
+    """
     if not or_id or "/" not in or_id:
         return None
     base = or_id.split("/", 1)[1].split(":", 1)[0]       # drop :free/:batch
     base = _SERIES_CANON_DATE.sub("", base)              # drop canonical -20260305
-    base = _SERIES_NOISE_SUFFIX.sub("", base)
-    m = _SERIES_DOTTED_VER.search(base) or _SERIES_SINGLE_VER.search(base)
-    if not m:
-        return None
-    ver = tuple(int(x) for x in m.group(1).split("."))
-    fam = base[:m.start()].strip("-") or base[m.end():].strip("-")
-    var = base[m.end():].strip("-") if m.start() > 0 else ""
-    return (fam, var, ver)
+    for cand in (_SERIES_MMDD_DATE.sub("", base), base):  # MMDD-stripped first
+        s = _SERIES_NOISE_SUFFIX.sub("", cand)
+        m = _SERIES_DOTTED_VER.search(s) or _SERIES_SINGLE_VER.search(s)
+        if m:
+            ver = tuple(int(x) for x in m.group(1).split("."))
+            fam = s[:m.start()].strip("-") or s[m.end():].strip("-")
+            var = s[m.end():].strip("-") if m.start() > 0 else ""
+            return (fam, var, ver)
+    return None
 
 
 def annotate_supersession(models_meta):

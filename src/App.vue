@@ -47,6 +47,8 @@ function goCompare() {
           <div class="navbar-start">
             <router-link class="navbar-item" :class="{ 'is-active': route.name === 'home' }"
               :to="{ name: 'home' }" @click="menuOpen = false">Leaderboard</router-link>
+            <router-link class="navbar-item" :class="{ 'is-active': route.name === 'advisor' }"
+              :to="{ name: 'advisor' }" @click="menuOpen = false">Advisor</router-link>
             <router-link class="navbar-item" :class="{ 'is-active': route.name === 'benchmarks' }"
               :to="{ name: 'benchmarks' }" @click="menuOpen = false">Benchmarks</router-link>
             <router-link class="navbar-item" :class="{ 'is-active': route.name === 'value' }"

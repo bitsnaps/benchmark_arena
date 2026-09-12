@@ -58,8 +58,8 @@ const ok = (msg) => console.log('  ok:', msg);
   ok('home renders the leaderboard table directly');
   if (await page.locator('.hero-lab').count()) fail('hero/overview page should be gone');
   const navTexts = (await page.locator('.navbar-start a').allInnerTexts()).map(s => s.trim());
-  if (navTexts.join(',') !== 'Leaderboard,Benchmarks,Value map,Providers') fail('navbar should be [Leaderboard, Benchmarks, Value map, Providers], got ' + navTexts);
-  else ok('navbar: Leaderboard + Benchmarks + Value map + Providers (no Overview)');
+  if (navTexts.join(',') !== 'Leaderboard,Advisor,Benchmarks,Value map,Providers') fail('navbar should be [Leaderboard, Advisor, Benchmarks, Value map, Providers], got ' + navTexts);
+  else ok('navbar: Leaderboard + Advisor + Benchmarks + Value map + Providers (no Overview)');
   const firstAll = await firstName();
   if (firstAll !== EXPECT.all) fail(`home #1 = "${firstAll}", expected "${EXPECT.all}"`);
   else ok(`home #1 row = ${firstAll} (overall top, All tab default)`);
@@ -183,7 +183,12 @@ const ok = (msg) => console.log('  ok:', msg);
   const expNew7 = ALLROWS.filter(r => !isOld(r) && freshWithin((META[r.name] || {}).created || null)).length;
   const expNew30 = ALLROWS.filter(r => !isOld(r) && freshWithin((META[r.name] || {}).created || null, Date.now(), 30)).length;
   const homeNew7 = await page.locator('.cov-table .new-chip').count();
-  if (homeNew7 === expNew7 && homeNew7 > 0)
+  if (expNew7 === 0 && homeNew7 === 0) {
+    // the 7-day release window slides with Date.now() — when the snapshot's
+    // newest model ages out, zero badges is CORRECT (stats-32 lesson: derive,
+    // never pin anchors that die when data improves or ages)
+    console.log('  (skip: no release within the 7-day window in this snapshot — badge check vacuous)');
+  } else if (homeNew7 === expNew7 && homeNew7 > 0)
     ok(`home NEW badges match the lib-derived count at the 7-day window (${homeNew7})`);
   else fail(`home NEW badges: expected ${expNew7}, got ${homeNew7}`);
   // the shared window selector lives in the home toolbar — widen to 30 and
@@ -192,7 +197,7 @@ const ok = (msg) => console.log('  ok:', msg);
   await page.selectOption(NEW_SELECT, '30');
   await page.waitForTimeout(400);
   const homeNew30 = await page.locator('.cov-table .new-chip').count();
-  if (homeNew30 === expNew30 && homeNew30 > homeNew7)
+  if (homeNew30 === expNew30 && homeNew30 >= homeNew7)
     ok(`window selector → 30 days re-flags ${homeNew30} rows (was ${homeNew7})`);
   else fail(`window switch: expected ${expNew30} badges at 30d (was ${homeNew7}), got ${homeNew30}`);
   await page.selectOption(NEW_SELECT, '7');

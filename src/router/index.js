@@ -5,6 +5,7 @@
 //
 // Site map (leaderboard-first):
 //   /                     Home = the leaderboard (tier tabs via ?tier=)
+//   /advisor              Use-case advisor wizard (shareable ?use=&priority=&…)
 //   /benchmarks/:slug?    Per-benchmark explorer (slug deep links)
 //   /model/:slug          Per-model score card
 //   /providers            Provider & pricing catalog (providers.json)
@@ -17,6 +18,11 @@ import HomeView from '../views/HomeView.vue';
 const routes = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/leaderboard', redirect: { name: 'home' } },
+  {
+    path: '/advisor',
+    name: 'advisor',
+    component: () => import('../views/AdvisorView.vue'),
+  },
   {
     path: '/leaderboard/:tier(all|closed|open)',
     redirect: (to) => ({ name: 'home', query: { tier: to.params.tier } }),

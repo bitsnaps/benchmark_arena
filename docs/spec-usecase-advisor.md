@@ -76,9 +76,11 @@ Coverage is why §4.2 exists — FrontierSWE (9) and Design Arena (18) are too t
 
 ### 4.2 Profile score & coverage fallback
 
-- `profileScore(m, p)` = **sparse mean** of m's non-null scores on `p.benches` — the same
-  "plain average of the scores a model actually has" semantics as the leaderboard's
-  `scoreForModel`. Reuse the store function; do NOT duplicate the math.
+- `profileScoreFor(m, p)` = the leaderboard's **coverage-weighted mean** over the
+  profile's benches: raw = sparse mean of covered scores, w = covered/total,
+  score = w·raw + (1−w)·50 — the exact `scoreForModel` formula, parameterized by
+  the bench subset (unit-tested parity on the core-8 subset). Uncovered = "no
+  evidence" (regress to the prior), never zero.
 - Coverage tag per model: `solid` (≥2 profile benches covered) · `thin` (exactly 1) ·
   `limited` (0 covered → fall back to the core-8 sparse mean, the leaderboard default set).
 - Tiles display the tag ("limited data — showing general score"). No silent blending.
@@ -97,8 +99,10 @@ Coverage is why §4.2 exists — FrontierSWE (9) and Design Arena (18) are too t
 
 - **Blended price recipe**: `blended = (3×input + 1×output) / 4` USD per 1M tokens
   (3:1 input:output assumption, shown in a tooltip). `cache_read` ignored in v1.
-- Source precedence: `pricing_usd_per_1m` (OpenRouter, 88/107 models) →
-  `pricing_aa_usd_per_1m` (75/107) → unknown.
+- Source precedence (stats-19, same as the leaderboard): `pricing_aa_usd_per_1m`
+  (AA list, 75/107) → `pricing_usd_per_1m` (OpenRouter snapshot, 88/107) → unknown.
+  NOT re-implemented — the advisor reads the store's `priceFor()`/`filterPriceFor()`;
+  free listings count as $0 via `filterPriceFor()` (survive any cap).
 - Normalization over the snapshot: `costScore = 1 − (log1p(p) − log1p(p_min)) / (log1p(p_max) − log1p(p_min))`
   where p_min/p_max are the min/max blended prices among models with known price
   (log scale — prices span ~3 orders of magnitude). Data-driven, never hard-coded.
@@ -131,11 +135,13 @@ Strict mode = one toggle on step 2, persisted as `strict=1`. Default off — har
 
 ### 4.8 Ranking, tie-breaks, shortlist
 
-1. Apply constraints → surviving models.
-2. Composite = Σ wᵢ·scoreᵢ over known components (§4.3 + §4.6).
-3. Sort desc; tie-breaks in order: higher profile coverage count → lower blended price
+1. Current-generation filter: superseded/stale rows (`isOlder`) never enter the
+   candidate pool — advising a superseded model is bad advice by definition.
+2. Apply constraints → surviving models.
+3. Composite = Σ wᵢ·scoreᵢ over known components (§4.3 + §4.6).
+4. Sort desc; tie-breaks in order: higher profile coverage count → lower blended price
    (unknown = +∞) → newer `created`.
-4. Take **5** (Ibrahim-confirmed). Ranks shown 1–5, #1 tagged "Recommended".
+5. Take **5** (Ibrahim-confirmed). Ranks shown 1–5, #1 tagged "Recommended".
 
 ### 4.9 Reasons (generated, deterministic order, max 3 + flags)
 

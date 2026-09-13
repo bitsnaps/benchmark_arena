@@ -2,8 +2,9 @@
 // Home = the leaderboard. Compact snapshot header, tier tabs, the global
 // pivot table, compare panel, then context: category leaders, methodology.
 // Tier tabs live in the URL as ?tier=, search as ?q=, the custom average
-// mix as ?avg= (comma-separated benchmark slugs), and the availability
-// filters as ?free=1 / ?price=<max blend> / ?seller=<provider slug>.
+// mix as ?avg= (comma-separated benchmark slugs), the availability
+// filters as ?free=1 / ?price=<max blend> / ?seller=<provider slug>, and
+// the input-modality filter as ?mod=<token> (stats-34).
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { TIERS, SHORT, AVG_PRESETS } from '../lib/constants.js';
@@ -17,8 +18,8 @@ import NewWindowSelect from '../components/NewWindowSelect.vue';
 const route = useRoute();
 const router = useRouter();
 
-const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor } = useData();
-const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId } = useLeaderboard();
+const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor, metaFor } = useData();
+const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId, modFilter } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
 const tier = computed(() =>
@@ -160,6 +161,31 @@ watch([loading, () => route.query.seller], ([ld, v]) => {
   if (!known && param) router.replace({ query: { ...route.query, seller: undefined } });
 }, { immediate: true });
 
+// ── stats-34: Modalities filter ⇄ URL (?mod=image|audio|video) ────────
+const MOD_OPTIONS = [
+  { v: '', label: 'Any modality' },
+  { v: 'image', label: 'Image input' },
+  { v: 'audio', label: 'Audio input' },
+  { v: 'video', label: 'Video input' },
+];
+const MOD_TOOLTIP = 'Show only models whose input supports this modality. Rows with unknown modality data are hidden while a filter is on (same rule as the price cap hiding unpriced rows).';
+// Counts over the current tier's default ranking (like the Free toggle)
+const modCount = (tok) =>
+  pivotFor(tier.value).filter(r => !isOlder(r) && ((metaFor(r)?.input_modalities) || []).includes(tok)).length;
+
+watch(modFilter, (m) => {
+  const want = m || undefined;
+  if (route.query.mod !== want) router.replace({ query: { ...route.query, mod: want } });
+});
+watch(() => route.query.mod, (v) => {
+  const param = typeof v === 'string' ? v : '';
+  const known = param === '' || MOD_OPTIONS.some(o => o.v === param);
+  // known tokens apply; stale share links reset to "any" + drop the param
+  const next = known ? param : '';
+  if (next !== modFilter.value) modFilter.value = next;
+  if (!known && param) router.replace({ query: { ...route.query, mod: undefined } });
+}, { immediate: true });
+
 // ── Rows for the active tab ───────────────────────────────────────────
 // One ranked listing. Older releases — superseded versions of the same
 // product line plus stale generations (9+ months old, no successor in the
@@ -176,6 +202,8 @@ const applyFilters = (list) => {
     if (q && !r.name.toLowerCase().includes(q)) return false;
     if (freeOnly.value && !hasFreeListingFor(r)) return false;
     if (sellerId.value && !availableAtFor(r).some(a => a.p === sellerId.value)) return false;
+    // stats-34: input-modality filter — unknown modalities hide while on
+    if (modFilter.value && !(metaFor(r)?.input_modalities || []).includes(modFilter.value)) return false;
     if (mp != null) {
       // free listings count as $0 so a free row survives any cap
       const p = filterPriceFor(r);
@@ -319,6 +347,16 @@ const openModel = (name) =>
             <option v-for="s in sellerOptions" :key="s.p" :value="s.p">{{ s.n }} ({{ s.c }})</option>
           </b-select>
         </div>
+
+        <!-- stats-34: input-modality filter — unknown rows hide while on -->
+        <b-tooltip :label="MOD_TOOLTIP" type="is-dark" multilined :delay="100">
+          <div class="row" style="gap:.4rem;align-items:center">
+            <span class="cell-sub" style="white-space:nowrap">Modalities</span>
+            <b-select v-model="modFilter" size="is-small" aria-label="Filter by input modality">
+              <option v-for="o in MOD_OPTIONS" :key="o.v" :value="o.v">{{ o.label }}{{ o.v ? ` (${modCount(o.v)})` : '' }}</option>
+            </b-select>
+          </div>
+        </b-tooltip>
 
         <!-- stats-27: how fresh a release must be to carry the NEW badge —
              ONE shared window (lib/newFlag.js), the same setting the

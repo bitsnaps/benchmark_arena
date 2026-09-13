@@ -31,6 +31,8 @@ import sys
 import time
 import os
 import shutil
+import urllib.request
+import urllib.error
 from collections import defaultdict
 from datetime import date, datetime, timezone
 
@@ -447,11 +449,12 @@ def scrape_artificial_analysis():
     if (t.length >= 10) parts.push(t);
   }
   var s = parts.join('\n');
-  var pricing = {}, conflicts = 0;
-  var re = /\\"slug\\":\\"[^"\\]*\\",\\"shortName\\":\\"([^"\\]{2,150})\\"/g;
+  var pricing = {}, slugs = {}, conflicts = 0;
+  var re = /\\"slug\\":\\"([^"\\]*)\\",\\"shortName\\":\\"([^"\\]{2,150})\\"/g;
   var m;
   while ((m = re.exec(s)) !== null) {
-    var name = m[1];
+    var name = m[2];
+    slugs[name] = m[1];
     var seg = s.slice(m.index + m[0].length, m.index + m[0].length + 4500);
     var stopA = seg.indexOf('\\"slug\\":');
     var stopB = seg.indexOf('\\"shortName\\":');
@@ -482,13 +485,14 @@ def scrape_artificial_analysis():
       ttft_seconds: grab('medianTimeToFirstTokenSeconds')
     };
   }
-  return JSON.stringify({models: models, pricing: pricing, conflicts: conflicts});
+  return JSON.stringify({models: models, pricing: pricing, slugs: slugs, conflicts: conflicts});
 })()"""
     # stats-28: the flight payload now streams late — at 8s the script tags
     # hold ~3KB (no model records); the full ~1.5MB payload lands by ~20s.
     data = load_and_eval(url, js, wait_ms=20000)
     models = []
     pricing = {}
+    slugs = {}
     conflicts = 0
     if isinstance(data, str):
         try:
@@ -498,6 +502,7 @@ def scrape_artificial_analysis():
     if isinstance(data, dict):
         models_raw = data.get("models") or []
         pricing = data.get("pricing") or {}
+        slugs = data.get("slugs") or {}
         conflicts = int(data.get("conflicts") or 0)
         for item in models_raw:
             if not isinstance(item, dict):
@@ -515,20 +520,24 @@ def scrape_artificial_analysis():
                     models.append((name, score))
             except (ValueError, TypeError):
                 pass
-        if pricing:
-            global _AA_PRICING_LAST
+        if pricing or slugs:
+            global _AA_PRICING_LAST, _AA_SLUGS_LAST
             _AA_PRICING_LAST = pricing
+            _AA_SLUGS_LAST = slugs
             try:
                 with open(AA_PRICING_CACHE, "w") as f:
                     json.dump({"mined_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-                               "models": pricing}, f, ensure_ascii=False)
+                               "models": pricing, "slugs": slugs}, f, ensure_ascii=False)
             except OSError as e:
                 print(f"    [WARN] AA pricing cache write failed: {e}")
+        if pricing:
             print(f"    Mined AA list prices for {len(pricing)} models")
             if conflicts:
                 print(f"    [AA pricing] {conflicts} conflicting duplicate record(s) — first valued wins")
         else:
             print(f"    [WARN] No AA pricing records mined (payload layout changed?)")
+        if slugs:
+            print(f"    Captured {len(slugs)} AA model slugs (stats-34 modality ladder)")
         print(f"    Extracted {len(models)} models")
     else:
         print(f"    [WARN] No data from AA")
@@ -539,6 +548,7 @@ def scrape_artificial_analysis():
 # rebuilds attach AA prices without re-running the browser scrape.
 AA_PRICING_CACHE = os.path.join(TMP_DIR, "aa_model_pricing.json")
 _AA_PRICING_LAST = None  # set by scrape_artificial_analysis on each full load
+_AA_SLUGS_LAST = None  # stats-34: slug per AA shortName, same payload
 
 
 def _load_aa_pricing_cache():
@@ -662,6 +672,223 @@ def apply_aa_pricing(models_meta, aa_pricing=None):
           f"({n_family} via variant-family join, {n_conflict} conflicted families skipped; "
           f"{n_moves} differ from the OpenRouter snapshot)")
     return (n_attached, n_moves)
+
+
+# ══ stats-34: modality enrichment (input/output modalities beyond OR) ════
+# OpenRouter is the only modality source today (89/108); the gaps are exactly
+# the models not listed on OR. Fill-gaps-only policy (Ibrahim, 2026-09-13):
+# OR values are NEVER overwritten — secondary sources only fill empty rows
+# and stamp where the data came from (modalities_source).
+
+# HF pipeline_tag -> (input, output) token lists — pinned mapping (spec §5).
+HF_PIPELINE_MODALITIES = {
+    "text-generation":     (["text"], ["text"]),
+    "image-text-to-text":  (["text", "image"], ["text"]),
+    "audio-text-to-text":  (["text", "audio"], ["text"]),
+    "video-text-to-text":  (["text", "video"], ["text"]),
+    "image-text-to-image": (["text", "image"], ["text", "image"]),
+    "audio-text-to-audio": (["text", "audio"], ["text", "audio"]),
+    "any-to-any":          (["text", "image", "audio", "video"],
+                            ["text", "image", "audio", "video"]),
+}
+
+# Last-resort map for first-party rows with no HF/AA footprint. Only
+# vendor-documented, stable facts belong here; anything uncertain stays
+# honestly unknown (e.g. Command A+).
+CURATED_MODALITIES = {
+    "Gemini 3 Pro":     (["text", "image", "audio", "video"], ["text"]),
+    "Qwen3.5 Plus":     (["text", "image"], ["text"]),
+    "Grok 4 Fast Chat": (["text", "image"], ["text"]),
+}
+
+# Canonical token order — mirrors OR's compact "text+image+file->text"
+MODALITY_ORDER = ("text", "image", "file", "audio", "video")
+# Secondary sources never synthesize 'file' (OR-only vocabulary, spec §4)
+SECONDARY_TOKENS = ("text", "image", "audio", "video")
+
+AA_MODALITIES_CACHE = os.path.join(TMP_DIR, "aa_modalities.json")
+AA_MODALITIES_TTL_S = 7 * 24 * 3600  # vendor specs are stable; refresh weekly
+
+
+def _load_aa_slug_map():
+    """Slug-per-shortName map mined alongside AA pricing (stats-34)."""
+    if _AA_SLUGS_LAST:
+        return _AA_SLUGS_LAST
+    if not os.path.exists(AA_PRICING_CACHE):
+        return {}
+    try:
+        with open(AA_PRICING_CACHE) as f:
+            payload = json.load(f)
+        return payload.get("slugs") or {}
+    except (OSError, ValueError):
+        return {}
+
+
+def hf_modalities_for(hf_id):
+    """(input, output) token lists from the HF repo's pipeline_tag, or
+    (None, None) when the tag is unmapped / repo gated / API unreachable."""
+    url = f"https://huggingface.co/api/models/{hf_id}"
+    req = urllib.request.Request(url, headers={"User-Agent": "benchmark-arena-scraper"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        info = json.load(r)
+    return HF_PIPELINE_MODALITIES.get(info.get("pipeline_tag"), (None, None))
+
+
+def parse_aa_modality_answer(text, side):
+    """AA FAQ answer -> canonical token list. Answers look like
+    'X supports text and image input.' The first 'supports … {side}'
+    sentence segment is scanned for known tokens in canonical order.
+    'file' is never synthesized from AA (OR-only vocabulary)."""
+    t = (text or "").lower()
+    m = re.search(rf"supports\s+([^.]*?)\s+{side}\b", t)
+    if not m:
+        return []
+    seg = m.group(1)
+    return [tok for tok in SECONDARY_TOKENS if re.search(rf"\b{tok}\b", seg)]
+
+
+_AA_LDJSON_ANSWER_RES = {
+    "input": re.compile(
+        r'"name":"What input modalities[^"]*","acceptedAnswer":\s*'
+        r'\{"@type":"Answer","text":"((?:[^"\\]|\\.)*)"'),
+    "output": re.compile(
+        r'"name":"What output modalities[^"]*","acceptedAnswer":\s*'
+        r'\{"@type":"Answer","text":"((?:[^"\\]|\\.)*)"'),
+}
+
+_AA_PAGE_JS = r"""(function(){
+  var parts = [];
+  var scripts = document.querySelectorAll('script[type="application/ld+json"]');
+  for (var i = 0; i < scripts.length; i++) {
+    var t = scripts[i].textContent || '';
+    if (t.indexOf('modalit') >= 0) parts.push(t);
+  }
+  return parts.join('\n');
+})()"""
+
+
+def _load_aa_modalities_cache():
+    if not os.path.exists(AA_MODALITIES_CACHE):
+        return {}
+    try:
+        with open(AA_MODALITIES_CACHE) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+def _save_aa_modalities_cache(cache):
+    try:
+        with open(AA_MODALITIES_CACHE, "w") as f:
+            json.dump(cache, f, ensure_ascii=False)
+    except OSError as e:
+        print(f"    [WARN] AA modalities cache write failed: {e}")
+
+
+def aa_page_modalities(slug):
+    """Mine one AA model page's JSON-LD FAQ for modality answers.
+    Returns (input_tokens, output_tokens); either may be None = no answer
+    (page 404 / layout change / FAQ missing)."""
+    data = load_and_eval(f"https://artificialanalysis.ai/models/{slug}",
+                         _AA_PAGE_JS, wait_ms=10000)
+    if not isinstance(data, str) or not data:
+        return (None, None)
+    inp = out = None
+    m = _AA_LDJSON_ANSWER_RES["input"].search(data)
+    if m:
+        inp = parse_aa_modality_answer(m.group(1).replace('\\"', '"'), "input")
+    m = _AA_LDJSON_ANSWER_RES["output"].search(data)
+    if m:
+        out = parse_aa_modality_answer(m.group(1).replace('\\"', '"'), "output")
+    return (inp or None, out or None)
+
+
+def _aa_slug_for(name, slug_map):
+    """Join a canonical row name to an AA slug: exact shortName (case-
+    insensitive — the casing canon runs AFTER enrichment, so fresh rows may
+    still be all-lowercase here), else the paren-stripped variant family —
+    only when the whole family agrees on one slug (same never-guess
+    discipline as the pricing family join)."""
+    if name in slug_map:
+        return slug_map[name]
+    lower = {}
+    for n in slug_map:
+        lower.setdefault(n.lower(), []).append(n)
+    hits = lower.get(name.lower())
+    if hits and len(hits) == 1:
+        return slug_map[hits[0]]
+    base = _aa_base_name(name).lower()
+    fam = {s for n, s in slug_map.items() if _aa_base_name(n).lower() == base}
+    if len(fam) == 1:
+        return next(iter(fam))
+    return None
+
+
+def enrich_modalities(models_meta):
+    """stats-34: fill input/output modalities for rows OpenRouter doesn't
+    cover. Ladder per spec §5: HuggingFace pipeline_tag -> AA model page
+    (7-day negative+positive cache) -> curated map. OR-covered rows are
+    only stamped modalities_source='openrouter'. Non-fatal per source."""
+    if not models_meta:
+        return
+    slug_map = _load_aa_slug_map()
+    # curated lookup is case-insensitive: the display-casing canon runs
+    # AFTER enrichment, so a fresh row's key can still be all-lowercase
+    cur_lower = {k.lower(): v for k, v in CURATED_MODALITIES.items()}
+    page_cache = _load_aa_modalities_cache()
+    now = time.time()
+    cache_dirty = False
+    n_or = n_hf = n_aa = n_cur = 0
+    for name, rec in models_meta.items():
+        if rec.get("input_modalities"):
+            rec["modalities_source"] = "openrouter"
+            n_or += 1
+            continue
+        inp = out = None
+        src = None
+        hf_id = rec.get("hugging_face_id")
+        if hf_id:
+            try:
+                inp, out = hf_modalities_for(hf_id)
+            except Exception:
+                inp = None
+            if inp:
+                src = "huggingface"
+        if not inp and slug_map:
+            slug = _aa_slug_for(name, slug_map)
+            if slug:
+                cached = page_cache.get(slug)
+                if cached and (now - cached.get("mined_at", 0)) < AA_MODALITIES_TTL_S:
+                    ain, aout = cached.get("in"), cached.get("out")
+                else:
+                    ain, aout = aa_page_modalities(slug)
+                    page_cache[slug] = {"in": ain, "out": aout, "mined_at": now}
+                    cache_dirty = True
+                if ain:
+                    inp, out, src = ain, aout, "artificialanalysis"
+        if not inp:
+            hit = cur_lower.get(name.lower())
+            if hit:
+                inp, out = hit
+                src = "curated"
+        if inp:
+            inp = [t for t in MODALITY_ORDER if t in inp]
+            out = [t for t in MODALITY_ORDER if t in (out or ["text"])]
+            rec["input_modalities"] = inp
+            rec["output_modalities"] = out
+            rec["modality"] = "+".join(inp) + "->" + "+".join(out)
+            rec["modalities_source"] = src
+            if src == "huggingface":
+                n_hf += 1
+            elif src == "artificialanalysis":
+                n_aa += 1
+            else:
+                n_cur += 1
+    if cache_dirty:
+        _save_aa_modalities_cache(page_cache)
+    unknown = sum(1 for r in models_meta.values() if not r.get("input_modalities"))
+    print(f"  [Modalities] openrouter={n_or} hf={n_hf} aa={n_aa} curated={n_cur} "
+          f"unknown={unknown} (meta={len(models_meta)})")
 
 
 def scrape_benchlm():
@@ -2380,7 +2607,8 @@ def _is_or_noise_token(tok):
 META_NAME_ALIASES = {
     "Claude 4.1 Opus": "anthropic/claude-opus-4.1",   # word-order variant of the curated display name
     "Qwen3.8-Max": "qwen/qwen3.8-max-0902",           # base listing delisted; 0902 snapshot is what benchmarks score
-    "gemma 3 4b it": "google/gemma-3-4b-it",          # HF-style spelling; exact catalog id
+    "Gemma 3 4B it": "google/gemma-3-4b-it",          # HF-style spelling; exact catalog id (stats-30 canon casing)
+    "gemma 3 4b it": "google/gemma-3-4b-it",          # pre-canon spelling kept; lookup is case-insensitive anyway
 }
 
 # ── Curated HuggingFace id overrides (unified row name -> HF repo id) ──
@@ -2521,6 +2749,10 @@ def match_models_to_openrouter(unified_names, or_models):
             continue
         for k in _match_key_candidates(e):
             by_key[k].append(e)
+    # stats-34: alias pins are case-insensitive — the display-casing canon
+    # renames rows (stats-30) and must never stale a curated pin (the merges'
+    # case-drift lesson; OR renamed Gemma's listing and unmasked exactly this)
+    aliases_lower = {k.lower(): v for k, v in META_NAME_ALIASES.items()}
 
     def _prefer(entries):
         # shortest raw id tail first (plain model beats dated revision),
@@ -2533,7 +2765,7 @@ def match_models_to_openrouter(unified_names, or_models):
 
     results = {}
     for name in unified_names:
-        alias_id = META_NAME_ALIASES.get(name)
+        alias_id = aliases_lower.get(name.lower())
         if alias_id and alias_id in by_id:
             results[name] = (by_id[alias_id], "alias")
             continue
@@ -4722,6 +4954,10 @@ def _run_meta_only():
     n_bare = annotate_legacy_bare_names(meta, row_names)
     n_hf, n_hfp = apply_hf_overrides(meta, row_names)
     n_aa, _aa_moves = apply_aa_pricing(meta)
+    try:
+        enrich_modalities(meta)
+    except Exception as e:
+        print(f"  [Modalities] enrichment failed (non-fatal): {e}")
     if n_sup:
         print(f"  [Supersession] flagged {n_sup} older model version(s)")
     if n_ov:
@@ -4821,6 +5057,10 @@ def main():
         n_bare = annotate_legacy_bare_names(models_meta, row_names)
         n_hf, n_hfp = apply_hf_overrides(models_meta, row_names)
         n_aa, n_aa_moves = apply_aa_pricing(models_meta)
+        try:
+            enrich_modalities(models_meta)
+        except Exception as e:
+            print(f"  [Modalities] enrichment failed (non-fatal): {e}")
         if n_sup:
             print(f"  [Supersession] flagged {n_sup} older model version(s)")
         if n_ov:

@@ -40,7 +40,8 @@ def meta_stats(doc):
     mm = doc.get("models_meta") or {}
     ttft = sum(1 for v in mm.values() if v.get("aa_ttft_seconds"))
     created = sum(1 for v in mm.values() if v.get("created"))
-    return mm, ttft, created
+    mods = sum(1 for v in mm.values() if v.get("input_modalities"))
+    return mm, ttft, created, mods
 
 
 def main():
@@ -68,8 +69,8 @@ def main():
         fail(f"row count exploded: {r_new} vs HEAD {r_old} (dedup broken?)")
 
     # 3. meta layer — absolute floor + gentle shrink allowance (archivals happen)
-    mm, tt_new, cr_new = meta_stats(doc)
-    _, tt_old, cr_old = meta_stats(head)
+    mm, tt_new, cr_new, mod_new = meta_stats(doc)
+    _, tt_old, cr_old, mod_old = meta_stats(head)
     n_old = len(head.get("models_meta") or {})
     if len(mm) < max(95, n_old - 10):
         fail(f"models_meta shrank: {len(mm)} vs HEAD {n_old}")
@@ -80,6 +81,16 @@ def main():
         )
     if cr_new < cr_old - 10:
         fail(f"created coverage shrank: {cr_new} vs HEAD {cr_old}")
+
+    # 3b. stats-34: modality coverage — the enrichment ladder only ever adds
+    # coverage, so a collapse means the OR modality miner itself broke.
+    # Enrichment sources (HF/AA) degrading to the OR baseline alone is a
+    # non-fatal GUARD NOTE, not a failed refresh.
+    if mod_new < max(85, mod_old - 15):
+        fail(f"modality coverage collapsed: {mod_new} vs HEAD {mod_old}")
+    if mod_new < mod_old:
+        print(f"GUARD NOTE modality coverage {mod_new} < HEAD {mod_old} "
+              f"(HF/AA enrichment partial today — non-fatal)")
 
     # 4. providers.json sanity (rebuilt by the same scraper run)
     try:
@@ -115,7 +126,7 @@ def main():
             continue
     print(
         f"GUARD OK rows={r_new} (HEAD {r_old}) meta={len(mm)} "
-        f"aa_ttft={tt_new} created={cr_new} approx_new_7d={fresh} ts={ts}"
+        f"aa_ttft={tt_new} created={cr_new} modalities={mod_new} approx_new_7d={fresh} ts={ts}"
     )
 
 

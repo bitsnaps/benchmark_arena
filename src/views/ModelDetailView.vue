@@ -4,7 +4,7 @@
 import { computed, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SHORT, BASE_TITLE } from '../lib/constants.js';
-import { fmtScore, fmtUsd, fmtValue, fmtCtx, fmtSec, scoreColor, barWidth, rankClass, providerColor, initials, slugify } from '../lib/format.js';
+import { fmtScore, fmtUsd, fmtValue, fmtCtx, fmtSec, scoreColor, barWidth, rankClass, providerColor, initials, slugify, modalityIcon } from '../lib/format.js';
 import { latencyClass } from '../lib/pivot.js';
 import { isNewModel, newBadgeTitle } from '../lib/newFlag.js';
 import { useData } from '../stores/data.js';
@@ -74,6 +74,24 @@ const ttft = computed(() => (model.value ? metaFor(model.value)?.aa_ttft_seconds
 const hfId = computed(() => (model.value ? hfIdFor(model.value) : null));
 const hfUrl = computed(() => (model.value ? hfUrlFor(model.value) : null));
 
+// ── stats-34: modality chips (input always when known; output only when
+// it goes beyond plain text — a text-only output row would be pure noise).
+// Provenance is surfaced on the row label: every number traceable to its
+// source, same ethos as the pricing layers.
+const inputMods = computed(() => (model.value ? metaFor(model.value)?.input_modalities || [] : []));
+const outputMods = computed(() => (model.value ? metaFor(model.value)?.output_modalities || [] : []));
+const outputExtra = computed(() => outputMods.value.filter(m => m !== 'text'));
+const MOD_SOURCE_LABEL = {
+  openrouter: 'OpenRouter catalog (router-reported architecture)',
+  huggingface: 'Hugging Face model tags',
+  artificialanalysis: 'Artificial Analysis model page (vendor spec)',
+  curated: 'curated from vendor documentation',
+};
+const modSourceLabel = computed(() => {
+  const src = model.value ? metaFor(model.value)?.modalities_source : null;
+  return 'Modality data: ' + (MOD_SOURCE_LABEL[src] || 'unknown source');
+});
+
 // ── Available at (stats-18 cross-seller view) ────────────────────────────
 // Every seller whose catalog lists this model, with its own list price and
 // free-listing flags, exactly as baked in models_meta.available_at. OpenRouter
@@ -134,6 +152,22 @@ function addToCompare() {
               <i class="fas fa-cube" aria-hidden="true"></i>&nbsp;{{ hfId }}
             </a>
           </b-tooltip>
+        </div>
+        <!-- stats-34: modality chips with source provenance -->
+        <div v-if="inputMods.length" class="row mt-sm" style="gap:.4rem;align-items:center;flex-wrap:wrap">
+          <b-tooltip :label="modSourceLabel" type="is-dark" multilined :delay="100">
+            <span class="cell-sub" style="cursor:help;white-space:nowrap"><i class="fas fa-circle-info"></i>&nbsp;Input</span>
+          </b-tooltip>
+          <span v-for="m in inputMods" :key="m" class="tag-lab"><i class="fas" :class="modalityIcon(m)" aria-hidden="true"></i>&nbsp;{{ m }}</span>
+          <template v-if="outputExtra.length">
+            <b-tooltip :label="modSourceLabel" type="is-dark" multilined :delay="100">
+              <span class="cell-sub" style="cursor:help;white-space:nowrap"><i class="fas fa-circle-info"></i>&nbsp;Output</span>
+            </b-tooltip>
+            <span v-for="m in outputExtra" :key="'o-' + m" class="tag-lab teal"><i class="fas" :class="modalityIcon(m)" aria-hidden="true"></i>&nbsp;{{ m }}</span>
+          </template>
+        </div>
+        <div v-else-if="model" class="row mt-sm">
+          <span class="cell-sub">Input modalities unverified for this row yet</span>
         </div>
       </div>
       <div class="row" style="gap:.6rem">

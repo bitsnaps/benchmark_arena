@@ -26,6 +26,12 @@ const freeOnly = ref(false);
 const maxPrice = ref(null);
 const sellerId = ref('');
 
+// ── stats-34: input-modality filter ───────────────────────────────────
+// '' = any; 'image' | 'audio' | 'video' = rows whose input_modalities
+// include the token. Rows with UNKNOWN modalities hide while a filter is
+// on (same honesty rule as the price cap hiding unpriced rows).
+const modFilter = ref('');
+
 // Leaving compare mode resets the selection
 watch(compareMode, (on) => {
   if (!on) compareRows.value = [];
@@ -49,7 +55,7 @@ const isBest = (bench, row) => {
 export function useLeaderboard() {
   return {
     searchQuery, compareMode, compareRows, showOlder, minCl,
-    freeOnly, maxPrice, sellerId,
+    freeOnly, maxPrice, sellerId, modFilter,
     isSameModel, canCheck, clearCompare, isBest,
   };
 }

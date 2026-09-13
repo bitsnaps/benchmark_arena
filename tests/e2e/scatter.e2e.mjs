@@ -16,6 +16,9 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+// stats-35: score replica imported from the shared mirror (independent
+// re-derivation of the harmonized CL blend) — no inline formula to drift
+import { scoreForModel as mirrorScore } from '../helpers/snapshot.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SHOTS = path.join(REPO, 'tests', 'e2e', 'shots');
@@ -25,13 +28,9 @@ const BASE = process.env.E2E_BASE || 'http://127.0.0.1:4173/benchmark_arena/';
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'public/benchmark_results.json'), 'utf8'));
 const CORE = ['Artificial Analysis','BenchLM.ai','Arena.ai Text','SimpleBench.com','ARC-AGI-2','Design Arena','SWE-Marathon','FrontierSWE'];
 const META = data.models_meta || {};
-const score = (r) => {
-  const v = CORE.map(b => r[b]).filter(x => x != null);
-  if (!v.length) return null;
-  const raw = v.reduce((a, b) => a + b, 0) / v.length;
-  const cl = Math.min(100, Math.max(0, r.cl ?? 0));
-  return (cl / 100) * raw + (1 - cl / 100) * 50;
-};
+// mirror returns the -1 sentinel when a row reports nothing; the scatter
+// math expects null there
+const score = (r) => { const s = mirrorScore(r); return s === -1 ? null : s; };
 const blend = (name) => {
   const m = META[name] || {};
   const aa = m.pricing_aa_usd_per_1m;               // stats-19: AA list wins

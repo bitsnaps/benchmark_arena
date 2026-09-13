@@ -393,6 +393,19 @@ a.hbar:hover .name { color: var(--teal); }
   border: 1px solid color-mix(in srgb, var(--gold, #f5c15a) 35%, transparent);
 }
 
+/* stats-35: "limited data" badge — row covers fewer than half of the
+   selected benchmarks, so its Score leans mostly on the neutral prior.
+   Muted slate (distinct from gold "older" and indigo "new"). */
+.limited-chip {
+  display: inline-block; margin-left: .35rem; padding: 0 .35rem;
+  border-radius: 6px; font-size: .62rem; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase; vertical-align: middle;
+  white-space: nowrap;
+  color: #9aa7b5; cursor: help;
+  background: rgba(154, 167, 181, 0.12);
+  border: 1px solid rgba(154, 167, 181, 0.35);
+}
+
 /* ★ footnote marker: model listed under a different name on a source site
    (tooltip = alias_note from models_meta) */
 .alias-star {

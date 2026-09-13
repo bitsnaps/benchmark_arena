@@ -205,7 +205,7 @@ function addToCompare() {
       <div class="stat">
         <div class="lbl">Benchmarks scored</div>
         <div class="val num">{{ covered }}<span class="sub" style="font-size:1rem"> / {{ benchmarks.length }}</span></div>
-        <div class="sub">missing evals count as neutral 50 in the Score</div>
+        <div class="sub">missing evals count as neutral 50 in the Score — covered cells are re-scaled to the catalog first (stats-35)</div>
       </div>
       <div class="stat">
         <div class="lbl">Benchmark wins</div>

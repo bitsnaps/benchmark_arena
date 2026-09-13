@@ -5,6 +5,7 @@
 import { ref, computed } from 'vue';
 import { SHORT, CORE_BENCHMARKS, LEADER_BENCHES, AVG_PRESETS, AVG_STORAGE_KEY } from '../lib/constants.js';
 import { slugify } from '../lib/format.js';
+import { computeBenchStats, harmonize } from '../lib/benchScale.js';
 
 const rawData = ref(null);
 const loading = ref(true);
@@ -163,11 +164,18 @@ const stats = computed(() => ({
   lastUpdated: rawData.value?.timestamp || '—',
 }));
 
+// stats-35: per-benchmark harmonization stats over EVERY shipped row
+// (closed + open) and every benchmark column — the advisor subsets reach
+// beyond the core set (VendingBench, CyberGem…), so the whole board is
+// normalized. One stats table keeps the leaderboard and the advisor
+// parity-equal (tests/unit/advisor.test.js).
+const benchStats = computed(() =>
+  computeBenchStats(pivotAll.value, benchmarks.value));
+
 // ── Composite average over the selected benchmarks ────────────────────
 // Raw sparse mean: plain average of the selected scores a model actually
-// has. Biased in favor of low-coverage models (selection bias — a model
-// only shows up on benchmarks where it performs), so it is NOT the ranking
-// metric; see scoreForModel.
+// has. Kept for display ("Raw avg" tooltip, model page avg) — it is NOT
+// the ranking metric; see scoreForModel.
 function avgForModel(row) {
   const vals = coreBenchmarks.value
     .map(b => row[b])
@@ -193,24 +201,33 @@ function coveredCountForModel(row) {
 }
 
 // ── CL-weighted global score (the ranking metric) ─────────────────────
-// Blends the raw sparse average toward a neutral 50 baseline in proportion
-// to the model's Coverage Level (CL = fraction of the SELECTED benchmarks
-// covered):
+// stats-35: each covered cell is first mapped onto the per-benchmark
+// harmonized scale (z = 50 + 15·(x−μ)/σ across every shipped row — see
+// lib/benchScale.js), THEN blended toward the neutral 50 prior in
+// proportion to the model's Coverage Level (CL = fraction of the SELECTED
+// benchmarks covered):
 //
-//     score = w * rawAvg + (1 - w) * 50,   w = cl / 100
+//     score = w · mean(harmonized covered) + (1 − w) · 50,  w = cl / 100
 //
-// Full coverage (cl=100) → unchanged raw average. A model reporting 2 of 8
-// core benchmarks only keeps 25% of its above-baseline excess, which stops
-// flash/niche models from topping the board on a handful of favorable
-// results. Uncovered benchmarks are treated as "no evidence" (neutral 50),
-// never as a zero.
+// Algebraically the same blend as before — but on a comparable scale:
+// 50 now means "median model on that benchmark", so uncovered cells are
+// truly no-evidence and a 2-of-8 chat-only model can no longer outrank
+// models that dominate it head-to-head. Recon: this plus the supersession/
+// staleness fixes cut catalog-wide coverage-bias inversions from 72 to 29.
 const SCORE_PRIOR = 50;
 function scoreForModel(row) {
-  const raw = avgForModel(row);
-  if (raw === null || raw === undefined) return null;
-  const cl = Math.min(100, Math.max(0, clForModel(row)));
-  const w = cl / 100;
-  return w * raw + (1 - w) * SCORE_PRIOR;
+  const sel = coreBenchmarks.value;
+  if (!sel.length) return null;
+  let covered = 0;
+  let tot = 0;
+  for (const b of sel) {
+    const v = row[b];
+    if (v === null || v === undefined) { tot += SCORE_PRIOR; continue; }
+    covered++;
+    tot += harmonize(b, v, benchStats.value);
+  }
+  if (!covered) return null; // no evidence at all → no score
+  return tot / sel.length;
 }
 
 const topOverall = computed(() =>
@@ -405,7 +422,7 @@ export function useData() {
     avgSelection, isCustomAvg, avgPresetId, setAvgSelection, toggleAvgBench,
     applyPreset, resetAvgSelection, applyAvgParam,
     pivotClosed, pivotOpen, pivotAll, pivotFor, stats,
-    avgForModel, clForModel, coveredCountForModel, scoreForModel,
+    avgForModel, clForModel, coveredCountForModel, scoreForModel, benchStats,
     topOverall, topClosed, topOpen, leaders,
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
     modelSlugIndex, benchSlugIndex, benchRankIndex,

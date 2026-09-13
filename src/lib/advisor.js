@@ -17,24 +17,30 @@
 //     model is bad advice by definition).
 
 import { SCORE_PRIOR, WEIGHTS, CTX_LADDER, CAP_LADDER } from '../config/advisorProfiles.js';
+import { harmonize } from './benchScale.js';
 import { fmtUsd, fmtSec, fmtScore } from './format.js';
 
 // ── Profile score (coverage-weighted sparse mean over a bench subset) ─
 // Mirrors stores/data.js scoreForModel but parameterized by the profile's
-// benchmark subset: raw = plain mean of the scores the model actually has
-// on the subset; w = covered/total; score = w·raw + (1−w)·SCORE_PRIOR.
-// Uncovered benches are "no evidence" (regress to the prior), never zero.
-export function profileScoreFor(row, benches) {
-  const vals = [];
+// benchmark subset. stats-35: covered cells are mapped onto the shared
+// per-benchmark harmonized scale (lib/benchScale.js) BEFORE the CL blend
+// when a stats table is provided — pass the store's benchStats so the
+// advisor stays parity-equal with the leaderboard score. Omitting stats
+// runs the raw pass-through (unit-fixture mode; algebraically the same
+// blend, just on raw cells): mean over ALL subset benches of
+// (covered ? value : SCORE_PRIOR) — uncovered = no evidence, never zero.
+export function profileScoreFor(row, benches, stats = null) {
+  if (!benches || !benches.length) return { score: null, covered: 0 };
+  let covered = 0;
+  let tot = 0;
   for (const b of benches) {
     const v = row?.[b];
-    if (v !== null && v !== undefined) vals.push(v);
+    if (v === null || v === undefined) { tot += SCORE_PRIOR; continue; }
+    covered++;
+    tot += stats ? harmonize(b, v, stats) : v;
   }
-  const covered = vals.length;
   if (!covered) return { score: null, covered: 0 };
-  const raw = vals.reduce((a, b) => a + b, 0) / covered;
-  const w = Math.min(1, Math.max(0, covered / benches.length));
-  return { score: w * raw + (1 - w) * SCORE_PRIOR, covered };
+  return { score: tot / benches.length, covered };
 }
 
 // Quality tag for a candidate given its profile coverage

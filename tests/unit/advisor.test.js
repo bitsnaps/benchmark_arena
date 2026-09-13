@@ -326,13 +326,26 @@ describe('parity with the store on the real snapshot', () => {
     CORE_BENCHMARKS = constants.CORE_BENCHMARKS;
   });
 
-  it('profileScoreFor(row, core-8) ≡ scoreForModel(row) for every row', () => {
+  it('profileScoreFor(row, core-8, benchStats) ≡ scoreForModel(row) for every row', () => {
     expect(d.pivotAll.value.length).toBeGreaterThan(0);
     for (const row of d.pivotAll.value) {
-      const mine = profileScoreFor(row, CORE_BENCHMARKS).score;
+      // stats-35: both sides must run on the SAME harmonization stats table —
+      // this is the parity contract between leaderboard and advisor scores
+      const mine = profileScoreFor(row, CORE_BENCHMARKS, d.benchStats.value).score;
       const store = d.scoreForModel(row);
       if (store === null) expect(mine).toBeNull();
       else expect(mine).toBeCloseTo(store, 9);
+    }
+  });
+
+  it('stats-35: advisor without stats stays within the harmonized score band (fixture mode is raw, prod is stats)', () => {
+    // the stats param is optional (unit-fixture mode) — on the real snapshot
+    // the raw and harmonized variants may differ but must stay in 0-100
+    for (const row of d.pivotAll.value.slice(0, 20)) {
+      const rawMode = profileScoreFor(row, CORE_BENCHMARKS).score;
+      if (rawMode === null) continue;
+      expect(rawMode).toBeGreaterThanOrEqual(0);
+      expect(rawMode).toBeLessThanOrEqual(100);
     }
   });
 

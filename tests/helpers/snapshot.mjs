@@ -5,8 +5,13 @@
 // Mirror contract (keep in sync with src/stores/data.js):
 //   older  = meta.superseded_by || meta.stale
 //   rank/leader/preset lists exclude older rows; nothing is ever deleted.
-//   score = CL-weighted global score: w*rawAvg + (1-w)*50, w = cl/100
-//   (the store's ranking metric — raw avg is display/context only)
+//   score (stats-35) = harmonized CL blend: every covered cell is z-mapped
+//   against every shipped row on that benchmark (50 = median model,
+//   15 pts = 1 sd, clipped 0-100), then meaned over the selected set with
+//   uncovered benches contributing the neutral 50 prior — algebraically
+//   w·zMean + (1−w)·50, w = covered/selected. The z re-derivation below is
+//   deliberately independent of src/lib/benchScale.js: this mirror exists
+//   to catch drift in the app modules, not to share bugs with them.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -34,11 +39,62 @@ export function avgForModel(row, core = CORE_BENCHMARKS) {
 
 export const SCORE_PRIOR = 50;
 
-export function scoreForModel(row, core = CORE_BENCHMARKS) {
-  const raw = avgForModel(row, core);
-  if (raw === -1) return -1;
-  const cl = Math.min(100, Math.max(0, row.cl ?? 0));
-  return (cl / 100) * raw + (1 - cl / 100) * SCORE_PRIOR;
+// Independent per-benchmark z stats: sample mean/sd (ddof=1) over the rows
+// that report the benchmark. Mirrors computeBenchStats semantics without
+// importing it. Benchmarks with <2 data points get no entry (pass-through).
+export function benchZStats(rows, benches) {
+  const stats = {};
+  for (const b of benches) {
+    const vals = [];
+    for (const r of rows || []) {
+      const v = r?.[b];
+      if (v === null || v === undefined) continue;
+      const n = Number(v);
+      if (Number.isNaN(n)) continue;
+      vals.push(n);
+    }
+    if (vals.length < 2) continue;
+    const mu = vals.reduce((a, v) => a + v, 0) / vals.length;
+    const ss = vals.reduce((a, v) => a + (v - mu) * (v - mu), 0);
+    const sd = Math.sqrt(ss / (vals.length - 1));
+    stats[b] = { mu, sd: sd > 1e-9 ? sd : 1 };
+  }
+  return stats;
+}
+
+let _snapStats = null; // lazy memo over the committed snapshot
+function snapStats() {
+  if (!_snapStats) {
+    const d = loadSnapshot();
+    const rows = [...(d.unified_closed || []), ...(d.unified_open || [])];
+    const seen = new Set();
+    const pivot = rows.filter((r) => !seen.has(r.name) && seen.add(r.name));
+    _snapStats = benchZStats(pivot, d.benchmarks || []);
+  }
+  return _snapStats;
+}
+
+export function zHarmonize(bench, value, stats = snapStats()) {
+  if (value === null || value === undefined) return null;
+  const st = stats?.[bench];
+  if (!st) return value;
+  return Math.max(0, Math.min(100, SCORE_PRIOR + (15 * (value - st.mu)) / st.sd));
+}
+
+// stats-35 score: mean over the selected set of (covered ? z : prior).
+// Returns -1 when the row reports nothing (sentinel, as before).
+export function scoreForModel(row, core = CORE_BENCHMARKS, stats = snapStats()) {
+  if (!row || !core?.length) return -1;
+  let covered = 0;
+  let tot = 0;
+  for (const b of core) {
+    const v = row[b];
+    if (v === null || v === undefined) { tot += SCORE_PRIOR; continue; }
+    covered++;
+    tot += zHarmonize(b, v, stats);
+  }
+  if (!covered) return -1;
+  return tot / core.length;
 }
 
 export function makeMirror(data = loadSnapshot()) {
@@ -52,8 +108,9 @@ export function makeMirror(data = loadSnapshot()) {
   const isOlder = (name) => !!(META[name] && (META[name].superseded_by || META[name].stale));
   const supersededBy = (name) => (META[name] && META[name].superseded_by) || null;
   const current = (list) => list.filter((r) => !isOlder(r.name));
+  const stats = benchZStats(pivotAll, data.benchmarks || []);
   const byAvg = (a, b) => avgForModel(b) - avgForModel(a);
-  const byScore = (a, b) => scoreForModel(b) - scoreForModel(a);
+  const byScore = (a, b) => scoreForModel(b, CORE_BENCHMARKS, stats) - scoreForModel(a, CORE_BENCHMARKS, stats);
 
   return {
     data, META, closed, open, rows, pivotAll, isOlder, supersededBy, current, byAvg, byScore,

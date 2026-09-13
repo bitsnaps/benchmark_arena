@@ -143,14 +143,29 @@ function valueTitle(row) {
   return `Value lens — Score ${s.toFixed(1)} ÷ blended ${fmtUsd(p.blend)}/1M tokens (3:1 in:out) = ${fmtValue(valueFor(row))} score points per 1M blended tokens. Higher = more benchmark score per dollar. Free tiers are excluded (infinite value is meaningless).`;
 }
 
-// Tooltip: raw sparse avg + coverage behind the CL-weighted score
+// Tooltip: harmonized coverage behind the CL-weighted score (stats-35).
+// Every covered cell is z-mapped onto the shared per-benchmark scale
+// (50 = median model on that benchmark, lib/benchScale.js) BEFORE the CL
+// blend, so "raw avg" and "harmonized avg" are two different numbers.
 function scoreTitle(row) {
   const raw = avgForModel(row);
   const w = scoreForModel(row);
   const cl = clForModel(row);
   if (raw === null || raw === undefined) return 'No scores in the selected avg set';
-  return `Raw avg ${raw.toFixed(1)} · CL ${Math.round(cl)}% (${coveredCountForModel(row)} of ${coreBenchmarks.value.length} selected) → CL-weighted ${w !== null && w !== undefined ? w.toFixed(1) : '—'} (uncovered selected benches count as neutral 50)`;
+  return `Raw avg ${raw.toFixed(1)} · CL ${Math.round(cl)}% (${coveredCountForModel(row)} of ${coreBenchmarks.value.length} selected) → CL-weighted ${w !== null && w !== undefined ? w.toFixed(1) : '—'}. Covered cells are first re-scaled to the catalog (50 = median model on that benchmark), then uncovered selected benches count as neutral 50 — sparse averages no longer ride benchmark-specific score inflation.`;
 }
+
+// stats-35 "Limited data" badge — Ibrahim-approved. The score of a row
+// covering fewer than half of the SELECTED benchmarks (with the shipped
+// 8-bench default: fewer than 4) leans mostly on the neutral prior, so
+// the number deserves an explicit caveat. Mirrors the advisor's
+// coverageTag philosophy; hidden entirely once coverage is sufficient.
+const isLimited = (row) => {
+  const n = coreBenchmarks.value.length;
+  return n > 0 && coveredCountForModel(row) * 2 < n;
+};
+const limitedTitle = (row) =>
+  `Limited data — this score averages only ${coveredCountForModel(row)} of ${coreBenchmarks.value.length} selected benchmarks, so most of the blend is the neutral prior. Treat the number as a floor, not a ranking; the model may be untested on the harder evals.`;
 </script>
 
 <template>
@@ -202,6 +217,7 @@ function scoreTitle(row) {
             <span v-if="tier === 'all'" class="tier-chip" :class="tierOf(props.row)">{{ tierOf(props.row) === 'closed' ? 'closed' : 'open' }}</span>
             <b-tooltip v-if="isNewRow(props.row)" :label="newBadgeTitle(releaseDateOf(props.row))" type="is-dark" multilined :delay="100" append-to-body><span class="new-chip">NEW</span></b-tooltip>
             <b-tooltip v-if="isOlder(props.row)" :label="olderTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip">older</span></b-tooltip>
+            <b-tooltip v-if="!isOlder(props.row) && isLimited(props.row)" :label="limitedTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="limited-chip">limited data</span></b-tooltip>
             <b-tooltip v-if="hfUrlFor(props.row)" :label="'Hugging Face: ' + hfIdFor(props.row)" type="is-dark" :delay="100" append-to-body><a class="hf-chip" :href="hfUrlFor(props.row)" target="_blank" rel="noopener noreferrer" @click.stop>HF</a></b-tooltip>
             <b-tooltip v-if="hasFreeListingFor(props.row)" :label="freeTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="free-chip">free</span></b-tooltip>
             <b-tooltip v-if="availCount(props.row)" :label="availTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="avail-chip">{{ availCount(props.row) }} sellers</span></b-tooltip>
@@ -214,7 +230,7 @@ function scoreTitle(row) {
     <b-table-column field="avg" label="Score" width="120" centered numeric sortable :custom-sort="byScore">
       <template #header>
         <!-- stats-26: header hint as Buefy tooltip (native th title retired) -->
-        <b-tooltip label="CL-weighted global score — raw sparse avg blended toward a neutral 50 in proportion to benchmark coverage (CL). Full coverage = raw avg." type="is-dark" multilined :delay="100" append-to-body>Score</b-tooltip>
+        <b-tooltip label="CL-weighted global score — each covered benchmark is first re-scaled to the catalog (50 = median model on that benchmark), then averaged and blended toward the neutral 50 in proportion to coverage (CL). Harmonized so sparse rows can't ride benchmark-specific score inflation." type="is-dark" multilined :delay="100" append-to-body>Score</b-tooltip>
       </template>
       <template #default="props">
         <div class="num" :style="{ color: scoreColor(scoreForModel(props.row)), fontWeight: 600 }">

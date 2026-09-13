@@ -28,7 +28,7 @@ import { useData } from '../stores/data.js';
 const route = useRoute();
 const router = useRouter();
 const {
-  pivotAll, scoreForModel, filterPriceFor, hasFreeListingFor, metaFor,
+  pivotAll, scoreForModel, benchStats, filterPriceFor, hasFreeListingFor, metaFor,
   tierOf, isOlder, releaseDateOf,
 } = useData();
 
@@ -119,7 +119,7 @@ const allCandidates = computed(() => {
   const out = [];
   for (const row of pivotAll.value) {
     if (isOlder(row)) continue; // advising a superseded model is bad advice
-    const { score, covered } = profileScoreFor(row, profile.value.benches);
+    const { score, covered } = profileScoreFor(row, profile.value.benches, benchStats.value);
     let quality, tag;
     if (covered > 0) {
       quality = score;

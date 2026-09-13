@@ -454,13 +454,16 @@ const openModel = (name) =>
       <div class="panel-lab" style="padding:1.2rem">
         <h3 style="margin:0 0 .4rem">How the Score column works</h3>
         <p style="color:var(--muted);font-size:.92rem">
-          Score is the raw average over the benchmarks in the current avg set ({{ avgLabel.toLowerCase() }}) that a
-          model actually reports, CL-weighted: it is blended toward a neutral 50 baseline in proportion to the
-          model's Coverage Level (CL). A fully-covered model (CL 100%) keeps its plain
-          average; a model covering 2 of {{ selectedCount }} selected evals only keeps {{ Math.round((2 / selectedCount) * 100) }}% of its edge above
-          50. This offsets selection bias — without it, models evaluated on a few
-          favorable leaderboards outrank frontier models tested across the board.
-          Missing evals are treated as “no evidence” (neutral), never as a zero.
+          Score is the average over the benchmarks in the current avg set ({{ avgLabel.toLowerCase() }}) that a
+          model actually reports, on the harmonized scale, CL-weighted: each covered cell is first re-scaled
+          against every shipped model on that benchmark (50 = median model, a 15-point
+          spread = one standard deviation), then the average is blended toward a neutral 50 baseline in proportion to the
+          model's Coverage Level (CL). Raw benchmark scores live on incomparable distributions —
+          without harmonization, a model evaluated on a few favorable (inflated) leaderboards outranks
+          frontier models tested across the board, and models covering few evals keep an unearned edge
+          (72 catalog-wide ranking inversions before this fix, 29 after).
+          Missing evals are treated as “no evidence” (neutral), never as a zero — and rows covering fewer
+          than half of the selected benchmarks carry a “limited data” badge so sparse scores announce themselves.
           Use the “Avg set” dropdown in the toolbar to swap which benchmarks feed the Score —
           the shipped default is unchanged for everyone who never touches it.
         </p>

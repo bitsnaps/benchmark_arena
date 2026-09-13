@@ -121,23 +121,48 @@ describe('model metadata joins', () => {
   });
 });
 
-describe('CL-weighted global score (selection-bias fix, 2026-09)', () => {
-  // score = w*rawAvg + (1-w)*50, w = cl/100 — full coverage keeps the raw avg
-  it('full-coverage models keep their raw average', () => {
-    for (const r of d.pivotAll.value) {
-      if ((r.cl ?? 0) === 100 && d.avgForModel(r) !== null) {
-        expect(d.scoreForModel(r)).toBeCloseTo(d.avgForModel(r), 6);
-      }
+describe('CL-weighted global score (stats-35 harmonized blend, 2026-09)', () => {
+  // score = mean over the selected set of (covered ? z : 50), where
+  // z = 50 + 15·(x−μ)/σ per benchmark over every shipped row — see
+  // lib/benchScale.js. The mirror re-derives z independently.
+  it('harmonization centres each benchmark: mean z ≈ 50 (clip tolerance)', () => {
+    const stats = MIRROR_MOD.benchZStats(d.pivotAll.value, d.benchmarks.value);
+    for (const b of d.coreBenchmarks.value) {
+      const st = stats[b];
+      if (!st) continue; // <2 data points — not harmonized
+      const zs = d.pivotAll.value
+        .filter(r => r[b] != null)
+        .map(r => Math.max(0, Math.min(100, 50 + (15 * (r[b] - st.mu)) / st.sd)));
+      const mean = zs.reduce((a, v) => a + v, 0) / zs.length;
+      // clipping only pushes the mean UP on low-outlier benches — small drift
+      expect(Math.abs(mean - 50), `mean z of "${b}"`).toBeLessThan(2.5);
     }
   });
 
-  it('partial-coverage models are pulled toward the neutral 50 baseline', () => {
+  it('full-coverage models score their harmonized average (mirror parity)', () => {
+    let n = 0;
+    for (const r of d.pivotAll.value) {
+      if ((r.cl ?? 0) !== 100 || d.avgForModel(r) === null) continue;
+      expect(d.scoreForModel(r)).toBeCloseTo(legacyScore(r), 6);
+      n++;
+    }
+    expect(n).toBeGreaterThan(0); // the board has fully-covered rows
+  });
+
+  it('partial-coverage models are pulled toward the neutral 50 baseline (on the harmonized scale)', () => {
+    const stats = MIRROR_MOD.benchZStats(d.pivotAll.value, d.benchmarks.value);
     for (const r of d.pivotAll.value) {
       const raw = d.avgForModel(r);
-      if (raw === null || !r.cl) continue;
-      if ((r.cl ?? 0) >= 100) continue; // full coverage: score === raw (covered above)
-      if (raw > 50) expect(d.scoreForModel(r)).toBeLessThan(raw);
-      if (raw < 50) expect(d.scoreForModel(r)).toBeGreaterThan(raw);
+      if (raw === null || !r.cl || (r.cl ?? 0) >= 100) continue;
+      // harmonized mean over the COVERED cells only
+      const zs = d.coreBenchmarks.value
+        .map(b => (r[b] != null ? MIRROR_MOD.zHarmonize(b, r[b], stats) : null))
+        .filter(v => v != null);
+      if (!zs.length) continue;
+      const hMean = zs.reduce((a, v) => a + v, 0) / zs.length;
+      const s = d.scoreForModel(r);
+      if (hMean > 50) expect(s, `score of "${r.name}" vs hMean ${hMean.toFixed(1)}`).toBeLessThan(hMean);
+      if (hMean < 50) expect(s).toBeGreaterThan(hMean);
     }
   });
 
@@ -145,6 +170,42 @@ describe('CL-weighted global score (selection-bias fix, 2026-09)', () => {
     const expected = [...current(d.pivotAll.value)].sort(byScore).map(r => r.name);
     const ranked = [...d.rankMaps.value.all.keys()];
     expect(ranked).toEqual(expected);
+  });
+
+  it('REGRESSION (stats-35): MiniMax M2.7 can no longer outrank MiniMax M3', () => {
+    const m27 = rowOf('MiniMax M2.7');
+    const m3 = rowOf('MiniMax-M3');
+    expect(m3, 'MiniMax-M3 present').toBeTruthy();
+    if (!m27) return;
+    // the structural fix: M3 joins M2.7's product line via the letter-rule
+    // parser, so M2.7 leaves the default ranking (superseded by M3)
+    expect(d.isOlder(m27), 'M2.7 superseded by M3').toBe(true);
+    expect(d.supersededBy(m27)).toBe('MiniMax-M3');
+    // and on shared benchmarks M3 dominates head-to-head (raw cells)
+    expect(d.isOlder(m3)).toBe(false);
+  });
+
+  it('REGRESSION (stats-35): undated escapees are now dated and stale-hidden', () => {
+    for (const [name, iso] of [['GPT 4o Mini 2024.07 18', '2024-07-18'],
+                               ['o3 2025.04 16', '2025-04-16']]) {
+      const row = rowOf(name);
+      if (!row) continue;
+      const rec = d.metaFor(row) || {};
+      expect(rec.created, `created of "${name}"`).toBe(iso);
+      expect(rec.created_source).toBe('display_name');
+      expect(d.isOlder(row), `${name} hidden by the staleness ladder`).toBe(true);
+    }
+  });
+
+  it('REGRESSION (stats-35): limited-data badge flags sub-half coverage rows', () => {
+    // cov < 4 of the default 8 must be flagged; full-coverage rows never
+    let limited = 0, solid = 0;
+    for (const r of current(d.pivotAll.value)) {
+      const cov = d.coveredCountForModel(r);
+      if (cov * 2 < d.coreBenchmarks.value.length) limited++; else solid++;
+    }
+    expect(limited).toBeGreaterThan(0);
+    expect(solid).toBeGreaterThan(0);
   });
 
   it('REGRESSION: GLM-5.3-Flash no longer outranks GLM-5.3 / Kimi K3', () => {
@@ -168,7 +229,7 @@ describe('CL-weighted global score (selection-bias fix, 2026-09)', () => {
 });
 
 describe('user-selectable average (commit B)', () => {
-  it('PARITY: default selection reproduces the shipped cl + legacy score exactly', () => {
+  it('PARITY: default selection reproduces the shipped cl + harmonized score exactly', () => {
     // Run FIRST in this describe — later tests mutate the selection.
     for (const r of d.pivotAll.value) {
       expect(d.clForModel(r), `client CL of "${r.name}"`).toBe(r.cl ?? 0);
@@ -206,14 +267,14 @@ describe('user-selectable average (commit B)', () => {
     d.setAvgSelection(['EQBench CW']);
     expect(d.avgForModel(r)).toBe(r['EQBench CW']);
     expect(d.clForModel(r)).toBe(100);
-    expect(d.scoreForModel(r)).toBe(r['EQBench CW']); // full coverage keeps the raw avg
-    // 2-bench mix: sparse mean + proportional CL blend
+    // single bench = its harmonized cell (50 = catalog median on that bench)
+    expect(d.scoreForModel(r)).toBeCloseTo(legacyScore(r, ['EQBench CW']), 9);
+    // 2-bench mix: harmonized sparse mean + proportional CL blend
     d.setAvgSelection(['Artificial Analysis', 'EQBench CW']);
     const vals = [r['Artificial Analysis'], r['EQBench CW']].filter(v => v != null);
     const raw = vals.reduce((a, b) => a + b, 0) / vals.length;
     expect(d.avgForModel(r)).toBeCloseTo(raw, 12);
-    const w = vals.length / 2; // CL = covered/selected
-    expect(d.scoreForModel(r)).toBeCloseTo(w * raw + (1 - w) * 50, 12);
+    expect(d.scoreForModel(r)).toBeCloseTo(legacyScore(r, ['Artificial Analysis', 'EQBench CW']), 9);
     d.resetAvgSelection();
   });
 

@@ -449,16 +449,30 @@ def scrape_artificial_analysis():
     if (t.length >= 10) parts.push(t);
   }
   var s = parts.join('\n');
-  var pricing = {}, slugs = {}, conflicts = 0;
-  var re = /\\"slug\\":\\"([^"\\]*)\\",\\"shortName\\":\\"([^"\\]{2,150})\\"/g;
+  var pricing = {}, slugs = {}, deprecation = {}, payloadModels = [], conflicts = 0;
+  // stats-35: AA inserted a 'name' field between slug and shortName in the
+  // 2026-09-13 payload (breaks the old slug->shortName adjacency). Anchor
+  // on the full slug->name->shortName record shape, falling back to the
+  // older two-field shape when the payload reverts. The same records carry
+  // a per-model 'deprecated' flag (+ deprecatedTo on detail pages) —
+  // vendor ground truth for the older-model ladder.
+  var reNew = /\\"slug\\":\\"([^"\\]*)\\",\\"name\\":\\"([^"\\]{2,150})\\",\\"shortName\\":\\"([^"\\]{2,150})\\"/g;
+  var reOld = /\\"slug\\":\\"([^"\\]*)\\",\\"shortName\\":\\"([^"\\]{2,150})\\"/g;
+  var re = reNew.test(s) ? reNew : reOld;
+  re.lastIndex = 0;
+  var keyIdx = re === reNew ? 3 : 2;      // shortName keys pricing/slugs (downstream join)
+  var nameIdx = re === reNew ? 2 : keyIdx; // record 'name' (variant label)
   var m;
   while ((m = re.exec(s)) !== null) {
-    var name = m[2];
-    slugs[name] = m[1];
+    var slug = m[1];
+    var name = m[keyIdx];
+    var recName = m[nameIdx];
+    slugs[name] = slug;
     var seg = s.slice(m.index + m[0].length, m.index + m[0].length + 4500);
     var stopA = seg.indexOf('\\"slug\\":');
     var stopB = seg.indexOf('\\"shortName\\":');
-    var stops = [stopA, stopB].filter(function(x){ return x >= 0; });
+    var stopC = seg.indexOf('\\"name\\":\\"');
+    var stops = [stopA, stopB, stopC].filter(function(x){ return x >= 0; });
     if (stops.length) seg = seg.slice(0, Math.min.apply(null, stops));
     var grab = function(key) {
       var needle = '\\"' + key + '\\":';
@@ -470,6 +484,36 @@ def scrape_artificial_analysis():
       var v = parseFloat(mm[0]);
       return isNaN(v) ? null : v;
     };
+    var grabBool = function(key) {
+      var needle = '\\"' + key + '\\":';
+      var at = seg.indexOf(needle);
+      if (at === -1) return null;
+      var rest = seg.slice(at + needle.length);
+      if (rest.lastIndexOf('true', 0) === 0) return 1;
+      if (rest.lastIndexOf('false', 0) === 0) return 0;
+      return null;
+    };
+    var grabStr = function(key) {
+      var needle = '\\"' + key + '\\":\\"';
+      var at = seg.indexOf(needle);
+      if (at === -1) return null;
+      var rest = seg.slice(at + needle.length);
+      var end = rest.indexOf('\\"');
+      return end === -1 ? null : rest.slice(0, end);
+    };
+    var dep = grabBool('deprecated');
+    if (dep !== null && slug) {
+      var prevDep = deprecation[slug];
+      if (!prevDep) {
+        deprecation[slug] = { deprecated: dep, deprecatedTo: grabStr('deprecatedTo') };
+      } else if (dep === 1 && prevDep.deprecated !== 1) {
+        deprecation[slug] = { deprecated: dep, deprecatedTo: grabStr('deprecatedTo') };
+      }
+    }
+    var intel = grab('intelligenceIndex');
+    if (intel !== null && recName && recName.length >= 3 && !/^\d+$/.test(recName)) {
+      payloadModels.push({ name: recName, score: intel });
+    }
     var inp = grab('price1mInputTokens');
     var outp = grab('price1mOutputTokens');
     if (inp === null && outp === null) continue;
@@ -485,7 +529,9 @@ def scrape_artificial_analysis():
       ttft_seconds: grab('medianTimeToFirstTokenSeconds')
     };
   }
-  return JSON.stringify({models: models, pricing: pricing, slugs: slugs, conflicts: conflicts});
+  return JSON.stringify({models: models, pricing: pricing, slugs: slugs,
+                         deprecation: deprecation, payloadModels: payloadModels,
+                         conflicts: conflicts});
 })()"""
     # stats-28: the flight payload now streams late — at 8s the script tags
     # hold ~3KB (no model records); the full ~1.5MB payload lands by ~20s.
@@ -504,6 +550,11 @@ def scrape_artificial_analysis():
         pricing = data.get("pricing") or {}
         slugs = data.get("slugs") or {}
         conflicts = int(data.get("conflicts") or 0)
+        # stats-35: AA deprecation flags ride the same records; payload
+        # records double as a models-list fallback when the table eval
+        # comes back empty (upstream layout drift protection).
+        payload_dep = data.get("deprecation") or {}
+        payload_models = data.get("payloadModels") or []
         for item in models_raw:
             if not isinstance(item, dict):
                 continue
@@ -520,14 +571,27 @@ def scrape_artificial_analysis():
                     models.append((name, score))
             except (ValueError, TypeError):
                 pass
-        if pricing or slugs:
-            global _AA_PRICING_LAST, _AA_SLUGS_LAST
+        if len(models) < 5 and payload_models:
+            seen = set()
+            for item in payload_models:
+                nm, sc = item.get("name"), item.get("score")
+                if (nm and nm not in seen and len(nm) >= 3
+                        and isinstance(sc, (int, float)) and sc > 0):
+                    models.append((nm, float(sc)))
+                    seen.add(nm)
+            if models:
+                print(f"    [WARN] table eval thin ({len(models)} rows) — "
+                      f"payload records used as the model list ({len(seen)} added)")
+        if pricing or slugs or payload_dep:
+            global _AA_PRICING_LAST, _AA_SLUGS_LAST, _AA_DEPRECATED_LAST
             _AA_PRICING_LAST = pricing
             _AA_SLUGS_LAST = slugs
+            _AA_DEPRECATED_LAST = payload_dep
             try:
                 with open(AA_PRICING_CACHE, "w") as f:
                     json.dump({"mined_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-                               "models": pricing, "slugs": slugs}, f, ensure_ascii=False)
+                               "models": pricing, "slugs": slugs,
+                               "deprecation": payload_dep}, f, ensure_ascii=False)
             except OSError as e:
                 print(f"    [WARN] AA pricing cache write failed: {e}")
         if pricing:
@@ -538,6 +602,9 @@ def scrape_artificial_analysis():
             print(f"    [WARN] No AA pricing records mined (payload layout changed?)")
         if slugs:
             print(f"    Captured {len(slugs)} AA model slugs (stats-34 modality ladder)")
+        if payload_dep:
+            n_dep = sum(1 for v in payload_dep.values() if v.get("deprecated") == 1)
+            print(f"    [AA deprecation] {len(payload_dep)} slugs, {n_dep} flagged deprecated (stats-35)")
         print(f"    Extracted {len(models)} models")
     else:
         print(f"    [WARN] No data from AA")
@@ -549,6 +616,7 @@ def scrape_artificial_analysis():
 AA_PRICING_CACHE = os.path.join(TMP_DIR, "aa_model_pricing.json")
 _AA_PRICING_LAST = None  # set by scrape_artificial_analysis on each full load
 _AA_SLUGS_LAST = None  # stats-34: slug per AA shortName, same payload
+_AA_DEPRECATED_LAST = None  # stats-35: slug -> {deprecated, deprecatedTo}
 
 
 def _load_aa_pricing_cache():
@@ -565,7 +633,6 @@ def _load_aa_pricing_cache():
     except (OSError, ValueError) as e:
         print(f"  [AA pricing] cache unreadable, skipping: {e}")
         return None
-
 
 _AA_PAREN_TAIL_RE = re.compile(r"\s*\([^()]*\)\s*$")
 
@@ -3071,6 +3138,16 @@ _SERIES_DOTTED_VER = re.compile(r"(\d+(?:\.\d+)+)")
 # Only 'v' is a version marker — "kimi-k3" stays unparseable by design.
 _SERIES_SINGLE_VER = re.compile(r"(?:^|-)v?(\d+)(?:-|$)")
 
+# stats-35: letter-prefixed version token as a LAST resort ("minimax-m3",
+# "kimi-k3"). Fires only when the dotted and v?-single rules both miss, so
+# it is purely additive: nothing that parses today changes grouping. The
+# letter stays in the family key — the same convention as the dotted rule
+# ('kimi-k2.6' -> fam 'kimi-k') — so 'minimax-m3' joins the ('minimax-m', '')
+# line of m2.5/m2.7 and 'kimi-k3' joins K2.6. Tokens at string start
+# ("o3-mini", "hy3") are skipped: the family key would be empty and the
+# letter is part of the product NAME there, not a version marker.
+_SERIES_LETTER_VER = re.compile(r"(?:^|-)([a-z])(\d+(?:\.\d+)*)(?=$|-)")
+
 
 def parse_series(or_id):
     """'openai/gpt-5.4-pro' -> ('gpt', 'pro', (5, 4)) — or None when unparseable.
@@ -3093,6 +3170,15 @@ def parse_series(or_id):
             ver = tuple(int(x) for x in m.group(1).split("."))
             fam = s[:m.start()].strip("-") or s[m.end():].strip("-")
             var = s[m.end():].strip("-") if m.start() > 0 else ""
+            return (fam, var, ver)
+        # stats-35: letter-prefixed version ("minimax-m3") — last resort,
+        # fam keeps the trailing letter exactly like the dotted rule so
+        # m3 lands in the same line as m2.5/m2.7.
+        m2 = _SERIES_LETTER_VER.search(s)
+        if m2 and m2.start() > 0:
+            ver = tuple(int(x) for x in m2.group(2).split("."))
+            fam = s[:m2.start(2)].strip("-")
+            var = s[m2.end(2):].strip("-")
             return (fam, var, ver)
     return None
 
@@ -3117,7 +3203,19 @@ def annotate_supersession(models_meta):
         if len(members) < 2:
             continue
         members.sort(reverse=True)          # date desc, then version desc
-        newest = members[0][2]
+        newest_date, newest_ver, newest = members[0]
+        # stats-35: flash/marketing guard (Ibrahim's note). A NEWER release
+        # can carry a LOWER version number (kimi-k2.8 landing after
+        # kimi-k3, a flash variant outperforming the pro line). Date-first
+        # ordering stays the product-generation rule, but when versions
+        # disagree with dates, say so loudly — the pairing gets a human
+        # look instead of silently hiding the higher-version sibling.
+        for d, ver, name in members[1:]:
+            if ver > newest_ver:
+                print(f"    [Supersession][WARN] version regression: {name} "
+                      f"v{'.'.join(map(str, ver))} hidden behind {newest} "
+                      f"v{'.'.join(map(str, newest_ver))} — verify true "
+                      f"successor, not a side-grade release")
         for _, _, name in members[1:]:
             models_meta[name]["superseded_by"] = newest
             n += 1
@@ -3286,8 +3384,112 @@ def annotate_legacy_bare_names(models_meta, row_names):
         n += 1
     return n
 
+# stats-35: dates embedded in display names — 'GPT 4o Mini 2024.07 18',
+# 'o3 2025.04 16' (YYYY.MM [DD]) and 'Command A 03.2025' (MM.YYYY).
+_NAME_DATE_RE = re.compile(r"\b(20\d{2})\.(\d{2})(?:\s+(\d{1,2}))?\b")
+_NAME_DATE_ALT_RE = re.compile(r"\b(\d{1,2})\.(20\d{2})\b")
+
+
+def fill_created_from_names(models_meta, row_names):
+    """stats-35: give undated rows a created date recovered from their
+    display name so the staleness ladder can age them ('GPT 4o Mini
+    2024.07 18', 'o3 2025.04 16'). Rows without an OpenRouter match have
+    NO meta record at all, so a minimal entry is created when a date is
+    found (same discipline as apply_supersede_overrides). These rows
+    can't family-group (or_id None) so the date only feeds staleness.
+    Stamps created_source='display_name' for provenance. Returns count."""
+    n = 0
+    for name in row_names:
+        rec = models_meta.get(name) or {}
+        if rec.get("created"):
+            continue
+        m = _NAME_DATE_RE.search(name)
+        if m:
+            iso = f"{m.group(1)}-{m.group(2)}-{m.group(3) or '01'}"
+        else:
+            m2 = _NAME_DATE_ALT_RE.search(name)
+            if not m2:
+                continue
+            iso = f"{m2.group(2)}-{m2.group(1)}-01"
+        rec = models_meta.setdefault(name, {})
+        rec["created"] = iso
+        rec["created_source"] = "display_name"
+        n += 1
+    if n:
+        print(f"  [Created] recovered {n} release date(s) from display names")
+    return n
+
+
+def _load_aa_deprecation():
+    """slug -> {deprecated, deprecatedTo} mined alongside AA pricing
+    (stats-35). Same cache file, same module-stash pattern as pricing."""
+    if _AA_DEPRECATED_LAST:
+        return _AA_DEPRECATED_LAST
+    if not os.path.exists(AA_PRICING_CACHE):
+        return {}
+    try:
+        with open(AA_PRICING_CACHE) as f:
+            payload = json.load(f)
+        return payload.get("deprecation") or {}
+    except (OSError, ValueError):
+        return {}
+
+
+def annotate_aa_deprecation(models_meta, row_names):
+    """stats-35: vendor deprecation evidence from the AA flight payload.
+
+    Policy (Ibrahim: 'if it plays well with us, use it'): AA's per-model
+    'deprecated' flag never contradicts our own hiding decisions (2026-09-13
+    audit — every disagreement is a model WE hide and AA still lists,
+    never the reverse), so it is applied conservatively: only rows our own
+    ladder could NOT hide get flagged. A resolvable deprecatedTo target
+    wins over a bare stale flag; targets are matched by exact shortName
+    only (never guessed by family). Rows already hidden by us are only
+    counted as agreement — a signal-quality metric for the daily report.
+    Returns (newly_hidden, targeted, agreement)."""
+    dep = _load_aa_deprecation()
+    if not dep or not models_meta:
+        return 0, 0, 0
+    slug_map = _load_aa_slug_map()
+    slug_to_row = {}
+    row_lower = {}
+    for r in row_names:
+        row_lower.setdefault(r.lower(), r)
+    for short, slug in slug_map.items():
+        hit = row_lower.get(short.lower())
+        if hit:
+            slug_to_row.setdefault(slug, hit)
+    n = n_t = n_agree = 0
+    for name in row_names:
+        rec = models_meta.get(name)
+        if not rec:
+            continue
+        slug = _aa_slug_for(name, slug_map)
+        info = dep.get(slug) if slug else None
+        if not info or info.get("deprecated") != 1:
+            continue
+        rec["aa_deprecated"] = True
+        if info.get("deprecatedTo"):
+            rec["aa_deprecated_to"] = info["deprecatedTo"]
+        if rec.get("superseded_by") or rec.get("stale"):
+            n_agree += 1
+            continue
+        target = slug_to_row.get(info.get("deprecatedTo") or "")
+        if target and target != name:
+            rec["superseded_by"] = target
+            n_t += 1
+        else:
+            rec["stale"] = True
+        n += 1
+    if n or n_agree:
+        print(f"  [AA deprecation] newly hidden={n} (targeted={n_t}, "
+              f"stale={n - n_t}) agrees-with-ours={n_agree}")
+    return n, n_t, n_agree
+
+
 
 def apply_hf_overrides(models_meta, row_names):
+
     """Curated HuggingFace id overrides — runs AFTER supersession/staleness
     annotation so superseded rows without a catalog match (placeholder
     records) get their verified HF repo too (e.g. "Granite 4.1 8B").
@@ -4948,10 +5150,12 @@ def _run_meta_only():
     if n_preserved:
         print(f"  [available-at] preserved curated seller map for {n_preserved} record(s)")
     row_names = {r["name"] for r in rows if r.get("name")}
+    fill_created_from_names(meta, row_names)   # stats-35: name-embedded dates
     n_sup = annotate_supersession(meta)
     n_ov = apply_supersede_overrides(meta, row_names)
     n_stale = annotate_stale_by_age(meta, row_names)
     n_bare = annotate_legacy_bare_names(meta, row_names)
+    annotate_aa_deprecation(meta, row_names)   # stats-35: vendor deprecation
     n_hf, n_hfp = apply_hf_overrides(meta, row_names)
     n_aa, _aa_moves = apply_aa_pricing(meta)
     try:
@@ -5051,10 +5255,12 @@ def main():
     try:
         models_meta = collect_model_metadata(closed_table + open_table)
         row_names = {r["name"] for r in closed_table + open_table if r.get("name")}
+        fill_created_from_names(models_meta, row_names)  # stats-35: name dates
         n_sup = annotate_supersession(models_meta)
         n_ov = apply_supersede_overrides(models_meta, row_names)
         n_stale = annotate_stale_by_age(models_meta, row_names)
         n_bare = annotate_legacy_bare_names(models_meta, row_names)
+        annotate_aa_deprecation(models_meta, row_names)  # stats-35: AA deprecation
         n_hf, n_hfp = apply_hf_overrides(models_meta, row_names)
         n_aa, n_aa_moves = apply_aa_pricing(models_meta)
         try:

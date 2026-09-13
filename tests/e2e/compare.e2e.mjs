@@ -6,6 +6,9 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+// stats-35: score replica imported from the shared mirror (independent
+// re-derivation of the harmonized CL blend) — no inline formula to drift
+import { scoreForModel as mirrorScore } from '../helpers/snapshot.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SHOTS = path.join(REPO, 'tests', 'e2e', 'shots');
@@ -15,8 +18,8 @@ const BASE = process.env.E2E_BASE || 'http://127.0.0.1:4173/benchmark_arena/';
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'public/benchmark_results.json'), 'utf8'));
 const CORE = ['Artificial Analysis','BenchLM.ai','Arena.ai Text','SimpleBench.com','ARC-AGI-2','Design Arena','SWE-Marathon','FrontierSWE'];
 const avg = r => { const v = CORE.map(b => r[b]).filter(x => x != null); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : -1; };
-// CL-weighted global score (mirrors stores/data.js scoreForModel): w*raw + (1-w)*50
-const score = r => { const raw = avg(r); if (raw === -1) return -1; const cl = Math.min(100, Math.max(0, r.cl ?? 0)); return (cl/100)*raw + (1-cl/100)*50; };
+// stats-35 harmonized CL blend via the mirror (-1 sentinel preserved)
+const score = r => mirrorScore(r);
 const slugify = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
 const closedRows = data.unified_closed || [];

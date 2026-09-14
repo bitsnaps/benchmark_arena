@@ -40,16 +40,23 @@ import MyProvidersPanel from '../components/MyProvidersPanel.vue';
 import { isNewModel, newBadgeTitle, createdIndexFromMeta } from '../lib/newFlag.js';
 import {
   buildMatrix, sortMatrixRows, filterMatrix, cellBlend, cheapestPid,
-  latencyClass, isBatchRow, normKey, DEFAULT_COLUMNS,
+  latencyClass, isBatchRow, normKey, rowBlend, DEFAULT_COLUMNS,
 } from '../lib/pivot.js';
 import { useProviders } from '../stores/providers.js';
+// stats-38: opt-in "my gateways" overlay columns — the pure rules live in
+// lib/myProviders.js (unit-tested); the store singleton is shared with the
+// My Providers panel (same module state, one localStorage source).
+import {
+  buildCatalogIndex, matchOne, buildMineOverlay, headlineSku, undercutsMine,
+} from '../lib/myProviders.js';
+import { useMyProviders } from '../stores/myProviders.js';
 
 const { rawData, loading, error, ensureProvidersLoaded } = useProviders();
 onMounted(ensureProvidersLoaded);
 // stats-24: AA TTFT lives in benchmark_results.json (models_meta), not in
 // providers.json — pull the data store too (module singleton; the fetch is
 // shared with the home view and happens once per session).
-const { rawData: benchRaw, ensureLoaded } = useData();
+const { rawData: benchRaw, ensureLoaded, pivotAll } = useData();
 onMounted(ensureLoaded);
 
 const asOf = computed(() => rawData.value?.as_of || null);
@@ -311,9 +318,100 @@ const colCounts = computed(() => {
   return counts;
 });
 
+// ── stats-38: opt-in "my gateways" overlay columns (v2) ──────────────
+// Extra Compare columns fed from the user's connected gateways (the My
+// providers tab's store — same module singleton, one localStorage source).
+// DISCIPLINE (docs/spec-my-providers-v2.md): the overlay never touches
+// row.cells — it lives in a per-row `mine` map attached AFTER filtering,
+// so cheapest-cell highlighting, the pricing filters, coverage counts and
+// the slider universe stay catalog-only by construction. Honest gaps: a
+// gateway that doesn't publish prices renders dashes, one that doesn't
+// serve a model renders the absent dot — never fabricated prices.
+const MINE_COL_KEY = 'arena.providers.mine-col';
+const showMine = ref(false);
+try { showMine.value = JSON.parse(localStorage.getItem(MINE_COL_KEY) || 'false') === true; }
+catch { /* fresh visit / private mode */ }
+watch(showMine, (v) => { try { localStorage.setItem(MINE_COL_KEY, JSON.stringify(v)); } catch { /* private mode */ } });
+
+const { providers: myProviders, ensureMyProvidersLoaded } = useMyProviders();
+onMounted(ensureMyProvidersLoaded);
+
+// One column per gateway that carries at least one chat-capable listing.
+// pid namespaces the column for sorting/comparator use ('mine:' prefix —
+// it can never collide with a catalog provider id); id is the raw store id
+// that buildMineOverlay's per-provider maps are keyed by.
+const mineCols = computed(() => (myProviders.value || [])
+  .filter(p => (p.models || []).some(m => m.chat))
+  .map(p => ({ pid: 'mine:' + p.id, id: p.id, label: p.label })));
+
+// The matching index — built exactly like the My Providers panel's (same
+// pure fn over the same snapshot pieces), so both tabs can never disagree.
+const mineCatalogIndex = computed(() =>
+  benchRaw.value ? buildCatalogIndex(pivotAll.value || [], modelsMeta.value || {}) : null);
+
+// arena name → provider id → matched SKUs (prices only as published)
+const mineOverlay = computed(() =>
+  mineCatalogIndex.value ? buildMineOverlay(myProviders.value || [], mineCatalogIndex.value) : null);
+
+// Resolve each pivot row's arena model with the SAME staged matcher the
+// panel uses (matchOne over r.key), then headline that provider's SKUs.
+// One SKU can surface on a base row and a dated-snapshot twin row — both
+// rows ARE the same arena model; the cell tooltip enumerates every SKU.
+const attachMine = (rows) => {
+  if (!showMine.value || !mineOverlay.value || !mineCatalogIndex.value) return rows;
+  return rows.map(r => {
+    const hit = matchOne(r.key, mineCatalogIndex.value);
+    if (!hit) return r;
+    const perProvider = mineOverlay.value.get(hit.name);
+    if (!perProvider) return r;
+    const mine = {};
+    for (const mc of mineCols.value) {
+      const skus = perProvider.get(mc.id);
+      if (!skus || !skus.length) continue;
+      const head = headlineSku(skus);
+      const blend = head.kind === 'paid' || head.kind === 'free' ? head.blend : null;
+      mine[mc.pid] = {
+        kind: head.kind,
+        blend,
+        in: head.sku.in,
+        out: head.sku.out,
+        free: head.kind === 'free',
+        skus,
+        under: undercutsMine(blend, rowBlend(r)),
+      };
+    }
+    return Object.keys(mine).length ? { ...r, mine } : r;
+  });
+};
+
+const mineHeaderTitle = (mc) =>
+  `${mc.label} — your gateway (stored only in this browser) · ` +
+  `${mineCounts.value[mc.pid] || 0} models in view served · ` +
+  'prices only when the gateway publishes them — hover a cell for every SKU';
+
+function mineCellTitle(r, mc) {
+  const c = r.mine?.[mc.pid];
+  if (!c) return '';
+  const list = c.skus.map(s => {
+    const free = s.free || (s.in === 0 && (s.out ?? 0) === 0);
+    const pr = free ? 'free (rate-limited)'
+      : (s.in != null || s.out != null)
+        ? `${s.in == null ? '?' : fmtUsd(s.in)} in / ${s.out == null ? '?' : fmtUsd(s.out)} out per 1M`
+        : 'no price published';
+    return `${s.key}${s.variant ? ' [' + s.variant + ']' : ''}${free ? ' :free' : ''} — ${pr}`;
+  }).join(' · ');
+  const cat = rowBlend(r);
+  const catBit = cat != null ? ` · catalog cheapest ${fmtUsd(cat)} (3:1 blend)` : '';
+  if (c.under) return `${mc.label} — ${list}${catBit} · YOUR GATEWAY UNDERCUTS every catalog seller`;
+  if (c.kind === 'paid') return `${mc.label} — ${list} · blended ${fmtUsd(c.blend)} (3:1 in:out)${catBit}`;
+  if (c.kind === 'free') return `${mc.label} — ${list} · free twin — rate limits apply, not unlimited`;
+  return `${mc.label} — ${list} · listed but no price published`;
+}
+
 // column sorting: default = coverage desc (sortMatrixRows); clicking a
 // provider header sorts by that column's blend (cheapest first), again to
-// flip, a third time back to the default.
+// flip, a third time back to the default. Mine columns sort by their own
+// blend via the same comparator (cells[pid] ?? mine[pid] fallback).
 const sortPid = ref(null);
 const sortAsc = ref(true);
 function sortBy(pid) {
@@ -327,17 +425,31 @@ function sortBy(pid) {
   page.value = 1; // sorted order changes — start from the top
 }
 const sortedRows = computed(() => {
-  const rows = visibleRows.value;
+  const rows = attachMine(visibleRows.value); // stats-38: overlay added post-filter
   if (!sortPid.value) return rows;
   const pid = sortPid.value;
+  const cellVal = (r) => {
+    if (r.cells[pid]) return cellBlend(r.cells[pid]);
+    const m = r.mine?.[pid];
+    return m ? m.blend : null;
+  };
   return [...rows].sort((a, b) => {
-    const av = cellBlend(a.cells[pid]);
-    const bv = cellBlend(b.cells[pid]);
+    const av = cellVal(a);
+    const bv = cellVal(b);
     if (av == null && bv == null) return 0;
     if (av == null) return 1;
     if (bv == null) return -1;
     return sortAsc.value ? av - bv : bv - av;
   });
+});
+
+// header tooltip counts for mine columns (post-filter view, like colCounts)
+const mineCounts = computed(() => {
+  const counts = {};
+  if (!showMine.value) return counts;
+  for (const r of sortedRows.value)
+    for (const pid of Object.keys(r.mine || {})) counts[pid] = (counts[pid] || 0) + 1;
+  return counts;
 });
 
 // ── Pagination (stats-20, unified in stats-21) ────────────────────────────────────────
@@ -424,7 +536,9 @@ const pickerTitle = (p) =>
           in sync. Or switch to "Compare" for the pivot view: one row per model,
           one column per seller, cheapest cell highlighted. "My providers"
           connects your own gateway — its models are matched against the arena
-          read-only, and everything stays in this browser.
+          read-only, and with the Compare tab's "my gateways" switch you can
+          overlay your own prices beside every seller. Everything stays in this
+          browser.
         </p>
       </div>
       <span v-if="asOf" class="tag-lab">prices as of {{ asOf }}</span>
@@ -578,12 +692,19 @@ const pickerTitle = (p) =>
               type="is-dark" multilined :delay="100">
               <b-switch v-model="showBatch" size="is-small">batch variants</b-switch>
             </b-tooltip>
+            <!-- stats-38: the v2 overlay — one column per connected gateway.
+                 Hidden entirely while no gateway carries a chat listing; the
+                 column itself is honest about unpriced/unserved cells. -->
+            <b-tooltip v-if="mineCols.length" label="Overlay your connected gateways (the My providers tab) as extra columns — prices only when the gateway publishes them; catalog highlighting, filters and counts are never affected"
+              type="is-dark" multilined :delay="100">
+              <b-switch v-model="showMine" size="is-small">my gateways</b-switch>
+            </b-tooltip>
             <span class="is-flex-grow-1"></span>
             <span class="cell-sub pm-coverage">
               {{ matrix ? matrix.coverage.models : 0 }} canonical models ·
               {{ selProviders.length }} columns ·
               {{ matrix ? matrix.coverage.collapsed : 0 }} duplicate ids collapsed ·
-              {{ visibleRows.length }} shown<span v-if="!showBatch && batchHidden"> · {{ batchHidden }} batch variants hidden</span>
+              {{ visibleRows.length }} shown<span v-if="!showBatch && batchHidden"> · {{ batchHidden }} batch variants hidden</span><span v-if="showMine && mineCols.length"> · +{{ mineCols.length }} my gateway{{ mineCols.length === 1 ? '' : 's' }}</span>
             </span>
           </div>
 
@@ -602,6 +723,18 @@ const pickerTitle = (p) =>
                       {{ p.name }}<span v-if="sortPid === p.id" class="pm-sort-arrow">{{ sortAsc ? ' ↑' : ' ↓' }}</span>
                     </b-tooltip>
                   </th>
+                  <!-- stats-38: the user's gateways, appended after the catalog
+                       columns with a dashed accent + 'mine' marker so the
+                       overlay is identifiable at a glance -->
+                  <template v-if="showMine">
+                    <th v-for="mc in mineCols" :key="mc.pid" class="pm-h pm-h-mine"
+                      :class="{ 'is-sorted': sortPid === mc.pid }"
+                      @click="sortBy(mc.pid)">
+                      <b-tooltip :label="mineHeaderTitle(mc)" type="is-dark" multilined :delay="100">
+                        {{ mc.label }}<span class="pm-mine-tag">mine</span><span v-if="sortPid === mc.pid" class="pm-sort-arrow">{{ sortAsc ? ' ↑' : ' ↓' }}</span>
+                      </b-tooltip>
+                    </th>
+                  </template>
                 </tr>
               </thead>
               <tbody>
@@ -656,9 +789,40 @@ const pickerTitle = (p) =>
                          renderer at that scale; a dot tooltip is not worth it -->
                     <span v-else class="pm-absent" :title="`${p.name} — not carried`">·</span>
                   </td>
+                  <!-- stats-38: the gateway columns — priced cells, honest
+                      dashes for unpriced listings, absent dots for models the
+                      gateway doesn't serve, a free chip for :free twins and
+                      the ▼ undercut marker when the gateway beats every
+                      catalog seller. Same tooltip recipe as catalog cells. -->
+                  <template v-if="showMine">
+                    <td v-for="mc in mineCols" :key="mc.pid" class="num pm-cell pm-cell-mine">
+                      <template v-if="r.mine && r.mine[mc.pid]">
+                        <b-tooltip v-if="r.mine[mc.pid].blend != null"
+                          :label="mineCellTitle(r, mc)" type="is-dark" multilined
+                          :delay="100" append-to-body>
+                          <span class="price-cell pm-mine-price">{{ fmtUsd(r.mine[mc.pid].blend) }}</span>
+                        </b-tooltip>
+                        <b-tooltip v-else :label="mineCellTitle(r, mc)" type="is-dark" multilined
+                          :delay="100" append-to-body>
+                          <span class="cell-sub">—</span>
+                        </b-tooltip>
+                        <b-tooltip v-if="r.mine[mc.pid].kind === 'free'"
+                          label="Free twin at your gateway — rate limits apply, not unlimited"
+                          type="is-dark" :delay="100" append-to-body>
+                          <span class="free-chip">free</span>
+                        </b-tooltip>
+                        <b-tooltip v-if="r.mine[mc.pid].under"
+                          :label="'Blended ' + fmtUsd(r.mine[mc.pid].blend) + ' — undercuts the cheapest catalog seller (' + fmtUsd(rowBlend(r)) + ') — 3:1 in:out blends'"
+                          type="is-dark" :delay="100" append-to-body>
+                          <span class="mine-under">▼ cheaper</span>
+                        </b-tooltip>
+                      </template>
+                      <span v-else class="pm-absent" :title="`${mc.label} — not carried by this gateway`">·</span>
+                    </td>
+                  </template>
                 </tr>
                 <tr v-if="!pagedRows.length">
-                  <td :colspan="selProviders.length + 1" class="cell-sub" style="text-align:center;padding:1.2rem">
+                  <td :colspan="selProviders.length + 1 + (showMine ? mineCols.length : 0)" class="cell-sub" style="text-align:center;padding:1.2rem">
                     No models match the current filters — relax the search, price cap or column set.
                   </td>
                 </tr>
@@ -685,6 +849,13 @@ const pickerTitle = (p) =>
             <span class="lat-ok legend-chip">1.5–3.5 s</span>
             <span class="lat-slow legend-chip">≥ 3.5 s</span>;
             hover any cell for the exact value. Unmeasured models stay gray.
+            <b>My gateways</b> (stats-38): the optional <b>my gateways</b> switch appends
+            a column per provider connected on the "My providers" tab — headline price is
+            your cheapest paid SKU (3:1 blend), <code>:free</code> twins are flagged with
+            the rate-limit caveat, gateways that publish no prices stay dashes, and a
+            <span class="mine-under">▼ cheaper</span> marker fires when your blend
+            undercuts every catalog seller. Your columns never affect catalog
+            highlighting, filters or counts, and nothing leaves this browser.
           </p>
         </template>
       </b-tab-item>

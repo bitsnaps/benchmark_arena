@@ -1,11 +1,14 @@
-// stats-36 My Providers e2e (stats-37 retarget): the full paste-mode journey
-// against the live catalog — now inside the Providers page's third tab.
-// Covers: the standalone navbar item is GONE, legacy /my-providers redirect
-// lands on ?view=mine, tab-click reaches the same panel, deep link works,
-// add via paste, matched/unlisted split, READ-ONLY score mirroring (parity
-// against tests/helpers/snapshot.mjs, which re-derives the score
-// independently of benchScale.js), variant chips, non-chat toggle, shared
-// search scoping, persistence across reload, clear-all, and a clean console.
+// stats-36 My Providers e2e (stats-37 retarget, stats-38 v2 overlay): the
+// full paste-mode journey against the live catalog — inside the Providers
+// page's third tab. Covers: the standalone navbar item is GONE, legacy
+// /my-providers redirect lands on ?view=mine, tab-click reaches the same
+// panel, deep link works, add via paste, matched/unlisted split, READ-ONLY
+// score mirroring (parity against tests/helpers/snapshot.mjs, which
+// re-derives the score independently of benchScale.js), variant chips,
+// non-chat toggle, shared search scoping, the stats-38 "my gateways"
+// Compare-pivot overlay (priced headline / honest dash / absent dot / SKU
+// tooltip / toggle persistence), persistence across reload, clear-all, and
+// a clean console.
 // Runs under tests/run-e2e.mjs (vite preview on 4173, base /benchmark_arena/).
 import { chromium } from 'playwright';
 import { loadSnapshot, makeMirror, scoreForModel } from '../helpers/snapshot.mjs';
@@ -23,13 +26,16 @@ if (!rowFor('Claude Opus 4.6') || !rowFor('GPT-5.6 Luna') || !rowFor('Claude Opu
 }
 const expectedScore = scoreForModel(rowFor('Claude Opus 4.6'));
 
-// A realistic reseller listing: OpenAI shape, [1m] ctx tag, thinking route,
-// a private gateway model, a :free twin, and one non-chat endpoint.
+// A realistic reseller listing: OpenAI shape, [1m] ctx tag, a thinking route,
+// an :free twin of an ARENA model, OpenRouter-style pricing on the paid SKUs
+// (stats-38: the Compare overlay needs published prices), a private gateway
+// model, and one non-chat endpoint.
 const FIXTURE = JSON.stringify({
   object: 'list',
   data: [
-    { id: 'claude-opus-4.6', object: 'model', created: 1626777600, owned_by: 'claude', supported_endpoint_types: ['openai'] },
-    { id: 'gpt-5.6-luna[1m]', object: 'model', created: 1626777600, owned_by: 'openai', supported_endpoint_types: ['openai'], context_length: 1000000 },
+    { id: 'claude-opus-4.6', object: 'model', created: 1626777600, owned_by: 'claude', supported_endpoint_types: ['openai'], pricing: { prompt: '0.000002', completion: '0.00001' } },
+    { id: 'claude-opus-4.6:free', object: 'model', created: 1626777600, owned_by: 'claude', supported_endpoint_types: ['openai'], pricing: { prompt: '0', completion: '0' } },
+    { id: 'gpt-5.6-luna[1m]', object: 'model', created: 1626777600, owned_by: 'openai', supported_endpoint_types: ['openai'], context_length: 1000000, pricing: { prompt: '0.000001', completion: '0.000004' } },
     { id: 'claude-opus-4-8-thinking', object: 'model', created: 1626777600, owned_by: 'claude', supported_endpoint_types: ['openai'] },
     { id: 'my-private-gateway-model', object: 'model', created: 1626777600, owned_by: 'me' },
     { id: 'aggregator-special-9b:free', object: 'model', created: 1626777600, owned_by: 'community', supported_endpoint_types: ['openai'] },
@@ -79,13 +85,13 @@ const FIXTURE = JSON.stringify({
 
   // ── 3. banner + matched/unlisted split ──
   const banner = (await page.locator('.mp-banner').innerText()).replace(/\s+/g, ' ').trim();
-  if (banner.includes('3 of 5')) ok('banner: 3 of 5 chat models matched (' + banner.slice(0, 60) + '…)');
+  if (banner.includes('4 of 6')) ok('banner: 4 of 6 chat models matched (' + banner.slice(0, 60) + '…)');
   else fail('banner mismatch: ' + banner);
 
   const matchedNames = (await page.locator('.mp-matched .model-link').allInnerTexts()).map(s => s.trim());
-  const wantMatched = ['Claude Opus 4.6', 'Claude Opus 4.8', 'GPT-5.6 Luna'];
+  const wantMatched = ['Claude Opus 4.6', 'Claude Opus 4.6', 'Claude Opus 4.8', 'GPT-5.6 Luna'];
   const same = wantMatched.length === matchedNames.length && wantMatched.every(n => matchedNames.includes(n));
-  if (same) ok('matched table: ' + matchedNames.join(', '));
+  if (same) ok('matched table (per-SKU, incl. the :free twin): ' + matchedNames.join(', '));
   else fail('matched rows mismatch: ' + JSON.stringify(matchedNames));
 
   const unlistedText = (await page.locator('.mp-unlisted').innerText()).replace(/\s+/g, ' ');
@@ -95,7 +101,7 @@ const FIXTURE = JSON.stringify({
 
   // ── 4. variant / free / match-pass chips ──
   const matchedZone = (await page.locator('.mp-matched').innerText()).replace(/\s+/g, ' ');
-  for (const [label, needle] of [['[1m] ctx tag', '[1m]'], [':free twin stays unlisted-side', 'thinking route']]) {
+  for (const [label, needle] of [['[1m] ctx tag', '[1m]'], [':free twin chip (matched-side)', ':free'], ['thinking route', 'thinking route']]) {
     if (matchedZone.includes(needle)) ok('matched table shows the ' + label);
     else fail('missing ' + label + ' in matched table');
   }
@@ -109,7 +115,9 @@ const FIXTURE = JSON.stringify({
   if (mirrored === want) ok(`score mirror parity: ${mirrored} == snapshot-derived ${want}`);
   else fail(`score mirror mismatch: got ${mirrored}, want ${want}`);
   if (await opusRow.locator('a.model-link').count()) {
-    const href = await opusRow.locator('a.model-link').getAttribute('href');
+    // .first() — the paid SKU and its :free twin are two rows of the SAME
+    // arena model, so the row filter matches both (stats-38 fixture)
+    const href = await opusRow.locator('a.model-link').first().getAttribute('href');
     if (String(href).includes('/model/')) ok('matched row deep-links to the model card (' + href + ')');
     else fail('model link href unexpected: ' + href);
   }
@@ -145,18 +153,84 @@ const FIXTURE = JSON.stringify({
   const searchBox = page.locator('input[placeholder^="Filter models"]');
   await searchBox.fill('opus');
   await page.waitForFunction(() => !document.querySelector('.mp-matched .model-link') ||
-    document.querySelectorAll('.mp-matched .model-link').length === 2, null, { timeout: 5000 });
+    document.querySelectorAll('.mp-matched .model-link').length === 3, null, { timeout: 5000 });
   const searched = (await page.locator('.mp-matched .model-link').allInnerTexts()).map(s => s.trim());
-  if (searched.length === 2 && searched.every(n => n.includes('Opus'))) ok('shared search filters matched rows to the Opus pair: ' + searched.join(', '));
+  if (searched.length === 3 && searched.every(n => n.includes('Opus'))) ok('shared search filters matched rows to the Opus trio (paid + free twin + thinking): ' + searched.join(', '));
   else fail('search scoping mismatch: ' + JSON.stringify(searched));
   if (!(await page.locator('.mp-unlisted').count())) ok('unlisted section collapses away when nothing matches the search');
   else fail('unlisted section should be hidden under the narrow search');
   await searchBox.fill('unorouter');
-  await page.waitForFunction(() => document.querySelectorAll('.mp-matched .model-link').length === 3, null, { timeout: 5000 });
+  await page.waitForFunction(() => document.querySelectorAll('.mp-matched .model-link').length === 4, null, { timeout: 5000 });
   ok('provider-name hit keeps the full listing (browse mode)');
   await searchBox.fill('');
-  await page.waitForFunction(() => document.querySelectorAll('.mp-matched .model-link').length === 3, null, { timeout: 5000 });
+  await page.waitForFunction(() => document.querySelectorAll('.mp-matched .model-link').length === 4, null, { timeout: 5000 });
   ok('clearing the search restores every row');
+
+  // ── 8c. v2: the "my gateways" overlay on the Compare pivot (stats-38) ──
+  await page.click('.tabs li a:has-text("Compare")');
+  await page.waitForSelector('.pm-table', { timeout: 10000 });
+  const mineSwitch = page.locator('label.switch:has-text("my gateways")');
+  if (await mineSwitch.count()) ok('my-gateways switch appears once a gateway is connected');
+  else fail('my-gateways switch missing despite a connected provider');
+  await mineSwitch.click();
+  await page.waitForSelector('.pm-h-mine', { timeout: 5000 });
+  const headerTxt = (await page.locator('.pm-h-mine').innerText()).replace(/\s+/g, ' ').trim().toUpperCase();
+  if (headerTxt.includes('UNOROUTER EXAMPLE') && headerTxt.includes('MINE')) ok('overlay column headed by the gateway label + mine marker (' + headerTxt + ')');
+  else fail('overlay header unexpected: ' + headerTxt);
+
+  // priced headline: opus-4.6 ($2 in / $10 out per 1M → 3:1 blend = $4); the
+  // :free twin (blend 0) must NOT headline — the paid SKU is the comparable
+  await searchBox.fill('opus');
+  await page.waitForFunction(() => document.querySelectorAll('.pm-table tbody tr').length >= 1 &&
+    document.querySelector('.pm-table tbody tr .pm-mine-price'), null, { timeout: 5000 });
+  const opusPivotRow = page.locator('.pm-table tbody tr', { hasText: 'Claude Opus 4.6' }).first();
+  const minePrice = (await opusPivotRow.locator('.pm-mine-price').first().innerText()).trim();
+  if (minePrice === '$4') ok('overlay cell shows the cheapest PAID blend: $4 = (3×2+10)/4');
+  else fail('overlay cell price mismatch: ' + minePrice);
+
+  // unpriced SKU (the thinking route) → honest dash, never a fabricated price
+  const opus48Row = page.locator('.pm-table tbody tr', { hasText: 'Claude Opus 4.8' }).first();
+  if (await opus48Row.locator('.pm-cell-mine').count()) {
+    const dashCell = (await opus48Row.locator('.pm-cell-mine').first().innerText()).replace(/\s+/g, ' ').trim();
+    if (dashCell.startsWith('—')) ok('unpriced gateway SKU renders an honest dash in the overlay');
+    else fail('overlay dash expected, got: ' + JSON.stringify(dashCell));
+  } else fail('Opus 4.8 row has no overlay cell');
+
+  // models the gateway does not serve keep the absent dot (search 'qwen')
+  await searchBox.fill('qwen');
+  await page.waitForFunction(() => {
+    const rows = document.querySelectorAll('.pm-table tbody tr');
+    return rows.length >= 1 && rows[0].querySelector('.pm-cell-mine');
+  }, null, { timeout: 5000 });
+  const qwenCell = (await page.locator('.pm-table tbody tr').first().locator('.pm-cell-mine').innerText()).trim();
+  if (qwenCell === '·') ok('non-served model renders the absent dot in the overlay column');
+  else fail('absent dot expected, got: ' + JSON.stringify(qwenCell));
+
+  // cell tooltip enumerates every SKU incl. the free twin (append-to-body).
+  // Disambiguate from the row-NAME tooltip ("Anthropic: Claude Opus 4.6 —
+  // API id …") by matching the cell tooltip's rate-limit wording.
+  await searchBox.fill('opus');
+  await page.waitForSelector('.pm-mine-price', { timeout: 5000 });
+  await opusPivotRow.locator('.pm-mine-price').first().hover();
+  const tip = page.locator('.tooltip-content:has-text("claude-opus-4.6"):has-text("rate-limited")').first();
+  await tip.waitFor({ state: 'visible', timeout: 5000 });
+  const tipTxt = (await tip.innerText()).replace(/\s+/g, ' ');
+  if (tipTxt.includes('claude-opus-4.6') && tipTxt.includes(':free')) ok('cell tooltip enumerates every SKU incl. the :free twin');
+  else fail('tooltip SKU enumeration missing: ' + tipTxt.slice(0, 140));
+
+  // the toggle persists across reload (localStorage arena.providers.mine-col)
+  await searchBox.fill('');
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('.pm-table', { timeout: 10000 });
+  if (await page.locator('.pm-h-mine').count()) ok('my-gateways toggle persists across reload (column still present)');
+  else fail('toggle state lost after reload');
+  await mineSwitch.click(); // off again — clean state for the remaining steps
+  await page.waitForFunction(() => !document.querySelector('.pm-h-mine'), null, { timeout: 5000 });
+  ok('toggling off removes the overlay columns');
+
+  // back to the panel for the persistence + clear-all steps
+  await page.click('.tabs li a:has-text("My providers")');
+  await page.waitForSelector('.mp-card', { timeout: 10000 });
 
   // ── 9. persistence across reload ──
   await page.reload({ waitUntil: 'networkidle' });
@@ -173,6 +247,13 @@ const FIXTURE = JSON.stringify({
   await page.click('button:has-text("Really clear everything?")');
   await page.waitForSelector('.mp-empty', { timeout: 5000 });
   ok('clear-all (two-step) returns to the empty state');
+
+  // ── 10b. clear-all also dissolves the overlay (v2) ──
+  await page.click('.tabs li a:has-text("Compare")');
+  await page.waitForSelector('.pm-table', { timeout: 10000 });
+  if (!(await page.locator('label.switch:has-text("my gateways")').count())) {
+    ok('with zero gateways the my-gateways switch disappears entirely');
+  } else fail('my-gateways switch should hide when no gateway is connected');
 
   // ── 11. console clean ──
   if (errors.length) fail('console/page errors: ' + errors.slice(0, 3).join(' || '));

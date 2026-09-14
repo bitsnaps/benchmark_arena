@@ -8,6 +8,7 @@ import {
   parseProviderId, parseModelListing,
   buildCatalogIndex, matchOne, matchListing,
   extractPricing,
+  buildMineOverlay, headlineSku, undercutsMine,
 } from '../../src/lib/myProviders.js';
 
 describe('parseProviderId', () => {
@@ -144,5 +145,96 @@ describe('extractPricing', () => {
     expect(extractPricing({})).toBeNull();
     expect(extractPricing({ prompt: 'free' })).toBeNull();
     expect(extractPricing({ prompt: '0.0000015' })).toEqual({ in: 1.5, out: null });
+  });
+});
+
+// ── stats-38: Compare-pivot overlay ("my gateways" columns) ───────────
+describe('buildMineOverlay', () => {
+  const INDEX = new Map([
+    ['claudefable51', { name: 'Claude Fable 5.1' }],
+    ['gpt56luna', { name: 'GPT-5.6 Luna' }],
+  ]);
+  const PROV = {
+    id: 'gw1',
+    models: [
+      { id: 'claude-fable-5.1', key: 'claudefable51', chat: true, pricing: { prompt: '0.000002', completion: '0.00001' } },
+      { id: 'gpt-5.6-luna[1m]', key: 'gpt56luna', variant: '1m', chat: true, pricing: null },
+      { id: 'img-forge', key: 'imgforge', chat: false, pricing: { prompt: '0', completion: '0' } },
+    ],
+  };
+
+  it('groups matched SKUs per arena name and per provider, chat-only', () => {
+    const ov = buildMineOverlay([PROV], INDEX);
+    const perProvider = ov.get('Claude Fable 5.1');
+    expect(perProvider.get('gw1')).toHaveLength(1);
+    expect(perProvider.get('gw1')[0]).toMatchObject({
+      key: 'claude-fable-5.1', in: 2, out: 10, free: false, pass: 'exact',
+    });
+    // the :free-less [1m] variant lands on its own arena row with honest nulls
+    const luna = ov.get('GPT-5.6 Luna').get('gw1');
+    expect(luna[0]).toMatchObject({ key: 'gpt-5.6-luna[1m]', variant: '1m', in: null, out: null });
+    // non-chat models never enter the overlay
+    expect([...ov.keys()].sort()).toEqual(['Claude Fable 5.1', 'GPT-5.6 Luna']);
+  });
+
+  it('splits SKUs of the same model across two providers and two gateways', () => {
+    const two = [PROV, { id: 'gw2', models: [{ id: 'claude-fable-5.1:free', key: 'claudefable51', free: true, chat: true }] }];
+    const ov = buildMineOverlay(two, INDEX);
+    const perProvider = ov.get('Claude Fable 5.1');
+    expect(perProvider.get('gw1')).toHaveLength(1);
+    expect(perProvider.get('gw2')[0]).toMatchObject({ key: 'claude-fable-5.1:free', free: true });
+  });
+
+  it('returns an empty map without an index (snapshot not loaded yet)', () => {
+    expect(buildMineOverlay([PROV], null).size).toBe(0);
+  });
+});
+
+describe('headlineSku', () => {
+  it('prefers the cheapest PAID sku over a free twin (3:1 blend)', () => {
+    const head = headlineSku([
+      { key: 'x:free', free: true, in: 0, out: 0 },
+      { key: 'x', free: false, in: 2, out: 10 },   // blend 4
+      { key: 'y', free: false, in: 1, out: 4 },    // blend 1.75
+    ]);
+    expect(head.kind).toBe('paid');
+    expect(head.sku.key).toBe('y');
+    expect(head.blend).toBeCloseTo(1.75);
+  });
+
+  it('falls back to the free twin when no paid blend exists', () => {
+    const head = headlineSku([{ key: 'x:free', free: true, in: null, out: null }]);
+    expect(head.kind).toBe('free');
+    expect(head.blend).toBe(0);
+  });
+
+  it('zero-priced SKUs count as free (the catalog isFreeRow rule)', () => {
+    const head = headlineSku([{ key: 'x', free: false, in: 0, out: 0 }]);
+    expect(head.kind).toBe('free');
+  });
+
+  it('listed-but-unpriced SKUs stay an honest unpriced headline', () => {
+    expect(headlineSku([{ key: 'x', free: false, in: null, out: null }]).kind).toBe('unpriced');
+    // completion-only pricing is not blendable — honest null, not a guess
+    const head = headlineSku([{ key: 'x', free: false, in: null, out: 6 }]);
+    expect(head.kind).toBe('unpriced');
+  });
+
+  it('returns null for an empty sku list', () => {
+    expect(headlineSku([])).toBeNull();
+    expect(headlineSku(null)).toBeNull();
+  });
+});
+
+describe('undercutsMine', () => {
+  it('fires strictly below the catalog blend, never on a tie', () => {
+    expect(undercutsMine(3, 4)).toBe(true);
+    expect(undercutsMine(4, 4)).toBe(false);
+    expect(undercutsMine(5, 4)).toBe(false);
+  });
+  it('stays silent when either side is unpriced', () => {
+    expect(undercutsMine(null, 4)).toBeNull();
+    expect(undercutsMine(3, null)).toBeNull();
+    expect(undercutsMine(0, null)).toBeNull();
   });
 });

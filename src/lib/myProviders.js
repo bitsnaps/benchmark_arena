@@ -19,6 +19,7 @@
 //     listing surfaces a warning, never a fabricated row.
 
 import { normKey } from './pivot.js';
+import { priceBlend } from './format.js';
 
 // Endpoint tokens that mean "serves text chat completions". Reseller lists
 // mix in image-generation / embedding / aihorde endpoints — those stay out
@@ -232,4 +233,88 @@ export function extractPricing(p) {
   const out = perTokenTo1M(p.completion);
   if (inp === null && out === null) return null;
   return { in: inp, out };
+}
+
+// ── v2: Compare-pivot overlay (stats-38) ──────────────────────────────
+// The Providers page's Compare tab can overlay the user's own gateways as
+// extra columns ("am I paying less via my gateway?"). These helpers keep
+// every user-side rule in pure, unit-tested code; the view only wires them.
+// Discipline (spec docs/spec-my-providers-v2.md):
+//   • The overlay NEVER touches row.cells — the view stores it in a
+//     separate per-row map, so cheapest-cell highlighting, pricing filters,
+//     coverage counts and the slider universe stay catalog-only.
+//   • Gateway prices are read from the parsed listing at render time —
+//     nothing price-shaped is persisted.
+
+// A SKU counts as free when it says so (:free twin) or publishes a zero
+// price — the same rule the catalog uses for isFreeRow (in===0 && out===0).
+function isFreeSku(s) {
+  return !!s.free || (s.in === 0 && (s.out ?? 0) === 0);
+}
+
+// 3:1 in:out blend for one SKU, same convention as cellBlend: free → 0,
+// in==null → null (a completion-only price is not blendable — honest null).
+function skuBlend(s) {
+  if (isFreeSku(s)) return 0;
+  if (s.in == null) return null;
+  return priceBlend({ input: s.in, output: s.out });
+}
+
+// buildMineOverlay(providers, index) → Map<arenaName, Map<providerId, sku[]>>
+//   Runs the SAME staged matcher the My Providers tab uses over each
+//   provider's chat-capable listing, and groups the matched SKUs per arena
+//   model. One gateway can carry several SKUs of the same model ([1m] ctx
+//   tags, :free twins) — they all land here; headlineSku picks the
+//   comparable one and the view's tooltips enumerate the rest.
+export function buildMineOverlay(providersList, index) {
+  const byName = new Map();
+  if (!index) return byName;
+  for (const p of providersList || []) {
+    const chat = (p?.models || []).filter(m => m.chat);
+    const { matched } = matchListing(chat, index);
+    for (const en of matched) {
+      if (!byName.has(en.name)) byName.set(en.name, new Map());
+      const perProvider = byName.get(en.name);
+      if (!perProvider.has(p.id)) perProvider.set(p.id, []);
+      const pr = extractPricing(en.model.pricing);
+      perProvider.get(p.id).push({
+        key: en.model.id,
+        variant: en.model.variant || null,
+        free: !!en.model.free,
+        pass: en.pass,
+        in: pr ? pr.in : null,
+        out: pr ? pr.out : null,
+      });
+    }
+  }
+  return byName;
+}
+
+// headlineSku(skus) → { kind: 'paid'|'free'|'unpriced', sku, blend } | null
+//   The price shown in the pivot cell. Cheapest PAID SKU wins (the paid SKU
+//   is the product comparable to catalog cells — free twins are rate-limited
+//   bonuses and stay in the tooltip); no paid blend → a free twin (blend 0,
+//   free chip + caveat); neither → 'unpriced' (listed, dash).
+export function headlineSku(skus) {
+  const list = (skus || []).filter(Boolean);
+  if (!list.length) return null;
+  let best = null, bestBlend = null, free = null, unpriced = null;
+  for (const s of list) {
+    if (isFreeSku(s)) { if (!free) free = s; continue; }
+    const b = skuBlend(s);
+    if (b === null) { if (!unpriced) unpriced = s; continue; }
+    if (best === null || b < bestBlend) { best = s; bestBlend = b; }
+  }
+  if (best) return { kind: 'paid', sku: best, blend: bestBlend };
+  if (free) return { kind: 'free', sku: free, blend: 0 };
+  return { kind: 'unpriced', sku: unpriced || list[0], blend: null };
+}
+
+// undercutsMine(mineBlend, catalogBlend) → true | false | null
+//   True when the gateway's blend undercuts the row's cheapest CATALOG
+//   blend (rowBlend — catalog-only by construction). Null when either side
+//   is unpriced: nothing honest to claim.
+export function undercutsMine(mineBlend, catalogBlend) {
+  if (mineBlend == null || catalogBlend == null) return null;
+  return mineBlend < catalogBlend;
 }

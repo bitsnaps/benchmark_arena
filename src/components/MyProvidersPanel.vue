@@ -314,6 +314,10 @@ function exportClicked() {
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   note('Exported your providers JSON.');
 }
+// stats-38 style pass: Import is a real button over a hidden file input
+// (was a disguised <label class="chip">) — and it must stay enabled with
+// zero providers, since importing is how a fresh browser gets its data back.
+const fileInput = ref(null);
 function importClicked(e) {
   const file = e.target.files?.[0];
   e.target.value = '';
@@ -342,16 +346,20 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
     </p>
 
     <div class="mp-toolbar">
-      <button class="chip mp-primary" type="button" aria-label="Add provider" @click="openAdd">+ Add provider</button>
+      <!-- stats-38 style pass: Buefy button vocabulary like every other page
+           (primary CTA / default actions / outlined danger that fills when
+           armed). Intent options below stay chips — they ARE selections. -->
+      <b-button type="is-primary" size="is-small" icon-left="plus"
+        aria-label="Add provider" @click="openAdd">Add provider</b-button>
       <span class="mp-spacer"></span>
-      <button class="chip" type="button" :disabled="!providers || !providers.length" @click="exportClicked">Export</button>
-      <label class="chip mp-file">
-        Import<input type="file" accept="application/json,.json" aria-label="Import providers JSON" @change="importClicked" />
-      </label>
-      <button class="chip mp-danger" :class="{ armed: armedClear }" type="button"
+      <b-button size="is-small" :disabled="!providers || !providers.length" @click="exportClicked">Export</b-button>
+      <b-button size="is-small" @click="fileInput?.click()">Import</b-button>
+      <input ref="fileInput" type="file" accept="application/json,.json"
+        aria-label="Import providers JSON" style="display:none" @change="importClicked" />
+      <b-button size="is-small" type="is-danger" :outlined="!armedClear"
         :disabled="!providers || !providers.length" @click="clearAllClicked">
         {{ armedClear ? 'Really clear everything?' : 'Clear all' }}
-      </button>
+      </b-button>
     </div>
 
     <p v-if="msg" class="mp-msg" role="status">{{ msg }}</p>
@@ -381,14 +389,14 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
           </div>
         </div>
         <div class="mp-actions-row">
-          <button class="chip" type="button" :aria-label="'Resync ' + c.p.label" :disabled="busy" @click="resync(c.p)">
+          <b-button size="is-small" :aria-label="'Resync ' + c.p.label" :disabled="busy" @click="resync(c.p)">
             {{ c.p.mode === 'paste' ? 'Paste listing' : 'Resync' }}
-          </button>
-          <button class="chip" type="button" :aria-label="'Edit ' + c.p.label" @click="openEdit(c.p)">Edit</button>
-          <button class="chip mp-danger" :class="{ armed: armedDelete === c.p.id }" type="button"
+          </b-button>
+          <b-button size="is-small" :aria-label="'Edit ' + c.p.label" @click="openEdit(c.p)">Edit</b-button>
+          <b-button size="is-small" type="is-danger" :outlined="armedDelete !== c.p.id"
             :aria-label="'Delete ' + c.p.label" @click="deleteClicked(c.p)">
             {{ armedDelete === c.p.id ? 'Really delete?' : 'Delete' }}
-          </button>
+          </b-button>
         </div>
       </header>
 
@@ -509,7 +517,7 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
       </template>
     </div>
 
-    <b-modal v-model="modalOpen" :width="520" aria-role="dialog" aria-label="Provider form">
+    <b-modal v-model="modalOpen" :width="560" aria-role="dialog" aria-label="Provider form">
       <div class="panel-lab mp-modal">
         <h3 class="mp-modal-title">
           {{ editingId ? (formMode === 'paste' ? 'Paste a fresh listing' : 'Edit provider') : 'Add a provider' }}
@@ -536,10 +544,11 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
         </b-field>
         <p v-if="formError" class="mp-err" role="alert">{{ formError }}</p>
         <footer class="mp-modal-foot">
-          <button class="chip" type="button" @click="modalOpen = false">Cancel</button>
-          <button class="chip mp-primary" type="button" aria-label="Save provider" :disabled="busy" @click="submitModal">
-            {{ busy ? 'Working…' : (editingId ? 'Save' : (formMode === 'paste' ? 'Import listing' : 'Fetch & add')) }}
-          </button>
+          <b-button size="is-small" @click="modalOpen = false">Cancel</b-button>
+          <b-button size="is-small" type="is-primary" :loading="busy"
+            aria-label="Save provider" @click="submitModal">
+            {{ editingId ? 'Save' : (formMode === 'paste' ? 'Import listing' : 'Fetch & add') }}
+          </b-button>
         </footer>
       </div>
     </b-modal>
@@ -551,28 +560,26 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
 .mp-note { margin: 0; max-width: 88ch; }
 .mp-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .mp-spacer { flex: 1; }
-.mp-file { cursor: pointer; }
-.mp-file input[type="file"] { display: none; }
-.mp-primary { background: var(--acc, #4b6bfb); color: #fff; border-color: transparent; }
-.mp-primary:hover { filter: brightness(1.08); }
-.mp-danger { color: #b0433c; }
-.mp-danger.armed { background: #b0433c; color: #fff; border-color: transparent; }
 .mp-msg { margin: 0; color: var(--ink-2, #556); font-size: 0.92em; }
+/* stats-38 style pass: every other page pads its panel-lab cards inline
+   (padding: 1.2rem) — these surfaces were the only ones without, which is
+   exactly the "missing paddings" Ibrahim flagged. */
+.mp-empty { padding: 1.4rem 1.2rem; }
 .mp-empty h2 { margin: 0 0 10px; font-size: 1.1em; }
 .mp-empty ol { margin: 0; padding-left: 20px; display: grid; gap: 8px; color: var(--ink-2, #556); }
-.mp-card { display: flex; flex-direction: column; gap: 12px; }
+.mp-card { display: flex; flex-direction: column; gap: 12px; padding: 1.2rem; }
 .mp-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .mp-name { margin: 0; font-size: 1.05em; }
 .mp-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
 .mp-url { font-family: ui-monospace, monospace; font-size: 0.86em; color: var(--ink-2, #556); }
 .mp-actions-row { display: flex; gap: 8px; flex-wrap: wrap; }
 .mp-err { margin: 0; padding: 8px 10px; border-radius: 8px; background: rgba(176, 67, 60, 0.1); color: #b0433c; font-size: 0.92em; }
-.mp-intent { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 10px; border-radius: 8px; background: rgba(75, 107, 251, 0.08); font-size: 0.92em; }
+.mp-intent { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 12px; border-radius: 8px; background: rgba(75, 107, 251, 0.08); font-size: 0.92em; }
 .mp-intent-q { font-weight: 600; }
 .mp-noModels { color: var(--ink-2, #556); font-size: 0.94em; }
 .linklike { background: none; border: none; padding: 0; color: var(--acc, #4b6bfb); cursor: pointer; text-decoration: underline; font: inherit; }
-.mp-banner { margin: 0; color: var(--ink-2, #556); font-size: 0.94em; }
-.mp-sec { margin: 6px 0 0; font-size: 0.95em; display: flex; align-items: center; gap: 8px; }
+.mp-banner { margin: 0 0 2px; color: var(--ink-2, #556); font-size: 0.94em; }
+.mp-sec { margin: 6px 0 2px; font-size: 0.95em; display: flex; align-items: center; gap: 8px; }
 .mp-table { width: 100%; }
 .model-cell { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .model-link { font-weight: 600; }
@@ -584,8 +591,11 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
 .mp-unlisted-toggle { background: none; }
 .mp-unlisted-hint { opacity: 0.6; font-size: 0.9em; }
 .mp-unlisted :deep(.collapse-content) { padding-top: 10px; }
-.mp-modal { display: flex; flex-direction: column; gap: 12px; }
+.mp-modal { display: flex; flex-direction: column; gap: 14px; padding: 1.4rem 1.25rem; }
 .mp-modal-title { margin: 0; font-size: 1.05em; }
-.mp-modes { display: flex; gap: 16px; font-size: 0.94em; align-items: center; }
-.mp-modal-foot { display: flex; justify-content: flex-end; gap: 10px; }
+.mp-modes { display: flex; gap: 16px; font-size: 0.94em; align-items: center; padding: 2px 0; }
+.mp-modal-foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+/* the b-table wrapper's own border sits INSIDE the padded card now — drop
+   its shadow so the nesting doesn't read as a second floating card */
+.mp-table :deep(.table-wrapper) { box-shadow: none; }
 </style>

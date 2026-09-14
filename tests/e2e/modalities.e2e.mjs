@@ -41,7 +41,10 @@ const ok = (msg) => console.log('  ok:', msg);
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
 
   const SEL = 'select[aria-label="Filter by input modality"]';
-  const rowNames = async () => (await page.locator('.b-table .table tbody tr .model-cell .model-link').allInnerTexts()).map(s => s.trim());
+  // stats-26 alias note renders a ★ decoration inside the model link
+  // (e.g. "Qwen3.8-Max★" — EQBench/HF alias found by the daily scrape).
+  // Strip it so row names compare equal to the raw snapshot names.
+  const rowNames = async () => (await page.locator('.b-table .table tbody tr .model-cell .model-link').allInnerTexts()).map(s => s.replace(/★/g, '').trim());
   const showAllPages = async () => {
     await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
     await page.selectOption('.page-size select', '0').catch(() => {});

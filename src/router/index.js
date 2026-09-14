@@ -8,9 +8,10 @@
 //   /advisor              Use-case advisor wizard (shareable ?use=&priority=&…)
 //   /benchmarks/:slug?    Per-benchmark explorer (slug deep links)
 //   /model/:slug          Per-model score card
-//   /providers            Provider & pricing catalog (providers.json)
-//   /my-providers         User-supplied providers, client-side (stats-36;
-//                         localStorage overlay — Home stays untouched)
+//   /providers            Provider & pricing catalog (providers.json);
+//                         "My providers" tab = user-supplied providers,
+//                         client-side (stats-36, re-homed as tab 3 in
+//                         stats-37; localStorage overlay — Home untouched)
 //   /compare              Side-by-side comparison (?models=slug,slug)
 //   /leaderboard/...      Legacy redirects → /?tier=...
 
@@ -45,9 +46,10 @@ const routes = [
     component: () => import('../views/ProvidersView.vue'),
   },
   {
+    // stats-37: My Providers moved into the Providers page as its third tab
+    // (?view=mine). Bookmarks of the old standalone route keep working.
     path: '/my-providers',
-    name: 'my-providers',
-    component: () => import('../views/MyProvidersView.vue'),
+    redirect: () => ({ name: 'providers', query: { view: 'mine' } }),
   },
   {
     path: '/value',

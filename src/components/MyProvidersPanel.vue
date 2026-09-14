@@ -1,11 +1,13 @@
 <script setup>
-// ── My Providers (stats-36) ───────────────────────────────────────────
+// ── My Providers panel (stats-36 page → stats-37 tab) ─────────────────
 // User-supplied AI providers, fully client-side: connect any
 // OpenAI-compatible aggregator / private gateway, list its models via
 // GET {base}/models (fetch mode) or a pasted response (paste mode —
 // works around CORS and keeps the key out of the browser entirely).
 //
-// The page then splits the listing in two zones:
+// stats-37 re-home: this used to be the standalone /my-providers page;
+// it now renders as the third tab of the Providers page. The shell
+// changed, the contract did not:
 //   • "On the arena" — models our staged conservative matcher links to
 //     catalog rows. Scores / CL / reference prices are MIRRORED READ-ONLY
 //     from the snapshot at render time (single source of truth — nothing
@@ -13,11 +15,19 @@
 //     matched (exact / dated snapshot / thinking route) and its reseller
 //     decorations ([1m] ctx tags, :free twins).
 //   • "Unlisted" — reseller-only models, metadata + honest dashes.
-// Home and every other page stay untouched; this is a self-contained
-// overlay. Pure logic lives in lib/myProviders.js (unit-tested);
-// persistence in stores/myProviders.js (versioned localStorage,
-// export/import, clear-all). See the design discussion in worklog
-// providers-custom-1/2 for the locked contract with Ibrahim.
+//   • This tab is an ADDITIVE overlay: nothing here touches the catalog
+//     arrays, so footer counts, the price-filter slider universe and the
+//     Compare pivot stay catalog-only (tabs 1–2). It renders regardless
+//     of the catalog fetch — its only catalog touchpoint is the read-only
+//     mirror from benchmark_results.json via the data store.
+//   • The page-level search box is shared across all three tabs; here it
+//     scopes rows WITHIN each provider card (arena name or listing id),
+//     with browse mode — a label / base-URL hit keeps every row of its
+//     own. Pricing filters stay catalog-tabs-only: many user providers
+//     publish no prices, so "free only" would blank this tab confusingly.
+// Pure logic lives in lib/myProviders.js (unit-tested); persistence in
+// stores/myProviders.js (versioned localStorage, export/import, clear-all
+// — key ba.myproviders.v1 UNCHANGED by the move, zero data migration).
 
 import { computed, onMounted, ref } from 'vue';
 import { parseModelListing, buildCatalogIndex, matchListing, extractPricing } from '../lib/myProviders.js';
@@ -26,6 +36,11 @@ import { useData } from '../stores/data.js';
 import {
   useMyProviders,
 } from '../stores/myProviders.js';
+
+// Shared search from the Providers page toolbar (spans all three tabs).
+const props = defineProps({
+  search: { type: String, default: '' },
+});
 
 const {
   providers, ensureMyProvidersLoaded,
@@ -227,6 +242,32 @@ function providerPrice(p) {
   return blend === null ? null : { blend, in: pr.in, out: pr.out };
 }
 
+// ── Shared-search scoping (stats-37) ──────────────────────────────────
+// One card per stored provider with its rows pre-filtered by the page's
+// shared search term. Row-level match = arena model name or listing id;
+// browse mode (label / base URL hit) keeps every row of that provider —
+// the same semantics tab 1 applies to a provider-name hit. Cards with no
+// surviving rows drop off the tab; with no term everything renders as-is.
+const lo = (s) => String(s || '').toLowerCase();
+const searchTerm = computed(() => lo(props.search).trim());
+const cards = computed(() => {
+  const term = searchTerm.value;
+  return (providers.value || [])
+    .map(p => {
+      const matched = matchedRows(p);
+      const unlisted = unlistedRows(p);
+      if (!term) return { p, matched, unlisted, browse: false };
+      const browse = lo(p.label).includes(term) || lo(p.baseUrl).includes(term);
+      return {
+        p,
+        matched: browse ? matched : matched.filter(r => lo(r.name).includes(term) || lo(r.key).includes(term)),
+        unlisted: browse ? unlisted : unlisted.filter(r => lo(r.key).includes(term)),
+        browse,
+      };
+    })
+    .filter(c => !term || c.browse || c.matched.length || c.unlisted.length);
+});
+
 // ── Post-sync intent question (one optional nudge, never a gate) ─────
 function setIntent(p, intent) { updateProvider(p.id, { intent }); }
 function skipIntent(p) { updateProvider(p.id, { intentDismissed: true }); }
@@ -294,19 +335,13 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
 
 <template>
   <section class="mp-page">
-    <div class="page-head">
-      <div class="kicker">Your providers · client-side only</div>
-      <h1 class="section-title">My Providers</h1>
-      <p class="section-sub">
-        Connect any OpenAI-compatible provider — aggregators, private gateways,
-        self-hosted stacks — and see how its models line up with the arena.
-        Everything lives in this browser: keys are sent only to your provider,
-        scores are mirrored read-only from the arena snapshot, and
-        <strong>Clear all</strong> wipes everything on demand.
-      </p>
-    </div>
+    <p class="cell-sub mp-note">
+      Your providers, stored only in this browser — keys are sent only to the
+      base URL you set, arena scores are mirrored read-only, and
+      <strong>Clear all</strong> wipes everything on demand.
+    </p>
 
-    <div class="panel-lab mp-toolbar">
+    <div class="mp-toolbar">
       <button class="chip mp-primary" type="button" aria-label="Add provider" @click="openAdd">+ Add provider</button>
       <span class="mp-spacer"></span>
       <button class="chip" type="button" :disabled="!providers || !providers.length" @click="exportClicked">Export</button>
@@ -330,57 +365,61 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
       </ol>
     </div>
 
-    <div v-for="p in providers" :key="p.id" class="panel-lab mp-card">
+    <p v-else-if="searchTerm && !cards.length" class="mp-msg" role="status">
+      No provider rows match the search — clear the box above to see everything again.
+    </p>
+
+    <div v-for="c in cards" :key="c.p.id" class="panel-lab mp-card">
       <header class="mp-card-head">
         <div class="mp-id">
-          <h2 class="mp-name">{{ p.label }}</h2>
+          <h2 class="mp-name">{{ c.p.label }}</h2>
           <div class="mp-meta">
-            <span v-if="p.baseUrl" class="mp-url">{{ p.baseUrl }}</span>
-            <span class="chip chip-quiet">{{ (p.models || []).length }} models</span>
-            <span class="chip chip-quiet">{{ fmtSync(p.lastSyncAt) }}</span>
-            <span v-if="p.intent" class="chip chip-quiet">focus: {{ INTENT_LABELS[p.intent] || p.intent }}</span>
+            <span v-if="c.p.baseUrl" class="mp-url">{{ c.p.baseUrl }}</span>
+            <span class="chip chip-quiet">{{ (c.p.models || []).length }} models</span>
+            <span class="chip chip-quiet">{{ fmtSync(c.p.lastSyncAt) }}</span>
+            <span v-if="c.p.intent" class="chip chip-quiet">focus: {{ INTENT_LABELS[c.p.intent] || c.p.intent }}</span>
           </div>
         </div>
         <div class="mp-actions-row">
-          <button class="chip" type="button" :aria-label="'Resync ' + p.label" :disabled="busy" @click="resync(p)">
-            {{ p.mode === 'paste' ? 'Paste listing' : 'Resync' }}
+          <button class="chip" type="button" :aria-label="'Resync ' + c.p.label" :disabled="busy" @click="resync(c.p)">
+            {{ c.p.mode === 'paste' ? 'Paste listing' : 'Resync' }}
           </button>
-          <button class="chip" type="button" :aria-label="'Edit ' + p.label" @click="openEdit(p)">Edit</button>
-          <button class="chip mp-danger" :class="{ armed: armedDelete === p.id }" type="button"
-            :aria-label="'Delete ' + p.label" @click="deleteClicked(p)">
-            {{ armedDelete === p.id ? 'Really delete?' : 'Delete' }}
+          <button class="chip" type="button" :aria-label="'Edit ' + c.p.label" @click="openEdit(c.p)">Edit</button>
+          <button class="chip mp-danger" :class="{ armed: armedDelete === c.p.id }" type="button"
+            :aria-label="'Delete ' + c.p.label" @click="deleteClicked(c.p)">
+            {{ armedDelete === c.p.id ? 'Really delete?' : 'Delete' }}
           </button>
         </div>
       </header>
 
-      <p v-if="p.lastError" class="mp-err" role="alert">{{ p.lastError }}</p>
+      <p v-if="c.p.lastError" class="mp-err" role="alert">{{ c.p.lastError }}</p>
 
-      <div v-if="p.lastSyncAt && !p.intent && !p.intentDismissed" class="mp-intent"
+      <div v-if="c.p.lastSyncAt && !c.p.intent && !c.p.intentDismissed" class="mp-intent"
         role="group" aria-label="What do you want this provider for?">
         <span class="mp-intent-q">What do you want this provider for?</span>
         <button v-for="(lbl, key) in INTENT_LABELS" :key="key" class="chip" type="button"
-          :aria-label="'Focus ' + lbl" @click="setIntent(p, key)">{{ lbl }}</button>
-        <button class="chip chip-quiet" type="button" aria-label="Skip focus question" @click="skipIntent(p)">Skip</button>
+          :aria-label="'Focus ' + lbl" @click="setIntent(c.p, key)">{{ lbl }}</button>
+        <button class="chip chip-quiet" type="button" aria-label="Skip focus question" @click="skipIntent(c.p)">Skip</button>
       </div>
 
-      <div v-if="!(p.models || []).length" class="mp-noModels">
-        No listing yet — <button class="linklike" type="button" @click="resync(p)">sync now</button>
-        ({{ p.mode === 'paste' ? 'paste a response' : 'fetch from the base URL' }}).
+      <div v-if="!(c.p.models || []).length" class="mp-noModels">
+        No listing yet — <button class="linklike" type="button" @click="resync(c.p)">sync now</button>
+        ({{ c.p.mode === 'paste' ? 'paste a response' : 'fetch from the base URL' }}).
       </div>
 
       <template v-else-if="catalogIndex">
         <p class="mp-banner" role="status">
-          <strong>{{ matchOf(p).stats.matched }} of {{ matchOf(p).stats.total }}</strong> chat models matched the arena catalog
-          <template v-if="nonChatCount(p)">
-            · {{ nonChatCount(p) }} non-chat (image / embedding) models {{ showNonChat.has(p.id) ? 'shown —' : 'hidden —' }}
-            <button class="linklike" type="button" :aria-label="'Toggle non-chat models ' + p.label" @click="toggleNonChat(p.id)">
-              {{ showNonChat.has(p.id) ? 'hide' : 'show' }}
+          <strong>{{ matchOf(c.p).stats.matched }} of {{ matchOf(c.p).stats.total }}</strong> chat models matched the arena catalog
+          <template v-if="nonChatCount(c.p)">
+            · {{ nonChatCount(c.p) }} non-chat (image / embedding) models {{ showNonChat.has(c.p.id) ? 'shown —' : 'hidden —' }}
+            <button class="linklike" type="button" :aria-label="'Toggle non-chat models ' + c.p.label" @click="toggleNonChat(c.p.id)">
+              {{ showNonChat.has(c.p.id) ? 'hide' : 'show' }}
             </button>
           </template>
         </p>
 
-        <h3 class="mp-sec">On the arena <span class="chip chip-quiet">{{ matchedRows(p).length }}</span></h3>
-        <b-table class="mp-table mp-matched" :data="matchedRows(p)" :hoverable="true" :paginated="matchedRows(p).length > 12" per-page="12">
+        <h3 class="mp-sec">On the arena <span class="chip chip-quiet">{{ c.matched.length }}</span></h3>
+        <b-table class="mp-table mp-matched" :data="c.matched" :hoverable="true" :paginated="c.matched.length > 12" per-page="12">
           <b-table-column field="name" label="Arena model" width="260">
             <template #default="props">
               <div class="model-cell">
@@ -420,15 +459,18 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
             </template>
           </b-table-column>
         </b-table>
+        <p v-if="c.browse && !c.matched.length && !c.unlisted.length" class="mp-msg">
+          This provider is named in the search — showing its full listing.
+        </p>
 
-        <b-collapse v-if="unlistedRows(p).length" class="mp-unlisted" :open="unlistedRows(p).length <= 8">
+        <b-collapse v-if="c.unlisted.length" class="mp-unlisted" :open="c.unlisted.length <= 8">
           <template #trigger="props">
             <button class="chip mp-unlisted-toggle" type="button" :aria-expanded="props ? props.open : null">
-              {{ props.open ? '▾' : '▸' }} Unlisted on the arena ({{ unlistedRows(p).length }})
+              {{ props.open ? '▾' : '▸' }} Unlisted on the arena ({{ c.unlisted.length }})
               <span class="mp-unlisted-hint">— reseller-only models, metadata only, honest dashes</span>
             </button>
           </template>
-          <b-table class="mp-table mp-unlisted-table" :data="unlistedRows(p)" :hoverable="true" :paginated="unlistedRows(p).length > 14" per-page="14">
+          <b-table class="mp-table mp-unlisted-table" :data="c.unlisted" :hoverable="true" :paginated="c.unlisted.length > 14" per-page="14">
             <b-table-column field="key" label="Listing id" width="320">
               <template #default="props">
                 <code class="mp-sku">{{ props.row.key }}</code>
@@ -473,28 +515,25 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
           {{ editingId ? (formMode === 'paste' ? 'Paste a fresh listing' : 'Edit provider') : 'Add a provider' }}
         </h3>
         <div v-if="!editingId" class="mp-modes" role="radiogroup" aria-label="Connection mode">
-          <label class="mp-mode"><input v-model="formMode" type="radio" name="mp-mode" value="fetch" /> Fetch from URL</label>
-          <label class="mp-mode"><input v-model="formMode" type="radio" name="mp-mode" value="paste" /> Paste listing</label>
+          <b-radio v-model="formMode" name="mp-mode" native-value="fetch" size="is-small">Fetch from URL</b-radio>
+          <b-radio v-model="formMode" name="mp-mode" native-value="paste" size="is-small">Paste listing</b-radio>
         </div>
-        <label class="mp-field">
-          <span>Name</span>
-          <input v-model="form.label" class="input" type="text" aria-label="Provider label" placeholder="UnoRouter, my gateway…" />
-        </label>
-        <label v-if="formMode === 'fetch'" class="mp-field">
-          <span>Base URL</span>
-          <input v-model="form.baseUrl" class="input" type="text" aria-label="Provider base URL" placeholder="https://api.unorouter.com/v1" />
-        </label>
-        <label class="mp-field">
-          <span>API key <em>optional</em></span>
-          <input v-model="form.key" class="input" type="password" aria-label="API key optional"
+        <b-field label="Name">
+          <b-input v-model="form.label" aria-label="Provider label" placeholder="UnoRouter, my gateway…" maxlength="60" />
+        </b-field>
+        <b-field v-if="formMode === 'fetch'" label="Base URL">
+          <b-input v-model="form.baseUrl" aria-label="Provider base URL" placeholder="https://api.unorouter.com/v1" />
+        </b-field>
+        <b-field label="API key (optional)"
+          message="Stored only in this browser's localStorage; sent only to the base URL above. For private keys, prefer paste mode — the key never enters the app.">
+          <b-input v-model="form.key" type="password" aria-label="API key optional" password-reveal
             placeholder="Bearer key — stored only in this browser" autocomplete="off" />
-          <small>Stored only in this browser's localStorage; sent only to the base URL above. For private keys, prefer paste mode — the key never enters the app.</small>
-        </label>
-        <label v-if="formMode === 'paste'" class="mp-field">
-          <span>Paste the /models response <em>— full JSON or just one id per line</em></span>
-          <textarea v-model="form.paste" class="textarea" rows="8" aria-label="Paste listing"
-            placeholder='curl -H "Authorization: Bearer sk-…" https://api.unorouter.com/v1/models  →  paste the output here'></textarea>
-        </label>
+        </b-field>
+        <b-field v-if="formMode === 'paste'" label="Paste the /models response"
+          message="Full JSON or just one model id per line.">
+          <b-input v-model="form.paste" type="textarea" rows="8" aria-label="Paste listing"
+            placeholder='curl -H "Authorization: Bearer sk-…" https://api.unorouter.com/v1/models  →  paste the output here' />
+        </b-field>
         <p v-if="formError" class="mp-err" role="alert">{{ formError }}</p>
         <footer class="mp-modal-foot">
           <button class="chip" type="button" @click="modalOpen = false">Cancel</button>
@@ -508,7 +547,8 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
 </template>
 
 <style scoped>
-.mp-page { display: flex; flex-direction: column; gap: 16px; padding-bottom: 48px; }
+.mp-page { display: flex; flex-direction: column; gap: 16px; }
+.mp-note { margin: 0; max-width: 88ch; }
 .mp-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .mp-spacer { flex: 1; }
 .mp-file { cursor: pointer; }
@@ -546,12 +586,6 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
 .mp-unlisted :deep(.collapse-content) { padding-top: 10px; }
 .mp-modal { display: flex; flex-direction: column; gap: 12px; }
 .mp-modal-title { margin: 0; font-size: 1.05em; }
-.mp-modes { display: flex; gap: 16px; font-size: 0.94em; }
-.mp-mode { display: inline-flex; align-items: center; gap: 6px; }
-.mp-field { display: flex; flex-direction: column; gap: 4px; font-size: 0.94em; }
-.mp-field span { font-weight: 600; }
-.mp-field em { font-weight: 400; opacity: 0.65; }
-.mp-field small { opacity: 0.7; line-height: 1.35; }
+.mp-modes { display: flex; gap: 16px; font-size: 0.94em; align-items: center; }
 .mp-modal-foot { display: flex; justify-content: flex-end; gap: 10px; }
 </style>
-

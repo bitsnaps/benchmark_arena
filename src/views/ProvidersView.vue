@@ -1,12 +1,25 @@
 <script setup>
-// Providers page — two tabs over one catalog (providers.json):
-//   Tab 1 "By provider" — the original per-provider cards ("who sells what").
-//   Tab 2 "Compare"     — stats-18 pivot: one row per canonical model, one
-//                         column per selected provider, so the same model's
-//                         prices sit side by side and the cheapest seller is
-//                         pickable at a glance. Rows are joined by
-//                         src/lib/pivot.js (org-strip normalization + free-
-//                         twin attach; see the lib header for discipline).
+// Providers page — three tabs: two over the scraped catalog (providers.json)
+// plus the user's own client-side overlay (stats-37 re-home of stats-36):
+//   Tab 1 "By provider"  — the original per-provider cards ("who sells what").
+//   Tab 2 "Compare"      — stats-18 pivot: one row per canonical model, one
+//                          column per selected provider, so the same model's
+//                          prices sit side by side and the cheapest seller is
+//                          pickable at a glance. Rows are joined by
+//                          src/lib/pivot.js (org-strip normalization + free-
+//                          twin attach; see the lib header for discipline).
+//   Tab 3 "My providers" — user-supplied gateways (localStorage overlay,
+//                          MyProvidersPanel): matched models mirror arena
+//                          scores read-only; unlisted stay honest dashes.
+//                          Additive by construction — nothing user-stored
+//                          enters the catalog arrays below, so the footer
+//                          counts, slider universe and pivot stay catalog-
+//                          only. This tab renders regardless of the catalog
+//                          fetch state for the same reason.
+// The search box is shared across all three tabs (the panel scopes rows
+// within each provider card, with browse mode on label/URL hits); the
+// pricing filters stay per-tab inside tabs 1–2 — many user providers
+// publish no prices, so "free only" must not blank tab 3.
 // Filters compose on both tabs: search is shared, and the pricing filters
 // (free-only toggle + max-price slider) are ONE reusable widget bound to a
 // single shared state (lib/priceFilter.js, stats-23) — the By-provider tab
@@ -23,6 +36,7 @@ import { useData } from '../stores/data.js';
 import AppPager from '../components/AppPager.vue';
 import PriceFilterControls from '../components/PriceFilterControls.vue';
 import NewWindowSelect from '../components/NewWindowSelect.vue';
+import MyProvidersPanel from '../components/MyProvidersPanel.vue';
 import { isNewModel, newBadgeTitle, createdIndexFromMeta } from '../lib/newFlag.js';
 import {
   buildMatrix, sortMatrixRows, filterMatrix, cellBlend, cheapestPid,
@@ -45,18 +59,20 @@ const kinds = computed(() => rawData.value?.kinds || []);
 const q = ref('');
 const norm = (s) => String(s).toLowerCase();
 
-// ── Tabs (deep-linkable: #/providers?view=compare) ────────────────────
+// stats-37: deep-linkable tabs — #/providers?view=compare | ?view=mine
 const route = useRoute();
 const router = useRouter();
-const tab = ref(route.query.view === 'compare' ? 1 : 0);
+const VIEW_TO_TAB = { compare: 1, mine: 2 };
+const TAB_TO_VIEW = { 1: 'compare', 2: 'mine' };
+const tab = ref(VIEW_TO_TAB[route.query.view] ?? 0);
 watch(tab, (t) => {
   const next = { ...route.query };
-  if (t === 1) next.view = 'compare';
+  if (TAB_TO_VIEW[t]) next.view = TAB_TO_VIEW[t];
   else delete next.view;
   if ((next.view || undefined) !== (route.query.view || undefined))
     router.replace({ query: next });
 });
-watch(() => route.query.view, (v) => { tab.value = v === 'compare' ? 1 : 0; });
+watch(() => route.query.view, (v) => { tab.value = VIEW_TO_TAB[v] ?? 0; });
 
 // ── Pricing filters (stats-23): one shared state for both tabs ────────
 // The free-only toggle and the max-price slider are the SAME widget on
@@ -404,9 +420,11 @@ const pickerTitle = (p) =>
           Who sells which model, at what price — USD per 1M tokens, input / output.
           Sellers are grouped into third-party <b>Providers</b> (cloud, serverless,
           aggregators) and first-party <b>Labs</b> — the reference price for each model.
-          The free-only and max-price filters sit on both tabs and stay in sync.
-          Or switch to "Compare" for the pivot view: one row per model, one column
-          per seller, cheapest cell highlighted.
+          The free-only and max-price filters sit on both catalog tabs and stay
+          in sync. Or switch to "Compare" for the pivot view: one row per model,
+          one column per seller, cheapest cell highlighted. "My providers"
+          connects your own gateway — its models are matched against the arena
+          read-only, and everything stays in this browser.
         </p>
       </div>
       <span v-if="asOf" class="tag-lab">prices as of {{ asOf }}</span>
@@ -669,6 +687,15 @@ const pickerTitle = (p) =>
             hover any cell for the exact value. Unmeasured models stay gray.
           </p>
         </template>
+      </b-tab-item>
+
+      <!-- ── Tab 3: My providers — user-supplied, client-side (stats-36 →
+           stats-37 re-home). No catalog guards on purpose: the panel is a
+           self-contained localStorage overlay whose only catalog touchpoint
+           is the read-only score mirror from benchmark_results.json, so it
+           must keep working even if the providers.json fetch fails. -->
+      <b-tab-item label="My providers">
+        <MyProvidersPanel :search="q" />
       </b-tab-item>
     </b-tabs>
 

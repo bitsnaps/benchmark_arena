@@ -1,8 +1,11 @@
-// stats-36 My Providers e2e: the full paste-mode journey against the live
-// catalog — add via paste, matched/unlisted split, READ-ONLY score mirroring
-// (parity against tests/helpers/snapshot.mjs, which re-derives the score
-// independently of benchScale.js), variant chips, non-chat toggle,
-// persistence across reload, clear-all, and a clean console.
+// stats-36 My Providers e2e (stats-37 retarget): the full paste-mode journey
+// against the live catalog — now inside the Providers page's third tab.
+// Covers: the standalone navbar item is GONE, legacy /my-providers redirect
+// lands on ?view=mine, tab-click reaches the same panel, deep link works,
+// add via paste, matched/unlisted split, READ-ONLY score mirroring (parity
+// against tests/helpers/snapshot.mjs, which re-derives the score
+// independently of benchScale.js), variant chips, non-chat toggle, shared
+// search scoping, persistence across reload, clear-all, and a clean console.
 // Runs under tests/run-e2e.mjs (vite preview on 4173, base /benchmark_arena/).
 import { chromium } from 'playwright';
 import { loadSnapshot, makeMirror, scoreForModel } from '../helpers/snapshot.mjs';
@@ -43,21 +46,32 @@ const FIXTURE = JSON.stringify({
   page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
   page.on('console', (m) => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
 
-  // ── 1. navbar item + route + empty state ──
+  // ── 1. navbar item gone; legacy route redirects; tab click + deep link ──
   await page.goto(BASE, { waitUntil: 'networkidle' });
-  const navMy = page.locator('.navbar-item', { hasText: 'My Providers' });
-  if (await navMy.count()) ok('navbar shows My Providers');
-  else fail('navbar item missing');
+  const navMy = page.locator('.navbar-start .navbar-item', { hasText: 'My Providers' });
+  if (!(await navMy.count())) ok('navbar no longer carries a standalone My Providers item');
+  else fail('My Providers navbar item still present');
 
   await page.goto(BASE + '#/my-providers', { waitUntil: 'networkidle' });
   await page.waitForSelector('.mp-empty', { timeout: 10000 });
-  if (await page.locator('.mp-empty').count()) ok('empty state renders on a fresh browser');
+  const redirUrl = page.url();
+  if (redirUrl.includes('/providers') && redirUrl.includes('view=mine')) ok('legacy /my-providers redirects to /providers?view=mine (' + redirUrl.slice(redirUrl.indexOf('#')) + ')');
+  else fail('redirect URL unexpected: ' + redirUrl);
+  if (await page.locator('.mp-empty:visible').count()) ok('empty state renders on a fresh browser');
   else fail('empty state missing');
+
+  await page.goto(BASE + '#/providers', { waitUntil: 'networkidle' });
+  await page.click('.tabs li a:has-text("My providers")');
+  await page.waitForSelector('.mp-empty:visible', { timeout: 10000 });
+  if (page.url().includes('view=mine')) ok('tab click activates the panel and writes the ?view=mine deep link');
+  else fail('tab click did not update the URL: ' + page.url());
 
   // ── 2. add via paste mode ──
   await page.click('[aria-label="Add provider"]');
   await page.waitForSelector('.mp-modal', { timeout: 5000 });
-  await page.check('input[name="mp-mode"][value="paste"]');
+  // b-radio overlays the native input with a <span class="check"> that
+  // intercepts pointer events — click the visible label like a user would
+  await page.click('label.b-radio:has-text("Paste listing")');
   await page.fill('[aria-label="Provider label"]', 'UnoRouter Example');
   await page.fill('[aria-label="Paste listing"]', FIXTURE);
   await page.click('[aria-label="Save provider"]');
@@ -126,6 +140,23 @@ const FIXTURE = JSON.stringify({
     if (cardTxt.includes('Price comparison')) ok('intent stored and shown as focus chip');
     else fail('intent chip missing after choice');
   } else fail('post-sync intent question did not appear');
+
+  // ── 8b. shared search scopes rows inside the panel (stats-37) ──
+  const searchBox = page.locator('input[placeholder^="Filter models"]');
+  await searchBox.fill('opus');
+  await page.waitForFunction(() => !document.querySelector('.mp-matched .model-link') ||
+    document.querySelectorAll('.mp-matched .model-link').length === 2, null, { timeout: 5000 });
+  const searched = (await page.locator('.mp-matched .model-link').allInnerTexts()).map(s => s.trim());
+  if (searched.length === 2 && searched.every(n => n.includes('Opus'))) ok('shared search filters matched rows to the Opus pair: ' + searched.join(', '));
+  else fail('search scoping mismatch: ' + JSON.stringify(searched));
+  if (!(await page.locator('.mp-unlisted').count())) ok('unlisted section collapses away when nothing matches the search');
+  else fail('unlisted section should be hidden under the narrow search');
+  await searchBox.fill('unorouter');
+  await page.waitForFunction(() => document.querySelectorAll('.mp-matched .model-link').length === 3, null, { timeout: 5000 });
+  ok('provider-name hit keeps the full listing (browse mode)');
+  await searchBox.fill('');
+  await page.waitForFunction(() => document.querySelectorAll('.mp-matched .model-link').length === 3, null, { timeout: 5000 });
+  ok('clearing the search restores every row');
 
   // ── 9. persistence across reload ──
   await page.reload({ waitUntil: 'networkidle' });

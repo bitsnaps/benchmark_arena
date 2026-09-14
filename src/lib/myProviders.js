@@ -6,7 +6,8 @@
 // store (stores/myProviders.js) + view consume it as-is.
 //
 // Design contract (agreed with Ibrahim, discussion rounds 1-2):
-//   • Home stays untouched — this lib only powers the My Providers page.
+//   • Home stays untouched — this lib only powers the My Providers tab
+//     on the Providers page (stats-37 re-home of the stats-36 page).
 //   • Matching is CONSERVATIVE: exact → dated-suffix → thinking-variant.
 //     Greedy prefix matching is deliberately NOT implemented (it mis-links
 //     base versions to wrong successors, e.g. Fable 5 → Fable 5.1).

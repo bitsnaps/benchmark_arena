@@ -9,6 +9,8 @@
 //   /benchmarks/:slug?    Per-benchmark explorer (slug deep links)
 //   /model/:slug          Per-model score card
 //   /providers            Provider & pricing catalog (providers.json)
+//   /my-providers         User-supplied providers, client-side (stats-36;
+//                         localStorage overlay — Home stays untouched)
 //   /compare              Side-by-side comparison (?models=slug,slug)
 //   /leaderboard/...      Legacy redirects → /?tier=...
 
@@ -41,6 +43,11 @@ const routes = [
     path: '/providers',
     name: 'providers',
     component: () => import('../views/ProvidersView.vue'),
+  },
+  {
+    path: '/my-providers',
+    name: 'my-providers',
+    component: () => import('../views/MyProvidersView.vue'),
   },
   {
     path: '/value',

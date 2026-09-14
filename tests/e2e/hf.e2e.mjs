@@ -50,6 +50,8 @@ const ok = (msg) => console.log('  ok:', msg);
   fs.mkdirSync(SHOTS, { recursive: true });
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  // CI-box hardening: goto can exceed the 30s default when the gate's  // preview server + chromium contend for CPU (stats-36 gate flakes)
+  page.setDefaultNavigationTimeout(60000);
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });

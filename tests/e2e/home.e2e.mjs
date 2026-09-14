@@ -43,6 +43,8 @@ const ok = (msg) => console.log('  ok:', msg);
   fs.mkdirSync(SHOTS, { recursive: true });
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  // CI-box hardening: goto can exceed the 30s default when the gate's  // preview server + chromium contend for CPU (stats-36 gate flakes)
+  page.setDefaultNavigationTimeout(60000);
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
@@ -61,8 +63,8 @@ const ok = (msg) => console.log('  ok:', msg);
   ok('home renders the leaderboard table directly');
   if (await page.locator('.hero-lab').count()) fail('hero/overview page should be gone');
   const navTexts = (await page.locator('.navbar-start a').allInnerTexts()).map(s => s.trim());
-  if (navTexts.join(',') !== 'Leaderboard,Advisor,Benchmarks,Value map,Providers') fail('navbar should be [Leaderboard, Advisor, Benchmarks, Value map, Providers], got ' + navTexts);
-  else ok('navbar: Leaderboard + Advisor + Benchmarks + Value map + Providers (no Overview)');
+  if (navTexts.join(',') !== 'Leaderboard,Advisor,Benchmarks,Value map,Providers,My Providers') fail('navbar should be [Leaderboard, Advisor, Benchmarks, Value map, Providers, My Providers], got ' + navTexts);
+  else ok('navbar: Leaderboard + Advisor + Benchmarks + Value map + Providers + My Providers (no Overview)');
   const firstAll = await firstName();
   if (firstAll !== EXPECT.all) fail(`home #1 = "${firstAll}", expected "${EXPECT.all}"`);
   else ok(`home #1 row = ${firstAll} (overall top, All tab default)`);
@@ -541,6 +543,8 @@ const ok = (msg) => console.log('  ok:', msg);
 
   await page.screenshot({ path: SHOTS + '/home-desktop.png' });
   const mob = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  // CI-box hardening: goto can exceed the 30s default when the gate's  // preview server + chromium contend for CPU (stats-36 gate flakes)
+  mob.setDefaultNavigationTimeout(60000);
   mob.on('pageerror', e => errors.push('mobile pageerror: ' + e.message));
   await mob.goto(BASE, { waitUntil: 'networkidle' });
   await mob.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });

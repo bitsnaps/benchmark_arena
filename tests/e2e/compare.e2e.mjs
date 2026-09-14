@@ -45,6 +45,8 @@ const ok = (msg) => console.log('  ok:', msg);
   fs.mkdirSync(SHOTS, { recursive: true });
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  // CI-box hardening: goto can exceed the 30s default when the gate's  // preview server + chromium contend for CPU (stats-36 gate flakes)
+  page.setDefaultNavigationTimeout(60000);
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
@@ -173,6 +175,8 @@ const ok = (msg) => console.log('  ok:', msg);
 
   // ── 10. Mobile 390px: grid scrolls horizontally ──
   const mob = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  // CI-box hardening: goto can exceed the 30s default when the gate's  // preview server + chromium contend for CPU (stats-36 gate flakes)
+  mob.setDefaultNavigationTimeout(60000);
   mob.on('pageerror', e => errors.push('mobile pageerror: ' + e.message));
   await mob.goto(BASE + '#/compare?models=' + top3.map(r => slugify(r.name)).join(','), { waitUntil: 'networkidle' });
   await mob.waitForSelector('.cmp-headcell', { timeout: 10000 });

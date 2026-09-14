@@ -55,6 +55,8 @@ function goCompare() {
               :to="{ name: 'value' }" @click="menuOpen = false">Value map</router-link>
             <router-link class="navbar-item" :class="{ 'is-active': route.name === 'providers' }"
               :to="{ name: 'providers' }" @click="menuOpen = false">Providers</router-link>
+            <router-link class="navbar-item" :class="{ 'is-active': route.name === 'my-providers' }"
+              :to="{ name: 'my-providers' }" @click="menuOpen = false">My Providers</router-link>
           </div>
           <div class="navbar-end">
             <a class="navbar-item compare-pill" :class="{ 'is-active': route.name === 'compare' }" @click="goCompare">

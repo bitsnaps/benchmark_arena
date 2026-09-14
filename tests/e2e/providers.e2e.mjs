@@ -32,6 +32,8 @@ const fail = (m) => { failed++; console.error(`  ✗ ${m}`); };
 const run = async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  // CI-box hardening: goto can exceed the 30s default when the gate's  // preview server + chromium contend for CPU (stats-36 gate flakes)
+  page.setDefaultNavigationTimeout(60000);
   const consoleErrors = [];
   page.on('console', (msg) => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
   page.on('pageerror', (err) => consoleErrors.push(String(err)));

@@ -187,7 +187,13 @@ function matchOf(p) {
 }
 function nonChatCount(p) { return (p.models || []).filter(m => !m.chat).length; }
 
-const PASS_LABEL = { exact: 'exact id', dated: 'dated snapshot', thinking: 'thinking route' };
+// stats-39: preview/route/thinksearch added; combo passes ('route+dated')
+// render as 'route tag + dated snapshot' via the segment join below.
+const PASS_LABEL = {
+  exact: 'exact id', dated: 'dated snapshot', thinking: 'thinking route',
+  preview: 'preview build', route: 'route tag', thinksearch: 'think+search route',
+};
+const passLabelOf = (p) => String(p).split('+').map(s => PASS_LABEL[s] || s).join(' + ');
 
 function matchedRows(p) {
   const { matched } = matchOf(p);
@@ -199,7 +205,7 @@ function matchedRows(p) {
       name: en.name,
       slug: slugify(en.name),
       pass: en.pass,
-      passLabel: PASS_LABEL[en.pass] || en.pass,
+      passLabel: passLabelOf(en.pass),
       variant: en.model.variant,
       free: en.model.free,
       score: row ? scoreForModel(row) : null,

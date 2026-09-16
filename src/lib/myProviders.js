@@ -51,6 +51,16 @@ export function parseProviderId(raw) {
   return { raw: id, base, key: normKey(base), variant, free };
 }
 
+// stats-39 — raw-anchored route/preview token strips for the extra passes
+// below. Tokens are stripped from the RAW id with a separator boundary
+// (never from the squashed normKey: 'quark-search' may be a real model
+// name, 'quarksearch' stripped to 'quark' would be a false link).
+const EXTRA_PASSES = [
+  ['preview', /[-_.]preview([-_.]\d{2,4})?$/i],           // gemini-3-pro-preview-06-05
+  ['route', /[-_.](nitro|online|search|exp|latest)$/i],    // glm-5.3-search
+  ['thinksearch', /[-_.]think(ing)?[-_.]search$/i],        // glm-5.2-think-search:free
+];
+
 // ── Listing parsing ───────────────────────────────────────────────────
 // One entry point for fetch AND paste. Accepts:
 //   • OpenAI shape   {"data":[{id, owned_by, supported_endpoint_types, ...}]}
@@ -138,6 +148,7 @@ export function parseModelListing(text) {
     models.push({
       ...c,
       key: pid.key,
+      base: pid.base, // stats-39: raw base for the extra-pass strips
       variant: pid.variant,
       free: pid.free,
       chat,
@@ -185,7 +196,16 @@ export function buildCatalogIndex(rows, meta) {
 //                     4-digit strips only fire on a clean hit.
 // Pass 3 'thinking' : reseller "-thinking" route of the same model.
 // Every match carries its pass so the UI can label HOW it matched.
-export function matchOne(key, index) {
+//
+// stats-39 extra passes (raw-anchored, REVERTIBLE BLOCK — deleting it and
+// the rawBase arg restores the stats-36 matcher byte-for-byte):
+//   preview / route / thinksearch strip one KNOWN token off the raw id
+//   (separator boundary mandatory) and re-enter the staged matcher above
+//   with the remainder, so strip+dated / strip+thinking combos still work.
+//   Guards: rawBase must be provided (2-arg callers are unaffected);
+//   remainder >= 5 chars; final gate is still an exact index hit; no
+//   prefix matching — the Fable 5 → 5.1 trap stays structurally impossible.
+export function matchOne(key, index, rawBase = null) {
   if (!key) return null;
   const exact = index.get(key);
   if (exact) return { pass: 'exact', name: exact.name };
@@ -202,6 +222,21 @@ export function matchOne(key, index) {
   if (th !== key && th.length >= 5 && index.has(th)) {
     return { pass: 'thinking', name: index.get(th).name };
   }
+
+  // ── stats-39 extra passes (see block comment above) ────────────────
+  if (rawBase) {
+    for (const [pass, re] of EXTRA_PASSES) {
+      const stripped = String(rawBase).replace(re, '');
+      if (stripped === rawBase || stripped.length < 5) continue;
+      const seg = stripped.includes('/') ? stripped.slice(stripped.lastIndexOf('/') + 1) : stripped;
+      const k2 = normKey(seg);
+      if (!k2 || k2 === key) continue;
+      const after = matchOne(k2, index); // 2-arg: shipped passes only, no chaining
+      if (after) {
+        return { pass: pass + (after.pass === 'exact' ? '' : '+' + after.pass), name: after.name };
+      }
+    }
+  }
   return null;
 }
 
@@ -209,7 +244,7 @@ export function matchListing(models, index) {
   const matched = [];
   const unlisted = [];
   for (const m of models || []) {
-    const hit = matchOne(m.key, index);
+    const hit = matchOne(m.key, index, m.base ?? null);
     if (hit) matched.push({ model: m, pass: hit.pass, name: hit.name });
     else unlisted.push(m);
   }

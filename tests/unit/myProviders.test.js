@@ -1,8 +1,10 @@
 // Unit tests for src/lib/myProviders.js — the My Providers pure core.
 // Locks: ID cleanup ([1m] ctx tags, :free twins, org prefixes), tolerant
 // listing parsing (fetch + paste), the STAGED conservative matcher
-// (exact → dated → thinking; prefix matching is deliberately absent —
-// see the Fable-5 regression test), and OpenRouter-style pricing math.
+// (exact → dated → thinking, plus the stats-39 raw-anchored
+// preview/route/thinksearch strips; prefix matching is deliberately
+// absent — see the Fable-5 regression test), and OpenRouter-style
+// pricing math.
 import { describe, it, expect } from 'vitest';
 import {
   parseProviderId, parseModelListing,
@@ -132,6 +134,81 @@ describe('buildCatalogIndex + staged matching', () => {
       ['DeepSeek R1', 'dated'],
     ]);
     expect(r.unlisted.map(m => m.id)).toEqual(['my-private-model']);
+  });
+});
+
+describe('stats-39 extra passes (raw-anchored, revertible)', () => {
+  const rows = [
+    { name: 'Gemini 3 Pro' }, { name: 'GLM-5.3' }, { name: 'GLM-5.3-Flash' },
+    { name: 'GLM-5.2' }, { name: 'Quark' }, { name: 'Ab' },
+  ];
+  const index = buildCatalogIndex(rows, {});
+  const K = (raw) => parseProviderId(raw).key;
+
+  it('preview pass strips -preview (and a single-chunk trailing date)', () => {
+    expect(matchOne(K('gemini-3-pro-preview'), index, 'gemini-3-pro-preview'))
+      .toMatchObject({ pass: 'preview', name: 'Gemini 3 Pro' });
+    expect(matchOne(K('gemini-3-pro-preview-0605'), index, 'gemini-3-pro-preview-0605'))
+      .toMatchObject({ pass: 'preview', name: 'Gemini 3 Pro' });
+  });
+
+  it('route pass strips nitro/online/search/exp/latest route tags', () => {
+    expect(matchOne(K('glm-5.3-search'), index, 'glm-5.3-search'))
+      .toMatchObject({ pass: 'route', name: 'GLM-5.3' });
+    expect(matchOne(K('glm-5.3-flash-search'), index, 'glm-5.3-flash-search'))
+      .toMatchObject({ pass: 'route', name: 'GLM-5.3-Flash' });
+  });
+
+  it('thinksearch pass strips the compound think(ing)-search token', () => {
+    expect(matchOne(K('glm-5.2-think-search'), index, 'glm-5.2-think-search'))
+      .toMatchObject({ pass: 'thinksearch', name: 'GLM-5.2' });
+    // the -thinking-search double form: the route strip removes -search
+    // first, then the SHIPPED thinking pass completes — combo label, same
+    // honest arena name (this shape never occurred in the measured dump).
+    expect(matchOne(K('glm-5.2-thinking-search'), index, 'glm-5.2-thinking-search'))
+      .toMatchObject({ pass: 'route+thinking', name: 'GLM-5.2' });
+  });
+
+  it('strip + shipped-pass combos work (route+dated)', () => {
+    // date BEFORE the token: shipped passes miss glm530901search, the route
+    // strip hands glm-5.3-0901 back to the staged matcher → dated fires.
+    expect(matchOne(K('glm-5.3-0901-search'), index, 'glm-5.3-0901-search'))
+      .toMatchObject({ pass: 'route+dated', name: 'GLM-5.3' });
+  });
+
+  it('guards: separator mandatory, remainder >= 5, index hit required', () => {
+    // NO separator before the token — 'quarksearch' is its own word
+    expect(matchOne(K('quarksearch'), index, 'quarksearch')).toBeNull();
+    // stripped remainder too short even though 'Ab' exists
+    expect(matchOne(K('ab-search'), index, 'ab-search')).toBeNull();
+    // strip fires but the remainder is not a catalog model
+    expect(matchOne(K('ghost-search'), index, 'ghost-search')).toBeNull();
+    // org-prefixed raw still strips on the last segment
+    expect(matchOne(K('zhipu/glm-5.2-search'), index, 'zhipu/glm-5.2-search'))
+      .toMatchObject({ pass: 'route', name: 'GLM-5.2' });
+  });
+
+  it('PIN: 2-arg callers keep byte-identical behavior (direction B)', () => {
+    // The compare-pivot join calls matchOne(r.key, index) — no rawBase,
+    // extra passes must never fire from the key alone.
+    expect(matchOne(K('glm-5.3-search'), index)).toBeNull();
+    expect(matchOne(K('glm-5.2-think-search'), index)).toBeNull();
+    expect(matchOne('glm53', index)).toMatchObject({ pass: 'exact', name: 'GLM-5.3' });
+  });
+
+  it('matchListing threads the raw base end-to-end', () => {
+    const parsed = parseModelListing(JSON.stringify({
+      data: [
+        { id: 'glm-5.3-search', supported_endpoint_types: ['openai'] },
+        { id: 'glm-5.3' },
+      ],
+    }));
+    const r = matchListing(parsed.models, index);
+    expect(r.stats).toEqual({ total: 2, matched: 2 });
+    expect(r.matched.map(m => [m.name, m.pass])).toEqual([
+      ['GLM-5.3', 'route'],
+      ['GLM-5.3', 'exact'],
+    ]);
   });
 });
 

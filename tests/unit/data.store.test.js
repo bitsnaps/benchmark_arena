@@ -241,8 +241,13 @@ describe('user-selectable average (commit B)', () => {
   });
 
   it('adding EQBench CW to the avg set re-scores; reset restores', () => {
-    const withEqb = d.pivotAll.value.find(r => r['EQBench CW'] != null);
-    if (!withEqb) return; // snapshot without EQB cells → nothing to assert
+    // Pick a PARTIAL-coverage row: rows already at cl=100 (e.g. GPT-6 Astra,
+    // full 8/8 core) stay at 100 when a 9th bench is added (9/9), so their
+    // CL/score legitimately do not move. Data drift on 2026-09-18 put such a
+    // row first in pivotAll order — the assertion needs a row that CAN move.
+    const withEqb = d.pivotAll.value.find(
+      r => r['EQBench CW'] != null && r.num_benchmarks < MIRROR_CORE.length);
+    if (!withEqb) return; // snapshot without eligible EQB cells → nothing to assert
     const scoreBefore = d.scoreForModel(withEqb);
     d.toggleAvgBench('EQBench CW'); // opt-in via checkbox — no dedicated preset on purpose
     expect(d.isCustomAvg.value).toBe(true);

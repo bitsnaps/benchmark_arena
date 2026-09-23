@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-22 05:01",
+  "timestamp": "2026-09-23 02:35",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -29,6 +29,18 @@
     "Artificial Analysis": {
       "closed": [
         [
+          "Claude Opus 5.5 (max with fallback)",
+          57.99999999999999
+        ],
+        [
+          "Claude Opus 5.5 (xhigh with fallback)",
+          56.00000000000001
+        ],
+        [
+          "Claude Opus 5.5 (high with fallback)",
+          54.0
+        ],
+        [
           "Claude Fable 5.1 (max with fallback)",
           53.0
         ],
@@ -45,20 +57,16 @@
           52.0
         ],
         [
+          "Claude Opus 5.5 (medium with fallback)",
+          51.0
+        ],
+        [
           "Claude Fable 5.1 (high with fallback)",
           51.0
         ],
         [
           "GPT-6 Astra (high)",
           51.0
-        ],
-        [
-          "Claude Opus 5 (max)",
-          51.0
-        ],
-        [
-          "Claude Opus 5 (xhigh)",
-          50.0
         ],
         [
           "GPT-6 Astra (medium)",
@@ -69,16 +77,12 @@
           49.0
         ],
         [
-          "Claude Opus 5 (high)",
-          48.0
-        ],
-        [
           "Muse Spark 1.3 (max)",
           48.0
         ],
         [
-          "GPT-5.6 Sol (max)",
-          47.0
+          "GPT-6 Sol (max)",
+          48.0
         ],
         [
           "Claude Fable 5.1 (low with fallback)",
@@ -101,10 +105,6 @@
           45.0
         ],
         [
-          "Claude Opus 5 (medium)",
-          45.0
-        ],
-        [
           "Grok 4.6 (high)",
           44.0
         ],
@@ -113,7 +113,7 @@
           44.0
         ],
         [
-          "GPT-5.6 Sol (xhigh)",
+          "GPT-6 Sol (xhigh)",
           44.0
         ],
         [
@@ -125,8 +125,8 @@
           43.0
         ],
         [
-          "GPT-5.6 Sol (high)",
-          42.0
+          "GPT-6 Sol (high)",
+          43.0
         ]
       ],
       "open": [
@@ -240,19 +240,31 @@
         ],
         [
           "GPT-6 Astra",
-          71.0
-        ],
-        [
-          "Claude Opus 5",
-          79.0
+          70.0
         ],
         [
           "Claude Fable 5",
           75.0
         ],
         [
+          "Claude Opus 5.5",
+          83.0
+        ],
+        [
+          "Claude Opus 5",
+          79.0
+        ],
+        [
+          "GPT-6 Sol",
+          70.0
+        ],
+        [
           "GPT-5.6 Sol",
           70.0
+        ],
+        [
+          "GPT-5.5 Pro",
+          63.0
         ],
         [
           "Gemini 3.8 Flash",
@@ -267,20 +279,20 @@
           62.0
         ],
         [
-          "GPT-5.6 Terra",
-          61.0
-        ],
-        [
-          "GPT-5.4",
-          53.0
-        ],
-        [
           "Claude Opus 4.7",
           56.0
         ],
         [
+          "GPT-5.4",
+          52.0
+        ],
+        [
           "Gemini 3.1 Pro",
           40.0
+        ],
+        [
+          "GPT-5.6 Terra",
+          61.0
         ],
         [
           "Muse Spark 1.2",
@@ -288,15 +300,11 @@
         ],
         [
           "Muse Spark 1.1",
-          60.0
+          59.0
         ],
         [
           "Grok 4.6",
           70.0
-        ],
-        [
-          "Claude Sonnet 5",
-          66.0
         ],
         [
           "Claude Opus 4.7 (Adaptive)",
@@ -307,6 +315,10 @@
           50.0
         ],
         [
+          "Claude Sonnet 5",
+          66.0
+        ],
+        [
           "Gemini 3.7 Flash",
           59.0
         ],
@@ -315,24 +327,12 @@
           53.0
         ],
         [
+          "Gemini 3.5 Flash",
+          53.0
+        ],
+        [
           "Grok 4.5",
           60.0
-        ],
-        [
-          "Gemini 3.5 Flash",
-          52.0
-        ],
-        [
-          "Grok 4.20",
-          29.0
-        ],
-        [
-          "Muse Spark",
-          58.0
-        ],
-        [
-          "Qwen3.7 Max",
-          41.0
         ]
       ],
       "open": [
@@ -349,11 +349,11 @@
           69.0
         ],
         [
-          "GLM-5.2",
+          "GLM-5.3-Flash",
           59.0
         ],
         [
-          "GLM-5.3-Flash",
+          "GLM-5.2",
           59.0
         ],
         [
@@ -365,12 +365,12 @@
           48.0
         ],
         [
-          "Qwen3.8-27B",
-          64.0
-        ],
-        [
           "DeepSeek V4 Pro 0813",
           55.0
+        ],
+        [
+          "Qwen3.8-27B",
+          64.0
         ],
         [
           "GLM-5.1",
@@ -382,7 +382,7 @@
         ],
         [
           "GLM-5",
-          51.0
+          52.0
         ],
         [
           "MiniMax M3",
@@ -393,16 +393,16 @@
           37.0
         ],
         [
-          "MiMo-V2.5",
-          50.0
-        ],
-        [
           "Kimi K2.5 (Reasoning)",
           49.0
         ],
         [
           "GLM-4.7",
           45.0
+        ],
+        [
+          "MiMo-V2.5",
+          50.0
         ],
         [
           "Qwen3.8-Flash-Next",
@@ -413,24 +413,24 @@
           47.0
         ],
         [
+          "Gemma 4 26B A4B",
+          52.0
+        ],
+        [
           "Gemma 4 31B",
-          47.0
+          48.0
         ],
         [
           "Qwen3.5-27B",
           47.0
         ],
         [
-          "Gemma 4 26B A4B",
-          52.0
-        ],
-        [
           "MiniMax M2.7",
-          41.0
+          42.0
         ],
         [
           "MiniMax M2.5",
-          41.0
+          42.0
         ],
         [
           "Kimi K2.5",
@@ -769,6 +769,46 @@
     "ARC-AGI-2": {
       "closed": [
         [
+          "GPT-6 Luna (Max)",
+          59.3
+        ],
+        [
+          "GPT-6 Luna (XHigh)",
+          41.9
+        ],
+        [
+          "GPT-6 Luna (High)",
+          31.4
+        ],
+        [
+          "GPT-6 Luna (Medium)",
+          18.1
+        ],
+        [
+          "GPT-6 Luna (Low)",
+          4.6
+        ],
+        [
+          "Claude Opus 5.5 (Max)",
+          91.7
+        ],
+        [
+          "Claude Opus 5.5 (XHigh)",
+          92.5
+        ],
+        [
+          "Claude Opus 5.5 (High)",
+          93.3
+        ],
+        [
+          "Claude Opus 5.5 (Medium)",
+          87.5
+        ],
+        [
+          "Claude Opus 5.5 (Low)",
+          70.1
+        ],
+        [
           "GPT-6 Astra (Max)",
           95.0
         ],
@@ -827,46 +867,6 @@
         [
           "Gemini 3.7 Flash (Low)",
           52.9
-        ],
-        [
-          "Grok 4.6 (XHigh)",
-          67.1
-        ],
-        [
-          "Grok 4.6 (High)",
-          65.1
-        ],
-        [
-          "Grok 4.6 (Medium)",
-          61.3
-        ],
-        [
-          "Grok 4.6 (Low)",
-          27.6
-        ],
-        [
-          "Inkling Small (XHigh)",
-          40.1
-        ],
-        [
-          "Inkling Small (High)",
-          33.1
-        ],
-        [
-          "Inkling Small (Medium)",
-          13.6
-        ],
-        [
-          "Inkling Small (Low)",
-          4.9
-        ],
-        [
-          "Inkling Small (Minimal)",
-          4.0
-        ],
-        [
-          "GPT-5.6 Luna 2026-07-30 (Max)",
-          59.6
         ]
       ],
       "open": [
@@ -952,11 +952,11 @@
       "closed": [
         [
           "Muse Spark 1.3 Max",
-          94.5
+          94.33333333333334
         ],
         [
           "GPT-6 Astra (xhigh)",
-          94.16666666666667
+          94.0
         ],
         [
           "Muse Spark 1.3 (xhigh)",
@@ -964,35 +964,35 @@
         ],
         [
           "GPT-5.6 Sol (xhigh)",
-          91.83333333333333
+          91.5
         ],
         [
           "Claude Fable 5.1",
-          90.83333333333333
+          90.66666666666666
         ],
         [
           "Claude Opus 5",
-          89.33333333333333
+          89.16666666666667
         ],
         [
           "GPT-5.6 Sol (Medium)",
-          88.66666666666667
+          88.5
         ],
         [
           "Claude Fable 5",
-          87.33333333333333
+          87.16666666666667
         ],
         [
           "Muse Spark 1.2",
-          87.33333333333333
+          87.0
         ],
         [
           "Gemini 3.7 Flash",
-          86.83333333333333
+          86.66666666666667
         ],
         [
           "Gemini 3.8 Flash",
-          86.66666666666667
+          86.33333333333333
         ],
         [
           "Grok 4.6",
@@ -1002,31 +1002,31 @@
       "open": [
         [
           "Kimi K3",
-          97.16666666666667
+          97.0
         ],
         [
           "DeepSeek-V4.1-Flash",
-          89.33333333333333
+          89.16666666666667
         ],
         [
           "MiMo-V2.6-Pro",
-          88.16666666666667
+          88.0
         ],
         [
           "GLM-5.3",
-          87.66666666666667
-        ],
-        [
-          "GLM 5.2",
-          84.16666666666667
+          87.5
         ],
         [
           "Qwen3.8 Max",
           84.16666666666667
         ],
         [
+          "GLM 5.2",
+          84.0
+        ],
+        [
           "Llama 4 Scout",
-          0.5
+          0.33333333333333337
         ]
       ]
     },
@@ -1391,8 +1391,8 @@
           65.5
         ],
         [
-          "Claude Fable 5.1",
-          56.3
+          "Claude Opus 5.5",
+          62.3
         ],
         [
           "Grok 4.7",
@@ -1801,225 +1801,225 @@
     "LLM Chess": {
       "closed": [
         [
-          "Gemini-3.8-Flash",
+          "GPT-6-Astra",
           100.0
         ],
         [
           "GPT-5.6-Sol",
-          97.6639998437186
+          97.39699217725813
         ],
         [
-          "GPT-6-Astra",
-          97.2376853094657
+          "Gemini-3.8-Flash",
+          97.2498236494061
         ],
         [
           "Gemini-3.1-Pro",
-          96.10448226490841
+          95.84173822834418
         ],
         [
           "GPT-5.6-Terra",
-          87.21662801686213
+          86.9781828542577
         ],
         [
           "Claude-Opus-5",
-          86.90634429283884
+          86.66874742779773
         ],
         [
           "GPT-5.6-Luna",
-          82.83309714762001
+          82.60663630216548
         ],
         [
           "Gemini-3.7-Flash",
-          79.64865984617676
+          79.43090506615277
         ],
         [
           "Gemini-3.6-Flash",
-          79.10664008797342
+          78.89036715828368
         ],
         [
           "GPT-5.3-Codex",
-          77.45290597963621
+          77.24115426232689
         ],
         [
           "Gemini-3-Pro",
-          76.66445810640649
+          76.45486195949253
         ],
         [
           "Gemini-3.5-Flash",
-          73.37510062650941
+          73.1744973906606
         ],
         [
           "Grok-4-20-Reasoning",
-          68.90032420253746
+          68.71195474385127
         ],
         [
           "Claude-Sonnet-5",
-          67.39070272100594
+          67.2064604792028
         ],
         [
           "Grok-4-1-Fast-Reasoning",
-          67.13287908620956
+          66.94934171915243
         ],
         [
           "o3",
-          66.24203432818935
+          66.06093247862485
         ],
         [
           "GPT-5-Mini",
-          65.48236014237888
+          65.30333519763036
         ],
         [
           "Grok-4-Fast-Reasoning",
-          64.509711831724
+          64.33334605059903
         ],
         [
           "Claude Opus 4.7",
-          62.71841752044885
+          62.54694903325782
         ],
         [
           "GPT-5-Nano",
-          62.38880211110144
+          62.21823477317132
         ],
         [
           "GPT-5.1-Codex-Mini",
-          56.73491497721304
+          56.57980503619956
         ],
         [
           "GPT-5.1-Codex",
-          55.11593720417435
+          54.965253453752304
         ],
         [
           "Claude Opus 4.8",
-          52.89991559175714
+          52.75529031488221
         ],
         [
           "Claude Opus 4.5",
-          52.747581911403095
+          52.60337310590533
         ],
         [
           "Grok-4.6",
-          52.6092484410522
+          52.46541783117586
         ]
       ],
       "open": [
         [
           "DeepSeek-R1",
-          46.78898671852171
+          46.66106836396165
         ],
         [
           "Qwen3.6-27B",
-          45.58285234743638
+          45.458231493740264
         ],
         [
           "deepseek-V3.2_non-reasoning",
-          42.29296578983569
+          42.17733929367224
         ],
         [
           "Kimi-K2.5",
-          39.118418171621414
+          39.01147070307268
         ],
         [
           "Qwen3.5-35B-A3b",
-          33.53363672548112
+          33.441957722938405
         ],
         [
           "Qwen3-30B-A3b-Thinking",
-          33.075577529011774
+          32.98515083353559
         ],
         [
           "Llama 4 Maverick",
-          30.53645223283001
+          30.452967357484773
         ],
         [
           "Qwen3-Next-80B-A3b",
-          29.388719900565953
+          29.308372858324518
         ],
         [
           "Qwen-3-235B-A22b-Instruct",
-          28.88259602963812
+          28.803632700473486
         ],
         [
           "Nemotron-3-Nano",
-          26.47219940857253
+          26.399825962866124
         ],
         [
           "Qwen3.5-9B-Thinking",
-          26.470001701188313
+          26.397634263885422
         ],
         [
           "Qwen3.5-9B",
-          24.107181375162487
+          24.04127375050835
         ],
         [
           "Llama-3-70B-Instruct-Awq",
-          23.274453767969312
+          23.210822771914756
         ],
         [
           "GLM-5",
-          22.41580135329937
+          22.35451786275256
         ],
         [
           "GLM-4.7-Flash",
-          21.240556980447735
+          21.182486539315427
         ],
         [
           "Llama 4 Scout",
-          18.24190734954048
+          18.192035041207998
         ],
         [
           "Gemma-2-27B-it",
-          17.80798223601261
+          17.7592962535747
         ],
         [
           "Gemma-2-9B-it-8BIT",
-          12.383470635780467
+          12.349614950958705
         ],
         [
           "Qwen3.5-4B-Thinking",
-          11.895701691339324
+          11.863179538298315
         ],
         [
           "DeepSeek-V3",
-          11.010798882913479
+          10.980696002422235
         ],
         [
           "Llama 3.3 70B Instruct",
-          9.861804903817745
+          9.834843305698987
         ],
         [
           "Qwen3-4B-Thinking",
-          8.671664958695311
+          8.647957133614899
         ],
         [
           "Qwen2.5-72B-Instruct",
-          7.234812010552254
+          7.215032457438425
         ],
         [
           "Kimi-K2-Instruct",
-          6.538871338884039
+          6.520994446884176
         ],
         [
           "Llama3.1-8B",
-          2.2134169221840643
+          2.2073655697077963
         ]
       ]
     }
   },
   "unified_closed": [
     {
-      "name": "Claude Fable 5.1",
-      "num_benchmarks": 8,
-      "cl": 100.0,
-      "Artificial Analysis": 53.0,
-      "BenchLM.ai": 80.0,
-      "Arena.ai Text": 92.0,
-      "SimpleBench.com": 86.6,
-      "ARC-AGI-2": 90.0,
-      "Design Arena": 90.8,
+      "name": "Claude Opus 5.5",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 58.0,
+      "BenchLM.ai": 83.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": 93.3,
+      "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": 34.9,
-      "SWE-Marathon": 91.2,
-      "FrontierSWE": 56.3,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": 62.3,
       "CyberGem": null,
       "EQBench CW": null,
       "LLM Chess": null
@@ -2029,47 +2029,47 @@
       "num_benchmarks": 8,
       "cl": 100.0,
       "Artificial Analysis": 53.0,
-      "BenchLM.ai": 71.0,
+      "BenchLM.ai": 70.0,
       "Arena.ai Text": 89.2,
       "SimpleBench.com": 83.6,
       "ARC-AGI-2": 95.0,
-      "Design Arena": 94.2,
+      "Design Arena": 94.0,
       "DeepSWE": 74.0,
       "VendingBench": 100.0,
       "SWE-Marathon": 85.0,
       "FrontierSWE": 65.5,
       "CyberGem": null,
       "EQBench CW": 100.0,
-      "LLM Chess": 97.2
+      "LLM Chess": 100.0
     },
     {
-      "name": "Claude Opus 5",
+      "name": "Claude Fable 5.1",
       "num_benchmarks": 7,
       "cl": 87.5,
-      "Artificial Analysis": 51.0,
-      "BenchLM.ai": 79.0,
-      "Arena.ai Text": 91.2,
-      "SimpleBench.com": 80.6,
-      "ARC-AGI-2": 90.4,
-      "Design Arena": 89.3,
-      "DeepSWE": 74.0,
-      "VendingBench": 72.1,
-      "SWE-Marathon": 100.0,
+      "Artificial Analysis": 53.0,
+      "BenchLM.ai": 80.0,
+      "Arena.ai Text": 92.0,
+      "SimpleBench.com": 86.6,
+      "ARC-AGI-2": 90.0,
+      "Design Arena": 90.7,
+      "DeepSWE": null,
+      "VendingBench": 34.9,
+      "SWE-Marathon": 91.2,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 97.8,
-      "LLM Chess": 86.9
+      "EQBench CW": null,
+      "LLM Chess": null
     },
     {
       "name": "Muse Spark 1.3",
       "num_benchmarks": 6,
       "cl": 75.0,
       "Artificial Analysis": 48.0,
-      "BenchLM.ai": 58.0,
+      "BenchLM.ai": 55.0,
       "Arena.ai Text": 91.2,
       "SimpleBench.com": 81.8,
       "ARC-AGI-2": null,
-      "Design Arena": 94.5,
+      "Design Arena": 94.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": 61.2,
@@ -2079,22 +2079,22 @@
       "LLM Chess": null
     },
     {
-      "name": "GPT-5.6 Sol",
-      "num_benchmarks": 7,
-      "cl": 87.5,
-      "Artificial Analysis": 47.0,
+      "name": "GPT-6 Sol",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": 48.0,
       "BenchLM.ai": 70.0,
-      "Arena.ai Text": 89.7,
-      "SimpleBench.com": 64.8,
-      "ARC-AGI-2": 92.5,
-      "Design Arena": 91.8,
-      "DeepSWE": 73.0,
-      "VendingBench": 62.0,
-      "SWE-Marathon": 85.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 89.8,
-      "LLM Chess": 97.7
+      "EQBench CW": null,
+      "LLM Chess": null
     },
     {
       "name": "Grok 4.7",
@@ -2130,7 +2130,7 @@
       "FrontierSWE": null,
       "CyberGem": 79.7,
       "EQBench CW": null,
-      "LLM Chess": 52.6
+      "LLM Chess": 52.5
     },
     {
       "name": "GPT-5.6 Terra",
@@ -2148,7 +2148,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 84.0,
-      "LLM Chess": 87.2
+      "LLM Chess": 87.0
     },
     {
       "name": "Gemini 3.8 Flash",
@@ -2159,14 +2159,14 @@
       "Arena.ai Text": 91.2,
       "SimpleBench.com": 82.4,
       "ARC-AGI-2": null,
-      "Design Arena": 86.7,
+      "Design Arena": 86.3,
       "DeepSWE": 74.0,
       "VendingBench": 32.8,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 78.9,
-      "LLM Chess": 100.0
+      "LLM Chess": 97.2
     },
     {
       "name": "Claude Sonnet 5",
@@ -2184,32 +2184,32 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 81.0,
-      "LLM Chess": 67.4
+      "LLM Chess": 67.2
     },
     {
-      "name": "GPT-5.6 Luna",
-      "num_benchmarks": 5,
-      "cl": 62.5,
+      "name": "GPT-6 Luna",
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 37.0,
       "BenchLM.ai": 57.0,
-      "Arena.ai Text": 84.9,
+      "Arena.ai Text": null,
       "SimpleBench.com": null,
-      "ARC-AGI-2": 59.5,
+      "ARC-AGI-2": 59.3,
       "Design Arena": null,
-      "DeepSWE": 67.0,
-      "VendingBench": 26.4,
-      "SWE-Marathon": 48.8,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 82.8,
-      "LLM Chess": 82.8
+      "EQBench CW": null,
+      "LLM Chess": null
     },
     {
       "name": "GPT-5.3 Codex",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 33.0,
-      "BenchLM.ai": 62.0,
+      "BenchLM.ai": 61.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2220,7 +2220,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 77.5
+      "LLM Chess": 77.2
     },
     {
       "name": "Gemini 3.1 Pro",
@@ -2238,7 +2238,7 @@
       "FrontierSWE": null,
       "CyberGem": 38.8,
       "EQBench CW": null,
-      "LLM Chess": 96.1
+      "LLM Chess": 95.8
     },
     {
       "name": "Apodex 1.1",
@@ -2299,7 +2299,7 @@
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": 25.0,
-      "BenchLM.ai": 41.0,
+      "BenchLM.ai": 42.0,
       "Arena.ai Text": 88.2,
       "SimpleBench.com": 70.4,
       "ARC-AGI-2": null,
@@ -2317,7 +2317,7 @@
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 25.0,
-      "BenchLM.ai": 48.0,
+      "BenchLM.ai": 49.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2407,7 +2407,7 @@
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 17.0,
-      "BenchLM.ai": 43.0,
+      "BenchLM.ai": 44.0,
       "Arena.ai Text": 81.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2418,7 +2418,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 80.9,
-      "LLM Chess": 43.3
+      "LLM Chess": 43.2
     },
     {
       "name": "Granite 4.2 8B",
@@ -2443,7 +2443,7 @@
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 14.0,
-      "BenchLM.ai": 37.0,
+      "BenchLM.ai": 38.0,
       "Arena.ai Text": 68.6,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2490,7 +2490,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 38.7,
-      "LLM Chess": 25.8
+      "LLM Chess": 25.7
     },
     {
       "name": "Trinity Large Thinking",
@@ -2655,6 +2655,42 @@
       "LLM Chess": null
     },
     {
+      "name": "Claude Opus 5",
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 79.0,
+      "Arena.ai Text": 91.2,
+      "SimpleBench.com": 80.6,
+      "ARC-AGI-2": 90.4,
+      "Design Arena": 89.2,
+      "DeepSWE": 74.0,
+      "VendingBench": 72.1,
+      "SWE-Marathon": 100.0,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 97.8,
+      "LLM Chess": 86.7
+    },
+    {
+      "name": "GPT-5.6 Sol",
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 70.0,
+      "Arena.ai Text": 89.7,
+      "SimpleBench.com": 64.8,
+      "ARC-AGI-2": 92.5,
+      "Design Arena": 91.5,
+      "DeepSWE": 73.0,
+      "VendingBench": 62.0,
+      "SWE-Marathon": 85.0,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 89.8,
+      "LLM Chess": 97.4
+    },
+    {
       "name": "Gemini 3.7 Flash",
       "num_benchmarks": 6,
       "cl": 75.0,
@@ -2663,14 +2699,14 @@
       "Arena.ai Text": 90.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 84.6,
-      "Design Arena": 86.8,
+      "Design Arena": 86.7,
       "DeepSWE": 65.0,
       "VendingBench": null,
       "SWE-Marathon": 45.0,
       "FrontierSWE": 20.3,
       "CyberGem": null,
       "EQBench CW": 77.5,
-      "LLM Chess": 79.6
+      "LLM Chess": 79.4
     },
     {
       "name": "Claude Fable 5",
@@ -2681,7 +2717,7 @@
       "Arena.ai Text": 93.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": 89.2,
-      "Design Arena": 87.3,
+      "Design Arena": 87.2,
       "DeepSWE": 70.0,
       "VendingBench": 36.6,
       "SWE-Marathon": 90.0,
@@ -2706,7 +2742,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 52.9
+      "LLM Chess": 52.8
     },
     {
       "name": "Grok 4.5",
@@ -2735,7 +2771,7 @@
       "Arena.ai Text": 92.3,
       "SimpleBench.com": 74.5,
       "ARC-AGI-2": null,
-      "Design Arena": 87.3,
+      "Design Arena": 87.0,
       "DeepSWE": 55.0,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2760,7 +2796,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 62.7
+      "LLM Chess": 62.5
     },
     {
       "name": "GPT-5 Pro",
@@ -2785,7 +2821,7 @@
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 62.0,
+      "BenchLM.ai": 63.0,
       "Arena.ai Text": 89.5,
       "SimpleBench.com": 76.9,
       "ARC-AGI-2": 85.0,
@@ -2799,11 +2835,29 @@
       "LLM Chess": null
     },
     {
+      "name": "GPT-5.6 Luna",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 57.0,
+      "Arena.ai Text": 84.9,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": 59.5,
+      "Design Arena": null,
+      "DeepSWE": 67.0,
+      "VendingBench": 26.4,
+      "SWE-Marathon": 48.8,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 82.8,
+      "LLM Chess": 82.6
+    },
+    {
       "name": "Gemini 3 Flash",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 35.0,
+      "BenchLM.ai": 36.0,
       "Arena.ai Text": 88.3,
       "SimpleBench.com": 61.1,
       "ARC-AGI-2": 33.6,
@@ -2814,14 +2868,14 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 27.3
+      "LLM Chess": 27.2
     },
     {
       "name": "Gemini 3 Pro",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 60.0,
+      "BenchLM.ai": 63.0,
       "Arena.ai Text": 90.0,
       "SimpleBench.com": 76.4,
       "ARC-AGI-2": 54.0,
@@ -2832,14 +2886,14 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 76.7
+      "LLM Chess": 76.5
     },
     {
       "name": "Gemini 3.5 Flash",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 52.0,
+      "BenchLM.ai": 53.0,
       "Arena.ai Text": 88.9,
       "SimpleBench.com": 76.7,
       "ARC-AGI-2": 72.1,
@@ -2850,14 +2904,14 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 73.4
+      "LLM Chess": 73.2
     },
     {
       "name": "Claude Opus 4.6",
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 55.0,
+      "BenchLM.ai": 53.0,
       "Arena.ai Text": 93.1,
       "SimpleBench.com": 67.6,
       "ARC-AGI-2": null,
@@ -2868,7 +2922,7 @@
       "FrontierSWE": null,
       "CyberGem": 66.6,
       "EQBench CW": null,
-      "LLM Chess": 42.7
+      "LLM Chess": 42.5
     },
     {
       "name": "Claude Sonnet 4.6",
@@ -2886,7 +2940,7 @@
       "FrontierSWE": null,
       "CyberGem": 65.2,
       "EQBench CW": null,
-      "LLM Chess": 42.3
+      "LLM Chess": 42.2
     },
     {
       "name": "GPT-5 mini",
@@ -2904,7 +2958,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 65.5
+      "LLM Chess": 65.3
     },
     {
       "name": "GPT-5.2-Codex",
@@ -2929,7 +2983,7 @@
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 57.0,
+      "BenchLM.ai": 56.0,
       "Arena.ai Text": 88.6,
       "SimpleBench.com": null,
       "ARC-AGI-2": 83.3,
@@ -2958,7 +3012,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 74.4,
-      "LLM Chess": 51.5
+      "LLM Chess": 51.4
     },
     {
       "name": "GPT-5.4 nano",
@@ -2976,7 +3030,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 43.0
+      "LLM Chess": 42.9
     },
     {
       "name": "Gemini 2.5 Pro",
@@ -2994,7 +3048,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 31.7
+      "LLM Chess": 31.6
     },
     {
       "name": "Gemini 3.6 Flash",
@@ -3012,7 +3066,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 71.3,
-      "LLM Chess": 79.1
+      "LLM Chess": 78.9
     },
     {
       "name": "Grok 4 Fast Chat",
@@ -3030,7 +3084,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 26.8
+      "LLM Chess": 26.7
     },
     {
       "name": "Claude Haiku 4.5",
@@ -3048,7 +3102,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 39.7
+      "LLM Chess": 39.6
     },
     {
       "name": "Claude Opus 4.5",
@@ -3066,7 +3120,7 @@
       "FrontierSWE": null,
       "CyberGem": 50.6,
       "EQBench CW": null,
-      "LLM Chess": 52.7
+      "LLM Chess": 52.6
     },
     {
       "name": "Claude Sonnet 4.5",
@@ -3084,7 +3138,7 @@
       "FrontierSWE": null,
       "CyberGem": 28.9,
       "EQBench CW": 75.1,
-      "LLM Chess": 39.2
+      "LLM Chess": 39.1
     },
     {
       "name": "GPT-5.1-Codex",
@@ -3102,7 +3156,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 55.1
+      "LLM Chess": 55.0
     },
     {
       "name": "Gemini 3.1 Flash-Lite",
@@ -3120,7 +3174,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 29.2
+      "LLM Chess": 29.1
     },
     {
       "name": "Grok 4.3",
@@ -3138,14 +3192,14 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 41.9
+      "LLM Chess": 41.7
     },
     {
       "name": "Muse Spark 1.1",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 60.0,
+      "BenchLM.ai": 59.0,
       "Arena.ai Text": 91.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -3228,7 +3282,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 62.4
+      "LLM Chess": 62.2
     },
     {
       "name": "Grok 3 Mini",
@@ -3246,7 +3300,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 52.1
+      "LLM Chess": 52.0
     },
     {
       "name": "Grok-4.20-Beta",
@@ -3282,7 +3336,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 32.5
+      "LLM Chess": 32.4
     },
     {
       "name": "o3 2025.04 16",
@@ -3300,7 +3354,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 75.0,
-      "LLM Chess": 66.2
+      "LLM Chess": 66.1
     },
     {
       "name": "o3 Mini",
@@ -3318,7 +3372,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 51.0
+      "LLM Chess": 50.9
     }
   ],
   "unified_open": [
@@ -3331,7 +3385,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 88.2,
+      "Design Arena": 88.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3349,7 +3403,7 @@
       "Arena.ai Text": 89.7,
       "SimpleBench.com": 66.2,
       "ARC-AGI-2": null,
-      "Design Arena": 87.7,
+      "Design Arena": 87.5,
       "DeepSWE": 69.0,
       "VendingBench": 52.6,
       "SWE-Marathon": 85.0,
@@ -3385,7 +3439,7 @@
       "Arena.ai Text": 90.0,
       "SimpleBench.com": 60.7,
       "ARC-AGI-2": 60.4,
-      "Design Arena": 97.2,
+      "Design Arena": 97.0,
       "DeepSWE": 69.0,
       "VendingBench": 33.3,
       "SWE-Marathon": 96.2,
@@ -3439,7 +3493,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 89.3,
+      "Design Arena": 89.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3543,7 +3597,7 @@
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 23.0,
-      "BenchLM.ai": 28.0,
+      "BenchLM.ai": 29.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -3615,7 +3669,7 @@
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": 14.0,
-      "BenchLM.ai": 22.0,
+      "BenchLM.ai": 23.0,
       "Arena.ai Text": 80.9,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -3727,7 +3781,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 0.5,
+      "Design Arena": 0.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3752,7 +3806,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 9.9
+      "LLM Chess": 9.8
     },
     {
       "name": "Olmo 3.1 32B Think",
@@ -3835,7 +3889,7 @@
       "Arena.ai Text": 88.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": 22.8,
-      "Design Arena": 84.2,
+      "Design Arena": 84.0,
       "DeepSWE": 44.0,
       "VendingBench": 53.6,
       "SWE-Marathon": 38.8,
@@ -3849,7 +3903,7 @@
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 51.0,
+      "BenchLM.ai": 52.0,
       "Arena.ai Text": 85.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 4.9,
@@ -3867,7 +3921,7 @@
       "num_benchmarks": 3,
       "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 41.0,
+      "BenchLM.ai": 42.0,
       "Arena.ai Text": 75.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": 4.9,
@@ -3950,7 +4004,7 @@
       "FrontierSWE": null,
       "CyberGem": 41.3,
       "EQBench CW": 70.1,
-      "LLM Chess": 39.1
+      "LLM Chess": 39.0
     },
     {
       "name": "Kimi K2.6",
@@ -3993,7 +4047,7 @@
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 41.0,
+      "BenchLM.ai": 42.0,
       "Arena.ai Text": 79.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -4022,7 +4076,7 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 66.2,
-      "LLM Chess": 46.8
+      "LLM Chess": 46.7
     },
     {
       "name": "DeepSeek V3.2 Exp Thinking",
@@ -4098,11 +4152,11 @@
     }
   ],
   "models_meta": {
-    "Claude Fable 5.1": {
-      "or_id": "anthropic/claude-fable-5.1",
-      "or_name": "Anthropic: Claude Fable 5.1",
+    "Claude Opus 5.5": {
+      "or_id": "anthropic/claude-opus-5.5",
+      "or_name": "Anthropic: Claude Opus 5.5",
       "provider": "Anthropic",
-      "created": "2026-09-01",
+      "created": "2026-09-22",
       "context_length": 1000000,
       "max_output_tokens": 128000,
       "modality": "text+image+file->text",
@@ -4120,9 +4174,9 @@
       "active_params_b": null,
       "params_source": null,
       "pricing_usd_per_1m": {
-        "input": 10.0,
-        "output": 50.0,
-        "cache_read": 0.25
+        "input": 4.0,
+        "output": 20.0,
+        "cache_read": 0.2
       },
       "reasoning": {
         "mandatory": true,
@@ -4144,59 +4198,23 @@
         "response_format",
         "stop",
         "structured_outputs",
+        "temperature",
         "tool_choice",
         "tools",
         "verbosity"
       ],
       "hugging_face_id": null,
       "or_free_variants": null,
-      "description": "Claude Fable 5.1 improves on Claude Fable 5 across the board, with the biggest gains in agentic coding, long-running agentic workflows, and knowledge work: long code refactors, front-end and visual...",
+      "description": "Claude Opus 5.5 is Anthropic's flagship model for demanding reasoning, coding, and long-horizon agentic work, succeeding Claude Opus 5. It is particularly strong at multi-step changes in large codebases, code...",
       "superseded_by": null,
       "match": "exact",
       "pricing_aa_usd_per_1m": {
-        "input": 10,
-        "output": 50,
-        "cache_read": 0.25
+        "input": 4,
+        "output": 20,
+        "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 8.468,
-      "modalities_source": "openrouter",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 10.0,
-          "out": 50.0
-        },
-        {
-          "p": "anthropic",
-          "n": "Anthropic",
-          "in": 10.0,
-          "out": 50.0
-        },
-        {
-          "p": "azure-ai-foundry",
-          "n": "Azure AI Foundry",
-          "in": 10.0,
-          "out": 50.0
-        },
-        {
-          "p": "google-vertex-ai",
-          "n": "Google Vertex AI",
-          "in": 10.0,
-          "out": 50.0
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 10.0,
-          "out": 50.0
-        }
-      ]
+      "modalities_source": "openrouter"
     },
     "GPT-6 Astra": {
       "or_id": "openai/gpt-6-astra",
@@ -4258,7 +4276,7 @@
         "cache_read": 1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 146.71,
+      "aa_ttft_seconds": 203.061,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -4291,11 +4309,11 @@
         }
       ]
     },
-    "Claude Opus 5": {
-      "or_id": "anthropic/claude-opus-5",
-      "or_name": "Anthropic: Claude Opus 5",
+    "Claude Fable 5.1": {
+      "or_id": "anthropic/claude-fable-5.1",
+      "or_name": "Anthropic: Claude Fable 5.1",
       "provider": "Anthropic",
-      "created": "2026-07-24",
+      "created": "2026-09-01",
       "context_length": 1000000,
       "max_output_tokens": 128000,
       "modality": "text+image+file->text",
@@ -4313,12 +4331,12 @@
       "active_params_b": null,
       "params_source": null,
       "pricing_usd_per_1m": {
-        "input": 5.0,
-        "output": 25.0,
-        "cache_read": 0.5
+        "input": 10.0,
+        "output": 50.0,
+        "cache_read": 0.25
       },
       "reasoning": {
-        "mandatory": false,
+        "mandatory": true,
         "supported_efforts": [
           "max",
           "xhigh",
@@ -4337,54 +4355,47 @@
         "response_format",
         "stop",
         "structured_outputs",
-        "temperature",
         "tool_choice",
         "tools",
         "verbosity"
       ],
       "hugging_face_id": null,
       "or_free_variants": null,
-      "description": "Claude Opus 5 is Anthropic’s flagship model for demanding reasoning, coding, and long-horizon agentic work. It is particularly strong at end-to-end software tasks, code review and bug finding, visual analysis...",
+      "description": "Claude Fable 5.1 improves on Claude Fable 5 across the board, with the biggest gains in agentic coding, long-running agentic workflows, and knowledge work: long code refactors, front-end and visual...",
       "superseded_by": null,
       "match": "exact",
       "pricing_aa_usd_per_1m": {
-        "input": 5,
-        "output": 25,
-        "cache_read": 0.5
+        "input": 10,
+        "output": 50,
+        "cache_read": 0.25
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 21.6,
+      "aa_ttft_seconds": 6.646,
       "modalities_source": "openrouter",
       "available_at": [
         {
           "p": "openrouter",
           "n": "OpenRouter",
-          "in": 5.0,
-          "out": 25.0
+          "in": 10.0,
+          "out": 50.0
         },
         {
           "p": "anthropic",
           "n": "Anthropic",
-          "in": 5.0,
-          "out": 25.0
+          "in": 10.0,
+          "out": 50.0
         },
         {
           "p": "azure-ai-foundry",
           "n": "Azure AI Foundry",
-          "in": 5.0,
-          "out": 25.0
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 5.0,
-          "out": 25.0
+          "in": 10.0,
+          "out": 50.0
         },
         {
           "p": "google-vertex-ai",
           "n": "Google Vertex AI",
-          "in": 5.0,
-          "out": 25.0
+          "in": 10.0,
+          "out": 50.0
         },
         {
           "p": "opencode-zen",
@@ -4393,8 +4404,8 @@
         {
           "p": "orcarouter",
           "n": "OrcaRouter",
-          "in": 5.0,
-          "out": 25.0
+          "in": 10.0,
+          "out": 50.0
         }
       ]
     },
@@ -4463,7 +4474,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 20.812,
+      "aa_ttft_seconds": 20.976,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -4484,11 +4495,11 @@
         }
       ]
     },
-    "GPT-5.6 Sol": {
-      "or_id": "openai/gpt-5.6-sol",
-      "or_name": "OpenAI: GPT-5.6 Sol",
+    "GPT-6 Sol": {
+      "or_id": "openai/gpt-6-sol",
+      "or_name": "OpenAI: GPT-6 Sol",
       "provider": "OpenAI",
-      "created": "2026-07-09",
+      "created": "2026-09-22",
       "context_length": 1050000,
       "max_output_tokens": 128000,
       "modality": "text+image+file->text",
@@ -4501,7 +4512,7 @@
         "text"
       ],
       "tokenizer": "GPT",
-      "knowledge_cutoff": "2026-02-16",
+      "knowledge_cutoff": null,
       "total_params_b": null,
       "active_params_b": null,
       "params_source": null,
@@ -4536,47 +4547,17 @@
       ],
       "hugging_face_id": null,
       "or_free_variants": null,
-      "description": "GPT-5.6 Sol is the flagship model in OpenAI's GPT-5.6 series. It is suited for complex reasoning, coding, and agentic workflows, and is particularly strong at command-line and multi-step coding tasks...",
+      "description": "GPT-6 Sol is the cost-efficient high-end model in OpenAI's GPT-6 series, positioned below the flagship GPT-6 Astra and above the fast GPT-6 Luna tier. It is suited for demanding professional...",
       "superseded_by": null,
       "match": "exact",
       "pricing_aa_usd_per_1m": {
-        "input": 4,
-        "output": 20,
-        "cache_read": 0.4
+        "input": 2,
+        "output": 10,
+        "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.429,
-      "modalities_source": "openrouter",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 2.0,
-          "out": 10.0
-        },
-        {
-          "p": "azure-openai",
-          "n": "Azure OpenAI",
-          "in": 5.0,
-          "out": 30.0
-        },
-        {
-          "p": "openai",
-          "n": "OpenAI",
-          "in": 4.0,
-          "out": 20.0
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 4.0,
-          "out": 20.0
-        }
-      ]
+      "aa_ttft_seconds": 1.285,
+      "modalities_source": "openrouter"
     },
     "Grok 4.7": {
       "or_id": "x-ai/grok-4.7",
@@ -4640,7 +4621,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.853,
+      "aa_ttft_seconds": 0.842,
       "modalities_source": "openrouter"
     },
     "Grok 4.6": {
@@ -4707,7 +4688,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 31.864,
+      "aa_ttft_seconds": 29.295,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -4801,7 +4782,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.073,
+      "aa_ttft_seconds": 2.045,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -4989,7 +4970,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.814,
+      "aa_ttft_seconds": 1.806,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5034,11 +5015,11 @@
         }
       ]
     },
-    "GPT-5.6 Luna": {
-      "or_id": "openai/gpt-5.6-luna",
-      "or_name": "OpenAI: GPT-5.6 Luna",
+    "GPT-6 Luna": {
+      "or_id": "openai/gpt-6-luna",
+      "or_name": "OpenAI: GPT-6 Luna",
       "provider": "OpenAI",
-      "created": "2026-07-09",
+      "created": "2026-09-22",
       "context_length": 1050000,
       "max_output_tokens": 128000,
       "modality": "text+image+file->text",
@@ -5051,14 +5032,14 @@
         "text"
       ],
       "tokenizer": "GPT",
-      "knowledge_cutoff": "2026-02-16",
+      "knowledge_cutoff": null,
       "total_params_b": null,
       "active_params_b": null,
       "params_source": null,
       "pricing_usd_per_1m": {
-        "input": 0.2,
-        "output": 1.2,
-        "cache_read": 0.02
+        "input": 0.1,
+        "output": 0.5,
+        "cache_read": 0.01
       },
       "reasoning": {
         "mandatory": false,
@@ -5086,47 +5067,17 @@
       ],
       "hugging_face_id": null,
       "or_free_variants": null,
-      "description": "GPT-5.6 Luna is a fast, cost-efficient model in OpenAI's GPT-5.6 series. It is suited for high-volume, latency-sensitive tasks such as chat, classification, and lightweight agentic workflows, providing capable reasoning for...",
+      "description": "GPT-6 Luna is the fast, cost-efficient model in OpenAI's GPT-6 series, positioned below GPT-6 Sol. It is suited for high-volume and latency-sensitive workloads such as chat, classification, and lightweight agentic...",
       "superseded_by": null,
       "match": "exact",
       "pricing_aa_usd_per_1m": {
-        "input": 0.2,
-        "output": 1.2,
-        "cache_read": 0.02
+        "input": 0.1,
+        "output": 0.5,
+        "cache_read": 0.01
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.755,
-      "modalities_source": "openrouter",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.2,
-          "out": 1.2
-        },
-        {
-          "p": "azure-openai",
-          "n": "Azure OpenAI",
-          "in": 0.2,
-          "out": 1.2
-        },
-        {
-          "p": "openai",
-          "n": "OpenAI",
-          "in": 0.2,
-          "out": 1.2
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 0.2,
-          "out": 1.6
-        }
-      ]
+      "aa_ttft_seconds": 22.485,
+      "modalities_source": "openrouter"
     },
     "GPT-5.3 Codex": {
       "or_id": "openai/gpt-5.3-codex",
@@ -5188,7 +5139,7 @@
         "cache_read": 0.175
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 60.139,
+      "aa_ttft_seconds": 53.604,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5335,7 +5286,6 @@
         "frequency_penalty",
         "include_reasoning",
         "logit_bias",
-        "logprobs",
         "max_tokens",
         "min_p",
         "presence_penalty",
@@ -5348,7 +5298,6 @@
         "tool_choice",
         "tools",
         "top_k",
-        "top_logprobs",
         "top_p"
       ],
       "hugging_face_id": "thinkingmachines/Inkling-Small",
@@ -5364,7 +5313,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.048,
+      "aa_ttft_seconds": 2.086,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5457,7 +5406,7 @@
         "cache_read": 0.17
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.418,
+      "aa_ttft_seconds": 2.34,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5546,7 +5495,7 @@
         "cache_read": 0.04
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.223,
+      "aa_ttft_seconds": 2.227,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5634,7 +5583,7 @@
         "cache_read": 0.035
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.775,
+      "aa_ttft_seconds": 2.861,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5724,7 +5673,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.497,
+      "aa_ttft_seconds": 2.545,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5810,7 +5759,7 @@
         "cache_read": 0.03
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 10.425,
+      "aa_ttft_seconds": 8.36,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5911,7 +5860,7 @@
         "cache_read": 0.04
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.552,
+      "aa_ttft_seconds": 2.603,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6094,7 +6043,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.873,
+      "aa_ttft_seconds": 0.901,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6176,6 +6125,79 @@
           "n": "Inception",
           "in": 0.25,
           "out": 0.75
+        }
+      ]
+    },
+    "Command A+": {
+      "or_id": "cohere/command-a-plus",
+      "or_name": "Cohere: Command A+",
+      "provider": "Cohere",
+      "created": "2026-09-22",
+      "context_length": 192000,
+      "max_output_tokens": 64000,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Cohere",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.3,
+        "output": 1.5,
+        "cache_read": 0.15
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Command A+ is Cohere's flagship model for enterprise agentic workflows. It accepts text and image inputs with a 192K context window, supports native tool calling with strict tool schemas, structured...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0,
+        "output": 0,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.412,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 2.5,
+          "out": 10.0
+        },
+        {
+          "p": "vercel-ai-gateway",
+          "n": "Vercel AI Gateway",
+          "in": 2.5,
+          "out": 10.0
         }
       ]
     },
@@ -6415,7 +6437,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.38,
+      "aa_ttft_seconds": 1.226,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6423,6 +6445,207 @@
           "n": "OpenRouter",
           "in": 0.25,
           "out": 0.8
+        }
+      ]
+    },
+    "Claude Opus 5": {
+      "or_id": "anthropic/claude-opus-5",
+      "or_name": "Anthropic: Claude Opus 5",
+      "provider": "Anthropic",
+      "created": "2026-07-24",
+      "context_length": 1000000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Claude",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 5.0,
+        "output": 25.0,
+        "cache_read": 0.5
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "high"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Claude Opus 5 is Anthropic’s flagship model for demanding reasoning, coding, and long-horizon agentic work. It is particularly strong at end-to-end software tasks, code review and bug finding, visual analysis...",
+      "superseded_by": "Claude Opus 5.5",
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 5,
+        "output": 25,
+        "cache_read": 0.5
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 30.777,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 5.0,
+          "out": 25.0
+        },
+        {
+          "p": "anthropic",
+          "n": "Anthropic",
+          "in": 5.0,
+          "out": 25.0
+        },
+        {
+          "p": "azure-ai-foundry",
+          "n": "Azure AI Foundry",
+          "in": 5.0,
+          "out": 25.0
+        },
+        {
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 5.0,
+          "out": 25.0
+        },
+        {
+          "p": "google-vertex-ai",
+          "n": "Google Vertex AI",
+          "in": 5.0,
+          "out": 25.0
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 5.0,
+          "out": 25.0
+        }
+      ]
+    },
+    "GPT-5.6 Sol": {
+      "or_id": "openai/gpt-5.6-sol",
+      "or_name": "OpenAI: GPT-5.6 Sol",
+      "provider": "OpenAI",
+      "created": "2026-07-09",
+      "context_length": 1050000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2026-02-16",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 2.0,
+        "output": 10.0,
+        "cache_read": 0.2
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-5.6 Sol is the flagship model in OpenAI's GPT-5.6 series. It is suited for complex reasoning, coding, and agentic workflows, and is particularly strong at command-line and multi-step coding tasks...",
+      "superseded_by": "GPT-6 Sol",
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 4,
+        "output": 20,
+        "cache_read": 0.4
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 3.578,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 2.0,
+          "out": 10.0
+        },
+        {
+          "p": "azure-openai",
+          "n": "Azure OpenAI",
+          "in": 5.0,
+          "out": 30.0
+        },
+        {
+          "p": "openai",
+          "n": "OpenAI",
+          "in": 4.0,
+          "out": 20.0
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 4.0,
+          "out": 20.0
         }
       ]
     },
@@ -6488,7 +6711,7 @@
         "cache_read": 0.075
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 11.533,
+      "aa_ttft_seconds": 11.521,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6583,7 +6806,7 @@
         "cache_read": 1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 121.113,
+      "aa_ttft_seconds": 107.968,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6682,7 +6905,7 @@
       "hugging_face_id": null,
       "or_free_variants": null,
       "description": "Claude Opus 4.8 is Anthropic's most capable generally available model in the Opus family. It supports text, image, and file inputs with text output, with reasoning support and a 1M-token...",
-      "superseded_by": "Claude Opus 5",
+      "superseded_by": "Claude Opus 5.5",
       "match": "exact",
       "aa_deprecated": true,
       "pricing_aa_usd_per_1m": {
@@ -6691,7 +6914,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 27.724,
+      "aa_ttft_seconds": 34.589,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6798,7 +7021,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 7.431,
+      "aa_ttft_seconds": 10.936,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6890,7 +7113,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 20.423,
+      "aa_ttft_seconds": 16.601,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6970,7 +7193,7 @@
       "hugging_face_id": null,
       "or_free_variants": null,
       "description": "Opus 4.7 is the next generation of Anthropic's Opus family, built for long-running, asynchronous agents. Building on the coding and agentic strengths of Opus 4.6, it delivers stronger performance on...",
-      "superseded_by": "Claude Opus 5",
+      "superseded_by": "Claude Opus 5.5",
       "match": "exact",
       "pricing_aa_usd_per_1m": {
         "input": 5,
@@ -6978,7 +7201,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.311,
+      "aa_ttft_seconds": 1.347,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -7157,6 +7380,100 @@
         }
       ]
     },
+    "GPT-5.6 Luna": {
+      "or_id": "openai/gpt-5.6-luna",
+      "or_name": "OpenAI: GPT-5.6 Luna",
+      "provider": "OpenAI",
+      "created": "2026-07-09",
+      "context_length": 1050000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2026-02-16",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.2,
+        "output": 1.2,
+        "cache_read": 0.02
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-5.6 Luna is a fast, cost-efficient model in OpenAI's GPT-5.6 series. It is suited for high-volume, latency-sensitive tasks such as chat, classification, and lightweight agentic workflows, providing capable reasoning for...",
+      "superseded_by": "GPT-6 Luna",
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.2,
+        "output": 1.2,
+        "cache_read": 0.02
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.633,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.2,
+          "out": 1.2
+        },
+        {
+          "p": "azure-openai",
+          "n": "Azure OpenAI",
+          "in": 0.2,
+          "out": 1.2
+        },
+        {
+          "p": "openai",
+          "n": "OpenAI",
+          "in": 0.2,
+          "out": 1.2
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 0.2,
+          "out": 1.6
+        }
+      ]
+    },
     "Gemini 3 Flash": {
       "or_id": "google/gemini-3-flash-preview",
       "or_name": "Google: Gemini 3 Flash Preview",
@@ -7221,7 +7538,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.786,
+      "aa_ttft_seconds": 6.344,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -7320,7 +7637,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 24.706,
+      "aa_ttft_seconds": 19.924,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -7414,7 +7731,7 @@
       "hugging_face_id": null,
       "or_free_variants": null,
       "description": "Opus 4.6 is Anthropic’s strongest model for coding and long-running professional tasks. It is built for agents that operate across entire workflows rather than single prompts, making it especially effective...",
-      "superseded_by": "Claude Opus 5",
+      "superseded_by": "Claude Opus 5.5",
       "match": "exact",
       "pricing_aa_usd_per_1m": {
         "input": 5,
@@ -7422,7 +7739,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.081,
+      "aa_ttft_seconds": 2.042,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -7530,7 +7847,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.152,
+      "aa_ttft_seconds": 1.271,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -7640,7 +7957,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 99.286,
+      "aa_ttft_seconds": 92.602,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -7884,7 +8201,7 @@
         "cache_read": 0.075
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 12.575,
+      "aa_ttft_seconds": 10.363,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -7985,7 +8302,7 @@
         "cache_read": 0.02
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.059,
+      "aa_ttft_seconds": 4.245,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -8082,7 +8399,7 @@
         "cache_read": 0.125
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 23.974,
+      "aa_ttft_seconds": 23.469,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -8181,7 +8498,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 16.783,
+      "aa_ttft_seconds": 17.229,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -8369,7 +8686,7 @@
       "hugging_face_id": null,
       "or_free_variants": null,
       "description": "Claude Opus 4.5 is Anthropic’s frontier reasoning model optimized for complex software engineering, agentic workflows, and long-horizon computer use. It offers strong multimodal capabilities, competitive performance across real-world coding and...",
-      "superseded_by": "Claude Opus 5",
+      "superseded_by": "Claude Opus 5.5",
       "match": "exact",
       "aa_deprecated": true,
       "pricing_aa_usd_per_1m": {
@@ -8378,7 +8695,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 14.962,
+      "aa_ttft_seconds": 18.105,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -8663,7 +8980,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 6.072,
+      "aa_ttft_seconds": 5.73,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -8760,7 +9077,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 13.332,
+      "aa_ttft_seconds": 13.167,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -8911,18 +9228,23 @@
       "supported_parameters": [
         "frequency_penalty",
         "include_reasoning",
+        "logit_bias",
         "max_tokens",
+        "min_p",
         "presence_penalty",
         "reasoning",
+        "repetition_penalty",
         "response_format",
+        "seed",
         "stop",
         "structured_outputs",
         "temperature",
         "tool_choice",
         "tools",
+        "top_k",
         "top_p"
       ],
-      "hugging_face_id": null,
+      "hugging_face_id": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
       "or_free_variants": null,
       "description": "MiMo-V2.6-Pro is the flagship foundation model developed by Xiaomi. Built at a scale of over 1T parameters, it is designed to push the ceiling of capability for the most demanding...",
       "superseded_by": null,
@@ -8933,7 +9255,7 @@
         "cache_read": 0.0036
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.187,
+      "aa_ttft_seconds": 2.608,
       "modalities_source": "openrouter"
     },
     "GLM-5.3": {
@@ -9003,7 +9325,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.098,
+      "aa_ttft_seconds": 3.283,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9200,7 +9522,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.736,
+      "aa_ttft_seconds": 5.073,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9330,7 +9652,7 @@
         "cache_read": 0.026
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.685,
+      "aa_ttft_seconds": 3.104,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9381,7 +9703,7 @@
       "provider": "DeepSeek",
       "created": "2026-09-10",
       "context_length": 1048576,
-      "max_output_tokens": 384000,
+      "max_output_tokens": 943718,
       "modality": "text+image->text",
       "input_modalities": [
         "text",
@@ -9396,9 +9718,9 @@
       "active_params_b": 8.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": 0.003
+        "input": 0.1,
+        "output": 0.5,
+        "cache_read": 0.01
       },
       "reasoning": {
         "mandatory": false,
@@ -9442,7 +9764,7 @@
         "cache_read": 0.006
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.917,
+      "aa_ttft_seconds": 0.987,
       "modalities_source": "openrouter"
     },
     "DeepSeek V4 Pro 0813": {
@@ -9465,9 +9787,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.66,
-        "output": 1.98,
-        "cache_read": 0.022
+        "input": 1.32,
+        "output": 3.96,
+        "cache_read": 0.044
       },
       "reasoning": {
         "mandatory": false,
@@ -9511,7 +9833,7 @@
         "cache_read": 0.044
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.633,
+      "aa_ttft_seconds": 1.696,
       "modalities_source": "openrouter"
     },
     "MiniMax-M3": {
@@ -9577,7 +9899,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.918,
+      "aa_ttft_seconds": 1.096,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9712,7 +10034,7 @@
         "cache_read": 0.0036
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.771,
+      "aa_ttft_seconds": 5.81,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9757,7 +10079,7 @@
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.7062,
-        "output": 3.21,
+        "output": 3.3,
         "cache_read": 0.18
       },
       "reasoning": {
@@ -9798,7 +10120,7 @@
         "cache_read": 0.19
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.002,
+      "aa_ttft_seconds": 3.306,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9934,11 +10256,11 @@
       "match": "exact",
       "pricing_aa_usd_per_1m": {
         "input": 0.6,
-        "output": 2.4,
-        "cache_read": 0.2
+        "output": 2.5,
+        "cache_read": 0.16
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.322,
+      "aa_ttft_seconds": 2.339,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10031,7 +10353,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.017,
+      "aa_ttft_seconds": 1.03,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10161,7 +10483,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.034,
+      "aa_ttft_seconds": 2.124,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10248,7 +10570,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.256,
+      "aa_ttft_seconds": 2.266,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10325,7 +10647,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.732,
+      "aa_ttft_seconds": 0.733,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10398,7 +10720,7 @@
         "cache_read": 0.245
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.895,
+      "aa_ttft_seconds": 0.905,
       "modalities_source": "openrouter",
       "alias_note": "LLM Chess lists this model under its HF name llama-4-maverick-17b-128e-instruct",
       "available_at": [
@@ -10470,7 +10792,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.839,
+      "aa_ttft_seconds": 0.862,
       "modalities_source": "openrouter",
       "alias_note": "LLM Chess lists this model under its HF name llama4-scout-17b-instruct-v1:0",
       "available_at": [
@@ -10539,7 +10861,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.835,
+      "aa_ttft_seconds": 0.834,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10630,7 +10952,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.182,
+      "aa_ttft_seconds": 1.212,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10777,7 +11099,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.511,
+      "aa_ttft_seconds": 1.53,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11070,7 +11392,7 @@
         "cache_read": 0.6
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.186,
+      "aa_ttft_seconds": 1.251,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11174,12 +11496,12 @@
       "match": "exact",
       "aa_deprecated": true,
       "pricing_aa_usd_per_1m": {
-        "input": 1.2,
-        "output": 4.4,
+        "input": 1.285,
+        "output": 4.07,
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.847,
+      "aa_ttft_seconds": 1.846,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11419,7 +11741,7 @@
         "cache_read": 0.16
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.981,
+      "aa_ttft_seconds": 2.983,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11643,30 +11965,6 @@
         }
       ]
     },
-    "Command A+": {
-      "stale": true,
-      "pricing_aa_usd_per_1m": {
-        "input": 0,
-        "output": 0,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.416,
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 2.5,
-          "out": 10.0
-        },
-        {
-          "p": "vercel-ai-gateway",
-          "n": "Vercel AI Gateway",
-          "in": 2.5,
-          "out": 10.0
-        }
-      ]
-    },
     "Mistral Large 3": {
       "hugging_face_id": "mistralai/Mistral-Large-3-675B-Instruct-2512",
       "pricing_aa_usd_per_1m": {
@@ -11675,7 +11973,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.014,
+      "aa_ttft_seconds": 1.08,
       "available_at": [
         {
           "p": "openrouter",
@@ -11754,12 +12052,6 @@
       "hugging_face_id": "LiquidAI/LFM2.5-8B-A1B",
       "total_params_b": 8.5,
       "params_source": "huggingface",
-      "pricing_aa_usd_per_1m": {
-        "input": 0,
-        "output": 0,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
       "input_modalities": [
         "text"
       ],
@@ -11912,7 +12204,7 @@
         "cache_read": 0.195
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.489,
+      "aa_ttft_seconds": 0.499,
       "input_modalities": [
         "text",
         "image",

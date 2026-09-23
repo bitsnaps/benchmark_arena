@@ -103,13 +103,24 @@ const ok = (msg) => console.log('  ok:', msg);
     else fail('headers mismatch: ' + JSON.stringify(headers));
 
     // ── 2. Anchor row: Claude Opus 5 ($5 in / $25 out → blend $10) ──
+    // stats-37 churn hardening: (a) EXACT-name row lookup — the old
+    // substring hasText started resolving to Claude Opus 5.5 the day the
+    // 5.5 generation shipped; (b) the anchor is read with the Older-versions
+    // toggle ON, because once a successor ships, supersession archives the
+    // anchor (correct data behavior) and the default view no longer
+    // contains its row.
     if (!anchor) {
       console.log('  (skip: no Claude Opus 5 row in this snapshot)');
     } else {
-      const row = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: 'Claude Opus 5' }) }).first();
+      const olderSw = page.locator('label.switch:has-text("Older versions")').first();
+      await olderSw.click();
+      await page.waitForTimeout(500);
+      const row = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: /^Claude Opus 5$/ }) }).first();
       const cell = (await row.locator('.value-cell').innerText()).trim();
-      if (cell === ANCHOR_TXT) ok(`Claude Opus 5 value cell = ${cell} (Score/10)`);
+      if (cell === ANCHOR_TXT) ok(`Claude Opus 5 value cell = ${cell} (Score/10, Older on)`);
       else fail(`Claude Opus 5 value cell = "${cell}", expected "${ANCHOR_TXT}"`);
+      await olderSw.click(); // restore the default view for tests 3-4
+      await page.waitForTimeout(300);
     }
 
     // ── 3. Unpriced visible rows show a dash in the VALUE cell ──

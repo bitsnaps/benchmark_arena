@@ -722,6 +722,8 @@ a.hbar:hover .name { color: var(--teal); }
 }
 .pm-cell.is-cheapest .price-cell { font-weight: 700; color: var(--teal); }
 .pm-absent { color: var(--faint); opacity: .4; }
+.pm-cell.score-cell .score-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+th.pm-h.score-col { min-width: 58px; }
 /* Latency ladder — live since stats-24 (AA median TTFT via models_meta) */
 .lat-fast .price-cell, .price-cell.lat-fast { color: var(--green); }
 .lat-ok .price-cell, .price-cell.lat-ok { color: var(--gold); }

@@ -16,6 +16,10 @@
 //                          counts, slider universe and pivot stay catalog-
 //                          only. This tab renders regardless of the catalog
 //                          fetch state for the same reason.
+// Tab 2 also carries an opt-in Score column (stats-40): one per-MODEL
+// reference value — the unified CL-weighted aggregate or any single
+// benchmark's raw cell — joined via the same staged matcher; '—' when
+// the row's model is not on the board, never a fabricated score.
 // The search box is shared across all three tabs (the panel scopes rows
 // within each provider card, with browse mode on label/URL hits); the
 // pricing filters stay per-tab inside tabs 1–2 — many user providers
@@ -29,7 +33,8 @@
 // OpenCode Zen) render honest dashes, never fabricated prices.
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { fmtUsd, fmtCtx, fmtSec } from '../lib/format.js';
+import { fmtUsd, fmtCtx, fmtSec, fmtScore, scoreColor } from '../lib/format.js';
+import { SHORT } from '../lib/constants.js';
 import { passesPricing, priceUniverseBlend, usePriceFilter } from '../lib/priceFilter.js';
 import { usePageSize } from '../lib/pager.js';
 import { useData } from '../stores/data.js';
@@ -56,7 +61,7 @@ onMounted(ensureProvidersLoaded);
 // stats-24: AA TTFT lives in benchmark_results.json (models_meta), not in
 // providers.json — pull the data store too (module singleton; the fetch is
 // shared with the home view and happens once per session).
-const { rawData: benchRaw, ensureLoaded, pivotAll } = useData();
+const { rawData: benchRaw, ensureLoaded, pivotAll, scoreForModel, benchmarks } = useData();
 onMounted(ensureLoaded);
 
 const asOf = computed(() => rawData.value?.as_of || null);
@@ -408,6 +413,73 @@ function mineCellTitle(r, mc) {
   return `${mc.label} — ${list} · listed but no price published`;
 }
 
+// ── stats-40: optional score column (unified or one benchmark) ────────
+// One reference column between Model and the seller columns. A score is a
+// per-MODEL property (same discipline as latency/created, stats-24/27) —
+// never per seller — so the column carries ONE value per row however many
+// selected sellers list the model. Source: 'unified' (the store's
+// CL-weighted aggregate via scoreForModel — the exact number the
+// leaderboard ranks by, parity by construction) or any raw benchmark cell
+// (its own 0-100 scale — NOT cross-comparable; the header tooltip says
+// so). The join reuses the my-gateways staged matcher (buildCatalogIndex
+// + matchOne over r.key), so both opt-in layers agree on WHAT a row is.
+// Honest gaps: off-board models render '—', never fabricated scores.
+// State persists locally; deep-links as ?score=1&src=<bench> (URL beats
+// stored state when present, same contract as ?view=).
+const SCORE_COL_KEY = 'arena.providers.score-col';
+const scoreOn = ref(false);
+const scoreSrc = ref('unified');
+try {
+  const saved = JSON.parse(localStorage.getItem(SCORE_COL_KEY) || '{}');
+  if (saved.on === true) scoreOn.value = true;
+  if (saved.src) scoreSrc.value = String(saved.src);
+} catch { /* fresh visit / private mode */ }
+if (route.query.score === '1') scoreOn.value = true;
+else if (route.query.score === '0') scoreOn.value = false;
+if (typeof route.query.src === 'string' && route.query.src) scoreSrc.value = route.query.src;
+watch([scoreOn, scoreSrc], ([on, src]) => {
+  try { localStorage.setItem(SCORE_COL_KEY, JSON.stringify({ on, src })); } catch { /* private mode */ }
+  if (!on && sortPid.value === 'score') { sortPid.value = null; sortAsc.value = true; }
+  const next = { ...route.query };
+  if (on) next.score = '1'; else delete next.score;
+  if (on && src && src !== 'unified') next.src = src; else delete next.src;
+  if ((next.score || undefined) !== (route.query.score || undefined) ||
+      (next.src || undefined) !== (route.query.src || undefined))
+    router.replace({ query: next });
+});
+const scoreOptions = computed(() => [
+  { value: 'unified', label: 'Unified (CL)' },
+  ...(benchmarks.value || []).map((b) => ({ value: b, label: SHORT[b] || b })),
+]);
+watch(scoreOptions, (opts) => {
+  if (scoreSrc.value !== 'unified' && !opts.some((o) => o.value === scoreSrc.value))
+    scoreSrc.value = 'unified';
+});
+const boardByName = computed(() => {
+  const m = new Map();
+  for (const r of pivotAll.value || []) if (r && r.name && !m.has(r.name)) m.set(r.name, r);
+  return m;
+});
+// per-MODEL resolution: staged matcher (same join as the my-gateways
+// overlay) → arena name → unified board row → aggregate or raw cell.
+// null = the row's model is not on the board / has no cell there.
+const scoreCellFor = (r) => {
+  if (!scoreOn.value || !mineCatalogIndex.value) return null;
+  const hit = matchOne(r.key, mineCatalogIndex.value);
+  if (!hit) return null;
+  const brow = boardByName.value.get(hit.name);
+  if (!brow) return null;
+  if (scoreSrc.value === 'unified') {
+    const s = scoreForModel(brow);
+    return s == null || s < 0 ? null : s;
+  }
+  const v = brow[scoreSrc.value];
+  return v == null ? null : Number(v);
+};
+const scoreHeaderTitle = computed(() => scoreSrc.value === 'unified'
+  ? 'Unified score — the CL-weighted aggregate the leaderboard ranks by (50 = median model). Joined per model by normalized API id; a dash = not on the board.'
+  : scoreSrc.value + ' — raw leaderboard score on its own 0-100 scale. Benchmark columns are NOT cross-comparable — use Unified for that. A dash = not on the board / no cell there.');
+
 // column sorting: default = coverage desc (sortMatrixRows); clicking a
 // provider header sorts by that column's blend (cheapest first), again to
 // flip, a third time back to the default. Mine columns sort by their own
@@ -415,6 +487,10 @@ function mineCellTitle(r, mc) {
 const sortPid = ref(null);
 const sortAsc = ref(true);
 function sortBy(pid) {
+  // stats-40: scores read best high→low — first click sorts descending
+  if (pid === 'score' && sortPid.value !== pid) {
+    sortPid.value = pid; sortAsc.value = false; page.value = 1; return;
+  }
   if (sortPid.value === pid) {
     if (sortAsc.value) sortAsc.value = false;
     else { sortPid.value = null; sortAsc.value = true; }
@@ -429,6 +505,7 @@ const sortedRows = computed(() => {
   if (!sortPid.value) return rows;
   const pid = sortPid.value;
   const cellVal = (r) => {
+    if (pid === 'score') return scoreCellFor(r);
     if (r.cells[pid]) return cellBlend(r.cells[pid]);
     const m = r.mine?.[pid];
     return m ? m.blend : null;
@@ -692,6 +769,17 @@ const pickerTitle = (p) =>
               type="is-dark" multilined :delay="100">
               <b-switch v-model="showBatch" size="is-small">batch variants</b-switch>
             </b-tooltip>
+            <!-- stats-40: optional score reference column — the unified
+                 CL-weighted aggregate or any single benchmark, joined per
+                 model; seller columns and their highlighting are never
+                 affected -->
+            <b-tooltip label="Add a score column — the unified CL-weighted aggregate the leaderboard ranks by, or any single benchmark's raw scores"
+              type="is-dark" multilined :delay="100">
+              <b-switch v-model="scoreOn" size="is-small">score</b-switch>
+            </b-tooltip>
+            <b-select v-if="scoreOn" v-model="scoreSrc" size="is-small" aria-label="score source">
+              <option v-for="o in scoreOptions" :key="o.value" :value="o.value">{{ o.label }}</option>
+            </b-select>
             <!-- stats-38: the v2 overlay — one column per connected gateway.
                  Hidden entirely while no gateway carries a chat listing; the
                  column itself is honest about unpriced/unserved cells. -->
@@ -713,6 +801,15 @@ const pickerTitle = (p) =>
               <thead>
                 <tr>
                   <th class="left pm-model-col">Model</th>
+                  <!-- stats-40: per-model score reference — unified
+                       aggregate or one benchmark; sorts like a seller column -->
+                  <th v-if="scoreOn" class="pm-h score-col"
+                    :class="{ 'is-sorted': sortPid === 'score' }"
+                    @click="sortBy('score')">
+                    <b-tooltip :label="scoreHeaderTitle" type="is-dark" multilined :delay="100">
+                      Score<span v-if="sortPid === 'score'" class="pm-sort-arrow">{{ sortAsc ? ' ↑' : ' ↓' }}</span>
+                    </b-tooltip>
+                  </th>
                   <th v-for="p in selProviders" :key="p.id" class="pm-h"
                     :class="{ 'is-sorted': sortPid === p.id }"
                     @click="sortBy(p.id)">
@@ -755,6 +852,15 @@ const pickerTitle = (p) =>
                       type="is-dark" :delay="100" append-to-body>
                       <span class="new-chip">NEW</span>
                     </b-tooltip>
+                  </td>
+                  <!-- stats-40: one per-MODEL score (unified or the picked
+                       benchmark); '—' = not on the board, never fabricated -->
+                  <td v-if="scoreOn" class="num pm-cell score-cell">
+                    <b-tooltip v-if="scoreCellFor(r) != null" :label="scoreHeaderTitle"
+                      type="is-dark" multilined :delay="100" append-to-body>
+                      <span class="score-val" :style="{ color: scoreColor(scoreCellFor(r)) }">{{ fmtScore(scoreCellFor(r)) }}</span>
+                    </b-tooltip>
+                    <span v-else class="cell-sub">—</span>
                   </td>
                   <td v-for="p in selProviders" :key="p.id" class="num pm-cell"
                     :class="[latencyClass(r.cells[p.id] && r.cells[p.id].latency), { 'is-cheapest': isCheapest(r, p.id) }]">

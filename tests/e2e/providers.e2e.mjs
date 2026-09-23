@@ -8,7 +8,10 @@ import { fileURLToPath } from 'node:url';
 import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS, cellBlend, latencyTier, normKey } from '../../src/lib/pivot.js';
 import { capFromSlider } from '../../src/lib/priceFilter.js';
 import { isNewModel, createdIndexFromMeta } from '../../src/lib/newFlag.js';
-import { fmtUsd, fmtSec } from '../../src/lib/format.js';
+import { fmtUsd, fmtSec, fmtScore } from '../../src/lib/format.js';
+import { buildCatalogIndex, matchOne } from '../../src/lib/myProviders.js';
+// stats-35 mirror — the sanctioned parity source for unified scores
+import { scoreForModel } from '../helpers/snapshot.mjs';
 import { ttftIndexFromMeta } from '../../src/lib/pivot.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -651,6 +654,102 @@ const run = async () => {
     // leave the shipped default behind for the rest of the run
     await page.selectOption(NEW_SELECT, '7');
     await page.waitForTimeout(300);
+
+    // ── 5d. stats-40: optional score column (unified / benchmark) ──
+    // Expected values derive from the committed snapshot via the SAME
+    // stats-35 mirror the value-lens suite uses and the SAME staged
+    // matcher the app ships — no hardcoded scores anywhere.
+    await page.goto('about:blank');
+    await page.goto(BASE + '#/providers?view=compare', { waitUntil: 'networkidle' });
+    await page.evaluate(() => localStorage.removeItem('arena.providers.score-col'));
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForSelector('.pm-table', { timeout: 10000 });
+    const scoreTh0 = await page.locator('.pm-table thead th.score-col').count();
+    if (scoreTh0 === 0) ok('score column hidden by default (opt-in)');
+    else fail(`score column should be hidden by default, found ${scoreTh0}`);
+
+    const searchBox = page.locator('input.input').first();
+    await page.locator('.pm-controls label.switch', { hasText: 'score' }).first().click();
+    await page.waitForSelector('.pm-table thead th.score-col', { timeout: 10000 });
+    ok('score toggle reveals the Score column');
+    await page.screenshot({ path: SHOTS + '/providers-score.png' });
+
+    // unified spot-check: DeepSeek V4 Flash — expected from the stats-35 mirror
+    const benchRows = [...(benchDoc.unified_closed || []), ...(benchDoc.unified_open || [])];
+    const benchRow = benchRows.find(r => r.name === 'DeepSeek V4 Flash');
+    const expUnified = fmtScore(scoreForModel(benchRow));
+    await searchBox.fill('DeepSeek V4 Flash');
+    await page.waitForTimeout(400);
+    const dsRow = page.locator('.pm-table tbody tr', { hasText: 'DeepSeek V4 Flash' }).first();
+    const dsScore = (await dsRow.locator('.score-cell .score-val').innerText()).trim();
+    if (dsScore === expUnified) ok(`unified score joins through the staged matcher (${dsScore} = leaderboard score)`);
+    else fail(`unified score: got "${dsScore}", expected "${expUnified}" (stats-35 mirror)`);
+
+    // benchmark source: same row, raw SimpleBench cell — its own scale
+    const selects = page.locator('.pm-controls select');
+    const nSel = await selects.count();
+    let scoreSel = null;
+    for (let i = 0; i < nSel; i++) {
+      const opts = await selects.nth(i).locator('option').allInnerTexts();
+      if (opts.some(x => x.includes('Unified'))) { scoreSel = selects.nth(i); break; }
+    }
+    if (!scoreSel) { fail('score source select not found in .pm-controls'); }
+    else {
+      await scoreSel.selectOption({ label: 'SimpleB' });
+      await page.waitForTimeout(300);
+      const expSimple = fmtScore(benchRow['SimpleBench.com']);
+      const dsSimple = (await dsRow.locator('.score-cell .score-val').innerText()).trim();
+      if (dsSimple === expSimple) ok(`benchmark source renders the raw cell (${dsSimple} on SimpleBench's own scale)`);
+      else fail(`benchmark score: got "${dsSimple}", expected "${expSimple}"`);
+    }
+
+    // honest dash: a catalog row the staged matcher can NOT join → '—'
+    const scBuild = buildMatrix(catalog.providers, DEFAULT_COLUMNS);
+    const scIndex = buildCatalogIndex(benchRows, modelsMeta);
+    const stray = scBuild.rows.find(r => !isBatchRow(r) && !matchOne(r.key, scIndex) && r.name);
+    if (stray) {
+      await searchBox.fill(stray.name);
+      await page.waitForTimeout(400);
+      const strayRow = page.locator('.pm-table tbody tr', { hasText: stray.name }).first();
+      const strayCell = (await strayRow.locator('.score-cell').innerText()).trim();
+      if (strayCell === '—') ok(`off-board model stays honest ("${stray.name}" renders a dash)`);
+      else fail(`off-board model "${stray.name}" shows "${strayCell}", expected —`);
+    } else ok('no off-board rows among the default columns (snapshot fully joined)');
+
+    // header-click sort: first click = descending, top row carries the max
+    await searchBox.fill('');
+    await page.waitForTimeout(400);
+    await page.click('.pm-table thead th.score-col');
+    await page.waitForTimeout(300);
+    const scCells = await page.locator('.pm-table tbody tr .score-cell').allInnerTexts();
+    const nums = scCells.map(s => parseFloat(s.trim())).filter(v => !Number.isNaN(v));
+    const top = parseFloat((await page.locator('.pm-table tbody tr').first().locator('.score-cell').innerText()).trim());
+    if (nums.length && top === Math.max(...nums))
+      ok(`score header sorts descending (top cell ${top} is the page max)`);
+    else fail(`score sort: top=${top}, page max=${nums.length ? Math.max(...nums) : 'n/a'}`);
+
+    // deep link: ?score=1&src=<bench> restores the column + source on a load
+    await page.goto('about:blank');
+    await page.goto(BASE + '#/providers?view=compare&score=1&src=SimpleBench.com', { waitUntil: 'networkidle' });
+    await page.waitForSelector('.pm-table thead th.score-col', { timeout: 10000 });
+    let dlSel = null;
+    const dlSelects = page.locator('.pm-controls select');
+    const dlN = await dlSelects.count();
+    for (let i = 0; i < dlN; i++) {
+      const opts = await dlSelects.nth(i).locator('option').allInnerTexts();
+      if (opts.some(x => x.includes('Unified'))) { dlSel = dlSelects.nth(i); break; }
+    }
+    const dlVal = dlSel ? await dlSel.inputValue() : null;
+    if (dlVal === 'SimpleBench.com') ok('deep link ?score=1&src=SimpleBench.com restores the source');
+    else fail(`deep link source: got "${dlVal}"`);
+
+    // toggle off — column gone, URL param cleaned
+    await page.locator('.pm-controls label.switch', { hasText: 'score' }).first().click();
+    await page.waitForTimeout(400);
+    const goneTh = await page.locator('.pm-table thead th.score-col').count();
+    const urlScore = await page.evaluate(() => new URLSearchParams(location.hash.split('?')[1] || '').get('score'));
+    if (goneTh === 0 && urlScore === null) ok('toggle off hides the column and cleans the URL');
+    else fail(`toggle off: th=${goneTh}, url score param=${urlScore}`);
 
     // ── 6. Console cleanliness ──────────────────────────────────────
     const real = consoleErrors.filter(e => !/favicon|Download the Vue Devtools/i.test(e));

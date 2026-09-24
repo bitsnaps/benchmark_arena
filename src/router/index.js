@@ -13,6 +13,8 @@
 //                         client-side (stats-36, re-homed as tab 3 in
 //                         stats-37; localStorage overlay — Home untouched)
 //   /compare              Side-by-side comparison (?models=slug,slug)
+//   /methodology          How the site works + how to read the data
+//                         (static content, stats-45; navbar last item)
 //   /leaderboard/...      Legacy redirects → /?tier=...
 
 import { createRouter, createWebHashHistory } from 'vue-router';
@@ -60,6 +62,13 @@ const routes = [
     path: '/compare',
     name: 'compare',
     component: () => import('../views/CompareView.vue'),
+  },
+  {
+    // stats-45: the plain-language contract — pipeline, Score math, how to
+    // read every column. Static content, lazy-loaded like the other views.
+    path: '/methodology',
+    name: 'methodology',
+    component: () => import('../views/MethodologyView.vue'),
   },
   { path: '/:pathMatch(.*)*', redirect: { name: 'home' } },
 ];

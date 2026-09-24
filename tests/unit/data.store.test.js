@@ -718,7 +718,15 @@ describe('availability ("available at" cross-seller layer)', () => {
     // MiMo-V2-Flash is absent from the OpenRouter catalog (no or_id) — the
     // name route may only attach exact normalized id matches it truly has
     const row = rowOf('MiMo-V2-Flash');
-    const a = d.availableAtFor(row);
+    // stats-43: when bench cells vanish upstream but a gateway still prices
+    // the model, the merge keeps the curated record as a no_bench_coverage
+    // registry row (no unified row). The Novita pin must still verify there —
+    // availableAtFor resolves meta by name, so a {name} stub anchors it.
+    const anchor = row ?? { name: 'MiMo-V2-Flash' };
+    if (!row) {
+      expect(d.metaFor(anchor)?.no_bench_coverage).toBe(true);
+    }
+    const a = d.availableAtFor(anchor);
     expect(Array.isArray(a)).toBe(true);
     // verified absent from OpenRouter → never an OpenRouter entry
     for (const e of a) expect(e.p).not.toBe('openrouter');

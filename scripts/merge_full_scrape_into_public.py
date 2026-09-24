@@ -6,18 +6,83 @@ complete new document — fresh benchmark cells, unified tables, timestamp —
 so the fresh download document is the BASE. The curated layers are then
 reconciled:
   models_meta.available_at   restored on shared keys (hand-baked, db3ea19)
-  public-only meta records   DROPPED — their benchmark cells vanished from
-                             every source, so no row renders and the leak
-                             contract (flagged meta <=> unified rows) would
-                             fail; the dropped values are printed so the
-                             worklog archives them (nothing silently lost)
+  public-only meta records   RETIRED — stats-43 oracle (Ibrahim, 2026-09-24):
+                             "does anyone still sell it at a price?" beats
+                             "did OpenRouter drop it?". OR keeps legacy
+                             snapshots indefinitely (GPT-4o-Mini-2024-07-18
+                             is still listed first-party + OR + Azure while
+                             bench coverage moved on), and identity-only
+                             models can live entirely off-OR (MiMo-V2-Flash
+                             on Novita). So: a record whose cells vanished
+                             from every fresh source is archived ONLY if no
+                             gateway in the fresh providers.json still lists
+                             it at a price (exact normKey join, no fuzzy
+                             matching). Kept records are flagged
+                             no_bench_coverage=true — meta-only registry
+                             rows (no unified row => never render in the
+                             leaderboard); they preserve curated pins
+                             (available_at, created, hf id) so a future
+                             re-adoption continues history instead of
+                             forking a fresh record. Drops are printed so
+                             the worklog archives them (nothing silently
+                             lost).
 Result written to BOTH copies so the deployed artifact and future
 --meta-only bases agree.
 """
 import json
+import re
 
 PUB = "/home/z/my-project/benchmark_arena/public/benchmark_results.json"
 DL = "/home/z/my-project/download/benchmark_results.json"
+PROV = "/home/z/my-project/benchmark_arena/public/providers.json"
+
+
+def _norm_key(raw):
+    """Twin of src/lib/pivot.js normKey() / bench_scraper._prov_norm_key():
+    lowercase -> drop the org prefix (last '/' segment) -> strip every
+    non-alphanumeric char. Exact-match join discipline, never fuzzy."""
+    if not raw:
+        return None
+    s = str(raw).lower().strip()
+    i = s.rfind("/")
+    if i != -1:
+        s = s[i + 1:]
+    s = re.sub(r"[^a-z0-9]", "", s)
+    return s or None
+
+
+def _priced_listing_index():
+    """normKey -> human-readable evidence, for every fresh providers.json
+    listing that carries a numeric price (in and/or out). $0 counts (:free
+    twins are real purchase options); null-priced catalog stubs (NIM,
+    OpenCode Zen bare rows) do not. Free twins also index their base id —
+    the unsuffixed listing the join discipline prefers."""
+    prov = json.load(open(PROV))
+    idx = {}
+    for p in prov.get("providers") or []:
+        seller = p.get("name") or p.get("slug") or "?"
+        for m in p.get("models") or []:
+            inn, out = m.get("in"), m.get("out")
+            if not (isinstance(inn, (int, float)) or isinstance(out, (int, float))):
+                continue
+            srcs = [m.get("id")]
+            if m.get("free") and m.get("base"):
+                srcs.append(m.get("base"))
+            for src in srcs:
+                k = _norm_key(src)
+                if k and k not in idx:
+                    idx[k] = f"{m.get('id')} @ {seller} (in={inn} out={out})"
+    return idx
+
+
+def _listed_evidence(rec, meta_key, idx):
+    """Evidence string if this record is priced somewhere, else None.
+    Join ladder (both exact): or_id normKey first (the canonical OpenRouter
+    id), then the display-name normKey (identity-only rows)."""
+    for cand in (_norm_key(rec.get("or_id")), _norm_key(meta_key)):
+        if cand and cand in idx:
+            return f"{cand} -> {idx[cand]}"
+    return None
 
 
 def main():
@@ -59,11 +124,23 @@ def main():
         if old:
             md[dk]["available_at"] = old
             restored += 1
+    priced_idx = _priced_listing_index() if pub_only else {}
+    n_kept = 0
     for k in pub_only:
         rec = mp[k]
-        print(f"  DROP {k}: cells gone from every fresh source — archiving:")
-        print(f"    or_id={rec.get('or_id')} pricing={rec.get('pricing_usd_per_1m')} "
-              f"available_at={json.dumps(rec.get('available_at'))}")
+        evidence = _listed_evidence(rec, k, priced_idx)
+        if evidence:
+            rec["no_bench_coverage"] = True
+            md[k] = rec
+            n_kept += 1
+            print(f"  KEEP {k}: cells gone from every fresh source, but still "
+                  f"priced somewhere — kept as no_bench_coverage registry row:")
+            print(f"    {evidence}")
+        else:
+            print(f"  DROP {k}: cells gone from every fresh source and no priced "
+                  f"listing anywhere — archiving:")
+            print(f"    or_id={rec.get('or_id')} pricing={rec.get('pricing_usd_per_1m')} "
+                  f"available_at={json.dumps(rec.get('available_at'))}")
     dl["models_meta"] = md
 
     for path, obj in ((PUB, dl), (DL, dl)):
@@ -76,7 +153,8 @@ def main():
     orp = sum(1 for v in md.values() if (v.get("pricing_usd_per_1m") or {}).get("input") is not None)
     ttft = sum(1 for v in md.values() if v.get("aa_ttft_seconds") is not None)
     print(f"available_at restored on shared keys: {restored} (total records with sellers: {avail})")
-    print(f"AA-priced: {aa} | OR-priced: {orp} | AA ttft stored: {ttft} | meta total: {len(md)}")
+    print(f"AA-priced: {aa} | OR-priced: {orp} | AA ttft stored: {ttft} | "
+          f"meta total: {len(md)} (kept no-coverage registry rows: {n_kept})")
     print(f"timestamp: {dl.get('timestamp')} (was {pub.get('timestamp')})")
 
 

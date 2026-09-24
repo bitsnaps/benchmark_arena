@@ -172,7 +172,14 @@ def main(path):
         c = m.get("created")
         if c and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", c):
             problems.append(f"contract: '{n}' created={c!r} is not ISO yyyy-mm-dd")
+    n_registry = 0
     for n in flagged - row_names:
+        # stats-43: no_bench_coverage records are intentional registry rows —
+        # cells retired upstream but the model is still priced somewhere, so
+        # the merge kept the curated record (meta-only, renders nowhere).
+        if (meta.get(n) or {}).get("no_bench_coverage"):
+            n_registry += 1
+            continue
         problems.append(f"contract: flagged model '{n}' missing from unified rows")
     for r in rows:
         cl = r.get("cl")
@@ -202,7 +209,8 @@ def main(path):
             problems.append(f"red line: '{n}' must stay visible (distinct product line)")
 
     print(f"leak_detector: {len(rows)} rows, {len(flagged)} flagged older, "
-          f"{len(visible)} visible, {len(meta)} meta entries")
+          f"{len(visible)} visible, {len(meta)} meta entries"
+          + (f", {n_registry} no-coverage registry rows" if n_registry else ""))
     if problems:
         for p in problems:
             print("  " + p)

@@ -6,9 +6,11 @@
 import { describe, it, expect } from 'vitest';
 import {
   SLIDER_EXP,
+  SLIDER_SCALE_CAP,
   capFromSlider,
   passesPricing,
   priceUniverseBlend,
+  universeScale,
   usePriceFilter,
 } from '../../src/lib/priceFilter.js';
 
@@ -36,6 +38,27 @@ describe('capFromSlider (slider position → $/1M cap)', () => {
   it('clamps the universe scale to ≥ $1 so pre-load states stay sane', () => {
     expect(capFromSlider(50, 0.4)).toBe(0.13); // scale clamps 0.4 → 1, then cents-rounds
     expect(capFromSlider(50, undefined)).toBe(0.13);
+  });
+});
+
+describe('universeScale + SLIDER_SCALE_CAP (stats-44 robust scale)', () => {
+  it('caps the scale so one outlier listing cannot flatten the track', () => {
+    // the live catalog's max is an Azure SKU at $4,828/1M vs p99 ≈ $37 —
+    // uncapped, the whole sub-$40 working range sat in the first ~1% of track
+    expect(SLIDER_SCALE_CAP).toBe(50);
+    expect(universeScale(4828)).toBe(50);
+    expect(capFromSlider(50, 4828)).toBe(6.25); // 50 * (50/100)^3
+  });
+
+  it('is a ceiling only — small universes keep their own max', () => {
+    expect(universeScale(8)).toBe(8);
+    expect(capFromSlider(50, 8)).toBe(1); // stats-23 behavior unchanged
+  });
+
+  it('keeps the ≥ $1 floor for pre-load states', () => {
+    expect(universeScale(undefined)).toBe(1);
+    expect(universeScale(0)).toBe(1);
+    expect(universeScale(0.4)).toBe(1);
   });
 });
 

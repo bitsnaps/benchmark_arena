@@ -19,8 +19,14 @@ const { freeOnly, sliderVal, maxPriceLabel } = usePriceFilter();
   <span class="cell-sub" style="margin-left:.4rem">max price</span>
   <b-tooltip label="Cap the blended API price (3:1 in:out, USD per 1M tokens). Free listings count as $0; unpriced listings hide while the cap is on."
     type="is-dark" multilined :delay="100">
+    <!-- stats-44: the slider needs a DEFINITE width. Buefy 3 renders
+         .tooltip-trigger as a plain block inside the flex .b-tooltip, and
+         the slider has no intrinsic width — so with only max-width set the
+         flex chain resolved to 0px and the track painted invisible (the
+         labels around it still showed). An explicit width gives the flex
+         item a real basis; the track fills it. -->
     <b-slider v-model="sliderVal" :min="0" :max="100" :step="1" size="is-small"
-      :tooltip="false" aria-label="maximum blended price per 1M tokens" style="max-width:240px" />
+      :tooltip="false" aria-label="maximum blended price per 1M tokens" style="width:240px" />
   </b-tooltip>
   <span class="cell-sub pm-price-label">{{ maxPriceLabel }}</span>
 </template>

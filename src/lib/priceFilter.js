@@ -27,13 +27,28 @@ import { fmtUsd } from './format.js';
 // Compare tab shipped with in stats-19).
 export const SLIDER_EXP = 3;
 
+// stats-44: the slider's $ scale tops out at SLIDER_SCALE_CAP. The raw
+// catalog max is one absurd listing away from useless: one Azure SKU lists
+// $4,828/1M against a catalog p99 of ~$37, which squashed the whole
+// sub-$40 working range into the first ~1% of track (Ibrahim: "feels like
+// it has a range of 0 values"). $50 ≈ the catalog's p99 — everything
+// pricier still shows via the far end of the track and at the top position
+// ("any price" = no cap).
+export const SLIDER_SCALE_CAP = 50;
+
+// Pure: the effective $ top of the slider scale — the universe max clamped
+// into [1, SLIDER_SCALE_CAP]. The floor keeps pre-load states sane; the cap
+// keeps one outlier listing from flattening the working range.
+export function universeScale(maxBlend) {
+  return Math.max(1, Math.min(Number(maxBlend) || 1, SLIDER_SCALE_CAP));
+}
+
 // Pure: slider position (0..100) → absolute $/1M blended cap.
 // 100 means "any price" → null. maxBlend (the largest blend in the active
-// universe) only shapes the scale; it is clamped to ≥ 1 so the mapping
-// stays sane before data loads.
+// universe) only shapes the scale — clamped by universeScale() above.
 export function capFromSlider(v, maxBlend, exp = SLIDER_EXP) {
   if (v >= 100) return null;
-  const top = Math.max(1, Number(maxBlend) || 1);
+  const top = universeScale(maxBlend);
   return Math.round(top * Math.pow(v / 100, exp) * 100) / 100;
 }
 

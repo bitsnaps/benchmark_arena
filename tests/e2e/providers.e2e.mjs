@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS, cellBlend, latencyTier, normKey } from '../../src/lib/pivot.js';
-import { capFromSlider } from '../../src/lib/priceFilter.js';
+import { capFromSlider, universeScale } from '../../src/lib/priceFilter.js';
 import { isNewModel, createdIndexFromMeta } from '../../src/lib/newFlag.js';
 import { fmtUsd, fmtSec, fmtScore } from '../../src/lib/format.js';
 import { buildCatalogIndex, matchOne } from '../../src/lib/myProviders.js';
@@ -238,6 +238,17 @@ const run = async () => {
     await page.waitForSelector('.pv-controls', { timeout: 10000 });
     ok('By provider carries the pricing-filter controls (free only + max price)');
 
+    // stats-44 visibility regression: the slider track must actually PAINT.
+    // Buefy 3 + max-width-only styling resolved the flex chain to 0px — the
+    // labels showed but the track was invisible (Ibrahim's report). The
+    // keyboard-driven cap specs below passed all along because focus() does
+    // not require visibility — so the paint is asserted here explicitly.
+    const trackBox = await page.locator('.pv-controls .b-slider .b-slider-track').first().boundingBox();
+    if (trackBox && trackBox.width >= 200 && trackBox.height > 0)
+      ok(`max-price slider track is visible (${Math.round(trackBox.width)}x${Math.round(trackBox.height)}px)`);
+    else
+      fail(`max-price slider track not visible: ${JSON.stringify(trackBox)}`);
+
     await page.selectOption('.prov-size select', '0'); // All — full tables for honest counting
     await page.waitForTimeout(300);
 
@@ -274,11 +285,13 @@ const run = async () => {
     else fail(`free toggle off: expected ${catalog.providers.length} cards, got ${restoredCards}`);
 
     // price cap: slider at mid-track → cubic cap over the catalog scale;
-    // unpriced rows hide (OpenCode Zen non-free), pricier sellers drop out
+    // unpriced rows hide (OpenCode Zen non-free), pricier sellers drop out.
+    // stats-44: the scale is clamped by universeScale (SLIDER_SCALE_CAP 50) —
+    // one outlier listing ($4,828/1M) must not own the track.
     const blends = catalog.providers
       .flatMap(p => p.models.map(m => blendOf(p, m)))
       .filter(b => b != null);
-    const universeMax = Math.max(1, Math.ceil(Math.max(...blends)));
+    const universeMax = universeScale(Math.max(1, Math.ceil(Math.max(...blends))));
     const cap = capFromSlider(50, universeMax);
     const capSets = catalog.providers
       .map(p => ({ p, rows: p.models.filter(m => { const b = blendOf(p, m); return b != null && b <= cap; }) }))

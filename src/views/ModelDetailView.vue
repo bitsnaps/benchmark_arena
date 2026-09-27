@@ -13,7 +13,7 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, archiveLinkFor } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 const model = computed(() => modelSlugIndex.value.get(route.params.slug) || null);
@@ -248,6 +248,9 @@ function addToCompare() {
         <div class="name">
           <span class="rank" style="display:inline-grid;margin-right:.45rem">—</span>
           {{ SHORT[b] || b }}
+          <!-- stats-49: verified archived-page link where the source still
+               publishes the model on its own page -->
+          <a v-if="archiveLinkFor(model, b)" class="arch-link" :href="archiveLinkFor(model, b)" target="_blank" rel="noopener noreferrer">archived page<i class="fas fa-arrow-up-right-from-square"></i></a>
         </div>
         <div class="track"></div>
         <div class="num cell-sub">—</div>

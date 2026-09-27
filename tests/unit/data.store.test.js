@@ -752,3 +752,40 @@ describe('availability ("available at" cross-seller layer)', () => {
     expect(d.filterPriceFor({ name: 'definitely-not-a-model' })).toBeNull();
   });
 });
+
+describe('stats-49 archived-page links', () => {
+  // Mechanism coverage via snapshot-wide invariants (no pinned names — a
+  // churn day cannot green-wash the suite). The scraper only ships
+  // archive_links after HTTP verification; the store must surface them
+  // AA-scoped, null-safe, and never for rows that HAVE an AA score.
+  const linkedGapRows = () => d.pivotAll.value
+    .filter(r => r['Artificial Analysis'] == null && d.metaFor(r)?.archive_links?.aa);
+
+  it('every verified AA gap row resolves to its archived-page URL', () => {
+    const rows = linkedGapRows();
+    for (const row of rows) {
+      const url = d.metaFor(row).archive_links.aa;
+      expect(url).toMatch(/^https:\/\/artificialanalysis\.ai\/models\/[a-z0-9-]+$/);
+      expect(d.archiveLinkFor(row, 'Artificial Analysis')).toBe(url);
+    }
+  });
+
+  it('archiveLinkFor is scoped to the AA column only', () => {
+    const rows = linkedGapRows();
+    for (const row of rows) {
+      for (const b of d.benchmarks.value) {
+        if (b !== 'Artificial Analysis') expect(d.archiveLinkFor(row, b)).toBeNull();
+      }
+    }
+  });
+
+  it('rows with an AA score never carry an archived link', () => {
+    const scored = d.pivotAll.value.filter(r => r['Artificial Analysis'] != null);
+    for (const row of scored) expect(d.archiveLinkFor(row, 'Artificial Analysis')).toBeNull();
+  });
+
+  it('archiveLinkFor is null-safe for unknown rows', () => {
+    expect(d.archiveLinkFor({ name: 'definitely-not-a-model' }, 'Artificial Analysis')).toBeNull();
+    expect(d.archiveLinkFor(null, 'Artificial Analysis')).toBeNull();
+  });
+});

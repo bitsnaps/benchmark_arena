@@ -29,7 +29,7 @@ const perPage = computed(() => (pageSize.value === 0
 // filter/tab changes reshape the list — land back on the first page
 watch(() => props.rows.length, () => { page.value = 1; });
 
-const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor, archiveLinkFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
@@ -43,6 +43,10 @@ const olderTitle = (row) =>
   supersededBy(row)
     ? `superseded by ${supersededBy(row)} — hidden by default, excluded from the ranking`
     : 'stale generation (9+ months old, no successor in the data) — hidden by default, excluded from the ranking';
+
+// stats-49: tooltip for the archived-page link rendered in an empty AA cell.
+// The URL is HTTP-verified at scrape time (2xx + page marker) before it ships.
+const archTip = 'No current AA leaderboard entry — the model was archived by the source; its own page still carries score, pricing and latency';
 
 // ★ footnote: source sites list this model under a different (e.g. HF repo) name
 const aliasNote = (row) => metaFor(row)?.alias_note || null;
@@ -288,7 +292,14 @@ const limitedTitle = (row) =>
         <b-tooltip :label="benchThLabel(b)" type="is-dark" multilined :delay="100" append-to-body>{{ SHORT[b] || b }}</b-tooltip>
       </template>
       <template #default="props">
-        <span :style="{ color: scoreColor(props.row[b]), fontWeight: 500 }">{{ fmtScore(props.row[b]) }}</span>
+        <!-- stats-49: an empty AA cell can carry a small link to the model's
+             own (archived) page on the source — verified URL only; any other
+             gap keeps the plain dash -->
+        <span v-if="props.row[b] !== null && props.row[b] !== undefined" :style="{ color: scoreColor(props.row[b]), fontWeight: 500 }">{{ fmtScore(props.row[b]) }}</span>
+        <b-tooltip v-else-if="archiveLinkFor(props.row, b)" :label="archTip" type="is-dark" multilined :delay="100" append-to-body>
+          <a class="arch-link" :href="archiveLinkFor(props.row, b)" target="_blank" rel="noopener noreferrer" :aria-label="archTip" @click.stop>archived<i class="fas fa-arrow-up-right-from-square"></i></a>
+        </b-tooltip>
+        <span v-else class="cell-sub">—</span>
       </template>
     </b-table-column>
 

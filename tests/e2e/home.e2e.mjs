@@ -133,6 +133,30 @@ const ok = (msg) => console.log('  ok:', msg);
     if (!(await page.locator('.b-table .table tbody tr.is-older-row .older-chip').count()))
       fail('inline older rows should carry an "older" chip');
     else ok('inline older rows carry the "older" chip');
+
+    // ── stats-49: archived-page links in empty AA cells ──
+    // The UI must render EXACTLY the verified set the snapshot carries —
+    // every linked cell needs a null AA score + a verified archive_links.aa,
+    // and no link may appear anywhere else. Fully data-derived (no hard-
+    // coded model names), so a data refresh cannot silently invalidate it.
+    const archOf = (r) => (r['Artificial Analysis'] == null && META[r.name]?.archive_links?.aa) || null;
+    const expectedArchOn = new Set(ALLROWS.filter(archOf).map(r => archOf(r)));
+    const archLoc = page.locator('.b-table .table tbody tr .arch-link');
+    const gotOn = await archLoc.count();
+    if (gotOn !== expectedArchOn.size)
+      fail(`archived links (Older ON): expected ${expectedArchOn.size}, got ${gotOn}`);
+    else ok(`archived links render exactly as verified in the snapshot (${gotOn} empty AA cells linked)`);
+    const gotHrefs = await archLoc.evaluateAll(els => els.map(e => e.getAttribute('href')));
+    for (const h of expectedArchOn) if (!gotHrefs.includes(h)) fail(`missing archived link: ${h}`);
+    for (const h of gotHrefs) if (!expectedArchOn.has(h)) fail(`unexpected archived link: ${h}`);
+    if (gotOn && new Set(gotHrefs).size === gotOn
+        && gotHrefs.every(h => /^https:\/\/artificialanalysis\.ai\/models\/[a-z0-9-]+$/.test(h || '')))
+      ok('archived link hrefs match the snapshot set exactly (well-formed AA model pages)');
+    const badTarget = await archLoc.evaluateAll(els =>
+      els.filter(e => e.getAttribute('target') !== '_blank' || e.getAttribute('rel') !== 'noopener noreferrer').length);
+    if (badTarget) fail(`${badTarget} archived links missing target=_blank / rel=noopener noreferrer`);
+    else ok('archived links open safely in a new tab (target=_blank, rel=noopener noreferrer)');
+
     // merged table = every model exactly once; top of the table unchanged
     const totalRows = await page.locator('.b-table .table tbody tr').count();
     if (totalRows !== ALLROWS.length)
@@ -145,6 +169,15 @@ const ok = (msg) => console.log('  ok:', msg);
     // hide again before navigating on
     await page.locator('label.switch:has-text("Older versions")').click();
     await page.waitForTimeout(300);
+    // stats-49: with Older OFF only current rows remain — links shrink to
+    // exactly the current-row subset of the verified set
+    {
+      const expectedArchOff = ALLROWS.filter(r => !isOld(r) && archOf(r)).length;
+      const gotOff = await page.locator('.b-table .table tbody tr .arch-link').count();
+      if (gotOff !== expectedArchOff)
+        fail(`archived links (Older OFF): expected ${expectedArchOff}, got ${gotOff}`);
+      else ok(`archived links respect the Older-versions filter (${gotOff} current rows linked)`);
+    }
     // superseded model page shows the banner + successor link
     await page.goto(BASE + '#/model/' + slugify(supInTable.name), { waitUntil: 'networkidle' });
     await page.waitForSelector('.model-head', { timeout: 10000 });
@@ -156,6 +189,17 @@ const ok = (msg) => console.log('  ok:', msg);
       const succ = supOf(supInTable.name);
       if (!page.url().includes('/model/' + slugify(succ))) fail(`successor link should open ${slugify(succ)}, got ${page.url()}`);
       else ok(`banner link opens successor "${succ}"`);
+    }
+    // stats-49: model page — the missing-bars block carries the archived-page
+    // link iff the snapshot has a verified URL for this model's AA gap
+    {
+      const supRow = ALLROWS.find(r => r.name === supInTable.name);
+      const expDetail = (supRow && archOf(supRow)) ? 1 : 0;
+      const gotDetail = await page.locator('.hbar.missing .arch-link').count();
+      if (gotDetail !== expDetail)
+        fail(`model-page archived link: expected ${expDetail}, got ${gotDetail}`);
+      else if (expDetail) ok(`model page links the archived AA page (${archOf(supRow)})`);
+      else ok('model page shows no archived link (none verified for this model)');
     }
     // override pair: gemini 3 pro page banners and links to Gemini 3.1 Pro
     if (hasOverride) {

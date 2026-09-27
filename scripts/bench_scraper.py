@@ -958,6 +958,113 @@ def enrich_modalities(models_meta):
           f"unknown={unknown} (meta={len(models_meta)})")
 
 
+# ── stats-49: archived-page links for empty AA cells ─────────────────────
+# Ibrahim (2026-09-27): sources archive models — dropped from the public
+# leaderboard table, but the model's OWN page stays up with score, price and
+# latency (e.g. GPT-5.6 Luna -> artificialanalysis.ai/models/gpt-5-6-luna).
+# For every row whose AA cell is empty we verify that page over HTTP and
+# ship the URL as models_meta.archive_links.aa; the UI renders a small
+# "archived" link in the empty cell. Discipline:
+#   - never guess: a URL ships only after verification (2xx + content marker)
+#   - derivation-only slugs that 404 ship nothing (no alternate-ladder
+#     guessing — a near-miss slug is a DIFFERENT model page)
+#   - 7-day positive AND negative cache (same TTL discipline as modalities)
+#   - links are presentational metadata only: no score, CL or value math
+#     ever reads them; cells stay "—" (dashes over guesses, Methodology §5)
+
+AA_ARCHIVE_CACHE = os.path.join(TMP_DIR, "aa_archive_links.json")
+AA_ARCHIVE_TTL_S = 7 * 86400
+_AA_ARCHIVE_MARKER = "intelligence index"  # model-page vocabulary, lowercase
+
+
+def _load_aa_archive_cache():
+    if not os.path.exists(AA_ARCHIVE_CACHE):
+        return {}
+    try:
+        with open(AA_ARCHIVE_CACHE) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+def _save_aa_archive_cache(cache):
+    try:
+        with open(AA_ARCHIVE_CACHE, "w") as f:
+            json.dump(cache, f, ensure_ascii=False)
+    except OSError as e:
+        print(f"    [WARN] AA archive cache write failed: {e}")
+
+
+def _aa_slug_candidate(name):
+    """Display name -> AA URL slug candidate (lowercase, dots -> dash,
+    non-alnum runs -> dash). Candidate only — never shipped unverified.
+    e.g. 'GPT-5.6 Luna' -> 'gpt-5-6-luna'."""
+    s = (name or "").lower().strip().replace(".", "-")
+    s = re.sub(r"[^a-z0-9]+", "-", s)
+    return re.sub(r"-{2,}", "-", s).strip("-")
+
+
+def aa_archive_page_verified(slug, timeout=25):
+    """True iff /models/<slug> answers 2xx AND carries the Intelligence
+    Index marker in the first 128KB (guards against future soft-redirects
+    to a generic page). Ranged GET keeps the probe cheap. Fail-closed:
+    any HTTP error / marker miss / network error -> False."""
+    url = f"https://artificialanalysis.ai/models/{slug}"
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                      "(benchmark-arena archive-link verification)",
+        "Range": "bytes=0-131071",
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            body = r.read(140000).decode("utf-8", errors="ignore")
+            return _AA_ARCHIVE_MARKER in body.lower()
+    except (urllib.error.HTTPError, urllib.error.URLError, OSError, ValueError):
+        return False
+
+
+def enrich_archive_links(models_meta, rows):
+    """stats-49: attach models_meta[name].archive_links = {"aa": url} for
+    every leaderboard row whose 'Artificial Analysis' cell is empty AND
+    whose derived AA model page verifies. Cached 7 days both ways; prints
+    a per-run census for the report. Non-fatal by contract (callers wrap)."""
+    if not models_meta or not rows:
+        return
+    targets = [r.get("name") for r in rows
+               if r.get("name") and r.get("Artificial Analysis") is None
+               and r.get("name") in models_meta]
+    if not targets:
+        return
+    cache = _load_aa_archive_cache()
+    now = time.time()
+    cache_dirty = False
+    n_new = n_cached = 0
+    for name in targets:
+        slug = _aa_slug_candidate(name)
+        if not slug:
+            continue
+        url = f"https://artificialanalysis.ai/models/{slug}"
+        hit = cache.get(slug)
+        if hit and (now - hit.get("at", 0)) < AA_ARCHIVE_TTL_S:
+            ok = bool(hit.get("ok"))
+            n_cached += 1
+        else:
+            ok = aa_archive_page_verified(slug)
+            cache[slug] = {"ok": ok, "at": now}
+            cache_dirty = True
+            n_new += 1
+            # be polite to the source: small gap between fresh probes
+            time.sleep(0.4)
+        if ok:
+            models_meta[name]["archive_links"] = {"aa": url}
+    if cache_dirty:
+        _save_aa_archive_cache(cache)
+    linked = sum(1 for name in targets if models_meta[name].get("archive_links"))
+    print(f"  [AA archive links] {linked}/{len(targets)} AA-gap rows linked "
+          f"(fresh probes {n_new}, cache hits {n_cached}; unverified slugs "
+          f"ship no link)")
+
+
 def scrape_benchlm():
     """
     BenchLM.ai leaderboard (virtual table, 25 rows loaded initially).
@@ -5324,6 +5431,14 @@ def main():
             print(f"  [Casing] canonicalized {n_casing} all-lowercase display name(s) (vendor-aligned)")
     except Exception as e:
         print(f"  [Casing] canonicalization failed (non-fatal): {e}")
+
+    # stats-49: archived-page links for empty AA cells — after the casing
+    # canon so names/keys are final; runs on the same rows that ship.
+    if models_meta:
+        try:
+            enrich_archive_links(models_meta, closed_table + open_table)
+        except Exception as e:
+            print(f"  [AA archive links] enrichment failed (non-fatal): {e}")
 
     # Format and display
     report = format_results(all_results, closed_table, open_table, all_benchmarks, avg_benchmarks)

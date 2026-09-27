@@ -318,6 +318,12 @@ const isSuperseded = (row) => !!supersededBy(row);
 // Both kinds hide behind the Older-versions toggle; neither is ever deleted.
 const isOlder = (row) => isSuperseded(row) || !!metaFor(row)?.stale;
 const releaseDateOf = (row) => metaFor(row)?.created || null;
+// stats-49: archived-page link for empty benchmark cells. Sources archive
+// models (dropped from their leaderboard table) but keep the model's OWN
+// page up with score/price/latency. The scraper attaches a URL only after
+// HTTP verification — no verified page, no link. v1: AA cells only.
+const archiveLinkFor = (row, bench) =>
+  bench === 'Artificial Analysis' ? metaFor(row)?.archive_links?.aa || null : null;
 const metaCoverage = computed(() => {
   const total = pivotAll.value.length;
   const withMeta = pivotAll.value.filter(r => !!modelsMeta.value[r.name]).length;
@@ -427,6 +433,7 @@ export function useData() {
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
     modelSlugIndex, benchSlugIndex, benchRankIndex,
     modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, isOlder, releaseDateOf,
+    archiveLinkFor,
     priceFor, valueFor, hfIdFor, hfUrlFor,
     availableAtFor, hasFreeListingFor, sellerCountFor, filterPriceFor,
   };

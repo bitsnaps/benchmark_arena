@@ -70,6 +70,7 @@ const ok = (msg) => console.log('  ok:', msg);
       'The Providers page',
       'Honesty rules',
       'Dashes over guesses',
+      'Gaps may link out',
       'not an official ranking',
       'Freshness & verification',
       'benchmark_results.json',

@@ -238,6 +238,16 @@ a:hover { color: #7ff3df; }
 .b-table input[type=checkbox] { accent-color: var(--teal); }
 /* sub text under model names inside cells */
 .cell-sub { color: var(--faint); font-size: .75rem; }
+/* stats-48: compact pointer to a Methodology section (replaces inline notes) */
+.meth-link {
+  color: var(--teal);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  margin-left: .3rem;
+}
+.meth-link i { font-size: .72em; margin-left: .28rem; vertical-align: .12em; opacity: .8; }
+.meth-link:hover { text-decoration: underline; }
 
 /* ── Buefy tabs (leaderboard tier switcher) ───────────────── */
 .b-tabs .tabs { margin-bottom: 1.1rem; }

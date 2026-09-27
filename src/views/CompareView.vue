@@ -399,9 +399,8 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
     <!-- Footnotes -->
     <div v-if="sel.length" class="row mt-sm" style="gap:.4rem">
       <p class="cell-sub">
-        Teal cells = best of the selection for that row (prices: cheapest wins).
-        Blended price weights input:output 3:1. Specs are the OpenRouter snapshot —
-        prices can differ across providers (NVIDIA / OpenCode sources coming later).
+        Teal = best of the selection for that row (prices: cheapest wins).
+        <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'money' } }">How prices are blended<i class="fas fa-arrow-up-right-from-square"></i></router-link>
       </p>
     </div>
   </section>

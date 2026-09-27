@@ -310,40 +310,13 @@ const aria = computed(() =>
       <span v-for="l in legend" :key="l.name" class="vm-lg"><i :style="{ background: l.color }"></i>{{ l.name }}</span>
     </div>
     <p class="cell-sub" style="text-align:center">
-      Plotted {{ built.points.length }} of {{ currentCount }} current-generation models ({{ tier }} tier):
+      Plotted {{ built.points.length }} of {{ currentCount }} current-generation {{ tier }}-tier models:
       {{ built.hidden.x }} lack a usable {{ mx.label.toLowerCase() }} and {{ built.hidden.y }} more lack a usable
       {{ my.label.toLowerCase() }} — excluded rather than fabricated; {{ olderCount }} older versions hide behind the
-      Older toggle. Dot color = vendor · gold ring = NEW (the shared New-badge window) · hollow = older version ·
-      teal halo = frontier. Price axes default to log scale because $0.10 → $300 spans three decades.
-      Numbers come from the same store the leaderboard uses — nothing is recalculated here.
+      Older toggle. Dashed teal frontier = no one beats those dots on both axes at once ·
+      gold ring = NEW · hollow = older version.
+      <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'money' } }">Where the numbers come from<i class="fas fa-arrow-up-right-from-square"></i></router-link>
     </p>
 
-    <!-- Methodology -->
-    <div class="grid-2 mt">
-      <div class="panel-lab" style="padding:1.2rem">
-        <h3 style="margin:0 0 .4rem">Reading the map</h3>
-        <p style="color:var(--muted);font-size:.92rem">
-          The default view is the budget question itself: Our Score on X (CL-weighted quality) versus the blended
-          API price on Y (3:1 input:output, USD per 1M tokens). Dots toward the top-left deliver the most quality
-          per dollar — the dashed teal frontier connects the models no other model beats on both axes at once, so
-          the best pick for any budget is always ON that line, never below it. A dot above the line means
-          someone cheaper scores equal or better; a dot right of it means someone equal or better costs less.
-          Flip the frontier pair for other questions — Score vs AA TTFT finds the fastest thinking per second
-          of latency, Score vs Age shows this month's fresh blood, Value vs Context stretches a context budget.
-        </p>
-      </div>
-      <div class="panel-lab" style="padding:1.2rem">
-        <h3 style="margin:0 0 .4rem">Where the numbers come from</h3>
-        <p style="color:var(--muted);font-size:.92rem">
-          Nothing on this page is recomputed: Score follows the leaderboard's CL-weighted formula (and the
-          Avg-set dropdown on the Leaderboard page — swap the eval mix there and this map re-renders), prices
-          reuse the Price column's source ladder (the lab's own AA list price first, the OpenRouter snapshot as
-          fallback) and Value reuses Score ÷ blended $. Honest gaps stay honest: a model missing either axis
-          value is excluded and counted below the chart, never fabricated; a rate-limited free listing is not
-          "$0 to run", so free tiers don't pretend to be free on price axes; older generations hide by default.
-          Every control mirrors into the URL — copy the address bar to share the exact view.
-        </p>
-      </div>
-    </div>
   </section>
 </template>

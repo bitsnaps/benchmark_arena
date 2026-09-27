@@ -287,19 +287,19 @@ function addToCompare() {
         </div>
       </div>
       <p class="cell-sub mt-sm" v-if="value !== null">
-        <i class="fas fa-scale-balanced"></i>&nbsp;Value lens: <b style="color:var(--teal)">{{ fmtValue(value) }}</b> score points per 1M blended tokens
-        (3:1 in:out) — sort the leaderboard by the <b>Value</b> column to compare cost efficiency.
+        <i class="fas fa-scale-balanced"></i>&nbsp;Value lens: <b style="color:var(--teal)">{{ fmtValue(value) }}</b> score points per 1M blended tokens —
+        <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'money' } }">how it's computed<i class="fas fa-arrow-up-right-from-square"></i></router-link>
       </p>
       <p class="cell-sub mt-sm" v-if="ttft != null">
         <i class="fas fa-bolt"></i>&nbsp;Median TTFT: <span :class="['legend-chip', latencyClass(ttft)]" style="font-size:1.02rem">{{ fmtSec(ttft) }}</span>
-        — median time to first token measured by Artificial Analysis
-        (fast &lt; 1.5 s · ok &lt; 3.5 s · slow at or above; the same measure tints the Compare grid).
+        — median time to first token, measured by Artificial Analysis.
+        <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'money' } }">latency tiers<i class="fas fa-arrow-up-right-from-square"></i></router-link>
       </p>
       <p class="cell-sub mt-sm">
-        {{ pricing.source === 'aa'
-          ? 'List price recorded by Artificial Analysis — the lab\u2019s own price, without a router\u2019s margin. The same model can still be cheaper first-party or via other hosts — compare sellers on the'
-          : 'Router list price for this exact row — the same model is often cheaper first-party or via other hosts. Compare sellers on the' }}
-        <router-link :to="{ name: 'providers' }">Providers page</router-link>.
+        {{ pricing.source === 'aa' ? 'Artificial Analysis list price — the lab\u2019s own, without a router\u2019s margin.' : 'Router list price for this exact row.' }}
+        The same model is often cheaper first-party or via other hosts —
+        <router-link :to="{ name: 'providers' }">compare sellers</router-link>, or see the
+        <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'money' } }">price source ladder<i class="fas fa-arrow-up-right-from-square"></i></router-link>.
       </p>
     </div>
 

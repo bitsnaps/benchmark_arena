@@ -89,6 +89,21 @@ const ok = (msg) => console.log('  ok:', msg);
     if (deepH1 === 'Methodology') ok('deep link #/methodology renders directly');
     else fail(`deep link h1 = "${deepH1}", expected "Methodology"`);
 
+    // ── 4b. Cross-page deep scroll ?s=<section> (stats-48 links) ───────
+    // unknown value first: a fresh load must stay at the top (no phantom scroll)
+    await page.goto(BASE + '#/methodology?s=nonsense', { waitUntil: 'networkidle' });
+    await page.waitForSelector('h1.section-title', { timeout: 10000 });
+    await page.waitForTimeout(400);
+    const zeroTop = await page.evaluate(() => Math.abs(window.scrollY));
+    if (zeroTop < 40) ok('unknown ?s value stays at the top of the page');
+    else fail(`unknown ?s scrolled somewhere (scrollY=${zeroTop})`);
+    await page.goto(BASE + '#/methodology?s=money', { waitUntil: 'networkidle' });
+    await page.waitForSelector('h1.section-title', { timeout: 10000 });
+    await page.waitForTimeout(900); // rAF + smooth scroll settles
+    const moneyTop = await page.locator('#money').evaluate((el) => el.getBoundingClientRect().top);
+    if (moneyTop > 30 && moneyTop < 320) ok(`?s=money deep-scrolls to the money section (top=${Math.round(moneyTop)}px, navbar-clear)`);
+    else fail(`?s=money did not scroll (top=${Math.round(moneyTop)}px)`);
+
     // ── 5. Jump chip scrolls to the honesty section ────────────────────
     await page.locator('.chip', { hasText: 'Honesty rules' }).click();
     await page.waitForTimeout(900); // smooth scroll

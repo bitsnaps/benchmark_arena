@@ -559,6 +559,28 @@ const ok = (msg) => console.log('  ok:', msg);
   await mob.screenshot({ path: SHOTS + '/model-mobile.png' });
   ok('mobile screenshots taken');
 
+  // ── stats-48: noise reduction — inline notes replaced by Methodology links ──
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
+  const bodyText = await page.locator('body').innerText();
+  const removedNotes = ['How the Score column works', 'Benchmarks in the average', 'CL = Coverage Level'];
+  const stillThere = removedNotes.filter(n => bodyText.includes(n));
+  if (stillThere.length) fail('noise notes still on home: ' + JSON.stringify(stillThere));
+  else ok('verbose score/legend notes removed from home');
+  const methLinks = page.locator('a.meth-link');
+  const nLinks = await methLinks.count();
+  if (nLinks >= 2) ok(`home has ${nLinks} compact methodology links`);
+  else fail(`expected >=2 methodology links on home, got ${nLinks}`);
+  const href = await methLinks.first().getAttribute('href');
+  if (href && href.includes('/methodology') && href.includes('s=score')) ok('first link deep-targets the Score section: ' + href);
+  else fail('methodology link does not deep-target ?s=score, got ' + href);
+  await methLinks.first().click();
+  await page.waitForURL(/methodology/, { timeout: 10000 });
+  await page.waitForTimeout(900); // smooth scroll to #score settles
+  const top = await page.evaluate(() => document.getElementById('score')?.getBoundingClientRect().top ?? -1);
+  if (top > 30 && top < 320) ok(`deep link scrolled to the Score section (top=${Math.round(top)}px, navbar-clear)`);
+  else fail(`deep link did not scroll to #score (top=${Math.round(top)}px)`);
+
   if (errors.length) fail('page errors: ' + errors.join(' | '));
   else ok('zero console/page errors');
 

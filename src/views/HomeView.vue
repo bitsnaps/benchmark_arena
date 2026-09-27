@@ -417,15 +417,9 @@ const openModel = (name) =>
     </div>
 
     <p class="cell-sub mt-sm" style="text-align:center">
-      CL = Coverage Level (core benchmarks present / {{ stats.coreBenchmarks }}).
-      Columns follow the Avg set — shown: {{ coreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.
-      <span v-if="nonCoreBenchmarks.length">Hidden (opt in via the Avg set dropdown): {{ nonCoreBenchmarks.map(b => SHORT[b] || b).join(', ') }}.</span>
-      Price = API list price per 1M tokens, in / out (OpenRouter snapshot) — <router-link :to="{ name: 'providers' }">compare sellers</router-link>.
-      Value = Score per 1M blended tokens (3:1 in:out) — sort by it for the cost-efficiency view; free tiers and unpriced rows show a dash.
-      For the visual take, open the <router-link :to="{ name: 'value' }">Value map</router-link> — quality vs price as an interactive scatter.
-      <span class="hf-chip" style="cursor:default">HF</span> = the model's Hugging Face repo (open-weight models with a verified repo).
-      <b-tooltip label="Free tier — rate limits apply, not unlimited" type="is-dark" :delay="100"><span class="free-chip" style="cursor:default">free</span></b-tooltip> = a free listing at some seller (hover for where);
-      <span class="avail-chip" style="cursor:default">N sellers</span> = other catalogs listing the model — the full per-seller view is on its model page.
+      Columns follow the Avg set — shown: {{ coreBenchmarks.map(b => SHORT[b] || b).join(', ') }}<span v-if="nonCoreBenchmarks.length">; hidden (opt in via the Avg set dropdown): {{ nonCoreBenchmarks.map(b => SHORT[b] || b).join(', ') }}</span>.
+      For the visual take, open the <router-link :to="{ name: 'value' }">Value map</router-link>.
+      <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'score' } }">How to read every measure<i class="fas fa-arrow-up-right-from-square"></i></router-link>
     </p>
 
     <ComparePanel />
@@ -449,40 +443,9 @@ const openModel = (name) =>
       </div>
     </div>
 
-    <!-- Methodology -->
-    <div class="grid-2 mt">
-      <div class="panel-lab" style="padding:1.2rem">
-        <h3 style="margin:0 0 .4rem">How the Score column works</h3>
-        <p style="color:var(--muted);font-size:.92rem">
-          Score is the average over the benchmarks in the current avg set ({{ avgLabel.toLowerCase() }}) that a
-          model actually reports, on the harmonized scale, CL-weighted: each covered cell is first re-scaled
-          against every shipped model on that benchmark (50 = median model, a 15-point
-          spread = one standard deviation), then the average is blended toward a neutral 50 baseline in proportion to the
-          model's Coverage Level (CL). Raw benchmark scores live on incomparable distributions —
-          without harmonization, a model evaluated on a few favorable (inflated) leaderboards outranks
-          frontier models tested across the board, and models covering few evals keep an unearned edge
-          (72 catalog-wide ranking inversions before this fix, 29 after).
-          Missing evals are treated as “no evidence” (neutral), never as a zero — and rows covering fewer
-          than half of the selected benchmarks carry a “limited data” badge so sparse scores announce themselves.
-          Use the “Avg set” dropdown in the toolbar to swap which benchmarks feed the Score —
-          the shipped default is unchanged for everyone who never touches it.
-        </p>
-      </div>
-      <div class="panel-lab" style="padding:1.2rem">
-        <h3 style="margin:0 0 .4rem">Benchmarks in the average</h3>
-        <div class="chips mt-sm">
-          <span class="tag-lab teal" v-for="b in coreBenchmarks" :key="b">{{ SHORT[b] || b }}</span>
-          <span class="tag-lab" v-for="b in nonCoreBenchmarks" :key="b">{{ SHORT[b] || b }}</span>
-        </div>
-        <p class="cell-sub mt-sm">Teal = counted in the global Score and shown as a table column. Grey = hidden from the table until selected in the Avg set dropdown (still on the Benchmarks page, model cards and compare panel).</p>
-      </div>
-    </div>
-
-    <div class="notice mt">
-      <i class="fas fa-circle-info"></i>
-      Scores are aggregated from public leaderboards and normalized where possible.
-      This is decision support, not an official ranking — verify the source leaderboard
-      before committing budget.
-    </div>
+    <p class="cell-sub" style="text-align:center">
+      Decision support, not an official ranking.
+      <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'honesty' } }">How this site works, honesty rules &amp; the full math<i class="fas fa-arrow-up-right-from-square"></i></router-link>
+    </p>
   </section>
 </template>

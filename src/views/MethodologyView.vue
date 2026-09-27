@@ -7,12 +7,27 @@
 // scripts/merge_full_scrape_into_public.py (merge + retirement oracle),
 // scripts/prepush.sh (gates), lib/benchScale.js + stores/data.js (Score),
 // lib/format.js (price blend), lib/pivot.js (provider join).
+import { onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 // In-page jumps: the router uses hash history (#/...), so plain anchor
 // hrefs would hijack the route. Scroll manually instead.
 function jump(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+// stats-48: cross-page deep links land here as ?s=<section id> — other
+// pages replaced their inline notes with compact "details" links pointing
+// at the matching section. Unknown/absent values just stay at the top.
+const route = useRoute();
+function jumpFromQuery() {
+  const s = route.query.s;
+  if (typeof s === 'string' && document.getElementById(s)) {
+    requestAnimationFrame(() => jump(s));
+  }
+}
+onMounted(jumpFromQuery);
+watch(() => route.query.s, jumpFromQuery);
 </script>
 
 <template>
@@ -35,7 +50,7 @@ function jump(id) {
     </div>
 
     <!-- ── 1. The pipeline ─────────────────────────────────────────── -->
-    <h2 class="mh2">From public leaderboards to one snapshot</h2>
+    <h2 class="mh2" id="pipeline">From public leaderboards to one snapshot</h2>
     <p class="mlead">
       Benchmark Arena is an aggregator, not an evaluator. We never run models ourselves — we read
       the public leaderboards that do, every day, and reconcile them into one snapshot you can

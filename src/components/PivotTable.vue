@@ -292,12 +292,13 @@ const limitedTitle = (row) =>
         <b-tooltip :label="benchThLabel(b)" type="is-dark" multilined :delay="100" append-to-body>{{ SHORT[b] || b }}</b-tooltip>
       </template>
       <template #default="props">
-        <!-- stats-49: an empty AA cell can carry a small link to the model's
-             own (archived) page on the source — verified URL only; any other
-             gap keeps the plain dash -->
+        <!-- stats-49: an empty AA cell can carry a small icon link to the
+             model's own (archived) page on the source — verified URL only;
+             any other gap keeps the plain dash. Icon-only per Ibrahim:
+             the words live in the tooltip + aria-label -->
         <span v-if="props.row[b] !== null && props.row[b] !== undefined" :style="{ color: scoreColor(props.row[b]), fontWeight: 500 }">{{ fmtScore(props.row[b]) }}</span>
         <b-tooltip v-else-if="archiveLinkFor(props.row, b)" :label="archTip" type="is-dark" multilined :delay="100" append-to-body>
-          <a class="arch-link" :href="archiveLinkFor(props.row, b)" target="_blank" rel="noopener noreferrer" :aria-label="archTip" @click.stop>archived<i class="fas fa-arrow-up-right-from-square"></i></a>
+          <a class="arch-link" :href="archiveLinkFor(props.row, b)" target="_blank" rel="noopener noreferrer" :aria-label="archTip" @click.stop><i class="fas fa-arrow-up-right-from-square"></i></a>
         </b-tooltip>
         <span v-else class="cell-sub">—</span>
       </template>

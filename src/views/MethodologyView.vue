@@ -262,7 +262,7 @@ watch(() => route.query.s, jumpFromQuery);
         <div class="kv"><span class="k">Sources are read, never invented</span><span>No benchmark cell originates from a price catalog or another benchmark; OpenRouter-style catalogs enrich metadata only.</span></div>
         <div class="kv"><span class="k">Free ≠ unlimited</span><span>A free listing counts as $0 with its rate limits intact — we never promote it to "infinite value".</span></div>
         <div class="kv"><span class="k">Archived, not deleted</span><span>Superseded models stay reachable behind the Older-versions toggle, forever unranked.</span></div>
-        <div class="kv"><span class="k">Gaps may link out</span><span>Where a source archived a model, its empty cell can carry a small link to the model's own page on that source — every URL is verified over HTTP before it ships, and we never copy the archived numbers into the table.</span></div>
+        <div class="kv"><span class="k">Gaps may link out</span><span>Where a source archived a model, its empty cell can carry a small <i class="fas fa-arrow-up-right-from-square" style="color:var(--teal)"></i> linking to the model's own page on that source — every URL is verified over HTTP before it ships, and we never copy the archived numbers into the table.</span></div>
         <div class="kv"><span class="k">Retirement needs two proofs</span><span>A model is removed only when its scores vanish from every source <em>and</em> no seller still lists it at a price — sell-through churn alone doesn't erase a model.</span></div>
       </div>
       <div class="notice mt" style="margin-top:1rem">

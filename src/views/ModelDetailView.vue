@@ -16,6 +16,10 @@ const router = useRouter();
 const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, archiveLinkFor } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
+// stats-49: the archived-page icon is wordless — this tooltip + the link's
+// aria-label are where the explanation lives (same wording as PivotTable)
+const archTip = 'No current AA leaderboard entry — the model was archived by the source; its own page still carries score, pricing and latency';
+
 const model = computed(() => modelSlugIndex.value.get(route.params.slug) || null);
 
 watchEffect(() => {
@@ -249,8 +253,11 @@ function addToCompare() {
           <span class="rank" style="display:inline-grid;margin-right:.45rem">—</span>
           {{ SHORT[b] || b }}
           <!-- stats-49: verified archived-page link where the source still
-               publishes the model on its own page -->
-          <a v-if="archiveLinkFor(model, b)" class="arch-link" :href="archiveLinkFor(model, b)" target="_blank" rel="noopener noreferrer">archived page<i class="fas fa-arrow-up-right-from-square"></i></a>
+               publishes the model on its own page — icon-only per Ibrahim,
+               the tooltip + aria-label carry the words -->
+          <b-tooltip v-if="archiveLinkFor(model, b)" :label="archTip" type="is-dark" multilined :delay="100" append-to-body>
+            <a class="arch-link" :href="archiveLinkFor(model, b)" target="_blank" rel="noopener noreferrer" :aria-label="archTip"><i class="fas fa-arrow-up-right-from-square"></i></a>
+          </b-tooltip>
         </div>
         <div class="track"></div>
         <div class="num cell-sub">—</div>

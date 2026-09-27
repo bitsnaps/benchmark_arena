@@ -1361,10 +1361,15 @@ def scrape_simplebench():
     Scrape SimpleBench.com leaderboard via browser JS eval.
     Table has columns: Rank, Model, Score (AVG@5), Organization.
     Col 1 = model name, Col 2 = score percentage.
+
+    stats-50: the legacy .slice(0,35) cap (pre-repo era, f40549d) silently
+    dropped ~2/3 of the leaderboard (106 rows live) — every model ranked
+    below #34 never reached the merge, e.g. Kimi K3. The cap is gone; the
+    join layer + the >=2-benchmark row filter handle the extra rows.
     """
     url = "https://simple-bench.com/"
     js = (
-        "Array.from(document.querySelectorAll('#leaderboardTable tr')).slice(0,35).map(function(r){"
+        "Array.from(document.querySelectorAll('#leaderboardTable tr')).map(function(r){"
         "  var c=r.querySelectorAll('td');"
         "  if(c.length<3) return null;"
         "  return {model:c[1]?c[1].textContent.trim():'',"
@@ -1372,6 +1377,56 @@ def scrape_simplebench():
         "}).filter(Boolean)"
     )
     data = load_and_eval(url, js, wait_ms=10000)
+
+    # stats-50: CURATED aliases only (house rule — no fuzzy matching; a wrong
+    # alias is worse than an honest dash). Source label -> our canonical row.
+    # Each entry verified against the source's own page context:
+    #  - date-stamped labels are the FINAL point release aggregators track
+    #    under the bare name (R1 05/28, V3 03-24, Gemini 2.5 Pro 06-05;
+    #    the older (03-25) 2.5 Pro entry intentionally stays unmatched)
+    #  - 'o3 (high)': o3 exists only as the 04-16 snapshot; (high) is its
+    #    reasoning-effort label, not a variant
+    #  - bare 'Claude Fable': the source lists 'Claude Fable 5.1' separately,
+    #    so the bare label is the predecessor Fable 5 (81.9 < 86.6 ordering)
+    SB_NAME_ALIASES = {
+        "DeepSeek R1 05/28": "DeepSeek R1",
+        "DeepSeek V3 03-24": "DeepSeek V3",
+        "Gemini 2.5 Pro (06-05)": "Gemini 2.5 Pro",
+        "o3 (high)": "o3 2025.04 16",
+        "Claude Fable": "Claude Fable 5",
+        # same model per the EQB user-approved equivalence (HF repo name
+        # qwen/qwen3.8-2.4t-a95b)
+        "Qwen 3.8 2.4T A95B": "Qwen3.8-Max",
+        # stats-50: the space-form "max" strip + the truncated-family pass
+        # would drop these flagship scores onto the PLUS rows (mid-tier).
+        # Hyphenated targets keep "max" through normalize, so they form
+        # their own (untracked, 1-bench) keys instead of polluting Plus.
+        # Root fix in stats-51.
+        "Qwen 3.7 Max": "Qwen3.7-Max",
+        "Qwen 3.6 Max Preview": "Qwen3.6-Max",
+    }
+
+    # stats-50: entries whose identity is ambiguous under the current
+    # normalize conventions — shipping them would put a score on the WRONG
+    # row, and a wrong cell is worse than an honest dash. stats-51 revisits
+    # with the normalize rework.
+    SB_SKIP = {
+        # the size-strip collapses every Llama 3.1 size onto one key; this
+        # 405B score would land on the mixed row displayed as "8B"
+        "Llama 3.1 405b instruct",
+        # plain "V3.1" — we only track the Terminus Thinking edition; the
+        # truncated-family pass would merge this onto that row
+        "DeepSeek V3.1",
+        # plain "Grok 4" (flagship) — we only track the Fast Chat variant;
+        # the truncated-family pass would hang this score on that row
+        "Grok 4",
+        # GPT-5.2 base vs Pro vs Codex is a cross-source naming tangle (the
+        # shipped row carries base-GPT-5.2 cells under a variant display);
+        # both SimpleBench labels would add a variant score onto the wrong
+        # identity — skip until the stats-51 normalize/variant rework
+        "GPT-5.2 (high)",
+        "GPT-5.2 Pro (xhigh)",
+    }
 
     models = []
     skip = {'highest human score*', 'human baseline*'}
@@ -1381,8 +1436,9 @@ def scrape_simplebench():
                 continue
             name = item.get("model", "").strip()
             score_str = item.get("score", "").strip().replace('%', '')
-            if name.lower() in skip:
+            if name.lower() in skip or name in SB_SKIP:
                 continue
+            name = SB_NAME_ALIASES.get(name, name)
             try:
                 score = float(score_str)
                 if 0 < score <= 100 and name:
@@ -3358,6 +3414,17 @@ SUPERSEDE_OVERRIDES = {
     # signal: BenchLM also tags Kimi K2.6 'Superseded' (see benchlm_status
     # monitor disagreements).
     "kimi k2.6": "Kimi K2.7 Code",
+    # stats-50: the SimpleBench un-truncation re-admitted two old-generation
+    # rows (each gained the 2nd benchmark the >=2-bench rule needs). The
+    # leak detector's same-line rule demands they hide behind their newer
+    # line successors, and the auto passes can't order them (no usable
+    # dates / cross-variant pairs):
+    #   - Grok 4.1 Fast: bare grok line v(4,1) vs Grok 4.7 v(4,7)
+    #   - GPT-4.5-Preview ('gpt 4.5' after the preview strip): bare gpt line
+    #     v(4,5); nearest alive successor generation is the GPT-5 Pro row
+    "grok 4.1 fast": "Grok 4.7",
+    # keys match the lowercased DISPLAY name (see lower_map above)
+    "gpt-4.5-preview": "GPT-5 Pro",
     # 2026-09 EQBench snapshot (113-row): Granite 4.1 8B re-entered with no
     # OpenRouter meta, so the date-based auto pass can't order it; same-line
     # successor Granite 4.2 8B exists (leak detector same-line rule
@@ -4530,10 +4597,19 @@ def normalize_model_name(name):
     # 20260813", "deepseek v4 flash high preview". Mirrors the
     # (high)/(low)/(medium)/(none)/… paren rule above; trailing "max" keeps
     # its own dedicated rule below (established "Qwen3.8 Max" convention).
+    # stats-50 NOTE: that convention has a KNOWN FLAW — space-form "Qwen 3.7
+    # Max" loses "max" while hyphen "Qwen3.8-Max" keeps it, so the
+    # truncated-family pass then merges flagship Max scores onto the Plus
+    # rows. Root fix (normalize rework + display names + row-set review)
+    # is stats-51; tonight the affected SimpleBench entries are routed via
+    # SB_NAME_ALIASES instead.
     n = re.sub(r'\s+(?:xhigh|x-high|high|medium|low|minimal|adaptive|none)\b', ' ', n, flags=re.IGNORECASE)
 
     # ── Strip parameter-size suffixes (open-weight technical designations) ──
     # "Qwen 3.8 2.4T" → "Qwen 3.8", "Model 397B" → "Model"
+    # stats-50 NOTE: this also collapses Llama 3.1 405B/70B/8B onto one key —
+    # a mixed-size row risk (see stats-51). SimpleBench's 405B entry is
+    # skipped at the source until then.
     n = re.sub(r'\s+\d+(?:\.\d+)?[TtBb]\b', '', n)
     # "Model A95B" → "Model" (letter-prefix param sizes)
     n = re.sub(r'\s+[A-Za-z]\d+[Bb]\b', '', n)
@@ -4750,6 +4826,12 @@ def build_unified_table(all_results):
     # indicators (Flash, Lite, Mini, Nano).  E.g. "glm 5.3" must NOT be
     # merged into "glm 5.3 flash" — the base model's scores would
     # incorrectly inflate the smaller variant.
+    # stats-50 NOTE: the same class extends beyond size words — "pro"/"plus"/
+    # "max"/"terminus thinking" etc. are tier/edition words, and merges like
+    # "deepseek 3.1" → "deepseek 3.1 terminus thinking" or "gpt 5.5" →
+    # "gpt 5.5 pro" are wrong-joins of the same kind. Widening this set
+    # reshapes the row set (verified tonight: it re-admits a zoo of tiny
+    # open-weight rows) — deferred to stats-51 with a full review.
     _VARIANT_SMALLER = {'flash', 'lite', 'mini', 'nano', 'small', 'tiny'}
 
     _merged_truncated = set()

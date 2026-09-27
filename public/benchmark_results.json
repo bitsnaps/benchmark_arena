@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-27 18:18",
+  "timestamp": "2026-09-27 20:40",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -667,7 +667,7 @@
           82.4
         ],
         [
-          "Claude Fable",
+          "Claude Fable 5",
           81.9
         ],
         [
@@ -711,7 +711,7 @@
           71.7
         ],
         [
-          "Qwen 3.7 Max",
+          "Qwen3.7-Max",
           70.4
         ],
         [
@@ -735,16 +735,16 @@
           64.8
         ],
         [
-          "Qwen 3.6 Max Preview",
-          63.0
-        ],
-        [
-          "Gemini 2.5 Pro (06-05)",
+          "Gemini 2.5 Pro",
           62.4
         ],
         [
           "Claude Opus 4.5",
           62.0
+        ],
+        [
+          "Claude Opus 4.7",
+          61.7
         ]
       ],
       "open": [
@@ -757,12 +757,96 @@
           66.2
         ],
         [
-          "Qwen 3.8 2.4T A95B",
+          "Qwen3.6-Max",
+          63.0
+        ],
+        [
+          "Qwen3.8-Max",
           62.5
         ],
         [
           "DeepSeek V4 Flash",
           61.1
+        ],
+        [
+          "Kimi K3 (max)",
+          60.7
+        ],
+        [
+          "Qwen 3.8 27B",
+          60.2
+        ],
+        [
+          "GLM 5.2",
+          58.8
+        ],
+        [
+          "Kimi K2.7 Code",
+          57.9
+        ],
+        [
+          "GLM 5.1",
+          55.1
+        ],
+        [
+          "GLM 5",
+          53.2
+        ],
+        [
+          "DeepSeek 3.2 Speciale",
+          52.6
+        ],
+        [
+          "DeepSeek V4 Pro",
+          50.9
+        ],
+        [
+          "GLM 4.7",
+          47.7
+        ],
+        [
+          "Kimi K2.5",
+          46.8
+        ],
+        [
+          "DeepSeek V4 Flash (preview)",
+          46.3
+        ],
+        [
+          "MiniMax M3",
+          45.8
+        ],
+        [
+          "Nemotron 3 Ultra",
+          41.7
+        ],
+        [
+          "DeepSeek R1",
+          40.8
+        ],
+        [
+          "Kimi K2 Thinking",
+          39.6
+        ],
+        [
+          "Qwen 3.6 Flash",
+          35.2
+        ],
+        [
+          "MiniMax M2.1",
+          34.7
+        ],
+        [
+          "Qwen3 235B-A22B",
+          31.0
+        ],
+        [
+          "DeepSeek R1",
+          30.9
+        ],
+        [
+          "Llama 4 Maverick",
+          27.7
         ]
       ]
     },
@@ -956,7 +1040,7 @@
         ],
         [
           "Muse Spark 1.3 Max",
-          93.85382059800665
+          94.01993355481729
         ],
         [
           "Muse Spark 1.3 (xhigh)",
@@ -979,12 +1063,12 @@
           88.03986710963456
         ],
         [
-          "Claude Fable 5",
+          "Muse Spark 1.2",
           86.71096345514951
         ],
         [
-          "Muse Spark 1.2",
-          86.71096345514951
+          "Claude Fable 5",
+          86.54485049833886
         ],
         [
           "Gemini 3.7 Flash",
@@ -992,7 +1076,7 @@
         ],
         [
           "Gemini 3.8 Flash",
-          85.88039867109634
+          85.71428571428571
         ],
         [
           "Grok 4.6",
@@ -1006,15 +1090,15 @@
         ],
         [
           "DeepSeek-V4.1-Flash",
-          88.70431893687709
+          88.87043189368771
         ],
         [
           "MiMo-V2.6-Pro",
-          88.20598006644518
+          88.03986710963456
         ],
         [
           "GLM-5.3",
-          86.87707641196013
+          86.71096345514951
         ],
         [
           "Qwen3.8 Max",
@@ -1279,6 +1363,10 @@
         [
           "Qwen 3.5 35B A3B",
           3.0
+        ],
+        [
+          "Qwen 3.5 27B",
+          1.3
         ],
         [
           "MiniMax-M2",
@@ -2081,7 +2169,7 @@
       "Arena.ai Text": 91.4,
       "SimpleBench.com": 81.8,
       "ARC-AGI-2": null,
-      "Design Arena": 93.9,
+      "Design Arena": 94.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": 61.2,
@@ -2146,12 +2234,12 @@
     },
     {
       "name": "GPT-5.6 Terra",
-      "num_benchmarks": 5,
-      "cl": 62.5,
+      "num_benchmarks": 6,
+      "cl": 75.0,
       "Artificial Analysis": 42.0,
       "BenchLM.ai": 59.0,
       "Arena.ai Text": 86.9,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 48.9,
       "ARC-AGI-2": 83.9,
       "Design Arena": null,
       "DeepSWE": null,
@@ -2171,7 +2259,7 @@
       "Arena.ai Text": 91.1,
       "SimpleBench.com": 82.4,
       "ARC-AGI-2": 89.2,
-      "Design Arena": 85.9,
+      "Design Arena": 85.7,
       "DeepSWE": 74.0,
       "VendingBench": 32.8,
       "SWE-Marathon": null,
@@ -2182,12 +2270,12 @@
     },
     {
       "name": "Claude Sonnet 5",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 5,
+      "cl": 62.5,
       "Artificial Analysis": 38.0,
       "BenchLM.ai": 64.0,
       "Arena.ai Text": 86.5,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 60.6,
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": 54.0,
@@ -2290,12 +2378,12 @@
     },
     {
       "name": "Inkling",
-      "num_benchmarks": 5,
-      "cl": 62.5,
+      "num_benchmarks": 6,
+      "cl": 75.0,
       "Artificial Analysis": 25.0,
       "BenchLM.ai": 36.0,
       "Arena.ai Text": 83.4,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 50.0,
       "ARC-AGI-2": 36.5,
       "Design Arena": null,
       "DeepSWE": null,
@@ -2308,12 +2396,12 @@
     },
     {
       "name": "Qwen3.7 Plus",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 25.0,
       "BenchLM.ai": 40.0,
       "Arena.ai Text": 88.5,
-      "SimpleBench.com": 70.4,
+      "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
@@ -2451,6 +2539,24 @@
       "LLM Chess": null
     },
     {
+      "name": "gpt-oss-120b",
+      "num_benchmarks": 4,
+      "cl": 50.0,
+      "Artificial Analysis": 12.0,
+      "BenchLM.ai": 20.0,
+      "Arena.ai Text": 69.5,
+      "SimpleBench.com": 22.1,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 0.0,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 38.6,
+      "LLM Chess": 25.7
+    },
+    {
       "name": "Mercury 2.5",
       "num_benchmarks": 3,
       "cl": 37.5,
@@ -2467,24 +2573,6 @@
       "CyberGem": null,
       "EQBench CW": null,
       "LLM Chess": null
-    },
-    {
-      "name": "gpt-oss-120b",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": 12.0,
-      "BenchLM.ai": 20.0,
-      "Arena.ai Text": 69.5,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": 0.0,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 38.6,
-      "LLM Chess": 25.7
     },
     {
       "name": "Trinity Large Thinking",
@@ -2613,6 +2701,24 @@
       "LLM Chess": null
     },
     {
+      "name": "Claude Fable 5",
+      "num_benchmarks": 6,
+      "cl": 75.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 74.0,
+      "Arena.ai Text": 92.9,
+      "SimpleBench.com": 81.9,
+      "ARC-AGI-2": 89.2,
+      "Design Arena": 86.5,
+      "DeepSWE": 70.0,
+      "VendingBench": 36.6,
+      "SWE-Marathon": 90.0,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 88.3,
+      "LLM Chess": null
+    },
+    {
       "name": "Claude Opus 5",
       "num_benchmarks": 6,
       "cl": 75.0,
@@ -2667,24 +2773,6 @@
       "LLM Chess": 79.4
     },
     {
-      "name": "Claude Fable 5",
-      "num_benchmarks": 5,
-      "cl": 62.5,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 74.0,
-      "Arena.ai Text": 92.9,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 89.2,
-      "Design Arena": 86.7,
-      "DeepSWE": 70.0,
-      "VendingBench": 36.6,
-      "SWE-Marathon": 90.0,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 88.3,
-      "LLM Chess": null
-    },
-    {
       "name": "Claude Opus 4.8",
       "num_benchmarks": 5,
       "cl": 62.5,
@@ -2701,6 +2789,24 @@
       "CyberGem": null,
       "EQBench CW": null,
       "LLM Chess": 52.8
+    },
+    {
+      "name": "GPT-5.6 Luna",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 55.0,
+      "Arena.ai Text": 85.2,
+      "SimpleBench.com": 46.8,
+      "ARC-AGI-2": 59.5,
+      "Design Arena": null,
+      "DeepSWE": 67.0,
+      "VendingBench": 26.4,
+      "SWE-Marathon": 48.8,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 82.5,
+      "LLM Chess": 82.6
     },
     {
       "name": "Grok 4.5",
@@ -2775,22 +2881,22 @@
       "LLM Chess": null
     },
     {
-      "name": "GPT-5.6 Luna",
+      "name": "Gemini 2.5 Pro",
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 55.0,
-      "Arena.ai Text": 85.2,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 59.5,
+      "BenchLM.ai": 25.0,
+      "Arena.ai Text": 84.0,
+      "SimpleBench.com": 62.4,
+      "ARC-AGI-2": 4.9,
       "Design Arena": null,
-      "DeepSWE": 67.0,
-      "VendingBench": 26.4,
-      "SWE-Marathon": 48.8,
+      "DeepSWE": null,
+      "VendingBench": 3.7,
+      "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": 82.5,
-      "LLM Chess": 82.6
+      "EQBench CW": null,
+      "LLM Chess": 31.6
     },
     {
       "name": "Gemini 3 Flash",
@@ -2973,24 +3079,6 @@
       "LLM Chess": 42.9
     },
     {
-      "name": "Gemini 2.5 Pro",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 25.0,
-      "Arena.ai Text": 84.0,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 4.9,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": 3.7,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": 31.6
-    },
-    {
       "name": "Gemini 3.6 Flash",
       "num_benchmarks": 3,
       "cl": 37.5,
@@ -3009,6 +3097,24 @@
       "LLM Chess": 78.9
     },
     {
+      "name": "Gemini 2.5 Flash",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 78.3,
+      "SimpleBench.com": 41.2,
+      "ARC-AGI-2": 2.5,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 3.5,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 4.8,
+      "EQBench CW": null,
+      "LLM Chess": 22.8
+    },
+    {
       "name": "Gemini 3 Pro",
       "num_benchmarks": 3,
       "cl": 37.5,
@@ -3025,6 +3131,78 @@
       "CyberGem": null,
       "EQBench CW": null,
       "LLM Chess": 76.5
+    },
+    {
+      "name": "o1 Mini",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 67.2,
+      "SimpleBench.com": 18.1,
+      "ARC-AGI-2": 0.8,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": 32.4
+    },
+    {
+      "name": "o3 2025.04 16",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 81.8,
+      "SimpleBench.com": 53.1,
+      "ARC-AGI-2": 6.5,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 74.8,
+      "LLM Chess": 66.1
+    },
+    {
+      "name": "o3 Mini",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 71.4,
+      "SimpleBench.com": 22.8,
+      "ARC-AGI-2": 3.0,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": 50.9
+    },
+    {
+      "name": "Claude 3.7 Sonnet",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": 46.4,
+      "ARC-AGI-2": 0.9,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
     },
     {
       "name": "Claude Haiku 4.5",
@@ -3081,6 +3259,24 @@
       "LLM Chess": 39.1
     },
     {
+      "name": "GPT-4.1",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": 27.0,
+      "ARC-AGI-2": 0.4,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 9.4,
+      "EQBench CW": 61.8,
+      "LLM Chess": 30.0
+    },
+    {
       "name": "Gemini 3.1 Flash-Lite",
       "num_benchmarks": 2,
       "cl": 25.0,
@@ -3097,6 +3293,24 @@
       "CyberGem": null,
       "EQBench CW": null,
       "LLM Chess": 29.1
+    },
+    {
+      "name": "Grok 4.1 Fast",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 86.0,
+      "SimpleBench.com": 56.0,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 7.1,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 57.1,
+      "LLM Chess": null
     },
     {
       "name": "Grok 4.3",
@@ -3171,22 +3385,40 @@
       "LLM Chess": null
     },
     {
-      "name": "Gemini 2.5 Flash",
+      "name": "Gemini 1.5 Pro 002",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
       "BenchLM.ai": null,
-      "Arena.ai Text": 78.3,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 2.5,
+      "Arena.ai Text": 69.4,
+      "SimpleBench.com": 27.1,
+      "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": 3.5,
+      "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 4.8,
+      "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": 22.8
+      "LLM Chess": null
+    },
+    {
+      "name": "GPT 4o Mini 2024.07 18",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 64.3,
+      "SimpleBench.com": 10.7,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 34.1,
+      "LLM Chess": 24.3
     },
     {
       "name": "GPT 5 Nano",
@@ -3205,6 +3437,42 @@
       "CyberGem": null,
       "EQBench CW": null,
       "LLM Chess": 62.2
+    },
+    {
+      "name": "GPT-4.5-Preview",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": 34.5,
+      "ARC-AGI-2": 0.8,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 53.6,
+      "LLM Chess": 30.0
+    },
+    {
+      "name": "GPT-5.1-Codex",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 85.5,
+      "SimpleBench.com": 53.2,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 9.5,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": 55.0
     },
     {
       "name": "Grok 3 Mini",
@@ -3261,58 +3529,22 @@
       "LLM Chess": null
     },
     {
-      "name": "o1 Mini",
+      "name": "o4-Mini",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
       "BenchLM.ai": null,
-      "Arena.ai Text": 67.2,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 0.8,
+      "Arena.ai Text": null,
+      "SimpleBench.com": 38.7,
+      "ARC-AGI-2": 6.1,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": null,
+      "CyberGem": 2.5,
       "EQBench CW": null,
-      "LLM Chess": 32.4
-    },
-    {
-      "name": "o3 2025.04 16",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 81.8,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 6.5,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 74.8,
-      "LLM Chess": 66.1
-    },
-    {
-      "name": "o3 Mini",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 71.4,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 3.0,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": 50.9
+      "LLM Chess": 52.4
     }
   ],
   "unified_open": [
@@ -3325,7 +3557,7 @@
       "Arena.ai Text": 89.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 88.2,
+      "Design Arena": 88.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3343,7 +3575,7 @@
       "Arena.ai Text": 89.2,
       "SimpleBench.com": 66.2,
       "ARC-AGI-2": null,
-      "Design Arena": 86.9,
+      "Design Arena": 86.7,
       "DeepSWE": 69.0,
       "VendingBench": 52.6,
       "SWE-Marathon": 85.0,
@@ -3372,12 +3604,12 @@
     },
     {
       "name": "Kimi K3",
-      "num_benchmarks": 7,
-      "cl": 87.5,
+      "num_benchmarks": 8,
+      "cl": 100.0,
       "Artificial Analysis": 44.0,
       "BenchLM.ai": 70.0,
       "Arena.ai Text": 90.5,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 60.7,
       "ARC-AGI-2": 60.4,
       "Design Arena": 95.8,
       "DeepSWE": 69.0,
@@ -3433,7 +3665,7 @@
       "Arena.ai Text": 88.8,
       "SimpleBench.com": 66.7,
       "ARC-AGI-2": null,
-      "Design Arena": 88.7,
+      "Design Arena": 88.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3480,12 +3712,12 @@
     },
     {
       "name": "MiniMax-M3",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 29.0,
       "BenchLM.ai": 40.0,
       "Arena.ai Text": 83.1,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 45.8,
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
@@ -3515,6 +3747,24 @@
       "LLM Chess": null
     },
     {
+      "name": "Kimi K2.7 Code",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": 26.0,
+      "BenchLM.ai": 37.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": 57.9,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 32.8,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
       "name": "MiMo-V2.5-Pro",
       "num_benchmarks": 3,
       "cl": 37.5,
@@ -3533,31 +3783,13 @@
       "LLM Chess": null
     },
     {
-      "name": "Kimi K2.7 Code",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": 26.0,
-      "BenchLM.ai": 37.0,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": 32.8,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
       "name": "Nemotron 3 Ultra",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 23.0,
       "BenchLM.ai": 25.0,
       "Arena.ai Text": null,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 41.7,
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
@@ -3606,12 +3838,12 @@
     },
     {
       "name": "Qwen3.6 Plus",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 18.0,
       "BenchLM.ai": 33.0,
       "Arena.ai Text": 86.2,
-      "SimpleBench.com": 63.0,
+      "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
@@ -3678,12 +3910,12 @@
     },
     {
       "name": "Llama 4 Maverick",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 10.0,
       "BenchLM.ai": 12.0,
       "Arena.ai Text": 11.5,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 27.7,
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
@@ -3696,12 +3928,12 @@
     },
     {
       "name": "Mistral Large 3",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": 9.0,
       "BenchLM.ai": 16.0,
       "Arena.ai Text": 78.9,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 20.4,
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
@@ -3732,12 +3964,12 @@
     },
     {
       "name": "Llama 3.3 70B Instruct",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 8.0,
       "BenchLM.ai": null,
       "Arena.ai Text": 64.3,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 19.9,
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
@@ -3840,12 +4072,12 @@
     },
     {
       "name": "GLM-5.2",
-      "num_benchmarks": 5,
-      "cl": 62.5,
+      "num_benchmarks": 6,
+      "cl": 75.0,
       "Artificial Analysis": null,
       "BenchLM.ai": 56.0,
       "Arena.ai Text": 88.6,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 58.8,
       "ARC-AGI-2": 22.8,
       "Design Arena": 83.4,
       "DeepSWE": 44.0,
@@ -3858,12 +4090,12 @@
     },
     {
       "name": "GLM-5",
-      "num_benchmarks": 3,
-      "cl": 37.5,
+      "num_benchmarks": 4,
+      "cl": 50.0,
       "Artificial Analysis": null,
       "BenchLM.ai": 37.0,
       "Arena.ai Text": 85.7,
-      "SimpleBench.com": null,
+      "SimpleBench.com": 53.2,
       "ARC-AGI-2": 4.9,
       "Design Arena": null,
       "DeepSWE": null,
@@ -3873,6 +4105,96 @@
       "CyberGem": 43.2,
       "EQBench CW": 71.0,
       "LLM Chess": 22.4
+    },
+    {
+      "name": "DeepSeek 3.2 Speciale",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 80.8,
+      "SimpleBench.com": 52.6,
+      "ARC-AGI-2": 4.0,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 6.7,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 66.6,
+      "LLM Chess": null
+    },
+    {
+      "name": "DeepSeek V3",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 11.0,
+      "Arena.ai Text": 70.5,
+      "SimpleBench.com": 27.2,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 3.6,
+      "EQBench CW": null,
+      "LLM Chess": 11.0
+    },
+    {
+      "name": "GLM-4.7",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 27.0,
+      "Arena.ai Text": 83.2,
+      "SimpleBench.com": 47.7,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 15.3,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 23.5,
+      "EQBench CW": 61.5,
+      "LLM Chess": null
+    },
+    {
+      "name": "GLM-5.1",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 42.0,
+      "Arena.ai Text": 86.9,
+      "SimpleBench.com": 55.1,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 36.3,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 68.7,
+      "EQBench CW": 70.6,
+      "LLM Chess": null
+    },
+    {
+      "name": "Kimi K2.5",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 36.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": 46.8,
+      "ARC-AGI-2": 11.8,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 7.7,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 41.3,
+      "EQBench CW": 69.9,
+      "LLM Chess": 39.0
     },
     {
       "name": "MiniMax M2.5",
@@ -3893,76 +4215,40 @@
       "LLM Chess": null
     },
     {
-      "name": "DeepSeek V3",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "name": "DeepSeek R1",
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 11.0,
-      "Arena.ai Text": 70.5,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 76.6,
+      "SimpleBench.com": 40.8,
+      "ARC-AGI-2": 1.3,
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
-      "CyberGem": 3.6,
-      "EQBench CW": null,
-      "LLM Chess": 11.0
+      "CyberGem": null,
+      "EQBench CW": 65.9,
+      "LLM Chess": 46.7
     },
     {
-      "name": "GLM-4.7",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "name": "DeepSeek V4 Pro",
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 27.0,
-      "Arena.ai Text": 83.2,
-      "SimpleBench.com": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 85.8,
+      "SimpleBench.com": 50.9,
       "ARC-AGI-2": null,
       "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": 15.3,
-      "SWE-Marathon": null,
+      "DeepSWE": 63.0,
+      "VendingBench": 21.2,
+      "SWE-Marathon": 21.2,
       "FrontierSWE": null,
-      "CyberGem": 23.5,
-      "EQBench CW": 61.5,
+      "CyberGem": 83.3,
+      "EQBench CW": 68.6,
       "LLM Chess": null
-    },
-    {
-      "name": "GLM-5.1",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 42.0,
-      "Arena.ai Text": 86.9,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": 36.3,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": 68.7,
-      "EQBench CW": 70.6,
-      "LLM Chess": null
-    },
-    {
-      "name": "Kimi K2.5",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 36.0,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 11.8,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": 7.7,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": 41.3,
-      "EQBench CW": 69.9,
-      "LLM Chess": 39.0
     },
     {
       "name": "Kimi K2.6",
@@ -3980,6 +4266,24 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 77.3,
+      "LLM Chess": null
+    },
+    {
+      "name": "MiniMax M2.1",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 74.6,
+      "SimpleBench.com": 34.7,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
       "LLM Chess": null
     },
     {
@@ -4001,42 +4305,6 @@
       "LLM Chess": null
     },
     {
-      "name": "DeepSeek R1",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 76.6,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 1.3,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 65.9,
-      "LLM Chess": 46.7
-    },
-    {
-      "name": "DeepSeek V3.2 Exp Thinking",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 80.8,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 4.0,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": 6.7,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 66.6,
-      "LLM Chess": null
-    },
-    {
       "name": "DeepSeek V4 Flash",
       "num_benchmarks": 2,
       "cl": 25.0,
@@ -4055,24 +4323,6 @@
       "LLM Chess": null
     },
     {
-      "name": "DeepSeek V4 Pro",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 85.8,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": 63.0,
-      "VendingBench": 21.2,
-      "SWE-Marathon": 21.2,
-      "FrontierSWE": null,
-      "CyberGem": 83.3,
-      "EQBench CW": 68.6,
-      "LLM Chess": null
-    },
-    {
       "name": "Gemma 3 4B it",
       "num_benchmarks": 2,
       "cl": 25.0,
@@ -4084,6 +4334,24 @@
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "MiniMax M2",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 68.2,
+      "SimpleBench.com": 25.0,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 1.0,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
@@ -4154,7 +4422,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 878.213,
+      "aa_ttft_seconds": 780.462,
       "modalities_source": "openrouter"
     },
     "GPT-6 Astra": {
@@ -4217,7 +4485,7 @@
         "cache_read": 1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 94.49,
+      "aa_ttft_seconds": 97.671,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -4497,7 +4765,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.736,
+      "aa_ttft_seconds": 1.85,
       "modalities_source": "openrouter"
     },
     "Grok 4.7": {
@@ -4911,7 +5179,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.312,
+      "aa_ttft_seconds": 1.284,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5017,7 +5285,7 @@
         "cache_read": 0.01
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 15.903,
+      "aa_ttft_seconds": 15.836,
       "modalities_source": "openrouter"
     },
     "GPT-5.3 Codex": {
@@ -5347,7 +5615,7 @@
         "cache_read": 0.17
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.779,
+      "aa_ttft_seconds": 1.775,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5436,7 +5704,7 @@
         "cache_read": 0.08
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.194,
+      "aa_ttft_seconds": 2.176,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5614,7 +5882,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.044,
+      "aa_ttft_seconds": 3.009,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5801,7 +6069,7 @@
         "cache_read": 0.04
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.47,
+      "aa_ttft_seconds": 2.489,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5984,7 +6252,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.925,
+      "aa_ttft_seconds": 0.926,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6051,7 +6319,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.424,
+      "aa_ttft_seconds": 0.436,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6067,66 +6335,6 @@
           "out": 10.0
         }
       ]
-    },
-    "Mercury 2.5": {
-      "or_id": "inception/mercury-2.5",
-      "or_name": "Inception: Mercury 2.5",
-      "provider": "Inception",
-      "created": "2026-09-08",
-      "context_length": 260000,
-      "max_output_tokens": 65536,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.04,
-        "output": 0.15,
-        "cache_read": 0.004
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "high",
-          "medium",
-          "low",
-          "none"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "Mercury 2.5 is the fastest reasoning LLM, and the latest diffusion LLM (dLLM) from Inception. Instead of generating tokens sequentially, Mercury 2.5 produces and refines multiple tokens in parallel, achieving...",
-      "superseded_by": null,
-      "match": "exact",
-      "pricing_aa_usd_per_1m": {
-        "input": 0.25,
-        "output": 0.75,
-        "cache_read": 0.025
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.076,
-      "modalities_source": "openrouter"
     },
     "gpt-oss-120b": {
       "or_id": "openai/gpt-oss-120b",
@@ -6314,6 +6522,66 @@
         }
       ]
     },
+    "Mercury 2.5": {
+      "or_id": "inception/mercury-2.5",
+      "or_name": "Inception: Mercury 2.5",
+      "provider": "Inception",
+      "created": "2026-09-08",
+      "context_length": 260000,
+      "max_output_tokens": 65536,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.04,
+        "output": 0.15,
+        "cache_read": 0.004
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Mercury 2.5 is the fastest reasoning LLM, and the latest diffusion LLM (dLLM) from Inception. Instead of generating tokens sequentially, Mercury 2.5 produces and refines multiple tokens in parallel, achieving...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.25,
+        "output": 0.75,
+        "cache_read": 0.025
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 3.098,
+      "modalities_source": "openrouter"
+    },
     "Trinity Large Thinking": {
       "or_id": "arcee-ai/trinity-large-thinking",
       "or_name": "Arcee AI: Trinity Large Thinking",
@@ -6364,7 +6632,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.337,
+      "aa_ttft_seconds": 1.327,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6372,6 +6640,116 @@
           "n": "OpenRouter",
           "in": 0.25,
           "out": 0.8
+        }
+      ]
+    },
+    "Claude Fable 5": {
+      "or_id": "anthropic/claude-fable-5",
+      "or_name": "Anthropic: Claude Fable 5",
+      "provider": "Anthropic",
+      "created": "2026-06-09",
+      "context_length": 1000000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Claude",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 10.0,
+        "output": 50.0,
+        "cache_read": 1.0
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "high"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "Claude Fable 5 is a Mythos-class model from Anthropic, built for autonomous knowledge work and coding. It supports text, image, and file inputs with text output, with reasoning support and...",
+      "superseded_by": "Claude Fable 5.1",
+      "match": "exact",
+      "aa_deprecated": true,
+      "pricing_aa_usd_per_1m": {
+        "input": 10,
+        "output": 50,
+        "cache_read": 1
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 85.179,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/claude-fable-5"
+      },
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 10.0,
+          "out": 50.0
+        },
+        {
+          "p": "anthropic",
+          "n": "Anthropic",
+          "in": 10.0,
+          "out": 50.0
+        },
+        {
+          "p": "azure-ai-foundry",
+          "n": "Azure AI Foundry",
+          "in": 10.0,
+          "out": 50.0
+        },
+        {
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 10.0,
+          "out": 50.0
+        },
+        {
+          "p": "google-vertex-ai",
+          "n": "Google Vertex AI",
+          "in": 10.0,
+          "out": 50.0
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 10.0,
+          "out": 50.0
         }
       ]
     },
@@ -6437,7 +6815,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 27.783,
+      "aa_ttft_seconds": 25.578,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-5"
@@ -6546,7 +6924,7 @@
         "cache_read": 0.4
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.419,
+      "aa_ttft_seconds": 2.336,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-5-6-sol"
@@ -6680,116 +7058,6 @@
         }
       ]
     },
-    "Claude Fable 5": {
-      "or_id": "anthropic/claude-fable-5",
-      "or_name": "Anthropic: Claude Fable 5",
-      "provider": "Anthropic",
-      "created": "2026-06-09",
-      "context_length": 1000000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Claude",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 10.0,
-        "output": 50.0,
-        "cache_read": 1.0
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "max",
-          "xhigh",
-          "high",
-          "medium",
-          "low"
-        ],
-        "default_effort": "high"
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_completion_tokens",
-        "max_tokens",
-        "reasoning",
-        "reasoning_effort",
-        "response_format",
-        "stop",
-        "structured_outputs",
-        "tool_choice",
-        "tools",
-        "verbosity"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "Claude Fable 5 is a Mythos-class model from Anthropic, built for autonomous knowledge work and coding. It supports text, image, and file inputs with text output, with reasoning support and...",
-      "superseded_by": "Claude Fable 5.1",
-      "match": "exact",
-      "aa_deprecated": true,
-      "pricing_aa_usd_per_1m": {
-        "input": 10,
-        "output": 50,
-        "cache_read": 1
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 96.958,
-      "modalities_source": "openrouter",
-      "archive_links": {
-        "aa": "https://artificialanalysis.ai/models/claude-fable-5"
-      },
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 10.0,
-          "out": 50.0
-        },
-        {
-          "p": "anthropic",
-          "n": "Anthropic",
-          "in": 10.0,
-          "out": 50.0
-        },
-        {
-          "p": "azure-ai-foundry",
-          "n": "Azure AI Foundry",
-          "in": 10.0,
-          "out": 50.0
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 10.0,
-          "out": 50.0
-        },
-        {
-          "p": "google-vertex-ai",
-          "n": "Google Vertex AI",
-          "in": 10.0,
-          "out": 50.0
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 10.0,
-          "out": 50.0
-        }
-      ]
-    },
     "Claude Opus 4.8": {
       "or_id": "anthropic/claude-opus-4.8",
       "or_name": "Anthropic: Claude Opus 4.8",
@@ -6898,6 +7166,103 @@
           "n": "OrcaRouter",
           "in": 5.0,
           "out": 25.0
+        }
+      ]
+    },
+    "GPT-5.6 Luna": {
+      "or_id": "openai/gpt-5.6-luna",
+      "or_name": "OpenAI: GPT-5.6 Luna",
+      "provider": "OpenAI",
+      "created": "2026-07-09",
+      "context_length": 1050000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2026-02-16",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.2,
+        "output": 1.2,
+        "cache_read": 0.02
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-5.6 Luna is a fast, cost-efficient model in OpenAI's GPT-5.6 series. It is suited for high-volume, latency-sensitive tasks such as chat, classification, and lightweight agentic workflows, providing capable reasoning for...",
+      "superseded_by": "GPT-6 Luna",
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.2,
+        "output": 1.2,
+        "cache_read": 0.02
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 1.522,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/gpt-5-6-luna"
+      },
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.2,
+          "out": 1.2
+        },
+        {
+          "p": "azure-openai",
+          "n": "Azure OpenAI",
+          "in": 0.2,
+          "out": 1.2
+        },
+        {
+          "p": "openai",
+          "n": "OpenAI",
+          "in": 0.2,
+          "out": 1.2
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 0.2,
+          "out": 1.6
         }
       ]
     },
@@ -7270,100 +7635,99 @@
         }
       ]
     },
-    "GPT-5.6 Luna": {
-      "or_id": "openai/gpt-5.6-luna",
-      "or_name": "OpenAI: GPT-5.6 Luna",
-      "provider": "OpenAI",
-      "created": "2026-07-09",
-      "context_length": 1050000,
-      "max_output_tokens": 128000,
-      "modality": "text+image+file->text",
+    "Gemini 2.5 Pro": {
+      "or_id": "google/gemini-2.5-pro",
+      "or_name": "Google: Gemini 2.5 Pro",
+      "provider": "Google",
+      "created": "2025-06-17",
+      "context_length": 1048576,
+      "max_output_tokens": 65536,
+      "modality": "text+image+file+audio+video->text",
       "input_modalities": [
-        "file",
+        "text",
         "image",
-        "text"
+        "file",
+        "audio",
+        "video"
       ],
       "output_modalities": [
         "text"
       ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2026-02-16",
+      "tokenizer": "Gemini",
+      "knowledge_cutoff": "2025-01-31",
       "total_params_b": null,
       "active_params_b": null,
       "params_source": null,
       "pricing_usd_per_1m": {
-        "input": 0.2,
-        "output": 1.2,
-        "cache_read": 0.02
+        "input": 1.25,
+        "output": 10.0,
+        "cache_read": 0.125
       },
       "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "max",
-          "xhigh",
-          "high",
-          "medium",
-          "low",
-          "none"
-        ],
-        "default_effort": "medium"
+        "mandatory": true,
+        "supported_efforts": null,
+        "default_effort": null
       },
       "supported_parameters": [
         "include_reasoning",
-        "max_completion_tokens",
         "max_tokens",
         "reasoning",
-        "reasoning_effort",
         "response_format",
         "seed",
+        "stop",
         "structured_outputs",
+        "temperature",
         "tool_choice",
-        "tools"
+        "tools",
+        "top_p"
       ],
       "hugging_face_id": null,
       "or_free_variants": null,
-      "description": "GPT-5.6 Luna is a fast, cost-efficient model in OpenAI's GPT-5.6 series. It is suited for high-volume, latency-sensitive tasks such as chat, classification, and lightweight agentic workflows, providing capable reasoning for...",
-      "superseded_by": "GPT-6 Luna",
+      "description": "Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking” capabilities, enabling it to reason through responses with enhanced accuracy...",
+      "superseded_by": "Gemini 3.1 Pro",
       "match": "exact",
+      "aa_deprecated": true,
       "pricing_aa_usd_per_1m": {
-        "input": 0.2,
-        "output": 1.2,
-        "cache_read": 0.02
+        "input": 1.25,
+        "output": 10,
+        "cache_read": 0.125
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.522,
+      "aa_ttft_seconds": 20.87,
       "modalities_source": "openrouter",
       "archive_links": {
-        "aa": "https://artificialanalysis.ai/models/gpt-5-6-luna"
+        "aa": "https://artificialanalysis.ai/models/gemini-2-5-pro"
       },
       "available_at": [
         {
           "p": "openrouter",
           "n": "OpenRouter",
-          "in": 0.2,
-          "out": 1.2
+          "in": 1.25,
+          "out": 10.0
         },
         {
-          "p": "azure-openai",
-          "n": "Azure OpenAI",
-          "in": 0.2,
-          "out": 1.2
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 1.25,
+          "out": 10.0
         },
         {
-          "p": "openai",
-          "n": "OpenAI",
-          "in": 0.2,
-          "out": 1.2
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
+          "p": "google-ai-studio",
+          "n": "Google AI Studio",
+          "in": 1.25,
+          "out": 10.0
         },
         {
           "p": "orcarouter",
           "n": "OrcaRouter",
-          "in": 0.2,
-          "out": 1.6
+          "in": 2.5,
+          "out": 15.0
+        },
+        {
+          "p": "vercel-ai-gateway",
+          "n": "Vercel AI Gateway",
+          "in": 2.5,
+          "out": 10.0
         }
       ]
     },
@@ -7638,7 +8002,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.019,
+      "aa_ttft_seconds": 1.989,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-4-6"
@@ -7749,7 +8113,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.604,
+      "aa_ttft_seconds": 1.785,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-sonnet-4-6"
@@ -7926,7 +8290,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 69.403,
+      "aa_ttft_seconds": 64.525,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-5-mini"
@@ -8322,102 +8686,6 @@
           "n": "OrcaRouter",
           "in": 0.2,
           "out": 1.25
-        }
-      ]
-    },
-    "Gemini 2.5 Pro": {
-      "or_id": "google/gemini-2.5-pro",
-      "or_name": "Google: Gemini 2.5 Pro",
-      "provider": "Google",
-      "created": "2025-06-17",
-      "context_length": 1048576,
-      "max_output_tokens": 65536,
-      "modality": "text+image+file+audio+video->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file",
-        "audio",
-        "video"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Gemini",
-      "knowledge_cutoff": "2025-01-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 1.25,
-        "output": 10.0,
-        "cache_read": 0.125
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "include_reasoning",
-        "max_tokens",
-        "reasoning",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_p"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "Gemini 2.5 Pro is Google’s state-of-the-art AI model designed for advanced reasoning, coding, mathematics, and scientific tasks. It employs “thinking” capabilities, enabling it to reason through responses with enhanced accuracy...",
-      "superseded_by": "Gemini 3.1 Pro",
-      "match": "exact",
-      "aa_deprecated": true,
-      "pricing_aa_usd_per_1m": {
-        "input": 1.25,
-        "output": 10,
-        "cache_read": 0.125
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 19.441,
-      "modalities_source": "openrouter",
-      "archive_links": {
-        "aa": "https://artificialanalysis.ai/models/gemini-2-5-pro"
-      },
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 1.25,
-          "out": 10.0
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 1.25,
-          "out": 10.0
-        },
-        {
-          "p": "google-ai-studio",
-          "n": "Google AI Studio",
-          "in": 1.25,
-          "out": 10.0
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 2.5,
-          "out": 15.0
-        },
-        {
-          "p": "vercel-ai-gateway",
-          "n": "Vercel AI Gateway",
-          "in": 2.5,
-          "out": 10.0
         }
       ]
     },
@@ -8838,6 +9106,63 @@
           "out": 15.0
         }
       ]
+    },
+    "GPT-4.1": {
+      "or_id": "openai/gpt-4.1",
+      "or_name": "OpenAI: GPT-4.1",
+      "provider": "OpenAI",
+      "created": "2025-04-14",
+      "context_length": 1047576,
+      "max_output_tokens": 32768,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "image",
+        "text",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2024-06-30",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 2.0,
+        "output": 8.0,
+        "cache_read": 0.5
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "max_completion_tokens",
+        "max_tokens",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-4.1 is a flagship large language model optimized for advanced instruction following, real-world software engineering, and long-context reasoning. It supports a 1 million token context window and outperforms GPT-4o and...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "aa_deprecated": true,
+      "pricing_aa_usd_per_1m": {
+        "input": 2,
+        "output": 8,
+        "cache_read": 0.5
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.943,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/gpt-4-1"
+      }
     },
     "Gemini 3.1 Flash-Lite": {
       "or_id": "google/gemini-3.1-flash-lite",
@@ -9529,7 +9854,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.576,
+      "aa_ttft_seconds": 5.79,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9659,7 +9984,7 @@
         "cache_read": 0.026
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.139,
+      "aa_ttft_seconds": 3.105,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9771,7 +10096,7 @@
         "cache_read": 0.006
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.149,
+      "aa_ttft_seconds": 1.127,
       "modalities_source": "openrouter"
     },
     "MiMo-V2.6-Flash": {
@@ -9859,7 +10184,7 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.245,
+        "input": 0.293,
         "output": 3.5,
         "cache_read": 0.172
       },
@@ -10045,90 +10370,6 @@
         }
       ]
     },
-    "MiMo-V2.5-Pro": {
-      "or_id": "xiaomi/mimo-v2.5-pro",
-      "or_name": "Xiaomi: MiMo-V2.5-Pro",
-      "provider": "Xiaomi",
-      "created": "2026-04-22",
-      "context_length": 1048576,
-      "max_output_tokens": 131072,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 1023.2,
-      "active_params_b": null,
-      "params_source": "huggingface",
-      "pricing_usd_per_1m": {
-        "input": 0.435,
-        "output": 0.87,
-        "cache_read": 0.0036
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "XiaomiMiMo/MiMo-V2.5-Pro",
-      "or_free_variants": null,
-      "description": "MiMo-V2.5-Pro is Xiaomi’s flagship model, delivering strong performance in general agentic capabilities, complex software engineering, and long-horizon tasks, with top rankings on benchmarks such as ClawEval, GDPVal, and SWE-bench Pro....",
-      "superseded_by": "MiMo-V2.6-Pro",
-      "match": "exact",
-      "pricing_aa_usd_per_1m": {
-        "input": 0.435,
-        "output": 0.87,
-        "cache_read": 0.0036
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.256,
-      "modalities_source": "openrouter",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.435,
-          "out": 0.87
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 1.0,
-          "out": 3.0
-        },
-        {
-          "p": "novita-ai",
-          "n": "Novita AI",
-          "in": 0.522,
-          "out": 1.044
-        }
-      ]
-    },
     "Kimi K2.7 Code": {
       "or_id": "moonshotai/kimi-k2.7-code",
       "or_name": "MoonshotAI: Kimi K2.7 Code",
@@ -10192,7 +10433,7 @@
         "cache_read": 0.19
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.043,
+      "aa_ttft_seconds": 2.979,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10264,6 +10505,90 @@
           "n": "W&B Inference Gateway",
           "in": 0.71,
           "out": 3.5
+        }
+      ]
+    },
+    "MiMo-V2.5-Pro": {
+      "or_id": "xiaomi/mimo-v2.5-pro",
+      "or_name": "Xiaomi: MiMo-V2.5-Pro",
+      "provider": "Xiaomi",
+      "created": "2026-04-22",
+      "context_length": 1048576,
+      "max_output_tokens": 131072,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 1023.2,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.435,
+        "output": 0.87,
+        "cache_read": 0.0036
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "XiaomiMiMo/MiMo-V2.5-Pro",
+      "or_free_variants": null,
+      "description": "MiMo-V2.5-Pro is Xiaomi’s flagship model, delivering strong performance in general agentic capabilities, complex software engineering, and long-horizon tasks, with top rankings on benchmarks such as ClawEval, GDPVal, and SWE-bench Pro....",
+      "superseded_by": "MiMo-V2.6-Pro",
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.435,
+        "output": 0.87,
+        "cache_read": 0.0036
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.294,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.435,
+          "out": 0.87
+        },
+        {
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 1.0,
+          "out": 3.0
+        },
+        {
+          "p": "novita-ai",
+          "n": "Novita AI",
+          "in": 0.522,
+          "out": 1.044
         }
       ]
     },
@@ -10555,7 +10880,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.099,
+      "aa_ttft_seconds": 2.029,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10719,7 +11044,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.785,
+      "aa_ttft_seconds": 0.78,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10864,7 +11189,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.845,
+      "aa_ttft_seconds": 0.843,
       "modalities_source": "openrouter",
       "alias_note": "LLM Chess lists this model under its HF name llama4-scout-17b-instruct-v1:0",
       "available_at": [
@@ -10933,7 +11258,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.794,
+      "aa_ttft_seconds": 0.792,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11022,7 +11347,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.043,
+      "aa_ttft_seconds": 1.058,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-5-2"
@@ -11172,7 +11497,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.484,
+      "aa_ttft_seconds": 1.558,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-5"
@@ -11217,120 +11542,6 @@
           "n": "Z.ai",
           "in": 1.0,
           "out": 3.2
-        }
-      ]
-    },
-    "MiniMax M2.5": {
-      "or_id": "minimax/minimax-m2.5",
-      "or_name": "MiniMax: MiniMax M2.5",
-      "provider": "MiniMax",
-      "created": "2026-02-12",
-      "context_length": 200000,
-      "max_output_tokens": 128000,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 228.7,
-      "active_params_b": null,
-      "params_source": "huggingface",
-      "pricing_usd_per_1m": {
-        "input": 0.27,
-        "output": 1.08,
-        "cache_read": 0.027
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "MiniMaxAI/MiniMax-M2.5",
-      "or_free_variants": null,
-      "description": "MiniMax-M2.5 is a SOTA large language model designed for real-world productivity. Trained in a diverse range of complex real-world digital working environments, M2.5 builds upon the coding expertise of M2.1...",
-      "superseded_by": "MiniMax-M3",
-      "match": "exact",
-      "modalities_source": "openrouter",
-      "archive_links": {
-        "aa": "https://artificialanalysis.ai/models/minimax-m2-5"
-      },
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.27,
-          "out": 1.08
-        },
-        {
-          "p": "baseten",
-          "n": "Baseten",
-          "in": 0.3,
-          "out": 1.2
-        },
-        {
-          "p": "minimax",
-          "n": "MiniMax",
-          "in": 0.3,
-          "out": 1.2
-        },
-        {
-          "p": "nebius",
-          "n": "Nebius",
-          "in": 0.3,
-          "out": 1.2
-        },
-        {
-          "p": "novita-ai",
-          "n": "Novita AI",
-          "in": 0.3,
-          "out": 1.2
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 0.3,
-          "out": 1.2
-        },
-        {
-          "p": "tensormesh",
-          "n": "Tensormesh",
-          "in": 0.3,
-          "out": 1.2
-        },
-        {
-          "p": "w-b-inference-gateway",
-          "n": "W&B Inference Gateway",
-          "in": 0.3,
-          "out": 1.2
         }
       ]
     },
@@ -11474,7 +11685,7 @@
         "cache_read": 0.45
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.087,
+      "aa_ttft_seconds": 1.049,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-4-7"
@@ -11586,7 +11797,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.65,
+      "aa_ttft_seconds": 1.669,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-5-1"
@@ -11768,6 +11979,120 @@
         }
       ]
     },
+    "MiniMax M2.5": {
+      "or_id": "minimax/minimax-m2.5",
+      "or_name": "MiniMax: MiniMax M2.5",
+      "provider": "MiniMax",
+      "created": "2026-02-12",
+      "context_length": 200000,
+      "max_output_tokens": 128000,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 228.7,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.27,
+        "output": 1.08,
+        "cache_read": 0.027
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "MiniMaxAI/MiniMax-M2.5",
+      "or_free_variants": null,
+      "description": "MiniMax-M2.5 is a SOTA large language model designed for real-world productivity. Trained in a diverse range of complex real-world digital working environments, M2.5 builds upon the coding expertise of M2.1...",
+      "superseded_by": "MiniMax-M3",
+      "match": "exact",
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/minimax-m2-5"
+      },
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.27,
+          "out": 1.08
+        },
+        {
+          "p": "baseten",
+          "n": "Baseten",
+          "in": 0.3,
+          "out": 1.2
+        },
+        {
+          "p": "minimax",
+          "n": "MiniMax",
+          "in": 0.3,
+          "out": 1.2
+        },
+        {
+          "p": "nebius",
+          "n": "Nebius",
+          "in": 0.3,
+          "out": 1.2
+        },
+        {
+          "p": "novita-ai",
+          "n": "Novita AI",
+          "in": 0.3,
+          "out": 1.2
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 0.3,
+          "out": 1.2
+        },
+        {
+          "p": "tensormesh",
+          "n": "Tensormesh",
+          "in": 0.3,
+          "out": 1.2
+        },
+        {
+          "p": "w-b-inference-gateway",
+          "n": "W&B Inference Gateway",
+          "in": 0.3,
+          "out": 1.2
+        }
+      ]
+    },
     "Kimi K2.6": {
       "or_id": "moonshotai/kimi-k2.6",
       "or_name": "MoonshotAI: Kimi K2.6",
@@ -11832,7 +12157,7 @@
         "cache_read": 0.16
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.74,
+      "aa_ttft_seconds": 2.68,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/kimi-k2-6"
@@ -11907,6 +12232,61 @@
           "out": 3.41
         }
       ]
+    },
+    "MiniMax M2.1": {
+      "or_id": "minimax/minimax-m2.1",
+      "or_name": "MiniMax: MiniMax M2.1",
+      "provider": "MiniMax",
+      "created": "2025-12-23",
+      "context_length": 204800,
+      "max_output_tokens": 131072,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 228.7,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.3,
+        "output": 1.2,
+        "cache_read": 0.03
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "MiniMaxAI/MiniMax-M2.1",
+      "or_free_variants": null,
+      "description": "MiniMax-M2.1 is a lightweight, state-of-the-art large language model optimized for coding, agentic workflows, and modern application development. With only 10 billion activated parameters, it delivers a major jump in real-world...",
+      "superseded_by": "MiniMax-M3",
+      "match": "exact",
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/minimax-m2-1"
+      }
     },
     "MiniMax M2.7": {
       "or_id": "minimax/minimax-m2.7",
@@ -12016,6 +12396,13 @@
       "created_source": "display_name",
       "stale": true
     },
+    "Grok 4.1 Fast": {
+      "superseded_by": "Grok 4.7",
+      "aa_deprecated": true,
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/grok-4-1-fast"
+      }
+    },
     "Mistral Large 3": {
       "hugging_face_id": "mistralai/Mistral-Large-3-675B-Instruct-2512",
       "pricing_aa_usd_per_1m": {
@@ -12024,7 +12411,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.02,
+      "aa_ttft_seconds": 1.025,
       "available_at": [
         {
           "p": "openrouter",
@@ -12168,7 +12555,7 @@
         "cache_read": 0.016
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.504,
+      "aa_ttft_seconds": 2.499,
       "input_modalities": [
         "text",
         "image"
@@ -12332,6 +12719,83 @@
         }
       ]
     },
+    "o3 Mini": {
+      "or_id": "openai/o3-mini",
+      "or_name": "OpenAI: o3 Mini",
+      "provider": "OpenAI",
+      "created": "2025-01-31",
+      "context_length": 200000,
+      "max_output_tokens": 100000,
+      "modality": "text+file->text",
+      "input_modalities": [
+        "text",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2023-10-31",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 1.1,
+        "output": 4.4,
+        "cache_read": 0.55
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "OpenAI o3-mini is a cost-efficient language model optimized for STEM reasoning tasks, particularly excelling in science, mathematics, and coding. This model supports the `reasoning_effort` parameter, which can be set to...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/o3-mini"
+      },
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 1.1,
+          "out": 4.4
+        },
+        {
+          "p": "azure-openai",
+          "n": "Azure OpenAI",
+          "in": 1.1,
+          "out": 4.4
+        },
+        {
+          "p": "openai",
+          "n": "OpenAI",
+          "in": 1.1,
+          "out": 4.4
+        },
+        {
+          "p": "vercel-ai-gateway",
+          "n": "Vercel AI Gateway",
+          "in": 1.1,
+          "out": 4.4
+        }
+      ]
+    },
     "GPT 5 Nano": {
       "or_id": "openai/gpt-5-nano",
       "or_name": "OpenAI: GPT-5 Nano",
@@ -12426,6 +12890,79 @@
         }
       ]
     },
+    "GPT-5.1-Codex": {
+      "or_id": "openai/gpt-5.1-codex",
+      "or_name": "OpenAI: GPT-5.1-Codex",
+      "provider": "OpenAI",
+      "created": "2025-11-13",
+      "context_length": 400000,
+      "max_output_tokens": 128000,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 1.25,
+        "output": 10.0,
+        "cache_read": 0.13
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-5.1-Codex is a specialized version of GPT-5.1 optimized for software engineering and coding workflows. It is designed for both interactive development sessions and long, independent execution of complex engineering tasks....",
+      "superseded_by": "GPT-5.3 Codex",
+      "match": "exact",
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/gpt-5-1-codex"
+      },
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 1.25,
+          "out": 10.0
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 1.25,
+          "out": 10.0
+        }
+      ]
+    },
     "Grok-4.20-Beta": {
       "or_id": "x-ai/grok-4.20",
       "or_name": "SpaceXAI: Grok 4.20",
@@ -12478,15 +13015,16 @@
       "match": "subset",
       "modalities_source": "openrouter"
     },
-    "o3 Mini": {
-      "or_id": "openai/o3-mini",
-      "or_name": "OpenAI: o3 Mini",
+    "o4-Mini": {
+      "or_id": "openai/o4-mini",
+      "or_name": "OpenAI: o4 Mini",
       "provider": "OpenAI",
-      "created": "2025-01-31",
+      "created": "2025-04-16",
       "context_length": 200000,
       "max_output_tokens": 100000,
-      "modality": "text+file->text",
+      "modality": "text+image+file->text",
       "input_modalities": [
+        "image",
         "text",
         "file"
       ],
@@ -12494,14 +13032,14 @@
         "text"
       ],
       "tokenizer": "GPT",
-      "knowledge_cutoff": "2023-10-31",
+      "knowledge_cutoff": "2024-06-30",
       "total_params_b": null,
       "active_params_b": null,
       "params_source": null,
       "pricing_usd_per_1m": {
         "input": 1.1,
         "output": 4.4,
-        "cache_read": 0.55
+        "cache_read": 0.275
       },
       "reasoning": {
         "mandatory": false,
@@ -12520,40 +13058,22 @@
       ],
       "hugging_face_id": null,
       "or_free_variants": null,
-      "description": "OpenAI o3-mini is a cost-efficient language model optimized for STEM reasoning tasks, particularly excelling in science, mathematics, and coding. This model supports the `reasoning_effort` parameter, which can be set to...",
+      "description": "OpenAI o4-mini is a compact reasoning model in the o-series, optimized for fast, cost-efficient performance while retaining strong multimodal and agentic capabilities. It supports tool use and demonstrates competitive reasoning...",
       "superseded_by": null,
       "match": "exact",
       "stale": true,
+      "aa_deprecated": true,
+      "pricing_aa_usd_per_1m": {
+        "input": 1.1,
+        "output": 4.4,
+        "cache_read": 0.275
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 30.593,
       "modalities_source": "openrouter",
       "archive_links": {
-        "aa": "https://artificialanalysis.ai/models/o3-mini"
-      },
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 1.1,
-          "out": 4.4
-        },
-        {
-          "p": "azure-openai",
-          "n": "Azure OpenAI",
-          "in": 1.1,
-          "out": 4.4
-        },
-        {
-          "p": "openai",
-          "n": "OpenAI",
-          "in": 1.1,
-          "out": 4.4
-        },
-        {
-          "p": "vercel-ai-gateway",
-          "n": "Vercel AI Gateway",
-          "in": 1.1,
-          "out": 4.4
-        }
-      ]
+        "aa": "https://artificialanalysis.ai/models/o4-mini"
+      }
     },
     "Solar Pro4": {
       "or_id": "upstage/solar-pro4",
@@ -12877,13 +13397,13 @@
         }
       ]
     },
-    "DeepSeek V3.2 Exp Thinking": {
-      "or_id": "deepseek/deepseek-v3.2-exp",
-      "or_name": "DeepSeek: DeepSeek V3.2 Exp",
+    "DeepSeek V4 Pro": {
+      "or_id": "deepseek/deepseek-v4-pro",
+      "or_name": "DeepSeek: DeepSeek V4 Pro 0423",
       "provider": "DeepSeek",
-      "created": "2025-09-29",
-      "context_length": 163840,
-      "max_output_tokens": 65536,
+      "created": "2026-04-24",
+      "context_length": 1024000,
+      "max_output_tokens": 384000,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -12892,28 +13412,34 @@
         "text"
       ],
       "tokenizer": "DeepSeek",
-      "knowledge_cutoff": "2025-07-31",
-      "total_params_b": 685.4,
-      "active_params_b": null,
-      "params_source": "huggingface",
+      "knowledge_cutoff": null,
+      "total_params_b": 1600.0,
+      "active_params_b": 49.0,
+      "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.27,
-        "output": 0.41
+        "input": 0.348,
+        "output": 0.696,
+        "cache_read": 0.029
       },
       "reasoning": {
         "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
+        "supported_efforts": [
+          "xhigh",
+          "high"
+        ],
+        "default_effort": "high"
       },
       "supported_parameters": [
         "frequency_penalty",
         "include_reasoning",
         "logit_bias",
         "logprobs",
+        "max_completion_tokens",
         "max_tokens",
         "min_p",
         "presence_penalty",
         "reasoning",
+        "reasoning_effort",
         "repetition_penalty",
         "response_format",
         "seed",
@@ -12926,25 +13452,91 @@
         "top_logprobs",
         "top_p"
       ],
-      "hugging_face_id": "deepseek-ai/DeepSeek-V3.2-Exp",
+      "hugging_face_id": "deepseek-ai/DeepSeek-V4-Pro",
       "or_free_variants": null,
-      "description": "DeepSeek-V3.2-Exp is an experimental large language model released by DeepSeek as an intermediate step between V3.1 and future architectures. It introduces DeepSeek Sparse Attention (DSA), a fine-grained sparse attention mechanism...",
-      "superseded_by": null,
-      "match": "subset",
-      "stale": true,
+      "description": "DeepSeek V4 Pro is a large-scale Mixture-of-Experts model from DeepSeek with 1.6T total parameters and 49B activated parameters, supporting a 1M-token context window. It is designed for advanced reasoning, coding,...",
+      "superseded_by": "DeepSeek V4 Pro 0813",
+      "match": "exact",
       "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/deepseek-v4-pro"
+      },
       "available_at": [
         {
           "p": "openrouter",
           "n": "OpenRouter",
-          "in": 0.27,
-          "out": 0.41
+          "in": 0.6267,
+          "out": 1.2535
+        },
+        {
+          "p": "alibaba-dashscope",
+          "n": "Alibaba (DashScope)",
+          "in": 2.4,
+          "out": 4.8
+        },
+        {
+          "p": "azure-ai-foundry",
+          "n": "Azure AI Foundry",
+          "in": 1.74,
+          "out": 3.48
+        },
+        {
+          "p": "deepinfra",
+          "n": "DeepInfra",
+          "in": 1.3,
+          "out": 2.6
+        },
+        {
+          "p": "deepseek",
+          "n": "DeepSeek",
+          "in": 1.32,
+          "out": 3.96
+        },
+        {
+          "p": "fireworks-ai",
+          "n": "Fireworks AI",
+          "in": 1.74,
+          "out": 3.48
+        },
+        {
+          "p": "nebius",
+          "n": "Nebius",
+          "in": 1.75,
+          "out": 3.5
         },
         {
           "p": "novita-ai",
           "n": "Novita AI",
-          "in": 0.27,
-          "out": 0.41
+          "in": 1.6,
+          "out": 3.2
+        },
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 0.442,
+          "out": 0.884
+        },
+        {
+          "p": "tencent-cloud",
+          "n": "Tencent Cloud",
+          "in": 0.435,
+          "out": 0.87
+        },
+        {
+          "p": "together-ai",
+          "n": "Together AI",
+          "in": 1.74,
+          "out": 3.48
+        },
+        {
+          "p": "w-b-inference-gateway",
+          "n": "W&B Inference Gateway",
+          "in": 1.15,
+          "out": 2.55
         }
       ]
     },
@@ -13106,149 +13698,6 @@
         }
       ]
     },
-    "DeepSeek V4 Pro": {
-      "or_id": "deepseek/deepseek-v4-pro",
-      "or_name": "DeepSeek: DeepSeek V4 Pro 0423",
-      "provider": "DeepSeek",
-      "created": "2026-04-24",
-      "context_length": 1024000,
-      "max_output_tokens": 384000,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "DeepSeek",
-      "knowledge_cutoff": null,
-      "total_params_b": 1600.0,
-      "active_params_b": 49.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.348,
-        "output": 0.696,
-        "cache_read": 0.029
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "xhigh",
-          "high"
-        ],
-        "default_effort": "high"
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_completion_tokens",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "reasoning_effort",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "deepseek-ai/DeepSeek-V4-Pro",
-      "or_free_variants": null,
-      "description": "DeepSeek V4 Pro is a large-scale Mixture-of-Experts model from DeepSeek with 1.6T total parameters and 49B activated parameters, supporting a 1M-token context window. It is designed for advanced reasoning, coding,...",
-      "superseded_by": "DeepSeek V4 Pro 0813",
-      "match": "exact",
-      "modalities_source": "openrouter",
-      "archive_links": {
-        "aa": "https://artificialanalysis.ai/models/deepseek-v4-pro"
-      },
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.6267,
-          "out": 1.2535
-        },
-        {
-          "p": "alibaba-dashscope",
-          "n": "Alibaba (DashScope)",
-          "in": 2.4,
-          "out": 4.8
-        },
-        {
-          "p": "azure-ai-foundry",
-          "n": "Azure AI Foundry",
-          "in": 1.74,
-          "out": 3.48
-        },
-        {
-          "p": "deepinfra",
-          "n": "DeepInfra",
-          "in": 1.3,
-          "out": 2.6
-        },
-        {
-          "p": "deepseek",
-          "n": "DeepSeek",
-          "in": 1.32,
-          "out": 3.96
-        },
-        {
-          "p": "fireworks-ai",
-          "n": "Fireworks AI",
-          "in": 1.74,
-          "out": 3.48
-        },
-        {
-          "p": "nebius",
-          "n": "Nebius",
-          "in": 1.75,
-          "out": 3.5
-        },
-        {
-          "p": "novita-ai",
-          "n": "Novita AI",
-          "in": 1.6,
-          "out": 3.2
-        },
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 0.442,
-          "out": 0.884
-        },
-        {
-          "p": "tencent-cloud",
-          "n": "Tencent Cloud",
-          "in": 0.435,
-          "out": 0.87
-        },
-        {
-          "p": "together-ai",
-          "n": "Together AI",
-          "in": 1.74,
-          "out": 3.48
-        },
-        {
-          "p": "w-b-inference-gateway",
-          "n": "W&B Inference Gateway",
-          "in": 1.15,
-          "out": 2.55
-        }
-      ]
-    },
     "Gemma 3 4B it": {
       "or_id": "google/gemma-3-4b-it",
       "or_name": "Google: Gemma 3 4B",
@@ -13315,6 +13764,68 @@
         }
       ]
     },
+    "MiniMax M2": {
+      "or_id": "minimax/minimax-m2",
+      "or_name": "MiniMax: MiniMax M2",
+      "provider": "MiniMax",
+      "created": "2025-10-23",
+      "context_length": 196608,
+      "max_output_tokens": 176947,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 228.7,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.3,
+        "output": 1.2
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "MiniMaxAI/MiniMax-M2",
+      "or_free_variants": null,
+      "description": "MiniMax-M2 is a compact, high-efficiency large language model optimized for end-to-end coding and agentic workflows. With 10 billion activated parameters (230 billion total), it delivers near-frontier intelligence across general reasoning,...",
+      "superseded_by": "MiniMax-M3",
+      "match": "exact",
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/minimax-m2"
+      }
+    },
+    "GPT 4o Mini 2024.07 18": {
+      "created": "2024-07-18",
+      "created_source": "display_name",
+      "stale": true
+    },
     "Gemini 3 Pro": {
       "superseded_by": "Gemini 3.1 Pro",
       "input_modalities": [
@@ -13353,17 +13864,21 @@
       "modalities_source": "curated",
       "alias_note": "LLM Chess lists this model as grok-4-fast-non-reasoning (its non-reasoning/chat variant)"
     },
-    "GPT-5.1-Codex": {
-      "or_id": "openai/gpt-5.1-codex",
-      "or_name": "OpenAI: GPT-5.1-Codex",
+    "GPT-4.5-Preview": {
+      "superseded_by": "GPT-5 Pro"
+    },
+    "GPT-5.2 Pro": {
+      "or_id": "openai/gpt-5.2-pro",
+      "or_name": "OpenAI: GPT-5.2 Pro",
       "provider": "OpenAI",
-      "created": "2025-11-13",
+      "created": "2025-12-10",
       "context_length": 400000,
       "max_output_tokens": 128000,
-      "modality": "text+image->text",
+      "modality": "text+image+file->text",
       "input_modalities": [
+        "image",
         "text",
-        "image"
+        "file"
       ],
       "output_modalities": [
         "text"
@@ -13374,9 +13889,124 @@
       "active_params_b": null,
       "params_source": null,
       "pricing_usd_per_1m": {
-        "input": 1.25,
-        "output": 10.0,
-        "cache_read": 0.13
+        "input": 21.0,
+        "output": 168.0
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "xhigh",
+          "high",
+          "medium"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-5.2 Pro is OpenAI’s most advanced model, offering major improvements in agentic coding and long context performance over GPT-5 Pro. It is optimized for complex tasks that require step-by-step reasoning,...",
+      "superseded_by": "GPT-5.5 Pro",
+      "match": "exact",
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "Muse Glimmer 30B": {
+      "or_id": "meta/muse-glimmer-30b",
+      "or_name": "Meta: Muse Glimmer 30B",
+      "provider": "Meta",
+      "created": "2026-08-09",
+      "context_length": 131072,
+      "max_output_tokens": 16384,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 30.0,
+      "active_params_b": null,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.3,
+        "output": 1.2,
+        "cache_read": 0.04
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "meta-models/Muse-Glimmer-30B",
+      "or_free_variants": null,
+      "description": "Muse Glimmer 30B is a dense, open-weight multimodal model from Meta Superintelligence Labs, distilled from Muse Spark and optimized for autonomous agents on consumer hardware. It is suited for long-horizon...",
+      "superseded_by": null,
+      "match": "exact",
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "gpt-oss-20b": {
+      "or_id": "openai/gpt-oss-20b",
+      "or_name": "OpenAI: gpt-oss-20b",
+      "provider": "OpenAI",
+      "created": "2025-08-05",
+      "context_length": 131072,
+      "max_output_tokens": 32768,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2024-06-30",
+      "total_params_b": 21.0,
+      "active_params_b": 3.6,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.018,
+        "output": 0.09
       },
       "reasoning": {
         "mandatory": true,
@@ -13388,8 +14018,77 @@
         "default_effort": "medium"
       },
       "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "openai/gpt-oss-20b",
+      "or_free_variants": null,
+      "description": "gpt-oss-20b is an open-weight 21B parameter model released by OpenAI under the Apache 2.0 license. It uses a Mixture-of-Experts (MoE) architecture with 3.6B active parameters per forward pass, optimized for...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "GPT-5.5": {
+      "or_id": "openai/gpt-5.5",
+      "or_name": "OpenAI: GPT-5.5",
+      "provider": "OpenAI",
+      "created": "2026-04-24",
+      "context_length": 1050000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "file",
+        "image",
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2025-12-01",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 5.0,
+        "output": 30.0,
+        "cache_read": 0.5
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
         "include_reasoning",
         "max_completion_tokens",
+        "max_tokens",
         "reasoning",
         "reasoning_effort",
         "response_format",
@@ -13400,26 +14099,967 @@
       ],
       "hugging_face_id": null,
       "or_free_variants": null,
-      "description": "GPT-5.1-Codex is a specialized version of GPT-5.1 optimized for software engineering and coding workflows. It is designed for both interactive development sessions and long, independent execution of complex engineering tasks....",
-      "superseded_by": "GPT-5.3 Codex",
+      "description": "GPT-5.5 is OpenAI’s frontier model designed for complex professional workloads, building on GPT-5.4 with stronger reasoning, higher reliability, and improved token efficiency on hard tasks. It features a 1M+ token...",
+      "superseded_by": null,
       "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 5,
+        "output": 30,
+        "cache_read": 0.5
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 35.332,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/gpt-5-5"
+      },
+      "no_bench_coverage": true
+    },
+    "GPT-5.4": {
+      "or_id": "openai/gpt-5.4",
+      "or_name": "OpenAI: GPT-5.4",
+      "provider": "OpenAI",
+      "created": "2026-03-05",
+      "context_length": 1050000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 2.5,
+        "output": 15.0,
+        "cache_read": 0.25
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-5.4 is OpenAI’s latest frontier model, unifying the Codex and GPT lines into a single system. It features a 1M+ token context window (922K input, 128K output) with support for...",
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 2.5,
+        "output": 15,
+        "cache_read": 0.25
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.798,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/gpt-5-4"
+      },
+      "no_bench_coverage": true
+    },
+    "Qwen3.8 27B": {
+      "or_id": "qwen/qwen3.8-27b",
+      "or_name": "Qwen: Qwen3.8 27B",
+      "provider": "Qwen",
+      "created": "2026-08-14",
+      "context_length": 1000000,
+      "max_output_tokens": 131072,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen",
+      "knowledge_cutoff": null,
+      "total_params_b": 27.0,
+      "active_params_b": null,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.42,
+        "output": 3.0,
+        "cache_read": 0.085
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "xhigh",
+          "medium",
+          "low"
+        ],
+        "default_effort": "xhigh"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_a",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3.8-27B",
+      "or_free_variants": [
+        "qwen/qwen3.8-27b:free"
+      ],
+      "description": "Qwen3.8 27B is an open-weight dense vision-language model from Qwen. It is suited for coding, professional workflows, research, multimodal interaction, and long-running agent tasks, with flexible thinking that can be...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.5,
+        "output": 3,
+        "cache_read": 0.1
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 3.818,
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "MiMo-V2.5": {
+      "or_id": "xiaomi/mimo-v2.5",
+      "or_name": "Xiaomi: MiMo-V2.5",
+      "provider": "Xiaomi",
+      "created": "2026-04-22",
+      "context_length": 1048576,
+      "max_output_tokens": 131072,
+      "modality": "text+image+audio+video->text",
+      "input_modalities": [
+        "text",
+        "audio",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 310.8,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.14,
+        "output": 0.28,
+        "cache_read": 0.0028
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "XiaomiMiMo/MiMo-V2.5",
+      "or_free_variants": null,
+      "description": "MiMo-V2.5 is a native omnimodal model by Xiaomi. It delivers Pro-level agentic performance at roughly half the inference cost, while surpassing MiMo-V2-Omni in multimodal perception across image and video understanding...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.14,
+        "output": 0.28,
+        "cache_read": 0.0028
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 25.668,
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "Qwen3.5 397B A17B": {
+      "or_id": "qwen/qwen3.5-397b-a17b",
+      "or_name": "Qwen: Qwen3.5 397B A17B",
+      "provider": "Qwen",
+      "created": "2026-02-16",
+      "context_length": 262144,
+      "max_output_tokens": 235929,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": null,
+      "total_params_b": 397.0,
+      "active_params_b": 17.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.55,
+        "output": 3.5,
+        "cache_read": 0.225
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3.5-397B-A17B",
+      "or_free_variants": null,
+      "description": "The Qwen3.5 series 397B-A17B native vision-language model is built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. It delivers...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.6,
+        "output": 3.6,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.256,
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "Qwen3.6 35B A3B": {
+      "or_id": "qwen/qwen3.6-35b-a3b",
+      "or_name": "Qwen: Qwen3.6 35B A3B",
+      "provider": "Qwen",
+      "created": "2026-04-27",
+      "context_length": 262144,
+      "max_output_tokens": 235929,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen",
+      "knowledge_cutoff": null,
+      "total_params_b": 35.0,
+      "active_params_b": 3.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.15,
+        "output": 1.0,
+        "cache_read": 0.05
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3.6-35B-A3B",
+      "or_free_variants": null,
+      "description": "Qwen3.6-35B-A3B is an open-weight multimodal model from Alibaba Cloud with 35 billion total parameters and 3 billion active parameters per token. It uses a hybrid sparse mixture-of-experts architecture combining Gated...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.375,
+        "output": 2.25,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.074,
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "Gemma 4 26B A4B": {
+      "or_id": "google/gemma-4-26b-a4b-it",
+      "or_name": "Google: Gemma 4 26B A4B ",
+      "provider": "Google",
+      "created": "2026-04-03",
+      "context_length": 262144,
+      "max_output_tokens": 235929,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "image",
+        "text",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Gemma",
+      "knowledge_cutoff": null,
+      "total_params_b": 25.2,
+      "active_params_b": 3.8,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.0675,
+        "output": 0.225,
+        "cache_read": 0.0375
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "google/gemma-4-26B-A4B-it",
+      "or_free_variants": [
+        "google/gemma-4-26b-a4b-it:free"
+      ],
+      "description": "Gemma 4 26B A4B IT is an instruction-tuned Mixture-of-Experts (MoE) model from Google DeepMind. Despite 25.2B total parameters, only 3.8B activate per token during inference — delivering near-31B quality at...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.1,
+        "output": 0.37,
+        "cache_read": 0.06
+      },
+      "price_source": "artificialanalysis",
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "Qwen3.5 122B A10B": {
+      "or_id": "qwen/qwen3.5-122b-a10b",
+      "or_name": "Qwen: Qwen3.5-122B-A10B",
+      "provider": "Qwen",
+      "created": "2026-02-25",
+      "context_length": 262144,
+      "max_output_tokens": 235929,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": null,
+      "total_params_b": 122.0,
+      "active_params_b": 10.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.26,
+        "output": 2.08
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3.5-122B-A10B",
+      "or_free_variants": null,
+      "description": "The Qwen3.5 122B-A10B native vision-language model is built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. In terms of...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.4,
+        "output": 3.2,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.333,
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "Qwen3.5-27B": {
+      "or_id": "qwen/qwen3.5-27b",
+      "or_name": "Qwen: Qwen3.5-27B",
+      "provider": "Qwen",
+      "created": "2026-02-25",
+      "context_length": 262144,
+      "max_output_tokens": 65536,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": null,
+      "total_params_b": 27.0,
+      "active_params_b": null,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.195,
+        "output": 1.56
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3.5-27B",
+      "or_free_variants": null,
+      "description": "The Qwen3.5 27B native vision-language Dense model incorporates a linear attention mechanism, delivering fast response times while balancing inference speed and performance. Its overall capabilities are comparable to those of...",
+      "match": "exact",
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/qwen3-5-27b"
+      },
+      "no_bench_coverage": true
+    },
+    "Qwen3.5-35B-A3B": {
+      "or_id": "qwen/qwen3.5-35b-a3b",
+      "or_name": "Qwen: Qwen3.5-35B-A3B",
+      "provider": "Qwen",
+      "created": "2026-02-25",
+      "context_length": 256000,
+      "max_output_tokens": 16384,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": null,
+      "total_params_b": 35.0,
+      "active_params_b": 3.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.3125,
+        "output": 1.25,
+        "cache_read": 0.1562
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3.5-35B-A3B",
+      "or_free_variants": null,
+      "description": "The Qwen3.5 Series 35B-A3B is a native vision-language model designed with a hybrid architecture that integrates linear attention mechanisms and a sparse mixture-of-experts model, achieving higher inference efficiency. Its overall...",
+      "match": "exact",
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/qwen3-5-35b-a3b"
+      },
+      "no_bench_coverage": true
+    },
+    "GPT 5": {
+      "or_id": "openai/gpt-5",
+      "or_name": "OpenAI: GPT-5",
+      "provider": "OpenAI",
+      "created": "2025-08-07",
+      "context_length": 400000,
+      "max_output_tokens": 128000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2024-09-30",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 1.25,
+        "output": 10.0,
+        "cache_read": 0.125
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "high",
+          "medium",
+          "low",
+          "minimal"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-5 is OpenAI’s most advanced model, offering major improvements in reasoning, code quality, and user experience. It is optimized for complex tasks that require step-by-step reasoning, instruction following, and accuracy...",
+      "match": "exact",
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/gpt-5"
+      },
+      "no_bench_coverage": true
+    },
+    "DeepSeek V3.1": {
+      "or_id": "deepseek/deepseek-chat-v3.1",
+      "or_name": "DeepSeek: DeepSeek V3.1",
+      "provider": "DeepSeek",
+      "created": "2025-08-21",
+      "context_length": 163840,
+      "max_output_tokens": 32768,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "DeepSeek",
+      "knowledge_cutoff": "2025-03-31",
+      "total_params_b": 671.0,
+      "active_params_b": 37.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.25,
+        "output": 0.95,
+        "cache_read": 0.13
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "deepseek-ai/DeepSeek-V3.1",
+      "or_free_variants": null,
+      "description": "DeepSeek-V3.1 is a large hybrid reasoning model (671B parameters, 37B active) that supports both thinking and non-thinking modes via prompt templates. It extends the DeepSeek-V3 base with a two-phase long-context...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "aa_deprecated": true,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/deepseek-v3-1"
+      },
+      "no_bench_coverage": true
+    },
+    "Qwen3 235B A22B": {
+      "or_id": "qwen/qwen3-235b-a22b",
+      "or_name": "Qwen: Qwen3 235B A22B",
+      "provider": "Qwen",
+      "created": "2025-04-28",
+      "context_length": 131072,
+      "max_output_tokens": 8192,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": "2025-03-31",
+      "total_params_b": 235.0,
+      "active_params_b": 22.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.455,
+        "output": 1.82
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3-235B-A22B",
+      "or_free_variants": null,
+      "description": "Qwen3-235B-A22B is a 235B parameter mixture-of-experts (MoE) model developed by Qwen, activating 22B parameters per forward pass. It supports seamless switching between a \"thinking\" mode for complex reasoning, math, and...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "Llama 3.1 8B Instruct": {
+      "or_id": "meta-llama/llama-3.1-70b-instruct",
+      "or_name": "Meta: Llama 3.1 70B Instruct",
+      "provider": "Meta",
+      "created": "2024-07-23",
+      "context_length": 131072,
+      "max_output_tokens": 16384,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Llama3",
+      "knowledge_cutoff": "2023-12-31",
+      "total_params_b": 70.6,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.4,
+        "output": 0.4
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "meta-llama/Meta-Llama-3.1-70B-Instruct",
+      "or_free_variants": null,
+      "description": "Meta's latest class of model (Llama 3.1) launched with a variety of sizes & flavors. This 70B instruct-tuned version is optimized for high quality dialogue usecases. It has demonstrated strong...",
+      "superseded_by": "Llama 3.3 70B Instruct",
+      "match": "exact",
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "DeepSeek V3.1 Terminus Thinking": {
+      "or_id": "deepseek/deepseek-v3.1-terminus",
+      "or_name": "DeepSeek: DeepSeek V3.1 Terminus",
+      "provider": "DeepSeek",
+      "created": "2025-09-22",
+      "context_length": 131072,
+      "max_output_tokens": 32768,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "DeepSeek",
+      "knowledge_cutoff": "2025-03-31",
+      "total_params_b": 684.5,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.27,
+        "output": 1.0,
+        "cache_read": 0.135
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+      "or_free_variants": null,
+      "description": "DeepSeek-V3.1 Terminus is an update to [DeepSeek V3.1](/deepseek/deepseek-chat-v3.1) that maintains the model's original capabilities while addressing issues reported by users, including language consistency and agent capabilities, further optimizing the model's...",
+      "superseded_by": null,
+      "match": "subset",
+      "stale": true,
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "DeepSeek V3.2 Exp Thinking": {
+      "or_id": "deepseek/deepseek-v3.2-exp",
+      "or_name": "DeepSeek: DeepSeek V3.2 Exp",
+      "provider": "DeepSeek",
+      "created": "2025-09-29",
+      "context_length": 163840,
+      "max_output_tokens": 65536,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "DeepSeek",
+      "knowledge_cutoff": "2025-07-31",
+      "total_params_b": 685.4,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.27,
+        "output": 0.41
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "deepseek-ai/DeepSeek-V3.2-Exp",
+      "or_free_variants": null,
+      "description": "DeepSeek-V3.2-Exp is an experimental large language model released by DeepSeek as an intermediate step between V3.1 and future architectures. It introduces DeepSeek Sparse Attention (DSA), a fine-grained sparse attention mechanism...",
+      "superseded_by": null,
+      "match": "subset",
+      "stale": true,
       "modalities_source": "openrouter",
       "available_at": [
         {
           "p": "openrouter",
           "n": "OpenRouter",
-          "in": 1.25,
-          "out": 10.0
+          "in": 0.27,
+          "out": 0.41
         },
         {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 1.25,
-          "out": 10.0
+          "p": "novita-ai",
+          "n": "Novita AI",
+          "in": 0.27,
+          "out": 0.41
         }
       ],
       "no_bench_coverage": true
@@ -13475,12 +15115,6 @@
           "out": 0.33
         }
       ],
-      "no_bench_coverage": true
-    },
-    "GPT 4o Mini 2024.07 18": {
-      "created": "2024-07-18",
-      "created_source": "display_name",
-      "stale": true,
       "no_bench_coverage": true
     }
   }

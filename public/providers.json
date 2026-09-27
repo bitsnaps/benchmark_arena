@@ -12577,7 +12577,7 @@
         }
       ],
       "free_tier": true,
-      "edge_rtt_ms": 169
+      "edge_rtt_ms": 172
     },
     {
       "id": "together-ai",
@@ -17132,6 +17132,14 @@
           "ctx": 400000
         },
         {
+          "id": "~z-ai/glm-latest",
+          "name": "Z.ai: GLM Latest",
+          "in": 0.3556,
+          "out": 1.1176,
+          "cache": 0.066,
+          "ctx": 1048576
+        },
+        {
           "id": "meituan/longcat-2.0",
           "name": "Meituan: LongCat 2.0",
           "in": 0.3,
@@ -17685,14 +17693,6 @@
           "ctx": 131072
         },
         {
-          "id": "~z-ai/glm-latest",
-          "name": "Z.ai: GLM Latest",
-          "in": 0.3426,
-          "out": 2.574,
-          "cache": 0.0595,
-          "ctx": 262144
-        },
-        {
           "id": "anthropic/claude-haiku-4.5:batch",
           "name": "Anthropic: Claude Haiku 4.5 (batch)",
           "in": 0.5,
@@ -17835,14 +17835,6 @@
           "ctx": 262144
         },
         {
-          "id": "deepseek/deepseek-v4-pro-0813",
-          "name": "DeepSeek: DeepSeek V4 Pro 0813",
-          "in": 0.245,
-          "out": 3.5,
-          "cache": 0.172,
-          "ctx": 1048576
-        },
-        {
           "id": "x-ai/grok-4.20",
           "name": "SpaceXAI: Grok 4.20",
           "in": 1.25,
@@ -17865,6 +17857,14 @@
           "out": 2.5,
           "cache": 0.2,
           "ctx": 1000000
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro-0813",
+          "name": "DeepSeek: DeepSeek V4 Pro 0813",
+          "in": 0.293,
+          "out": 3.5,
+          "cache": 0.172,
+          "ctx": 1048576
         },
         {
           "id": "qwen/qwen3-coder-plus",
@@ -18245,14 +18245,6 @@
           "ctx": 500000
         },
         {
-          "id": "~moonshotai/kimi-latest",
-          "name": "MoonshotAI: Kimi Latest",
-          "in": 0.9875,
-          "out": 5.53,
-          "cache": 0.1145,
-          "ctx": 1048576
-        },
-        {
           "id": "writer/palmyra-x5",
           "name": "Writer: Palmyra X5",
           "in": 0.6,
@@ -18459,6 +18451,14 @@
           "out": 7.5,
           "cache": 0.25,
           "ctx": 262144
+        },
+        {
+          "id": "~moonshotai/kimi-latest",
+          "name": "MoonshotAI: Kimi Latest",
+          "in": 1.0,
+          "out": 9.0,
+          "cache": 0.3,
+          "ctx": 1048576
         },
         {
           "id": "google/gemini-3.5-flash",
@@ -20608,7 +20608,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 201
+      "edge_rtt_ms": 370
     },
     {
       "id": "vercel-ai-gateway",
@@ -21845,7 +21845,7 @@
           "base": "space-bunny"
         }
       ],
-      "edge_rtt_ms": 508
+      "edge_rtt_ms": 539
     },
     {
       "id": "w-b-inference-gateway",

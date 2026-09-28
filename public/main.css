@@ -715,6 +715,17 @@ a.hbar:hover .name { color: var(--teal); }
   white-space: nowrap;
 }
 .pm-chip-group + .pm-chip { margin-left: .1rem; }
+/* stats-52: collapsed picker row — dashed "+N more" expander and the
+   my-gateway chips (dashed teal accent, the same overlay language as the
+   pm-h-mine columns; dimmed while the gateway matches no arena model) */
+.pm-chip-more { border-style: dashed; }
+.pm-chip-mine { border-style: dashed; }
+.pm-chip-mine.is-on {
+  color: var(--teal);
+  border-color: rgba(46, 230, 199, 0.55);
+  background: rgba(46, 230, 199, 0.10);
+}
+.pm-chip.is-dim { opacity: .45; }
 .pm-price-label { min-width: 11ch; display: inline-block; }
 .pm-coverage { text-align: right; }
 .pm-page-label { white-space: nowrap; margin: 0 .5rem; }

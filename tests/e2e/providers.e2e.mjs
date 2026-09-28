@@ -6,6 +6,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildMatrix, sortMatrixRows, isBatchRow, DEFAULT_COLUMNS, cellBlend, latencyTier, normKey } from '../../src/lib/pivot.js';
+// stats-52: the picker collapse — expectations re-derive with the SAME pure fn the app ships
+import { pickVisibleChips, CHIP_FLOOR } from '../../src/lib/chipRow.js';
 import { capFromSlider, universeScale } from '../../src/lib/priceFilter.js';
 import { isNewModel, createdIndexFromMeta } from '../../src/lib/newFlag.js';
 import { fmtUsd, fmtSec, fmtScore } from '../../src/lib/format.js';
@@ -522,6 +524,67 @@ const run = async () => {
     else fail(`provider picker: expected ${expectCols - 3} columns total, got ${headCols2 - 1} headers`);
     await page.click('.pm-controls >> text=reset');
     await page.waitForTimeout(300);
+
+    // ── 5e. stats-52: chip-row collapse — selected ∪ top-weight floor ──
+    // The expected visible set derives from the SAME pure fn the view
+    // ships, so the assertion is churn-proof against data refreshes.
+    const providersNoLab = catalog.providers.filter(p => p.kind !== 'first-party');
+    const labsAll = catalog.providers.filter(p => p.kind === 'first-party');
+    const defSel = new Set(DEFAULT_COLUMNS.filter(id => catalog.providers.some(p => p.id === id)));
+    const expProvVis = pickVisibleChips(providersNoLab, defSel, CHIP_FLOOR, p => p.models.length);
+    const expLabVis = pickVisibleChips(labsAll, defSel, CHIP_FLOOR, p => p.models.length);
+    const norm = (s) => s.replace(/\s+/g, '');
+    const chipTxts = async () => (await page.locator('.pm-controls').first()
+      .locator('.pm-chip:not(.pm-chip-more)').allInnerTexts())
+      .map(norm).filter(t => t !== 'reset');
+    const gotChips = await chipTxts();
+    const wantChips = [...expProvVis, ...expLabVis].map(p => norm(p.name + p.models.length));
+    if (gotChips.length === wantChips.length && gotChips.every((t, i) => t === wantChips[i]))
+      ok(`picker collapsed to the derived visible set (${wantChips.length} chips = selected columns + top-weight floor, registry order)`);
+    else fail(`picker collapse mismatch: got [${gotChips.join('|')}] want [${wantChips.join('|')}]`);
+
+    const hiddenProv = providersNoLab.length - expProvVis.length;
+    const hiddenLabs = labsAll.length - expLabVis.length;
+    const moreChips = page.locator('.pm-controls').first().locator('.pm-chip-more');
+    const wantMore = (hiddenProv > 0 ? 1 : 0) + (hiddenLabs > 0 ? 1 : 0);
+    if (await moreChips.count() === wantMore && wantMore === 2)
+      ok(`both clusters hide chips behind expanders (providers +${hiddenProv}, labs +${hiddenLabs})`);
+    else fail(`expander count: expected 2, got ${await moreChips.count()}`);
+    const moreTxt = (await moreChips.first().innerText()).replace(/\s+/g, ' ').trim();
+    if (moreTxt === `+${hiddenProv} more`) ok(`providers expander label honest: "${moreTxt}"`);
+    else fail(`providers expander label: want "+${hiddenProv} more", got "${moreTxt}"`);
+
+    // expand inline → the full providers cluster renders; collapse restores
+    await moreChips.first().click();
+    await page.waitForTimeout(250);
+    const expandedTxt = (await moreChips.first().innerText()).trim();
+    const expandedN = await chipTxts();
+    if (expandedTxt === 'less' && expandedN.length === providersNoLab.length + expLabVis.length)
+      ok(`expand is inline and complete: all ${providersNoLab.length} provider chips visible, expander reads "less"`);
+    else fail(`expand wrong: label="${expandedTxt}" chips=${expandedN.length} want=${providersNoLab.length + expLabVis.length}`);
+
+    // a chip selected while expanded keeps its seat after collapsing
+    const hiddenPick = providersNoLab
+      .filter(p => !expProvVis.some(v => v.id === p.id))
+      .filter(p => catalog.providers.filter(x => x.name.includes(p.name)).length === 1)[0];
+    if (!hiddenPick) fail('no unique hidden provider found for the seat test');
+    else {
+      await page.click(`.pm-chip:has-text("${hiddenPick.name}")`);
+      await page.waitForTimeout(300);
+      const colsSel = await page.locator('.pm-table thead th').count();
+      if (colsSel === 1 + expectCols + 1) ok(`selecting "${hiddenPick.name}" adds its column (${colsSel - 1} columns)`);
+      else fail(`seat-select column count: expected ${expectCols + 1}, got ${colsSel - 1}`);
+      await moreChips.first().click(); // collapse — the expander reads 'less'
+      await page.waitForTimeout(250);
+      const keptVisible = (await chipTxts()).includes(norm(hiddenPick.name + hiddenPick.models.length));
+      if (keptVisible) ok('the newly selected chip KEEPS its seat after collapsing (never hidden while active)');
+      else fail(`"${hiddenPick.name}" chip vanished after collapse`);
+      await page.click(`.pm-chip:has-text("${hiddenPick.name}")`); // deselect — restore state
+      await page.waitForTimeout(300);
+      const colsBack = await page.locator('.pm-table thead th').count();
+      if (colsBack === 1 + expectCols) ok(`deselect restores ${colsBack - 1} columns`);
+      else fail(`restore column count: expected ${expectCols}, got ${colsBack - 1}`);
+    }
 
     // back to tab 1: cards still render
     await page.click('.tabs li >> text=By provider');

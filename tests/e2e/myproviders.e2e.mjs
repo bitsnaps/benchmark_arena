@@ -339,6 +339,63 @@ const SOL_FIXTURE = JSON.stringify({
   ok('restoring the key re-prices the cell instantly (render-time lens confirmed)');
   await searchBox.fill('');
 
+  // ── 8e. stats-52: per-gateway chips — trim the overlay one gateway at a
+  // time. State: Compare tab, master switch ON, two gateways, both on.
+  // The master switch keeps its exact semantics; chips only trim.
+  await page.waitForSelector('.pm-chip-mine', { timeout: 5000 });
+  const mineGroups = (await page.locator('.pm-chip-group').allInnerTexts()).map(s => s.trim().toLowerCase());
+  if (mineGroups.join('|') === 'providers|labs|my gateways')
+    ok('gateway chips join the picker row as a third cluster (one list for all)');
+  else fail('mine cluster label wrong: "' + mineGroups.join('|') + '"');
+  if (await page.locator('.pm-chip-mine').count() === 2) ok('one dashed chip per connected gateway (2)');
+  else fail('expected 2 gateway chips, got ' + await page.locator('.pm-chip-mine').count());
+
+  // badges: arena models matched per gateway — honest counts, never fabricated
+  const badgeOf = async (label) => {
+    const t = (await page.locator(`.pm-chip-mine:has-text("${label}")`).innerText()).trim();
+    const m = t.match(/(\d+)\s*$/);
+    return m ? Number(m[1]) : -1;
+  };
+  const unoN = await badgeOf('UnoRouter');
+  const solN = await badgeOf('Sol Gateway');
+  if (unoN >= 1 && solN >= 1) ok(`matched-model badges live (UnoRouter ${unoN}, Sol ${solN})`);
+  else fail(`badges unexpected: uno=${unoN} sol=${solN}`);
+
+  // trimming a gateway chip drops ONLY its column; the master switch stays on
+  await page.click('.pm-chip-mine:has-text("Sol Gateway")');
+  await page.waitForFunction(() => document.querySelectorAll('.pm-h-mine').length === 1, null, { timeout: 5000 });
+  const leftHeader = (await page.locator('.pm-h-mine').innerText()).replace(/\s+/g, ' ').trim().toUpperCase();
+  const covAfterTrim = (await page.locator('.pm-coverage').innerText()).replace(/\s+/g, ' ');
+  if (leftHeader.includes('UNOROUTER') && covAfterTrim.includes('+1 my gateway'))
+    ok(`trim drops only Sol's column — coverage honest ("+1 my gateway", ${leftHeader})`);
+  else fail(`trim wrong: header="${leftHeader}" coverage="${covAfterTrim}"`);
+  if (await page.locator('label.switch:has-text("my gateways") input').isChecked())
+    ok('master switch UNTOUCHED by the chip trim (still checked, semantics preserved)');
+  else fail('master switch got flipped by a chip trim');
+
+  // the trimmed chip stays visible (floor pads unselected) — one click re-adds
+  await page.click('.pm-chip-mine:has-text("Sol Gateway")');
+  await page.waitForFunction(() => document.querySelectorAll('.pm-h-mine').length === 2, null, { timeout: 5000 });
+  ok('re-clicking the trimmed chip restores its column (2 gateway columns back)');
+
+  // the trim persists across reload — Sol still off after reload
+  await page.click('.pm-chip-mine:has-text("Sol Gateway")'); // trim again
+  await page.waitForFunction(() => document.querySelectorAll('.pm-h-mine').length === 1, null, { timeout: 5000 });
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('.pm-table', { timeout: 10000 });
+  await page.waitForSelector('.pm-chip-mine', { timeout: 5000 });
+  if (await page.locator('.pm-h-mine').count() === 1)
+    ok('the gateway trim persists across reload (only UnoRouter\'s column returns)');
+  else fail('trim lost after reload: ' + await page.locator('.pm-h-mine').count() + ' mine columns');
+  // restore, then master off → the whole cluster hides (semantics unchanged)
+  await page.click('.pm-chip-mine:has-text("Sol Gateway")');
+  await page.waitForFunction(() => document.querySelectorAll('.pm-h-mine').length === 2, null, { timeout: 5000 });
+  await page.locator('label.switch:has-text("my gateways")').click();
+  await page.waitForFunction(() => !document.querySelector('.pm-chip-mine'), null, { timeout: 5000 });
+  if (!(await page.locator('.pm-h-mine').count()))
+    ok('master switch off hides the cluster AND the columns (all-on/all-off intact)');
+  else fail('columns survived the master switch going off');
+
   // back to the panel for the persistence + clear-all steps
   await page.click('.tabs li a:has-text("My providers")');
   await page.waitForSelector('.mp-card', { timeout: 10000 });

@@ -47,6 +47,9 @@ import {
   buildMatrix, sortMatrixRows, filterMatrix, cellBlend, cheapestPid,
   latencyClass, isBatchRow, normKey, rowBlend, DEFAULT_COLUMNS,
 } from '../lib/pivot.js';
+// stats-52: the picker chip-row collapse (selected ∪ top-weight floor) —
+// the pure partition lives in lib (unit-tested), the view only feeds it.
+import { pickVisibleChips, CHIP_FLOOR } from '../lib/chipRow.js';
 import { useProviders } from '../stores/providers.js';
 // stats-38: opt-in "my gateways" overlay columns — the pure rules live in
 // lib/myProviders.js (unit-tested); the store singleton is shared with the
@@ -285,8 +288,35 @@ function toggleProvider(id) {
 }
 function resetColumns() {
   selected.value = new Set(DEFAULT_COLUMNS.filter(id => byId.value[id]));
-  try { localStorage.removeItem(PICKER_KEY); } catch { /* private mode */ }
+  mineOff.value = new Set(); // stats-52: the gateway trim resets too — every gateway back on
+  try {
+    localStorage.removeItem(PICKER_KEY);
+    localStorage.removeItem(MINE_OFF_KEY);
+  } catch { /* private mode */ }
 }
+
+// ── stats-52: chip-row collapse — selected ∪ top-weight floor ─────────
+// The picker row rendered all 65 catalog chips and crowded the pivot.
+// Each cluster now shows the selected chips (live columns — always
+// toggleable) padded with the biggest unselected sellers up to a floor of
+// 6; everything else hides behind a "+N more" chip that expands inline.
+// Expansion is session-only: the persisted state is the selection, not
+// the cosmetics. Order never jumps — the visible set renders in registry
+// order (pickVisibleChips guarantees it).
+const showAllProviders = ref(false);
+const showAllLabs = ref(false);
+const visibleProviderChips = computed(() =>
+  pickVisibleChips(pickerProviders.value, selected.value, CHIP_FLOOR, p => p.models.length));
+const visibleLabChips = computed(() =>
+  pickVisibleChips(pickerLabs.value, selected.value, CHIP_FLOOR, p => p.models.length));
+const shownProviderChips = computed(() =>
+  showAllProviders.value ? pickerProviders.value : visibleProviderChips.value);
+const shownLabChips = computed(() =>
+  showAllLabs.value ? pickerLabs.value : visibleLabChips.value);
+const hiddenProvidersN = computed(() => pickerProviders.value.length - visibleProviderChips.value.length);
+const hiddenLabsN = computed(() => pickerLabs.value.length - visibleLabChips.value.length);
+const moreTitle = (all, hidden) =>
+  `Show all ${all} — ${hidden} hidden behind the top-${CHIP_FLOOR} floor (selected columns always stay visible)`;
 
 // stats-19: pricing-mode variants (OpenRouter ':batch' ids — async endpoints
 // of the SAME model at a discount) are hidden by default so the default view
@@ -358,6 +388,61 @@ const mineCatalogIndex = computed(() =>
 const mineOverlay = computed(() =>
   mineCatalogIndex.value ? buildMineOverlay(myProviders.value || [], mineCatalogIndex.value) : null);
 
+// ── stats-52: per-gateway chips — the overlay, one toggle at a time ───
+// The master switch below keeps its exact semantics (OFF = no overlay at
+// all); when it is ON, each connected gateway also gets a chip in the
+// picker row so its column can be trimmed individually. Persisted as the
+// DESELECTED ids (a trim): an empty trim means "all gateways on", so a
+// gateway added later shows up by default (the pre-stats-52 behavior)
+// and a deselect-all survives a reload. Stale ids of deleted gateways
+// are harmless (uid() ids never repeat) — nothing to prune.
+const MINE_OFF_KEY = 'providers-compare-mine-off';
+const mineOff = ref(new Set());
+try {
+  const savedOff = JSON.parse(localStorage.getItem(MINE_OFF_KEY) || '[]');
+  if (Array.isArray(savedOff)) mineOff.value = new Set(savedOff.map(String));
+} catch { /* fresh visit / private mode */ }
+watch(mineOff, (v) => { try { localStorage.setItem(MINE_OFF_KEY, JSON.stringify([...v])); } catch { /* private mode */ } });
+
+function toggleMineCol(id) {
+  const next = new Set(mineOff.value);
+  if (next.has(id)) next.delete(id);
+  else next.add(id);
+  mineOff.value = next;
+}
+
+// The columns that actually render: master switch gates the whole
+// overlay, the trim picks which gateways participate.
+const mineColsOn = computed(() => mineCols.value.filter(mc => !mineOff.value.has(mc.id)));
+
+// Honest chip badge: how many arena models this gateway's overlay can
+// price (matched names in the overlay index — view-filter-independent,
+// unlike the post-filter mineCounts the column header tooltip uses).
+const mineMatchN = computed(() => {
+  const counts = {};
+  if (!mineOverlay.value) return counts;
+  for (const perProvider of mineOverlay.value.values())
+    for (const pid of perProvider.keys()) counts[pid] = (counts[pid] || 0) + 1;
+  return counts;
+});
+
+const showAllMine = ref(false);
+const mineChipList = computed(() =>
+  mineCols.value.map(mc => ({ ...mc, n: mineMatchN.value[mc.id] || 0 })));
+const mineOnSet = computed(() =>
+  new Set(mineCols.value.filter(mc => !mineOff.value.has(mc.id)).map(mc => mc.id)));
+const visibleMineChips = computed(() =>
+  pickVisibleChips(mineChipList.value, mineOnSet.value, CHIP_FLOOR, c => c.n));
+const shownMineChips = computed(() =>
+  showAllMine.value ? mineChipList.value : visibleMineChips.value);
+const hiddenMineN = computed(() => mineChipList.value.length - visibleMineChips.value.length);
+
+const mineChipTitle = (mc) => {
+  const n = mineMatchN.value[mc.id] || 0;
+  if (!n) return `${mc.label} — your gateway (stored only in this browser) · no arena models matched yet — check the matcher on the My providers tab`;
+  return `${mc.label} — your gateway (stored only in this browser) · ${n} arena models matched · click to ${mineOff.value.has(mc.id) ? 'add back' : 'remove'} its column`;
+};
+
 // Resolve each pivot row's arena model with the SAME staged matcher the
 // panel uses (matchOne over r.key), then headline that provider's SKUs.
 // One SKU can surface on a base row and a dated-snapshot twin row — both
@@ -370,7 +455,7 @@ const attachMine = (rows) => {
     const perProvider = mineOverlay.value.get(hit.name);
     if (!perProvider) return r;
     const mine = {};
-    for (const mc of mineCols.value) {
+    for (const mc of mineColsOn.value) {
       const skus = perProvider.get(mc.id);
       if (!skus || !skus.length) continue;
       const head = headlineSku(skus);
@@ -736,26 +821,67 @@ const pickerTitle = (p) =>
       <!-- ── Tab 2: Compare pivot — models × providers ────────────────── -->
       <b-tab-item label="Compare">
         <template v-if="!loading && !error && selected">
-          <!-- stats-22: chips clustered Providers / Labs, same order as tab 1 -->
+          <!-- stats-22: chips clustered Providers / Labs, same order as tab 1.
+               stats-52: each cluster collapses to the selected chips plus the
+               biggest unselected sellers up to a 6-chip floor — a "+N more"
+               chip expands the full list inline (session-only). The user's
+               gateways join as a third cluster (dashed mine chips) once the
+               master switch is on — each chip toggles its own overlay column. -->
           <div class="row pm-controls mt">
             <span class="cell-sub">Columns:</span>
             <span class="pm-chip-group">Providers</span>
-            <b-tooltip v-for="p in pickerProviders" :key="p.id" :label="pickerTitle(p)"
+            <b-tooltip v-for="p in shownProviderChips" :key="p.id" :label="pickerTitle(p)"
               type="is-dark" multilined :delay="100">
               <button type="button" class="pm-chip" :class="{ 'is-on': selected.has(p.id) }"
-                @click="toggleProvider(p.id)">
+                :aria-pressed="selected.has(p.id)" @click="toggleProvider(p.id)">
                 {{ p.name }}<span class="pm-chip-n">{{ p.models.length }}</span>
+              </button>
+            </b-tooltip>
+            <b-tooltip v-if="hiddenProvidersN > 0 || showAllProviders" :label="moreTitle(pickerProviders.length, hiddenProvidersN)"
+              type="is-dark" multilined :delay="100">
+              <button type="button" class="pm-chip pm-chip-more" :aria-expanded="showAllProviders"
+                @click="showAllProviders = !showAllProviders">
+                {{ showAllProviders ? 'less' : '+' + hiddenProvidersN + ' more' }}
               </button>
             </b-tooltip>
             <span class="pm-chip-group">Labs</span>
-            <b-tooltip v-for="p in pickerLabs" :key="p.id" :label="pickerTitle(p)"
+            <b-tooltip v-for="p in shownLabChips" :key="p.id" :label="pickerTitle(p)"
               type="is-dark" multilined :delay="100">
               <button type="button" class="pm-chip" :class="{ 'is-on': selected.has(p.id) }"
-                @click="toggleProvider(p.id)">
+                :aria-pressed="selected.has(p.id)" @click="toggleProvider(p.id)">
                 {{ p.name }}<span class="pm-chip-n">{{ p.models.length }}</span>
               </button>
             </b-tooltip>
-            <b-tooltip label="Restore the default shortlist" type="is-dark" :delay="100">
+            <b-tooltip v-if="hiddenLabsN > 0 || showAllLabs" :label="moreTitle(pickerLabs.length, hiddenLabsN)"
+              type="is-dark" multilined :delay="100">
+              <button type="button" class="pm-chip pm-chip-more" :aria-expanded="showAllLabs"
+                @click="showAllLabs = !showAllLabs">
+                {{ showAllLabs ? 'less' : '+' + hiddenLabsN + ' more' }}
+              </button>
+            </b-tooltip>
+            <!-- stats-52: the user's gateways, same chip row — the master
+                 switch below stays the all-on/all-off control; the chips trim
+                 which gateway's column renders. Badge = arena models matched
+                 (honest 0 → dimmed chip, never a fabricated count). -->
+            <template v-if="showMine && mineCols.length">
+              <span class="pm-chip-group">My gateways</span>
+              <b-tooltip v-for="mc in shownMineChips" :key="mc.pid" :label="mineChipTitle(mc)"
+                type="is-dark" multilined :delay="100">
+                <button type="button" class="pm-chip pm-chip-mine"
+                  :class="{ 'is-on': !mineOff.has(mc.id), 'is-dim': !(mineMatchN[mc.id] || 0) }"
+                  :aria-pressed="!mineOff.has(mc.id)" @click="toggleMineCol(mc.id)">
+                  {{ mc.label }}<span class="pm-chip-n">{{ mineMatchN[mc.id] || 0 }}</span>
+                </button>
+              </b-tooltip>
+              <b-tooltip v-if="hiddenMineN > 0 || showAllMine" :label="moreTitle(mineCols.length, hiddenMineN)"
+                type="is-dark" multilined :delay="100">
+                <button type="button" class="pm-chip pm-chip-more" :aria-expanded="showAllMine"
+                  @click="showAllMine = !showAllMine">
+                  {{ showAllMine ? 'less' : '+' + hiddenMineN + ' more' }}
+                </button>
+              </b-tooltip>
+            </template>
+            <b-tooltip label="Restore the default shortlist — catalog columns back to defaults, every gateway back on" type="is-dark" :delay="100">
               <button type="button" class="pm-chip" @click="resetColumns">reset</button>
             </b-tooltip>
           </div>
@@ -794,7 +920,7 @@ const pickerTitle = (p) =>
               {{ matrix ? matrix.coverage.models : 0 }} canonical models ·
               {{ selProviders.length }} columns ·
               {{ matrix ? matrix.coverage.collapsed : 0 }} duplicate ids collapsed ·
-              {{ visibleRows.length }} shown<span v-if="!showBatch && batchHidden"> · {{ batchHidden }} batch variants hidden</span><span v-if="showMine && mineCols.length"> · +{{ mineCols.length }} my gateway{{ mineCols.length === 1 ? '' : 's' }}</span>
+              {{ visibleRows.length }} shown<span v-if="!showBatch && batchHidden"> · {{ batchHidden }} batch variants hidden</span><span v-if="showMine && mineColsOn.length"> · +{{ mineColsOn.length }} my gateway{{ mineColsOn.length === 1 ? '' : 's' }}</span>
             </span>
           </div>
 
@@ -824,9 +950,10 @@ const pickerTitle = (p) =>
                   </th>
                   <!-- stats-38: the user's gateways, appended after the catalog
                        columns with a dashed accent + 'mine' marker so the
-                       overlay is identifiable at a glance -->
+                       overlay is identifiable at a glance. stats-52: only the
+                       gateways whose picker chip is still on render here. -->
                   <template v-if="showMine">
-                    <th v-for="mc in mineCols" :key="mc.pid" class="pm-h pm-h-mine"
+                    <th v-for="mc in mineColsOn" :key="mc.pid" class="pm-h pm-h-mine"
                       :class="{ 'is-sorted': sortPid === mc.pid }"
                       @click="sortBy(mc.pid)">
                       <b-tooltip :label="mineHeaderTitle(mc)" type="is-dark" multilined :delay="100">
@@ -906,7 +1033,7 @@ const pickerTitle = (p) =>
                       models the gateway doesn't serve, a free chip for
                       :free twins and the ▼ undercut marker. -->
                   <template v-if="showMine">
-                    <td v-for="mc in mineCols" :key="mc.pid" class="num pm-cell pm-cell-mine">
+                    <td v-for="mc in mineColsOn" :key="mc.pid" class="num pm-cell pm-cell-mine">
                       <template v-if="r.mine && r.mine[mc.pid]">
                         <b-tooltip v-if="r.mine[mc.pid].blend != null || r.mine[mc.pid].in != null || r.mine[mc.pid].out != null"
                           :label="mineCellTitle(r, mc)" type="is-dark" multilined
@@ -933,7 +1060,7 @@ const pickerTitle = (p) =>
                   </template>
                 </tr>
                 <tr v-if="!pagedRows.length">
-                  <td :colspan="selProviders.length + 1 + (showMine ? mineCols.length : 0)" class="cell-sub" style="text-align:center;padding:1.2rem">
+                  <td :colspan="selProviders.length + 1 + (showMine ? mineColsOn.length : 0)" class="cell-sub" style="text-align:center;padding:1.2rem">
                     No models match the current filters — relax the search, price cap or column set.
                   </td>
                 </tr>
@@ -961,7 +1088,11 @@ const pickerTitle = (p) =>
             <span class="lat-slow legend-chip">≥ 3.5 s</span>;
             hover any cell for the exact value. Unmeasured models stay gray.
             <b>My gateways</b> (stats-38): the optional <b>my gateways</b> switch appends
-            a column per provider connected on the "My providers" tab — cells show your
+            a column per provider connected on the "My providers" tab — and since stats-52
+            each connected gateway also gets its own dashed chip in the column picker, so
+            you can keep some gateways out of the table while the switch stays on (the
+            switch remains the master on/off; the reset button brings every gateway back).
+            Cells show your
             input/output price side by side per 1M tokens (the 3:1 blend that drives sorting
             and comparison stays in the tooltip), <code>:free</code> twins are flagged with
             the rate-limit caveat, gateways that publish no prices stay dashes, and a
@@ -971,6 +1102,8 @@ const pickerTitle = (p) =>
             against each listing entry at render time, provenance-marked in the tooltip,
             never guessed. Your columns never affect catalog
             highlighting, filters or counts, and nothing leaves this browser.
+            The picker itself stays short (stats-52): your columns plus the biggest
+            sellers, with <b>+N more</b> expanding the full list inline.
           </p>
         </template>
       </b-tab-item>

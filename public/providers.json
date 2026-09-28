@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-27",
+  "as_of": "2026-09-28",
   "kinds": [
     "first-party",
     "cloud",
@@ -12577,7 +12577,7 @@
         }
       ],
       "free_tier": true,
-      "edge_rtt_ms": 172
+      "edge_rtt_ms": 170
     },
     {
       "id": "together-ai",
@@ -15936,14 +15936,6 @@
           "ctx": 131072
         },
         {
-          "id": "deepseek/deepseek-v4-flash",
-          "name": "DeepSeek: DeepSeek V4 Flash 0423",
-          "in": 0.0469,
-          "out": 0.0938,
-          "cache": 0.0094,
-          "ctx": 1048576
-        },
-        {
           "id": "mistralai/ministral-8b-2512:batch",
           "name": "Mistral: Ministral 3 8B 2512 (batch)",
           "in": 0.075,
@@ -15995,14 +15987,6 @@
           "out": 0.12,
           "cache": 0.03,
           "ctx": 262144
-        },
-        {
-          "id": "z-ai/glm-5.3-flash",
-          "name": "Z.ai: GLM 5.3 Flash",
-          "in": 0.045,
-          "out": 0.14,
-          "cache": 0.01,
-          "ctx": 1048576
         },
         {
           "id": "~z-ai/glm-flash-latest",
@@ -16250,22 +16234,6 @@
           "ctx": 131072
         },
         {
-          "id": "deepseek/deepseek-v4.1-flash",
-          "name": "DeepSeek: DeepSeek V4.1 Flash",
-          "in": 0.035,
-          "out": 0.29,
-          "cache": 0.001,
-          "ctx": 1040000
-        },
-        {
-          "id": "~deepseek/deepseek-flash-latest",
-          "name": "DeepSeek: DeepSeek Flash Latest",
-          "in": 0.035,
-          "out": 0.29,
-          "cache": 0.001,
-          "ctx": 1040000
-        },
-        {
           "id": "qwen/qwen3.5-flash-02-23",
           "name": "Qwen: Qwen3.5-Flash",
           "in": 0.065,
@@ -16420,12 +16388,12 @@
           "ctx": 262144
         },
         {
-          "id": "tencent/hy3",
-          "name": "Tencent: Hy3",
-          "in": 0.0825,
-          "out": 0.33,
-          "cache": 0.0206,
-          "ctx": 262144
+          "id": "deepseek/deepseek-v4-flash",
+          "name": "DeepSeek: DeepSeek V4 Flash 0423",
+          "in": 0.14,
+          "out": 0.28,
+          "cache": 0.028,
+          "ctx": 1048576
         },
         {
           "id": "meta-llama/llama-3.3-70b-instruct",
@@ -16619,12 +16587,36 @@
           "ctx": 1000000
         },
         {
-          "id": "deepseek/deepseek-v3.2",
-          "name": "DeepSeek: DeepSeek V3.2",
-          "in": 0.269,
-          "out": 0.4,
-          "cache": 0.1345,
-          "ctx": 163840
+          "id": "deepseek/deepseek-v4.1-flash",
+          "name": "DeepSeek: DeepSeek V4.1 Flash",
+          "in": 0.0297,
+          "out": 0.6,
+          "cache": 0.0268,
+          "ctx": 1048576
+        },
+        {
+          "id": "~deepseek/deepseek-flash-latest",
+          "name": "DeepSeek: DeepSeek Flash Latest",
+          "in": 0.0297,
+          "out": 0.6,
+          "cache": 0.0268,
+          "ctx": 1048576
+        },
+        {
+          "id": "z-ai/glm-5.3-flash",
+          "name": "Z.ai: GLM 5.3 Flash",
+          "in": 0.15,
+          "out": 0.5,
+          "cache": 0.03,
+          "ctx": 1048575
+        },
+        {
+          "id": "tencent/hy3",
+          "name": "Tencent: Hy3",
+          "in": 0.132,
+          "out": 0.528,
+          "cache": 0.033,
+          "ctx": 262144
         },
         {
           "id": "deepseek/deepseek-v3.2-exp",
@@ -16632,6 +16624,14 @@
           "in": 0.27,
           "out": 0.41,
           "ctx": 163840
+        },
+        {
+          "id": "deepseek/deepseek-v3.2",
+          "name": "DeepSeek: DeepSeek V3.2",
+          "in": 0.28,
+          "out": 0.42,
+          "cache": 0.028,
+          "ctx": 131072
         },
         {
           "id": "openai/gpt-5.6-luna-pro:batch",
@@ -16771,14 +16771,6 @@
           "ctx": 128000
         },
         {
-          "id": "deepseek/deepseek-v4-flash-vision-exp",
-          "name": "DeepSeek: DeepSeek V4 Flash Vision Exp",
-          "in": 0.2156,
-          "out": 0.6468,
-          "cache": 0.0069,
-          "ctx": 1048576
-        },
-        {
           "id": "google/gemini-3.1-flash-lite:batch",
           "name": "Google: Gemini 3.1 Flash Lite (batch)",
           "in": 0.125,
@@ -16800,14 +16792,6 @@
           "out": 0.8,
           "cache": 0.07,
           "ctx": 262144
-        },
-        {
-          "id": "~deepseek/deepseek-pro-latest",
-          "name": "DeepSeek: DeepSeek Pro Latest",
-          "in": 0.2442,
-          "out": 0.7326,
-          "cache": 0.0078,
-          "ctx": 1048576
         },
         {
           "id": "z-ai/glm-4.5-air",
@@ -16871,28 +16855,12 @@
           "ctx": 1000000
         },
         {
-          "id": "deepseek/deepseek-v4-pro",
-          "name": "DeepSeek: DeepSeek V4 Pro 0423",
-          "in": 0.348,
-          "out": 0.696,
-          "cache": 0.029,
-          "ctx": 1024000
-        },
-        {
           "id": "arcee-ai/trinity-large-thinking",
           "name": "Arcee AI: Trinity Large Thinking",
           "in": 0.25,
           "out": 0.8,
           "cache": 0.06,
           "ctx": 262144
-        },
-        {
-          "id": "minimax/minimax-m2.7",
-          "name": "MiniMax: MiniMax M2.7",
-          "in": 0.21,
-          "out": 0.84,
-          "cache": 0.042,
-          "ctx": 196608
         },
         {
           "id": "cognitivecomputations/dolphin-mistral-24b-venice-edition",
@@ -16978,13 +16946,6 @@
           "in": 0.62,
           "out": 0.62,
           "ctx": 65535
-        },
-        {
-          "id": "deepseek/deepseek-chat-v3-0324",
-          "name": "DeepSeek: DeepSeek V3 0324",
-          "in": 0.25,
-          "out": 1.0,
-          "ctx": 163840
         },
         {
           "id": "deepseek/deepseek-v3.1-terminus",
@@ -17124,6 +17085,14 @@
           "ctx": 131072
         },
         {
+          "id": "deepseek/deepseek-chat-v3-0324",
+          "name": "DeepSeek: DeepSeek V3 0324",
+          "in": 0.29,
+          "out": 1.14,
+          "cache": 0.11,
+          "ctx": 163840
+        },
+        {
           "id": "openai/gpt-5.4-nano",
           "name": "OpenAI: GPT-5.4 Nano",
           "in": 0.2,
@@ -17132,12 +17101,11 @@
           "ctx": 400000
         },
         {
-          "id": "~z-ai/glm-latest",
-          "name": "Z.ai: GLM Latest",
-          "in": 0.3556,
-          "out": 1.1176,
-          "cache": 0.066,
-          "ctx": 1048576
+          "id": "qwen/qwen3.5-35b-a3b",
+          "name": "Qwen: Qwen3.5-35B-A3B",
+          "in": 0.1625,
+          "out": 1.3,
+          "ctx": 262144
         },
         {
           "id": "meituan/longcat-2.0",
@@ -17179,20 +17147,20 @@
           "ctx": 204800
         },
         {
+          "id": "minimax/minimax-m2.7",
+          "name": "MiniMax: MiniMax M2.7",
+          "in": 0.3,
+          "out": 1.2,
+          "cache": 0.06,
+          "ctx": 204800
+        },
+        {
           "id": "minimax/minimax-m3",
           "name": "MiniMax: MiniMax M3",
           "in": 0.3,
           "out": 1.2,
           "cache": 0.06,
           "ctx": 524288
-        },
-        {
-          "id": "qwen/qwen3.5-35b-a3b",
-          "name": "Qwen: Qwen3.5-35B-A3B",
-          "in": 0.3125,
-          "out": 1.25,
-          "cache": 0.1562,
-          "ctx": 256000
         },
         {
           "id": "deepseek/deepseek-r1-distill-llama-70b",
@@ -17296,6 +17264,14 @@
           "in": 0.195,
           "out": 1.56,
           "ctx": 262144
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash-vision-exp",
+          "name": "DeepSeek: DeepSeek V4 Flash Vision Exp",
+          "in": 0.44,
+          "out": 1.32,
+          "cache": 0.014,
+          "ctx": 1048575
         },
         {
           "id": "cohere/command-a-plus",
@@ -17686,6 +17662,14 @@
           "ctx": 202752
         },
         {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek: DeepSeek V4 Pro 0423",
+          "in": 0.9553,
+          "out": 1.9105,
+          "cache": 0.0796,
+          "ctx": 1024000
+        },
+        {
           "id": "moonshotai/kimi-k2",
           "name": "MoonshotAI: Kimi K2 0711",
           "in": 0.57,
@@ -17766,6 +17750,14 @@
           "in": 0.7,
           "out": 2.5,
           "ctx": 64000
+        },
+        {
+          "id": "~z-ai/glm-latest",
+          "name": "Z.ai: GLM Latest",
+          "in": 0.4522,
+          "out": 2.805,
+          "cache": 0.1466,
+          "ctx": 1048576
         },
         {
           "id": "tencent/hy4-preview",
@@ -17861,9 +17853,17 @@
         {
           "id": "deepseek/deepseek-v4-pro-0813",
           "name": "DeepSeek: DeepSeek V4 Pro 0813",
-          "in": 0.293,
+          "in": 0.2523,
           "out": 3.5,
-          "cache": 0.172,
+          "cache": 0.2518,
+          "ctx": 1048576
+        },
+        {
+          "id": "~deepseek/deepseek-pro-latest",
+          "name": "DeepSeek: DeepSeek Pro Latest",
+          "in": 0.2523,
+          "out": 3.5,
+          "cache": 0.2518,
           "ctx": 1048576
         },
         {
@@ -17881,14 +17881,6 @@
           "out": 3.3,
           "cache": 0.18,
           "ctx": 262144
-        },
-        {
-          "id": "z-ai/glm-5.1",
-          "name": "Z.ai: GLM 5.1",
-          "in": 0.9646,
-          "out": 3.0316,
-          "cache": 0.1791,
-          "ctx": 202752
         },
         {
           "id": "amazon/nova-pro-v1",
@@ -18147,6 +18139,14 @@
           "out": 5.0,
           "cache": 0.0625,
           "ctx": 400000
+        },
+        {
+          "id": "z-ai/glm-5.1",
+          "name": "Z.ai: GLM 5.1",
+          "in": 1.4,
+          "out": 4.4,
+          "cache": 0.26,
+          "ctx": 202752
         },
         {
           "id": "z-ai/glm-5.3",
@@ -20608,7 +20608,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 370
+      "edge_rtt_ms": 330
     },
     {
       "id": "vercel-ai-gateway",
@@ -21845,7 +21845,7 @@
           "base": "space-bunny"
         }
       ],
-      "edge_rtt_ms": 539
+      "edge_rtt_ms": 617
     },
     {
       "id": "w-b-inference-gateway",

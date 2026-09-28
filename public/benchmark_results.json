@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-27 20:40",
+  "timestamp": "2026-09-28 02:47",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -1036,7 +1036,7 @@
       "closed": [
         [
           "GPT-6 Astra (xhigh)",
-          94.01993355481729
+          94.18604651162791
         ],
         [
           "Muse Spark 1.3 Max",
@@ -1044,11 +1044,11 @@
         ],
         [
           "Muse Spark 1.3 (xhigh)",
-          93.52159468438538
+          93.68770764119601
         ],
         [
           "GPT-5.6 Sol (xhigh)",
-          91.5282392026578
+          91.36212624584718
         ],
         [
           "Claude Fable 5.1",
@@ -1094,7 +1094,7 @@
         ],
         [
           "MiMo-V2.6-Pro",
-          88.03986710963456
+          87.87375415282392
         ],
         [
           "GLM-5.3",
@@ -1363,10 +1363,6 @@
         [
           "Qwen 3.5 35B A3B",
           3.0
-        ],
-        [
-          "Qwen 3.5 27B",
-          1.3
         ],
         [
           "MiniMax-M2",
@@ -2133,7 +2129,7 @@
       "Arena.ai Text": 88.9,
       "SimpleBench.com": 83.6,
       "ARC-AGI-2": 95.0,
-      "Design Arena": 94.0,
+      "Design Arena": 94.2,
       "DeepSWE": 74.0,
       "VendingBench": 100.0,
       "SWE-Marathon": 85.0,
@@ -2745,7 +2741,7 @@
       "Arena.ai Text": 89.7,
       "SimpleBench.com": 64.8,
       "ARC-AGI-2": 92.5,
-      "Design Arena": 91.5,
+      "Design Arena": 91.4,
       "DeepSWE": 73.0,
       "VendingBench": 62.0,
       "SWE-Marathon": 85.0,
@@ -3557,7 +3553,7 @@
       "Arena.ai Text": 89.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 88.0,
+      "Design Arena": 87.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4485,7 +4481,7 @@
         "cache_read": 1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 97.671,
+      "aa_ttft_seconds": 101.345,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -4897,7 +4893,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 25.674,
+      "aa_ttft_seconds": 22.358,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -4991,7 +4987,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.649,
+      "aa_ttft_seconds": 1.63,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5179,7 +5175,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.284,
+      "aa_ttft_seconds": 1.232,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5348,7 +5344,7 @@
         "cache_read": 0.175
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 70.758,
+      "aa_ttft_seconds": 67.403,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5615,7 +5611,7 @@
         "cache_read": 0.17
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.775,
+      "aa_ttft_seconds": 1.774,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5747,9 +5743,9 @@
       "active_params_b": 21.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0825,
-        "output": 0.33,
-        "cache_read": 0.0206
+        "input": 0.132,
+        "output": 0.528,
+        "cache_read": 0.033
       },
       "reasoning": {
         "mandatory": false,
@@ -5792,7 +5788,7 @@
         "cache_read": 0.035
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.16,
+      "aa_ttft_seconds": 3.042,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5882,7 +5878,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.009,
+      "aa_ttft_seconds": 3.044,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5968,7 +5964,7 @@
         "cache_read": 0.03
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 9.301,
+      "aa_ttft_seconds": 9.869,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6069,7 +6065,7 @@
         "cache_read": 0.04
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.489,
+      "aa_ttft_seconds": 2.491,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6252,7 +6248,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.926,
+      "aa_ttft_seconds": 0.932,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6632,7 +6628,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.327,
+      "aa_ttft_seconds": 1.316,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6705,7 +6701,7 @@
         "cache_read": 1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 85.179,
+      "aa_ttft_seconds": 87.014,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-fable-5"
@@ -6815,7 +6811,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 25.578,
+      "aa_ttft_seconds": 30.612,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-5"
@@ -7121,7 +7117,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 9.409,
+      "aa_ttft_seconds": 10.549,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-4-8"
@@ -7230,7 +7226,7 @@
         "cache_read": 0.02
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.522,
+      "aa_ttft_seconds": 1.411,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-5-6-luna"
@@ -7423,7 +7419,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 14.16,
+      "aa_ttft_seconds": 13.906,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/muse-spark-1-2"
@@ -7514,7 +7510,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.997,
+      "aa_ttft_seconds": 1.01,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-4-7"
@@ -7693,7 +7689,7 @@
         "cache_read": 0.125
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 20.87,
+      "aa_ttft_seconds": 19.042,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gemini-2-5-pro"
@@ -7795,7 +7791,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.984,
+      "aa_ttft_seconds": 5.733,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gemini-3-flash"
@@ -8002,7 +7998,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.989,
+      "aa_ttft_seconds": 1.943,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-4-6"
@@ -8113,7 +8109,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.785,
+      "aa_ttft_seconds": 1.707,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-sonnet-4-6"
@@ -8290,7 +8286,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 64.525,
+      "aa_ttft_seconds": 64.672,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-5-mini"
@@ -8647,7 +8643,7 @@
         "cache_read": 0.02
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.058,
+      "aa_ttft_seconds": 3.168,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-5-4-nano"
@@ -8753,7 +8749,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 19.416,
+      "aa_ttft_seconds": 18.074,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gemini-3-6-flash"
@@ -8953,7 +8949,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 10.589,
+      "aa_ttft_seconds": 11.261,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-4-5"
@@ -9228,7 +9224,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 6.023,
+      "aa_ttft_seconds": 6.001,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9325,7 +9321,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 12.861,
+      "aa_ttft_seconds": 12.66,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/grok-4-3"
@@ -9415,7 +9411,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.33,
+      "aa_ttft_seconds": 4.249,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/mercury-2"
@@ -9657,7 +9653,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.027,
+      "aa_ttft_seconds": 3.069,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9854,7 +9850,6 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.79,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -9920,8 +9915,8 @@
       "or_name": "Z.ai: GLM 5.3 Flash",
       "provider": "Z.ai",
       "created": "2026-08-26",
-      "context_length": 1048576,
-      "max_output_tokens": 128000,
+      "context_length": 1048575,
+      "max_output_tokens": 943717,
       "modality": "text+image+video->text",
       "input_modalities": [
         "text",
@@ -9937,9 +9932,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.045,
-        "output": 0.14,
-        "cache_read": 0.01
+        "input": 0.15,
+        "output": 0.5,
+        "cache_read": 0.03
       },
       "reasoning": {
         "mandatory": true,
@@ -9984,7 +9979,7 @@
         "cache_read": 0.026
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.105,
+      "aa_ttft_seconds": 3.151,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10034,8 +10029,8 @@
       "or_name": "DeepSeek: DeepSeek V4.1 Flash",
       "provider": "DeepSeek",
       "created": "2026-09-10",
-      "context_length": 1040000,
-      "max_output_tokens": 384000,
+      "context_length": 1048576,
+      "max_output_tokens": 943718,
       "modality": "text+image->text",
       "input_modalities": [
         "text",
@@ -10050,9 +10045,9 @@
       "active_params_b": 8.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.035,
-        "output": 0.29,
-        "cache_read": 0.001
+        "input": 0.0297,
+        "output": 0.6,
+        "cache_read": 0.0268
       },
       "reasoning": {
         "mandatory": false,
@@ -10096,7 +10091,7 @@
         "cache_read": 0.006
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.127,
+      "aa_ttft_seconds": 1.115,
       "modalities_source": "openrouter"
     },
     "MiMo-V2.6-Flash": {
@@ -10161,7 +10156,7 @@
         "cache_read": 0.0028
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.101,
+      "aa_ttft_seconds": 3.492,
       "modalities_source": "openrouter"
     },
     "DeepSeek V4 Pro 0813": {
@@ -10184,9 +10179,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.293,
+        "input": 0.2523,
         "output": 3.5,
-        "cache_read": 0.172
+        "cache_read": 0.2518
       },
       "reasoning": {
         "mandatory": false,
@@ -10230,7 +10225,7 @@
         "cache_read": 0.044
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.693,
+      "aa_ttft_seconds": 1.705,
       "modalities_source": "openrouter"
     },
     "MiniMax-M3": {
@@ -10433,7 +10428,6 @@
         "cache_read": 0.19
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.979,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10569,7 +10563,7 @@
         "cache_read": 0.0036
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.294,
+      "aa_ttft_seconds": 2.292,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10657,7 +10651,7 @@
         "cache_read": 0.16
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.194,
+      "aa_ttft_seconds": 1.146,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10750,7 +10744,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.022,
+      "aa_ttft_seconds": 1.023,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11044,7 +11038,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.78,
+      "aa_ttft_seconds": 0.807,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11189,7 +11183,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.843,
+      "aa_ttft_seconds": 0.842,
       "modalities_source": "openrouter",
       "alias_note": "LLM Chess lists this model under its HF name llama4-scout-17b-instruct-v1:0",
       "available_at": [
@@ -11347,7 +11341,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.058,
+      "aa_ttft_seconds": 1.039,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-5-2"
@@ -11497,7 +11491,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.558,
+      "aa_ttft_seconds": 1.499,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-5"
@@ -11685,7 +11679,7 @@
         "cache_read": 0.45
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.049,
+      "aa_ttft_seconds": 1.087,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-4-7"
@@ -11755,9 +11749,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.9646,
-        "output": 3.0316,
-        "cache_read": 0.1791
+        "input": 1.4,
+        "output": 4.4,
+        "cache_read": 0.26
       },
       "reasoning": {
         "mandatory": false,
@@ -11797,7 +11791,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.669,
+      "aa_ttft_seconds": 1.674,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-5-1"
@@ -12157,7 +12151,6 @@
         "cache_read": 0.16
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.68,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/kimi-k2-6"
@@ -12293,8 +12286,8 @@
       "or_name": "MiniMax: MiniMax M2.7",
       "provider": "MiniMax",
       "created": "2026-03-18",
-      "context_length": 196608,
-      "max_output_tokens": 176947,
+      "context_length": 204800,
+      "max_output_tokens": 131072,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -12308,9 +12301,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.21,
-        "output": 0.84,
-        "cache_read": 0.042
+        "input": 0.3,
+        "output": 1.2,
+        "cache_read": 0.06
       },
       "reasoning": {
         "mandatory": true,
@@ -12411,7 +12404,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.025,
+      "aa_ttft_seconds": 1.02,
       "available_at": [
         {
           "p": "openrouter",
@@ -12555,7 +12548,7 @@
         "cache_read": 0.016
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.499,
+      "aa_ttft_seconds": 2.504,
       "input_modalities": [
         "text",
         "image"
@@ -13069,7 +13062,7 @@
         "cache_read": 0.275
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 30.593,
+      "aa_ttft_seconds": 23.238,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/o4-mini"
@@ -13417,9 +13410,9 @@
       "active_params_b": 49.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.348,
-        "output": 0.696,
-        "cache_read": 0.029
+        "input": 0.9553,
+        "output": 1.9105,
+        "cache_read": 0.0796
       },
       "reasoning": {
         "mandatory": false,
@@ -13560,9 +13553,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0469,
-        "output": 0.0938,
-        "cache_read": 0.0094
+        "input": 0.14,
+        "output": 0.28,
+        "cache_read": 0.028
       },
       "reasoning": {
         "mandatory": false,
@@ -13866,6 +13859,131 @@
     },
     "GPT-4.5-Preview": {
       "superseded_by": "GPT-5 Pro"
+    },
+    "DeepSeek V3.2 Exp Thinking": {
+      "or_id": "deepseek/deepseek-v3.2-exp",
+      "or_name": "DeepSeek: DeepSeek V3.2 Exp",
+      "provider": "DeepSeek",
+      "created": "2025-09-29",
+      "context_length": 163840,
+      "max_output_tokens": 65536,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "DeepSeek",
+      "knowledge_cutoff": "2025-07-31",
+      "total_params_b": 685.4,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.27,
+        "output": 0.41
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "deepseek-ai/DeepSeek-V3.2-Exp",
+      "or_free_variants": null,
+      "description": "DeepSeek-V3.2-Exp is an experimental large language model released by DeepSeek as an intermediate step between V3.1 and future architectures. It introduces DeepSeek Sparse Attention (DSA), a fine-grained sparse attention mechanism...",
+      "superseded_by": null,
+      "match": "subset",
+      "stale": true,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "openrouter",
+          "n": "OpenRouter",
+          "in": 0.27,
+          "out": 0.41
+        },
+        {
+          "p": "novita-ai",
+          "n": "Novita AI",
+          "in": 0.27,
+          "out": 0.41
+        }
+      ],
+      "no_bench_coverage": true
+    },
+    "Qwen3.5 Plus": {
+      "superseded_by": "Qwen3.7 Plus",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "modality": "text+image->text",
+      "modalities_source": "curated",
+      "available_at": [
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 0.115,
+          "out": 0.688
+        }
+      ],
+      "no_bench_coverage": true
+    },
+    "MiMo-V2-Flash": {
+      "hugging_face_id": "XiaomiMiMo/MiMo-V2-Flash",
+      "total_params_b": 309.8,
+      "params_source": "huggingface",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.1,
+        "output": 0.3,
+        "cache_read": null
+      },
+      "price_source": "artificialanalysis",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "modality": "text->text",
+      "modalities_source": "huggingface",
+      "available_at": [
+        {
+          "p": "novita-ai",
+          "n": "Novita AI",
+          "in": 0.11,
+          "out": 0.33
+        }
+      ],
+      "no_bench_coverage": true
     },
     "GPT-5.2 Pro": {
       "or_id": "openai/gpt-5.2-pro",
@@ -14990,131 +15108,6 @@
       "match": "subset",
       "stale": true,
       "modalities_source": "openrouter",
-      "no_bench_coverage": true
-    },
-    "DeepSeek V3.2 Exp Thinking": {
-      "or_id": "deepseek/deepseek-v3.2-exp",
-      "or_name": "DeepSeek: DeepSeek V3.2 Exp",
-      "provider": "DeepSeek",
-      "created": "2025-09-29",
-      "context_length": 163840,
-      "max_output_tokens": 65536,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "DeepSeek",
-      "knowledge_cutoff": "2025-07-31",
-      "total_params_b": 685.4,
-      "active_params_b": null,
-      "params_source": "huggingface",
-      "pricing_usd_per_1m": {
-        "input": 0.27,
-        "output": 0.41
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "deepseek-ai/DeepSeek-V3.2-Exp",
-      "or_free_variants": null,
-      "description": "DeepSeek-V3.2-Exp is an experimental large language model released by DeepSeek as an intermediate step between V3.1 and future architectures. It introduces DeepSeek Sparse Attention (DSA), a fine-grained sparse attention mechanism...",
-      "superseded_by": null,
-      "match": "subset",
-      "stale": true,
-      "modalities_source": "openrouter",
-      "available_at": [
-        {
-          "p": "openrouter",
-          "n": "OpenRouter",
-          "in": 0.27,
-          "out": 0.41
-        },
-        {
-          "p": "novita-ai",
-          "n": "Novita AI",
-          "in": 0.27,
-          "out": 0.41
-        }
-      ],
-      "no_bench_coverage": true
-    },
-    "Qwen3.5 Plus": {
-      "superseded_by": "Qwen3.7 Plus",
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "modality": "text+image->text",
-      "modalities_source": "curated",
-      "available_at": [
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 0.115,
-          "out": 0.688
-        }
-      ],
-      "no_bench_coverage": true
-    },
-    "MiMo-V2-Flash": {
-      "hugging_face_id": "XiaomiMiMo/MiMo-V2-Flash",
-      "total_params_b": 309.8,
-      "params_source": "huggingface",
-      "pricing_aa_usd_per_1m": {
-        "input": 0.1,
-        "output": 0.3,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "modality": "text->text",
-      "modalities_source": "huggingface",
-      "available_at": [
-        {
-          "p": "novita-ai",
-          "n": "Novita AI",
-          "in": 0.11,
-          "out": 0.33
-        }
-      ],
       "no_bench_coverage": true
     }
   }

@@ -29,8 +29,8 @@
 // stores/myProviders.js (versioned localStorage, export/import, clear-all
 // — key ba.myproviders.v1 UNCHANGED by the move, zero data migration).
 
-import { computed, onMounted, ref } from 'vue';
-import { parseModelListing, buildCatalogIndex, matchListing, extractPricing } from '../lib/myProviders.js';
+import { computed, onMounted, ref, watch } from 'vue';
+import { parseModelListing, buildCatalogIndex, matchListing, extractPricingFor, normalizePriceKeys, previewPricingKeys } from '../lib/myProviders.js';
 import { fmtScore, fmtCtx, fmtUsd, scoreColor, priceBlend, slugify } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import {
@@ -64,28 +64,39 @@ const rowByName = computed(() => {
 const modalOpen = ref(false);
 const editingId = ref(null);      // null = adding a new provider
 const formMode = ref('fetch');    // 'fetch' | 'paste'
-const form = ref({ label: '', baseUrl: '', key: '', paste: '' });
+const form = ref({ label: '', baseUrl: '', key: '', paste: '', keyIn: '', keyOut: '', unit: 'token' });
 const formError = ref('');
 const busy = ref(false);
+
+function keysFromProvider(p) {
+  const pk = p && p.priceKeys;
+  return { keyIn: pk?.input || '', keyOut: pk?.output || '', unit: pk?.unit === '1m' ? '1m' : 'token' };
+}
 
 function openAdd() {
   editingId.value = null;
   formMode.value = 'fetch';
-  form.value = { label: '', baseUrl: '', key: '', paste: '' };
+  form.value = { label: '', baseUrl: '', key: '', paste: '', keyIn: '', keyOut: '', unit: 'token' };
+  unitTouched.value = false;
+  resetKeyTest();
   formError.value = '';
   modalOpen.value = true;
 }
 function openPasteImport(p) {
   editingId.value = p.id;
   formMode.value = 'paste';
-  form.value = { label: p.label, baseUrl: p.baseUrl, key: p.key, paste: '' };
+  form.value = { label: p.label, baseUrl: p.baseUrl, key: p.key, paste: '', ...keysFromProvider(p) };
+  unitTouched.value = false;
+  resetKeyTest();
   formError.value = '';
   modalOpen.value = true;
 }
 function openEdit(p) {
   editingId.value = p.id;
   formMode.value = 'fetch';
-  form.value = { label: p.label, baseUrl: p.baseUrl, key: p.key, paste: '' };
+  form.value = { label: p.label, baseUrl: p.baseUrl, key: p.key, paste: '', ...keysFromProvider(p) };
+  unitTouched.value = false;
+  resetKeyTest();
   formError.value = '';
   modalOpen.value = true;
 }
@@ -122,10 +133,14 @@ async function submitModal() {
   formError.value = '';
   const f = form.value;
   if (!f.label.trim()) { formError.value = 'Give the provider a name.'; return; }
+  // stats-51: custom pricing keys — validated BEFORE any fetch/commit so a
+  // typo in a path can never half-save. Both empty -> null (feature off).
+  const { priceKeys, error: keysError } = normalizePriceKeys({ input: f.keyIn, output: f.keyOut, unit: f.unit });
+  if (keysError) { formError.value = keysError; return; }
   busy.value = true;
   try {
     if (editingId.value) {
-      updateProvider(editingId.value, { label: f.label.trim(), baseUrl: f.baseUrl.trim(), key: f.key });
+      updateProvider(editingId.value, { label: f.label.trim(), baseUrl: f.baseUrl.trim(), key: f.key, priceKeys });
       if (formMode.value === 'paste') {
         const parsed = parseModelListing(f.paste);
         if (!parsed.models.length) throw new Error(parsed.warnings[0] || 'No models found in the pasted text.');
@@ -141,13 +156,13 @@ async function submitModal() {
     if (formMode.value === 'paste') {
       const parsed = parseModelListing(f.paste);
       if (!parsed.models.length) throw new Error(parsed.warnings[0] || 'No models found in the pasted text.');
-      const p = addProvider({ label: f.label.trim(), baseUrl: f.baseUrl.trim(), mode: 'paste' });
+      const p = addProvider({ label: f.label.trim(), baseUrl: f.baseUrl.trim(), mode: 'paste', priceKeys });
       setModels(p.id, parsed.models);
       modalOpen.value = false;
     } else {
       if (!f.baseUrl.trim()) { formError.value = 'Enter the provider base URL (e.g. https://api.unorouter.com/v1).'; return; }
       const parsed = await fetchListing({ baseUrl: f.baseUrl.trim(), key: f.key });
-      const p = addProvider({ label: f.label.trim(), baseUrl: f.baseUrl.trim(), key: f.key, mode: 'fetch' });
+      const p = addProvider({ label: f.label.trim(), baseUrl: f.baseUrl.trim(), key: f.key, mode: 'fetch', priceKeys });
       setModels(p.id, parsed.models);
       modalOpen.value = false;
     }
@@ -171,6 +186,71 @@ async function resync(p) {
     busy.value = false;
   }
 }
+
+// ── stats-51: custom pricing keys — live preview + dry-run check ─────
+// The preview is the honesty anchor: it shows EXACTLY what the parser
+// will extract, before any commit (Ibrahim: check before Fetch & Add).
+// Sources by context: paste text (add/paste-import, live per keystroke),
+// the stored listing (edit — keys are a render-time lens, no re-sync),
+// or a dry-run fetch (add-fetch 'Test keys', nothing persisted).
+const unitTouched = ref(false);
+const keyTestModels = ref(null);
+const keyTestBusy = ref(false);
+const keyTestError = ref('');
+
+function resetKeyTest() {
+  keyTestModels.value = null;
+  keyTestError.value = '';
+  keyTestBusy.value = false;
+}
+
+// stale-guard: any input the dry-run depended on invalidates its result
+watch(() => [form.value.baseUrl, form.value.key, form.value.paste], resetKeyTest);
+
+async function testKeys() {
+  resetKeyTest();
+  keyTestBusy.value = true;
+  try {
+    const parsed = await fetchListing({ baseUrl: form.value.baseUrl.trim(), key: form.value.key });
+    keyTestModels.value = parsed.models;
+  } catch (e) {
+    keyTestError.value = e.message || String(e);
+  } finally {
+    keyTestBusy.value = false;
+  }
+}
+
+// Light unit auto-suggest: a key path that names its unit (_per_1M_tokens /
+// per_token) pre-selects the radio — EXPLICITLY visible, one click to
+// override, and the preview still shows the final numbers either way.
+watch(() => [form.value.keyIn, form.value.keyOut], ([a, b]) => {
+  if (unitTouched.value) return;
+  const s = `${a} ${b}`;
+  if (/per.?1.?m/i.test(s)) form.value.unit = '1m';
+  else if (/per.?token/i.test(s)) form.value.unit = 'token';
+});
+
+const previewModels = computed(() => {
+  if (formMode.value === 'paste') {
+    return form.value.paste.trim() ? parseModelListing(form.value.paste).models : null;
+  }
+  if (editingId.value) {
+    const p = (providers.value || []).find(x => x.id === editingId.value);
+    return p ? (p.models || []) : null;
+  }
+  return keyTestModels.value;
+});
+
+const keysPreview = computed(() => {
+  const { priceKeys } = normalizePriceKeys({ input: form.value.keyIn, output: form.value.keyOut, unit: form.value.unit });
+  if (!previewModels.value || !previewModels.value.length) return null;
+  return { keys: priceKeys, summary: previewPricingKeys(previewModels.value, priceKeys) };
+});
+
+// Preview samples show EXACT extracted values — fmtUsd rounds >=10 to
+// integers, which is right for table cells but wrong for a verification
+// tool where $10.55 vs $11 is exactly the difference being checked.
+const fmtSample = (v) => (v == null ? '—' : '$' + (Math.round(v * 1e6) / 1e6));
 
 // ── Per-provider derived views ────────────────────────────────────────
 const showNonChat = ref(new Set()); // provider ids with the non-chat toggle on
@@ -224,28 +304,35 @@ function matchedRows(p) {
 
 function unlistedRows(p) {
   const { unlisted } = matchOf(p);
+  // stats-51: key-aware extraction — custom pricing keys resolve against
+  // each entry's raw listing (falls back to prompt/completion per side).
+  const priceOf = (m) => extractPricingFor(m, p.priceKeys);
   const rows = unlisted.map(m => ({
     key: m.id, ctx: m.context_length, endpoints: m.endpoints,
     free: m.free, variant: m.variant, kind: 'chat',
-    price: extractPricing(m.pricing),
+    price: priceOf(m),
   }));
   if (showNonChat.value.has(p.id)) {
     for (const m of (p.models || []).filter(x => !x.chat)) {
       rows.push({
         key: m.id, ctx: m.context_length, endpoints: m.endpoints,
         free: m.free, variant: m.variant, kind: 'non-chat',
-        price: extractPricing(m.pricing),
+        price: priceOf(m),
       });
     }
   }
   return rows.sort((a, b) => a.key.localeCompare(b.key));
 }
 
-function providerPrice(p) {
-  const pr = extractPricing(p);
-  if (!pr) return null;
+// stats-51 FIX: this used to call extractPricing(props.row) against the ROW
+// wrapper (no prompt/completion on it) — the "Provider $/1M" column dashed
+// EVEN when the provider published prices. Read the row's precomputed
+// key-aware price instead and blend it (3:1, same convention everywhere).
+function providerPrice(row) {
+  const pr = row && row.price;
+  if (!pr || (pr.in == null && pr.out == null)) return null;
   const blend = priceBlend({ input: pr.in ?? undefined, output: pr.out ?? undefined });
-  return blend === null ? null : { blend, in: pr.in, out: pr.out };
+  return blend === null ? null : { blend, in: pr.in, out: pr.out, viaKeys: !!pr.viaKeys };
 }
 
 // ── Shared-search scoping (stats-37) ──────────────────────────────────
@@ -507,10 +594,10 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
             <b-table-column field="price" label="Provider $/1M" width="130" centered numeric>
               <template #default="props">
                 <span v-if="providerPrice(props.row)" class="num"
-                  :title="'in $' + props.row.price.in + ' / out $' + (props.row.price.out ?? '?') + ' per 1M tokens · as published by your provider'">
+                  :title="'in $' + props.row.price.in + ' / out $' + (props.row.price.out ?? '?') + ' per 1M tokens · as published by your provider' + (props.row.price.viaKeys ? ' · resolved via your custom pricing keys' : '')">
                   {{ fmtUsd(providerPrice(props.row).blend) }}
                 </span>
-                <span v-else class="mp-dash" title="This provider does not publish prices in its /models response.">—</span>
+                <span v-else class="mp-dash" title="No price published for this listing id under the standard keys or your custom pricing keys.">—</span>
               </template>
             </b-table-column>
             <b-table-column field="score" label="Score" width="90" centered numeric>
@@ -548,6 +635,54 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
           <b-input v-model="form.paste" type="textarea" rows="8" aria-label="Paste listing"
             placeholder='curl -H "Authorization: Bearer sk-…" https://api.unorouter.com/v1/models  →  paste the output here' />
         </b-field>
+
+        <!-- stats-51: custom pricing keys — two dot-paths into each model's
+             raw listing entry + an explicit unit. Resolved at RENDER time
+             (keys are a lens; editing them never needs a re-sync) with a
+             live preview so the extraction is verifiable BEFORE saving. -->
+        <div class="mp-keys" role="group" aria-label="Pricing keys">
+          <p class="mp-keys-title">Pricing keys (optional)</p>
+          <p class="mp-keys-hint">
+            Provider publishes prices under non-standard keys? Point us at them —
+            a dot path into each model entry, e.g. <code>pricing.input_per_1M_tokens</code>;
+            array indexes work too (<code>tiers.0.input</code>). Sides without a hit fall
+            back to the standard prompt/completion pricing.
+          </p>
+          <div class="mp-keys-row">
+            <b-field label="Input price key" class="mp-key-field" custom-class="mp-key-label">
+              <b-input v-model="form.keyIn" size="is-small" aria-label="Input price key path"
+                placeholder="pricing.input_per_1M_tokens" />
+            </b-field>
+            <b-field label="Output price key" class="mp-key-field" custom-class="mp-key-label">
+              <b-input v-model="form.keyOut" size="is-small" aria-label="Output price key path"
+                placeholder="pricing.output_per_1M_tokens" />
+            </b-field>
+            <b-field label="Unit" class="mp-unit-field" custom-class="mp-key-label" @click="unitTouched = true">
+              <div class="mp-unit-radios">
+                <b-radio v-model="form.unit" name="mp-unit" native-value="token" size="is-small">per-token</b-radio>
+                <b-radio v-model="form.unit" name="mp-unit" native-value="1m" size="is-small">per-1M</b-radio>
+              </div>
+            </b-field>
+          </div>
+          <div v-if="keysPreview" class="mp-keys-preview" :class="{ 'is-warn': keysPreview.keys && keysPreview.summary.viaKeys === 0 }" aria-live="polite">
+            <template v-if="keysPreview.keys">
+              <strong>{{ keysPreview.summary.viaKeys }} of {{ keysPreview.summary.total }}</strong> listed models priced via your keys
+              <span v-if="keysPreview.summary.samples.length">
+                · sample <code>{{ keysPreview.summary.samples[0].id }}</code> → in {{ fmtSample(keysPreview.summary.samples[0].in) }} /
+                out {{ fmtSample(keysPreview.summary.samples[0].out) }} per 1M</span>
+              <span v-if="keysPreview.summary.missCount"> · {{ keysPreview.summary.missCount }} entr{{ keysPreview.summary.missCount === 1 ? 'y falls' : 'ies fall' }} back to standard prompt/completion pricing</span>
+              <span v-if="keysPreview.summary.badCount"> · {{ keysPreview.summary.badCount }} key hit{{ keysPreview.summary.badCount === 1 ? '' : 's' }} with a non-numeric value — left empty, never guessed</span>
+              <span v-if="keysPreview.summary.legacy"> · some stored entries predate raw capture — re-sync this provider to apply keys to them</span>
+            </template>
+            <template v-else>Custom pricing keys off — standard OpenRouter prompt/completion pricing only.</template>
+          </div>
+          <div v-if="!editingId && formMode === 'fetch'" class="mp-keys-test">
+            <b-button size="is-small" :disabled="!form.baseUrl.trim() || keyTestBusy" :loading="keyTestBusy"
+              aria-label="Test pricing keys" @click="testKeys">Test keys on the live listing</b-button>
+            <span v-if="keyTestError" class="mp-keys-test-err" role="alert">{{ keyTestError }}</span>
+          </div>
+        </div>
+
         <p v-if="formError" class="mp-err" role="alert">{{ formError }}</p>
         <footer class="mp-modal-foot">
           <b-button size="is-small" @click="modalOpen = false">Cancel</b-button>
@@ -601,6 +736,21 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
 .mp-modal-title { margin: 0; font-size: 1.05em; }
 .mp-modes { display: flex; gap: 16px; font-size: 0.94em; align-items: center; padding: 2px 0; }
 .mp-modal-foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+/* stats-51: pricing-keys section */
+.mp-keys { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border: 1px dashed rgba(127,127,127,.35); border-radius: 10px; }
+.mp-keys-title { margin: 0; font-weight: 600; font-size: 0.94em; }
+.mp-keys-hint { margin: 0; font-size: 0.86em; color: var(--ink-2, #556); }
+.mp-keys-hint code { font-size: 0.95em; }
+.mp-keys-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+.mp-key-field { flex: 1 1 170px; margin: 0; }
+.mp-unit-field { flex: 0 0 auto; margin: 0; }
+.mp-key-label { font-size: 0.85em; }
+.mp-unit-radios { display: flex; gap: 10px; align-items: center; }
+.mp-keys-preview { font-size: 0.88em; color: var(--ink-2, #556); padding: 8px 10px; border-radius: 8px; background: rgba(75, 107, 251, 0.07); }
+.mp-keys-preview.is-warn { background: rgba(176, 67, 60, 0.08); color: #b0433c; }
+.mp-keys-preview code { font-family: ui-monospace, monospace; }
+.mp-keys-test { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.mp-keys-test-err { font-size: 0.86em; color: #b0433c; }
 /* the b-table wrapper's own border sits INSIDE the padded card now — drop
    its shadow so the nesting doesn't read as a second floating card */
 .mp-table :deep(.table-wrapper) { box-shadow: none; }

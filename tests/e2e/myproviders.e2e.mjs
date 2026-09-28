@@ -43,6 +43,22 @@ const FIXTURE = JSON.stringify({
   ],
 });
 
+// stats-51: Ibrahim's real-world shape — prices under NON-standard nested
+// keys as per-1M numbers (no prompt/completion at all). Custom pricing keys
+// are the only way this gateway's prices ever surface.
+if (!rowFor('GPT-6 Sol')) {
+  console.error('FAIL: fixture anchor model "GPT-6 Sol" missing from the snapshot — update the stats-51 fixture');
+  process.exit(1);
+}
+const SOL_FIXTURE = JSON.stringify({
+  object: 'list',
+  data: [
+    { id: 'gpt-6-sol', object: 'model', type: 'chat', owned_by: 'OpenAI', name: 'GPT-6 Sol',
+      context_length: 1050000,
+      pricing: { type: 'per_token', currency: 'USD', input_per_1M_tokens: 2.11, output_per_1M_tokens: 10.55 } },
+  ],
+});
+
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -178,14 +194,15 @@ const FIXTURE = JSON.stringify({
   if (headerTxt.includes('UNOROUTER EXAMPLE') && headerTxt.includes('MINE')) ok('overlay column headed by the gateway label + mine marker (' + headerTxt + ')');
   else fail('overlay header unexpected: ' + headerTxt);
 
-  // priced headline: opus-4.6 ($2 in / $10 out per 1M → 3:1 blend = $4); the
-  // :free twin (blend 0) must NOT headline — the paid SKU is the comparable
+  // priced headline (stats-51 format change): opus-4.6 ($2 in / $10 out per
+  // 1M) now renders SIDE BY SIDE like catalog cells — the 3:1 blend ($4)
+  // moved into the tooltip; the :free twin (blend 0) must NOT headline
   await searchBox.fill('opus');
   await page.waitForFunction(() => document.querySelectorAll('.pm-table tbody tr').length >= 1 &&
     document.querySelector('.pm-table tbody tr .pm-mine-price'), null, { timeout: 5000 });
   const opusPivotRow = page.locator('.pm-table tbody tr', { hasText: 'Claude Opus 4.6' }).first();
   const minePrice = (await opusPivotRow.locator('.pm-mine-price').first().innerText()).trim();
-  if (minePrice === '$4') ok('overlay cell shows the cheapest PAID blend: $4 = (3×2+10)/4');
+  if (minePrice === '$2/$10') ok('overlay cell shows in/out SIDE BY SIDE like catalog cells: $2/$10');
   else fail('overlay cell price mismatch: ' + minePrice);
 
   // unpriced SKU (the thinking route) → honest dash, never a fabricated price
@@ -228,6 +245,100 @@ const FIXTURE = JSON.stringify({
   await page.waitForFunction(() => !document.querySelector('.pm-h-mine'), null, { timeout: 5000 });
   ok('toggling off removes the overlay columns');
 
+  // ── 8d. stats-51: custom pricing keys — the full journey ────────────
+  await page.click('.tabs li a:has-text("My providers")');
+  await page.waitForSelector('.mp-card', { timeout: 10000 });
+  await page.click('[aria-label="Add provider"]');
+  await page.waitForSelector('.mp-modal', { timeout: 5000 });
+  await page.click('label.b-radio:has-text("Paste listing")');
+  await page.fill('[aria-label="Provider label"]', 'Sol Gateway');
+  await page.fill('[aria-label="Paste listing"]', SOL_FIXTURE);
+  // the keys section is present even with keys empty (reassurance line)
+  await page.waitForSelector('.mp-keys-preview', { timeout: 5000 });
+  if ((await page.locator('.mp-keys-preview').innerText()).includes('Custom pricing keys off')) {
+    ok('keys section shows the honest off-line before anything is configured');
+  } else fail('keys off-line missing');
+  if (!(await page.locator('[aria-label="Test pricing keys"]').count())) {
+    ok('dry-run Test button correctly absent in paste mode (preview is already live)');
+  } else fail('Test keys button should not render in paste mode');
+  await page.fill('[aria-label="Input price key path"]', 'pricing.input_per_1M_tokens');
+  await page.fill('[aria-label="Output price key path"]', 'pricing.output_per_1M_tokens');
+  // unit auto-suggest: the key names its unit (_per_1M_tokens) -> per-1M pre-selected
+  await page.waitForFunction(() => document.querySelector('input[name="mp-unit"][value="1m"]')?.checked, null, { timeout: 5000 });
+  ok('unit auto-suggested to per-1M from the key name (explicit radio, one click to override)');
+  // the LIVE CHECK before any save (Ibrahim: verify before Fetch & Add)
+  await page.waitForFunction(() => document.querySelector('.mp-keys-preview')?.innerText.includes('1 of 1'), null, { timeout: 5000 });
+  const prevTxt = (await page.locator('.mp-keys-preview').innerText()).replace(/\s+/g, ' ');
+  if (prevTxt.includes('1 of 1') && prevTxt.includes('gpt-6-sol') && prevTxt.includes('$2.11') && prevTxt.includes('$10.55')) {
+    ok('live preview BEFORE save: ' + prevTxt.slice(0, 110) + '…');
+  } else fail('preview content unexpected: ' + prevTxt);
+  await page.click('[aria-label="Save provider"]');
+  await page.waitForFunction(() => document.querySelectorAll('.mp-card').length === 2, null, { timeout: 10000 });
+  ok('Sol Gateway saved with its pricing keys');
+
+  // Compare: the key-priced gateway joins as a second mine column
+  await page.click('.tabs li a:has-text("Compare")');
+  await page.waitForSelector('.pm-table', { timeout: 10000 });
+  await page.locator('label.switch:has-text("my gateways")').click();
+  await page.waitForSelector('.pm-h-mine', { timeout: 5000 });
+  const headers = await page.locator('.pm-h-mine').count();
+  if (headers === 2) ok('two gateway columns after adding the key-priced provider');
+  else fail('expected 2 mine columns, got ' + headers);
+  await searchBox.fill('sol');
+  await page.waitForFunction(() => document.querySelectorAll('.pm-table tbody tr .pm-mine-price').length >= 1, null, { timeout: 5000 });
+  const solRow = page.locator('.pm-table tbody tr', { hasText: 'GPT-6 Sol' }).first();
+  const solCell = (await solRow.locator('.pm-mine-price').first().innerText()).trim();
+  if (solCell === '$2.11/$11') ok('custom-key prices render side by side in the overlay: ' + solCell + ' (fmtUsd rounds >=10)');
+  else fail('sol overlay cell unexpected: ' + solCell);
+  await solRow.locator('.pm-mine-price').first().hover();
+  const solTip = page.locator('.tooltip-content:has-text("resolved via your custom pricing keys")').first();
+  await solTip.waitFor({ state: 'visible', timeout: 5000 });
+  const solTipTxt = (await solTip.innerText()).replace(/\s+/g, ' ');
+  if (solTipTxt.includes('blended $4.22') && solTipTxt.includes('gpt-6-sol')) {
+    ok('tooltip carries the blend + provenance marker: ' + solTipTxt.slice(0, 110) + '…');
+  } else fail('sol tooltip unexpected: ' + solTipTxt);
+
+  // the render-time lens: EDITING keys re-prices instantly, no re-sync
+  await page.click('.tabs li a:has-text("My providers")');
+  await page.waitForSelector('.mp-card', { timeout: 10000 });
+  await page.click('[aria-label="Edit Sol Gateway"]');
+  await page.waitForSelector('.mp-modal', { timeout: 5000 });
+  await page.fill('[aria-label="Input price key path"]', 'pricing.wrong_input');
+  // the broken INPUT key misses -> that side falls back to standard pricing
+  // (the output key still resolves, so the entry stays "priced via keys")
+  await page.waitForFunction(() => document.querySelector('.mp-keys-preview')?.innerText.includes('falls back'), null, { timeout: 5000 });
+  ok('edit-modal preview flags the broken key live (entry falls back to standard pricing)');
+  await page.click('[aria-label="Save provider"]');
+  await page.waitForSelector('.mp-modal', { state: 'detached', timeout: 5000 });
+  await page.click('.tabs li a:has-text("Compare")');
+  await page.waitForSelector('.pm-table', { timeout: 10000 });
+  await searchBox.fill('sol');
+  await page.waitForFunction(() => {
+    const el = document.querySelector('.pm-table tbody tr .pm-mine-price');
+    return el && el.innerText.includes('—');
+  }, null, { timeout: 5000 });
+  const partialCell = (await page.locator('.pm-table tbody tr .pm-mine-price').first().innerText()).trim();
+  if (partialCell === '—/$11') ok('partial pricing visible after the key edit: ' + partialCell + ' (output side still via keys — no re-sync)');
+  else fail('partial cell unexpected: ' + partialCell);
+  // restore — the lens bends back
+  await page.click('.tabs li a:has-text("My providers")');
+  await page.waitForSelector('.mp-card', { timeout: 10000 });
+  await page.click('[aria-label="Edit Sol Gateway"]');
+  await page.waitForSelector('.mp-modal', { timeout: 5000 });
+  await page.fill('[aria-label="Input price key path"]', 'pricing.input_per_1M_tokens');
+  await page.waitForFunction(() => document.querySelector('.mp-keys-preview')?.innerText.includes('1 of 1'), null, { timeout: 5000 });
+  await page.click('[aria-label="Save provider"]');
+  await page.waitForSelector('.mp-modal', { state: 'detached', timeout: 5000 });
+  await page.click('.tabs li a:has-text("Compare")');
+  await page.waitForSelector('.pm-table', { timeout: 10000 });
+  await searchBox.fill('sol');
+  await page.waitForFunction(() => {
+    const el = document.querySelector('.pm-table tbody tr .pm-mine-price');
+    return el && el.innerText.includes('$2.11');
+  }, null, { timeout: 5000 });
+  ok('restoring the key re-prices the cell instantly (render-time lens confirmed)');
+  await searchBox.fill('');
+
   // back to the panel for the persistence + clear-all steps
   await page.click('.tabs li a:has-text("My providers")');
   await page.waitForSelector('.mp-card', { timeout: 10000 });
@@ -235,7 +346,7 @@ const FIXTURE = JSON.stringify({
   // ── 9. persistence across reload ──
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForSelector('.mp-card', { timeout: 10000 });
-  const afterReload = await page.locator('.mp-card').innerText();
+  const afterReload = (await page.locator('.mp-card').allInnerTexts()).join(' ');
   if (afterReload.includes('UnoRouter Example') && afterReload.includes('GPT-5.6 Luna')) {
     ok('provider + listing persist across reload (localStorage)');
   } else fail('state lost after reload');

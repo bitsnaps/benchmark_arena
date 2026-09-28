@@ -75,7 +75,7 @@ const CHAT_FALLBACK = true; // no endpoint info at all → assume chat-capable
 
 function coerceModel(e) {
   if (typeof e === 'string') {
-    return { id: e.trim(), owned_by: null, endpoints: [], context_length: null, max_output_tokens: null, pricing: null };
+    return { id: e.trim(), owned_by: null, endpoints: [], context_length: null, max_output_tokens: null, pricing: null, raw: e };
   }
   if (!e || typeof e !== 'object') return null;
   const id = String(e.id ?? e.name ?? e.model ?? '').trim();
@@ -92,6 +92,10 @@ function coerceModel(e) {
     context_length: Number.isFinite(ctx) && ctx > 0 ? ctx : null,
     max_output_tokens: Number.isFinite(out) && out > 0 ? out : null,
     pricing: e.pricing && typeof e.pricing === 'object' ? e.pricing : null,
+    // stats-51: the ORIGINAL entry rides along (raw listing = persistable
+    // under the store's contract) so user-configured pricing keys can be
+    // re-resolved at render time — editing a key never needs a re-sync.
+    raw: e,
   };
 }
 
@@ -270,6 +274,152 @@ export function extractPricing(p) {
   return { in: inp, out };
 }
 
+// ── stats-51: user-configured pricing keys ────────────────────────────
+// Some gateways publish prices under their own shapes (e.g. nested
+// pricing.input_per_1M_tokens) instead of OpenRouter's flat
+// prompt/completion per-token strings. The user points us at the values
+// with two dot-paths per provider; we resolve them against the raw entry
+// AT RENDER TIME (keys are a lens, not a snapshot — editing them never
+// needs a re-sync). Discipline carried over from extractPricing:
+//   • NO unit guessing — the user picks per-token (×1e6, OpenRouter
+//     convention, default) or per-1M explicitly; the live preview makes
+//     a wrong pick instantly visible.
+//   • Per-side priority: custom key WINS when it yields a valid number,
+//     else that side falls back to the built-in prompt/completion path —
+//     configuring keys can only ADD prices, never break working rows.
+//   • A key that resolves to a non-numeric value is an honest null for
+//     that side (garbage must not silently un-fall-back into a number
+//     of the wrong shape); the preview surfaces it as a warning.
+
+const PATH_SEGMENT = /^[A-Za-z_$][A-Za-z0-9_$-]*$|^\d+$/;
+const FORBIDDEN_SEGMENTS = new Set(['__proto__', 'constructor', 'prototype']);
+
+// sanitizeKeyPath(' pricing.input_per_1M_tokens ') -> 'pricing.input_per_1M_tokens'
+// sanitizeKeyPath('tiers[0].input') -> 'tiers.0.input'; invalid -> null.
+export function sanitizeKeyPath(rawStr) {
+  const s = String(rawStr ?? '').trim();
+  if (!s || s.length > 128) return null;
+  const norm = s.replace(/\[(\d+)\]/g, '.$1').replace(/\.\.+/g, '.').replace(/^\.|\.$/g, '');
+  const segs = norm.split('.');
+  if (!segs.length || segs.length > 16) return null;
+  for (const seg of segs) {
+    if (FORBIDDEN_SEGMENTS.has(seg.toLowerCase())) return null;
+    if (!PATH_SEGMENT.test(seg)) return null;
+  }
+  return segs.join('.');
+}
+
+// normalizePriceKeys({input, output, unit}) -> { priceKeys, error }.
+// Both paths empty -> { priceKeys: null } (feature off). Any non-empty
+// path that fails sanitization -> { priceKeys: null, error }. One valid
+// side alone is fine (the other side falls back to built-ins).
+export function normalizePriceKeys(rawKeys) {
+  const k = rawKeys && typeof rawKeys === 'object' ? rawKeys : {};
+  const input = k.input ? sanitizeKeyPath(k.input) : null;
+  const output = k.output ? sanitizeKeyPath(k.output) : null;
+  if ((k.input && !input) || (k.output && !output)) {
+    const bad = k.input && !input ? k.input : k.output;
+    return { priceKeys: null, error: `Invalid pricing key path "${String(bad).slice(0, 40)}" — use letters, digits, dots and [n] indexes (e.g. pricing.input_per_1M_tokens).` };
+  }
+  if (!input && !output) return { priceKeys: null, error: null };
+  const unit = k.unit === '1m' ? '1m' : 'token';
+  return { priceKeys: { input, output, unit }, error: null };
+}
+
+// resolveKeyPath(obj, 'pricing.input') -> { found, value } — never throws,
+// never touches prototype-dangerous segments, arrays only index by number.
+export function resolveKeyPath(obj, path) {
+  if (!path || !obj || typeof obj !== 'object') return { found: false, value: undefined };
+  let cur = obj;
+  for (const seg of String(path).split('.')) {
+    if (cur == null || typeof cur !== 'object' || FORBIDDEN_SEGMENTS.has(seg)) {
+      return { found: false, value: undefined };
+    }
+    if (Array.isArray(cur) && !/^\d+$/.test(seg)) return { found: false, value: undefined };
+    cur = cur[seg];
+  }
+  return { found: cur !== undefined, value: cur };
+}
+
+// parsePriceValue: numbers pass; strings cleaned of currency decoration
+// ('$2.11', 'USD 1,234.50', '0') then parsed. Garbage -> null.
+export function parsePriceValue(v) {
+  if (typeof v === 'number') return Number.isFinite(v) && v >= 0 ? v : null;
+  if (typeof v !== 'string') return null;
+  const m = v.trim().match(/^(?:[$€£\s]*)(?:usd)?[$€£\s]*([0-9][0-9,\s]*(?:\.[0-9]+)?|[0-9]*\.[0-9]+)(?:\s*usd)?[$€£\s]*$/i);
+  if (!m) return null;
+  const n = Number(m[1].replace(/[,\s]/g, ''));
+  return Number.isFinite(n) && n >= 0 ? n : null;
+}
+
+// The lookup base for custom keys: the raw entry when present; for models
+// synced BEFORE stats-51 (no raw persisted) fall back to a shim over the
+// already-persisted pricing subtree — 'pricing.*' paths keep working
+// without a re-sync, anything deeper honestly misses (preview flags it).
+function pricingKeyBase(model) {
+  if (!model || typeof model !== 'object') return null;
+  if (model.raw !== undefined) {
+    return model.raw && typeof model.raw === 'object' ? model.raw : null;
+  }
+  return model.pricing && typeof model.pricing === 'object' ? { pricing: model.pricing } : null;
+}
+
+// extractPricingFor(model, priceKeys) -> { in, out, viaKeys } | null.
+// viaKeys: at least one side came from the user's keys (provenance for
+// tooltips). priceKeys null/undefined degrades EXACTLY to extractPricing.
+export function extractPricingFor(model, priceKeys) {
+  const pk = priceKeys && typeof priceKeys === 'object' ? priceKeys : null;
+  const side = (keyPath, builtinField) => {
+    if (keyPath) {
+      const res = resolveKeyPath(pricingKeyBase(model), keyPath);
+      if (res.found) {
+        const n = parsePriceValue(res.value);
+        if (n !== null) return { v: pk.unit === '1m' ? n : n * 1e6, via: true };
+        return { v: null, via: false }; // found but garbage — honest null
+      }
+      // key not present on this entry -> built-in fallback (below)
+    }
+    return { v: perTokenTo1M((model?.pricing || {})[builtinField]), via: false };
+  };
+  const inp = side(pk?.input, 'prompt');
+  const out = side(pk?.output, 'completion');
+  if (inp.v === null && out.v === null) return null;
+  return { in: inp.v, out: out.v, viaKeys: inp.via || out.via };
+}
+
+// previewPricingKeys(models, priceKeys) — the live-check summary behind
+// the modal's preview line (Ibrahim: check BEFORE hitting Fetch & Add).
+export function previewPricingKeys(models, priceKeys) {
+  const list = Array.isArray(models) ? models : [];
+  const pk = priceKeys && typeof priceKeys === 'object' ? priceKeys : null;
+  let viaKeys = 0, priced = 0, missCount = 0, badCount = 0, legacy = false;
+  const samples = [];
+  for (const m of list) {
+    if (pk && (pk.input || pk.output) && m && m.raw === undefined && m.pricing) legacy = true;
+    const r = extractPricingFor(m, pk);
+    if (r) {
+      if (r.in != null || r.out != null) priced++;
+      if (r.viaKeys) {
+        viaKeys++;
+        if (samples.length < 3) samples.push({ id: m.id, in: r.in, out: r.out });
+      }
+    }
+    if (pk) {
+      const base = pricingKeyBase(m);
+      let missed = false, bad = false;
+      for (const [path, field] of [[pk.input, 'prompt'], [pk.output, 'completion']]) {
+        if (!path) continue;
+        const res = resolveKeyPath(base, path);
+        if (!res.found) missed = true;
+        else if (parsePriceValue(res.value) === null) bad = true;
+      }
+      if (missed) missCount++;
+      if (bad) badCount++;
+    }
+  }
+  return { total: list.length, priced, viaKeys, missCount, badCount, legacy, samples };
+}
+
 // ── v2: Compare-pivot overlay (stats-38) ──────────────────────────────
 // The Providers page's Compare tab can overlay the user's own gateways as
 // extra columns ("am I paying less via my gateway?"). These helpers keep
@@ -311,7 +461,10 @@ export function buildMineOverlay(providersList, index) {
       if (!byName.has(en.name)) byName.set(en.name, new Map());
       const perProvider = byName.get(en.name);
       if (!perProvider.has(p.id)) perProvider.set(p.id, []);
-      const pr = extractPricing(en.model.pricing);
+      // stats-51: key-aware extraction — the provider's custom pricing keys
+      // (if configured) resolve against each entry's raw listing here, at
+      // render time, so editing keys re-prices the overlay instantly.
+      const pr = extractPricingFor(en.model, p.priceKeys);
       perProvider.get(p.id).push({
         key: en.model.id,
         variant: en.model.variant || null,
@@ -319,6 +472,7 @@ export function buildMineOverlay(providersList, index) {
         pass: en.pass,
         in: pr ? pr.in : null,
         out: pr ? pr.out : null,
+        viaKeys: !!(pr && pr.viaKeys),
       });
     }
   }

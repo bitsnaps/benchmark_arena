@@ -13,6 +13,7 @@
 //     exportPayload()/importPayload() give the user ownership of the data.
 
 import { ref, computed } from 'vue';
+import { normalizePriceKeys } from '../lib/myProviders.js';
 
 export const STORAGE_KEY = 'ba.myproviders.v1';
 export const SCHEMA_VERSION = 1;
@@ -60,7 +61,7 @@ function commit() {
 }
 
 // ── Actions ───────────────────────────────────────────────────────────
-export function addProvider({ label, baseUrl = '', key = '', mode = 'fetch' }) {
+export function addProvider({ label, baseUrl = '', key = '', mode = 'fetch', priceKeys = null }) {
   const p = {
     id: uid(),
     label: String(label || 'Untitled provider').slice(0, 80),
@@ -68,6 +69,10 @@ export function addProvider({ label, baseUrl = '', key = '', mode = 'fetch' }) {
     key: String(key || ''),
     mode, // 'fetch' | 'paste'
     intent: '', // '' | 'scores' | 'prices' | 'track' (post-sync question)
+    // stats-51: custom pricing key paths (validated; null = feature off).
+    // Additive optional field — storage schema stays v1, older records
+    // without it keep loading untouched.
+    priceKeys: normalizePriceKeys(priceKeys).priceKeys ?? null,
     addedAt: new Date().toISOString(),
     lastSyncAt: null,
     lastError: null,
@@ -134,6 +139,9 @@ export function importPayload(text) {
       key: String(p.key || ''),
       mode: p.mode === 'paste' ? 'paste' : 'fetch',
       intent: INTENTS.includes(p.intent) ? p.intent : '',
+      // stats-51: defensive mapping — a hand-edited export with garbage
+      // keys imports as null (feature off) instead of poisoning the store.
+      priceKeys: normalizePriceKeys(p.priceKeys).priceKeys ?? null,
       addedAt: p.addedAt || null,
       lastSyncAt: p.lastSyncAt || null,
       lastError: null,

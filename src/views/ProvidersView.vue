@@ -407,9 +407,11 @@ function mineCellTitle(r, mc) {
   }).join(' · ');
   const cat = rowBlend(r);
   const catBit = cat != null ? ` · catalog cheapest ${fmtUsd(cat)} (3:1 blend)` : '';
-  if (c.under) return `${mc.label} — ${list}${catBit} · YOUR GATEWAY UNDERCUTS every catalog seller`;
-  if (c.kind === 'paid') return `${mc.label} — ${list} · blended ${fmtUsd(c.blend)} (3:1 in:out)${catBit}`;
-  if (c.kind === 'free') return `${mc.label} — ${list} · free twin — rate limits apply, not unlimited`;
+  const viaBit = c.skus.some(s => s.viaKeys) ? ' · prices resolved via your custom pricing keys' : '';
+  if (c.under) return `${mc.label} — ${list}${viaBit}${catBit} · YOUR GATEWAY UNDERCUTS every catalog seller`;
+  if (c.kind === 'paid') return `${mc.label} — ${list}${viaBit} · blended ${fmtUsd(c.blend)} (3:1 in:out)${catBit}`;
+  if (c.kind === 'free') return `${mc.label} — ${list}${viaBit} · free twin — rate limits apply, not unlimited`;
+  if (c.in != null || c.out != null) return `${mc.label} — ${list}${viaBit} · partial pricing — the blend needs both sides (3:1 in:out)`;
   return `${mc.label} — ${list} · listed but no price published`;
 }
 
@@ -895,18 +897,21 @@ const pickerTitle = (p) =>
                          renderer at that scale; a dot tooltip is not worth it -->
                     <span v-else class="pm-absent" :title="`${p.name} — not carried`">·</span>
                   </td>
-                  <!-- stats-38: the gateway columns — priced cells, honest
-                      dashes for unpriced listings, absent dots for models the
-                      gateway doesn't serve, a free chip for :free twins and
-                      the ▼ undercut marker when the gateway beats every
-                      catalog seller. Same tooltip recipe as catalog cells. -->
+                  <!-- stats-38/51: the gateway columns — cells now show the
+                      SAME $in/$out side-by-side format as catalog cells
+                      (stats-51, Ibrahim: "show them side by side"); the
+                      3:1 blend that drives sorting/undercut stays in the
+                      tooltip. Partial pricing renders what's known ($—/6),
+                      honest dashes for unpriced listings, absent dots for
+                      models the gateway doesn't serve, a free chip for
+                      :free twins and the ▼ undercut marker. -->
                   <template v-if="showMine">
                     <td v-for="mc in mineCols" :key="mc.pid" class="num pm-cell pm-cell-mine">
                       <template v-if="r.mine && r.mine[mc.pid]">
-                        <b-tooltip v-if="r.mine[mc.pid].blend != null"
+                        <b-tooltip v-if="r.mine[mc.pid].blend != null || r.mine[mc.pid].in != null || r.mine[mc.pid].out != null"
                           :label="mineCellTitle(r, mc)" type="is-dark" multilined
                           :delay="100" append-to-body>
-                          <span class="price-cell pm-mine-price">{{ fmtUsd(r.mine[mc.pid].blend) }}</span>
+                          <span class="price-cell pm-mine-price">{{ fmtUsd(r.mine[mc.pid].in) }}<span class="price-sep">/</span>{{ fmtUsd(r.mine[mc.pid].out) }}</span>
                         </b-tooltip>
                         <b-tooltip v-else :label="mineCellTitle(r, mc)" type="is-dark" multilined
                           :delay="100" append-to-body>
@@ -956,11 +961,15 @@ const pickerTitle = (p) =>
             <span class="lat-slow legend-chip">≥ 3.5 s</span>;
             hover any cell for the exact value. Unmeasured models stay gray.
             <b>My gateways</b> (stats-38): the optional <b>my gateways</b> switch appends
-            a column per provider connected on the "My providers" tab — headline price is
-            your cheapest paid SKU (3:1 blend), <code>:free</code> twins are flagged with
+            a column per provider connected on the "My providers" tab — cells show your
+            input/output price side by side per 1M tokens (the 3:1 blend that drives sorting
+            and comparison stays in the tooltip), <code>:free</code> twins are flagged with
             the rate-limit caveat, gateways that publish no prices stay dashes, and a
             <span class="mine-under">▼ cheaper</span> marker fires when your blend
-            undercuts every catalog seller. Your columns never affect catalog
+            undercuts every catalog seller. If a gateway prices models under non-standard
+            JSON keys, set custom <b>pricing keys</b> on the provider (stats-51) — resolved
+            against each listing entry at render time, provenance-marked in the tooltip,
+            never guessed. Your columns never affect catalog
             highlighting, filters or counts, and nothing leaves this browser.
           </p>
         </template>

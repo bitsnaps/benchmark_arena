@@ -10,6 +10,8 @@ import {
   parseProviderId, parseModelListing,
   buildCatalogIndex, matchOne, matchListing,
   extractPricing,
+  sanitizeKeyPath, normalizePriceKeys, resolveKeyPath, parsePriceValue,
+  extractPricingFor, previewPricingKeys,
   buildMineOverlay, headlineSku, undercutsMine,
 } from '../../src/lib/myProviders.js';
 
@@ -313,5 +315,173 @@ describe('undercutsMine', () => {
     expect(undercutsMine(null, 4)).toBeNull();
     expect(undercutsMine(3, null)).toBeNull();
     expect(undercutsMine(0, null)).toBeNull();
+  });
+});
+
+// ── stats-51: user-configured pricing keys ───────────────────────────
+describe('sanitizeKeyPath + normalizePriceKeys', () => {
+  it('normalizes dot paths and bracket indexes', () => {
+    expect(sanitizeKeyPath(' pricing.input_per_1M_tokens ')).toBe('pricing.input_per_1M_tokens');
+    expect(sanitizeKeyPath('tiers[0].input')).toBe('tiers.0.input');
+    expect(sanitizeKeyPath('a..b')).toBe('a.b');
+    expect(sanitizeKeyPath('cost.per-1M')).toBe('cost.per-1M');
+  });
+  it('rejects garbage, oversize and prototype-dangerous paths', () => {
+    expect(sanitizeKeyPath('')).toBeNull();
+    expect(sanitizeKeyPath('has space')).toBeNull();
+    expect(sanitizeKeyPath('__proto__')).toBeNull();
+    expect(sanitizeKeyPath('a.__proto__.b')).toBeNull();
+    expect(sanitizeKeyPath('constructor.prototype')).toBeNull();
+    expect(sanitizeKeyPath('a.'.repeat(20) + 'b')).toBeNull(); // >16 segments
+    expect(sanitizeKeyPath('x'.repeat(129))).toBeNull();
+  });
+  it('normalizePriceKeys: off / one-side / unit pinning / error', () => {
+    expect(normalizePriceKeys({}).priceKeys).toBeNull();
+    expect(normalizePriceKeys(null).priceKeys).toBeNull();
+    expect(normalizePriceKeys({ input: 'pricing.in' }).priceKeys).toEqual({ input: 'pricing.in', output: null, unit: 'token' });
+    expect(normalizePriceKeys({ input: 'a', output: 'b', unit: '1m' }).priceKeys).toEqual({ input: 'a', output: 'b', unit: '1m' });
+    const bad = normalizePriceKeys({ input: 'bad path!' });
+    expect(bad.priceKeys).toBeNull();
+    expect(bad.error).toContain('Invalid pricing key path');
+  });
+});
+
+describe('resolveKeyPath', () => {
+  const doc = { pricing: { input_per_1M_tokens: 2.11, note: null }, tiers: [{ input: 1 }, { input: 3 }], id: 'x' };
+  it('resolves deep nesting and array indexes', () => {
+    expect(resolveKeyPath(doc, 'pricing.input_per_1M_tokens')).toEqual({ found: true, value: 2.11 });
+    expect(resolveKeyPath(doc, 'tiers.1.input')).toEqual({ found: true, value: 3 });
+    expect(resolveKeyPath(doc, 'id')).toEqual({ found: true, value: 'x' });
+    expect(resolveKeyPath(doc, 'pricing.note')).toEqual({ found: true, value: null });
+  });
+  it('misses honestly and never throws or pollutes', () => {
+    expect(resolveKeyPath(doc, 'pricing.deeper.still').found).toBe(false);
+    expect(resolveKeyPath(doc, 'tiers.input').found).toBe(false); // array by name
+    expect(resolveKeyPath(null, 'a').found).toBe(false);
+    expect(resolveKeyPath(doc, '__proto__.polluted').found).toBe(false);
+    expect(({}).polluted).toBeUndefined();
+    expect(resolveKeyPath(doc, '')).toEqual({ found: false, value: undefined });
+  });
+});
+
+describe('parsePriceValue', () => {
+  it('accepts numbers and currency-decorated strings', () => {
+    expect(parsePriceValue(2.11)).toBe(2.11);
+    expect(parsePriceValue(0)).toBe(0);
+    expect(parsePriceValue('2.11')).toBe(2.11);
+    expect(parsePriceValue('$2.11')).toBe(2.11);
+    expect(parsePriceValue('USD 1,234.50')).toBe(1234.5);
+    expect(parsePriceValue('0')).toBe(0);
+  });
+  it('rejects garbage honestly', () => {
+    expect(parsePriceValue('free')).toBeNull();
+    expect(parsePriceValue('')).toBeNull();
+    expect(parsePriceValue(null)).toBeNull();
+    expect(parsePriceValue(-1)).toBeNull();
+    expect(parsePriceValue('N/A')).toBeNull();
+    expect(parsePriceValue({ v: 1 })).toBeNull();
+  });
+});
+
+describe('extractPricingFor', () => {
+  // Ibrahim's real-world shape (stats-51 kickoff example): prices nested
+  // under pricing.input_per_1M_tokens as per-1M numbers — NOT OpenRouter
+  // prompt/completion per-token strings.
+  const GPT6_SOL = {
+    id: 'gpt-6-sol',
+    pricing: null,
+    raw: { id: 'gpt-6-sol', pricing: { type: 'per_token', currency: 'USD', input_per_1M_tokens: 2.11, output_per_1M_tokens: 10.55 } },
+  };
+  const KEYS = { input: 'pricing.input_per_1M_tokens', output: 'pricing.output_per_1M_tokens', unit: '1m' };
+
+  it('extracts Ibrahim-shaped nested per-1M pricing via custom keys', () => {
+    expect(extractPricingFor(GPT6_SOL, KEYS)).toEqual({ in: 2.11, out: 10.55, viaKeys: true });
+  });
+  it('per-token unit multiplies by 1e6 (explicit, never guessed)', () => {
+    expect(extractPricingFor(GPT6_SOL, { ...KEYS, unit: 'token' })).toEqual({ in: 2110000, out: 10550000, viaKeys: true });
+  });
+  it('null priceKeys degrades exactly to extractPricing', () => {
+    const m = { pricing: { prompt: '0.000002', completion: '0.00001' }, raw: { id: 'x' } };
+    expect(extractPricingFor(m, null)).toEqual({ in: 2, out: 10, viaKeys: false });
+    expect(extractPricingFor(m, undefined)).toEqual({ in: 2, out: 10, viaKeys: false });
+  });
+  it('falls back PER SIDE: custom key wins when it resolves, built-in otherwise', () => {
+    const m = {
+      pricing: { prompt: '0.000002', completion: '0.00001' },
+      raw: { id: 'x', cost: { input: 0.5 } }, // only the input key exists here
+    };
+    expect(extractPricingFor(m, { input: 'cost.input', output: 'cost.output', unit: '1m' }))
+      .toEqual({ in: 0.5, out: 10, viaKeys: true });
+  });
+  it('key found but garbage value -> honest null for that side (no fallback)', () => {
+    const m = { pricing: { prompt: '0.000002', completion: '0.00001' }, raw: { id: 'x', pricing: { input: 'free' } } };
+    // input: key hit with garbage -> honest null (garbage must not silently
+    // un-fall-back into a number of the wrong shape). output: no custom key
+    // -> built-in completion fallback still applies per side.
+    expect(extractPricingFor(m, { input: 'pricing.input', output: null, unit: '1m' }))
+      .toEqual({ in: null, out: 10, viaKeys: false });
+  });
+  it('legacy pre-raw records still resolve pricing.* paths via the shim', () => {
+    const legacy = { id: 'kimi-k3', pricing: { input_per_1M_tokens: 0.6, output_per_1M_tokens: 2.5 } }; // no raw
+    expect(extractPricingFor(legacy, KEYS)).toEqual({ in: 0.6, out: 2.5, viaKeys: true });
+  });
+  it('legacy records with deeper paths miss honestly (re-sync suggested)', () => {
+    const legacy = { id: 'x', pricing: { prompt: '0.000001' } };
+    expect(extractPricingFor(legacy, { input: 'cost.input', output: null, unit: '1m' }))
+      .toEqual({ in: 1, out: null, viaKeys: false }); // falls back to prompt
+  });
+  it('string entries (id lists) have nothing to resolve — built-ins only', () => {
+    const s = { id: 'm', pricing: null, raw: 'just-an-id' };
+    expect(extractPricingFor(s, KEYS)).toBeNull();
+  });
+});
+
+describe('previewPricingKeys', () => {
+  const models = [
+    { id: 'gpt-6-sol', pricing: null, raw: { id: 'gpt-6-sol', pricing: { input_per_1M_tokens: 2.11, output_per_1M_tokens: 10.55 } } },
+    { id: 'kimi-k3', pricing: null, raw: { id: 'kimi-k3', pricing: { input_per_1M_tokens: 0.6, output_per_1M_tokens: 2.5 } } },
+    { id: 'no-price', pricing: null, raw: { id: 'no-price' } },
+    { id: 'garbage', pricing: null, raw: { id: 'garbage', pricing: { input_per_1M_tokens: 'free' } } },
+  ];
+  const KEYS = { input: 'pricing.input_per_1M_tokens', output: 'pricing.output_per_1M_tokens', unit: '1m' };
+  it('counts hits, samples, misses and garbage honestly', () => {
+    const s = previewPricingKeys(models, KEYS);
+    expect(s.total).toBe(4);
+    expect(s.viaKeys).toBe(2);
+    expect(s.priced).toBe(2);
+    expect(s.badCount).toBe(1); // garbage hit, never guessed
+    expect(s.samples[0]).toEqual({ id: 'gpt-6-sol', in: 2.11, out: 10.55 });
+    expect(s.legacy).toBe(false);
+  });
+  it('flags legacy (pre-raw) models so the UI can suggest a re-sync', () => {
+    const legacy = [{ id: 'old', pricing: { input_per_1M_tokens: 1 } }];
+    expect(previewPricingKeys(legacy, KEYS).legacy).toBe(true);
+    expect(previewPricingKeys(legacy, null).legacy).toBe(false);
+  });
+  it('keys off -> all counts zero, no samples', () => {
+    const s = previewPricingKeys(models, null);
+    expect(s.viaKeys).toBe(0);
+    expect(s.samples).toEqual([]);
+  });
+});
+
+describe('buildMineOverlay + priceKeys (stats-51)', () => {
+  const INDEX = new Map([['gpt6sol', { name: 'GPT-6 Sol' }]]);
+  it('overlay SKUs carry key-resolved prices and provenance', () => {
+    const prov = {
+      id: 'gw1',
+      priceKeys: { input: 'pricing.input_per_1M_tokens', output: 'pricing.output_per_1M_tokens', unit: '1m' },
+      models: [{ id: 'gpt-6-sol', key: 'gpt6sol', chat: true, pricing: null, raw: { id: 'gpt-6-sol', pricing: { input_per_1M_tokens: 2.11, output_per_1M_tokens: 10.55 } } }],
+    };
+    const sku = buildMineOverlay([prov], INDEX).get('GPT-6 Sol').get('gw1')[0];
+    expect(sku).toMatchObject({ in: 2.11, out: 10.55, viaKeys: true });
+    // headline works over key-priced SKUs exactly like listing-priced ones
+    expect(headlineSku([sku]).kind).toBe('paid');
+    expect(headlineSku([sku]).blend).toBeCloseTo((3 * 2.11 + 10.55) / 4);
+  });
+  it('a provider without keys is untouched (byte-equal legacy behavior)', () => {
+    const prov = { id: 'gw2', models: [{ id: 'gpt-6-sol', key: 'gpt6sol', chat: true, pricing: { prompt: '0.000002', completion: '0.00001' } }] };
+    const sku = buildMineOverlay([prov], INDEX).get('GPT-6 Sol').get('gw2')[0];
+    expect(sku).toMatchObject({ in: 2, out: 10, viaKeys: false });
   });
 });

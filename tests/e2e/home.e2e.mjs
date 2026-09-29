@@ -9,6 +9,8 @@ import { fileURLToPath } from 'node:url';
 // stats-35: score replica imported from the shared mirror (independent
 // re-derivation of the harmonized CL blend) — no inline formula to drift
 import { scoreForModel as mirrorScore } from '../helpers/snapshot.mjs';
+// stats-55: column-header labels for the side-by-side panel assertions
+import { SHORT } from '../../src/lib/constants.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SHOTS = path.join(REPO, 'tests', 'e2e', 'shots');
@@ -555,6 +557,114 @@ const ok = (msg) => console.log('  ok:', msg);
   else ok('compare panel works on home');
   if (!await page.locator('button:has-text("Full comparison")').count()) fail('panel should offer Full comparison CTA');
   else ok('compare panel offers "Full comparison" CTA');
+
+  // ── stats-55: panel respects the Avg set + every column is sortable ──
+  // NOTE: th labels render text-transform:uppercase — allInnerTexts() comes
+  // back capitalized, so header comparisons normalize to uppercase.
+  const panel = page.locator('.cmp-panel');
+  const panelHeads = async () =>
+    (await panel.locator('thead th').allInnerTexts()).map(s => s.trim().toUpperCase());
+  const panelNames = async () =>
+    (await panel.locator('tbody tr .model-link').allInnerTexts())
+      .map(s => s.replace(/★/g, '').trim());
+  const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const rowOf = (name) => page.locator('.b-table .table tbody tr').filter({
+    has: page.locator('.model-link').filter({ hasText: new RegExp('^' + esc(name) + '(★)?$') }),
+  }).first();
+
+  // 1) Default Avg set → exactly the 8 core columns between Model and Score
+  const benchLabels = CORE.map(b => (SHORT[b] || b).toUpperCase());
+  let heads = await panelHeads();
+  if (JSON.stringify(heads) !== JSON.stringify(['MODEL', 'SCORE', ...benchLabels]))
+    fail('panel headers should follow the default Avg set, got ' + JSON.stringify(heads));
+  else ok('panel columns follow the default Avg set (8 of ' + BENCHES.length + ' leaderboards)');
+
+  // 2) Score header sorts by the live CL-weighted score (mirror-derived)
+  const picked = await panelNames();
+  const rowFor = (name) =>
+    [...(data.unified_closed || []), ...(data.unified_open || [])].find(r => r.name === name);
+  const byMirror = (dir) => [...picked].sort((a, b) => dir * (score(rowFor(a)) - score(rowFor(b))));
+  const scoreTh = panel.locator('thead th', { hasText: 'Score' });
+  await scoreTh.click(); await page.waitForTimeout(250); // first click = asc
+  if (JSON.stringify(await panelNames()) !== JSON.stringify(byMirror(1)))
+    fail('Score asc mismatch, got ' + (await panelNames()).join('|'));
+  else ok('Score column sorts ascending by the CL-weighted score');
+  await scoreTh.click(); await page.waitForTimeout(250); // second click = desc
+  if (JSON.stringify(await panelNames()) !== JSON.stringify(byMirror(-1)))
+    fail('Score desc mismatch, got ' + (await panelNames()).join('|'));
+  else ok('Score column sorts descending (best model on top)');
+
+  // 3) Avg-set dropdown drives the panel columns 1:1 (the reported bug)
+  // Buefy opens the menu via setTimeout(0) but closes synchronously — drive
+  // open/close off the menu's VISIBILITY with retries instead of bare clicks.
+  const avgMenu = page.locator('.avg-dropdown .dropdown-menu');
+  const avgOpen = async () => {
+    for (let i = 0; i < 4; i++) {
+      if (await avgMenu.isVisible().catch(() => false)) return;
+      await page.locator('button.avg-trigger').click();
+      await page.waitForTimeout(400);
+    }
+    fail('avg-set dropdown did not open');
+  };
+  const avgClose = async () => {
+    for (let i = 0; i < 4; i++) {
+      if (!(await avgMenu.isVisible().catch(() => false))) return;
+      await page.locator('button.avg-trigger').click();
+      await page.waitForTimeout(400);
+    }
+  };
+  const benchOff = 'FrontierSWE';
+  const labelOff = (SHORT[benchOff] || benchOff).toUpperCase();
+  const offRow = page.locator('.avg-bench-row', { hasText: labelOff });
+  await avgOpen();
+  await offRow.locator('input[type=checkbox]').click({ force: true });
+  await page.waitForTimeout(300);
+  heads = await panelHeads();
+  if (heads.length !== 9 || heads.includes(labelOff))
+    fail(`panel should drop "${labelOff}" when deselected, got ` + JSON.stringify(heads));
+  else ok('panel follows the Avg set live (8 → 7 bench columns)');
+  await avgClose();
+  await avgOpen();
+  await offRow.locator('input[type=checkbox]').click({ force: true }); // re-check
+  await page.waitForTimeout(300);
+  await avgClose();
+  heads = await panelHeads();
+  if (heads.length !== 10 || !heads.includes(labelOff))
+    fail('panel should restore the column after re-checking, got ' + JSON.stringify(heads));
+  else ok('re-checking restores the panel column (back to 8 of ' + BENCHES.length + ')');
+
+  // 4) Missing cells NEVER win a sort: add a current model with a gap in a
+  //    core bench, sort by that column — the gap model sits LAST both ways
+  //    (Buefy's default comparator would float it to the top on desc).
+  const allRows = [];
+  { const seen = new Set();
+    for (const r of [...(data.unified_closed || []), ...(data.unified_open || [])]) {
+      if (seen.has(r.name)) continue;
+      seen.add(r.name); allRows.push(r);
+    } }
+  const gapRow = allRows.find(r => !isOld(r) && !picked.includes(r.name)
+    && CORE.some(b => r[b] === null || r[b] === undefined));
+  if (!gapRow) fail('no current-gen row with a core-bench gap found in the snapshot');
+  else {
+    await rowOf(gapRow.name).locator('.b-checkbox input').click({ force: true });
+    await page.waitForTimeout(300);
+    const gapBench = CORE.find(b => gapRow[b] === null || gapRow[b] === undefined);
+    const gapTh = panel.locator('thead th', { hasText: SHORT[gapBench] || gapBench });
+    await gapTh.click(); await page.waitForTimeout(250);
+    let names3 = await panelNames();
+    if (names3[names3.length - 1] !== gapRow.name)
+      fail(`asc by ${gapBench} should sink "${gapRow.name}" last, got ` + names3.join('|'));
+    else ok(`asc sort by ${gapBench} sinks the missing cell last`);
+    await gapTh.click(); await page.waitForTimeout(250);
+    names3 = await panelNames();
+    if (names3[names3.length - 1] !== gapRow.name)
+      fail(`desc by ${gapBench} must STILL sink "${gapRow.name}" (Buefy default would float it), got ` + names3.join('|'));
+    else ok(`desc sort by ${gapBench} still sinks the missing cell (no data never beats a score)`);
+    await rowOf(gapRow.name).locator('.b-checkbox input').click({ force: true }); // untick — legacy flow expects the 2 picked models
+    await page.waitForTimeout(200);
+  }
+  await page.screenshot({ path: SHOTS + '/home-compare-panel-stats55.png' });
+
   // model page "Add to compare" CTA (pick a model NOT already checked)
   await page.locator('.b-table .table tbody tr').nth(3).locator('.model-link').click();
   await page.waitForSelector('.model-head');

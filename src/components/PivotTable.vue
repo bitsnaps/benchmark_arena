@@ -275,7 +275,10 @@ const limitedTitle = (row) =>
     <!-- Hide/Show columns: benchmark columns follow the Avg-set selection 1:1.
          Identity columns (# / Model / Score / CL) are always visible. Hidden
          benchmarks stay fully available on the Benchmarks page, model cards
-         and the compare panel — hiding is purely display, nothing is deleted. -->
+         and the full comparison page — hiding is purely display, nothing is
+         deleted. (stats-55: the home side-by-side panel follows the Avg set
+         1:1 like this table, so it is no longer the escape hatch showing
+         deselected columns.) -->
     <b-table-column
       v-for="b in coreBenchmarks"
       :key="b"

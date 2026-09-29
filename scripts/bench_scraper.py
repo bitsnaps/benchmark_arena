@@ -1529,26 +1529,42 @@ def parse_arcprize(snap):
 
 def scrape_design_arena():
     """
-    Scrape Design Arena leaderboard via browser JS eval (site Elo-based layout).
-    The leaderboard no longer renders an HTML table; each row is a div pair
-    (leaf Elo number div + sibling model-name div) under the 'Overall' section:
-      1396 | Kimi K3
-      1355 | GPT-5.6 Sol (XHigh)
+    Scrape Design Arena leaderboard via browser JS eval (stats-53 chart-row layout).
+    Since 2026-09-29 the site renders each ranked row as a chart column: the Elo
+    number sits inside the bar, the model name in label lines below it, and the
+    main "Overall Frontend" list moved to /leaderboard/code (the root
+    /leaderboard is now a graph view). For every Elo-like leaf (bare 3-4 digit
+    number, 700-2000) we climb ancestors until the container's innerText holds
+    more than the bare number, then REQUIRE the container's first text line to
+    be the Elo itself and the remaining lines to form a plausible model name.
+    That startswith-Elo rule rejects the page's other numeric widgets:
+    task-sub-board rows ("Website | General Purpose | 1. | ..."), concatenated
+    count blobs, and "Preference vs Speed/Price" quadrant axis labels.
+    Only the default visible ranked rows are taken (parity with the pre-change
+    extractor, which also yielded just the rendered ~19 rows; a "Show N More"
+    button exists but expanding it would 10x the column's coverage).
     Raw Elo (~800-1400) is returned and rescaled to 0-100 by _benchmark_scale.
     """
-    url = "https://www.designarena.ai/leaderboard"
+    url = "https://www.designarena.ai/leaderboard/code"
     js = (
-        "Array.from(document.querySelectorAll('*')).filter(function(e){"
-        "  return e.children.length === 0 && /^\\d{3,4}$/.test((e.textContent||'').trim()) "
-        "    && +e.textContent.trim() >= 700 && +e.textContent.trim() <= 2000; "
-        "}).map(function(e){"
-        "  var cont = e.parentElement ? e.parentElement.parentElement : null;"
-        "  var nameEl = cont ? cont.children[1] : null;"
-        "  var nm = nameEl ? ((nameEl.innerText || nameEl.textContent || '')) : '';"
-        "  return {elo: e.textContent.trim(), model: nm.trim().replace(/\\s+/g,' ')};"
-        "})"
+        "(function(){"
+        "  var leaves = Array.from(document.querySelectorAll('*')).filter(function(e){"
+        "    return e.children.length === 0 && /^\\d{3,4}$/.test((e.textContent||'').trim()) "
+        "      && +e.textContent.trim() >= 700 && +e.textContent.trim() <= 2000;"
+        "  });"
+        "  var out = [];"
+        "  leaves.forEach(function(e){"
+        "    var elo = e.textContent.trim();"
+        "    var anc = e, t = (anc.innerText||'').trim(), guard = 0;"
+        "    while (guard++ < 6 && t === elo && anc.parentElement){"
+        "      anc = anc.parentElement; t = (anc.innerText||'').trim();"
+        "    }"
+        "    out.push({elo: elo, text: t});"
+        "  });"
+        "  return out;"
+        "})()"
     )
-    data = load_and_eval(url, js, wait_ms=10000,
+    data = load_and_eval(url, js, wait_ms=12000,
                          timeouts={'open': 90, 'wait': 75, 'eval': 60, 'close': 10})
 
     models = []
@@ -1557,14 +1573,30 @@ def scrape_design_arena():
         for item in data:
             if not isinstance(item, dict):
                 continue
-            name = item.get("model", "").strip()
+            raw_elo = (item.get("elo") or "").strip()
             try:
-                elo = float(item.get("elo", "").strip())
+                elo = float(raw_elo)
             except (ValueError, TypeError):
                 continue
-            if 700 <= elo <= 2000 and name and name.lower() not in seen:
-                seen.add(name.lower())
-                models.append((name, elo))
+            if not (700 <= elo <= 2000):
+                continue
+            lines = [ln.strip() for ln in (item.get("text") or "").splitlines() if ln.strip()]
+            if not lines or lines[0] != raw_elo:
+                continue  # ranked-row containers start with the bare Elo itself
+            name = " ".join(lines[1:]).strip()
+            if not (2 <= len(name) <= 60):
+                continue
+            if not re.match(r"^[A-Za-z(]", name):
+                continue  # rejects concatenated numeric blobs
+            if re.search(r"\d{5,}", name):
+                continue  # belt & braces: no long digit runs in real model names
+            key = name.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            models.append((name, elo))
+            if len(models) >= 40:
+                break
         print(f"    Got {len(models)} models (Elo {min(m[1] for m in models):.0f}-"
               f"{max(m[1] for m in models):.0f})" if models else "    Got 0 models")
 

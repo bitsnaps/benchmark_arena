@@ -1527,26 +1527,322 @@ def parse_arcprize(snap):
     return models
 
 
+_DA_RANK_RE = re.compile(r"^\d{1,3}\.$")
+_DA_BAD_NAME_WORDS = ("preference", "quadrant", "task-specific", "win rate",
+                      "elo rating", "show ", "more models", "sign in")
+
+
+def _da_elo(line):
+    """Parse an Elo token: bare 3-4 digit number (comma tolerated), 700-2000."""
+    s = (line or "").replace(",", "").strip()
+    if re.match(r"^\d{3,4}$", s):
+        v = int(s)
+        if 700 <= v <= 2000:
+            return v
+    return None
+
+
+def _da_valid_name(name):
+    """Plausible Design Arena model-name line."""
+    if not (2 <= len(name) <= 60):
+        return False
+    if not re.match(r"^[A-Za-z(]", name):
+        return False  # rejects concatenated numeric blobs / rank remnants
+    if re.search(r"\d{5,}", name):
+        return False  # belt & braces: no long digit runs in real model names
+    if re.search(r"\d+(?:\.\d+)?s\s*#\d+", name):
+        return False  # speed-table rows ("... 62.1s #106 ...") are NOT names
+    low = name.lower()
+    return not any(w in low for w in _DA_BAD_NAME_WORDS)
+
+
+_DA_BADGE_LINES = ("moe", "new")
+
+
+def _da_harvest_table(models, body):
+    """
+    PRIMARY harvest: the full leaderboard table rendered on the expanded page
+    ("The Leaderboard | ... | Rank | Model | Elo Rating | ... | Time"), whose
+    rows serialize as:  #N <NL> model name <NL> elo <NL> W/L <NL> win% <NL>
+    +/- <NL> battles <NL> org <NL> time <NL> #N+1 ...
+    We jump rank-token to rank-token: name = lines right after '#N' until the
+    first Elo token; everything else (W/L, %, battles, org, time) is skipped.
+    Returns the number of rows harvested.
+    """
+    start = body.find("The Leaderboard")
+    region = body[start:] if start >= 0 else body
+    lines = [ln.strip() for ln in region.split("\n") if ln.strip()]
+    rank_re = re.compile(r"^#\d{1,3}$")
+    i, n, count = 0, len(lines), 0
+    while i < n:
+        if rank_re.match(lines[i]):
+            j = i + 1
+            nm = []
+            while (j < n and not rank_re.match(lines[j]) and _da_elo(lines[j]) is None):
+                if lines[j].lower() not in _DA_BADGE_LINES:
+                    nm.append(lines[j])
+                j += 1
+            if j < n and _da_elo(lines[j]) is not None and nm:
+                name = " ".join(nm).strip()
+                if _da_valid_name(name):
+                    models.setdefault(name.lower(), (name, float(_da_elo(lines[j]))))
+                    count += 1
+                i = j + 1
+                continue
+        i += 1
+    return count
+
+
+def _da_parse_json_loose(raw):
+    """Loose JSON parse of an agent-browser eval result (array or quoted string)."""
+    if not raw:
+        return None
+    cleaned = raw.strip()
+    try:
+        parsed = json.loads(cleaned)
+        if isinstance(parsed, str):
+            return json.loads(parsed)
+        return parsed
+    except (json.JSONDecodeError, ValueError):
+        pass
+    lines = cleaned.split("\n")
+    non_status = [ln.strip() for ln in lines
+                  if ln.strip() and not ln.strip().startswith("✓")]
+    for candidate in ("\n".join(non_status), *[ln for ln in reversed(non_status)]):
+        try:
+            parsed = json.loads(candidate)
+            if isinstance(parsed, str):
+                parsed = json.loads(parsed)
+            if isinstance(parsed, (list, dict)):
+                return parsed
+        except (json.JSONDecodeError, ValueError):
+            continue
+    return None
+
+
+def _da_body_text(raw):
+    """Decode an agent-browser string eval result (multi-line body innerText)."""
+    if not raw:
+        return ""
+    cleaned = raw.strip()
+    try:
+        parsed = json.loads(cleaned)
+        if isinstance(parsed, str):
+            return parsed
+    except json.JSONDecodeError:
+        pass
+    lines = cleaned.split("\n")
+    non_status = [ln.strip() for ln in lines
+                  if ln.strip() and not ln.strip().startswith("✓")]
+    try:
+        parsed = json.loads("\n".join(non_status))
+        if isinstance(parsed, str):
+            return parsed
+    except json.JSONDecodeError:
+        pass
+    return "\n".join(non_status)
+
+
+def _da_parse_json_loose(raw):
+    """Loose JSON parse of an agent-browser eval result (array or quoted string)."""
+    if not raw:
+        return None
+    cleaned = raw.strip()
+    try:
+        parsed = json.loads(cleaned)
+        if isinstance(parsed, str):
+            return json.loads(parsed)
+        return parsed
+    except (json.JSONDecodeError, ValueError):
+        pass
+    lines = cleaned.split("\n")
+    non_status = [ln.strip() for ln in lines
+                  if ln.strip() and not ln.strip().startswith("\u2713")]
+    candidates = ["\n".join(non_status)] + list(reversed(non_status))
+    for candidate in candidates:
+        try:
+            parsed = json.loads(candidate)
+            if isinstance(parsed, str):
+                parsed = json.loads(parsed)
+            if isinstance(parsed, (list, dict)):
+                return parsed
+        except (json.JSONDecodeError, ValueError):
+            continue
+    return None
+
+
+def _da_body_text(raw):
+    """Decode an agent-browser string eval result (multi-line body innerText)."""
+    if not raw:
+        return ""
+    cleaned = raw.strip()
+    try:
+        parsed = json.loads(cleaned)
+        if isinstance(parsed, str):
+            return parsed
+    except json.JSONDecodeError:
+        pass
+    lines = cleaned.split("\n")
+    non_status = [ln for ln in lines if ln.strip() and not ln.strip().startswith("\u2713")]
+    try:
+        parsed = json.loads("\n".join(ln.strip() for ln in non_status))
+        if isinstance(parsed, str):
+            return parsed
+    except json.JSONDecodeError:
+        pass
+    return "\n".join(non_status)
+
+
+def _da_merge_climb(models, data):
+    """Merge climb-rule results ({elo, text}) into models dict (first wins)."""
+    if not isinstance(data, list):
+        return
+    for item in data:
+        if not isinstance(item, dict):
+            continue
+        raw_elo = (item.get("elo") or "").strip()
+        try:
+            elo = float(raw_elo)
+        except (ValueError, TypeError):
+            continue
+        if not (700 <= elo <= 2000):
+            continue
+        lines = [ln.strip() for ln in (item.get("text") or "").splitlines()
+                 if ln.strip() and ln.strip().lower() not in _DA_BADGE_LINES]
+        if not lines or lines[0] != raw_elo:
+            continue  # ranked-row containers start with the bare Elo itself
+        name = " ".join(lines[1:]).strip()
+        if _da_valid_name(name):
+            models.setdefault(name.lower(), (name, elo))
+
+
+def _da_harvest_sequence(models, body):
+    """
+    Harvest (name, elo) pairs from the page's innerText line stream, tolerant to
+    the site's non-deterministic expanded layouts (chart-style / numbered
+    rank-first / flat streams). Three complementary scans, dedup by name:
+      A. head chart run: from the first Elo token to the first rank token —
+         rows are Elo-first ("1375 | Kimi | K3 | 1365 | ...").
+      B. chart-style anywhere: any Elo token followed by 1+ name lines until
+         the next Elo/rank token (covers degenerate flat-stream tails; rank-
+         first rows reject themselves here because the next token is a rank).
+      C. numbered rows: "N. | name... | elo" with N >= floor (the main list
+         continues the un-ranked chart head; task sub-boards restart at 1).
+         Extra guard: tail Elo must not exceed the head's min Elo (+2) so
+         task-sub-board ratings can never leak into the overall list.
+    """
+    lines = [ln.strip() for ln in (body or "").split("\n")
+             if ln.strip() and ln.strip().lower() not in _DA_BADGE_LINES]
+    n = len(lines)
+    elos = [None] * n
+    ranks = [False] * n
+    for i, ln in enumerate(lines):
+        elos[i] = _da_elo(ln)
+        ranks[i] = bool(_DA_RANK_RE.match(ln))
+
+    # -- scan A: first contiguous Elo-first run (the ranked head block) --
+    head_elos = []
+    k = 0
+    while k < n and not ranks[k]:
+        if elos[k] is not None:
+            j = k + 1
+            nm = []
+            while j < n and not ranks[j] and elos[j] is None:
+                nm.append(lines[j])
+                j += 1
+            name = " ".join(nm).strip()
+            if _da_valid_name(name):
+                models.setdefault(name.lower(), (name, float(elos[k])))
+                head_elos.append(elos[k])
+            k = j
+        else:
+            k += 1
+
+    # -- scan B: Elo-first rows anywhere (flat-stream tails) --
+    k = 0
+    while k < n:
+        if elos[k] is not None:
+            j = k + 1
+            nm = []
+            while j < n and not ranks[j] and elos[j] is None:
+                nm.append(lines[j])
+                j += 1
+            name = " ".join(nm).strip()
+            if _da_valid_name(name):
+                models.setdefault(name.lower(), (name, float(elos[k])))
+            k = j
+        else:
+            k += 1
+
+    # -- scan C: numbered "N. | name... | elo" rows (ranked tail) --
+    floor = (len(head_elos) + 1) if head_elos else 15
+    head_min = min(head_elos) if head_elos else None
+    k = 0
+    while k < n:
+        if ranks[k]:
+            try:
+                rank = int(lines[k][:-1])
+            except ValueError:
+                k += 1
+                continue
+            j = k + 1
+            nm = []
+            while j < n and not ranks[j] and elos[j] is None:
+                nm.append(lines[j])
+                j += 1
+            if j < n and elos[j] is not None and nm:
+                name = " ".join(nm).strip()
+                ok = rank >= floor and _da_valid_name(name)
+                if ok and head_min is not None and elos[j] > head_min + 2:
+                    ok = False  # task-sub-board rating, not the overall list
+                if ok:
+                    models.setdefault(name.lower(), (name, float(elos[j])))
+                k = j + 1
+                continue
+        k += 1
+
+
 def scrape_design_arena():
     """
-    Scrape Design Arena leaderboard via browser JS eval (stats-53 chart-row layout).
-    Since 2026-09-29 the site renders each ranked row as a chart column: the Elo
-    number sits inside the bar, the model name in label lines below it, and the
-    main "Overall Frontend" list moved to /leaderboard/code (the root
-    /leaderboard is now a graph view). For every Elo-like leaf (bare 3-4 digit
-    number, 700-2000) we climb ancestors until the container's innerText holds
-    more than the bare number, then REQUIRE the container's first text line to
-    be the Elo itself and the remaining lines to form a plausible model name.
-    That startswith-Elo rule rejects the page's other numeric widgets:
-    task-sub-board rows ("Website | General Purpose | 1. | ..."), concatenated
-    count blobs, and "Preference vs Speed/Price" quadrant axis labels.
-    Only the default visible ranked rows are taken (parity with the pre-change
-    extractor, which also yielded just the rendered ~19 rows; a "Show N More"
-    button exists but expanding it would 10x the column's coverage).
-    Raw Elo (~800-1400) is returned and rescaled to 0-100 by _benchmark_scale.
+    Scrape Design Arena leaderboard via browser JS eval (stats-53/54 chart-row layout).
+    Since 2026-09-29 the site renders the "Overall Frontend" list at
+    /leaderboard/code (the root /leaderboard is now a graph view), defaults to
+    the top ~20 rows behind a "Show N More" button, and re-renders the expanded
+    tail in NON-DETERMINISTIC layouts across loads (per-row chart columns, a
+    numbered "N. name elo" list, or a degenerate flat stream). Strategy:
+      1. Click the visible "Show N More" button until it disappears
+         (BenchLM-style loop with an elo-leaf-count growth guard).
+      2. Scroll + harvest in multiple passes:
+           - climb rule over Elo leaves (chart-column rows), and
+           - innerText sequence harvest (_da_harvest_sequence) covering the
+             numbered and flat-stream layouts.
+         All rules dedup by model name (first harvest wins).
+    Raw Elo (~700-1400) is returned and rescaled to 0-100 by _benchmark_scale.
     """
     url = "https://www.designarena.ai/leaderboard/code"
-    js = (
+
+    # Click the VISIBLE+ENABLED "Show N More" button (All Models tab; the
+    # Open-Weights tab's own button stays offsetParent==null until tabbed).
+    js_click_more = ("(function() {"
+                     "  var btns = Array.from(document.querySelectorAll('button'))"
+                     "    .filter(function(b) {"
+                     "      return /show \\d+ more/i.test(b.textContent)"
+                     "        && !b.disabled && b.offsetParent !== null;"
+                     "    });"
+                     "  if (btns.length > 0) { btns[btns.length - 1].click(); return true; }"
+                     "  return false;"
+                     "})()")
+
+    # Expansion-progress metric: number of Elo-like leaves currently rendered.
+    js_count_elo = (
+        "Array.from(document.querySelectorAll('*')).filter(function(e){"
+        "  return e.children.length === 0 && /^\\d{3,4}$/.test((e.textContent||'').trim()) "
+        "    && +e.textContent.trim() >= 700 && +e.textContent.trim() <= 2000;"
+        "}).length"
+    )
+
+    # Climb-rule extraction: from each Elo leaf up to its ranked-row container.
+    js_climb = (
         "(function(){"
         "  var leaves = Array.from(document.querySelectorAll('*')).filter(function(e){"
         "    return e.children.length === 0 && /^\\d{3,4}$/.test((e.textContent||'').trim()) "
@@ -1564,45 +1860,78 @@ def scrape_design_arena():
         "  return out;"
         "})()"
     )
-    data = load_and_eval(url, js, wait_ms=12000,
-                         timeouts={'open': 90, 'wait': 75, 'eval': 60, 'close': 10})
 
-    models = []
-    seen = set()
-    if data and isinstance(data, list):
-        for item in data:
-            if not isinstance(item, dict):
-                continue
-            raw_elo = (item.get("elo") or "").strip()
-            try:
-                elo = float(raw_elo)
-            except (ValueError, TypeError):
-                continue
-            if not (700 <= elo <= 2000):
-                continue
-            lines = [ln.strip() for ln in (item.get("text") or "").splitlines() if ln.strip()]
-            if not lines or lines[0] != raw_elo:
-                continue  # ranked-row containers start with the bare Elo itself
-            name = " ".join(lines[1:]).strip()
-            if not (2 <= len(name) <= 60):
-                continue
-            if not re.match(r"^[A-Za-z(]", name):
-                continue  # rejects concatenated numeric blobs
-            if re.search(r"\d{5,}", name):
-                continue  # belt & braces: no long digit runs in real model names
-            key = name.lower()
-            if key in seen:
-                continue
-            seen.add(key)
-            models.append((name, elo))
-            if len(models) >= 40:
-                break
-        print(f"    Got {len(models)} models (Elo {min(m[1] for m in models):.0f}-"
-              f"{max(m[1] for m in models):.0f})" if models else "    Got 0 models")
+    # -- session flow (manual, BenchLM-style, so the page survives clicking) --
+    run_browser("close", timeout=10)
+    time.sleep(0.5)
+    print(f"  Opening: {url}")
+    run_browser("open", url, timeout=90)
+    time.sleep(1)
+    print("  Waiting for load event...")
+    run_browser("wait", "--load", "load", timeout=75)
+    time.sleep(1)
+    print("  Waiting 12000ms for JS rendering...")
+    time.sleep(12)
 
-    if not models:
+    # -- expand: click "Show N More" until it disappears / count stalls --
+    MAX_LOAD_CLICKS = 25
+    prev_count = -1
+    for click_round in range(MAX_LOAD_CLICKS):
+        result = run_browser("eval", js_click_more, timeout=15)
+        if not (result and "true" in result.strip()):
+            if click_round == 0:
+                print("  Show-more button not found, using initial rows only")
+            break
+        time.sleep(3)  # wait for the expanded rows to render
+        n_res = run_browser("eval", js_count_elo, timeout=10)
+        try:
+            n_rows = int(str(n_res).strip().strip('"'))
+        except ValueError:
+            n_rows = -1
+        print(f"  Clicked 'Show N More' (round {click_round+1}) → {n_rows} elo rows")
+        if n_rows >= 0 and n_rows == prev_count:
+            print("  Elo-row count stopped growing; expansion done")
+            break
+        prev_count = n_rows
+
+    # -- harvest: scroll + climb-rule + innerText sequence rules, dedup by name --
+    models = {}
+    scrolls = [None, "bottom", "middle", "bottom", "top"]
+    prev_total = -1
+    for pass_no, where in enumerate(scrolls):
+        if where == "bottom":
+            run_browser("eval", "window.scrollTo(0, document.body.scrollHeight); 'ok'", timeout=10)
+        elif where == "middle":
+            run_browser("eval",
+                        "window.scrollTo(0, document.body.scrollHeight / 2); 'ok'", timeout=10)
+        elif where == "top":
+            run_browser("eval", "window.scrollTo(0, 0); 'ok'", timeout=10)
+        time.sleep(2)
+
+        raw2 = run_browser("eval", "(document.body.innerText||'')", timeout=30)
+        body = _da_body_text(raw2)
+        table_rows = _da_harvest_table(models, body)
+        raw = run_browser("eval", js_climb, timeout=60)
+        _da_merge_climb(models, _da_parse_json_loose(raw))
+        _da_harvest_sequence(models, body)
+
+        total = len(models)
+        print(f"  Harvest pass {pass_no+1} ({where or 'top'}): {total} unique models "
+              f"(table rows: {table_rows})")
+        if total >= 120 and total == prev_total:
+            break
+        prev_total = total
+    run_browser("close", timeout=10)
+
+    result = sorted(models.values(), key=lambda m: -m[1])[:400]
+    if result:
+        print(f"    Got {len(result)} models (Elo {min(m[1] for m in result):.0f}-"
+              f"{max(m[1] for m in result):.0f})")
+    else:
+        print("    Got 0 models")
+    if len(result) < 20:
         print("    [WARN] No data from Design Arena")
-    return models
+    return result
 
 
 def scrape_deepswe():
@@ -3462,6 +3791,13 @@ SUPERSEDE_OVERRIDES = {
     # successor Granite 4.2 8B exists (leak detector same-line rule
     # 'granite/8b' v(4, 1) vs v(4, 2)).
     "granite 4.1 8b": "Granite 4.2 8B",
+    # stats-54 (Design Arena full coverage, 2026-09-29): the 174-row DA column
+    # re-admitted two legacy rows with no OpenRouter meta (no dates, auto pass
+    # can't order them); the leak detector's same-line rule demands they hide:
+    #   - Claude Opus 4: 'claude-opus/-' v(4,) vs v(5, 5) 'Claude Opus 5.5'
+    #   - Grok-3-Beta:   'grok/-'        v(3,) vs v(4, 7) 'Grok 4.7'
+    "claude opus 4": "Claude Opus 5.5",
+    "grok-3-beta": "Grok 4.7",
 }
 
 # Models released this many months before the newest release in the snapshot

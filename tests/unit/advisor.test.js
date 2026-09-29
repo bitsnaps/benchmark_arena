@@ -358,15 +358,18 @@ describe('parity with the store on the real snapshot', () => {
       return;
     }
     // stats-32 ground truth: on the core-8 Score (which the advisor's
-    // limited-data fallback reuses) the new Pro 0813 outranks Flash 0731 —
-    // BOTH are current-gen; only the April SKUs are superseded
+    // limited-data fallback reuses) the new Pro 0813 outranks Flash 0731.
+    // stats-54 (2026-09-29): AA's deprecation payload now stales Flash 0731
+    // (superseded upstream by DeepSeek V4.1 Flash, 2026-09-10), so isOlder
+    // (flash) flipped to true — which only strengthens this test's headline
+    // invariant that Flash 0731 is never shortlisted over Pro 0813.
     const ps = d.scoreForModel(pro);
     const fs = d.scoreForModel(flash);
     expect(ps).not.toBeNull();
     expect(fs).not.toBeNull();
     expect(ps).toBeGreaterThan(fs);
     expect(d.isOlder(pro)).toBe(false);
-    expect(d.isOlder(flash)).toBe(false);
+    expect(d.isOlder(flash)).toBe(true);
     const april = find(/^DeepSeek V4 Flash$/i);
     if (april) expect(d.isOlder(april)).toBe(true);
   });

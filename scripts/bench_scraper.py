@@ -4912,7 +4912,11 @@ def normalize_model_name(name):
     n = re.sub(r'\s*\(new\)', '', n, flags=re.IGNORECASE)
 
     # ── Remove config-level parentheticals (e.g., (High), (xHigh), (Medium), etc.) ──
-    n = re.sub(r'\s*\((?:high|xhigh|x-high|medium|low|minimal|adaptive|max|none|\d+[kK]?|auto)\s*(?:with\s+fallback)?\)\s*', ' ', n, flags=re.IGNORECASE)
+    # 2026-09-30: AA now renders one row per reasoning-effort config —
+    # 'GPT-6.1 Sol (max)', '(xhigh)', … and the spelled-out 'None' effort as
+    # '(Non-reasoning)' — all collapse into the family base (keep-best),
+    # matching the documented effort-variant policy (stats-28, line 1474).
+    n = re.sub(r'\s*\((?:high|xhigh|x-high|medium|low|minimal|adaptive|max|none|non[-\s]?reasoning|\d+[kK]?|auto)\s*(?:with\s+fallback)?\)\s*', ' ', n, flags=re.IGNORECASE)
     # Also handle combined parentheticals like "(Thinking 16K)" from ARC
     n = re.sub(r'\s*\((?:thinking|reasoning|refine\.?|no\s*thinking)\s*,?\s*\d+[kK]?\)', '', n, flags=re.IGNORECASE)
     # Handle hyphen-separated effort levels: "Model - High" → "Model" (VendingBench format)
@@ -5079,7 +5083,7 @@ def get_model_family_and_version(normalized_name):
     return (family, version)
 
 
-def dedup_older_versions(rows, normalize_fn):
+def dedup_older_versions(rows, normalize_fn, core_benchmarks=None):
     """
     Remove inferior same-version variants within the same model family.
 
@@ -5090,6 +5094,11 @@ def dedup_older_versions(rows, normalize_fn):
     Different versions (e.g. GPT-5.5 vs GPT-5.6) are ALWAYS preserved —
     they represent distinct product releases, not duplicates.
     Different families (e.g. "gpt sol" vs "gpt terra") are also preserved.
+
+    stats-57: the removed duplicate's UNIQUE cells fold into the kept row
+    (gap-fill only — never overwrite). E.g. 'Claude 4.5 Haiku' admitted on
+    AA-only coverage folds its AA cell into the better-covered
+    'Claude Haiku 4.5' instead of losing it.
     """
     from collections import defaultdict
 
@@ -5114,6 +5123,17 @@ def dedup_older_versions(rows, normalize_fn):
         ))
         for idx in indices:
             if idx != best:
+                # stats-57: fold unique coverage into the kept row
+                src, dst = rows[idx], rows[best]
+                for b, v in src.items():
+                    if b in ('name', 'num_benchmarks', 'cl'):
+                        continue
+                    if dst.get(b) is None and v is not None:
+                        dst[b] = v
+                if core_benchmarks is not None:
+                    core_cov = sum(1 for b in core_benchmarks if dst.get(b) is not None)
+                    dst['num_benchmarks'] = core_cov
+                    dst['cl'] = round(core_cov / len(core_benchmarks) * 100, 1)
                 to_remove.add(idx)
 
     if not to_remove:
@@ -5247,6 +5267,21 @@ def build_unified_table(all_results):
 
     # Build tables
     n_core = len(avg_benchmarks)  # total core benchmarks for CL calculation
+    # stats-57: families already tracked via the >=2-core floor. A new
+    # GENERATION of a tracked family (GPT-6.1 Sol after GPT-6 Sol) may enter
+    # the unified ranking on AA-only coverage — the AA Intelligence Index is
+    # itself a verified, comparable score, and flagship point releases ship
+    # on AA before other sources add them. Unknown single-source models still
+    # wait for a second benchmark (measured 2026-09-30: admits 2, keeps 91
+    # single-benchmark rows out — no leaderboard zoo).
+    _tracked_fams = set()
+    for _k, _d in model_scores.items():
+        _av = {b: s for b, s in _d["scores"].items() if b not in EXCLUDE_FROM_AVG}
+        if len(_av) >= 2:
+            _f, _v = get_model_family_and_version(_k)
+            if _f:
+                _tracked_fams.add(_f)
+
     def build_table(classification):
         rows = []
         for key, data in model_scores.items():
@@ -5257,7 +5292,11 @@ def build_unified_table(all_results):
             avg_scores = {b: s for b, s in scores.items() if b not in EXCLUDE_FROM_AVG}
             cl_pct = len(avg_scores) / n_core * 100
             if len(avg_scores) < 2:  # ≥2 core benchmarks (configurable via MIN_CL_PERCENT)
-                continue
+                # stats-57 exception: AA-scored new generation of a tracked family
+                _fam, _ver = get_model_family_and_version(key)
+                if not (avg_scores.get("Artificial Analysis") is not None
+                        and _fam is not None and _fam in _tracked_fams):
+                    continue
 
             # Confidence Level: fraction of core benchmarks covered
             cl = cl_pct
@@ -5280,7 +5319,7 @@ def build_unified_table(all_results):
         ))
 
         # Remove same-version duplicates (e.g. two "gpt sol 5.6" entries)
-        rows, removed = dedup_older_versions(rows, normalize_model_name)
+        rows, removed = dedup_older_versions(rows, normalize_model_name, avg_benchmarks)
         if removed:
             print(f"  [dedup] Removed duplicates from {classification}: {removed}")
 

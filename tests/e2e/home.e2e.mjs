@@ -183,17 +183,12 @@ const ok = (msg) => console.log('  ok:', msg);
     // superseded model page shows the banner + successor link
     await page.goto(BASE + '#/model/' + slugify(supInTable.name), { waitUntil: 'networkidle' });
     await page.waitForSelector('.model-head', { timeout: 10000 });
-    if (!(await page.locator('.notice:has-text("superseded by")').count())) fail('superseded banner missing on model page');
-    else {
-      ok(`superseded banner shown for "${supInTable.name}"`);
-      await page.locator('.notice a').click();
-      await page.waitForTimeout(600);
-      const succ = supOf(supInTable.name);
-      if (!page.url().includes('/model/' + slugify(succ))) fail(`successor link should open ${slugify(succ)}, got ${page.url()}`);
-      else ok(`banner link opens successor "${succ}"`);
-    }
     // stats-49: model page — the missing-bars block carries the archived-page
-    // link iff the snapshot has a verified URL for this model's AA gap
+    // link iff the snapshot has a verified URL for this model's AA gap.
+    // (2026-09-30: assert BEFORE the successor click — the link lives on the
+    // ARCHIVED model's page, not the successor's; asserting after navigation
+    // only passed while the archived model still had an AA score, and real
+    // data drift (AA archiving Claude Fable 5) exposed the wrong-page bug.)
     {
       const supRow = ALLROWS.find(r => r.name === supInTable.name);
       const expDetail = (supRow && archOf(supRow)) ? 1 : 0;
@@ -202,6 +197,15 @@ const ok = (msg) => console.log('  ok:', msg);
         fail(`model-page archived link: expected ${expDetail}, got ${gotDetail}`);
       else if (expDetail) ok(`model page links the archived AA page (${archOf(supRow)})`);
       else ok('model page shows no archived link (none verified for this model)');
+    }
+    if (!(await page.locator('.notice:has-text("superseded by")').count())) fail('superseded banner missing on model page');
+    else {
+      ok(`superseded banner shown for "${supInTable.name}"`);
+      await page.locator('.notice a').click();
+      await page.waitForTimeout(600);
+      const succ = supOf(supInTable.name);
+      if (!page.url().includes('/model/' + slugify(succ))) fail(`successor link should open ${slugify(succ)}, got ${page.url()}`);
+      else ok(`banner link opens successor "${succ}"`);
     }
     // override pair: gemini 3 pro page banners and links to Gemini 3.1 Pro
     if (hasOverride) {

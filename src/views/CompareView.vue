@@ -19,11 +19,16 @@ const router = useRouter();
 
 const {
   benchmarks, pivotAll, modelSlugIndex, scoreForModel, clForModel, coveredCountForModel, rankMaps, tierOf, isCore,
-  stats, metaFor, metaCoverage, topClosed, topOpen, isOlder,
+  stats, metaFor, metaCoverage, topClosed, topOpen, isOlder, archiveLinkFor,
 } = useData();
 const { compareRows, compareMode } = useLeaderboard();
 
 const MAX = 5;
+
+// stats-58: tooltip for the archived-source link rendered in an empty score
+// cell — same wording as PivotTable / ModelDetailView (stats-49). Icon-only
+// per Ibrahim: the words live in the tooltip + the link's aria-label.
+const archTip = 'No current AA leaderboard entry — the model was archived by the source; its own page still carries score, pricing and latency';
 
 // ── URL ⇄ selection sync ─────────────────────────────────────────────
 const rowsForSlugs = (slugs) => {
@@ -243,7 +248,17 @@ const cmpGroups = computed(() => {
       label: SHORT[b] || b,
       hint: isCore(b) ? 'core' : 'context only',
       core: isCore(b),
-      cells: mk('high', (s) => ({ num: s.row[b] ?? null, main: fmtScore(s.row[b]), color: scoreColor(s.row[b]), bar: s.row[b] ?? null })),
+      // stats-58: an empty cell of a source-archived model carries the
+      // verified archived-page link (same archiveLinkFor rule as PivotTable:
+      // AA cells only, URL HTTP-verified at scrape time). Any other gap
+      // keeps the plain dash.
+      cells: mk('high', (s) => {
+        const v = s.row[b] ?? null;
+        return {
+          num: v, main: fmtScore(v), color: scoreColor(v), bar: v,
+          arch: v === null ? archiveLinkFor(s.row, b) : null,
+        };
+      }),
     })),
   });
 
@@ -385,7 +400,7 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
                 </div>
                 <a v-else-if="c.href" class="cmp-link mono" :href="c.href" target="_blank" rel="noopener">{{ c.main }} <i class="fas fa-arrow-up-right-from-square"></i></a>
                 <template v-else>
-                  <span class="cmp-main" :class="{ num: c.bar !== null && c.bar !== undefined }" :style="c.color ? { color: c.color } : null">{{ c.main }}</span>
+                  <span class="cmp-main" :class="{ num: c.bar !== null && c.bar !== undefined }" :style="c.color ? { color: c.color } : null">{{ c.main }}<b-tooltip v-if="c.arch" :label="archTip" type="is-dark" multilined :delay="100" append-to-body><a class="arch-link" :href="c.arch" target="_blank" rel="noopener noreferrer" :aria-label="archTip" style="margin-left:.3rem" @click.stop><i class="fas fa-arrow-up-right-from-square"></i></a></b-tooltip></span>
                   <div v-if="c.bar !== null && c.bar !== undefined" class="bar cmp-bar"><i :style="{ width: barWidth(c.bar) }"></i></div>
                 </template>
                 <span v-if="c.sub" class="cmp-sub">{{ c.sub }}</span>

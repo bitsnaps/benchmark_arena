@@ -125,6 +125,52 @@ const ok = (msg) => console.log('  ok:', msg);
   if (!firstHref.includes('#/model/')) fail('column name should link to model page, got ' + firstHref);
   else ok('column names link to model score cards');
 
+  // ── 5b. Archived-source link in the score matrix (stats-58) ──
+  // Mirror of stores/data.js archiveLinkFor: AA cells only, verified URL only.
+  // Fixture is derived from the committed snapshot so a data refresh cannot
+  // silently invalidate the section (falls back to a clear fixture failure).
+  const archModel = pivotAll.find(r => r['Artificial Analysis'] == null
+    && META[r.name] && META[r.name].archive_links && META[r.name].archive_links.aa);
+  const scoredPartner = sorted.find(r => r['Artificial Analysis'] != null && r.name !== (archModel || {}).name);
+  if (!archModel || !scoredPartner) {
+    fail('fixture: snapshot has no (archived-AA row + AA-scored partner) pair');
+  } else {
+    const expectedUrl = META[archModel.name].archive_links.aa;
+    const pair = [archModel, scoredPartner].map(r => slugify(r.name)).join(',');
+    await page.goto(BASE + '#/compare?models=' + pair, { waitUntil: 'networkidle' });
+    await page.waitForSelector('.cmp-headcell', { timeout: 10000 });
+    const rowCells = await page.evaluate((lbl) => {
+      // NB: .cmp-label also contains the hint span ("core"/"context only"),
+      // so compare against the FIRST span's text, not the div's textContent
+      const el = [...document.querySelectorAll('.cmp-label')]
+        .find(e => (e.querySelector('span') || {}).textContent?.trim() === lbl);
+      if (!el) return null;
+      const cells = [];
+      let sib = el.nextElementSibling;
+      while (sib && sib.classList.contains('cmp-cell')) { cells.push(sib); sib = sib.nextElementSibling; }
+      return cells.map(c => ({
+        arch: c.querySelectorAll('.arch-link').length,
+        href: c.querySelector('.arch-link')?.href || null,
+        aria: c.querySelector('.arch-link')?.getAttribute('aria-label') || null,
+        text: c.textContent.trim(),
+      }));
+    }, 'AA'); // SHORT['Artificial Analysis']
+    if (!rowCells || rowCells.length !== 2) fail('AA score row not found with 2 cells, got ' + JSON.stringify(rowCells));
+    else {
+      const [archCell, scoredCell] = rowCells;
+      if (archCell.arch !== 1) fail(`archived cell should carry exactly 1 arch-link, got ${archCell.arch} (text "${archCell.text}")`);
+      else ok('archived model AA cell shows the arch-link icon');
+      if (archCell.href !== expectedUrl) fail(`arch-link href mismatch: got ${archCell.href}`);
+      else ok(`arch-link points at the verified archived page (${expectedUrl})`);
+      if (!archCell.aria || !archCell.aria.includes('archived')) fail('arch-link aria-label should explain the archived state');
+      else ok('arch-link aria-label carries the explanation (icon-only per stats-49)');
+      if (archCell.arch && archCell.text.includes(expectedUrl)) fail('URL text leaked into the cell');
+      if (scoredCell.arch !== 0) fail(`AA-scored partner cell must keep the plain score (no arch-link), got ${scoredCell.arch}`);
+      else ok(`AA-scored partner keeps its score (${scoredPartner.name}: ${scoredCell.text})`);
+    }
+    await page.screenshot({ path: SHOTS + '/compare-arch-link.png' });
+  }
+
   // ── 6. Unknown slug cleans up to empty state ──
   await page.goto(BASE + '#/compare?models=does-not-exist', { waitUntil: 'networkidle' });
   await page.waitForSelector('.panel-lab .chip', { timeout: 10000 });

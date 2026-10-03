@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-02 02:38",
+  "timestamp": "2026-10-03 21:53",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -33,11 +33,11 @@
           57.99999999999999
         ],
         [
-          "Claude Opus 5.5 (xhigh with fallback)",
+          "Claude Sonnet 5.5 (max with fallback)",
           56.00000000000001
         ],
         [
-          "Claude Sonnet 5.5 (max with fallback)",
+          "Claude Opus 5.5 (xhigh with fallback)",
           56.00000000000001
         ],
         [
@@ -284,19 +284,19 @@
         ],
         [
           "Claude Opus 4.8",
-          62.0
+          61.0
         ],
         [
           "Step 5 Preview",
-          63.0
+          64.0
         ],
         [
           "Claude Opus 4.7 (Adaptive)",
-          59.0
+          61.0
         ],
         [
           "GPT-5.5",
-          59.0
+          60.0
         ],
         [
           "Grok 4.6",
@@ -304,7 +304,7 @@
         ],
         [
           "GPT-5.4",
-          50.0
+          49.0
         ],
         [
           "Gemini 3.7 Flash",
@@ -312,7 +312,7 @@
         ],
         [
           "Claude Sonnet 5",
-          65.0
+          64.0
         ],
         [
           "Muse Spark 1.1",
@@ -332,7 +332,7 @@
         ],
         [
           "Grok 4.5",
-          57.0
+          56.0
         ]
       ],
       "open": [
@@ -450,7 +450,7 @@
         ],
         [
           "claude fable 5 (High)",
-          93.07692307692308
+          92.92307692307692
         ],
         [
           "claude opus 5.5 (High)",
@@ -458,7 +458,7 @@
         ],
         [
           "claude opus 4.7 (High)",
-          92.61538461538461
+          92.46153846153847
         ],
         [
           "Claude Fable 5.1 Max",
@@ -469,8 +469,12 @@
           91.84615384615384
         ],
         [
-          "Muse Spark 1.3 Max",
+          "gemini 3.8 flash (High)",
           91.53846153846153
+        ],
+        [
+          "Muse Spark 1.3 Max",
+          91.38461538461539
         ],
         [
           "Claude Opus 4.7",
@@ -481,16 +485,12 @@
           91.38461538461539
         ],
         [
-          "gemini 3.8 flash (High)",
-          91.38461538461539
-        ],
-        [
           "Muse Spark 1.1",
-          91.07692307692308
+          90.92307692307692
         ],
         [
           "claude opus 5 (High)",
-          90.92307692307692
+          90.76923076923077
         ],
         [
           "Claude Opus 5 Max",
@@ -517,15 +517,19 @@
           89.84615384615384
         ],
         [
+          "GPT 6.1 Sol Max",
+          89.6923076923077
+        ],
+        [
           "gemini 3.6 flash (High)",
           89.6923076923077
         ],
         [
-          "gpt 5.5 (High)",
-          89.38461538461539
+          "claude opus 4.8 (High)",
+          89.53846153846153
         ],
         [
-          "claude opus 4.8 (High)",
+          "gpt 5.5 (High)",
           89.38461538461539
         ],
         [
@@ -533,12 +537,8 @@
           88.76923076923077
         ],
         [
-          "GPT 5.5",
+          "GPT 6 Astra Max",
           88.76923076923077
-        ],
-        [
-          "gemini 3.5 flash (Medium)",
-          88.61538461538461
         ]
       ],
       "open": [
@@ -548,7 +548,7 @@
         ],
         [
           "Qwen3.8 Max",
-          89.38461538461539
+          89.53846153846153
         ],
         [
           "MiMo V2.6 Pro",
@@ -556,23 +556,23 @@
         ],
         [
           "GLM 5.3 Max",
-          89.07692307692308
+          88.92307692307693
         ],
         [
           "GLM 5.2 Max",
-          88.46153846153845
-        ],
-        [
-          "GLM 5.3 Flash",
-          88.3076923076923
+          88.61538461538461
         ],
         [
           "DeepSeek V4.1 Flash Max",
+          88.3076923076923
+        ],
+        [
+          "GLM 5.3 Flash",
           88.15384615384615
         ],
         [
           "MiMo V2.5 Pro",
-          87.23076923076924
+          87.38461538461539
         ],
         [
           "Qwen3.5 Max Preview",
@@ -603,12 +603,12 @@
           85.38461538461539
         ],
         [
-          "MiMo V2.6 Flash",
-          85.23076923076923
-        ],
-        [
           "Gemma 4 31B",
           85.07692307692307
+        ],
+        [
+          "MiMo V2.6 Flash",
+          84.92307692307692
         ],
         [
           "Kimi K2.5 Thinking",
@@ -628,18 +628,18 @@
         ],
         [
           "GLM 4.7",
-          83.38461538461537
+          83.23076923076923
         ],
         [
           "MiniMax M3",
           83.07692307692308
         ],
         [
-          "Qwen3.8 27B",
-          82.92307692307692
+          "DeepSeek V4 Flash High Preview",
+          82.76923076923077
         ],
         [
-          "DeepSeek V4 Flash High Preview",
+          "Qwen3.8 27B",
           82.76923076923077
         ]
       ]
@@ -1060,11 +1060,11 @@
       "closed": [
         [
           "Claude Opus 5.5",
-          98.73217115689383
+          99.20760697305863
         ],
         [
           "GPT-6 Astra (xhigh)",
-          98.25673534072901
+          98.09825673534073
         ],
         [
           "GPT-6 Astra (max)",
@@ -1076,11 +1076,11 @@
         ],
         [
           "Muse Spark 1.3 (xhigh)",
-          93.50237717908082
+          93.6608557844691
         ],
         [
           "Muse Spark 1.3 Max",
-          93.50237717908082
+          93.18541996830429
         ],
         [
           "GPT-5.6 Sol (xhigh)",
@@ -1088,19 +1088,19 @@
         ],
         [
           "Claude Fable 5.1",
-          90.96671949286846
+          90.80824088748018
         ],
         [
           "Claude Opus 5",
-          88.90649762282092
+          88.74801901743264
         ],
         [
           "GPT-5.6 Sol (Medium)",
-          88.11410459587957
+          87.95562599049128
         ],
         [
           "Muse Spark 1.2",
-          87.00475435816165
+          87.16323296354992
         ],
         [
           "Claude Fable 5",
@@ -1112,27 +1112,27 @@
         ],
         [
           "Gemini 3.8 Flash",
-          85.89540412044374
+          85.73692551505546
         ],
         [
           "Grok 4.6",
           83.99366085578447
         ],
         [
-          "Gemini 3.6 Flash",
-          83.51822503961965
-        ],
-        [
           "Claude Opus 4.6",
           83.35974643423137
         ],
         [
-          "Claude Opus 4.6 (Thinking)",
-          82.88431061806656
+          "Gemini 3.6 Flash",
+          83.35974643423137
         ],
         [
           "GPT-6 Sol",
           82.88431061806656
+        ],
+        [
+          "Claude Opus 4.6 (Thinking)",
+          82.7258320126783
         ],
         [
           "Deca 2.6 Ultra",
@@ -1143,20 +1143,20 @@
           81.45800316957211
         ],
         [
-          "Muse Spark 1.1",
-          81.45800316957211
-        ],
-        [
           "Claude Sonnet 4.6",
           81.29952456418383
         ],
         [
-          "Qwen3.7 Max",
+          "Muse Spark 1.1",
           81.29952456418383
         ],
         [
           "Grok 4.5",
           81.29952456418383
+        ],
+        [
+          "Qwen3.7 Max",
+          81.14104595879556
         ]
       ],
       "open": [
@@ -1166,27 +1166,27 @@
         ],
         [
           "DeepSeek-V4.1-Flash",
-          88.74801901743264
+          88.4310618066561
         ],
         [
           "MiMo-V2.6-Pro",
-          88.11410459587957
+          87.95562599049128
         ],
         [
           "GLM-5.3",
-          87.00475435816165
+          87.16323296354992
         ],
         [
           "Qwen3.8 Max",
-          84.31061806656102
+          84.15213946117274
         ],
         [
           "GLM 5.2",
-          83.67670364500792
+          83.51822503961965
         ],
         [
           "GLM-5.3-Flash",
-          82.56735340729001
+          82.40887480190175
         ],
         [
           "Kimi K2.6",
@@ -1198,7 +1198,7 @@
         ],
         [
           "MiMo-V2.5-Pro",
-          80.03169572107765
+          79.87321711568937
         ],
         [
           "GLM 5 Turbo",
@@ -1206,11 +1206,11 @@
         ],
         [
           "MiMo-V2.5",
-          78.76386687797148
+          78.6053882725832
         ],
         [
           "Kimi K2.7 Code",
-          77.81299524564183
+          77.65451664025356
         ],
         [
           "MiniMax M3",
@@ -1218,23 +1218,23 @@
         ],
         [
           "GLM 5",
-          76.70364500792392
+          76.54516640253566
         ],
         [
           "DeepSeek-V4-Pro",
-          75.7527733755943
+          75.59429477020603
         ],
         [
           "Kimi K2.5 (Thinking)",
-          75.1188589540412
-        ],
-        [
-          "Qwen3.6 Plus",
           74.96038034865293
         ],
         [
+          "Qwen3.6 Plus",
+          74.80190174326465
+        ],
+        [
           "MiniMax M2.7",
-          74.64342313787638
+          74.48494453248811
         ],
         [
           "DeepSeek-V4-Flash-0731",
@@ -1246,7 +1246,7 @@
         ],
         [
           "GLM 4.7",
-          71.94928684627575
+          71.79080824088749
         ],
         [
           "MiniMax M2.5",
@@ -1254,11 +1254,11 @@
         ],
         [
           "DeepSeek-V4-Flash",
-          70.20602218700476
+          70.04754358161648
         ],
         [
           "MiniMax M2.1",
-          67.82884310618067
+          67.67036450079239
         ]
       ]
     },
@@ -2057,6 +2057,10 @@
           100.0
         ],
         [
+          "Claude-Opus-5-5",
+          98.43374696916442
+        ],
+        [
           "GPT-5.6-Sol",
           97.39699217725813
         ],
@@ -2067,6 +2071,14 @@
         [
           "Gemini-3.1-Pro",
           95.84173822834418
+        ],
+        [
+          "GPT-6.1-Sol",
+          93.52762880087279
+        ],
+        [
+          "GPT-6-Sol",
+          87.34569830370616
         ],
         [
           "GPT-5.6-Terra",
@@ -2099,6 +2111,10 @@
         [
           "Gemini-3.5-Flash",
           73.1744973906606
+        ],
+        [
+          "GPT-6-Luna",
+          69.19903954880223
         ],
         [
           "Grok-4-20-Reasoning",
@@ -2135,22 +2151,6 @@
         [
           "GPT-5.1-Codex-Mini",
           56.57980503619956
-        ],
-        [
-          "GPT-5.1-Codex",
-          54.965253453752304
-        ],
-        [
-          "Claude Opus 4.8",
-          52.75529031488221
-        ],
-        [
-          "Claude Opus 4.5",
-          52.60337310590533
-        ],
-        [
-          "Grok-4.6",
-          52.46541783117586
         ]
       ],
       "open": [
@@ -2267,7 +2267,7 @@
       "Arena.ai Text": 92.9,
       "SimpleBench.com": 88.4,
       "ARC-AGI-2": 93.3,
-      "Design Arena": 98.7,
+      "Design Arena": 99.2,
       "DeepSWE": null,
       "VendingBench": 59.5,
       "SWE-Marathon": 90.3,
@@ -2278,11 +2278,11 @@
     },
     {
       "name": "Claude Sonnet 5.5",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 5,
+      "cl": 62.5,
       "Artificial Analysis": 56.0,
       "BenchLM.ai": 68.0,
-      "Arena.ai Text": null,
+      "Arena.ai Text": 87.8,
       "SimpleBench.com": 75.9,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -2300,10 +2300,10 @@
       "cl": 100.0,
       "Artificial Analysis": 53.0,
       "BenchLM.ai": 71.0,
-      "Arena.ai Text": 88.6,
+      "Arena.ai Text": 88.8,
       "SimpleBench.com": 83.6,
       "ARC-AGI-2": 95.0,
-      "Design Arena": 98.3,
+      "Design Arena": 98.1,
       "DeepSWE": 74.0,
       "VendingBench": 100.0,
       "SWE-Marathon": 82.8,
@@ -2321,7 +2321,7 @@
       "Arena.ai Text": 92.5,
       "SimpleBench.com": 86.6,
       "ARC-AGI-2": 90.0,
-      "Design Arena": 91.0,
+      "Design Arena": 90.8,
       "DeepSWE": null,
       "VendingBench": 34.9,
       "SWE-Marathon": 88.9,
@@ -2350,11 +2350,11 @@
     },
     {
       "name": "GPT-6.1 Sol",
-      "num_benchmarks": 5,
-      "cl": 62.5,
+      "num_benchmarks": 6,
+      "cl": 75.0,
       "Artificial Analysis": 52.0,
       "BenchLM.ai": 68.0,
-      "Arena.ai Text": null,
+      "Arena.ai Text": 89.7,
       "SimpleBench.com": 82.9,
       "ARC-AGI-2": 94.2,
       "Design Arena": null,
@@ -2364,18 +2364,18 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": 93.5
     },
     {
       "name": "Muse Spark 1.3",
       "num_benchmarks": 6,
       "cl": 75.0,
       "Artificial Analysis": 48.0,
-      "BenchLM.ai": 50.0,
-      "Arena.ai Text": 91.5,
+      "BenchLM.ai": 52.0,
+      "Arena.ai Text": 91.4,
       "SimpleBench.com": 81.8,
       "ARC-AGI-2": null,
-      "Design Arena": 93.5,
+      "Design Arena": 93.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": 59.6,
@@ -2404,11 +2404,11 @@
     },
     {
       "name": "Step 5 Preview",
-      "num_benchmarks": 2,
-      "cl": 25.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 44.0,
-      "BenchLM.ai": 63.0,
-      "Arena.ai Text": null,
+      "BenchLM.ai": 64.0,
+      "Arena.ai Text": 85.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -2444,10 +2444,10 @@
       "cl": 75.0,
       "Artificial Analysis": 41.0,
       "BenchLM.ai": 65.0,
-      "Arena.ai Text": 91.4,
+      "Arena.ai Text": 91.5,
       "SimpleBench.com": 82.4,
       "ARC-AGI-2": 89.2,
-      "Design Arena": 85.9,
+      "Design Arena": 85.7,
       "DeepSWE": 74.0,
       "VendingBench": 32.8,
       "SWE-Marathon": null,
@@ -2462,17 +2462,17 @@
       "cl": 75.0,
       "Artificial Analysis": 38.0,
       "BenchLM.ai": 53.0,
-      "Arena.ai Text": 83.7,
+      "Arena.ai Text": 83.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": 59.3,
-      "Design Arena": 81.1,
+      "Design Arena": 80.8,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": 54.8,
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": 69.2
     },
     {
       "name": "GPT-5.3 Codex",
@@ -2483,7 +2483,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 60.5,
+      "Design Arena": 60.4,
       "DeepSWE": null,
       "VendingBench": 38.3,
       "SWE-Marathon": null,
@@ -2497,7 +2497,7 @@
       "num_benchmarks": 6,
       "cl": 75.0,
       "Artificial Analysis": 30.0,
-      "BenchLM.ai": 38.0,
+      "BenchLM.ai": 39.0,
       "Arena.ai Text": 90.3,
       "SimpleBench.com": 79.6,
       "ARC-AGI-2": 77.1,
@@ -2519,7 +2519,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 74.5,
+      "Design Arena": 74.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2588,7 +2588,7 @@
       "cl": 87.5,
       "Artificial Analysis": 25.0,
       "BenchLM.ai": 36.0,
-      "Arena.ai Text": 83.4,
+      "Arena.ai Text": 83.2,
       "SimpleBench.com": 50.0,
       "ARC-AGI-2": 36.5,
       "Design Arena": 70.5,
@@ -2609,7 +2609,7 @@
       "Arena.ai Text": 88.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 81.3,
+      "Design Arena": 81.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2642,7 +2642,7 @@
       "cl": 50.0,
       "Artificial Analysis": 22.0,
       "BenchLM.ai": 34.0,
-      "Arena.ai Text": 85.2,
+      "Arena.ai Text": 85.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": 10.3,
       "Design Arena": null,
@@ -2681,7 +2681,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 4.0,
-      "Design Arena": 55.8,
+      "Design Arena": 55.6,
       "DeepSWE": null,
       "VendingBench": 3.0,
       "SWE-Marathon": null,
@@ -2749,7 +2749,7 @@
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": 12.0,
-      "BenchLM.ai": 19.0,
+      "BenchLM.ai": 20.0,
       "Arena.ai Text": 69.5,
       "SimpleBench.com": 22.1,
       "ARC-AGI-2": null,
@@ -2768,7 +2768,7 @@
       "cl": 37.5,
       "Artificial Analysis": 12.0,
       "BenchLM.ai": 11.0,
-      "Arena.ai Text": 62.5,
+      "Arena.ai Text": 62.3,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -2843,7 +2843,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 35.3,
+      "Design Arena": 35.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2947,7 +2947,7 @@
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": 6.0,
-      "BenchLM.ai": 6.0,
+      "BenchLM.ai": 7.0,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
@@ -2966,7 +2966,7 @@
       "cl": 75.0,
       "Artificial Analysis": null,
       "BenchLM.ai": 74.0,
-      "Arena.ai Text": 93.1,
+      "Arena.ai Text": 92.9,
       "SimpleBench.com": 81.9,
       "ARC-AGI-2": 89.2,
       "Design Arena": 86.8,
@@ -2983,11 +2983,11 @@
       "num_benchmarks": 6,
       "cl": 75.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 62.0,
-      "Arena.ai Text": 89.4,
+      "BenchLM.ai": 61.0,
+      "Arena.ai Text": 89.5,
       "SimpleBench.com": 64.8,
       "ARC-AGI-2": 72.1,
-      "Design Arena": 77.8,
+      "Design Arena": 77.7,
       "DeepSWE": 59.0,
       "VendingBench": 37.3,
       "SWE-Marathon": 95.1,
@@ -3002,10 +3002,10 @@
       "cl": 75.0,
       "Artificial Analysis": null,
       "BenchLM.ai": 78.0,
-      "Arena.ai Text": 90.9,
+      "Arena.ai Text": 90.8,
       "SimpleBench.com": 80.6,
       "ARC-AGI-2": 90.4,
-      "Design Arena": 88.9,
+      "Design Arena": 88.7,
       "DeepSWE": 74.0,
       "VendingBench": 72.1,
       "SWE-Marathon": 97.5,
@@ -3023,7 +3023,7 @@
       "Arena.ai Text": 85.1,
       "SimpleBench.com": 46.8,
       "ARC-AGI-2": 59.5,
-      "Design Arena": 74.5,
+      "Design Arena": 74.3,
       "DeepSWE": 67.0,
       "VendingBench": 26.4,
       "SWE-Marathon": 47.6,
@@ -3056,7 +3056,7 @@
       "cl": 75.0,
       "Artificial Analysis": null,
       "BenchLM.ai": 59.0,
-      "Arena.ai Text": 85.5,
+      "Arena.ai Text": 85.7,
       "SimpleBench.com": 73.1,
       "ARC-AGI-2": 89.6,
       "Design Arena": 82.9,
@@ -3066,14 +3066,14 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 97.5,
-      "LLM Chess": null
+      "LLM Chess": 87.3
     },
     {
       "name": "Grok 4.5",
       "num_benchmarks": 6,
       "cl": 75.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 57.0,
+      "BenchLM.ai": 56.0,
       "Arena.ai Text": 87.1,
       "SimpleBench.com": 70.0,
       "ARC-AGI-2": 52.6,
@@ -3092,7 +3092,7 @@
       "cl": 75.0,
       "Artificial Analysis": null,
       "BenchLM.ai": 68.0,
-      "Arena.ai Text": 85.1,
+      "Arena.ai Text": 85.2,
       "SimpleBench.com": 75.9,
       "ARC-AGI-2": 67.1,
       "Design Arena": 84.0,
@@ -3109,7 +3109,7 @@
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 65.0,
+      "BenchLM.ai": 64.0,
       "Arena.ai Text": 86.5,
       "SimpleBench.com": 60.6,
       "ARC-AGI-2": null,
@@ -3127,7 +3127,7 @@
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 59.0,
+      "BenchLM.ai": 60.0,
       "Arena.ai Text": 89.4,
       "SimpleBench.com": 76.9,
       "ARC-AGI-2": 85.0,
@@ -3149,7 +3149,7 @@
       "Arena.ai Text": 84.0,
       "SimpleBench.com": 62.4,
       "ARC-AGI-2": 4.9,
-      "Design Arena": 61.8,
+      "Design Arena": 61.6,
       "DeepSWE": null,
       "VendingBench": 3.7,
       "SWE-Marathon": null,
@@ -3167,7 +3167,7 @@
       "Arena.ai Text": 88.2,
       "SimpleBench.com": 61.1,
       "ARC-AGI-2": 33.6,
-      "Design Arena": 67.7,
+      "Design Arena": 67.5,
       "DeepSWE": null,
       "VendingBench": 23.4,
       "SWE-Marathon": null,
@@ -3181,7 +3181,7 @@
       "num_benchmarks": 5,
       "cl": 62.5,
       "Artificial Analysis": null,
-      "BenchLM.ai": 50.0,
+      "BenchLM.ai": 51.0,
       "Arena.ai Text": 88.8,
       "SimpleBench.com": 76.7,
       "ARC-AGI-2": 72.1,
@@ -3221,7 +3221,7 @@
       "Arena.ai Text": 91.4,
       "SimpleBench.com": 74.5,
       "ARC-AGI-2": null,
-      "Design Arena": 87.0,
+      "Design Arena": 87.2,
       "DeepSWE": 55.0,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3235,7 +3235,7 @@
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 47.0,
+      "BenchLM.ai": 48.0,
       "Arena.ai Text": 93.1,
       "SimpleBench.com": 67.6,
       "ARC-AGI-2": null,
@@ -3253,8 +3253,8 @@
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 59.0,
-      "Arena.ai Text": 92.6,
+      "BenchLM.ai": 61.0,
+      "Arena.ai Text": 92.5,
       "SimpleBench.com": 61.7,
       "ARC-AGI-2": 75.8,
       "Design Arena": null,
@@ -3290,7 +3290,7 @@
       "cl": 50.0,
       "Artificial Analysis": null,
       "BenchLM.ai": null,
-      "Arena.ai Text": 82.2,
+      "Arena.ai Text": 82.3,
       "SimpleBench.com": 61.6,
       "ARC-AGI-2": 18.3,
       "Design Arena": 64.2,
@@ -3325,11 +3325,11 @@
       "num_benchmarks": 4,
       "cl": 50.0,
       "Artificial Analysis": null,
-      "BenchLM.ai": 50.0,
+      "BenchLM.ai": 49.0,
       "Arena.ai Text": 88.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": 83.3,
-      "Design Arena": 70.8,
+      "Design Arena": 70.7,
       "DeepSWE": null,
       "VendingBench": 39.6,
       "SWE-Marathon": null,
@@ -3347,7 +3347,7 @@
       "Arena.ai Text": 89.7,
       "SimpleBench.com": null,
       "ARC-AGI-2": 60.4,
-      "Design Arena": 83.5,
+      "Design Arena": 83.4,
       "DeepSWE": 47.0,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3383,7 +3383,7 @@
       "Arena.ai Text": 90.0,
       "SimpleBench.com": 76.4,
       "ARC-AGI-2": 54.0,
-      "Design Arena": 76.2,
+      "Design Arena": 76.1,
       "DeepSWE": null,
       "VendingBench": 35.3,
       "SWE-Marathon": null,
@@ -3401,7 +3401,7 @@
       "Arena.ai Text": 81.8,
       "SimpleBench.com": 53.1,
       "ARC-AGI-2": 6.5,
-      "Design Arena": 40.7,
+      "Design Arena": 40.6,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3419,7 +3419,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 46.4,
       "ARC-AGI-2": 0.9,
-      "Design Arena": 65.6,
+      "Design Arena": 65.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3473,7 +3473,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 27.0,
       "ARC-AGI-2": 0.4,
-      "Design Arena": 41.7,
+      "Design Arena": 41.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3509,7 +3509,7 @@
       "Arena.ai Text": 85.5,
       "SimpleBench.com": 53.2,
       "ARC-AGI-2": null,
-      "Design Arena": 64.7,
+      "Design Arena": 64.5,
       "DeepSWE": null,
       "VendingBench": 9.5,
       "SWE-Marathon": null,
@@ -3650,10 +3650,10 @@
       "cl": 37.5,
       "Artificial Analysis": null,
       "BenchLM.ai": 57.0,
-      "Arena.ai Text": 91.1,
+      "Arena.ai Text": 90.9,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 81.5,
+      "Design Arena": 81.3,
       "DeepSWE": null,
       "VendingBench": 42.0,
       "SWE-Marathon": null,
@@ -3671,7 +3671,7 @@
       "Arena.ai Text": 71.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": 0.4,
-      "Design Arena": 26.6,
+      "Design Arena": 26.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3743,7 +3743,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 38.7,
       "ARC-AGI-2": 6.1,
-      "Design Arena": 33.8,
+      "Design Arena": 33.6,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3761,7 +3761,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 8.6,
-      "Design Arena": 63.1,
+      "Design Arena": 62.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3779,7 +3779,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 5.9,
-      "Design Arena": 60.1,
+      "Design Arena": 59.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3797,7 +3797,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 66.4,
+      "Design Arena": 66.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3869,7 +3869,7 @@
       "Arena.ai Text": 68.6,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 15.5,
+      "Design Arena": 15.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3902,7 +3902,7 @@
       "cl": 25.0,
       "Artificial Analysis": null,
       "BenchLM.ai": null,
-      "Arena.ai Text": 67.2,
+      "Arena.ai Text": 67.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": 2.6,
       "Design Arena": null,
@@ -3961,7 +3961,7 @@
       "Arena.ai Text": 89.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 88.1,
+      "Design Arena": 88.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3976,10 +3976,10 @@
       "cl": 87.5,
       "Artificial Analysis": 45.0,
       "BenchLM.ai": 67.0,
-      "Arena.ai Text": 89.1,
+      "Arena.ai Text": 88.9,
       "SimpleBench.com": 66.2,
       "ARC-AGI-2": null,
-      "Design Arena": 87.0,
+      "Design Arena": 87.2,
       "DeepSWE": 69.0,
       "VendingBench": 52.6,
       "SWE-Marathon": 82.8,
@@ -3994,10 +3994,10 @@
       "cl": 62.5,
       "Artificial Analysis": 45.0,
       "BenchLM.ai": 65.0,
-      "Arena.ai Text": 89.4,
+      "Arena.ai Text": 89.5,
       "SimpleBench.com": 62.5,
       "ARC-AGI-2": null,
-      "Design Arena": 84.3,
+      "Design Arena": 84.2,
       "DeepSWE": 57.0,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4030,10 +4030,10 @@
       "cl": 75.0,
       "Artificial Analysis": 42.0,
       "BenchLM.ai": 55.0,
-      "Arena.ai Text": 88.3,
+      "Arena.ai Text": 88.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": 65.8,
-      "Design Arena": 82.6,
+      "Design Arena": 82.4,
       "DeepSWE": 63.0,
       "VendingBench": null,
       "SWE-Marathon": 75.6,
@@ -4066,10 +4066,10 @@
       "cl": 62.5,
       "Artificial Analysis": 39.0,
       "BenchLM.ai": 61.0,
-      "Arena.ai Text": 88.2,
+      "Arena.ai Text": 88.3,
       "SimpleBench.com": 66.7,
       "ARC-AGI-2": null,
-      "Design Arena": 88.7,
+      "Design Arena": 88.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4084,7 +4084,7 @@
       "cl": 37.5,
       "Artificial Analysis": 38.0,
       "BenchLM.ai": 55.0,
-      "Arena.ai Text": 85.2,
+      "Arena.ai Text": 84.9,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -4159,7 +4159,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 57.9,
       "ARC-AGI-2": null,
-      "Design Arena": 77.8,
+      "Design Arena": 77.7,
       "DeepSWE": null,
       "VendingBench": 32.8,
       "SWE-Marathon": null,
@@ -4195,7 +4195,7 @@
       "Arena.ai Text": 86.9,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 66.1,
+      "Design Arena": 65.9,
       "DeepSWE": null,
       "VendingBench": 3.0,
       "SWE-Marathon": null,
@@ -4213,7 +4213,7 @@
       "Arena.ai Text": 86.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 75.0,
+      "Design Arena": 74.8,
       "DeepSWE": null,
       "VendingBench": 33.0,
       "SWE-Marathon": null,
@@ -4249,7 +4249,7 @@
       "Arena.ai Text": 81.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 56.9,
+      "Design Arena": 56.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4285,7 +4285,7 @@
       "Arena.ai Text": 11.5,
       "SimpleBench.com": 27.7,
       "ARC-AGI-2": null,
-      "Design Arena": 18.5,
+      "Design Arena": 18.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4321,7 +4321,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 4.3,
+      "Design Arena": 4.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4444,10 +4444,10 @@
       "cl": 75.0,
       "Artificial Analysis": null,
       "BenchLM.ai": 56.0,
-      "Arena.ai Text": 88.5,
+      "Arena.ai Text": 88.6,
       "SimpleBench.com": 58.8,
       "ARC-AGI-2": 22.8,
-      "Design Arena": 83.7,
+      "Design Arena": 83.5,
       "DeepSWE": 44.0,
       "VendingBench": 53.6,
       "SWE-Marathon": 37.8,
@@ -4480,10 +4480,10 @@
       "cl": 50.0,
       "Artificial Analysis": null,
       "BenchLM.ai": 28.0,
-      "Arena.ai Text": 83.4,
+      "Arena.ai Text": 83.2,
       "SimpleBench.com": 47.7,
       "ARC-AGI-2": null,
-      "Design Arena": 71.9,
+      "Design Arena": 71.8,
       "DeepSWE": null,
       "VendingBench": 15.3,
       "SWE-Marathon": null,
@@ -4519,7 +4519,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 46.8,
       "ARC-AGI-2": 11.8,
-      "Design Arena": 75.1,
+      "Design Arena": 75.0,
       "DeepSWE": null,
       "VendingBench": 7.7,
       "SWE-Marathon": null,
@@ -4555,7 +4555,7 @@
       "Arena.ai Text": 85.8,
       "SimpleBench.com": 50.9,
       "ARC-AGI-2": null,
-      "Design Arena": 75.8,
+      "Design Arena": 75.6,
       "DeepSWE": 63.0,
       "VendingBench": 21.2,
       "SWE-Marathon": 20.7,
@@ -4606,10 +4606,10 @@
       "cl": 37.5,
       "Artificial Analysis": null,
       "BenchLM.ai": 37.0,
-      "Arena.ai Text": 87.2,
+      "Arena.ai Text": 87.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 80.0,
+      "Design Arena": 79.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4627,7 +4627,7 @@
       "Arena.ai Text": 74.6,
       "SimpleBench.com": 34.7,
       "ARC-AGI-2": null,
-      "Design Arena": 67.8,
+      "Design Arena": 67.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4645,7 +4645,7 @@
       "Arena.ai Text": 79.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 74.6,
+      "Design Arena": 74.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4681,7 +4681,7 @@
       "Arena.ai Text": 80.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 4.0,
-      "Design Arena": 64.7,
+      "Design Arena": 64.5,
       "DeepSWE": null,
       "VendingBench": 6.7,
       "SWE-Marathon": null,
@@ -4699,7 +4699,7 @@
       "Arena.ai Text": 82.8,
       "SimpleBench.com": 61.1,
       "ARC-AGI-2": null,
-      "Design Arena": 70.2,
+      "Design Arena": 70.0,
       "DeepSWE": 53.0,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4735,7 +4735,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 26.3,
       "ARC-AGI-2": null,
-      "Design Arena": 42.9,
+      "Design Arena": 42.8,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4807,7 +4807,7 @@
       "Arena.ai Text": 80.3,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 59.6,
+      "Design Arena": 59.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4897,7 +4897,7 @@
       "Arena.ai Text": 80.6,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 63.9,
+      "Design Arena": 63.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4915,7 +4915,7 @@
       "Arena.ai Text": 71.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 65.8,
+      "Design Arena": 65.6,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4930,7 +4930,7 @@
       "cl": 25.0,
       "Artificial Analysis": null,
       "BenchLM.ai": null,
-      "Arena.ai Text": 82.2,
+      "Arena.ai Text": 82.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": 73.9,
@@ -5060,7 +5060,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 704.691,
+      "aa_ttft_seconds": 679.558,
       "modalities_source": "openrouter"
     },
     "Claude Sonnet 5.5": {
@@ -5125,8 +5125,16 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.343,
-      "modalities_source": "openrouter"
+      "aa_ttft_seconds": 1.226,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 2.0202,
+          "out": 10.101
+        }
+      ]
     },
     "GPT-6 Astra": {
       "or_id": "openai/gpt-6-astra",
@@ -5189,7 +5197,7 @@
         "cache_read": 1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 191.013,
+      "aa_ttft_seconds": 180.997,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5283,7 +5291,7 @@
         "cache_read": 0.25
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.492,
+      "aa_ttft_seconds": 4.711,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5383,8 +5391,16 @@
         "cache_read": 0.1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 111.223,
-      "modalities_source": "openrouter"
+      "aa_ttft_seconds": 110.279,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 2.0202,
+          "out": 10.101
+        }
+      ]
     },
     "Muse Spark 1.3": {
       "or_id": "meta/muse-spark-1.3",
@@ -5450,7 +5466,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 46.464,
+      "aa_ttft_seconds": 51.467,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5533,8 +5549,16 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 8.622,
-      "modalities_source": "openrouter"
+      "aa_ttft_seconds": 8.919,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 2.0202,
+          "out": 6.0606
+        }
+      ]
     },
     "GPT-5.6 Terra": {
       "or_id": "openai/gpt-5.6-terra",
@@ -5598,7 +5622,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.316,
+      "aa_ttft_seconds": 2.418,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5722,6 +5746,12 @@
           "n": "OrcaRouter",
           "in": 0.75,
           "out": 3.75
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.7576,
+          "out": 3.7879
         }
       ]
     },
@@ -5787,7 +5817,7 @@
         "cache_read": 0.01
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 23.486,
+      "aa_ttft_seconds": 22.854,
       "modalities_source": "openrouter"
     },
     "GPT-5.3 Codex": {
@@ -5851,7 +5881,7 @@
         "cache_read": 0.175
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 71.468,
+      "aa_ttft_seconds": 68.502,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -5869,6 +5899,12 @@
           "n": "OrcaRouter",
           "in": 1.75,
           "out": 14.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.5909,
+          "out": 12.7273
         }
       ]
     },
@@ -5953,6 +5989,12 @@
           "n": "OrcaRouter",
           "in": 2.0,
           "out": 12.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 2.0202,
+          "out": 12.1212
         }
       ]
     },
@@ -6025,7 +6067,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.048,
+      "aa_ttft_seconds": 2.242,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6118,7 +6160,7 @@
         "cache_read": 0.17
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.835,
+      "aa_ttft_seconds": 1.847,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6145,6 +6187,12 @@
           "n": "Together AI",
           "in": 1.0,
           "out": 4.05
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.0101,
+          "out": 4.0909
         }
       ]
     },
@@ -6207,7 +6255,7 @@
         "cache_read": 0.08
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.151,
+      "aa_ttft_seconds": 2.176,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6250,9 +6298,9 @@
       "active_params_b": 21.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.132,
-        "output": 0.528,
-        "cache_read": 0.033
+        "input": 0.0825,
+        "output": 0.33,
+        "cache_read": 0.0206
       },
       "reasoning": {
         "mandatory": false,
@@ -6295,7 +6343,7 @@
         "cache_read": 0.034
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.195,
+      "aa_ttft_seconds": 3.173,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6322,6 +6370,12 @@
           "in": 0.18,
           "out": 0.59,
           "free": true
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.1414,
+          "out": 0.5859
         }
       ]
     },
@@ -6388,7 +6442,7 @@
         "cache_read": 0.03
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 8.762,
+      "aa_ttft_seconds": 9.105,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6418,6 +6472,12 @@
           "n": "OrcaRouter",
           "in": 0.3,
           "out": 2.5
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.303,
+          "out": 2.5253
         }
       ]
     },
@@ -6481,7 +6541,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.713,
+      "aa_ttft_seconds": 2.835,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6501,6 +6561,12 @@
           "n": "Novita AI",
           "in": 0.06,
           "out": 0.18
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.0606,
+          "out": 0.1818
         }
       ]
     },
@@ -6608,6 +6674,12 @@
           "n": "Vercel AI Gateway",
           "in": 1.0,
           "out": 5.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.8586,
+          "out": 4.2929
         }
       ]
     },
@@ -6769,7 +6841,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.767,
+      "aa_ttft_seconds": 0.817,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -6836,7 +6908,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.535,
+      "aa_ttft_seconds": 0.519,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -7035,6 +7107,12 @@
           "n": "W&B Inference Gateway",
           "in": 0.03,
           "out": 0.17
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.1515,
+          "out": 0.6061
         }
       ]
     },
@@ -7095,7 +7173,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.871,
+      "aa_ttft_seconds": 3.606,
       "modalities_source": "openrouter"
     },
     "Trinity Large Thinking": {
@@ -7148,7 +7226,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.091,
+      "aa_ttft_seconds": 0.914,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -7221,7 +7299,7 @@
         "cache_read": 1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 98.421,
+      "aa_ttft_seconds": 97.236,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-fable-5"
@@ -7332,7 +7410,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 65.001,
+      "aa_ttft_seconds": 63.279,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-4-8"
@@ -7377,6 +7455,12 @@
           "n": "OrcaRouter",
           "in": 5.0,
           "out": 25.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 4.2929,
+          "out": 21.4646
         }
       ]
     },
@@ -7442,7 +7526,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 50.2,
+      "aa_ttft_seconds": 44.816,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-5"
@@ -7650,7 +7734,7 @@
         "cache_read": 0.4
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.39,
+      "aa_ttft_seconds": 2.721,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-5-6-sol"
@@ -7748,7 +7832,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.06,
+      "aa_ttft_seconds": 1.906,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-6-sol"
@@ -7816,7 +7900,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 11.06,
+      "aa_ttft_seconds": 9.825,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/grok-4-5"
@@ -7843,6 +7927,12 @@
           "n": "xAI",
           "in": 2.0,
           "out": 6.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 2.0202,
+          "out": 6.0606
         }
       ]
     },
@@ -7910,7 +8000,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 24.607,
+      "aa_ttft_seconds": 24.087,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/grok-4-6"
@@ -7943,6 +8033,12 @@
           "n": "xAI",
           "in": 2.0,
           "out": 6.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 2.0202,
+          "out": 6.0606
         }
       ]
     },
@@ -8007,7 +8103,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.57,
+      "aa_ttft_seconds": 1.307,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-sonnet-5"
@@ -8187,7 +8283,7 @@
         "cache_read": 0.125
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 23.722,
+      "aa_ttft_seconds": 23.427,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gemini-2-5-pro"
@@ -8289,7 +8385,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 7.087,
+      "aa_ttft_seconds": 7.076,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gemini-3-flash"
@@ -8324,6 +8420,12 @@
           "n": "OrcaRouter",
           "in": 0.5,
           "out": 3.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.404,
+          "out": 2.4242
         }
       ]
     },
@@ -8390,7 +8492,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 15.86,
+      "aa_ttft_seconds": 16.186,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gemini-3-5-flash"
@@ -8429,6 +8531,12 @@
           "n": "OrcaRouter",
           "in": 1.5,
           "out": 9.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.5152,
+          "out": 9.0909
         }
       ]
     },
@@ -8494,7 +8602,7 @@
         "cache_read": 0.075
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 11.757,
+      "aa_ttft_seconds": 11.671,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gemini-3-7-flash"
@@ -8527,6 +8635,12 @@
         {
           "p": "opencode-zen",
           "n": "OpenCode Zen"
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.7576,
+          "out": 3.7879
         }
       ]
     },
@@ -8594,7 +8708,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 13.449,
+      "aa_ttft_seconds": 14.104,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/muse-spark-1-2"
@@ -8687,7 +8801,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.891,
+      "aa_ttft_seconds": 1.974,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-4-6"
@@ -8732,6 +8846,12 @@
           "n": "Vercel AI Gateway",
           "in": 5.0,
           "out": 25.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 4.2929,
+          "out": 21.4646
         }
       ]
     },
@@ -8796,7 +8916,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.497,
+      "aa_ttft_seconds": 1.094,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-opus-4-7"
@@ -8841,6 +8961,12 @@
           "n": "OrcaRouter",
           "in": 5.0,
           "out": 25.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 4.2929,
+          "out": 21.4646
         }
       ]
     },
@@ -8907,7 +9033,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.362,
+      "aa_ttft_seconds": 1.357,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/claude-sonnet-4-6"
@@ -8958,6 +9084,12 @@
           "n": "Snowflake Cortex",
           "in": 3.0,
           "out": 15.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 2.5758,
+          "out": 12.8788
         }
       ]
     },
@@ -9023,6 +9155,12 @@
           "n": "OrcaRouter",
           "in": 15.0,
           "out": 120.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 13.6364,
+          "out": 109.0909
         }
       ]
     },
@@ -9180,6 +9318,12 @@
           "n": "OrcaRouter",
           "in": 60.0,
           "out": 270.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 27.2727,
+          "out": 163.6364
         }
       ]
     },
@@ -9247,7 +9391,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 16.025,
+      "aa_ttft_seconds": 18.392,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gemini-3-6-flash"
@@ -9280,6 +9424,12 @@
           "n": "OrcaRouter",
           "in": 0.75,
           "out": 3.75
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.7576,
+          "out": 3.7879
         }
       ]
     },
@@ -9391,6 +9541,12 @@
           "n": "Vercel AI Gateway",
           "in": 5.0,
           "out": 25.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 4.2929,
+          "out": 21.4646
         }
       ]
     },
@@ -9491,6 +9647,12 @@
           "n": "Vercel AI Gateway",
           "in": 3.0,
           "out": 15.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 2.5758,
+          "out": 12.8788
         }
       ]
     },
@@ -9545,11 +9707,19 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.872,
+      "aa_ttft_seconds": 0.893,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-4-1"
-      }
+      },
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.8182,
+          "out": 7.2727
+        }
+      ]
     },
     "GPT-5 mini": {
       "or_id": "openai/gpt-5-mini",
@@ -9646,6 +9816,12 @@
           "n": "Replicate",
           "in": 0.25,
           "out": 2.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.2273,
+          "out": 1.8182
         }
       ]
     },
@@ -9812,6 +9988,12 @@
           "n": "OrcaRouter",
           "in": 0.75,
           "out": 4.5
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.6818,
+          "out": 4.0909
         }
       ]
     },
@@ -9876,7 +10058,7 @@
         "cache_read": 0.02
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 6.578,
+      "aa_ttft_seconds": 6.229,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-5-4-nano"
@@ -9915,6 +10097,12 @@
           "n": "OrcaRouter",
           "in": 0.2,
           "out": 1.25
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.1818,
+          "out": 1.1364
         }
       ]
     },
@@ -10014,6 +10202,12 @@
           "n": "OrcaRouter",
           "in": 0.25,
           "out": 1.5
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.2525,
+          "out": 1.5152
         }
       ]
     },
@@ -10131,7 +10325,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 13.525,
+      "aa_ttft_seconds": 12.55,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/grok-4-3"
@@ -10160,6 +10354,12 @@
           "n": "xAI",
           "in": 1.25,
           "out": 2.5
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.2626,
+          "out": 2.5253
         }
       ]
     },
@@ -10221,7 +10421,7 @@
         "cache_read": 0.025
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.808,
+      "aa_ttft_seconds": 4.842,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/mercury-2"
@@ -10305,7 +10505,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 36.04,
+      "aa_ttft_seconds": 30.175,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/muse-spark-1-1"
@@ -10328,6 +10528,12 @@
           "n": "OrcaRouter",
           "in": 1.25,
           "out": 4.25
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.2626,
+          "out": 4.2929
         }
       ]
     },
@@ -10448,7 +10654,7 @@
         "cache_read": 0.04
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.661,
+      "aa_ttft_seconds": 2.692,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/step-3-7-flash"
@@ -10536,8 +10742,16 @@
         "cache_read": 0.0036
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.282,
-      "modalities_source": "openrouter"
+      "aa_ttft_seconds": 4.079,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.4394,
+          "out": 0.8788
+        }
+      ]
     },
     "GLM-5.3": {
       "or_id": "z-ai/glm-5.3",
@@ -10545,7 +10759,7 @@
       "provider": "Z.ai",
       "created": "2026-08-18",
       "context_length": 1048576,
-      "max_output_tokens": 131072,
+      "max_output_tokens": 943718,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -10559,9 +10773,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 1.4,
-        "output": 4.4,
-        "cache_read": 0.14
+        "input": 0.22,
+        "output": 3.39,
+        "cache_read": 0.176
       },
       "reasoning": {
         "mandatory": true,
@@ -10606,7 +10820,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.009,
+      "aa_ttft_seconds": 3.13,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10654,6 +10868,12 @@
           "n": "Z.ai",
           "in": 1.4,
           "out": 4.4
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.4141,
+          "out": 4.4444
         }
       ]
     },
@@ -10757,9 +10977,9 @@
       "active_params_b": null,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.359,
-        "output": 10.0,
-        "cache_read": 0.359
+        "input": 0.639,
+        "output": 13.0,
+        "cache_read": 0.62
       },
       "reasoning": {
         "mandatory": false,
@@ -10803,7 +11023,7 @@
         "cache_read": 0.3
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.406,
+      "aa_ttft_seconds": 5.185,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10861,6 +11081,12 @@
           "n": "Together AI",
           "in": 3.0,
           "out": 15.0
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 3.0303,
+          "out": 15.1515
         }
       ]
     },
@@ -10933,7 +11159,7 @@
         "cache_read": 0.026
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.29,
+      "aa_ttft_seconds": 3.212,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -10975,6 +11201,12 @@
           "n": "Z.ai",
           "in": 0.15,
           "out": 0.5
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.1515,
+          "out": 0.5051
         }
       ]
     },
@@ -10999,9 +11231,9 @@
       "active_params_b": 8.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0172,
-        "output": 0.75,
-        "cache_read": 0.0172
+        "input": 0.3,
+        "output": 1.2,
+        "cache_read": 0.006
       },
       "reasoning": {
         "mandatory": false,
@@ -11045,8 +11277,16 @@
         "cache_read": 0.006
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.99,
-      "modalities_source": "openrouter"
+      "aa_ttft_seconds": 0.963,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.303,
+          "out": 1.2121
+        }
+      ]
     },
     "MiMo-V2.6-Flash": {
       "or_id": "xiaomi/mimo-v2.6-flash",
@@ -11084,6 +11324,7 @@
         "frequency_penalty",
         "include_reasoning",
         "logit_bias",
+        "logprobs",
         "max_tokens",
         "min_p",
         "presence_penalty",
@@ -11097,6 +11338,7 @@
         "tool_choice",
         "tools",
         "top_k",
+        "top_logprobs",
         "top_p"
       ],
       "hugging_face_id": "XiaomiMiMo/MiMo-V2.6-Flash-RL",
@@ -11110,8 +11352,16 @@
         "cache_read": 0.0028
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.603,
-      "modalities_source": "openrouter"
+      "aa_ttft_seconds": 3.7,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.1414,
+          "out": 0.2828
+        }
+      ]
     },
     "DeepSeek V4 Pro 0813": {
       "or_id": "deepseek/deepseek-v4-pro-0813",
@@ -11119,7 +11369,7 @@
       "provider": "DeepSeek",
       "created": "2026-08-12",
       "context_length": 1048576,
-      "max_output_tokens": 393216,
+      "max_output_tokens": 943718,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -11133,9 +11383,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 1.32,
-        "output": 3.96,
-        "cache_read": 0.044
+        "input": 0.22,
+        "output": 4.2,
+        "cache_read": 0.14
       },
       "reasoning": {
         "mandatory": false,
@@ -11179,8 +11429,16 @@
         "cache_read": 0.044
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.687,
-      "modalities_source": "openrouter"
+      "aa_ttft_seconds": 1.754,
+      "modalities_source": "openrouter",
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.3333,
+          "out": 4.0
+        }
+      ]
     },
     "MiniMax-M3": {
       "or_id": "minimax/minimax-m3",
@@ -11245,7 +11503,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.387,
+      "aa_ttft_seconds": 1.976,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11316,6 +11574,12 @@
           "n": "W&B Inference Gateway",
           "in": 0.23,
           "out": 0.96
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.303,
+          "out": 1.2121
         }
       ]
     },
@@ -11454,6 +11718,12 @@
           "n": "W&B Inference Gateway",
           "in": 0.71,
           "out": 3.5
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.9596,
+          "out": 4.0404
         }
       ]
     },
@@ -11522,7 +11792,7 @@
         "cache_read": 0.16
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.282,
+      "aa_ttft_seconds": 1.416,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11610,7 +11880,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.127,
+      "aa_ttft_seconds": 2.124,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11832,7 +12102,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.267,
+      "aa_ttft_seconds": 2.296,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11909,7 +12179,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.768,
+      "aa_ttft_seconds": 0.754,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11981,7 +12251,7 @@
         "cache_read": 0.245
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.04,
+      "aa_ttft_seconds": 1.065,
       "modalities_source": "openrouter",
       "alias_note": "LLM Chess lists this model under its HF name llama-4-maverick-17b-128e-instruct",
       "available_at": [
@@ -12053,7 +12323,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.821,
+      "aa_ttft_seconds": 0.826,
       "modalities_source": "openrouter",
       "alias_note": "LLM Chess lists this model under its HF name llama4-scout-17b-instruct-v1:0",
       "available_at": [
@@ -12165,7 +12435,7 @@
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.41,
-        "output": 3.99,
+        "output": 3.49,
         "cache_read": 0.26
       },
       "reasoning": {
@@ -12210,7 +12480,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.26,
+      "aa_ttft_seconds": 1.312,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-5-2"
@@ -12297,6 +12567,12 @@
           "n": "Z.ai",
           "in": 1.4,
           "out": 4.4
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.5152,
+          "out": 4.5455
         }
       ]
     },
@@ -12411,7 +12687,7 @@
         "cache_read": 0.45
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.275,
+      "aa_ttft_seconds": 1.252,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-4-7"
@@ -12481,9 +12757,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.9646,
-        "output": 3.0316,
-        "cache_read": 0.1791
+        "input": 1.4,
+        "output": 4.4,
+        "cache_read": 0.26
       },
       "reasoning": {
         "mandatory": false,
@@ -12523,7 +12799,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.728,
+      "aa_ttft_seconds": 1.716,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-5-1"
@@ -12574,6 +12850,12 @@
           "n": "Z.ai",
           "in": 1.4,
           "out": 4.4
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.4141,
+          "out": 4.4444
         }
       ]
     },
@@ -12816,6 +13098,12 @@
           "n": "W&B Inference Gateway",
           "in": 0.3,
           "out": 1.2
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.303,
+          "out": 1.2121
         }
       ]
     },
@@ -12895,6 +13183,12 @@
           "n": "OrcaRouter",
           "in": 0.147,
           "out": 0.295
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.2727,
+          "out": 1.1313
         }
       ]
     },
@@ -12919,9 +13213,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.4341,
-        "output": 1.828,
-        "cache_read": 0.0731
+        "input": 0.95,
+        "output": 4.0,
+        "cache_read": 0.16
       },
       "reasoning": {
         "mandatory": false,
@@ -12962,7 +13256,7 @@
         "cache_read": 0.16
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.928,
+      "aa_ttft_seconds": 2.794,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/kimi-k2-6"
@@ -13035,6 +13329,12 @@
           "n": "W&B Inference Gateway",
           "in": 0.65,
           "out": 3.41
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.9596,
+          "out": 4.0404
         }
       ]
     },
@@ -13098,7 +13398,7 @@
         "cache_read": 0.0036
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.273,
+      "aa_ttft_seconds": 2.242,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/mimo-v2-5-pro"
@@ -13121,6 +13421,12 @@
           "n": "Novita AI",
           "in": 0.522,
           "out": 1.044
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.0101,
+          "out": 3.0303
         }
       ]
     },
@@ -13177,7 +13483,15 @@
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/minimax-m2-1"
-      }
+      },
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.303,
+          "out": 1.2121
+        }
+      ]
     },
     "MiniMax M2.7": {
       "or_id": "minimax/minimax-m2.7",
@@ -13299,9 +13613,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0092,
+        "input": 0.0188,
         "output": 1.28,
-        "cache_read": 0.0092
+        "cache_read": 0.0169
       },
       "reasoning": {
         "mandatory": false,
@@ -13349,7 +13663,7 @@
         "cache_read": 0.014
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.927,
+      "aa_ttft_seconds": 0.975,
       "modalities_source": "openrouter"
     },
     "Kimi K2": {
@@ -13401,7 +13715,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.521,
+      "aa_ttft_seconds": 1.503,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/kimi-k2"
@@ -13413,7 +13727,7 @@
       "provider": "MoonshotAI",
       "created": "2025-11-06",
       "context_length": 262144,
-      "max_output_tokens": 98304,
+      "max_output_tokens": 235929,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -13428,8 +13742,7 @@
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.6,
-        "output": 2.5,
-        "cache_read": 0.15
+        "output": 2.5
       },
       "reasoning": {
         "mandatory": true,
@@ -13467,11 +13780,19 @@
         "cache_read": 0.6
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.451,
+      "aa_ttft_seconds": 1.423,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/kimi-k2-thinking"
-      }
+      },
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.4747,
+          "out": 2.0202
+        }
+      ]
     },
     "Qwen3 Coder 30B A3B Instruct": {
       "or_id": "qwen/qwen3-coder-30b-a3b-instruct",
@@ -13618,7 +13939,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.071,
+      "aa_ttft_seconds": 1.131,
       "available_at": [
         {
           "p": "openrouter",
@@ -13762,7 +14083,7 @@
         "cache_read": 0.016
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.456,
+      "aa_ttft_seconds": 2.458,
       "input_modalities": [
         "text",
         "image"
@@ -14000,6 +14321,12 @@
           "n": "Vercel AI Gateway",
           "in": 1.1,
           "out": 4.4
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.0,
+          "out": 4.0
         }
       ]
     },
@@ -14061,7 +14388,15 @@
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/o4-mini"
-      }
+      },
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.0,
+          "out": 4.0
+        }
+      ]
     },
     "Amazon Nova Pro V1.0": {
       "or_id": "amazon/nova-pro-v1",
@@ -14196,6 +14531,12 @@
           "n": "Replicate",
           "in": 0.05,
           "out": 0.4
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.0455,
+          "out": 0.3636
         }
       ]
     },
@@ -14525,6 +14866,12 @@
           "n": "W&B Inference Gateway",
           "in": 1.15,
           "out": 2.55
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 1.3333,
+          "out": 4.0
         }
       ]
     },
@@ -14733,9 +15080,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.042,
-        "output": 0.084,
-        "cache_read": 0.0084
+        "input": 0.028,
+        "output": 0.056,
+        "cache_read": 0.0056
       },
       "reasoning": {
         "mandatory": false,
@@ -14868,6 +15215,12 @@
           "n": "W&B Inference Gateway",
           "in": 0.14,
           "out": 0.28
+        },
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.4444,
+          "out": 1.3333
         }
       ]
     },
@@ -14986,8 +15339,8 @@
       "or_name": "DeepSeek: DeepSeek V3.1 Terminus",
       "provider": "DeepSeek",
       "created": "2025-09-22",
-      "context_length": 131072,
-      "max_output_tokens": 65536,
+      "context_length": 163840,
+      "max_output_tokens": 147456,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -15001,9 +15354,8 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.3,
-        "output": 1.0,
-        "cache_read": 0.135
+        "input": 0.27,
+        "output": 1.0
       },
       "reasoning": {
         "mandatory": false,
@@ -15214,7 +15566,15 @@
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-4-6"
-      }
+      },
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.6061,
+          "out": 2.2222
+        }
+      ]
     },
     "GLM 4.7 Flash": {
       "or_id": "z-ai/glm-4.7-flash",

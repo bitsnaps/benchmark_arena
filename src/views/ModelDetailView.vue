@@ -61,10 +61,23 @@ const aliasNote = computed(() => (model.value ? metaFor(model.value)?.alias_note
 // lib/newFlag.js singleton); the Released tag beside it keeps the exact date.
 const isNew = computed(() => (model.value ? isNewModel(released.value) : false));
 
-// API pricing (price layer) — AA list price when on record (the lab's own,
-// no routing margin), else the OpenRouter snapshot. Source surfaces in the
-// panel label so the number is never misattributed.
+// API pricing (price layer) — the stats-19 ladder, extended stats-59:
+// AA list price → OpenRouter snapshot → cheapest seller listing → free
+// listing as $0. Source surfaces in the panel label so the number is never
+// misattributed.
 const pricing = computed(() => (model.value ? priceFor(model.value) : null));
+const PRICE_SOURCE_LABEL = {
+  aa: 'Artificial Analysis list price · no routing margin',
+  openrouter: 'OpenRouter list price',
+  seller: 'Cheapest seller list price',
+  free: 'Free listing · rate limits apply',
+};
+const PRICE_SOURCE_NOTE = {
+  aa: 'Artificial Analysis list price — the lab\u2019s own, without a router\u2019s margin.',
+  openrouter: 'Router list price for this exact row.',
+  seller: 'Cheapest seller listing — shown because no AA/OpenRouter list price is on record for this row.',
+  free: 'This model has a free listing — shown as $0. Free tiers are rate-limited, not unlimited.',
+};
 const modelCtx = computed(() => (model.value ? metaFor(model.value)?.context_length || null : null));
 // stats-19: the raw API id (org/model) — the card is where the short format
 // lives now; listings present only the full name.
@@ -272,7 +285,7 @@ function addToCompare() {
     <div v-if="pricing" class="panel-lab mt" style="padding:1.2rem">
       <div class="row" style="justify-content:space-between;margin-bottom:.6rem">
         <h3 style="margin:0;font-size:1.05rem">API pricing</h3>
-        <span class="cell-sub">{{ pricing.source === 'aa' ? 'Artificial Analysis list price · no routing margin' : 'OpenRouter list price' }} · snapshot {{ stats.lastUpdated }}</span>
+        <span class="cell-sub">{{ PRICE_SOURCE_LABEL[pricing.source] || 'List price' }} · snapshot {{ stats.lastUpdated }}</span>
       </div>
       <div class="grid-4">
         <div class="stat">
@@ -306,7 +319,7 @@ function addToCompare() {
         <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'money' } }">latency tiers<i class="fas fa-arrow-up-right-from-square"></i></router-link>
       </p>
       <p class="cell-sub mt-sm">
-        {{ pricing.source === 'aa' ? 'Artificial Analysis list price — the lab\u2019s own, without a router\u2019s margin.' : 'Router list price for this exact row.' }}
+        {{ PRICE_SOURCE_NOTE[pricing.source] || 'List price for this row.' }}
         The same model is often cheaper first-party or via other hosts —
         <router-link :to="{ name: 'providers' }">compare sellers</router-link>, or see the
         <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'money' } }">price source ladder<i class="fas fa-arrow-up-right-from-square"></i></router-link>.

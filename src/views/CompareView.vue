@@ -20,6 +20,7 @@ const router = useRouter();
 const {
   benchmarks, pivotAll, modelSlugIndex, scoreForModel, clForModel, coveredCountForModel, rankMaps, tierOf, isCore,
   stats, metaFor, metaCoverage, topClosed, topOpen, isOlder, archiveLinkFor,
+  priceFor, valueFor, hasFreeListingFor,
 } = useData();
 const { compareRows, compareMode } = useLeaderboard();
 
@@ -129,15 +130,21 @@ async function copyLink() {
 }
 
 // ── Column data (one entry per selected model) ───────────────────────
+// stats-59: prices read through the store's priceFor() ladder (AA list →
+// OpenRouter → cheapest seller → free $0) instead of the OpenRouter-only
+// homegrown copy — the same numbers the leaderboard Price column shows, so
+// the Compare page can never disagree with the table (and AA-priced,
+// seller-priced and free-listing models stop rendering avoidable dashes).
 const sel = computed(() => compareRows.value.map((row) => {
   const meta = metaFor(row);
-  const price = meta?.pricing_usd_per_1m || null;
-  const blended = price ? (3 * (price.input ?? 0) + (price.output ?? 0)) / 4 : null;
+  const price = priceFor(row);
   const wscore = scoreForModel(row);
   const tier = tierOf(row);
   return {
-    row, meta, price, blended, avg: wscore, tier,
-    value: wscore !== null && wscore !== undefined && blended ? wscore / blended : null,
+    row, meta, price, blended: price ? price.blend : null, avg: wscore, tier,
+    free: hasFreeListingFor(row),
+    // valueFor owns the ÷0 guard: free/$0 rows stay out of the value lens
+    value: valueFor(row),
     overallRank: rankMaps.value.all.get(row.name) ?? null,
     tierRank: rankMaps.value[tier]?.get(row.name) ?? null,
     supersededBy: meta?.superseded_by || null,
@@ -231,13 +238,24 @@ const cmpGroups = computed(() => {
     ],
   });
 
+  // stats-59: price provenance rides on each cell as a sub label — the
+  // number is never misattributed (same ethos as the model page's card).
+  const priceSub = (s) => {
+    const p = s.price;
+    if (!p) return null;
+    if (p.source === 'free') return 'free listing — rate limits apply';
+    if (p.source === 'seller') return `via ${p.seller || 'seller'} (no AA/OR list price)`;
+    if (p.source === 'aa') return 'AA list price';
+    return 'OpenRouter snapshot';
+  };
+
   groups.push({
     label: 'Pricing · USD per 1M tokens',
     rows: [
-      { key: 'pin', label: 'Input', cells: mk('low', (s) => ({ num: s.price?.input ?? null, main: fmtUsd(s.price?.input) })) },
+      { key: 'pin', label: 'Input', cells: mk('low', (s) => ({ num: s.price?.input ?? null, main: fmtUsd(s.price?.input), sub: priceSub(s) })) },
       { key: 'pout', label: 'Output', cells: mk('low', (s) => ({ num: s.price?.output ?? null, main: fmtUsd(s.price?.output) })) },
-      { key: 'pblend', label: 'Blended', hint: '3:1 input:output', cells: mk('low', (s) => ({ num: s.blended || null, main: fmtUsd(s.blended) })) },
-      { key: 'value', label: 'Score per $1M', hint: 'Global Score ÷ blended price', cells: mk('high', (s) => ({ num: s.value, main: fmtValue(s.value), sub: s.value ? 'score pts' : null })) },
+      { key: 'pblend', label: 'Blended', hint: '3:1 input:output', cells: mk('low', (s) => ({ num: s.blended ?? null, main: fmtUsd(s.blended) })) },
+      { key: 'value', label: 'Score per $1M', hint: 'Global Score ÷ blended price', cells: mk('high', (s) => ({ num: s.value, main: fmtValue(s.value), sub: s.value ? 'score pts' : (s.free ? 'free — excluded from value' : null) })) },
     ],
   });
 

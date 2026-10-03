@@ -40,10 +40,22 @@ const blend = (name) => {
     return b > 0 ? b : null;                        // log axis: 0 is not plottable
   }
   const pr = m.pricing_usd_per_1m;
-  if (!pr || typeof pr.input !== 'number') return null;
-  const out = typeof pr.output === 'number' ? pr.output : null;
-  const b = out === null ? pr.input : (3 * pr.input + out) / 4;
-  return b > 0 ? b : null;
+  if (pr && typeof pr.input === 'number') {
+    const out = typeof pr.output === 'number' ? pr.output : null;
+    const b = out === null ? pr.input : (3 * pr.input + out) / 4;
+    return b > 0 ? b : null;
+  }
+  // stats-59: full ladder — cheapest seller listing next, then a free
+  // listing at $0 (both not plottable at 0 on the log axis, mirroring
+  // stores/data.js priceFor + buildScatterPoints' non-positive drop)
+  const sellerBlends = (m.available_at || [])
+    .filter(a => typeof a.in === 'number' && a.in >= 0)
+    .map(a => (typeof a.out === 'number' ? (3 * a.in + a.out) / 4 : a.in));
+  if (sellerBlends.length) {
+    const b = Math.min(...sellerBlends);
+    return b > 0 ? b : null;
+  }
+  return null; // free listing ($0) or nothing on record — not plottable
 };
 const ttft = (name) => (META[name] || {}).aa_ttft_seconds ?? null;
 const isOld = (name) => !!(META[name] && (META[name].superseded_by || META[name].stale));

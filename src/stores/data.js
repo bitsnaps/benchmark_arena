@@ -331,13 +331,22 @@ const metaCoverage = computed(() => {
 });
 
 // ── Pricing (price layer) ────────────────────────────────────────────────
-// API list price per 1M tokens. Source preference (stats-19): the AA list
-// price (models_meta.pricing_aa_usd_per_1m — the lab's own price, no
-// routing margin) when present, else the OpenRouter snapshot
-// (pricing_usd_per_1m). `source` records which one fed the row so the UI
-// tooltips stay honest. Rows without either resolve to null — never
-// fabricated. `blend` is the 3:1 in:out mean used for sorting;
-// `output`/`cache_read` may be null when the source lacks them.
+// API list price per 1M tokens. Source ladder (stats-19, extended stats-59):
+//   1. the AA list price (models_meta.pricing_aa_usd_per_1m — the lab's own
+//      price, no routing margin)
+//   2. the OpenRouter snapshot (pricing_usd_per_1m)
+//   3. the cheapest SELLER listing in models_meta.available_at (stats-59:
+//      a model absent from both lists above but carried by a seller that
+//      publishes prices — e.g. Gemini 3 Pro @ Replicate — keeps a real
+//      number instead of an avoidable dash)
+//   4. a free listing resolves to $0 (stats-59: a model with no priced
+//      source anywhere but a free=true listing shows $0.00, never a dash;
+//      free ≠ unlimited — every surface carries the rate-limit caveat and
+//      valueFor's blend<=0 guard keeps free rows out of the value ranking)
+// `source` records which rung fed the row so the UI tooltips stay honest.
+// Rows without any of the four resolve to null — never fabricated.
+// `blend` is the 3:1 in:out mean used for sorting; `output`/`cache_read`
+// may be null when the source lacks them.
 const priceFor = (row) => {
   const meta = metaFor(row);
   const aa = meta?.pricing_aa_usd_per_1m;
@@ -352,15 +361,36 @@ const priceFor = (row) => {
     };
   }
   const pr = meta?.pricing_usd_per_1m;
-  if (!pr || typeof pr.input !== 'number') return null;
-  const out = typeof pr.output === 'number' ? pr.output : null;
-  return {
-    input: pr.input,
-    output: out,
-    cache_read: typeof pr.cache_read === 'number' ? pr.cache_read : null,
-    source: 'openrouter',
-    blend: out === null ? pr.input : (3 * pr.input + out) / 4,
-  };
+  if (pr && typeof pr.input === 'number') {
+    const out = typeof pr.output === 'number' ? pr.output : null;
+    return {
+      input: pr.input,
+      output: out,
+      cache_read: typeof pr.cache_read === 'number' ? pr.cache_read : null,
+      source: 'openrouter',
+      blend: out === null ? pr.input : (3 * pr.input + out) / 4,
+    };
+  }
+  // stats-59 rung 3: cheapest seller listing with a published per-token price
+  const sellers = (meta?.available_at ?? [])
+    .filter(a => typeof a.in === 'number' && a.in >= 0)
+    .map(a => ({
+      input: a.in,
+      output: typeof a.out === 'number' ? a.out : null,
+      cache_read: null,
+      source: 'seller',
+      seller: a.n || a.p || null,
+      blend: typeof a.out === 'number' ? (3 * a.in + a.out) / 4 : a.in,
+    }));
+  if (sellers.length) {
+    sellers.sort((x, y) => x.blend - y.blend);
+    return sellers[0];
+  }
+  // stats-59 rung 4: free listing with no priced source anywhere → $0
+  if ((meta?.available_at ?? []).some(a => a.free)) {
+    return { input: 0, output: 0, cache_read: null, source: 'free', blend: 0 };
+  }
+  return null;
 };
 
 // ── Value lens: Score per 1M blended tokens ──────────────────────────────

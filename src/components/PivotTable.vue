@@ -125,15 +125,19 @@ function byValue(a, b, isAsc) {
   return isAsc ? av - bv : bv - av;
 }
 
-// Tooltip for the Price cell: source (AA list price when available — the
-// lab's own price, no routing margin — else the OpenRouter snapshot) + the
-// full in / out / cache breakdown
+// Tooltip for the Price cell: which rung of the source ladder fed the row
+// (stats-19 ladder, extended stats-59: AA list → OpenRouter → cheapest
+// seller → free listing) + the full in / out / cache breakdown
 function priceTitle(row) {
   const p = priceFor(row);
   if (!p) return 'No API price on record for this row';
   const src = p.source === 'aa'
     ? 'Artificial Analysis list price — the lab\u2019s own price, no routing margin'
-    : 'OpenRouter snapshot — router list price';
+    : p.source === 'openrouter'
+      ? 'OpenRouter snapshot — router list price'
+      : p.source === 'seller'
+        ? `Cheapest seller listing${p.seller ? ' — ' + p.seller : ''} — shown because no AA/OpenRouter list price is on record`
+        : 'Free listing — shown as $0; free tiers are rate-limited, not unlimited';
   const cache = p.cache_read != null ? ` · cache read ${fmtUsd(p.cache_read)}` : '';
   return `API list price — input ${fmtUsd(p.input)} · output ${fmtUsd(p.output)}${cache} per 1M tokens (${src}; sorted by a 3:1 in:out blend). Compare sellers on the Providers page.`;
 }
@@ -245,12 +249,13 @@ const limitedTitle = (row) =>
     </b-table-column>
 
     <!-- Price: per-model API metadata (not a benchmark), always visible.
-         AA list price when available (the lab's own, no routing margin),
-         else the OpenRouter snapshot; models with no price on record show
-         an honest dash. -->
+         Source ladder (stats-19, extended stats-59): AA list price when
+         available (the lab's own, no routing margin), else the OpenRouter
+         snapshot, else the cheapest seller listing, else a free listing as
+         $0; models with no price source at all show an honest dash. -->
     <b-table-column field="price" label="Price" width="115" centered sortable :custom-sort="byPrice">
       <template #header>
-        <b-tooltip label="API list price, USD per 1M tokens — input / output. Artificial Analysis list price when available (no routing margin); OpenRouter snapshot otherwise. Sorted by a 3:1 in:out blend. — = no price on record." type="is-dark" multilined :delay="100" append-to-body>Price</b-tooltip>
+        <b-tooltip label="API list price, USD per 1M tokens — input / output. AA list price when available (no routing margin); OpenRouter snapshot otherwise; failing those, the cheapest seller listing; a free listing shows $0. Sorted by a 3:1 in:out blend. — = no price source at all." type="is-dark" multilined :delay="100" append-to-body>Price</b-tooltip>
       </template>
       <template #default="props">
         <b-tooltip v-if="priceFor(props.row)" :label="priceTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="price-cell">{{ fmtUsd(priceFor(props.row).input) }}<span class="price-sep">/</span>{{ fmtUsd(priceFor(props.row).output) }}</span></b-tooltip>

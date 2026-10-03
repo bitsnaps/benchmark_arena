@@ -34,16 +34,23 @@ const visible = rows.filter(r => !isOld(r));
 const avail = m => m?.available_at ?? [];
 const hasFree = m => avail(m).some(a => a.free);
 const blend = m => {
-  // stats-19: AA list price wins when present (same rule as the store)
+  // stats-19 ladder, extended stats-59 (same rule as the store's priceFor):
+  // AA list price → OpenRouter snapshot → cheapest priced seller listing.
+  // A free listing is handled by filterPrice (free → $0), not here.
   const aa = m?.pricing_aa_usd_per_1m;
   if (aa && typeof aa.input === 'number') {
     const out = typeof aa.output === 'number' ? aa.output : null;
     return out === null ? aa.input : (3 * aa.input + out) / 4;
   }
   const pr = m?.pricing_usd_per_1m;
-  if (!pr || typeof pr.input !== 'number') return null;
-  const out = typeof pr.output === 'number' ? pr.output : null;
-  return out === null ? pr.input : (3 * pr.input + out) / 4;
+  if (pr && typeof pr.input === 'number') {
+    const out = typeof pr.output === 'number' ? pr.output : null;
+    return out === null ? pr.input : (3 * pr.input + out) / 4;
+  }
+  const sellerBlends = avail(m)
+    .filter(a => typeof a.in === 'number' && a.in >= 0)
+    .map(a => (typeof a.out === 'number' ? (3 * a.in + a.out) / 4 : a.in));
+  return sellerBlends.length ? Math.min(...sellerBlends) : null;
 };
 const filterPrice = m => (hasFree(m) ? 0 : blend(m));
 

@@ -9,6 +9,8 @@ import { fileURLToPath } from 'node:url';
 // stats-35: score replica imported from the shared mirror (independent
 // re-derivation of the harmonized CL blend) — no inline formula to drift
 import { scoreForModel as mirrorScore } from '../helpers/snapshot.mjs';
+// stats-59: the price cells must render the exact store ladder output
+import { fmtUsd } from '../../src/lib/format.js';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SHOTS = path.join(REPO, 'tests', 'e2e', 'shots');
@@ -169,6 +171,70 @@ const ok = (msg) => console.log('  ok:', msg);
       else ok(`AA-scored partner keeps its score (${scoredPartner.name}: ${scoredCell.text})`);
     }
     await page.screenshot({ path: SHOTS + '/compare-arch-link.png' });
+  }
+
+  // ── 5c. Price ladder on the Compare page (stats-59) ──
+  // The Compare page must render the SAME price the store ladder produces
+  // (AA list → OpenRouter → cheapest seller → free $0) — never its own
+  // OpenRouter-only copy. Fixture pairs a seller-fallback model (no AA/OR
+  // list price, a priced seller exists) with an AA-priced list model.
+  const listRow = pivotAll.find(r => {
+    const m = META[r.name] || {};
+    return typeof m.pricing_aa_usd_per_1m?.input === 'number';
+  });
+  const sellerRow = pivotAll.find(r => {
+    const m = META[r.name] || {};
+    if (typeof m.pricing_aa_usd_per_1m?.input === 'number'
+      || typeof m.pricing_usd_per_1m?.input === 'number') return false;
+    return (m.available_at || []).some(a => typeof a.in === 'number');
+  });
+  if (!listRow || !sellerRow) {
+    fail('fixture: snapshot lacks (AA-priced row + seller-fallback row) pair');
+  } else {
+    const seller = (META[sellerRow.name].available_at || [])
+      .filter(a => typeof a.in === 'number')
+      .sort((a, b) => ((3 * a.in + (a.out ?? 0)) / 4) - ((3 * b.in + (b.out ?? 0)) / 4))[0];
+    const pair = [sellerRow, listRow].map(r => slugify(r.name)).join(',');
+    await page.goto(BASE + '#/compare?models=' + pair, { waitUntil: 'networkidle' });
+    await page.waitForSelector('.cmp-headcell', { timeout: 10000 });
+    const readRow = await page.evaluate((lbl) => {
+      const el = [...document.querySelectorAll('.cmp-label')]
+        .find(e => (e.querySelector('span') || {}).textContent?.trim() === lbl);
+      if (!el) return null;
+      const cells = [];
+      let sib = el.nextElementSibling;
+      while (sib && sib.classList.contains('cmp-cell')) { cells.push(sib); sib = sib.nextElementSibling; }
+      return cells.map(c => ({ main: c.querySelector('.cmp-main')?.textContent.trim() ?? null, sub: c.querySelector('.cmp-sub')?.textContent.trim() ?? null }));
+    }, 'Input');
+    if (!readRow || readRow.length !== 2) fail('Input price row not found with 2 cells');
+    else {
+      const wantSeller = fmtUsd(seller.in);
+      if (readRow[0].main !== wantSeller)
+        fail(`seller-fallback input should render "${wantSeller}" (cheapest seller ${seller.p}), got "${readRow[0].main}"`);
+      else ok(`seller-fallback model renders ${wantSeller} instead of a dash (${sellerRow.name} via ${seller.n})`);
+      if (!readRow[0].sub || !readRow[0].sub.includes('no AA/OR'))
+        fail(`seller-fallback provenance sub missing, got "${readRow[0].sub}"`);
+      else ok(`provenance sub shown: "${readRow[0].sub}"`);
+      const wantList = fmtUsd(META[listRow.name].pricing_aa_usd_per_1m.input);
+      if (readRow[1].main !== wantList)
+        fail(`AA-priced model input should render "${wantList}", got "${readRow[1].main}"`);
+      else ok(`AA-priced model keeps its list price ${wantList} (${listRow.name})`);
+    }
+    // the ÷0 guard: a $0-priced row shows an honest dash under Score per $1M
+    const valueCells = await page.evaluate((lbl) => {
+      const el = [...document.querySelectorAll('.cmp-label')]
+        .find(e => (e.querySelector('span') || {}).textContent?.trim() === lbl);
+      if (!el) return null;
+      const cells = [];
+      let sib = el.nextElementSibling;
+      while (sib && sib.classList.contains('cmp-cell')) { cells.push(sib); sib = sib.nextElementSibling; }
+      return cells.map(c => c.textContent.trim());
+    }, 'Score per $1M');
+    if (!valueCells || valueCells.length !== 2) fail('Score per $1M row not found');
+    else if (seller.in === 0 && !valueCells[0].startsWith('—'))
+      fail(`$0-priced model must show an honest dash under value, got "${valueCells[0]}"`);
+    else if (seller.in === 0) ok('÷0 guard holds on the page: $0-priced model shows value dash');
+    await page.screenshot({ path: SHOTS + '/compare-price-ladder.png' });
   }
 
   // ── 6. Unknown slug cleans up to empty state ──

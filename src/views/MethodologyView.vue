@@ -174,14 +174,17 @@ watch(() => route.query.s, jumpFromQuery);
         <h3><i class="fas fa-coins"></i> Price</h3>
         <p>
           List API price per 1M tokens — what a seller publishes, not a negotiated rate. Source
-          preference: the lab's own list price first (it excludes routing margin), otherwise the
-          largest aggregator's catalog snapshot. Whichever fed the row is recorded so tooltips
-          stay honest.
+          ladder: the lab's own list price first (it excludes routing margin), then the largest
+          aggregator's catalog snapshot, then the cheapest seller listing that publishes prices,
+          and finally a free listing resolves to $0.00. Whichever fed the row is recorded so
+          tooltips stay honest — and a row with no price source at all still shows a dash: a
+          missing price is never invented.
         </p>
         <p>
           The sortable headline is the conventional <strong>3:1 blend</strong>:
           <span class="mono">(3 × input + output) / 4</span> — most real traffic is input-heavy.
-          Free listings count as $0; unpriced rows show a dash and are never assigned a price.
+          Free listings count as $0 in filters and carry a rate-limit caveat everywhere (free
+          ≠ unlimited); unpriced rows show a dash and are never assigned a price.
         </p>
       </div>
 

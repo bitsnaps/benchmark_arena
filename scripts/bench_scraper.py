@@ -4313,18 +4313,28 @@ def _openrouter_model_row(entry):
 
 # ── Open provider API catalogs (keyless /v1/models endpoints) ──────────────
 # Added 2026-09-07 (stats-17) to widen the providers page beyond
-# LiteLLM+OpenRouter. All three are open — no API key needed. Shapes vary:
+# LiteLLM+OpenRouter. All are open — no API key needed. Shapes vary:
 #   NVIDIA NIM   — bare OpenAI list (id/owned_by only; no pricing/context)
 #   OpenCode Zen — bare OpenAI list; carries several '-free' twin ids
 #   OrcaRouter   — OpenRouter-style schema (pricing per-token AND *_per_million,
 #                  context_length, top_provider) incl. '-free' twins
+#   Poe (stats-59) — OpenAI-compatible catalog where pricing.prompt/completion
+#                  are per-token USD STRINGS ("0.0000020202" = $2.02/1M) and
+#                  context_length lives under context_window. PRICED BOTS ONLY
+#                  (priced_only=True): Poe returns pricing=null for per-request
+#                  bots, subscription-gated bots and non-text modality bots —
+#                  null ≠ free there (investigated with Ibrahim 2026-10-03;
+#                  e.g. gpt-4o is null-priced yet subscription-gated), so an
+#                  unpriced Poe row must not imply a free listing. Explicitly
+#                  zero-priced token rows (if any) still classify as free via
+#                  the zero-price rule below.
 #
 # FREE-LISTING DISCIPLINE: an id ending '-free' (or ':free') is a FREE LISTING
 # of its base model — stored with free=True + base=<id minus suffix> so the
 # future "free at which provider" feature can key off it. Free does NOT mean
 # unlimited: none of these APIs expose rate-limit numbers, so the data never
 # claims more than "free" and the UI tooltip carries the rate-limit caveat.
-# Prices are parsed only where the API exposes them (OrcaRouter); NVIDIA /
+# Prices are parsed only where the API exposes them (OrcaRouter, Poe); NVIDIA /
 # OpenCode rows keep null prices and render an honest dash. A bare trailing
 # "/free" segment (orcarouter/free — their free auto-router) is marked free
 # with no base id.
@@ -4333,12 +4343,12 @@ def _openrouter_model_row(entry):
 # catalog free of charge, rate-limited (confirmed by Ibrahim 2026-09-07).
 # Marked at the PROVIDER level (free_tier=True) — the API exposes no pricing
 # so rows keep null prices; the UI shows the free chip + rate-limit caveat.
-# LATENCY: none of the four catalogs exposes per-model latency/throughput
-# numbers (probed 2026-09-07: bare id/owned_by for NIM+Zen; pricing+context
-# only for Orca; OpenRouter /api/v1/models has none and its front stats
-# endpoints 404 keyless). Only honest signal available = edge RTT measured
-# at build time (measure_edge_rtt) — network round-trip to the API edge from
-# the scrape node, NOT model latency; header-tooltip material only.
+# LATENCY: none of the catalogs exposes per-model latency/throughput numbers
+# (probed 2026-09-07: bare id/owned_by for NIM+Zen; pricing+context only for
+# Orca/Poe; OpenRouter /api/v1/models has none and its front stats endpoints
+# 404 keyless). Only honest signal available = edge RTT measured at build
+# time (measure_edge_rtt) — network round-trip to the API edge from the
+# scrape node, NOT model latency; header-tooltip material only.
 OPEN_PROVIDER_APIS = [
     {
         "name": "NVIDIA NIM",
@@ -4358,6 +4368,14 @@ OPEN_PROVIDER_APIS = [
         "kind": "aggregator",
         "url": "https://api.orcarouter.ai/v1/models",
         "cache": os.path.join(TMP_DIR, "openapi_orcarouter.json"),
+    },
+    {
+        # stats-59: Poe — token-priced bots only; null pricing ≠ free there
+        "name": "Poe",
+        "kind": "aggregator",
+        "url": "https://api.poe.com/v1/models",
+        "cache": os.path.join(TMP_DIR, "openapi_poe.json"),
+        "priced_only": True,
     },
 ]
 OPEN_API_CACHE_TTL = 3600  # seconds — mirrors the OpenRouter catalog cache
@@ -4478,7 +4496,9 @@ def _api_provider_row(entry):
             except (TypeError, ValueError):
                 pass
     prov = entry.get("top_provider") or {}
-    ctx = prov.get("context_length") or entry.get("context_length")
+    cw = entry.get("context_window") or {}  # Poe nests context here (stats-59)
+    ctx = (prov.get("context_length") or entry.get("context_length")
+           or cw.get("context_length"))
     is_free, base = _free_listing_of(rid)
     row = {
         "id": rid,
@@ -4617,6 +4637,11 @@ def build_providers_json(or_models=None, litellm=None):
                               {"seen": set(), "models": []})
         for entry in entries:
             row = _api_provider_row(entry)
+            if row is not None and src.get("priced_only") and row.get("in") is None:
+                # stats-59 (Poe): null pricing there means per-request /
+                # subscription-gated / non-text — NOT free. A null-priced row
+                # would read as a free listing, so priced-only sources skip it.
+                continue
             if row is not None and row["id"] not in g["seen"]:
                 g["seen"].add(row["id"])
                 g["models"].append(row)
@@ -4661,7 +4686,7 @@ def build_providers_json(or_models=None, litellm=None):
         "sources": {
             "catalog": "LiteLLM model_prices_and_context_window.json (community catalog)",
             "aggregator": "OpenRouter /api/v1/models (router list price)",
-            "apis": "keyless /v1/models catalogs: NVIDIA NIM · OpenCode Zen · OrcaRouter",
+            "apis": "keyless /v1/models catalogs: NVIDIA NIM · OpenCode Zen · OrcaRouter · Poe (token-priced bots only)",
         },
         "providers": providers,
     }

@@ -405,20 +405,30 @@ describe('pricing layer (price column from models_meta.pricing_usd_per_1m)', () 
     expect(p.blend).toBeCloseTo((3 * p.input + p.output) / 4, 10);
   });
 
-  it('every priced row records its source — aa (AA list price) or openrouter', () => {
-    let aa = 0, or = 0;
+  it('every priced row records its ladder source — aa | openrouter | seller | free (stats-59)', () => {
+    let aa = 0, or = 0, seller = 0, free = 0;
     for (const r of d.pivotAll.value) {
       const p = d.priceFor(r);
       if (!p) continue;
-      expect(['aa', 'openrouter']).toContain(p.source);
+      expect(['aa', 'openrouter', 'seller', 'free']).toContain(p.source);
       if (p.source === 'aa') {
         aa++;
         // the aa branch must surface the AA record verbatim
         const rec = d.metaFor(r).pricing_aa_usd_per_1m;
         expect(p.input).toBe(rec.input);
-      } else {
+      } else if (p.source === 'openrouter') {
         or++;
         expect(d.metaFor(r).pricing_usd_per_1m).toBeTruthy();
+      } else if (p.source === 'seller') {
+        seller++;
+        // the seller rung fires only when BOTH list sources are absent
+        const rec = d.metaFor(r);
+        const aaNum = rec?.pricing_aa_usd_per_1m?.input;
+        const orNum = rec?.pricing_usd_per_1m?.input;
+        expect(typeof aaNum === 'number' || typeof orNum === 'number').toBe(false);
+      } else {
+        free++;
+        expect(p.input).toBe(0);
       }
     }
     expect(aa).toBeGreaterThan(0); // stats-19: the AA layer is populated
@@ -434,7 +444,7 @@ describe('pricing layer (price column from models_meta.pricing_usd_per_1m)', () 
   it('rows without a catalog match resolve to null — never fabricated', () => {
     expect(d.priceFor({ name: 'definitely-not-a-model' })).toBeNull();
     const without = d.pivotAll.value.filter(r => !d.priceFor(r));
-    expect(without.length).toBeGreaterThan(0); // small locals have no API price
+    expect(without.length).toBeGreaterThan(0); // registry-only rows keep the honest dash
   });
 
   it('every price is a sane USD-per-1M number (0..1000)', () => {
@@ -445,6 +455,86 @@ describe('pricing layer (price column from models_meta.pricing_usd_per_1m)', () 
       expect(p.input).toBeLessThan(1000);
       if (p.output !== null) expect(p.output).toBeLessThan(1000);
     }
+  });
+});
+
+describe('stats-59 price ladder (seller fallback + free $0)', () => {
+  it('anchor: Gemini 3 Pro falls through to its cheapest seller (Replicate $2 / $12)', () => {
+    const row = rowOf('Gemini 3 Pro');
+    if (!row) return console.log("  (skip: 'Gemini 3 Pro' absent from this snapshot — upstream churn)");
+    const rec = d.metaFor(row);
+    if (rec?.pricing_aa_usd_per_1m?.input != null || rec?.pricing_usd_per_1m?.input != null) {
+      return console.log('  (skip: Gemini 3 Pro gained an AA/OR list price — seller fallback no longer feeds this row)');
+    }
+    const p = d.priceFor(row);
+    expect(p).not.toBeNull();
+    expect(p.source).toBe('seller');
+    expect(p.input).toBe(2.0);
+    expect(p.output).toBe(12.0);
+    expect(p.blend).toBeCloseTo((3 * 2.0 + 12.0) / 4, 10);
+    expect(p.seller).toBe('Replicate');
+  });
+
+  it('anchor: a $0-priced seller listing displays $0 but stays OUT of the value ranking', () => {
+    const row = rowOf('Olmo 3 7B Think');
+    if (!row) return console.log("  (skip: 'Olmo 3 7B Think' absent from this snapshot — upstream churn)");
+    const p = d.priceFor(row);
+    expect(p).not.toBeNull();
+    expect(p.source).toBe('seller');
+    expect(p.input).toBe(0);
+    expect(p.blend).toBe(0);
+    expect(d.valueFor(row)).toBeNull(); // ÷0 guard — free/$0 is not infinite value
+  });
+
+  it('the seller rung never overrides a list price (ladder order holds)', () => {
+    for (const r of d.pivotAll.value) {
+      const p = d.priceFor(r);
+      if (!p) continue;
+      if (p.source === 'seller' || p.source === 'free') {
+        const rec = d.metaFor(r);
+        expect(rec?.pricing_aa_usd_per_1m?.input).toBeUndefined();
+        expect(rec?.pricing_usd_per_1m?.input).toBeUndefined();
+      }
+    }
+  });
+
+  it('a free listing with no priced source resolves to $0 (synthetic fixture)', () => {
+    const NAME = '__stats59_free_fixture__';
+    const raw = d.rawData.value;
+    raw.models_meta[NAME] = {
+      available_at: [
+        { p: 'nvidia-nim', n: 'NVIDIA NIM' },               // seller without prices — dash material
+        { p: 'publicai', n: 'PublicAI', free: true },        // the free listing
+      ],
+    };
+    try {
+      const row = { name: NAME };
+      const p = d.priceFor(row);
+      expect(p).not.toBeNull();
+      expect(p.source).toBe('free');
+      expect(p.input).toBe(0);
+      expect(p.output).toBe(0);
+      expect(p.blend).toBe(0);
+      expect(d.valueFor(row)).toBeNull();            // excluded from value (÷0 guard)
+      expect(d.filterPriceFor(row)).toBe(0);         // free counts as $0 for filters
+      expect(d.hasFreeListingFor(row)).toBe(true);
+    } finally {
+      delete raw.models_meta[NAME]; // never leak the fixture into other tests
+    }
+  });
+
+  it('rows with neither a price source nor a free listing keep the dash (registry-only)', () => {
+    let dashes = 0;
+    for (const r of d.pivotAll.value) {
+      const rec = d.metaFor(r);
+      const hasList = rec?.pricing_aa_usd_per_1m?.input != null || rec?.pricing_usd_per_1m?.input != null;
+      const sellers = rec?.available_at ?? [];
+      if (!hasList && !sellers.some(a => typeof a.in === 'number') && !sellers.some(a => a.free)) {
+        expect(d.priceFor(r)).toBeNull();
+        dashes++;
+      }
+    }
+    expect(dashes).toBeGreaterThan(0); // the honest-dash population never reaches zero
   });
 });
 

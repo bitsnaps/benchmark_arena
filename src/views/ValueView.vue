@@ -150,7 +150,12 @@ const tipRows = computed(() => {
   if (sc != null) out.push(['Score', fmtScore(sc) + ' · CL ' + Math.round(clForModel(p.row)) + '%']);
   const pr = priceFor(p.row);
   if (pr) {
-    out.push(['Blended 3:1', fmtUsd(pr.blend) + '/1M · ' + (pr.source === 'aa' ? 'AA list' : 'OpenRouter')]);
+    // stats-59: name every rung of the source ladder honestly
+    const srcLabel = pr.source === 'aa' ? 'AA list'
+      : pr.source === 'seller' ? ('seller' + (pr.seller ? ': ' + pr.seller : ''))
+        : pr.source === 'free' ? 'free listing'
+          : 'OpenRouter';
+    out.push(['Blended 3:1', fmtUsd(pr.blend) + '/1M · ' + srcLabel]);
     if (pr.input != null || pr.output != null) out.push(['In / Out', fmtUsd(pr.input) + ' / ' + fmtUsd(pr.output)]);
   }
   const v = valueFor(p.row);

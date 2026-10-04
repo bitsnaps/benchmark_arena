@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-03 21:53",
+  "timestamp": "2026-10-04 02:38",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -1060,7 +1060,7 @@
       "closed": [
         [
           "Claude Opus 5.5",
-          99.20760697305863
+          99.3660855784469
         ],
         [
           "GPT-6 Astra (xhigh)",
@@ -1076,11 +1076,11 @@
         ],
         [
           "Muse Spark 1.3 (xhigh)",
-          93.6608557844691
+          93.50237717908082
         ],
         [
           "Muse Spark 1.3 Max",
-          93.18541996830429
+          93.026941362916
         ],
         [
           "GPT-5.6 Sol (xhigh)",
@@ -1166,7 +1166,7 @@
         ],
         [
           "DeepSeek-V4.1-Flash",
-          88.4310618066561
+          88.27258320126784
         ],
         [
           "MiMo-V2.6-Pro",
@@ -1198,7 +1198,7 @@
         ],
         [
           "MiMo-V2.5-Pro",
-          79.87321711568937
+          79.7147385103011
         ],
         [
           "GLM 5 Turbo",
@@ -2267,7 +2267,7 @@
       "Arena.ai Text": 92.9,
       "SimpleBench.com": 88.4,
       "ARC-AGI-2": 93.3,
-      "Design Arena": 99.2,
+      "Design Arena": 99.4,
       "DeepSWE": null,
       "VendingBench": 59.5,
       "SWE-Marathon": 90.3,
@@ -2375,7 +2375,7 @@
       "Arena.ai Text": 91.4,
       "SimpleBench.com": 81.8,
       "ARC-AGI-2": null,
-      "Design Arena": 93.7,
+      "Design Arena": 93.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": 59.6,
@@ -2465,7 +2465,7 @@
       "Arena.ai Text": 83.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": 59.3,
-      "Design Arena": 80.8,
+      "Design Arena": 81.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": 54.8,
@@ -4069,7 +4069,7 @@
       "Arena.ai Text": 88.3,
       "SimpleBench.com": 66.7,
       "ARC-AGI-2": null,
-      "Design Arena": 88.4,
+      "Design Arena": 88.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4609,7 +4609,7 @@
       "Arena.ai Text": 87.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 79.9,
+      "Design Arena": 79.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -6298,9 +6298,9 @@
       "active_params_b": 21.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0825,
-        "output": 0.33,
-        "cache_read": 0.0206
+        "input": 0.132,
+        "output": 0.528,
+        "cache_read": 0.033
       },
       "reasoning": {
         "mandatory": false,
@@ -10759,7 +10759,7 @@
       "provider": "Z.ai",
       "created": "2026-08-18",
       "context_length": 1048576,
-      "max_output_tokens": 943718,
+      "max_output_tokens": 131072,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -10773,9 +10773,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.22,
-        "output": 3.39,
-        "cache_read": 0.176
+        "input": 1.4,
+        "output": 4.4,
+        "cache_read": 0.14
       },
       "reasoning": {
         "mandatory": true,
@@ -10977,9 +10977,9 @@
       "active_params_b": null,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.639,
+        "input": 0.72,
         "output": 13.0,
-        "cache_read": 0.62
+        "cache_read": 0.7
       },
       "reasoning": {
         "mandatory": false,
@@ -11231,9 +11231,9 @@
       "active_params_b": 8.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.3,
-        "output": 1.2,
-        "cache_read": 0.006
+        "input": 0.003,
+        "output": 2.4,
+        "cache_read": 0.003
       },
       "reasoning": {
         "mandatory": false,
@@ -12434,7 +12434,7 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.41,
+        "input": 0.38,
         "output": 3.49,
         "cache_read": 0.26
       },
@@ -13613,9 +13613,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0188,
+        "input": 0.0152,
         "output": 1.28,
-        "cache_read": 0.0169
+        "cache_read": 0.0137
       },
       "reasoning": {
         "mandatory": false,
@@ -14627,8 +14627,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.1,
-        "output": 0.32
+        "input": 0.22,
+        "output": 0.5,
+        "cache_read": 0.11
       },
       "reasoning": null,
       "supported_parameters": [
@@ -15288,8 +15289,8 @@
       "or_name": "DeepSeek: DeepSeek V3 0324",
       "provider": "DeepSeek",
       "created": "2025-03-24",
-      "context_length": 128000,
-      "max_output_tokens": 115200,
+      "context_length": 163840,
+      "max_output_tokens": 147456,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -15303,9 +15304,8 @@
       "active_params_b": null,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.29,
-        "output": 1.14,
-        "cache_read": 0.11
+        "input": 0.25,
+        "output": 1.0
       },
       "reasoning": null,
       "supported_parameters": [

@@ -470,7 +470,11 @@ const run = async () => {
     const ttftIdx = ttftIndexFromMeta(modelsMeta);
     const fableSec = ttftIdx.get(normKey('Claude Fable 5.1'));
     const fableRow = page.locator('.pm-table tbody tr', { has: page.locator('.prov-model', { hasText: 'Claude Fable 5.1' }) });
-    await fableRow.locator('td.lat-slow .b-tooltip').first().hover();
+    // Tier must be derived, not pinned: AA re-measures TTFT every scrape and
+    // Fable 5.1 crossed the 3.5s boundary (slow -> ok) on 2026-10-06 (stats-28 intent).
+    const fableTier = latencyTier(fableSec);
+    if (fableTier == null) fail('Claude Fable 5.1 has no AA TTFT in meta — cannot verify cell tooltip');
+    else await fableRow.locator(`td.lat-${fableTier} .b-tooltip`).first().hover();
     await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
     const fableTip = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
     if (fableSec != null && fableTip.includes(`AA TTFT ${fmtSec(fableSec)}`) && fableTip.includes('Artificial Analysis'))

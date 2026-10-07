@@ -6,21 +6,33 @@
 // away on the full comparison page, which still shows every leaderboard).
 // Every column is sortable; the sorters sink missing cells to the bottom
 // in BOTH directions (Buefy's default would float them to the top on desc).
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { SHORT } from '../lib/constants.js';
 import { sinkLast } from '../lib/compareSort.js';
 import { fmtScore, scoreColor, providerColor, initials, slugify } from '../lib/format.js';
+import { GRADE_UNRATED, gradeTitle, valueGradeTitle, SPEED_TIER_TITLE } from '../lib/tiers.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
 const router = useRouter();
-const { benchmarks, coreBenchmarks, scoreForModel } = useData();
+const { benchmarks, coreBenchmarks, scoreForModel, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue } = useData();
 const { compareRows, clearCompare, isBest } = useLeaderboard();
 
 // Score sorts by the live CL-weighted Score (follows the Avg set exactly
 // like the leaderboard column); benchmark columns sort by the raw cell.
 const byScore = sinkLast((r) => scoreForModel(r));
 const byBench = (b) => sinkLast((r) => r[b] ?? null);
+
+// stats-60: the same grade chips as the leaderboard rows (one shared mode,
+// lib/tiers.js) — the compare panel must agree with what the table shows.
+const showGrades = computed(() => tiersMode.value !== 'off');
+const isAxisMode = computed(() => tiersMode.value === 'axis');
+const gradeChipClass = (letter) =>
+  `grade-chip grade-${letter === GRADE_UNRATED ? 'unrated' : letter.toLowerCase()}`;
+const speedChipClass = (t) => `grade-chip grade-speed-${t}`;
+const overallTip = (row) => gradeTitle(gradeFor(row) ?? GRADE_UNRATED, gradeBoundsOverall.value);
+const valueTip = (row) => valueGradeTitle(gradeValueFor(row), gradeBoundsValue.value);
 </script>
 
 <template>
@@ -42,10 +54,23 @@ const byBench = (b) => sinkLast((r) => r[b] ?? null);
           <span class="av" :style="{ background: providerColor(props.row.name).color }">
             {{ initials(props.row.name) }}
           </span>
-          <router-link
-            class="model-link has-text-weight-semibold"
-            :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
-          >{{ props.row.name }}</router-link>
+          <div>
+            <router-link
+              class="model-link has-text-weight-semibold"
+              :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
+            >{{ props.row.name }}</router-link>
+            <!-- stats-60: grade chips mirror the leaderboard (one shared mode) -->
+            <div v-if="showGrades" class="cell-sub">
+              <template v-if="!isAxisMode">
+                <b-tooltip :label="overallTip(props.row)" type="is-dark" multilined :delay="100" append-to-body><span :class="gradeChipClass(gradeFor(props.row) ?? 'Unrated')">{{ gradeFor(props.row) ?? 'Unrated' }}</span></b-tooltip>
+              </template>
+              <template v-else>
+                <b-tooltip :label="overallTip(props.row)" type="is-dark" multilined :delay="100" append-to-body><span :class="gradeChipClass(gradeFor(props.row) ?? 'Unrated')"><span class="grade-axis">Q</span>{{ gradeFor(props.row) ?? 'U' }}</span></b-tooltip>
+                <b-tooltip v-if="gradeValueFor(props.row)" :label="valueTip(props.row)" type="is-dark" multilined :delay="100" append-to-body><span :class="gradeChipClass(gradeValueFor(props.row))"><span class="grade-axis">V</span>{{ gradeValueFor(props.row) }}</span></b-tooltip>
+                <b-tooltip v-if="gradeSpeedFor(props.row)" :label="SPEED_TIER_TITLE" type="is-dark" multilined :delay="100" append-to-body><span :class="speedChipClass(gradeSpeedFor(props.row))"><span class="grade-axis">S</span>{{ gradeSpeedFor(props.row) }}</span></b-tooltip>
+              </template>
+            </div>
+          </div>
         </div>
       </b-table-column>
       <b-table-column field="avg" label="Score" width="90" centered numeric sortable :custom-sort="byScore" v-slot="props">

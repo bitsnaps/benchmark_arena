@@ -7,13 +7,14 @@ import { SHORT, BASE_TITLE } from '../lib/constants.js';
 import { fmtScore, fmtUsd, fmtValue, fmtCtx, fmtSec, scoreColor, barWidth, rankClass, providerColor, initials, slugify, modalityIcon } from '../lib/format.js';
 import { latencyClass } from '../lib/pivot.js';
 import { isNewModel, newBadgeTitle } from '../lib/newFlag.js';
+import { GRADE_UNRATED, gradeTitle } from '../lib/tiers.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, archiveLinkFor } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, archiveLinkFor, tiersMode, gradeFor, gradeBoundsOverall } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 // stats-49: the archived-page icon is wordless — this tooltip + the link's
@@ -33,6 +34,15 @@ const avg = computed(() => model.value ? avgForModel(model.value) : null);
 const wscore = computed(() => model.value ? scoreForModel(model.value) : null);
 // Coverage against the current avg-set selection (not the baked 8-core CL)
 const cl = computed(() => model.value ? clForModel(model.value) : 0);
+
+// stats-60: the model card carries the same grade as the leaderboard chips
+// (one shared mode + map). In per-axis mode the card badge is labeled Q —
+// the card's other axes (Value/Speed) already have their own dedicated
+// stat tiles, so a duplicate chip would be noise.
+const gradeLetter = computed(() => (model.value ? gradeFor(model.value) : null));
+const isAxisMode = computed(() => tiersMode.value === 'axis');
+const gradeTip = computed(() =>
+  gradeTitle(gradeLetter.value ?? GRADE_UNRATED, gradeBoundsOverall.value));
 
 // Scored / missing benchmarks
 const scored = computed(() => !model.value ? [] : benchmarks.value
@@ -220,7 +230,13 @@ function addToCompare() {
     <!-- Stat tiles -->
     <div class="grid-4 mt">
       <div class="stat">
-        <div class="lbl">Global Score</div>
+        <div class="lbl">Global Score
+          <!-- stats-60: grade badge — same shared mode + letter as the
+               leaderboard chips; Unrated when below the coverage gate -->
+          <b-tooltip v-if="tiersMode !== 'off' && !gradeLetter" :label="gradeTip" type="is-dark" multilined :delay="100" append-to-body><span class="grade-chip grade-unrated" style="margin-left:.35rem">Unrated</span></b-tooltip>
+          <b-tooltip v-else-if="tiersMode !== 'off' && isAxisMode" :label="gradeTip" type="is-dark" multilined :delay="100" append-to-body><span :class="['grade-chip', 'grade-' + gradeLetter.toLowerCase()]" style="margin-left:.35rem"><span class="grade-axis">Q</span>{{ gradeLetter }}</span></b-tooltip>
+          <b-tooltip v-else-if="tiersMode !== 'off'" :label="gradeTip" type="is-dark" multilined :delay="100" append-to-body><span :class="['grade-chip', 'grade-' + gradeLetter.toLowerCase()]" style="margin-left:.35rem">{{ gradeLetter }}</span></b-tooltip>
+        </div>
         <div class="val num" :style="{ color: scoreColor(wscore) }">{{ fmtScore(wscore) }}</div>
         <div class="sub">CL-weighted · raw avg {{ avg !== null && avg !== undefined ? fmtScore(avg) : '—' }}</div>
         <div class="bar mt-sm"><i :style="{ width: barWidth(wscore) }"></i></div>

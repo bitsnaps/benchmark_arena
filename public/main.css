@@ -429,6 +429,31 @@ a.hbar:hover .name { color: var(--teal); }
   border: 1px solid rgba(154, 167, 181, 0.35);
 }
 
+/* stats-60: model grade chips (S/A/B/C/D + Unrated + Speed ladder).
+   Same geometry as the other chips; per-grade hue ladder S teal → D rose,
+   Unrated slate. A leading axis letter (Q/V/S) marks per-axis mode. */
+.grade-chip {
+  display: inline-block; margin-left: .35rem; padding: 0 .4rem;
+  border-radius: 6px; font-size: .62rem; font-weight: 700;
+  letter-spacing: .05em; vertical-align: middle; white-space: nowrap;
+  cursor: help;
+}
+.grade-chip .grade-axis {
+  opacity: .7; margin-right: .12rem; font-size: .58rem;
+}
+.grade-chip.grade-s { color: #2dd4bf; background: rgba(45, 212, 191, 0.13); border: 1px solid rgba(45, 212, 191, 0.4); }
+.grade-chip.grade-a { color: #4ade80; background: rgba(74, 222, 128, 0.12); border: 1px solid rgba(74, 222, 128, 0.38); }
+.grade-chip.grade-b { color: #60a5fa; background: rgba(96, 165, 250, 0.12); border: 1px solid rgba(96, 165, 250, 0.38); }
+.grade-chip.grade-c { color: #fbbf24; background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.38); }
+.grade-chip.grade-d { color: #f87171; background: rgba(248, 113, 113, 0.12); border: 1px solid rgba(248, 113, 113, 0.38); }
+.grade-chip.grade-unrated {
+  color: #9aa7b5; background: rgba(154, 167, 181, 0.12);
+  border: 1px solid rgba(154, 167, 181, 0.35);
+}
+.grade-chip.grade-speed-fast { color: #4ade80; background: rgba(74, 222, 128, 0.12); border: 1px solid rgba(74, 222, 128, 0.38); }
+.grade-chip.grade-speed-ok { color: #fbbf24; background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.38); }
+.grade-chip.grade-speed-slow { color: #f87171; background: rgba(248, 113, 113, 0.12); border: 1px solid rgba(248, 113, 113, 0.38); }
+
 /* ★ footnote marker: model listed under a different name on a source site
    (tooltip = alias_note from models_meta) */
 .alias-star {

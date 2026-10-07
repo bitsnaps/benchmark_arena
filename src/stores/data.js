@@ -6,6 +6,7 @@ import { ref, computed } from 'vue';
 import { SHORT, CORE_BENCHMARKS, LEADER_BENCHES, AVG_PRESETS, AVG_STORAGE_KEY } from '../lib/constants.js';
 import { slugify } from '../lib/format.js';
 import { computeBenchStats, harmonize } from '../lib/benchScale.js';
+import { computeGradeMaps, speedTierFor, tiersMode, setTiersMode } from '../lib/tiers.js';
 
 const rawData = ref(null);
 const loading = ref(true);
@@ -443,6 +444,31 @@ const filterPriceFor = (row) => {
   return p ? p.blend : null;
 };
 
+// ── stats-60: model grades (S/A/B/C/D) ────────────────────────────────
+// Grades derive from the SAME reactive metrics the site already ships —
+// scoreForModel for Overall/Quality, valueFor for Value — so a grade can
+// never contradict the number next to it, and both re-compute when the
+// Avg-set selection changes. Speed reads metaFor(row).aa_ttft_seconds
+// through the shipped latencyTier ladder (fast/ok/slow); no TTFT on
+// record → no Speed chip (honest gap, same policy as the latency layer).
+// Rows outside the rated maps (no score / under the 3-of-selected coverage
+// gate) resolve to null → the UI renders "Unrated" (overall/Quality) or
+// omits the chip (Value/Speed).
+const gradeMaps = computed(() => computeGradeMaps({
+  rows: pivotAll.value,
+  scoreOf: scoreForModel,
+  valueOf: valueFor,
+  coverageOf: coveredCountForModel,
+}));
+// Overall (and per-axis Quality) grade letter, or null when unrated.
+const gradeFor = (row) => (row ? gradeMaps.value.overall.letters.get(row.name) ?? null : null);
+// Value-lens grade letter, or null when the model has no value score.
+const gradeValueFor = (row) => (row ? gradeMaps.value.value.letters.get(row.name) ?? null : null);
+// Speed tier from the shipped TTFT ladder: 'fast' | 'ok' | 'slow' | null.
+const gradeSpeedFor = (row) => speedTierFor(metaFor(row)?.aa_ttft_seconds);
+const gradeBoundsOverall = computed(() => gradeMaps.value.overall.bounds);
+const gradeBoundsValue = computed(() => gradeMaps.value.value.bounds);
+
 // Full benchmark name as native tooltip on column headers
 function benchThAttrs(column) {
   const b = column.field;
@@ -466,5 +492,7 @@ export function useData() {
     archiveLinkFor,
     priceFor, valueFor, hfIdFor, hfUrlFor,
     availableAtFor, hasFreeListingFor, sellerCountFor, filterPriceFor,
+    tiersMode, setTiersMode, gradeFor, gradeValueFor, gradeSpeedFor,
+    gradeBoundsOverall, gradeBoundsValue,
   };
 }

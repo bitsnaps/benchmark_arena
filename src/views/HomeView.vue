@@ -3,17 +3,20 @@
 // pivot table, compare panel, then context: category leaders, methodology.
 // Tier tabs live in the URL as ?tier=, search as ?q=, the custom average
 // mix as ?avg= (comma-separated benchmark slugs), the availability
-// filters as ?free=1 / ?price=<max blend> / ?seller=<provider slug>, and
-// the input-modality filter as ?mod=<token> (stats-34).
+// filters as ?free=1 / ?price=<max blend> / ?seller=<provider slug>, the
+// input-modality filter as ?mod=<token> (stats-34), and the model-grade
+// mode as ?tiers= (stats-60).
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { TIERS, SHORT, AVG_PRESETS } from '../lib/constants.js';
 import { slugify, fmtScore, fmtUsd, providerColor, initials } from '../lib/format.js';
+import { tiersMode, setTiersMode, applyTiersParam, TIERS_MODE_DEFAULT } from '../lib/tiers.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 import PivotTable from '../components/PivotTable.vue';
 import ComparePanel from '../components/ComparePanel.vue';
 import NewWindowSelect from '../components/NewWindowSelect.vue';
+import TiersSelect from '../components/TiersSelect.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -66,6 +69,31 @@ watch(avgSelection, (sel) => {
   const want = sel ? sel.map(slugify).join(',') : undefined;
   if (route.query.avg !== want) {
     router.replace({ query: { ...route.query, avg: want } });
+  }
+});
+
+// ── Tiers mode ⇄ ?tiers= (stats-60, shareable views) ─────────────────
+// Same discipline as ?avg=: a valid param wins over localStorage; an
+// unknown param is dropped (stale share link); a missing param never
+// resets a stored non-default mode — it gets reflected into the URL.
+watch([loading, () => route.query.tiers], ([ld, v]) => {
+  if (ld) return;
+  const param = typeof v === 'string' ? v : '';
+  if (param) {
+    if (!applyTiersParam(param)) {
+      router.replace({ query: { ...route.query, tiers: undefined } });
+    }
+    return;
+  }
+  if (!('tiers' in route.query) && tiersMode.value !== TIERS_MODE_DEFAULT) {
+    router.replace({ query: { ...route.query, tiers: tiersMode.value } });
+  }
+}, { immediate: true });
+
+watch(tiersMode, (m) => {
+  const want = m === TIERS_MODE_DEFAULT ? undefined : m;
+  if (route.query.tiers !== want) {
+    router.replace({ query: { ...route.query, tiers: want } });
   }
 });
 
@@ -364,6 +392,10 @@ const openModel = (name) =>
         <NewWindowSelect />
 
         <span class="cell-sub">Row opacity = benchmark coverage — hover a row to solidify it</span>
+
+        <!-- stats-60: model tiers — ONE shared mode (lib/tiers.js), the
+             same setting Compare rows and model cards read -->
+        <TiersSelect />
 
         <!-- Avg set: which benchmarks feed the global Score (default = shipped formula).
              Parked on the FAR RIGHT so the opened panel can't cover the model-name column. -->

@@ -7,6 +7,7 @@
 import { SHORT } from '../lib/constants.js';
 import { fmtScore, fmtUsd, fmtValue, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
 import { isNewModel, newBadgeTitle } from '../lib/newFlag.js';
+import { GRADE_UNRATED, gradeTitle, valueGradeTitle, SPEED_TIER_TITLE } from '../lib/tiers.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 import { usePageSize } from '../lib/pager.js';
@@ -29,7 +30,7 @@ const perPage = computed(() => (pageSize.value === 0
 // filter/tab changes reshape the list — land back on the first page
 watch(() => props.rows.length, () => { page.value = 1; });
 
-const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor, archiveLinkFor } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor, archiveLinkFor, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions.
@@ -55,6 +56,23 @@ const aliasNote = (row) => metaFor(row)?.alias_note || null;
 // user-adjustable window (lib/newFlag.js singleton, default 7 days). No
 // date on record → no badge, honest gap.
 const isNewRow = (row) => isNewModel(releaseDateOf(row));
+
+// ── stats-60: grade chips ──────────────────────────────────────────────
+// overall mode → one chip: S/A/B/C/D or Unrated (no score / under the
+// 3-of-selected coverage gate). axis mode → Quality + Value chips (Value
+// omitted when the model has no value score — priced+scored only) and a
+// Speed chip reusing the TTFT fast/ok/slow ladder (omitted without TTFT).
+// off mode → nothing. Wording comes from lib/tiers.js so tests lock it.
+const showGrades = computed(() => tiersMode.value !== 'off');
+const isAxisMode = computed(() => tiersMode.value === 'axis');
+const gradeChipClass = (letter) =>
+  `grade-chip grade-${letter === GRADE_UNRATED ? 'unrated' : letter.toLowerCase()}`;
+const speedChipClass = (t) => `grade-chip grade-speed-${t}`;
+const overallTip = (row) => {
+  const letter = gradeFor(row);
+  return gradeTitle(letter ?? GRADE_UNRATED, gradeBoundsOverall.value);
+};
+const valueTip = (row) => valueGradeTitle(gradeValueFor(row), gradeBoundsValue.value);
 
 // The model's short API id (org/model) — stats-19: listings present only the
 // full name; the id lives on the model card and in hover tooltips.
@@ -223,6 +241,16 @@ const limitedTitle = (row) =>
           <div class="cell-sub">
             {{ providerColor(props.row.name).name }}
             <span v-if="tier === 'all'" class="tier-chip" :class="tierOf(props.row)">{{ tierOf(props.row) === 'closed' ? 'closed' : 'open' }}</span>
+            <!-- stats-60: grade chips — overall mode shows one chip (letter or
+                 Unrated); per-axis mode shows Q/V/S; off shows nothing -->
+            <template v-if="showGrades">
+              <b-tooltip v-if="!isAxisMode" :label="overallTip(props.row)" type="is-dark" multilined :delay="100" append-to-body><span :class="gradeChipClass(gradeFor(props.row) ?? 'Unrated')">{{ gradeFor(props.row) ?? 'Unrated' }}</span></b-tooltip>
+              <template v-else>
+                <b-tooltip :label="overallTip(props.row)" type="is-dark" multilined :delay="100" append-to-body><span :class="gradeChipClass(gradeFor(props.row) ?? 'Unrated')"><span class="grade-axis">Q</span>{{ gradeFor(props.row) ?? 'U' }}</span></b-tooltip>
+                <b-tooltip v-if="gradeValueFor(props.row)" :label="valueTip(props.row)" type="is-dark" multilined :delay="100" append-to-body><span :class="gradeChipClass(gradeValueFor(props.row))"><span class="grade-axis">V</span>{{ gradeValueFor(props.row) }}</span></b-tooltip>
+                <b-tooltip v-if="gradeSpeedFor(props.row)" :label="SPEED_TIER_TITLE" type="is-dark" multilined :delay="100" append-to-body><span :class="speedChipClass(gradeSpeedFor(props.row))"><span class="grade-axis">S</span>{{ gradeSpeedFor(props.row) }}</span></b-tooltip>
+              </template>
+            </template>
             <b-tooltip v-if="isNewRow(props.row)" :label="newBadgeTitle(releaseDateOf(props.row))" type="is-dark" multilined :delay="100" append-to-body><span class="new-chip">NEW</span></b-tooltip>
             <b-tooltip v-if="isOlder(props.row)" :label="olderTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip">older</span></b-tooltip>
             <b-tooltip v-if="!isOlder(props.row) && isLimited(props.row)" :label="limitedTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="limited-chip">limited data</span></b-tooltip>

@@ -101,13 +101,54 @@ def main():
         return idx
 
     pub_l, dl_l = lower_index(mp), lower_index(md)
+
+    # stats-61 (2026-10-07, Ibrahim): sources started emitting cosmetic
+    # renames ("GPT-5.4 mini" -> "GPT 5.4 Mini", dashes->spaces). Lowercase
+    # join misses those, forking records (stale key kept as a registry row
+    # + fresh key without history) and leaving AA/TTFT joins + superseded_by
+    # chains dangling. normKey (the app's own identity: lowercase, drop org
+    # prefix, strip non-alphanumerics) folds every observed rename pair with
+    # zero collisions. Same-record test: unique normKey on BOTH sides.
+    def normkey_index(d):
+        idx = {}
+        for k in d:
+            nk = _norm_key(k)
+            if nk:
+                idx.setdefault(nk, []).append(k)
+        return idx
+
+    pub_n, dl_n = normkey_index(mp), normkey_index(md)
+    lower_shared = set(pub_l) & set(dl_l)
+    norm_shared = (set(pub_n) & set(dl_n)) - {
+        nk for nk in set(pub_n) & set(dl_n)
+        if len(pub_n[nk]) > 1 or len(dl_n[nk]) > 1
+    }
+    # Renamed pairs = normKey-shared but NOT already lowercase-shared.
+    renamed = []
+    seen_pk = set()
+    for nk in sorted(norm_shared):
+        pk, dk = pub_n[nk][0], dl_n[nk][0]
+        if pk.lower() in lower_shared and dk.lower() in lower_shared:
+            continue  # already joined by the case-insensitive path
+        renamed.append((pk, dk))
+        seen_pk.add(pk)
+    if renamed:
+        print(f"meta keys: {len(renamed)} renamed record(s) re-joined via normKey "
+              f"(stats-61) — history follows the fresh name:")
+        for pk, dk in renamed[:10]:
+            print(f"  RENAME {pk} -> {dk}")
+        if len(renamed) > 10:
+            print(f"  ... and {len(renamed) - 10} more")
+
     shared_l = set(pub_l) & set(dl_l)
-    dl_only = [k for k in md if k.lower() not in shared_l]
-    pub_only = [k for k in mp if k.lower() not in shared_l]
+    dl_only = [k for k in md if k.lower() not in shared_l and _norm_key(k) not in norm_shared]
+    pub_only = [k for k in mp if k.lower() not in shared_l
+                and _norm_key(k) not in norm_shared]
     ambiguous = {kk for kk in shared_l if len(pub_l[kk]) > 1 or len(dl_l[kk]) > 1}
     recased = sum(1 for kk in shared_l - ambiguous
                   if dl_l[kk][0] != pub_l[kk][0])
-    print(f"meta keys: shared={sum(len(dl_l[kk]) for kk in shared_l)} "
+    print(f"meta keys: shared={sum(len(dl_l[kk]) for kk in shared_l) + len(renamed)} "
+          f"(case {sum(len(dl_l[kk]) for kk in shared_l)} + renamed {len(renamed)}) "
           f"new-from-scrape={len(dl_only)} public-only-kept={len(pub_only)} "
           f"recased-on-adopt={recased}")
     if dl_only:
@@ -120,6 +161,12 @@ def main():
     restored = 0
     for kk in shared_l - ambiguous:
         pk, dk = pub_l[kk][0], dl_l[kk][0]
+        old = mp[pk].get("available_at")
+        if old:
+            md[dk]["available_at"] = old
+            restored += 1
+    # stats-61: renamed records carry their history onto the fresh key too.
+    for pk, dk in renamed:
         old = mp[pk].get("available_at")
         if old:
             md[dk]["available_at"] = old
@@ -142,6 +189,32 @@ def main():
             print(f"    or_id={rec.get('or_id')} pricing={rec.get('pricing_usd_per_1m')} "
                   f"available_at={json.dumps(rec.get('available_at'))}")
     dl["models_meta"] = md
+
+    # stats-61: re-point superseded_by chains that still name a pre-rename
+    # variant. Identity = normKey; rewrite only when the target is NOT a
+    # live unified row (the contract test resolves against rows) and the
+    # normKey match is unique. Registry rows (kept above) are left alone
+    # when no fresh twin exists — the monitor still sees them.
+    row_names = {r.get("name") for r in dl.get("unified_closed", [])}
+    row_names |= {r.get("name") for r in dl.get("unified_open", [])}
+    row_nk = {}
+    for nm in row_names:
+        nk = _norm_key(nm)
+        if nk:
+            row_nk.setdefault(nk, []).append(nm)
+    rewrites = 0
+    for k, rec in md.items():
+        tgt = rec.get("superseded_by")
+        if not tgt or tgt in row_names:
+            continue
+        nk = _norm_key(tgt)
+        cands = row_nk.get(nk) if nk else None
+        if cands and len(cands) == 1:
+            print(f"  CHAIN {k}: superseded_by {tgt} -> {cands[0]} (rename drift)")
+            rec["superseded_by"] = cands[0]
+            rewrites += 1
+    if rewrites:
+        print(f"superseded_by chains re-pointed: {rewrites}")
 
     for path, obj in ((PUB, dl), (DL, dl)):
         with open(path, "w") as f:

@@ -54,6 +54,10 @@ const tierRank = computed(() => (model.value && tier.value ? rankMaps.value[tier
 // Freshness: superseded models carry a banner pointing at their successor;
 // release date comes from the OpenRouter catalog snapshot (models_meta.created)
 const successor = computed(() => (model.value ? supersededBy(model.value) : null));
+// stale generations (no successor, 9+ months old) need the banner too —
+// stats-61: BenchLM re-admitted several such rows and the leak-guard e2e
+// deep-link check requires every older model page to be marked.
+const staleFlag = computed(() => (model.value ? !!metaFor(model.value)?.stale : false));
 const released = computed(() => (model.value ? releaseDateOf(model.value) : null));
 // ★ footnote: a source site lists this model under a different name (alias_note)
 const aliasNote = computed(() => (model.value ? metaFor(model.value)?.alias_note || null : null));
@@ -195,13 +199,20 @@ function addToCompare() {
       </div>
     </div>
 
-    <!-- Superseded banner -->
-    <div v-if="successor" class="notice mt" style="border-color:var(--gold)">
+    <!-- Freshness banner: superseded models point at their successor;
+         stale generations (no successor, 9+ months old) get their own mark
+         so an explicit deep link is always honest about freshness. -->
+    <div v-if="successor || staleFlag" class="notice mt" style="border-color:var(--gold)">
       <i class="fas fa-clock-rotate-left"></i>
-      <span>
+      <span v-if="successor">
         This model has been superseded by
         <router-link :to="{ name: 'model', params: { slug: slugify(successor) } }">{{ successor }}</router-link>
         — a newer release of the same product line. It is excluded from the default
+        leaderboard ranking and shown only in the “Older versions” section.
+      </span>
+      <span v-else>
+        This model is a stale generation — no successor was ever shipped, and it
+        predates the newest releases in the snapshot. It is excluded from the default
         leaderboard ranking and shown only in the “Older versions” section.
       </span>
     </div>

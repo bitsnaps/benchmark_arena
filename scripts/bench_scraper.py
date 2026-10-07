@@ -1065,52 +1065,106 @@ def enrich_archive_links(models_meta, rows):
           f"ship no link)")
 
 
-def scrape_benchlm():
+def _benchlm_from_next_data():
+    """stats-61: primary BenchLM source — the page's __NEXT_DATA__ JSON.
+
+    The 2026-10 leaderboard is a VIRTUAL table (only a ~25-row window is
+    mounted in the DOM; the window slides with scroll), so DOM scraping at a
+    single scroll position sees an arbitrary slice. The Next.js payload
+    carries the full census (882 rows on 2026-10-07) with verified positional
+    indexes, cross-validated 25/25 against the live DOM table (Ibrahim's
+    snapshot):
+      [1] display name   [7] status ('Current'/'Superseded'/...)
+      [10]/[11] price in/out   [15] Elo   [26] Score 0-100
+    Rows without a score (mostly status 'Tracked') are skipped for the
+    benchmark feed but keep feeding the sidecar census/extra.
+    Returns (data, scored_count) in the SAME item-dict shape the DOM path
+    produces, so the shared sidecar tail is reused. (None, 0) on any failure
+    so the caller falls back to the DOM harvest.
     """
-    BenchLM.ai leaderboard (virtual table, 25 rows loaded initially).
+    js = ("(function(){var el=document.querySelector('#__NEXT_DATA__');"
+          "return el ? el.textContent : '';})()")
+    try:
+        raw = run_browser("eval", js, timeout=45)
+        s = (raw or "").strip()
+        if not s:
+            return None, 0
+        if s.startswith('"'):
+            s = json.loads(s)  # unwrap quote-wrapped eval output
+        d = json.loads(s)
+        rows = (d.get("props", {}).get("pageProps", {})
+                 .get("homepageData", {}).get("leaderboard", {}).get("rows"))
+        if not isinstance(rows, list) or len(rows) < 50:
+            print(f"    __NEXT_DATA__: rows={len(rows) if isinstance(rows, list) else 'n/a'} — too small, falling back to DOM")
+            return None, 0
+        data = []
+        scored = 0
+        for r in rows:
+            if not isinstance(r, list) or len(r) < 27:
+                continue
+            name = str(r[1] or "").strip()
+            if not name:
+                continue
+            score_v = r[26]
+            score = f"{score_v}" if isinstance(score_v, (int, float)) and 0 < score_v <= 100 else ""
+            if score:
+                scored += 1
+            elo_v, pin_v, pout_v = r[15], r[10], r[11]
+            elo = f"{elo_v}" if isinstance(elo_v, (int, float)) else ""
+            if isinstance(pin_v, (int, float)) and isinstance(pout_v, (int, float)):
+                price = f"${pin_v} / ${pout_v}"
+            else:
+                price = ""
+            data.append({"model": name, "score": score, "status": str(r[7] or ""),
+                         "elo": elo, "price": price})
+        print(f"    __NEXT_DATA__: {len(rows)} rows, {scored} scored (full census, no DOM needed)")
+        if scored < 30:
+            print("    scored too small — falling back to DOM harvest")
+            return None, 0
+        return data, scored
+    except Exception as e:
+        print(f"    [WARN] __NEXT_DATA__ parse failed: {str(e)[:120]}")
+        return None, 0
 
-    2026-09 UI layout (verified live):
-      thead: Model | Provider | License | Status | Reasoning | Context |
-             Price in/out | Tok/s | Latency | Score | AG | CO | RE | MM |
-             KN | ML | IF | MA | Elo
-      Model cell is a <th scope="row"> (rank span + compare button with
-      aria-label "Add {model} to compare" + org + status tag); the 18 <td>s
-      follow. The overall Score column index is derived from thead at runtime
-      (was hardcoded col 9 = AG after the UI redesign — that bug produced
-      org-name rows like ['Tencent', 70.0]).
 
-    Strategy: click the visible+enabled "Load 25 more" button until it
-    disappears (400 rows as of 2026-09), then extract model names from the
-    compare-button aria-label and scores from the dynamic Score column.
-    Rows without a score (unranked "Tracked" models) are skipped.
-    Requires 1920x1080 viewport for hydration.
+def _benchlm_dom_harvest():
+    """FALLBACK (stats-61): scroll-aware DOM harvest for the virtual table.
+
+    The 2026-10 leaderboard mounts only a ~25-row window (the window slides
+    with scroll), so a single end-of-pagination extraction reads an arbitrary
+    slice. This harvest extracts at EVERY pagination position and merges by
+    model name; it stops when 'Load 25 more' disappears or 4 consecutive
+    rounds add no new name. Returns item dicts for the shared tail, or None.
+
+    2026-10 layout (verified live, Ibrahim + snapshot): 20 columns —
+      Model | Score | Parameters (B) | Context | Price | Elo | Open/closed |
+      AG CO RE MM KN ML IF MA | Tok/s | Latency | License | Status | Reasoning
+    The row-header <th> (Model) is NOT a <td>, so tbody cells are
+    [th, ...tds] and align 1:1 with thead th indexes (the 2026-09 code
+    indexed tds directly and read Parameters as Score / Context as Status —
+    650 rows → 0 scored). Cells are therefore read via 'th, td' in document
+    order, every column index derives from thead labels, and the leaderboard
+    table is picked by its 'Model'+'Score' thead instead of document position
+    (the exit-intent popup may inject its own).
     """
-    url = "https://benchlm.ai/"
-    print(f"  Opening {url}...")
-    run_browser("close", timeout=5)
-    time.sleep(0.5)
-    run_browser("set", "viewport", "1920", "1080", timeout=10)
-    run_browser("open", url, timeout=45)
-    time.sleep(1)
-    run_browser("wait", "--load", "load", timeout=30)
-    time.sleep(10)  # BenchLM is slow to hydrate
-
-    all_models = []
-
-    # JS: derive the Score column index from thead, then map every row.
-    # Model name: compare button aria-label ("Add X to compare" /
-    # "Remove X from compare") — cleanest source; fallback to th text.
     js_extract = ("(function() {"
-                  "  var table = document.querySelector('table');"
+                  "  var table = null, heads = [];"
+                  "  var tables = Array.from(document.querySelectorAll('table'));"
+                  "  for (var t = 0; t < tables.length; t++) {"
+                  "    var h = Array.from(tables[t].querySelectorAll('thead th'))"
+                  "      .map(function(th) { return th.textContent.trim(); });"
+                  "    if (h.indexOf('Model') >= 0 && h.indexOf('Score') >= 0) {"
+                  "      table = tables[t]; heads = h; break;"
+                  "    }"
+                  "  }"
                   "  if (!table) return '[]';"
-                  "  var heads = Array.from(table.querySelectorAll('thead th'))"
-                  "    .map(function(th) { return th.textContent.trim(); });"
-                  "  var scoreIdx = heads.indexOf('Score');"
-                  "  if (scoreIdx < 0) scoreIdx = 8;"
+                  "  function col(name) { return heads.indexOf(name); }"
+                  "  var scoreIdx = col('Score'), statusIdx = col('Status');"
+                  "  var eloIdx = col('Elo'), priceIdx = col('Price');"
                   "  return JSON.stringify(Array.from(table.querySelectorAll('tbody tr'))"
                   "    .map(function(tr) {"
+                  "      var cells = tr.querySelectorAll('th, td');"
                   "      var th = tr.querySelector('th');"
-                  "      var tds = tr.querySelectorAll('td');"
                   "      var btn = th ? th.querySelector('button[aria-label]') : null;"
                   "      var model = '';"
                   "      if (btn) {"
@@ -1119,14 +1173,46 @@ def scrape_benchlm():
                   "        model = m ? m[1] : '';"
                   "      }"
                   "      if (!model && th) {"
-                  "        var t = th.textContent.trim().replace(/^\\d+/, '');"
+                  "        var t = th.textContent.trim().replace(/^\\s*#\\d+\\s*/, '');"
                   "        model = t;"
                   "      }"
-                  "      var statusTd = tds[2] ? tds[2].textContent.trim() : '';"
-                  "      var score = tds[scoreIdx] ? tds[scoreIdx].textContent.trim() : '';"
-                  "      return {model: model, score: score, status: statusTd};"
+                  "      function cellText(i) {"
+                  "        return (i >= 0 && cells[i]) ? cells[i].textContent.trim() : '';"
+                  "      }"
+                  "      return {model: model, score: cellText(scoreIdx),"
+                  "              status: cellText(statusIdx), elo: cellText(eloIdx),"
+                  "              price: cellText(priceIdx)};"
                   "    }));"
                   "})()")
+
+    # Best-effort popup dismiss (Ibrahim 2026-10-07: "there is still a popup
+    # at the launch which you may need to close each turn"). Clicks only
+    # clearly-dismiss controls inside dialogs, then Escape — never a
+    # "Subscribe"-style affirmative button. Harmless no-op when absent.
+    js_dismiss = ("(function() {"
+                  "  var clicked = 0;"
+                  "  var sels = ['[role=\\'dialog\\'] button', 'dialog[open] button',"
+                  "              'button[aria-label=\\'Close\\']',"
+                  "              'button[aria-label*=\\'lose\\' i]'];"
+                  "  for (var s = 0; s < sels.length; s++) {"
+                  "    var els = document.querySelectorAll(sels[s]);"
+                  "    for (var e = 0; e < els.length; e++) {"
+                  "      var b = els[e];"
+                  "      if (b.offsetParent !== null && !b.disabled) { b.click(); clicked++; }"
+                  "    }"
+                  "  }"
+                  "  ['keydown', 'keyup'].forEach(function(typ) {"
+                  "    document.body.dispatchEvent(new KeyboardEvent(typ,"
+                  "      {key: 'Escape', code: 'Escape', bubbles: true}));"
+                  "  });"
+                  "  return clicked;"
+                  "})()")
+
+    def dismiss_popup():
+        try:
+            run_browser("eval", js_dismiss, timeout=10)
+        except Exception:
+            pass  # best-effort only
 
     # JS: click the last VISIBLE+ENABLED "Load 25 more" button (there are
     # duplicates in the DOM — sticky footer + table footer).
@@ -1140,85 +1226,155 @@ def scrape_benchlm():
                      "  return false;"
                      "})()")
 
-    # Click "Load 25 more" until the button is gone (row-count growth check
-    # guards against a stuck/disabled-but-visible button).
-    MAX_LOAD_CLICKS = 25
-    prev_rows = -1
-    for click_round in range(MAX_LOAD_CLICKS):
-        result = run_browser("eval", js_click_load, timeout=15)
-        if not (result and "true" in result.strip()):
-            if click_round == 0:
-                print("  Load-more button not found, using initial rows only")
-            break
-        time.sleep(3)  # wait for rows to load
-        n_res = run_browser("eval", "document.querySelectorAll('table tbody tr').length",
-                            timeout=10)
-        try:
-            n_rows = int(str(n_res).strip().strip('"'))
-        except ValueError:
-            n_rows = -1
-        print(f"  Clicked 'Load 25 more' (round {click_round+1}) → {n_rows} rows")
-        if n_rows >= 0 and n_rows == prev_rows:
-            print("  Row count stopped growing; pagination done")
-            break
-        prev_rows = n_rows
-
-    # Extract all rows from the fully-loaded table
-    js = js_extract
-    data = None
-    for attempt in range(3):
-        print(f"  Evaluating JS (attempt {attempt+1})...")
-        raw = run_browser("eval", js, timeout=45)
-        if raw:
-            # Try double-parse: agent-browser wraps eval in quotes
-            try:
-                parsed = json.loads(raw.strip())
-                if isinstance(parsed, str):
-                    data = json.loads(parsed)
-                else:
-                    data = parsed
-            except (json.JSONDecodeError, ValueError):
-                # Fallback: try stripping quotes manually
-                lines_out = raw.strip().split("\n")
-                json_str = ""
-                for ln in lines_out:
-                    s = ln.strip()
-                    if s.startswith('"') and s.endswith('"'):
-                        s = s[1:-1]
-                    if s.startswith("["):
-                        json_str = s
-                        break
-                if not json_str:
-                    for ln in reversed(lines_out):
+    def extract_once():
+        """One extraction attempt-triplet; returns parsed item list or None."""
+        for attempt in range(3):
+            print(f"  Evaluating JS (attempt {attempt+1})...")
+            raw = run_browser("eval", js_extract, timeout=45)
+            data = None
+            if raw:
+                # Try double-parse: agent-browser wraps eval in quotes
+                try:
+                    parsed = json.loads(raw.strip())
+                    if isinstance(parsed, str):
+                        data = json.loads(parsed)
+                    else:
+                        data = parsed
+                except (json.JSONDecodeError, ValueError):
+                    # Fallback: try stripping quotes manually
+                    lines_out = raw.strip().split("\n")
+                    json_str = ""
+                    for ln in lines_out:
                         s = ln.strip()
                         if s.startswith('"') and s.endswith('"'):
                             s = s[1:-1]
                         if s.startswith("["):
                             json_str = s
                             break
-                try:
-                    data = json.loads(json_str)
-                    if isinstance(data, str):
-                        data = json.loads(data)
-                except (json.JSONDecodeError, ValueError):
-                    data = None
-            if data and len(data) > 0:
+                    if not json_str:
+                        for ln in reversed(lines_out):
+                            s = ln.strip()
+                            if s.startswith('"') and s.endswith('"'):
+                                s = s[1:-1]
+                            if s.startswith("["):
+                                json_str = s
+                                break
+                    try:
+                        data = json.loads(json_str)
+                        if isinstance(data, str):
+                            data = json.loads(data)
+                    except (json.JSONDecodeError, ValueError):
+                        data = None
+                if data and len(data) > 0:
+                    return data
+                print("    Empty or parse error, retrying...")
+            else:
+                print("    No output, retrying...")
+            time.sleep(5)
+        return None
+
+    harvested = {}
+    MAX_LOAD_CLICKS = 40
+    stale = 0
+    prev_n = -1
+    for click_round in range(MAX_LOAD_CLICKS):
+        dismiss_popup()  # popup can re-open between rounds (Ibrahim 2026-10-07)
+        items = extract_once()
+        if items:
+            new = 0
+            for it in items:
+                nm = (it.get("model") or "").strip()
+                if nm and nm not in harvested:
+                    harvested[nm] = it
+                    new += 1
+            print(f"  Round {click_round+1}: +{new} new → {len(harvested)} unique rows")
+        if len(harvested) == prev_n:
+            stale += 1
+            if stale >= 4:
+                print("  No new names for 4 consecutive rounds; harvest complete")
                 break
-            data = None
-            print("    Empty or parse error, retrying...")
         else:
-            print("    No output, retrying...")
-        time.sleep(5)
+            stale = 0
+            prev_n = len(harvested)
+        result = run_browser("eval", js_click_load, timeout=15)
+        if not (result and "true" in result.strip()):
+            print("  'Load 25 more' gone; pagination complete")
+            break
+        time.sleep(3)  # wait for the next virtual window to mount
+
+    if not harvested:
+        print("    [WARN] DOM harvest found nothing")
+        return None
+    print(f"  DOM harvest total: {len(harvested)} unique rows")
+    return list(harvested.values())
+
+
+def scrape_benchlm():
+    """
+    BenchLM.ai leaderboard (2026-10: VIRTUAL table + __NEXT_DATA__ payload).
+
+    2026-10-07 verified layout (Ibrahim + live snapshot), 20 columns:
+      Model | Score | Parameters (B) | Context | Price | Elo | Open/closed |
+      AG CO RE MM KN ML IF MA | Tok/s | Latency | License | Status | Reasoning
+    - Row header is a <th scope="row">; tbody cells are [th, ...tds] and align
+      1:1 with thead th indexes.
+    - An exit-intent subscribe popup can appear "each turn" (dismissed
+      best-effort before every pagination click).
+    - 'Load 25 more' pages the DATA, but only a ~25-row DOM window stays
+      mounted (virtualization) — row-count growth checks are meaningless.
+
+    Strategy (stats-61):
+      1. PRIMARY: read the page's __NEXT_DATA__ JSON (full census, verified
+         indexes) — no scrolling, no popup exposure. _benchlm_from_next_data().
+      2. FALLBACK: DOM harvest — click 'Load 25 more' until gone, harvesting
+         rows at EVERY scroll position and de-duplicating by model name;
+         terminate on button-gone or 4 consecutive no-new-name rounds.
+    Rows without a score (unranked 'Tracked' models) are skipped for the
+    benchmark feed. Requires 1920x1080 viewport for hydration.
+    """
+    url = "https://benchlm.ai/"
+    print(f"  Opening {url}...")
+    run_browser("close", timeout=5)
+    time.sleep(0.5)
+    run_browser("set", "viewport", "1920", "1080", timeout=10)
+    run_browser("open", url, timeout=45)
+    time.sleep(1)
+    run_browser("wait", "--load", "load", timeout=30)
+    time.sleep(10)  # BenchLM is slow to hydrate
+
+    all_models = []
+
+    # PRIMARY: full-census JSON payload (stats-61) — no scrolling, no popup
+    # exposure. FALLBACK (in _benchlm_dom_harvest): scroll-aware DOM harvest
+    # for the virtual table.
+    data, n_scored = _benchlm_from_next_data()
+    if data is None:
+        print("  Falling back to DOM harvest...")
+        data = _benchlm_dom_harvest()
 
     if data:
         status_counts = {}
         superseded_names = []
         skipped_no_score = 0
+        extra_by_name = {}  # Elo + raw "$/ $" price, monitoring only (stats-61)
         for item in data:
             status = (item.get("status") or "").strip()
             if status:
                 status_counts[status] = status_counts.get(status, 0) + 1
             name = clean_model_name(item.get("model", ""))
+            elo_raw = (item.get("elo") or "").strip()
+            price_raw = (item.get("price") or "").strip()
+            if name and (elo_raw or price_raw):
+                try:
+                    key = normalize_model_name(name)
+                except Exception:
+                    key = name.lower()
+                if key not in extra_by_name:
+                    extra_by_name[key] = {"display": name}
+                    if elo_raw:
+                        extra_by_name[key]["elo"] = elo_raw
+                    if price_raw:
+                        extra_by_name[key]["price_raw"] = price_raw
             score_str = (item.get("score") or "").strip()
             if not score_str:
                 skipped_no_score += 1  # unranked "Tracked" rows have no score
@@ -1259,7 +1415,7 @@ def scrape_benchlm():
             # with any Current row is not superseded — matches the dry run).
             if old is None or prio.get(status, 4) < prio.get(old, 4):
                 status_by_name[key] = status
-        _save_benchlm_status(status_counts, status_by_name)
+        _save_benchlm_status(status_counts, status_by_name, extra_by_name)
     else:
         print("    [WARN] BenchLM extraction failed after retries")
 
@@ -3755,6 +3911,17 @@ def annotate_supersession(models_meta):
 # must never hide the other).
 SUPERSEDE_OVERRIDES = {
     "gemini 3 pro": "Gemini 3.1 Pro",
+    # stats-61 (2026-10-07): BenchLM's return re-admitted legacy rows that
+    # have no OpenRouter or_id — the date/version auto-chainer groups by
+    # parse_series(or_id) and can never reach them, so the leak guard flagged
+    # them as visible old generations. Chain each to its line's current
+    # generation (successors verified present as unified rows).
+    "claude 3.7 sonnet": "Claude 4 Sonnet",
+    "grok 4 fast": "Grok 4.7",
+    "gemini 1.5 pro": "Gemini 3.1 Pro",
+    "gemini 1.5 pro 002": "Gemini 3.1 Pro",
+    "mistral large 2": "Mistral Large 4",
+    "mistral large 3": "Mistral Large 4",
     # GPT-5.5 instant is the ChatGPT-instant edition of the GPT-5.5 line;
     # GPT-5.6 (Sol/Terra/Luna) is its successor generation. Target uses a
     # trailing '*' -> resolved to the newest-created GPT-5.6* in the snapshot.
@@ -5608,11 +5775,13 @@ def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg
 BENCHLM_STATUS_PATH = "/home/z/my-project/download/benchlm_status.json"
 
 
-def _save_benchlm_status(census, by_name):
+def _save_benchlm_status(census, by_name, extra_by_name=None):
     """Save the BenchLM status census as a sidecar JSON (monitoring only).
 
     Rotates the previous file to .prev so the post-scrape monitor can diff
     status demotions (Current/Established → Superseded) between runs.
+    stats-61: optionally carries `extra` (per-model Elo + raw "$in / $out"
+    price from the 2026-10 table layout) — additive key, monitor-ignored.
     Non-fatal on any I/O error — scraping must never fail because of it.
     """
     try:
@@ -5622,6 +5791,7 @@ def _save_benchlm_status(census, by_name):
             "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "census": census,
             "by_name": by_name,
+            "extra": extra_by_name or {},
         }
         with open(BENCHLM_STATUS_PATH, "w") as f:
             json.dump(payload, f, indent=2, ensure_ascii=False)

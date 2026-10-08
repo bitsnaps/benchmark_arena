@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-10-07",
+  "as_of": "2026-10-08",
   "kinds": [
     "first-party",
     "cloud",
@@ -2222,6 +2222,14 @@
       "kind": "first-party",
       "models": [
         {
+          "id": "claude-haiku-5-5",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Haiku 5.5"
+        },
+        {
           "id": "claude-haiku-4-5",
           "in": 1.0,
           "out": 5.0,
@@ -2248,7 +2256,7 @@
           "id": "claude-sonnet-5-5",
           "in": 2.0,
           "out": 10.0,
-          "cache": 0.2,
+          "cache": 0.1,
           "ctx": 1000000,
           "name": "Anthropic: Claude Sonnet 5.5"
         },
@@ -3313,6 +3321,13 @@
           "ctx": 256000
         },
         {
+          "id": "bedrock_mantle/anthropic.claude-haiku-5-5",
+          "in": 0.11,
+          "out": 0.55,
+          "cache": 0.011,
+          "ctx": 1000000
+        },
+        {
           "id": "bedrock/us-gov-east-1/amazon.titan-text-lite-v1",
           "in": 0.3,
           "out": 0.4,
@@ -3323,6 +3338,27 @@
           "in": 0.3,
           "out": 0.4,
           "ctx": 42000
+        },
+        {
+          "id": "bedrock/us-gov-east-1/anthropic.claude-haiku-5-5",
+          "in": 0.12,
+          "out": 0.6,
+          "cache": 0.012,
+          "ctx": 1000000
+        },
+        {
+          "id": "bedrock/us-gov-west-1/anthropic.claude-haiku-5-5",
+          "in": 0.12,
+          "out": 0.6,
+          "cache": 0.012,
+          "ctx": 1000000
+        },
+        {
+          "id": "bedrock_mantle/us-gov-west-1/anthropic.claude-haiku-5-5",
+          "in": 0.12,
+          "out": 0.6,
+          "cache": 0.012,
+          "ctx": 1000000
         },
         {
           "id": "bedrock_mantle/openai.gpt-oss-120b",
@@ -3472,7 +3508,7 @@
           "id": "bedrock/ap-southeast-2/qwen.qwen3-next-80b-a3b",
           "in": 0.1545,
           "out": 1.236,
-          "ctx": 128000
+          "ctx": 262144
         },
         {
           "id": "bedrock/eu-west-3/mistral.mixtral-8x7b-instruct-v0:1",
@@ -3532,25 +3568,25 @@
           "id": "bedrock/ap-south-1/qwen.qwen3-next-80b-a3b",
           "in": 0.18,
           "out": 1.41,
-          "ctx": 128000
+          "ctx": 262144
         },
         {
           "id": "bedrock/eu-west-1/qwen.qwen3-next-80b-a3b",
           "in": 0.18,
           "out": 1.41,
-          "ctx": 128000
+          "ctx": 262144
         },
         {
           "id": "bedrock/ap-northeast-1/qwen.qwen3-next-80b-a3b",
           "in": 0.18,
           "out": 1.45,
-          "ctx": 128000
+          "ctx": 262144
         },
         {
           "id": "bedrock/sa-east-1/qwen.qwen3-next-80b-a3b",
           "in": 0.18,
           "out": 1.45,
-          "ctx": 128000
+          "ctx": 262144
         },
         {
           "id": "bedrock/us-east-1/qwen.qwen3-coder-next",
@@ -3724,7 +3760,7 @@
           "id": "bedrock/eu-west-2/qwen.qwen3-next-80b-a3b",
           "in": 0.23,
           "out": 1.86,
-          "ctx": 128000
+          "ctx": 262144
         },
         {
           "id": "bedrock_mantle/qwen.qwen3-coder-480b-a35b-instruct",
@@ -4116,7 +4152,7 @@
           "id": "bedrock_mantle/anthropic.claude-sonnet-5-5",
           "in": 2.2,
           "out": 11.0,
-          "cache": 0.22,
+          "cache": 0.11,
           "ctx": 1000000
         },
         {
@@ -4130,7 +4166,7 @@
           "id": "bedrock/us-gov-east-1/anthropic.claude-sonnet-5-5",
           "in": 2.4,
           "out": 12.0,
-          "cache": 0.24,
+          "cache": 0.12,
           "ctx": 1000000
         },
         {
@@ -4144,14 +4180,14 @@
           "id": "bedrock/us-gov-west-1/anthropic.claude-sonnet-5-5",
           "in": 2.4,
           "out": 12.0,
-          "cache": 0.24,
+          "cache": 0.12,
           "ctx": 1000000
         },
         {
           "id": "bedrock_mantle/us-gov-west-1/anthropic.claude-sonnet-5-5",
           "in": 2.4,
           "out": 12.0,
-          "cache": 0.24,
+          "cache": 0.12,
           "ctx": 1000000
         },
         {
@@ -5627,7 +5663,7 @@
           "in": 12.0,
           "out": 60.0,
           "cache": 1.2,
-          "ctx": null,
+          "ctx": 922000,
           "name": "OpenAI: GPT-6 Astra"
         },
         {
@@ -5774,6 +5810,14 @@
           "out": 0.31,
           "cache": 0.03,
           "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/claude-haiku-5-5",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Haiku 5.5"
         },
         {
           "id": "azure_ai/gpt-6-luna",
@@ -6578,6 +6622,21 @@
           "ctx": 131072
         },
         {
+          "id": "vertex_ai/claude-haiku-5-5",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Haiku 5.5"
+        },
+        {
+          "id": "vertex_ai/claude-haiku-5-5@default",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 1000000
+        },
+        {
           "id": "vertex_ai/jamba-1.5",
           "in": 0.2,
           "out": 0.4,
@@ -7022,7 +7081,7 @@
           "id": "vertex_ai/claude-sonnet-5-5",
           "in": 2.0,
           "out": 10.0,
-          "cache": 0.2,
+          "cache": 0.1,
           "ctx": 1000000,
           "name": "Anthropic: Claude Sonnet 5.5"
         },
@@ -7030,7 +7089,7 @@
           "id": "vertex_ai/claude-sonnet-5-5@default",
           "in": 2.0,
           "out": 10.0,
-          "cache": 0.2,
+          "cache": 0.1,
           "ctx": 1000000
         },
         {
@@ -12614,7 +12673,7 @@
         }
       ],
       "free_tier": true,
-      "edge_rtt_ms": 167
+      "edge_rtt_ms": 170
     },
     {
       "id": "together-ai",
@@ -16051,6 +16110,14 @@
           "ctx": 128000
         },
         {
+          "id": "nvidia/nemotron-3.5-lightning",
+          "name": "NVIDIA: Nemotron 3.5 Lightning",
+          "in": 0.049,
+          "out": 0.14,
+          "cache": 0.0245,
+          "ctx": 262144
+        },
+        {
           "id": "gryphe/mythomax-l2-13b",
           "name": "MythoMax 13B",
           "in": 0.08,
@@ -16102,14 +16169,6 @@
           "ctx": 16384
         },
         {
-          "id": "nvidia/nemotron-3.5-lightning",
-          "name": "NVIDIA: Nemotron 3.5 Lightning",
-          "in": 0.06,
-          "out": 0.16,
-          "cache": 0.03,
-          "ctx": 262144
-        },
-        {
           "id": "tencent/hy-mt2-1.8b",
           "name": "Tencent: Hy-MT2-1.8B",
           "in": 0.044,
@@ -16145,14 +16204,6 @@
           "out": 0.2,
           "cache": 0.01,
           "ctx": 1048576
-        },
-        {
-          "id": "nvidia/nemotron-3-nano-30b-a3b",
-          "name": "NVIDIA: Nemotron 3 Nano 30B A3B",
-          "in": 0.05,
-          "out": 0.2,
-          "cache": 0.03,
-          "ctx": 262144
         },
         {
           "id": "openai/gpt-4.1-nano:batch",
@@ -16209,11 +16260,26 @@
           "ctx": 300000
         },
         {
+          "id": "anthropic/claude-haiku-5.5:batch",
+          "name": "Anthropic: Claude Haiku 5.5 (batch)",
+          "in": 0.05,
+          "out": 0.25,
+          "cache": 0.005,
+          "ctx": 1000000
+        },
+        {
           "id": "mistralai/ministral-8b-2512",
           "name": "Mistral: Ministral 3 8B 2512",
           "in": 0.15,
           "out": 0.15,
           "cache": 0.015,
+          "ctx": 262144
+        },
+        {
+          "id": "nvidia/nemotron-3-nano-30b-a3b",
+          "name": "NVIDIA: Nemotron 3 Nano 30B A3B",
+          "in": 0.06,
+          "out": 0.24,
           "ctx": 262144
         },
         {
@@ -16292,6 +16358,14 @@
           "in": 0.065,
           "out": 0.26,
           "ctx": 1000000
+        },
+        {
+          "id": "google/gemma-4-26b-a4b-it",
+          "name": "Google: Gemma 4 26B A4B ",
+          "in": 0.0765,
+          "out": 0.255,
+          "cache": 0.0425,
+          "ctx": 262144
         },
         {
           "id": "mistralai/mistral-small-3.2-24b-instruct",
@@ -16381,14 +16455,6 @@
           "ctx": 131072
         },
         {
-          "id": "google/gemma-4-26b-a4b-it",
-          "name": "Google: Gemma 4 26B A4B ",
-          "in": 0.09,
-          "out": 0.3,
-          "cache": 0.05,
-          "ctx": 262144
-        },
-        {
           "id": "meta-llama/llama-4-scout",
           "name": "Meta: Llama 4 Scout",
           "in": 0.1,
@@ -16424,6 +16490,13 @@
           "in": 0.1,
           "out": 0.3,
           "ctx": 262144
+        },
+        {
+          "id": "meta-llama/llama-3.3-70b-instruct",
+          "name": "Meta: Llama 3.3 70B Instruct",
+          "in": 0.1,
+          "out": 0.32,
+          "ctx": 131072
         },
         {
           "id": "xiaomi/mimo-v2.5",
@@ -16481,6 +16554,13 @@
           "ctx": 131072
         },
         {
+          "id": "nvidia/nemotron-3-super-120b-a12b",
+          "name": "NVIDIA: Nemotron 3 Super",
+          "in": 0.085,
+          "out": 0.4,
+          "ctx": 262144
+        },
+        {
           "id": "bytedance-seed/seed-2.0-mini",
           "name": "ByteDance Seed: Seed-2.0-Mini",
           "in": 0.1,
@@ -16519,21 +16599,6 @@
           "ctx": 131072
         },
         {
-          "id": "nvidia/nemotron-3-super-120b-a12b",
-          "name": "NVIDIA: Nemotron 3 Super",
-          "in": 0.08,
-          "out": 0.45,
-          "ctx": 262144
-        },
-        {
-          "id": "~z-ai/glm-flash-latest",
-          "name": "Z.ai: GLM Flash Latest",
-          "in": 0.036,
-          "out": 0.5,
-          "cache": 0.036,
-          "ctx": 1048576
-        },
-        {
           "id": "qwen/qwen3-8b",
           "name": "Qwen: Qwen3 8B",
           "in": 0.117,
@@ -16554,6 +16619,14 @@
           "out": 0.5,
           "cache": 0.0375,
           "ctx": 262144
+        },
+        {
+          "id": "anthropic/claude-haiku-5.5",
+          "name": "Anthropic: Claude Haiku 5.5",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 1000000
         },
         {
           "id": "mistralai/codestral-2508:batch",
@@ -16578,6 +16651,14 @@
           "out": 0.5,
           "cache": 0.01,
           "ctx": 1050000
+        },
+        {
+          "id": "~anthropic/claude-haiku-latest",
+          "name": "Anthropic: Claude Haiku Latest",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 1000000
         },
         {
           "id": "~openai/gpt-luna-latest",
@@ -16611,14 +16692,6 @@
           "ctx": 1000000
         },
         {
-          "id": "deepseek/deepseek-v4-pro",
-          "name": "DeepSeek: DeepSeek V4 Pro 0423",
-          "in": 0.2088,
-          "out": 0.4176,
-          "cache": 0.0174,
-          "ctx": 1024000
-        },
-        {
           "id": "qwen/qwen3-235b-a22b-2507",
           "name": "Qwen: Qwen3 235B A22B Instruct 2507",
           "in": 0.09,
@@ -16642,6 +16715,14 @@
           "ctx": 262144
         },
         {
+          "id": "deepseek/deepseek-v3.2",
+          "name": "DeepSeek: DeepSeek V3.2",
+          "in": 0.259,
+          "out": 0.42,
+          "cache": 0.135,
+          "ctx": 163840
+        },
+        {
           "id": "deepseek/deepseek-v3.2-exp",
           "name": "DeepSeek: DeepSeek V3.2 Exp",
           "in": 0.27,
@@ -16649,12 +16730,12 @@
           "ctx": 163840
         },
         {
-          "id": "deepseek/deepseek-v3.2",
-          "name": "DeepSeek: DeepSeek V3.2",
-          "in": 0.28,
-          "out": 0.42,
-          "cache": 0.028,
-          "ctx": 131072
+          "id": "~z-ai/glm-flash-latest",
+          "name": "Z.ai: GLM Flash Latest",
+          "in": 0.032,
+          "out": 0.66,
+          "cache": 0.02,
+          "ctx": 1048576
         },
         {
           "id": "openai/gpt-5.6-luna-pro:batch",
@@ -16677,14 +16758,6 @@
           "name": "Tencent: Hunyuan A13B Instruct",
           "in": 0.14,
           "out": 0.57,
-          "ctx": 131072
-        },
-        {
-          "id": "meta-llama/llama-3.3-70b-instruct",
-          "name": "Meta: Llama 3.3 70B Instruct",
-          "in": 0.22,
-          "out": 0.5,
-          "cache": 0.11,
           "ctx": 131072
         },
         {
@@ -16977,16 +17050,16 @@
           "name": "Z.ai: GLM 4.6V",
           "in": 0.3,
           "out": 0.9,
-          "cache": 0.05,
+          "cache": 0.055,
           "ctx": 131072
         },
         {
-          "id": "qwen/qwen3-next-80b-a3b-instruct",
-          "name": "Qwen: Qwen3 Next 80B A3B Instruct",
-          "in": 0.1,
-          "out": 1.1,
-          "cache": 0.07,
-          "ctx": 262144
+          "id": "~deepseek/deepseek-flash-latest",
+          "name": "DeepSeek: DeepSeek Flash Latest",
+          "in": 0.0184,
+          "out": 1.2,
+          "cache": 0.01,
+          "ctx": 1048576
         },
         {
           "id": "microsoft/wizardlm-2-8x22b",
@@ -16994,22 +17067,6 @@
           "in": 0.62,
           "out": 0.62,
           "ctx": 65535
-        },
-        {
-          "id": "deepseek/deepseek-v4.1-flash",
-          "name": "DeepSeek: DeepSeek V4.1 Flash",
-          "in": 0.05,
-          "out": 1.2,
-          "cache": 0.02,
-          "ctx": 1048576
-        },
-        {
-          "id": "~deepseek/deepseek-flash-latest",
-          "name": "DeepSeek: DeepSeek Flash Latest",
-          "in": 0.05,
-          "out": 1.2,
-          "cache": 0.02,
-          "ctx": 1048576
         },
         {
           "id": "deepseek/deepseek-v3.1-terminus",
@@ -17028,17 +17085,25 @@
         {
           "id": "deepseek/deepseek-v4-flash-0731",
           "name": "DeepSeek: DeepSeek V4 Flash 0731",
-          "in": 0.018,
+          "in": 0.0104,
           "out": 1.28,
-          "cache": 0.018,
+          "cache": 0.0104,
           "ctx": 1048576
         },
         {
           "id": "~deepseek/deepseek-v4-flash-latest",
           "name": "DeepSeek: DeepSeek V4 Flash Latest",
-          "in": 0.018,
+          "in": 0.0104,
           "out": 1.28,
-          "cache": 0.018,
+          "cache": 0.0104,
+          "ctx": 1048576
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash",
+          "name": "DeepSeek: DeepSeek V4 Flash 0423",
+          "in": 0.0173,
+          "out": 1.28,
+          "cache": 0.0173,
           "ctx": 1048576
         },
         {
@@ -17077,14 +17142,6 @@
           "in": 0.435,
           "out": 0.87,
           "cache": 0.0036,
-          "ctx": 1048576
-        },
-        {
-          "id": "deepseek/deepseek-v4-flash",
-          "name": "DeepSeek: DeepSeek V4 Flash 0423",
-          "in": 0.03,
-          "out": 1.28,
-          "cache": 0.03,
           "ctx": 1048576
         },
         {
@@ -17188,6 +17245,14 @@
           "ctx": 400000
         },
         {
+          "id": "deepseek/deepseek-v4.1-flash",
+          "name": "DeepSeek: DeepSeek V4.1 Flash",
+          "in": 0.3,
+          "out": 1.2,
+          "cache": 0.006,
+          "ctx": 1048576
+        },
+        {
           "id": "meituan/longcat-2.0",
           "name": "Meituan: LongCat 2.0",
           "in": 0.3,
@@ -17265,6 +17330,13 @@
           "ctx": 36864
         },
         {
+          "id": "qwen/qwen3-next-80b-a3b-instruct",
+          "name": "Qwen: Qwen3 Next 80B A3B Instruct",
+          "in": 0.15,
+          "out": 1.5,
+          "ctx": 131072
+        },
+        {
           "id": "thinkingmachines/inkling-small",
           "name": "Thinking Machines: Inkling Small",
           "in": 0.45,
@@ -17322,13 +17394,6 @@
           "out": 1.5,
           "cache": 0.025,
           "ctx": 1048576
-        },
-        {
-          "id": "qwen/qwen3.5-27b",
-          "name": "Qwen: Qwen3.5-27B",
-          "in": 0.195,
-          "out": 1.56,
-          "ctx": 262144
         },
         {
           "id": "cohere/command-a-plus",
@@ -17735,6 +17800,21 @@
           "ctx": 202752
         },
         {
+          "id": "qwen/qwen3.5-27b",
+          "name": "Qwen: Qwen3.5-27B",
+          "in": 0.26,
+          "out": 2.6,
+          "ctx": 262144
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek: DeepSeek V4 Pro 0423",
+          "in": 0.9553,
+          "out": 1.9105,
+          "cache": 0.0796,
+          "ctx": 1024000
+        },
+        {
           "id": "moonshotai/kimi-k2",
           "name": "MoonshotAI: Kimi K2 0711",
           "in": 0.57,
@@ -17829,6 +17909,14 @@
           "in": 0.834,
           "out": 2.501,
           "cache": 0.042,
+          "ctx": 1048576
+        },
+        {
+          "id": "z-ai/glm-5.3",
+          "name": "Z.ai: GLM 5.3",
+          "in": 0.049,
+          "out": 3.39,
+          "cache": 0.048,
           "ctx": 1048576
         },
         {
@@ -17953,6 +18041,14 @@
           "ctx": 262144
         },
         {
+          "id": "~deepseek/deepseek-pro-latest",
+          "name": "DeepSeek: DeepSeek Pro Latest",
+          "in": 0.198,
+          "out": 4.2,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
           "id": "qwen/qwen3-vl-235b-a22b-thinking",
           "name": "Qwen: Qwen3 VL 235B A22B Thinking",
           "in": 0.4,
@@ -18020,14 +18116,6 @@
           "in": 0.78,
           "out": 3.9,
           "ctx": 262144
-        },
-        {
-          "id": "~deepseek/deepseek-pro-latest",
-          "name": "DeepSeek: DeepSeek Pro Latest",
-          "in": 0.4,
-          "out": 4.3,
-          "cache": 0.033,
-          "ctx": 1048576
         },
         {
           "id": "sakana/sakana-namazu",
@@ -18210,7 +18298,7 @@
           "name": "Anthropic: Claude Sonnet 5.5 (batch)",
           "in": 1.0,
           "out": 5.0,
-          "cache": 0.1,
+          "cache": 0.05,
           "ctx": 1000000
         },
         {
@@ -18254,28 +18342,12 @@
           "ctx": 1050000
         },
         {
-          "id": "~anthropic/claude-haiku-latest",
-          "name": "Anthropic: Claude Haiku Latest",
-          "in": 1.0,
-          "out": 5.0,
-          "cache": 0.1,
-          "ctx": 200000
-        },
-        {
           "id": "openai/gpt-4o:batch",
           "name": "OpenAI: GPT-4o (batch)",
           "in": 1.25,
           "out": 5.0,
           "cache": 0.625,
           "ctx": 128000
-        },
-        {
-          "id": "~z-ai/glm-latest",
-          "name": "Z.ai: GLM Latest",
-          "in": 0.063,
-          "out": 6.3,
-          "cache": 0.0585,
-          "ctx": 1048576
         },
         {
           "id": "writer/palmyra-x5",
@@ -18315,27 +18387,11 @@
           "ctx": 1050000
         },
         {
-          "id": "z-ai/glm-5.3",
-          "name": "Z.ai: GLM 5.3",
-          "in": 0.07,
-          "out": 7.0,
-          "cache": 0.065,
-          "ctx": 1048576
-        },
-        {
           "id": "qwen/qwen3.6-max-preview",
           "name": "Qwen: Qwen3.6 Max Preview",
           "in": 1.027,
           "out": 6.162,
           "ctx": 262144
-        },
-        {
-          "id": "z-ai/glm-5.2",
-          "name": "Z.ai: GLM 5.2",
-          "in": 0.171,
-          "out": 7.2,
-          "cache": 0.162,
-          "ctx": 1048576
         },
         {
           "id": "anthracite-org/magnum-v4-72b",
@@ -18382,7 +18438,7 @@
           "in": 2.0,
           "out": 6.0,
           "cache": 0.25,
-          "ctx": 1000000
+          "ctx": 1048576
         },
         {
           "id": "qwen/qwen3.8-max-0902",
@@ -18609,7 +18665,7 @@
           "name": "Anthropic: Claude Sonnet 5.5",
           "in": 2.0,
           "out": 10.0,
-          "cache": 0.2,
+          "cache": 0.1,
           "ctx": 1000000
         },
         {
@@ -18665,7 +18721,7 @@
           "name": "Anthropic: Claude Sonnet Latest",
           "in": 2.0,
           "out": 10.0,
-          "cache": 0.2,
+          "cache": 0.1,
           "ctx": 1000000
         },
         {
@@ -18675,6 +18731,22 @@
           "out": 10.0,
           "cache": 0.1,
           "ctx": 1050000
+        },
+        {
+          "id": "~z-ai/glm-latest",
+          "name": "Z.ai: GLM Latest",
+          "in": 0.0392,
+          "out": 12.0,
+          "cache": 0.0365,
+          "ctx": 1048576
+        },
+        {
+          "id": "z-ai/glm-5.2",
+          "name": "Z.ai: GLM 5.2",
+          "in": 0.171,
+          "out": 12.0,
+          "cache": 0.15,
+          "ctx": 1048576
         },
         {
           "id": "cohere/command-a",
@@ -18732,7 +18804,7 @@
         {
           "id": "~moonshotai/kimi-latest",
           "name": "MoonshotAI: Kimi Latest",
-          "in": 0.61,
+          "in": 0.64,
           "out": 13.0,
           "cache": 0.45,
           "ctx": 1048576
@@ -18860,7 +18932,7 @@
         {
           "id": "moonshotai/kimi-k3",
           "name": "MoonshotAI: Kimi K3",
-          "in": 0.62,
+          "in": 0.65,
           "out": 15.0,
           "cache": 0.43,
           "ctx": 1048576
@@ -19332,13 +19404,6 @@
           "ctx": null
         },
         {
-          "id": "z-ai/glm-5.3-flash",
-          "name": "Z.ai: GLM 5.3 Flash",
-          "in": 0.075,
-          "out": 0.25,
-          "ctx": 1000000
-        },
-        {
           "id": "google/gemma-4-26b-a4b-it",
           "name": "Google: Gemma 4 26B A4B ",
           "in": 0.06,
@@ -19427,6 +19492,13 @@
           "name": "Qwen: Qwen3.8 Flash",
           "in": 0.15,
           "out": 0.47,
+          "ctx": 1000000
+        },
+        {
+          "id": "z-ai/glm-5.3-flash",
+          "name": "Z.ai: GLM 5.3 Flash",
+          "in": 0.15,
+          "out": 0.5,
           "ctx": 1000000
         },
         {
@@ -20727,7 +20799,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 354
+      "edge_rtt_ms": 463
     },
     {
       "id": "poe",
@@ -20872,6 +20944,13 @@
           "name": "deepseek-v4-flash-e",
           "in": 0.202,
           "out": 0.404,
+          "ctx": 1000000
+        },
+        {
+          "id": "claude-haiku-5.5",
+          "name": "Anthropic: Claude Haiku 5.5",
+          "in": 0.101,
+          "out": 0.5051,
           "ctx": 1000000
         },
         {
@@ -21365,6 +21444,13 @@
           "ctx": 1048576
         },
         {
+          "id": "mistral-large-4",
+          "name": "mistral-large-4",
+          "in": 1.3737,
+          "out": 4.2222,
+          "ctx": 524288
+        },
+        {
           "id": "glm-5.1",
           "name": "Z.ai: GLM 5.1",
           "in": 1.4141,
@@ -21757,7 +21843,7 @@
           "ctx": 200000
         }
       ],
-      "edge_rtt_ms": 329
+      "edge_rtt_ms": 301
     },
     {
       "id": "vercel-ai-gateway",
@@ -22425,6 +22511,13 @@
           "ctx": null
         },
         {
+          "id": "claude-haiku-5-5",
+          "name": "Anthropic: Claude Haiku 5.5",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
           "id": "claude-opus-4-5",
           "name": "Anthropic: Claude Opus 4.5",
           "in": null,
@@ -22507,15 +22600,6 @@
           "in": null,
           "out": null,
           "ctx": null
-        },
-        {
-          "id": "deepseek-v4-flash-free",
-          "name": "deepseek-v4-flash-free",
-          "in": null,
-          "out": null,
-          "ctx": null,
-          "free": true,
-          "base": "deepseek-v4-flash"
         },
         {
           "id": "deepseek-v4-flash-vision-exp",
@@ -22908,15 +22992,6 @@
           "base": "longcat-2.5-preview"
         },
         {
-          "id": "mimo-v2.5-free",
-          "name": "Xiaomi: MiMo-V2.5",
-          "in": null,
-          "out": null,
-          "ctx": null,
-          "free": true,
-          "base": "mimo-v2.5"
-        },
-        {
           "id": "mimo-v2.6-flash-free",
           "name": "Xiaomi: MiMo-V2.6-Flash",
           "in": null,
@@ -23041,7 +23116,7 @@
           "base": "space-bunny"
         }
       ],
-      "edge_rtt_ms": 615
+      "edge_rtt_ms": 626
     },
     {
       "id": "w-b-inference-gateway",

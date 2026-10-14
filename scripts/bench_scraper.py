@@ -1471,29 +1471,136 @@ def _kebab_to_model_name(kebab):
     return ' '.join(merged) + parens
 
 
+def _arena_fetch_html(url, attempts=3):
+    """
+    Fetch a page's full HTML via the z-ai page_reader function (CLI).
+
+    2026-10-14: arena.ai put its whole zone behind a Cloudflare managed
+    challenge ("Just a moment...") that the local agent-browser CANNOT pass
+    (verified: challenge never clears in 96s of polling; /api/* also 403;
+    lmarena.ai 301-redirects into the same wall). The z-ai page_reader
+    service fetches it fine (HTTP 200, server-rendered table with all rows).
+
+    Returns the largest 'html' string in the response payload, or None.
+    Non-fatal on any error — caller falls back to the browser-eval path.
+    """
+    tmp_out = f"{TMP_DIR}/arena_page_reader.json"
+    for attempt in range(attempts):
+        try:
+            result = subprocess.run(
+                ["z-ai", "function", "-n", "page_reader",
+                 "-a", json.dumps({"url": url}),
+                 "-o", tmp_out],
+                capture_output=True, text=True, timeout=180,
+            )
+            if result.returncode != 0:
+                raise RuntimeError(
+                    f"z-ai page_reader rc={result.returncode} "
+                    f"{(result.stderr or '')[:200]}")
+            with open(tmp_out) as f:
+                payload = json.load(f)
+
+            best = ""
+            def _dig(obj):
+                nonlocal best
+                if isinstance(obj, dict):
+                    h = obj.get("html")
+                    if isinstance(h, str) and len(h) > len(best):
+                        best = h
+                    for v in obj.values():
+                        _dig(v)
+                elif isinstance(obj, list):
+                    for v in obj:
+                        _dig(v)
+            _dig(payload)
+            if best:
+                print(f"    [page_reader] fetched {len(best)} bytes of HTML")
+                return best
+            print(f"    [page_reader] attempt {attempt+1}: no html in payload")
+        except Exception as e:  # noqa: BLE001
+            print(f"    [page_reader] attempt {attempt+1} failed: {e}")
+        time.sleep(5)
+    return None
+
+
+def _parse_arena_text_html(page_html):
+    """
+    Parse the Arena.ai text-leaderboard HTML (2026-10 server-rendered table).
+
+    Layout: one <table>, 7 columns (Rank | Rank Spread | Model | Score |
+    Votes | Price $/M | Context). Model cell = kebab name span + org/license
+    span ('claude-opus-5.5-high' + 'Anthropic · Proprietary'); Score cell =
+    Elo span + CI span ('1513' + '±13', sometimes + 'Preliminary').
+    Returns [{model: kebab, score: int}] — same shape as the browser eval.
+    """
+    from html import unescape as _u
+
+    m = re.search(r"<table.*?</table>", page_html, re.S)
+    if not m:
+        return []
+    table = m.group(0)
+    out = []
+    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", table, re.S):
+        cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.S)
+        if len(cells) < 4:
+            continue
+        # model: first span inside the Model cell (span[1] is org/license)
+        spans = re.findall(r"<span[^>]*>(.*?)</span>", cells[2], re.S)
+        model = _u(re.sub(r"<[^>]+>", "", spans[0])).strip() if spans else ""
+        if not model or model.lower() == "model":
+            continue  # header-duplicate row inside tbody
+        # score: leading integer of the Score cell's first span
+        s_spans = re.findall(r"<span[^>]*>(.*?)</span>", cells[3], re.S)
+        s_text = _u(re.sub(r"<[^>]+>", "", s_spans[0])).strip() if s_spans \
+            else re.sub(r"<[^>]+>", "", cells[3]).strip()
+        sm = re.match(r"^(\d+)", s_text)
+        if not sm:
+            continue
+        out.append({"model": model, "score": int(sm.group(1))})
+    return out
+
+
 def scrape_arena_text():
     """
     Arena.ai text leaderboard (Elo-based, ~953-1508 range).
-    Uses JS eval via load_and_eval to extract model name (from <a> tag) and Elo score.
-    394 models with broad coverage across all model families.
+    2026-10-14: arena.ai is behind a Cloudflare managed challenge the local
+    headless browser cannot pass — primary path is now the z-ai page_reader
+    service (server-rendered HTML, all ~415 rows), parsed by
+    _parse_arena_text_html. The old agent-browser JS eval is kept as a
+    fallback in case the wall is lifted (it would need span-based
+    extraction now: model = Model-cell span[0], score = Score-cell span[0];
+    the old <a>-link markup is gone).
+    Names arrive kebab-case ('claude-opus-4-6-high') and go through
+    _kebab_to_model_name. Rows without a usable Elo (<900) are skipped.
     """
     url = "https://arena.ai/leaderboard/text"
 
-    # JS eval: extract model name from <a> link in col 2 and Elo score from col 3
-    js = ("JSON.stringify(Array.from(document.querySelectorAll('table tbody tr'))"
-           ".slice(0,500).map(tr => {"
-           "  var c = tr.querySelectorAll('td');"
-           "  var link = c[2] ? c[2].querySelector('a') : null;"
-           "  var model = link ? link.textContent.trim() : '';"
-           "  var scoreText = c[3] ? c[3].textContent.trim() : '';"
-           "  var scoreMatch = scoreText.match(/^(\\d+)/);"
-           "  return {model: model, score: scoreMatch ? parseInt(scoreMatch[1]) : 0};"
-           "}).filter(r => r.model && r.model.length > 3 && r.score > 0))")
+    data = None
 
-    data = load_and_eval(url, js, wait_ms=12000)
+    # Primary: page_reader service (bypasses the Cloudflare challenge)
+    page_html = _arena_fetch_html(url)
+    if page_html:
+        data = _parse_arena_text_html(page_html)
+        print(f"    [page_reader] parsed {len(data)} rows from HTML table")
+
+    # Fallback: local browser JS eval (pre-Cloudflare path; likely blocked)
+    if not data:
+        js = ("JSON.stringify(Array.from(document.querySelectorAll('table tbody tr'))"
+              ".slice(0,500).map(tr => {"
+              "  var c = tr.children;"
+              "  var mc = c[2] ? c[2].querySelector('span') : null;"
+              "  var model = mc ? mc.textContent.trim() : '';"
+              "  var sc = c[3] ? c[3].querySelector('span') : null;"
+              "  var scoreText = (sc ? sc.textContent : (c[3] ? c[3].textContent : '')).trim();"
+              "  var scoreMatch = scoreText.match(/^(\\d+)/);"
+              "  return {model: model, score: scoreMatch ? parseInt(scoreMatch[1]) : 0};"
+              "}).filter(r => r.model && r.model.length > 3 && r.score > 0))")
+        data = load_and_eval(url, js, wait_ms=12000)
+        if data:
+            print(f"    [browser eval] got {len(data)} rows")
 
     if not data or not isinstance(data, list):
-        print(f"    [WARN] No data from Arena.ai text JS eval")
+        print(f"    [WARN] No data from Arena.ai text (page_reader + eval both failed)")
         return []
 
     models = []

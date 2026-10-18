@@ -11,6 +11,7 @@ Exit 0 = safe to commit. Exit 1 = ABORT (nothing committed), reason printed.
 Run from the repo root (daily_refresh.sh does this).
 """
 import json
+import re
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -44,6 +45,10 @@ def meta_stats(doc):
     return mm, ttft, created, mods
 
 
+def _nk(s):
+    return re.sub(r"[^a-z0-9]", "", (s or "").lower())
+
+
 def main():
     try:
         doc = json.load(open(PUB))
@@ -74,13 +79,63 @@ def main():
     n_old = len(head.get("models_meta") or {})
     if len(mm) < max(95, n_old - 10):
         fail(f"models_meta shrank: {len(mm)} vs HEAD {n_old}")
+    # 3a. AA TTFT floor — deprecation-aware (stats-62, 2026-10-18): AA
+    # retires the payload latency/price records of models its census stubs
+    # flag deprecated, so a coverage drop explained by vendor deprecation
+    # (aa_deprecated set on the merged record) is a GUARD NOTE, while an
+    # unexplained collapse still fails (the stats-28 miner-death class).
+    mm_n = {}
+    for k, v in mm.items():
+        mm_n.setdefault(_nk(k), (k, v))
+    lost_tt = []
+    for k, v in (head.get("models_meta") or {}).items():
+        if not (isinstance(v, dict) and v.get("aa_ttft_seconds")):
+            continue
+        hit = mm_n.get(_nk(k))
+        if not hit or not (isinstance(hit[1], dict) and hit[1].get("aa_ttft_seconds")):
+            lost_tt.append(k)
+    dep_lost = [k for k in lost_tt
+                if isinstance(mm_n.get(_nk(k)), tuple)
+                and (mm_n[_nk(k)][1] or {}).get("aa_deprecated")]
+    unexpl = [k for k in lost_tt if _nk(k) not in {_nk(x) for x in dep_lost}]
     if tt_new < max(40, int(tt_old * 0.6)):
-        fail(
-            f"AA TTFT coverage collapsed: {tt_new} vs HEAD {tt_old} "
-            "- miner likely matched nothing (see stats-28 AA payload incident)"
+        if tt_new < 20 or len(unexpl) > 10:
+            fail(
+                f"AA TTFT coverage collapsed: {tt_new} vs HEAD {tt_old} "
+                f"({len(unexpl)} losses NOT explained by aa_deprecated "
+                "- miner breakage? see stats-28)"
+            )
+        print(
+            f"GUARD NOTE AA TTFT {tt_new} < HEAD {tt_old}: {len(dep_lost)} losses "
+            f"are vendor-deprecated (stats-62 stub census), {len(unexpl)} unexplained "
+            "- non-fatal"
         )
     if cr_new < cr_old - 10:
         fail(f"created coverage shrank: {cr_new} vs HEAD {cr_old}")
+
+    # 3b. stats-62: census completeness — every unified row must have a meta
+    # record, and no live row may carry the registry-only no_bench_coverage
+    # flag (the cells-vs-registry contradiction that mis-shipped on 10-18).
+    row_names = {r.get("name") for r in doc.get("unified_closed") or []}
+    row_names |= {r.get("name") for r in doc.get("unified_open") or []}
+    row_names.discard(None)
+    no_meta = sorted(n for n in row_names if n not in mm)
+    if len(no_meta) > 3:
+        fail(
+            f"{len(no_meta)} unified rows lost their meta records (OR-retirement "
+            f"class, stats-62): {no_meta[:6]}"
+        )
+    if no_meta:
+        print(f"GUARD NOTE {len(no_meta)} row(s) without meta record: {no_meta[:4]}")
+    false_reg = sorted(
+        n for n in row_names
+        if isinstance(mm.get(n), dict) and mm[n].get("no_bench_coverage")
+    )
+    if false_reg:
+        fail(
+            f"{len(false_reg)} live row(s) flagged no_bench_coverage — "
+            f"cells-vs-registry contradiction (stats-62): {false_reg[:6]}"
+        )
 
     # 3b. stats-34: modality coverage — the enrichment ladder only ever adds
     # coverage, so a collapse means the OR modality miner itself broke.

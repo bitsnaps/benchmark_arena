@@ -529,6 +529,32 @@ def scrape_artificial_analysis():
       ttft_seconds: grab('medianTimeToFirstTokenSeconds')
     };
   }
+  // stats-62 (2026-10-18): AA retired deprecated models' rich records into a
+  // stub-only census (slug->name->deprecated/releaseDate/creator — no price,
+  // no ttft). The rich-record scan above never sees those, so the deprecation
+  // census reported "0 flagged" while ~510 stubs carry flags (the 2026-10-18
+  // TTFT 104->54 incident). Scan the stub shape separately: slug-keyed
+  // deprecation entries (rich records keep precedence) + slug-map fill for
+  // models that no longer have a rich record.
+  var reStub = /\\"slug\\":\\"([^"\\]*)\\",\\"name\\":\\"([^"\\]{2,150})\\",\\"deprecated\\":(true|false)/g;
+  var sm;
+  while ((sm = reStub.exec(s)) !== null) {
+    var stSlug = sm[1], stName = sm[2], stDep = sm[3] === 'true' ? 1 : 0;
+    if (!deprecation[stSlug]) {
+      var stTo = null;
+      var stWin = s.slice(sm.index + sm[0].length, sm.index + sm[0].length + 700);
+      var stStop = stWin.indexOf('\\"slug\\":');
+      if (stStop >= 0) stWin = stWin.slice(0, stStop);
+      var stAt = stWin.indexOf('\\"deprecatedTo\\":\\"');
+      if (stAt >= 0) {
+        var stRest = stWin.slice(stAt + 18);
+        var stEnd = stRest.indexOf('\\"');
+        if (stEnd >= 0) stTo = stRest.slice(0, stEnd);
+      }
+      deprecation[stSlug] = { deprecated: stDep, deprecatedTo: stTo, stub: 1 };
+    }
+    if (!slugs[stName]) slugs[stName] = stSlug;
+  }
   return JSON.stringify({models: models, pricing: pricing, slugs: slugs,
                          deprecation: deprecation, payloadModels: payloadModels,
                          conflicts: conflicts});
@@ -604,7 +630,12 @@ def scrape_artificial_analysis():
             print(f"    Captured {len(slugs)} AA model slugs (stats-34 modality ladder)")
         if payload_dep:
             n_dep = sum(1 for v in payload_dep.values() if v.get("deprecated") == 1)
-            print(f"    [AA deprecation] {len(payload_dep)} slugs, {n_dep} flagged deprecated (stats-35)")
+            n_stub = sum(1 for v in payload_dep.values() if v.get("stub"))
+            n_stub_dep = sum(1 for v in payload_dep.values()
+                             if v.get("stub") and v.get("deprecated") == 1)
+            print(f"    [AA deprecation] {len(payload_dep)} slugs, {n_dep} flagged "
+                  f"deprecated (stats-35; {n_stub_dep} of them stub-census-only, "
+                  f"stats-62)")
         print(f"    Extracted {len(models)} models")
     else:
         print(f"    [WARN] No data from AA")
@@ -1032,7 +1063,13 @@ def enrich_archive_links(models_meta, rows):
         return
     targets = [r.get("name") for r in rows
                if r.get("name") and r.get("Artificial Analysis") is None
-               and r.get("name") in models_meta]
+               and r.get("name") in models_meta
+               # stats-62: no-catalog records (OR-retired rows kept in the
+               # census) are excluded — probing every retired model's AA
+               # detail page added minutes to the run for a nice-to-have on
+               # deprecated models. They can join via the 7-day cache if a
+               # later run matches them to the catalog again.
+               and models_meta[r.get("name")].get("match") != "no-catalog"]
     if not targets:
         return
     cache = _load_aa_archive_cache()
@@ -3880,9 +3917,46 @@ def collect_model_metadata(unified_rows, or_models=None):
             n_alias += 1
         else:
             n_subset += 1
-    unmatched = [n for n in names if n not in meta]
-    print(f"  [OpenRouter] metadata matched {len(meta)}/{len(names)} "
-          f"(exact {n_exact}, alias {n_alias}, subset {n_subset}, unmatched {len(unmatched)})")
+    # stats-62 (2026-10-18): OpenRouter retired ~60 legacy models from its
+    # catalog, which used to erase their census keys even though the rows
+    # still had fresh benchmark cells — the merge then misread "no metadata"
+    # as "cells gone" and archived live models as no-coverage registry rows.
+    # Keep every unified row in the census: unmatched names get a minimal
+    # no-catalog record (OR-derived fields stay None = honest gaps); the
+    # AA pricing/TTFT attach, deprecation and modality ladders still run
+    # on them by name.
+    n_nocatalog = 0
+    for name in names:
+        if name in meta:
+            continue
+        meta[name] = {
+            "or_id": None,
+            "or_name": name,
+            "provider": None,
+            "created": None,
+            "context_length": None,
+            "max_output_tokens": None,
+            "modality": None,
+            "input_modalities": [],
+            "output_modalities": [],
+            "tokenizer": None,
+            "total_params_b": None,
+            "active_params_b": None,
+            "params_source": None,
+            "pricing_usd_per_1m": None,
+            "reasoning": None,
+            "supported_parameters": [],
+            "hugging_face_id": None,
+            "or_free_variants": None,
+            "description": None,
+            "superseded_by": None,
+            "match": "no-catalog",
+        }
+        n_nocatalog += 1
+    unmatched = [n for n in names if matches.get(n) is None]
+    print(f"  [OpenRouter] metadata matched {len(meta) - n_nocatalog}/{len(names)} "
+          f"(exact {n_exact}, alias {n_alias}, subset {n_subset}, unmatched {len(unmatched)})"
+          + (f" + {n_nocatalog} no-catalog census record(s) (stats-62)" if n_nocatalog else ""))
     for u in unmatched:
         print(f"    - no catalog match: {u}")
 
@@ -4023,10 +4097,15 @@ SUPERSEDE_OVERRIDES = {
     # parse_series(or_id) and can never reach them, so the leak guard flagged
     # them as visible old generations. Chain each to its line's current
     # generation (successors verified present as unified rows).
-    "claude 3.7 sonnet": "Claude 4 Sonnet",
+    "claude 3.7 sonnet": "Claude Sonnet 4",
     "grok 4 fast": "Grok 4.7",
     "gemini 1.5 pro": "Gemini 3.1 Pro",
     "gemini 1.5 pro 002": "Gemini 3.1 Pro",
+    # stats-62 (2026-10-18): Gemini 2.0 Flash lost its OR or_id to the
+    # catalog-retirement wave (no-catalog record -> created=None -> the
+    # age-staleness pass can't see it) while AA still lists the row. Chain
+    # it to its line's current generation.
+    "gemini 2.0 flash": "Gemini 3.8 Flash",
     "mistral large 2": "Mistral Large 4",
     "mistral large 3": "Mistral Large 4",
     # GPT-5.5 instant is the ChatGPT-instant edition of the GPT-5.5 line;

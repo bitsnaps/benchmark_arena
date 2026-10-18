@@ -140,10 +140,80 @@ def main():
         if len(renamed) > 10:
             print(f"  ... and {len(renamed) - 10} more")
 
+    # stats-62 (2026-10-18): second cosmetic-drift class — an optional 'V'
+    # before a version number ("Amazon Nova Pro V1.0" -> "Amazon Nova
+    # Pro 1.0"). normKey keeps the V, so add a guarded v-fold tier: strip a
+    # 'v' directly preceding a digit, and only re-join when BOTH sides map
+    # uniquely and the pair is not already joined by the tiers above.
+    joined_pub = {pk for pk, _ in renamed}
+    joined_dl = {dk for _, dk in renamed}
+
+    def _vfold(nk):
+        return re.sub(r"v(\d)", r"\1", nk)
+
+    pub_v, dl_v = {}, {}
+    for nk_, ks in pub_n.items():
+        pub_v.setdefault(_vfold(nk_), []).extend(ks)
+    for nk_, ks in dl_n.items():
+        dl_v.setdefault(_vfold(nk_), []).extend(ks)
+    v_pairs = []
+    for nk_ in sorted(set(pub_v) & set(dl_v)):
+        if len(pub_v[nk_]) != 1 or len(dl_v[nk_]) != 1:
+            continue
+        pk, dk = pub_v[nk_][0], dl_v[nk_][0]
+        if pk in joined_pub or dk in joined_dl:
+            continue
+        if pk.lower() in lower_shared and dk.lower() in lower_shared:
+            continue
+        v_pairs.append((pk, dk))
+    if v_pairs:
+        for pk, dk in v_pairs:
+            renamed.append((pk, dk))
+            joined_pub.add(pk)
+            joined_dl.add(dk)
+        print(f"meta keys: {len(v_pairs)} V-drift record(s) re-joined via v-fold "
+              f"(stats-62): {[f'{p} -> {d}' for p, d in v_pairs[:5]]}")
+
+    # stats-62: third drift class — word-order flips ("Claude 4 Sonnet" ->
+    # "Claude Sonnet 4", AA display drift 2026-10-18). Token-multiset fold
+    # over the ORIGINAL names (normKey erases token boundaries) with the
+    # same uniqueness guards: both sides must fold uniquely, and the pair
+    # must not already be joined by the tiers above. Distinct variants
+    # ("…Terminus" vs "…Terminus Thinking") have different multisets and
+    # can never collide.
+    def _tsort(name):
+        return "".join(sorted(re.findall(r"[a-z0-9]+", name.lower())))
+
+    pub_t, dl_t = {}, {}
+    for k in mp:
+        pub_t.setdefault(_tsort(k), []).append(k)
+    for k in md:
+        dl_t.setdefault(_tsort(k), []).append(k)
+    ts_pairs = []
+    for tk in sorted(set(pub_t) & set(dl_t)):
+        if len(pub_t[tk]) != 1 or len(dl_t[tk]) != 1:
+            continue
+        pk, dk = pub_t[tk][0], dl_t[tk][0]
+        if pk in joined_pub or dk in joined_dl:
+            continue
+        if pk.lower() in lower_shared and dk.lower() in lower_shared:
+            continue
+        if _norm_key(pk) == _norm_key(dk):
+            continue
+        ts_pairs.append((pk, dk))
+    if ts_pairs:
+        for pk, dk in ts_pairs:
+            renamed.append((pk, dk))
+            joined_pub.add(pk)
+            joined_dl.add(dk)
+        print(f"meta keys: {len(ts_pairs)} word-order record(s) re-joined via "
+              f"token-sort (stats-62): {[f'{p} -> {d}' for p, d in ts_pairs[:5]]}")
+
     shared_l = set(pub_l) & set(dl_l)
-    dl_only = [k for k in md if k.lower() not in shared_l and _norm_key(k) not in norm_shared]
+    dl_only = [k for k in md if k.lower() not in shared_l and _norm_key(k) not in norm_shared
+               and k not in joined_dl]
     pub_only = [k for k in mp if k.lower() not in shared_l
-                and _norm_key(k) not in norm_shared]
+                and _norm_key(k) not in norm_shared and k not in joined_pub]
     ambiguous = {kk for kk in shared_l if len(pub_l[kk]) > 1 or len(dl_l[kk]) > 1}
     recased = sum(1 for kk in shared_l - ambiguous
                   if dl_l[kk][0] != pub_l[kk][0])
@@ -171,6 +241,44 @@ def main():
         if old:
             md[dk]["available_at"] = old
             restored += 1
+
+    # stats-62: no-catalog census records (OpenRouter retired the entry but
+    # the row still has fresh cells) adopt the pub record's STATIC facts so
+    # history is not erased — while every time-varying measurement the fresh
+    # run did not re-derive is dropped, never carried forward (approved
+    # honest-gap policy). A fresh non-empty field always wins over the
+    # carried one (e.g. AA re-attached today's list price to a no-catalog
+    # row). Marks or_catalog_retired so the UI/report can show why the OR
+    # fields went dark.
+    pub_lower = {}
+    for k in mp:
+        pub_lower.setdefault(k.lower(), k)
+    renamed_src = {dk: pk for pk, dk in renamed}
+    adopted = 0
+    for dk, fresh in md.items():
+        if fresh.get("match") != "no-catalog":
+            continue
+        pk = renamed_src.get(dk) or pub_lower.get(dk.lower())
+        if not pk:
+            continue
+        old = mp.get(pk) or {}
+        if not isinstance(old, dict) or not old:
+            continue
+        base = dict(old)
+        for f in ("aa_ttft_seconds", "pricing_aa_usd_per_1m",
+                  "pricing_usd_per_1m", "price_source", "no_bench_coverage"):
+            base.pop(f, None)
+        for fk, fv in fresh.items():
+            if fv is None or (isinstance(fv, list) and not fv):
+                continue
+            base[fk] = fv
+        base["match"] = "no-catalog"
+        base["or_catalog_retired"] = True
+        md[dk] = base
+        adopted += 1
+    if adopted:
+        print(f"stats-62: {adopted} no-catalog record(s) adopted pub history "
+              f"(static facts kept; stale price/ttft dropped)")
     priced_idx = _priced_listing_index() if pub_only else {}
     n_kept = 0
     for k in pub_only:
@@ -198,10 +306,14 @@ def main():
     row_names = {r.get("name") for r in dl.get("unified_closed", [])}
     row_names |= {r.get("name") for r in dl.get("unified_open", [])}
     row_nk = {}
+    row_t = {}
     for nm in row_names:
         nk = _norm_key(nm)
         if nk:
             row_nk.setdefault(nk, []).append(nm)
+        tk = _tsort(nm)
+        if tk:
+            row_t.setdefault(tk, []).append(nm)
     rewrites = 0
     for k, rec in md.items():
         tgt = rec.get("superseded_by")
@@ -212,6 +324,12 @@ def main():
         if cands and len(cands) == 1:
             print(f"  CHAIN {k}: superseded_by {tgt} -> {cands[0]} (rename drift)")
             rec["superseded_by"] = cands[0]
+            rewrites += 1
+            continue
+        tcands = row_t.get(_tsort(tgt)) if tgt else None
+        if tcands and len(tcands) == 1 and tcands[0] != tgt:
+            print(f"  CHAIN {k}: superseded_by {tgt} -> {tcands[0]} (word-order drift)")
+            rec["superseded_by"] = tcands[0]
             rewrites += 1
     if rewrites:
         print(f"superseded_by chains re-pointed: {rewrites}")

@@ -80,6 +80,12 @@ const ZEN_ROW = rows.find(r => avail(META[r.name]).some(a => a.p === ZEN && a.fr
 
 function fail(msg) { console.error('FAIL:', msg); process.exitCode = 1; }
 const ok = (msg) => console.log('  ok:', msg);
+// exact display-name match — a substring hasText collides with successor
+// models ('MiniMax-M3' also matched the new 'MiniMax-M3.1-Flash' row,
+// which has no free chip yet — same family as the stats-32 stale-anchor
+// lesson); the alias note may legally trail the name as a ★ inside
+// .model-link (same helper as hf.e2e.mjs)
+const exact = (name) => new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(★)?$`);
 // hash-only navigations re-render the SPA without a reload, so poll briefly
 // for the expected final count instead of sampling the transition state
 const expectCount = async (page, selector, expected, label) => {
@@ -124,7 +130,7 @@ const expectCount = async (page, selector, expected, label) => {
     // anchor row: free chip tooltip names the free sellers + the caveat
     // (stats-26: Buefy b-tooltip — hover the chip, read .tooltip-content)
     if (ANCHOR) {
-      const anchorRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: ANCHOR.name }) }).first();
+      const anchorRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: exact(ANCHOR.name) }) }).first();
       const anchorChip = anchorRow.locator('.free-chip').first();
       await anchorChip.hover();
       await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
@@ -213,7 +219,7 @@ const expectCount = async (page, selector, expected, label) => {
     await page.waitForSelector('.page-size select', { timeout: 5000 }).catch(() => {});
     await page.selectOption('.page-size select', '0').catch(() => {});
 
-    await page.locator('.model-link', { hasText: ANCHOR.name }).first().click();
+    await page.locator('.model-link', { hasText: exact(ANCHOR.name) }).first().click();
     await page.waitForSelector('.model-head', { timeout: 10000 });
     await page.waitForSelector('.avail-row', { timeout: 10000 });
     await expectCount(page, '.avail-row', ANCHOR_AVAIL.length, `model card seller rows (${ANCHOR.name})`);

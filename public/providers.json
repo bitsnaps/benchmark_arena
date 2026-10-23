@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-10-20",
+  "as_of": "2026-10-23",
   "kinds": [
     "first-party",
     "cloud",
@@ -3232,6 +3232,1475 @@
       ]
     },
     {
+      "id": "azure-openai",
+      "name": "Azure OpenAI",
+      "kind": "cloud",
+      "models": [
+        {
+          "id": "azure/model-router",
+          "in": 0.14,
+          "out": 0.0,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/gpt-5-nano",
+          "in": 0.05,
+          "out": 0.4,
+          "cache": 0.005,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5 Nano"
+        },
+        {
+          "id": "azure/gpt-5-nano-2025-08-07",
+          "in": 0.05,
+          "out": 0.4,
+          "cache": 0.005,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/eu/gpt-5-nano",
+          "in": 0.055,
+          "out": 0.44,
+          "cache": 0.0055,
+          "ctx": null,
+          "name": "OpenAI: GPT-5 Nano"
+        },
+        {
+          "id": "azure/eu/gpt-5-nano-2025-08-07",
+          "in": 0.055,
+          "out": 0.44,
+          "cache": 0.0055,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/us/gpt-5-nano",
+          "in": 0.055,
+          "out": 0.44,
+          "cache": 0.0055,
+          "ctx": null,
+          "name": "OpenAI: GPT-5 Nano"
+        },
+        {
+          "id": "azure/us/gpt-5-nano-2025-08-07",
+          "in": 0.055,
+          "out": 0.44,
+          "cache": 0.0055,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/gpt-4.1-nano",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.025,
+          "ctx": 1047576,
+          "name": "OpenAI: GPT-4.1 Nano"
+        },
+        {
+          "id": "azure/gpt-4.1-nano-2025-04-14",
+          "in": 0.1,
+          "out": 0.4,
+          "cache": 0.025,
+          "ctx": 1047576
+        },
+        {
+          "id": "azure/eu/gpt-4.1-nano",
+          "in": 0.11,
+          "out": 0.44,
+          "cache": 0.028,
+          "ctx": null,
+          "name": "OpenAI: GPT-4.1 Nano"
+        },
+        {
+          "id": "azure/us/gpt-4.1-nano",
+          "in": 0.11,
+          "out": 0.44,
+          "cache": 0.028,
+          "ctx": null,
+          "name": "OpenAI: GPT-4.1 Nano"
+        },
+        {
+          "id": "azure/us/gpt-4.1-nano-2025-04-14",
+          "in": 0.11,
+          "out": 0.44,
+          "cache": 0.028,
+          "ctx": 1047576
+        },
+        {
+          "id": "azure/gpt-6-luna",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Luna"
+        },
+        {
+          "id": "azure/gpt-6-luna-2026-09-22",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/us/gpt-6-luna",
+          "in": 0.11,
+          "out": 0.55,
+          "cache": 0.011,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Luna"
+        },
+        {
+          "id": "azure/eu/gpt-6-luna",
+          "in": 0.12,
+          "out": 0.6,
+          "cache": 0.012,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Luna"
+        },
+        {
+          "id": "azure/global-standard/gpt-4o-mini",
+          "in": 0.15,
+          "out": 0.6,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o-mini"
+        },
+        {
+          "id": "azure/gpt-4o-mini",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.075,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o-mini"
+        },
+        {
+          "id": "azure/gpt-4o-mini-2024-07-18",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.075,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o-mini (2024-07-18)"
+        },
+        {
+          "id": "azure/gpt-4o-mini-audio-preview-2024-12-17",
+          "in": 0.15,
+          "out": 0.6,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/eu/gpt-4o-mini",
+          "in": 0.165,
+          "out": 0.66,
+          "cache": 0.083,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o-mini"
+        },
+        {
+          "id": "azure/eu/gpt-4o-mini-2024-07-18",
+          "in": 0.165,
+          "out": 0.66,
+          "cache": 0.083,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o-mini (2024-07-18)"
+        },
+        {
+          "id": "azure/us/gpt-4o-mini",
+          "in": 0.165,
+          "out": 0.66,
+          "cache": 0.083,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o-mini"
+        },
+        {
+          "id": "azure/us/gpt-4o-mini-2024-07-18",
+          "in": 0.165,
+          "out": 0.66,
+          "cache": 0.083,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o-mini (2024-07-18)"
+        },
+        {
+          "id": "azure/gpt-5.6-luna",
+          "in": 0.2,
+          "out": 1.2,
+          "cache": 0.02,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.6 Luna"
+        },
+        {
+          "id": "azure/gpt-5.6-luna-2026-07-09",
+          "in": 0.2,
+          "out": 1.2,
+          "cache": 0.02,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/gpt-5.4-nano",
+          "in": 0.2,
+          "out": 1.25,
+          "cache": 0.02,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5.4 Nano"
+        },
+        {
+          "id": "azure/gpt-5.4-nano-2026-03-17",
+          "in": 0.2,
+          "out": 1.25,
+          "cache": 0.02,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/eu/gpt-5.6-luna",
+          "in": 0.22,
+          "out": 1.32,
+          "cache": 0.022,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.6 Luna"
+        },
+        {
+          "id": "azure/us/gpt-5.6-luna",
+          "in": 0.22,
+          "out": 1.32,
+          "cache": 0.022,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.6 Luna"
+        },
+        {
+          "id": "azure/eu/gpt-5.4-nano",
+          "in": 0.22,
+          "out": 1.375,
+          "cache": 0.022,
+          "ctx": null,
+          "name": "OpenAI: GPT-5.4 Nano"
+        },
+        {
+          "id": "azure/us/gpt-5.4-nano",
+          "in": 0.22,
+          "out": 1.375,
+          "cache": 0.022,
+          "ctx": null,
+          "name": "OpenAI: GPT-5.4 Nano"
+        },
+        {
+          "id": "azure/gpt-3.5-turbo",
+          "in": 0.5,
+          "out": 1.5,
+          "ctx": 4097,
+          "name": "OpenAI: GPT-3.5 Turbo"
+        },
+        {
+          "id": "azure/gpt-35-turbo",
+          "in": 0.5,
+          "out": 1.5,
+          "ctx": 4097,
+          "name": "OpenAI: GPT-3.5 Turbo"
+        },
+        {
+          "id": "azure/gpt-4.1-mini",
+          "in": 0.4,
+          "out": 1.6,
+          "cache": 0.1,
+          "ctx": 1047576,
+          "name": "OpenAI: GPT-4.1 Mini"
+        },
+        {
+          "id": "azure/gpt-4.1-mini-2025-04-14",
+          "in": 0.4,
+          "out": 1.6,
+          "cache": 0.1,
+          "ctx": 1047576
+        },
+        {
+          "id": "azure/eu/gpt-4.1-mini",
+          "in": 0.44,
+          "out": 1.76,
+          "cache": 0.11,
+          "ctx": null,
+          "name": "OpenAI: GPT-4.1 Mini"
+        },
+        {
+          "id": "azure/us/gpt-4.1-mini",
+          "in": 0.44,
+          "out": 1.76,
+          "cache": 0.11,
+          "ctx": null,
+          "name": "OpenAI: GPT-4.1 Mini"
+        },
+        {
+          "id": "azure/us/gpt-4.1-mini-2025-04-14",
+          "in": 0.44,
+          "out": 1.76,
+          "cache": 0.11,
+          "ctx": 1047576
+        },
+        {
+          "id": "azure/gpt-5-mini",
+          "in": 0.25,
+          "out": 2.0,
+          "cache": 0.025,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5 Mini"
+        },
+        {
+          "id": "azure/gpt-5-mini-2025-08-07",
+          "in": 0.25,
+          "out": 2.0,
+          "cache": 0.025,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/eu/gpt-5-mini",
+          "in": 0.275,
+          "out": 2.2,
+          "cache": 0.0275,
+          "ctx": null,
+          "name": "OpenAI: GPT-5 Mini"
+        },
+        {
+          "id": "azure/eu/gpt-5-mini-2025-08-07",
+          "in": 0.275,
+          "out": 2.2,
+          "cache": 0.0275,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/us/gpt-5-mini",
+          "in": 0.275,
+          "out": 2.2,
+          "cache": 0.0275,
+          "ctx": null,
+          "name": "OpenAI: GPT-5 Mini"
+        },
+        {
+          "id": "azure/us/gpt-5-mini-2025-08-07",
+          "in": 0.275,
+          "out": 2.2,
+          "cache": 0.0275,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/gpt-audio-mini",
+          "in": 0.6,
+          "out": 2.4,
+          "ctx": 128000,
+          "name": "OpenAI: GPT Audio Mini"
+        },
+        {
+          "id": "azure/gpt-audio-mini-2025-10-06",
+          "in": 0.6,
+          "out": 2.4,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/gpt-5.4-mini",
+          "in": 0.75,
+          "out": 4.5,
+          "cache": 0.075,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5.4 Mini"
+        },
+        {
+          "id": "azure/gpt-5.4-mini-2026-03-17",
+          "in": 0.75,
+          "out": 4.5,
+          "cache": 0.075,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/o1-mini",
+          "in": 1.1,
+          "out": 4.4,
+          "cache": 0.55,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/o1-mini-2024-09-12",
+          "in": 1.1,
+          "out": 4.4,
+          "cache": 0.55,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/o3-mini",
+          "in": 1.1,
+          "out": 4.4,
+          "cache": 0.55,
+          "ctx": 200000,
+          "name": "OpenAI: o3 Mini"
+        },
+        {
+          "id": "azure/o3-mini-2025-01-31",
+          "in": 1.1,
+          "out": 4.4,
+          "cache": 0.55,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/o4-mini",
+          "in": 1.1,
+          "out": 4.4,
+          "cache": 0.275,
+          "ctx": 200000,
+          "name": "OpenAI: o4 Mini"
+        },
+        {
+          "id": "azure/o4-mini-2025-04-16",
+          "in": 1.1,
+          "out": 4.4,
+          "cache": 0.275,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/eu/gpt-5.4-mini",
+          "in": 0.825,
+          "out": 4.95,
+          "cache": 0.0825,
+          "ctx": null,
+          "name": "OpenAI: GPT-5.4 Mini"
+        },
+        {
+          "id": "azure/us/gpt-5.4-mini",
+          "in": 0.825,
+          "out": 4.95,
+          "cache": 0.0825,
+          "ctx": null,
+          "name": "OpenAI: GPT-5.4 Mini"
+        },
+        {
+          "id": "azure/eu/o1-mini",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.605,
+          "ctx": null
+        },
+        {
+          "id": "azure/eu/o1-mini-2024-09-12",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.605,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/eu/o3-mini",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.605,
+          "ctx": 200000,
+          "name": "OpenAI: o3 Mini"
+        },
+        {
+          "id": "azure/eu/o3-mini-2025-01-31",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.605,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/eu/o4-mini",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.303,
+          "ctx": 200000,
+          "name": "OpenAI: o4 Mini"
+        },
+        {
+          "id": "azure/eu/o4-mini-2025-04-16",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.303,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/us/o1-mini",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.605,
+          "ctx": null
+        },
+        {
+          "id": "azure/us/o1-mini-2024-09-12",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.605,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/us/o3-mini",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.605,
+          "ctx": 200000,
+          "name": "OpenAI: o3 Mini"
+        },
+        {
+          "id": "azure/us/o3-mini-2025-01-31",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.605,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/us/o4-mini",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.303,
+          "ctx": 200000,
+          "name": "OpenAI: o4 Mini"
+        },
+        {
+          "id": "azure/us/o4-mini-2025-04-16",
+          "in": 1.21,
+          "out": 4.84,
+          "cache": 0.303,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/gpt-35-turbo-16k",
+          "in": 3.0,
+          "out": 4.0,
+          "ctx": 16385,
+          "name": "OpenAI: GPT-3.5 Turbo 16k"
+        },
+        {
+          "id": "azure/gpt-35-turbo-16k-0613",
+          "in": 3.0,
+          "out": 4.0,
+          "ctx": 16385
+        },
+        {
+          "id": "azure/us-gov/o3-mini",
+          "in": 1.513,
+          "out": 6.05,
+          "cache": 0.757,
+          "ctx": 200000,
+          "name": "OpenAI: o3 Mini"
+        },
+        {
+          "id": "azure/gpt-4.1",
+          "in": 2.0,
+          "out": 8.0,
+          "cache": 0.5,
+          "ctx": 1047576,
+          "name": "OpenAI: GPT-4.1"
+        },
+        {
+          "id": "azure/gpt-4.1-2025-04-14",
+          "in": 2.0,
+          "out": 8.0,
+          "cache": 0.5,
+          "ctx": 1047576
+        },
+        {
+          "id": "azure/o3",
+          "in": 2.0,
+          "out": 8.0,
+          "cache": 0.5,
+          "ctx": 200000,
+          "name": "OpenAI: o3"
+        },
+        {
+          "id": "azure/o3-2025-04-16",
+          "in": 2.0,
+          "out": 8.0,
+          "cache": 0.5,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/eu/gpt-4.1",
+          "in": 2.2,
+          "out": 8.8,
+          "cache": 0.55,
+          "ctx": null,
+          "name": "OpenAI: GPT-4.1"
+        },
+        {
+          "id": "azure/eu/o3",
+          "in": 2.2,
+          "out": 8.8,
+          "cache": 0.55,
+          "ctx": 200000,
+          "name": "OpenAI: o3"
+        },
+        {
+          "id": "azure/eu/o3-2025-04-16",
+          "in": 2.2,
+          "out": 8.8,
+          "cache": 0.55,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/us/gpt-4.1",
+          "in": 2.2,
+          "out": 8.8,
+          "cache": 0.55,
+          "ctx": null,
+          "name": "OpenAI: GPT-4.1"
+        },
+        {
+          "id": "azure/us/gpt-4.1-2025-04-14",
+          "in": 2.2,
+          "out": 8.8,
+          "cache": 0.55,
+          "ctx": 1047576
+        },
+        {
+          "id": "azure/us/o3",
+          "in": 2.2,
+          "out": 8.8,
+          "cache": 0.55,
+          "ctx": 200000,
+          "name": "OpenAI: o3"
+        },
+        {
+          "id": "azure/us/o3-2025-04-16",
+          "in": 2.2,
+          "out": 8.8,
+          "cache": 0.55,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/global/gpt-5.1",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5.1"
+        },
+        {
+          "id": "azure/gpt-5",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5"
+        },
+        {
+          "id": "azure/gpt-5-2025-08-07",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/gpt-5-chat",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/gpt-5.1",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5.1"
+        },
+        {
+          "id": "azure/gpt-5.1-2025-11-13",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/gpt-5.1-chat",
+          "in": 1.25,
+          "out": 10.0,
+          "cache": 0.125,
+          "ctx": 111616
+        },
+        {
+          "id": "azure/gpt-6-sol",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Sol"
+        },
+        {
+          "id": "azure/gpt-6-sol-2026-09-22",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/gpt-6.1-sol",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.1,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6.1 Sol"
+        },
+        {
+          "id": "azure/gpt-6.1-sol-2026-09-29",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.1,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/eu/gpt-5",
+          "in": 1.375,
+          "out": 11.0,
+          "cache": 0.1375,
+          "ctx": null,
+          "name": "OpenAI: GPT-5"
+        },
+        {
+          "id": "azure/eu/gpt-5-2025-08-07",
+          "in": 1.375,
+          "out": 11.0,
+          "cache": 0.1375,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/eu/gpt-5.1",
+          "in": 1.375,
+          "out": 11.0,
+          "cache": 0.1375,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5.1"
+        },
+        {
+          "id": "azure/eu/gpt-5.1-chat",
+          "in": 1.375,
+          "out": 11.0,
+          "cache": 0.1375,
+          "ctx": 111616
+        },
+        {
+          "id": "azure/us/gpt-5",
+          "in": 1.375,
+          "out": 11.0,
+          "cache": 0.1375,
+          "ctx": null,
+          "name": "OpenAI: GPT-5"
+        },
+        {
+          "id": "azure/us/gpt-5-2025-08-07",
+          "in": 1.375,
+          "out": 11.0,
+          "cache": 0.1375,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/us/gpt-5.1",
+          "in": 1.375,
+          "out": 11.0,
+          "cache": 0.1375,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5.1"
+        },
+        {
+          "id": "azure/us/gpt-5.1-chat",
+          "in": 1.375,
+          "out": 11.0,
+          "cache": 0.1375,
+          "ctx": 111616
+        },
+        {
+          "id": "azure/global-standard/gpt-4o-2024-08-06",
+          "in": 2.5,
+          "out": 10.0,
+          "cache": 1.25,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-08-06)"
+        },
+        {
+          "id": "azure/global-standard/gpt-4o-2024-11-20",
+          "in": 2.5,
+          "out": 10.0,
+          "cache": 1.25,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-11-20)"
+        },
+        {
+          "id": "azure/global/gpt-4o-2024-08-06",
+          "in": 2.5,
+          "out": 10.0,
+          "cache": 1.25,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-08-06)"
+        },
+        {
+          "id": "azure/global/gpt-4o-2024-11-20",
+          "in": 2.5,
+          "out": 10.0,
+          "cache": 1.25,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-11-20)"
+        },
+        {
+          "id": "azure/gpt-4o",
+          "in": 2.5,
+          "out": 10.0,
+          "cache": 1.25,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o"
+        },
+        {
+          "id": "azure/gpt-4o-2024-08-06",
+          "in": 2.5,
+          "out": 10.0,
+          "cache": 1.25,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-08-06)"
+        },
+        {
+          "id": "azure/gpt-4o-2024-11-20",
+          "in": 2.5,
+          "out": 10.0,
+          "cache": 1.25,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-11-20)"
+        },
+        {
+          "id": "azure/gpt-4o-audio-preview-2024-12-17",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/gpt-audio",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 128000,
+          "name": "OpenAI: GPT Audio"
+        },
+        {
+          "id": "azure/gpt-audio-1.5",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/gpt-audio-1.5-2026-02-23",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/gpt-audio-2025-08-28",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/us/gpt-6-sol",
+          "in": 2.2,
+          "out": 11.0,
+          "cache": 0.22,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Sol"
+        },
+        {
+          "id": "azure/us/gpt-6.1-sol",
+          "in": 2.2,
+          "out": 11.0,
+          "cache": 0.11,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6.1 Sol"
+        },
+        {
+          "id": "azure/eu/gpt-4o",
+          "in": 2.75,
+          "out": 11.0,
+          "cache": 1.375,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o"
+        },
+        {
+          "id": "azure/eu/gpt-4o-2024-08-06",
+          "in": 2.75,
+          "out": 11.0,
+          "cache": 1.375,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-08-06)"
+        },
+        {
+          "id": "azure/eu/gpt-4o-2024-11-20",
+          "in": 2.75,
+          "out": 11.0,
+          "cache": 1.375,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-11-20)"
+        },
+        {
+          "id": "azure/us/gpt-4o",
+          "in": 2.75,
+          "out": 11.0,
+          "cache": 1.375,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o"
+        },
+        {
+          "id": "azure/us/gpt-4o-2024-08-06",
+          "in": 2.75,
+          "out": 11.0,
+          "cache": 1.375,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-08-06)"
+        },
+        {
+          "id": "azure/us/gpt-4o-2024-11-20",
+          "in": 2.75,
+          "out": 11.0,
+          "cache": 1.375,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-11-20)"
+        },
+        {
+          "id": "azure/gpt-5.6-terra",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.6 Terra"
+        },
+        {
+          "id": "azure/gpt-5.6-terra-2026-07-09",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/apac/gpt-6.1-sol",
+          "in": 2.4,
+          "out": 12.0,
+          "cache": 0.12,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6.1 Sol"
+        },
+        {
+          "id": "azure/eu/gpt-6-sol",
+          "in": 2.4,
+          "out": 12.0,
+          "cache": 0.24,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Sol"
+        },
+        {
+          "id": "azure/eu/gpt-6.1-sol",
+          "in": 2.4,
+          "out": 12.0,
+          "cache": 0.12,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6.1 Sol"
+        },
+        {
+          "id": "azure/computer-use-preview",
+          "in": 3.0,
+          "out": 12.0,
+          "ctx": 8192
+        },
+        {
+          "id": "azure/eu/gpt-5.6-terra",
+          "in": 2.2,
+          "out": 13.2,
+          "cache": 0.22,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.6 Terra"
+        },
+        {
+          "id": "azure/us/gpt-5.6-terra",
+          "in": 2.2,
+          "out": 13.2,
+          "cache": 0.22,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.6 Terra"
+        },
+        {
+          "id": "azure/us-gov/gpt-5.1",
+          "in": 1.7188,
+          "out": 13.75,
+          "cache": 0.1719,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5.1"
+        },
+        {
+          "id": "azure/gpt-5.2",
+          "in": 1.75,
+          "out": 14.0,
+          "cache": 0.175,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5.2"
+        },
+        {
+          "id": "azure/gpt-5.2-2025-12-11",
+          "in": 1.75,
+          "out": 14.0,
+          "cache": 0.175,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/gpt-5.2-chat",
+          "in": 1.75,
+          "out": 14.0,
+          "cache": 0.175,
+          "ctx": 111616,
+          "name": "OpenAI: GPT-5.2 Chat"
+        },
+        {
+          "id": "azure/gpt-5.3-chat",
+          "in": 1.75,
+          "out": 14.0,
+          "cache": 0.175,
+          "ctx": 111616
+        },
+        {
+          "id": "azure/eu/computer-use-preview",
+          "in": 3.3,
+          "out": 13.2,
+          "ctx": null
+        },
+        {
+          "id": "azure/us/computer-use-preview",
+          "in": 3.3,
+          "out": 13.2,
+          "ctx": null
+        },
+        {
+          "id": "azure/eu/gpt-5.2",
+          "in": 1.925,
+          "out": 15.4,
+          "cache": 0.1925,
+          "ctx": null,
+          "name": "OpenAI: GPT-5.2"
+        },
+        {
+          "id": "azure/eu/gpt-5.2-chat",
+          "in": 1.925,
+          "out": 15.4,
+          "cache": 0.1925,
+          "ctx": 111616,
+          "name": "OpenAI: GPT-5.2 Chat"
+        },
+        {
+          "id": "azure/eu/gpt-5.3-chat",
+          "in": 1.925,
+          "out": 15.4,
+          "cache": 0.1925,
+          "ctx": 111616
+        },
+        {
+          "id": "azure/us/gpt-5.2",
+          "in": 1.925,
+          "out": 15.4,
+          "cache": 0.1925,
+          "ctx": null,
+          "name": "OpenAI: GPT-5.2"
+        },
+        {
+          "id": "azure/us/gpt-5.2-chat",
+          "in": 1.925,
+          "out": 15.4,
+          "cache": 0.1925,
+          "ctx": 111616,
+          "name": "OpenAI: GPT-5.2 Chat"
+        },
+        {
+          "id": "azure/us/gpt-5.3-chat",
+          "in": 1.925,
+          "out": 15.4,
+          "cache": 0.1925,
+          "ctx": 111616
+        },
+        {
+          "id": "azure/gpt-5.4",
+          "in": 2.5,
+          "out": 15.0,
+          "cache": 0.25,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.4"
+        },
+        {
+          "id": "azure/gpt-5.4-2026-03-05",
+          "in": 2.5,
+          "out": 15.0,
+          "cache": 0.25,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/command-r-plus",
+          "in": 3.0,
+          "out": 15.0,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/eu/gpt-5.4",
+          "in": 2.75,
+          "out": 16.5,
+          "cache": 0.275,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.4"
+        },
+        {
+          "id": "azure/eu/gpt-5.4-2026-03-05",
+          "in": 2.75,
+          "out": 16.5,
+          "cache": 0.275,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/us/gpt-5.4",
+          "in": 2.75,
+          "out": 16.5,
+          "cache": 0.275,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.4"
+        },
+        {
+          "id": "azure/us/gpt-5.4-2026-03-05",
+          "in": 2.75,
+          "out": 16.5,
+          "cache": 0.275,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/gpt-4o-2024-05-13",
+          "in": 5.0,
+          "out": 15.0,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-05-13)"
+        },
+        {
+          "id": "azure/eu/gpt-4o-2024-05-13",
+          "in": 5.5,
+          "out": 16.5,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-05-13)"
+        },
+        {
+          "id": "azure/us/gpt-4o-2024-05-13",
+          "in": 5.5,
+          "out": 16.5,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4o (2024-05-13)"
+        },
+        {
+          "id": "azure/gpt-5.6",
+          "in": 4.0,
+          "out": 20.0,
+          "cache": 0.4,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/gpt-5.6-sol",
+          "in": 4.0,
+          "out": 20.0,
+          "cache": 0.4,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.6 Sol"
+        },
+        {
+          "id": "azure/gpt-5.6-sol-2026-07-09",
+          "in": 4.0,
+          "out": 20.0,
+          "cache": 0.4,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/eu/gpt-5.6",
+          "in": 4.4,
+          "out": 22.0,
+          "cache": 0.44,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/eu/gpt-5.6-sol",
+          "in": 4.4,
+          "out": 22.0,
+          "cache": 0.44,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.6 Sol"
+        },
+        {
+          "id": "azure/us/gpt-5.6",
+          "in": 4.4,
+          "out": 22.0,
+          "cache": 0.44,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/us/gpt-5.6-sol",
+          "in": 4.4,
+          "out": 22.0,
+          "cache": 0.44,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.6 Sol"
+        },
+        {
+          "id": "azure/mistral-large-2402",
+          "in": 8.0,
+          "out": 24.0,
+          "ctx": 32000
+        },
+        {
+          "id": "azure/mistral-large-latest",
+          "in": 8.0,
+          "out": 24.0,
+          "ctx": 32000
+        },
+        {
+          "id": "azure/chat-latest",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 272000
+        },
+        {
+          "id": "azure/gpt-5.5",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.5"
+        },
+        {
+          "id": "azure/gpt-5.5-2026-04-23",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/gpt-5.5-2026-04-24",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/gpt-chat-latest",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 272000,
+          "name": "OpenAI: GPT Chat Latest"
+        },
+        {
+          "id": "azure/eu/gpt-5.5",
+          "in": 5.5,
+          "out": 33.0,
+          "cache": 0.55,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.5"
+        },
+        {
+          "id": "azure/eu/gpt-5.5-2026-04-23",
+          "in": 5.5,
+          "out": 33.0,
+          "cache": 0.55,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/eu/gpt-5.5-2026-04-24",
+          "in": 5.5,
+          "out": 33.0,
+          "cache": 0.55,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/us/gpt-5.5",
+          "in": 5.5,
+          "out": 33.0,
+          "cache": 0.55,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.5"
+        },
+        {
+          "id": "azure/us/gpt-5.5-2026-04-23",
+          "in": 5.5,
+          "out": 33.0,
+          "cache": 0.55,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/us/gpt-5.5-2026-04-24",
+          "in": 5.5,
+          "out": 33.0,
+          "cache": 0.55,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/us/gpt-chat-latest",
+          "in": 5.5,
+          "out": 33.0,
+          "cache": 0.55,
+          "ctx": 272000,
+          "name": "OpenAI: GPT Chat Latest"
+        },
+        {
+          "id": "azure/gpt-4-0125-preview",
+          "in": 10.0,
+          "out": 30.0,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/gpt-4-1106-preview",
+          "in": 10.0,
+          "out": 30.0,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/gpt-4-turbo",
+          "in": 11.0,
+          "out": 33.0,
+          "ctx": 128000,
+          "name": "OpenAI: GPT-4 Turbo"
+        },
+        {
+          "id": "azure/gpt-4-turbo-2024-04-09",
+          "in": 11.0,
+          "out": 33.0,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/gpt-4-turbo-vision-preview",
+          "in": 11.0,
+          "out": 33.0,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/eu/o3-deep-research",
+          "in": 11.0,
+          "out": 44.0,
+          "cache": 2.75,
+          "ctx": null
+        },
+        {
+          "id": "azure/us/o3-deep-research",
+          "in": 11.0,
+          "out": 44.0,
+          "cache": 2.75,
+          "ctx": null
+        },
+        {
+          "id": "azure/gpt-6-astra",
+          "in": 10.0,
+          "out": 50.0,
+          "cache": 1.0,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Astra"
+        },
+        {
+          "id": "azure/gpt-6-astra-2026-09-03",
+          "in": 10.0,
+          "out": 50.0,
+          "cache": 1.0,
+          "ctx": 922000
+        },
+        {
+          "id": "azure/us/gpt-6-astra",
+          "in": 11.0,
+          "out": 55.0,
+          "cache": 1.1,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Astra"
+        },
+        {
+          "id": "azure/eu/gpt-6-astra",
+          "in": 12.0,
+          "out": 60.0,
+          "cache": 1.2,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Astra"
+        },
+        {
+          "id": "azure/o1",
+          "in": 15.0,
+          "out": 60.0,
+          "cache": 7.5,
+          "ctx": 200000,
+          "name": "OpenAI: o1"
+        },
+        {
+          "id": "azure/o1-2024-12-17",
+          "in": 15.0,
+          "out": 60.0,
+          "cache": 7.5,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/eu/o1",
+          "in": 16.5,
+          "out": 66.0,
+          "cache": 8.25,
+          "ctx": 200000,
+          "name": "OpenAI: o1"
+        },
+        {
+          "id": "azure/eu/o1-2024-12-17",
+          "in": 16.5,
+          "out": 66.0,
+          "cache": 8.25,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/eu/o1-preview",
+          "in": 16.5,
+          "out": 66.0,
+          "cache": 8.25,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/us/o1",
+          "in": 16.5,
+          "out": 66.0,
+          "cache": 8.25,
+          "ctx": 200000,
+          "name": "OpenAI: o1"
+        },
+        {
+          "id": "azure/us/o1-2024-12-17",
+          "in": 16.5,
+          "out": 66.0,
+          "cache": 8.25,
+          "ctx": 200000
+        },
+        {
+          "id": "azure/us/o1-preview",
+          "in": 16.5,
+          "out": 66.0,
+          "cache": 8.25,
+          "ctx": 128000
+        },
+        {
+          "id": "azure/gpt-4",
+          "in": 30.0,
+          "out": 60.0,
+          "ctx": 8192,
+          "name": "OpenAI: GPT-4"
+        },
+        {
+          "id": "azure/gpt-4-0613",
+          "in": 30.0,
+          "out": 60.0,
+          "ctx": 8192
+        },
+        {
+          "id": "azure/gpt-4-32k",
+          "in": 60.0,
+          "out": 120.0,
+          "ctx": 32768
+        },
+        {
+          "id": "azure/gpt-4-32k-0613",
+          "in": 60.0,
+          "out": 120.0,
+          "ctx": 32768
+        },
+        {
+          "id": "azure/gpt-4.5-preview",
+          "in": 75.0,
+          "out": 150.0,
+          "cache": 37.5,
+          "ctx": 128000
+        }
+      ]
+    },
+    {
       "id": "amazon-bedrock",
       "name": "Amazon Bedrock",
       "kind": "cloud",
@@ -4429,1379 +5898,6 @@
       ]
     },
     {
-      "id": "azure-openai",
-      "name": "Azure OpenAI",
-      "kind": "cloud",
-      "models": [
-        {
-          "id": "azure/model-router",
-          "in": 0.14,
-          "out": 0.0,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/gpt-5-nano",
-          "in": 0.05,
-          "out": 0.4,
-          "cache": 0.005,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5 Nano"
-        },
-        {
-          "id": "azure/gpt-5-nano-2025-08-07",
-          "in": 0.05,
-          "out": 0.4,
-          "cache": 0.005,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/eu/gpt-5-nano",
-          "in": 0.055,
-          "out": 0.44,
-          "cache": 0.0055,
-          "ctx": null,
-          "name": "OpenAI: GPT-5 Nano"
-        },
-        {
-          "id": "azure/eu/gpt-5-nano-2025-08-07",
-          "in": 0.055,
-          "out": 0.44,
-          "cache": 0.0055,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/us/gpt-5-nano",
-          "in": 0.055,
-          "out": 0.44,
-          "cache": 0.0055,
-          "ctx": null,
-          "name": "OpenAI: GPT-5 Nano"
-        },
-        {
-          "id": "azure/us/gpt-5-nano-2025-08-07",
-          "in": 0.055,
-          "out": 0.44,
-          "cache": 0.0055,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/gpt-4.1-nano",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.025,
-          "ctx": 1047576,
-          "name": "OpenAI: GPT-4.1 Nano"
-        },
-        {
-          "id": "azure/gpt-4.1-nano-2025-04-14",
-          "in": 0.1,
-          "out": 0.4,
-          "cache": 0.025,
-          "ctx": 1047576
-        },
-        {
-          "id": "azure/eu/gpt-4.1-nano",
-          "in": 0.11,
-          "out": 0.44,
-          "cache": 0.028,
-          "ctx": null,
-          "name": "OpenAI: GPT-4.1 Nano"
-        },
-        {
-          "id": "azure/us/gpt-4.1-nano",
-          "in": 0.11,
-          "out": 0.44,
-          "cache": 0.028,
-          "ctx": null,
-          "name": "OpenAI: GPT-4.1 Nano"
-        },
-        {
-          "id": "azure/us/gpt-4.1-nano-2025-04-14",
-          "in": 0.11,
-          "out": 0.44,
-          "cache": 0.028,
-          "ctx": 1047576
-        },
-        {
-          "id": "azure/gpt-6-luna",
-          "in": 0.1,
-          "out": 0.5,
-          "cache": 0.01,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Luna"
-        },
-        {
-          "id": "azure/gpt-6-luna-2026-09-22",
-          "in": 0.1,
-          "out": 0.5,
-          "cache": 0.01,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/us/gpt-6-luna",
-          "in": 0.11,
-          "out": 0.55,
-          "cache": 0.011,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Luna"
-        },
-        {
-          "id": "azure/eu/gpt-6-luna",
-          "in": 0.12,
-          "out": 0.6,
-          "cache": 0.012,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Luna"
-        },
-        {
-          "id": "azure/global-standard/gpt-4o-mini",
-          "in": 0.15,
-          "out": 0.6,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o-mini"
-        },
-        {
-          "id": "azure/gpt-4o-mini",
-          "in": 0.15,
-          "out": 0.6,
-          "cache": 0.075,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o-mini"
-        },
-        {
-          "id": "azure/gpt-4o-mini-2024-07-18",
-          "in": 0.15,
-          "out": 0.6,
-          "cache": 0.075,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o-mini (2024-07-18)"
-        },
-        {
-          "id": "azure/gpt-4o-mini-audio-preview-2024-12-17",
-          "in": 0.15,
-          "out": 0.6,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/eu/gpt-4o-mini-2024-07-18",
-          "in": 0.165,
-          "out": 0.66,
-          "cache": 0.083,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o-mini (2024-07-18)"
-        },
-        {
-          "id": "azure/us/gpt-4o-mini-2024-07-18",
-          "in": 0.165,
-          "out": 0.66,
-          "cache": 0.083,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o-mini (2024-07-18)"
-        },
-        {
-          "id": "azure/gpt-5.6-luna",
-          "in": 0.2,
-          "out": 1.2,
-          "cache": 0.02,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.6 Luna"
-        },
-        {
-          "id": "azure/gpt-5.6-luna-2026-07-09",
-          "in": 0.2,
-          "out": 1.2,
-          "cache": 0.02,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/gpt-5.4-nano",
-          "in": 0.2,
-          "out": 1.25,
-          "cache": 0.02,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5.4 Nano"
-        },
-        {
-          "id": "azure/gpt-5.4-nano-2026-03-17",
-          "in": 0.2,
-          "out": 1.25,
-          "cache": 0.02,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/eu/gpt-5.6-luna",
-          "in": 0.22,
-          "out": 1.32,
-          "cache": 0.022,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.6 Luna"
-        },
-        {
-          "id": "azure/us/gpt-5.6-luna",
-          "in": 0.22,
-          "out": 1.32,
-          "cache": 0.022,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.6 Luna"
-        },
-        {
-          "id": "azure/eu/gpt-5.4-nano",
-          "in": 0.22,
-          "out": 1.375,
-          "cache": 0.022,
-          "ctx": null,
-          "name": "OpenAI: GPT-5.4 Nano"
-        },
-        {
-          "id": "azure/us/gpt-5.4-nano",
-          "in": 0.22,
-          "out": 1.375,
-          "cache": 0.022,
-          "ctx": null,
-          "name": "OpenAI: GPT-5.4 Nano"
-        },
-        {
-          "id": "azure/gpt-3.5-turbo",
-          "in": 0.5,
-          "out": 1.5,
-          "ctx": 4097,
-          "name": "OpenAI: GPT-3.5 Turbo"
-        },
-        {
-          "id": "azure/gpt-35-turbo",
-          "in": 0.5,
-          "out": 1.5,
-          "ctx": 4097,
-          "name": "OpenAI: GPT-3.5 Turbo"
-        },
-        {
-          "id": "azure/gpt-4.1-mini",
-          "in": 0.4,
-          "out": 1.6,
-          "cache": 0.1,
-          "ctx": 1047576,
-          "name": "OpenAI: GPT-4.1 Mini"
-        },
-        {
-          "id": "azure/gpt-4.1-mini-2025-04-14",
-          "in": 0.4,
-          "out": 1.6,
-          "cache": 0.1,
-          "ctx": 1047576
-        },
-        {
-          "id": "azure/eu/gpt-4.1-mini",
-          "in": 0.44,
-          "out": 1.76,
-          "cache": 0.11,
-          "ctx": null,
-          "name": "OpenAI: GPT-4.1 Mini"
-        },
-        {
-          "id": "azure/us/gpt-4.1-mini",
-          "in": 0.44,
-          "out": 1.76,
-          "cache": 0.11,
-          "ctx": null,
-          "name": "OpenAI: GPT-4.1 Mini"
-        },
-        {
-          "id": "azure/us/gpt-4.1-mini-2025-04-14",
-          "in": 0.44,
-          "out": 1.76,
-          "cache": 0.11,
-          "ctx": 1047576
-        },
-        {
-          "id": "azure/gpt-5-mini",
-          "in": 0.25,
-          "out": 2.0,
-          "cache": 0.025,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5 Mini"
-        },
-        {
-          "id": "azure/gpt-5-mini-2025-08-07",
-          "in": 0.25,
-          "out": 2.0,
-          "cache": 0.025,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/eu/gpt-5-mini",
-          "in": 0.275,
-          "out": 2.2,
-          "cache": 0.0275,
-          "ctx": null,
-          "name": "OpenAI: GPT-5 Mini"
-        },
-        {
-          "id": "azure/eu/gpt-5-mini-2025-08-07",
-          "in": 0.275,
-          "out": 2.2,
-          "cache": 0.0275,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/us/gpt-5-mini",
-          "in": 0.275,
-          "out": 2.2,
-          "cache": 0.0275,
-          "ctx": null,
-          "name": "OpenAI: GPT-5 Mini"
-        },
-        {
-          "id": "azure/us/gpt-5-mini-2025-08-07",
-          "in": 0.275,
-          "out": 2.2,
-          "cache": 0.0275,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/gpt-audio-mini",
-          "in": 0.6,
-          "out": 2.4,
-          "ctx": 128000,
-          "name": "OpenAI: GPT Audio Mini"
-        },
-        {
-          "id": "azure/gpt-audio-mini-2025-10-06",
-          "in": 0.6,
-          "out": 2.4,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/gpt-5.4-mini",
-          "in": 0.75,
-          "out": 4.5,
-          "cache": 0.075,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5.4 Mini"
-        },
-        {
-          "id": "azure/gpt-5.4-mini-2026-03-17",
-          "in": 0.75,
-          "out": 4.5,
-          "cache": 0.075,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/o1-mini",
-          "in": 1.1,
-          "out": 4.4,
-          "cache": 0.55,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/o1-mini-2024-09-12",
-          "in": 1.1,
-          "out": 4.4,
-          "cache": 0.55,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/o3-mini",
-          "in": 1.1,
-          "out": 4.4,
-          "cache": 0.55,
-          "ctx": 200000,
-          "name": "OpenAI: o3 Mini"
-        },
-        {
-          "id": "azure/o3-mini-2025-01-31",
-          "in": 1.1,
-          "out": 4.4,
-          "cache": 0.55,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/o4-mini",
-          "in": 1.1,
-          "out": 4.4,
-          "cache": 0.275,
-          "ctx": 200000,
-          "name": "OpenAI: o4 Mini"
-        },
-        {
-          "id": "azure/o4-mini-2025-04-16",
-          "in": 1.1,
-          "out": 4.4,
-          "cache": 0.275,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/eu/gpt-5.4-mini",
-          "in": 0.825,
-          "out": 4.95,
-          "cache": 0.0825,
-          "ctx": null,
-          "name": "OpenAI: GPT-5.4 Mini"
-        },
-        {
-          "id": "azure/us/gpt-5.4-mini",
-          "in": 0.825,
-          "out": 4.95,
-          "cache": 0.0825,
-          "ctx": null,
-          "name": "OpenAI: GPT-5.4 Mini"
-        },
-        {
-          "id": "azure/eu/o1-mini",
-          "in": 1.21,
-          "out": 4.84,
-          "cache": 0.605,
-          "ctx": null
-        },
-        {
-          "id": "azure/eu/o1-mini-2024-09-12",
-          "in": 1.21,
-          "out": 4.84,
-          "cache": 0.605,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/eu/o3-mini-2025-01-31",
-          "in": 1.21,
-          "out": 4.84,
-          "cache": 0.605,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/eu/o4-mini-2025-04-16",
-          "in": 1.21,
-          "out": 4.84,
-          "cache": 0.303,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/us/o1-mini",
-          "in": 1.21,
-          "out": 4.84,
-          "cache": 0.605,
-          "ctx": null
-        },
-        {
-          "id": "azure/us/o1-mini-2024-09-12",
-          "in": 1.21,
-          "out": 4.84,
-          "cache": 0.605,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/us/o3-mini-2025-01-31",
-          "in": 1.21,
-          "out": 4.84,
-          "cache": 0.605,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/us/o4-mini-2025-04-16",
-          "in": 1.21,
-          "out": 4.84,
-          "cache": 0.303,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/gpt-35-turbo-16k",
-          "in": 3.0,
-          "out": 4.0,
-          "ctx": 16385,
-          "name": "OpenAI: GPT-3.5 Turbo 16k"
-        },
-        {
-          "id": "azure/gpt-35-turbo-16k-0613",
-          "in": 3.0,
-          "out": 4.0,
-          "ctx": 16385
-        },
-        {
-          "id": "azure/us-gov/o3-mini",
-          "in": 1.513,
-          "out": 6.05,
-          "cache": 0.757,
-          "ctx": 200000,
-          "name": "OpenAI: o3 Mini"
-        },
-        {
-          "id": "azure/gpt-4.1",
-          "in": 2.0,
-          "out": 8.0,
-          "cache": 0.5,
-          "ctx": 1047576,
-          "name": "OpenAI: GPT-4.1"
-        },
-        {
-          "id": "azure/gpt-4.1-2025-04-14",
-          "in": 2.0,
-          "out": 8.0,
-          "cache": 0.5,
-          "ctx": 1047576
-        },
-        {
-          "id": "azure/o3",
-          "in": 2.0,
-          "out": 8.0,
-          "cache": 0.5,
-          "ctx": 200000,
-          "name": "OpenAI: o3"
-        },
-        {
-          "id": "azure/o3-2025-04-16",
-          "in": 2.0,
-          "out": 8.0,
-          "cache": 0.5,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/eu/gpt-4.1",
-          "in": 2.2,
-          "out": 8.8,
-          "cache": 0.55,
-          "ctx": null,
-          "name": "OpenAI: GPT-4.1"
-        },
-        {
-          "id": "azure/eu/o3-2025-04-16",
-          "in": 2.2,
-          "out": 8.8,
-          "cache": 0.55,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/us/gpt-4.1",
-          "in": 2.2,
-          "out": 8.8,
-          "cache": 0.55,
-          "ctx": null,
-          "name": "OpenAI: GPT-4.1"
-        },
-        {
-          "id": "azure/us/gpt-4.1-2025-04-14",
-          "in": 2.2,
-          "out": 8.8,
-          "cache": 0.55,
-          "ctx": 1047576
-        },
-        {
-          "id": "azure/us/o3-2025-04-16",
-          "in": 2.2,
-          "out": 8.8,
-          "cache": 0.55,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/global/gpt-5.1",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5.1"
-        },
-        {
-          "id": "azure/gpt-5",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5"
-        },
-        {
-          "id": "azure/gpt-5-2025-08-07",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/gpt-5-chat",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/gpt-5.1",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5.1"
-        },
-        {
-          "id": "azure/gpt-5.1-2025-11-13",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/gpt-5.1-chat",
-          "in": 1.25,
-          "out": 10.0,
-          "cache": 0.125,
-          "ctx": 111616
-        },
-        {
-          "id": "azure/gpt-6-sol",
-          "in": 2.0,
-          "out": 10.0,
-          "cache": 0.2,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Sol"
-        },
-        {
-          "id": "azure/gpt-6-sol-2026-09-22",
-          "in": 2.0,
-          "out": 10.0,
-          "cache": 0.2,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/gpt-6.1-sol",
-          "in": 2.0,
-          "out": 10.0,
-          "cache": 0.1,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6.1 Sol"
-        },
-        {
-          "id": "azure/gpt-6.1-sol-2026-09-29",
-          "in": 2.0,
-          "out": 10.0,
-          "cache": 0.1,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/eu/gpt-5",
-          "in": 1.375,
-          "out": 11.0,
-          "cache": 0.1375,
-          "ctx": null,
-          "name": "OpenAI: GPT-5"
-        },
-        {
-          "id": "azure/eu/gpt-5-2025-08-07",
-          "in": 1.375,
-          "out": 11.0,
-          "cache": 0.1375,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/eu/gpt-5.1",
-          "in": 1.375,
-          "out": 11.0,
-          "cache": 0.1375,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5.1"
-        },
-        {
-          "id": "azure/eu/gpt-5.1-chat",
-          "in": 1.375,
-          "out": 11.0,
-          "cache": 0.1375,
-          "ctx": 111616
-        },
-        {
-          "id": "azure/us/gpt-5",
-          "in": 1.375,
-          "out": 11.0,
-          "cache": 0.1375,
-          "ctx": null,
-          "name": "OpenAI: GPT-5"
-        },
-        {
-          "id": "azure/us/gpt-5-2025-08-07",
-          "in": 1.375,
-          "out": 11.0,
-          "cache": 0.1375,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/us/gpt-5.1",
-          "in": 1.375,
-          "out": 11.0,
-          "cache": 0.1375,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5.1"
-        },
-        {
-          "id": "azure/us/gpt-5.1-chat",
-          "in": 1.375,
-          "out": 11.0,
-          "cache": 0.1375,
-          "ctx": 111616
-        },
-        {
-          "id": "azure/global-standard/gpt-4o-2024-08-06",
-          "in": 2.5,
-          "out": 10.0,
-          "cache": 1.25,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-08-06)"
-        },
-        {
-          "id": "azure/global-standard/gpt-4o-2024-11-20",
-          "in": 2.5,
-          "out": 10.0,
-          "cache": 1.25,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-11-20)"
-        },
-        {
-          "id": "azure/global/gpt-4o-2024-08-06",
-          "in": 2.5,
-          "out": 10.0,
-          "cache": 1.25,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-08-06)"
-        },
-        {
-          "id": "azure/global/gpt-4o-2024-11-20",
-          "in": 2.5,
-          "out": 10.0,
-          "cache": 1.25,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-11-20)"
-        },
-        {
-          "id": "azure/gpt-4o",
-          "in": 2.5,
-          "out": 10.0,
-          "cache": 1.25,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o"
-        },
-        {
-          "id": "azure/gpt-4o-2024-08-06",
-          "in": 2.5,
-          "out": 10.0,
-          "cache": 1.25,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-08-06)"
-        },
-        {
-          "id": "azure/gpt-4o-2024-11-20",
-          "in": 2.5,
-          "out": 10.0,
-          "cache": 1.25,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-11-20)"
-        },
-        {
-          "id": "azure/gpt-4o-audio-preview-2024-12-17",
-          "in": 2.5,
-          "out": 10.0,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/gpt-audio",
-          "in": 2.5,
-          "out": 10.0,
-          "ctx": 128000,
-          "name": "OpenAI: GPT Audio"
-        },
-        {
-          "id": "azure/gpt-audio-1.5",
-          "in": 2.5,
-          "out": 10.0,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/gpt-audio-1.5-2026-02-23",
-          "in": 2.5,
-          "out": 10.0,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/gpt-audio-2025-08-28",
-          "in": 2.5,
-          "out": 10.0,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/us/gpt-6-sol",
-          "in": 2.2,
-          "out": 11.0,
-          "cache": 0.22,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Sol"
-        },
-        {
-          "id": "azure/us/gpt-6.1-sol",
-          "in": 2.2,
-          "out": 11.0,
-          "cache": 0.11,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6.1 Sol"
-        },
-        {
-          "id": "azure/eu/gpt-4o-2024-08-06",
-          "in": 2.75,
-          "out": 11.0,
-          "cache": 1.375,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-08-06)"
-        },
-        {
-          "id": "azure/eu/gpt-4o-2024-11-20",
-          "in": 2.75,
-          "out": 11.0,
-          "cache": 1.375,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-11-20)"
-        },
-        {
-          "id": "azure/us/gpt-4o-2024-08-06",
-          "in": 2.75,
-          "out": 11.0,
-          "cache": 1.375,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-08-06)"
-        },
-        {
-          "id": "azure/us/gpt-4o-2024-11-20",
-          "in": 2.75,
-          "out": 11.0,
-          "cache": 1.375,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-11-20)"
-        },
-        {
-          "id": "azure/gpt-5.6-terra",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.6 Terra"
-        },
-        {
-          "id": "azure/gpt-5.6-terra-2026-07-09",
-          "in": 2.0,
-          "out": 12.0,
-          "cache": 0.2,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/apac/gpt-6.1-sol",
-          "in": 2.4,
-          "out": 12.0,
-          "cache": 0.12,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6.1 Sol"
-        },
-        {
-          "id": "azure/eu/gpt-6-sol",
-          "in": 2.4,
-          "out": 12.0,
-          "cache": 0.24,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Sol"
-        },
-        {
-          "id": "azure/eu/gpt-6.1-sol",
-          "in": 2.4,
-          "out": 12.0,
-          "cache": 0.12,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6.1 Sol"
-        },
-        {
-          "id": "azure/computer-use-preview",
-          "in": 3.0,
-          "out": 12.0,
-          "ctx": 8192
-        },
-        {
-          "id": "azure/eu/gpt-5.6-terra",
-          "in": 2.2,
-          "out": 13.2,
-          "cache": 0.22,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.6 Terra"
-        },
-        {
-          "id": "azure/us/gpt-5.6-terra",
-          "in": 2.2,
-          "out": 13.2,
-          "cache": 0.22,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.6 Terra"
-        },
-        {
-          "id": "azure/us-gov/gpt-5.1",
-          "in": 1.7188,
-          "out": 13.75,
-          "cache": 0.1719,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5.1"
-        },
-        {
-          "id": "azure/gpt-5.2",
-          "in": 1.75,
-          "out": 14.0,
-          "cache": 0.175,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5.2"
-        },
-        {
-          "id": "azure/gpt-5.2-2025-12-11",
-          "in": 1.75,
-          "out": 14.0,
-          "cache": 0.175,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/gpt-5.2-chat",
-          "in": 1.75,
-          "out": 14.0,
-          "cache": 0.175,
-          "ctx": 111616,
-          "name": "OpenAI: GPT-5.2 Chat"
-        },
-        {
-          "id": "azure/gpt-5.3-chat",
-          "in": 1.75,
-          "out": 14.0,
-          "cache": 0.175,
-          "ctx": 111616
-        },
-        {
-          "id": "azure/eu/computer-use-preview",
-          "in": 3.3,
-          "out": 13.2,
-          "ctx": null
-        },
-        {
-          "id": "azure/us/computer-use-preview",
-          "in": 3.3,
-          "out": 13.2,
-          "ctx": null
-        },
-        {
-          "id": "azure/eu/gpt-5.2",
-          "in": 1.925,
-          "out": 15.4,
-          "cache": 0.1925,
-          "ctx": null,
-          "name": "OpenAI: GPT-5.2"
-        },
-        {
-          "id": "azure/eu/gpt-5.2-chat",
-          "in": 1.925,
-          "out": 15.4,
-          "cache": 0.1925,
-          "ctx": 111616,
-          "name": "OpenAI: GPT-5.2 Chat"
-        },
-        {
-          "id": "azure/eu/gpt-5.3-chat",
-          "in": 1.925,
-          "out": 15.4,
-          "cache": 0.1925,
-          "ctx": 111616
-        },
-        {
-          "id": "azure/us/gpt-5.2",
-          "in": 1.925,
-          "out": 15.4,
-          "cache": 0.1925,
-          "ctx": null,
-          "name": "OpenAI: GPT-5.2"
-        },
-        {
-          "id": "azure/us/gpt-5.2-chat",
-          "in": 1.925,
-          "out": 15.4,
-          "cache": 0.1925,
-          "ctx": 111616,
-          "name": "OpenAI: GPT-5.2 Chat"
-        },
-        {
-          "id": "azure/us/gpt-5.3-chat",
-          "in": 1.925,
-          "out": 15.4,
-          "cache": 0.1925,
-          "ctx": 111616
-        },
-        {
-          "id": "azure/gpt-5.4",
-          "in": 2.5,
-          "out": 15.0,
-          "cache": 0.25,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.4"
-        },
-        {
-          "id": "azure/gpt-5.4-2026-03-05",
-          "in": 2.5,
-          "out": 15.0,
-          "cache": 0.25,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/command-r-plus",
-          "in": 3.0,
-          "out": 15.0,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/eu/gpt-5.4",
-          "in": 2.75,
-          "out": 16.5,
-          "cache": 0.275,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.4"
-        },
-        {
-          "id": "azure/eu/gpt-5.4-2026-03-05",
-          "in": 2.75,
-          "out": 16.5,
-          "cache": 0.275,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/us/gpt-5.4",
-          "in": 2.75,
-          "out": 16.5,
-          "cache": 0.275,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.4"
-        },
-        {
-          "id": "azure/us/gpt-5.4-2026-03-05",
-          "in": 2.75,
-          "out": 16.5,
-          "cache": 0.275,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/gpt-4o-2024-05-13",
-          "in": 5.0,
-          "out": 15.0,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-05-13)"
-        },
-        {
-          "id": "azure/eu/gpt-4o-2024-05-13",
-          "in": 5.5,
-          "out": 16.5,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-05-13)"
-        },
-        {
-          "id": "azure/us/gpt-4o-2024-05-13",
-          "in": 5.5,
-          "out": 16.5,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4o (2024-05-13)"
-        },
-        {
-          "id": "azure/gpt-5.6",
-          "in": 4.0,
-          "out": 20.0,
-          "cache": 0.4,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/gpt-5.6-sol",
-          "in": 4.0,
-          "out": 20.0,
-          "cache": 0.4,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.6 Sol"
-        },
-        {
-          "id": "azure/gpt-5.6-sol-2026-07-09",
-          "in": 4.0,
-          "out": 20.0,
-          "cache": 0.4,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/eu/gpt-5.6",
-          "in": 4.4,
-          "out": 22.0,
-          "cache": 0.44,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/eu/gpt-5.6-sol",
-          "in": 4.4,
-          "out": 22.0,
-          "cache": 0.44,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.6 Sol"
-        },
-        {
-          "id": "azure/us/gpt-5.6",
-          "in": 4.4,
-          "out": 22.0,
-          "cache": 0.44,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/us/gpt-5.6-sol",
-          "in": 4.4,
-          "out": 22.0,
-          "cache": 0.44,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.6 Sol"
-        },
-        {
-          "id": "azure/mistral-large-2402",
-          "in": 8.0,
-          "out": 24.0,
-          "ctx": 32000
-        },
-        {
-          "id": "azure/mistral-large-latest",
-          "in": 8.0,
-          "out": 24.0,
-          "ctx": 32000
-        },
-        {
-          "id": "azure/chat-latest",
-          "in": 5.0,
-          "out": 30.0,
-          "cache": 0.5,
-          "ctx": 272000
-        },
-        {
-          "id": "azure/gpt-5.5",
-          "in": 5.0,
-          "out": 30.0,
-          "cache": 0.5,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.5"
-        },
-        {
-          "id": "azure/gpt-5.5-2026-04-23",
-          "in": 5.0,
-          "out": 30.0,
-          "cache": 0.5,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/gpt-5.5-2026-04-24",
-          "in": 5.0,
-          "out": 30.0,
-          "cache": 0.5,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/gpt-chat-latest",
-          "in": 5.0,
-          "out": 30.0,
-          "cache": 0.5,
-          "ctx": 272000,
-          "name": "OpenAI: GPT Chat Latest"
-        },
-        {
-          "id": "azure/eu/gpt-5.5",
-          "in": 5.5,
-          "out": 33.0,
-          "cache": 0.55,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.5"
-        },
-        {
-          "id": "azure/eu/gpt-5.5-2026-04-23",
-          "in": 5.5,
-          "out": 33.0,
-          "cache": 0.55,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/eu/gpt-5.5-2026-04-24",
-          "in": 5.5,
-          "out": 33.0,
-          "cache": 0.55,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/us/gpt-5.5",
-          "in": 5.5,
-          "out": 33.0,
-          "cache": 0.55,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.5"
-        },
-        {
-          "id": "azure/us/gpt-5.5-2026-04-23",
-          "in": 5.5,
-          "out": 33.0,
-          "cache": 0.55,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/us/gpt-5.5-2026-04-24",
-          "in": 5.5,
-          "out": 33.0,
-          "cache": 0.55,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/us/gpt-chat-latest",
-          "in": 5.5,
-          "out": 33.0,
-          "cache": 0.55,
-          "ctx": 272000,
-          "name": "OpenAI: GPT Chat Latest"
-        },
-        {
-          "id": "azure/gpt-4-0125-preview",
-          "in": 10.0,
-          "out": 30.0,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/gpt-4-1106-preview",
-          "in": 10.0,
-          "out": 30.0,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/gpt-4-turbo",
-          "in": 11.0,
-          "out": 33.0,
-          "ctx": 128000,
-          "name": "OpenAI: GPT-4 Turbo"
-        },
-        {
-          "id": "azure/gpt-4-turbo-2024-04-09",
-          "in": 11.0,
-          "out": 33.0,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/gpt-4-turbo-vision-preview",
-          "in": 11.0,
-          "out": 33.0,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/eu/o3-deep-research",
-          "in": 11.0,
-          "out": 44.0,
-          "cache": 2.75,
-          "ctx": null
-        },
-        {
-          "id": "azure/us/o3-deep-research",
-          "in": 11.0,
-          "out": 44.0,
-          "cache": 2.75,
-          "ctx": null
-        },
-        {
-          "id": "azure/gpt-6-astra",
-          "in": 10.0,
-          "out": 50.0,
-          "cache": 1.0,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Astra"
-        },
-        {
-          "id": "azure/gpt-6-astra-2026-09-03",
-          "in": 10.0,
-          "out": 50.0,
-          "cache": 1.0,
-          "ctx": 922000
-        },
-        {
-          "id": "azure/us/gpt-6-astra",
-          "in": 11.0,
-          "out": 55.0,
-          "cache": 1.1,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Astra"
-        },
-        {
-          "id": "azure/eu/gpt-6-astra",
-          "in": 12.0,
-          "out": 60.0,
-          "cache": 1.2,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Astra"
-        },
-        {
-          "id": "azure/o1",
-          "in": 15.0,
-          "out": 60.0,
-          "cache": 7.5,
-          "ctx": 200000,
-          "name": "OpenAI: o1"
-        },
-        {
-          "id": "azure/o1-2024-12-17",
-          "in": 15.0,
-          "out": 60.0,
-          "cache": 7.5,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/eu/o1-2024-12-17",
-          "in": 16.5,
-          "out": 66.0,
-          "cache": 8.25,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/eu/o1-preview",
-          "in": 16.5,
-          "out": 66.0,
-          "cache": 8.25,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/us/o1-2024-12-17",
-          "in": 16.5,
-          "out": 66.0,
-          "cache": 8.25,
-          "ctx": 200000
-        },
-        {
-          "id": "azure/us/o1-preview",
-          "in": 16.5,
-          "out": 66.0,
-          "cache": 8.25,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/gpt-4",
-          "in": 30.0,
-          "out": 60.0,
-          "ctx": 8192,
-          "name": "OpenAI: GPT-4"
-        },
-        {
-          "id": "azure/gpt-4-0613",
-          "in": 30.0,
-          "out": 60.0,
-          "ctx": 8192
-        },
-        {
-          "id": "azure/gpt-4-32k",
-          "in": 60.0,
-          "out": 120.0,
-          "ctx": 32768
-        },
-        {
-          "id": "azure/gpt-4-32k-0613",
-          "in": 60.0,
-          "out": 120.0,
-          "ctx": 32768
-        },
-        {
-          "id": "azure/gpt-4.5-preview",
-          "in": 75.0,
-          "out": 150.0,
-          "cache": 37.5,
-          "ctx": 128000
-        }
-      ]
-    },
-    {
       "id": "google-vertex-ai",
       "name": "Google Vertex AI",
       "kind": "cloud",
@@ -6836,6 +6932,13 @@
           "in": 0.25,
           "out": 1.0,
           "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/MAI-Code-1.1-Flash",
+          "in": 0.2,
+          "out": 1.2,
+          "cache": 0.02,
+          "ctx": 256000
         },
         {
           "id": "azure_ai/Llama-3.3-70B-Instruct",
@@ -10013,6 +10116,13 @@
           "ctx": 163840
         },
         {
+          "id": "fireworks_ai/accounts/fireworks/models/deepseek-v4p1-flash-1017-us",
+          "in": 0.45,
+          "out": 1.8,
+          "cache": 0.009,
+          "ctx": 1048576
+        },
+        {
           "id": "fireworks_ai/accounts/fireworks/models/qwen3-coder-480b-a35b-instruct",
           "in": 0.45,
           "out": 1.8,
@@ -12554,6 +12664,13 @@
           "ctx": null
         },
         {
+          "id": "minimaxai/minimax-m3.1-flash",
+          "name": "MiniMax: MiniMax M3.1 Flash",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
           "id": "mistralai/codestral-22b-instruct-v0.1",
           "name": "mistralai/codestral-22b-instruct-v0.1",
           "in": null,
@@ -12743,6 +12860,20 @@
           "ctx": null
         },
         {
+          "id": "nvidia/nemotron-3.5-embed-1b",
+          "name": "nvidia/nemotron-3.5-embed-1b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3.5-embed-8b",
+          "name": "nvidia/nemotron-3.5-embed-8b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
           "id": "nvidia/nemotron-3.5-lightning-30b-a3b",
           "name": "nvidia/nemotron-3.5-lightning-30b-a3b",
           "in": null,
@@ -12912,7 +13043,7 @@
         }
       ],
       "free_tier": true,
-      "edge_rtt_ms": 169
+      "edge_rtt_ms": 170
     },
     {
       "id": "together-ai",
@@ -14181,6 +14312,13 @@
           "ctx": null
         },
         {
+          "id": "baseten/reflection/Beam-1.0",
+          "in": 0.4,
+          "out": 1.2,
+          "cache": 0.04,
+          "ctx": 1048576
+        },
+        {
           "id": "baseten/thinkingmachines/inkling-small",
           "in": 0.5,
           "out": 1.2,
@@ -14303,13 +14441,6 @@
           "cache": 0.15,
           "ctx": 1048576,
           "name": "Meta: Muse Spark Open"
-        },
-        {
-          "id": "baseten/reflection/Beam-1.0",
-          "in": 1.3,
-          "out": 4.3,
-          "cache": 0.13,
-          "ctx": 1048576
         },
         {
           "id": "baseten/zai-org/GLM-5.2",
@@ -16186,14 +16317,6 @@
           "free": true
         },
         {
-          "id": "minimax/minimax-m3.1-flash:free",
-          "name": "MiniMax: MiniMax M3.1 Flash (free)",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 1000000,
-          "free": true
-        },
-        {
           "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
           "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
           "in": 0.0,
@@ -16260,6 +16383,14 @@
         {
           "id": "poolside/laguna-xs-2.1:free",
           "name": "Poolside: Laguna XS 2.1 (free)",
+          "in": 0.0,
+          "out": 0.0,
+          "ctx": 262144,
+          "free": true
+        },
+        {
+          "id": "recursive/flint-v1.0:free",
+          "name": "Recursive: Flint (free)",
           "in": 0.0,
           "out": 0.0,
           "ctx": 262144,
@@ -16342,14 +16473,6 @@
           "ctx": 131072
         },
         {
-          "id": "~deepseek/deepseek-v4-flash-latest",
-          "name": "DeepSeek: DeepSeek V4 Flash Latest",
-          "in": 0.0039,
-          "out": 0.12,
-          "cache": 0.0034,
-          "ctx": 1048576
-        },
-        {
           "id": "nex-agi/nex-n2.5-mini",
           "name": "Nex AGI: Nex-N2.5-Mini",
           "in": 0.025,
@@ -16417,14 +16540,6 @@
           "ctx": 128000
         },
         {
-          "id": "deepseek/deepseek-v4.1-flash",
-          "name": "DeepSeek: DeepSeek V4.1 Flash",
-          "in": 0.056,
-          "out": 0.12,
-          "cache": 0.0016,
-          "ctx": 1048576
-        },
-        {
           "id": "inference-net/schematron-v2-turbo",
           "name": "Inference.net: Schematron V2 Turbo",
           "in": 0.03,
@@ -16463,22 +16578,6 @@
           "ctx": 260000
         },
         {
-          "id": "z-ai/glm-5.3-flash",
-          "name": "Z.ai: GLM 5.3 Flash",
-          "in": 0.0375,
-          "out": 0.16,
-          "cache": 0.006,
-          "ctx": 1048576
-        },
-        {
-          "id": "~z-ai/glm-flash-latest",
-          "name": "Z.ai: GLM Flash Latest",
-          "in": 0.0375,
-          "out": 0.16,
-          "cache": 0.006,
-          "ctx": 1048576
-        },
-        {
           "id": "deepseek/deepseek-v4.1-flash:batch",
           "name": "DeepSeek: DeepSeek V4.1 Flash (batch)",
           "in": 0.05,
@@ -16509,11 +16608,43 @@
           "ctx": 16384
         },
         {
+          "id": "z-ai/glm-5.3-flash",
+          "name": "Z.ai: GLM 5.3 Flash",
+          "in": 0.0052,
+          "out": 0.1985,
+          "cache": 0.0052,
+          "ctx": 1048576
+        },
+        {
+          "id": "~z-ai/glm-flash-latest",
+          "name": "Z.ai: GLM Flash Latest",
+          "in": 0.0052,
+          "out": 0.1985,
+          "cache": 0.0052,
+          "ctx": 1048576
+        },
+        {
+          "id": "~deepseek/deepseek-v4-flash-latest",
+          "name": "DeepSeek: DeepSeek V4 Flash Latest",
+          "in": 0.0475,
+          "out": 0.1568,
+          "cache": 0.028,
+          "ctx": 1048576
+        },
+        {
           "id": "microsoft/phi-4",
           "name": "Microsoft: Phi 4",
           "in": 0.07,
           "out": 0.14,
           "ctx": 16384
+        },
+        {
+          "id": "qwen/qwen3.5-9b",
+          "name": "Qwen: Qwen3.5-9B",
+          "in": 0.08,
+          "out": 0.13,
+          "cache": 0.04,
+          "ctx": 262144
         },
         {
           "id": "tencent/hy-mt2-1.8b",
@@ -16554,27 +16685,12 @@
           "ctx": 131072
         },
         {
-          "id": "google/gemini-2.5-flash-lite:batch",
-          "name": "Google: Gemini 2.5 Flash Lite (batch)",
-          "in": 0.05,
-          "out": 0.2,
-          "cache": 0.01,
-          "ctx": 1048576
-        },
-        {
           "id": "openai/gpt-4.1-nano:batch",
           "name": "OpenAI: GPT-4.1 Nano (batch)",
           "in": 0.05,
           "out": 0.2,
           "cache": 0.0125,
           "ctx": 1047576
-        },
-        {
-          "id": "qwen/qwen3.5-9b",
-          "name": "Qwen: Qwen3.5-9B",
-          "in": 0.1,
-          "out": 0.15,
-          "ctx": 256000
         },
         {
           "id": "upstage/solar-mini4",
@@ -16607,6 +16723,13 @@
           "out": 0.182,
           "cache": 0.0182,
           "ctx": 1048575
+        },
+        {
+          "id": "mistralai/mistral-small-3.2-24b-instruct",
+          "name": "Mistral: Mistral Small 3.2 24B",
+          "in": 0.075,
+          "out": 0.2,
+          "ctx": 128000
         },
         {
           "id": "inference-net/schematron-v2-small",
@@ -16732,11 +16855,12 @@
           "ctx": 1000000
         },
         {
-          "id": "mistralai/mistral-small-3.2-24b-instruct",
-          "name": "Mistral: Mistral Small 3.2 24B",
-          "in": 0.0938,
-          "out": 0.25,
-          "ctx": 256000
+          "id": "google/gemma-4-26b-a4b-it",
+          "name": "Google: Gemma 4 26B A4B ",
+          "in": 0.0765,
+          "out": 0.255,
+          "cache": 0.0425,
+          "ctx": 262144
         },
         {
           "id": "qwen/qwen3-coder-30b-a3b-instruct",
@@ -16744,6 +16868,14 @@
           "in": 0.07,
           "out": 0.28,
           "ctx": 262144
+        },
+        {
+          "id": "xiaomi/mimo-v2.5",
+          "name": "Xiaomi: MiMo-V2.5",
+          "in": 0.119,
+          "out": 0.238,
+          "cache": 0.0026,
+          "ctx": 1050000
         },
         {
           "id": "meta-llama/llama-guard-4-12b",
@@ -16819,14 +16951,6 @@
           "ctx": 80000
         },
         {
-          "id": "google/gemma-4-26b-a4b-it",
-          "name": "Google: Gemma 4 26B A4B ",
-          "in": 0.09,
-          "out": 0.3,
-          "cache": 0.05,
-          "ctx": 262144
-        },
-        {
           "id": "qwen/qwen3-30b-a3b-instruct-2507",
           "name": "Qwen: Qwen3 30B A3B Instruct 2507",
           "in": 0.09,
@@ -16876,14 +17000,6 @@
           "in": 0.1,
           "out": 0.32,
           "ctx": 131072
-        },
-        {
-          "id": "xiaomi/mimo-v2.5",
-          "name": "Xiaomi: MiMo-V2.5",
-          "in": 0.14,
-          "out": 0.28,
-          "cache": 0.0028,
-          "ctx": 1048576
         },
         {
           "id": "xiaomi/mimo-v2.6-flash",
@@ -16946,13 +17062,6 @@
           "out": 0.4,
           "cache": 0.025,
           "ctx": 1047576
-        },
-        {
-          "id": "nvidia/nemotron-3-super-120b-a12b",
-          "name": "NVIDIA: Nemotron 3 Super",
-          "in": 0.08,
-          "out": 0.45,
-          "ctx": 262144
         },
         {
           "id": "~deepseek/deepseek-flash-latest",
@@ -17125,20 +17234,20 @@
           "ctx": 128000
         },
         {
-          "id": "deepseek/deepseek-v4.1-flash-1017",
-          "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
-          "in": 0.15,
-          "out": 0.6,
-          "cache": 0.003,
-          "ctx": 1048576
-        },
-        {
           "id": "liquid/lfm-2.5-24b-a2b",
           "name": "LiquidAI: LFM2.5-24B-A2B",
           "in": 0.05,
           "out": 0.7,
           "cache": 0.025,
           "ctx": 128000
+        },
+        {
+          "id": "minimax/minimax-m3.1-flash",
+          "name": "MiniMax: MiniMax M3.1 Flash",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.015,
+          "ctx": 1048576
         },
         {
           "id": "mistralai/mistral-small-2603",
@@ -17241,6 +17350,14 @@
           "ctx": 1024000
         },
         {
+          "id": "deepseek/deepseek-v4.1-flash",
+          "name": "DeepSeek: DeepSeek V4.1 Flash",
+          "in": 0.165,
+          "out": 0.66,
+          "cache": 0.006,
+          "ctx": 1048576
+        },
+        {
           "id": "meta-llama/llama-4-maverick",
           "name": "Meta: Llama 4 Maverick",
           "in": 0.1875,
@@ -17270,6 +17387,14 @@
           "in": 0.351,
           "out": 0.555,
           "ctx": 128000
+        },
+        {
+          "id": "xiaomi/mimo-v2.5-pro",
+          "name": "Xiaomi: MiMo-V2.5-Pro",
+          "in": 0.3045,
+          "out": 0.609,
+          "cache": 0.0028,
+          "ctx": 1050000
         },
         {
           "id": "qwen/qwen3-coder-next",
@@ -17373,19 +17498,19 @@
           "ctx": 400000
         },
         {
+          "id": "qwen/qwen3.5-35b-a3b",
+          "name": "Qwen: Qwen3.5-35B-A3B",
+          "in": 0.14,
+          "out": 1.0,
+          "cache": 0.05,
+          "ctx": 262144
+        },
+        {
           "id": "mancer/weaver",
           "name": "Mancer: Weaver (alpha)",
           "in": 0.4,
           "out": 0.75,
           "ctx": 8000
-        },
-        {
-          "id": "qwen/qwen3.5-35b-a3b",
-          "name": "Qwen: Qwen3.5-35B-A3B",
-          "in": 0.15,
-          "out": 1.0,
-          "cache": 0.05,
-          "ctx": 262144
         },
         {
           "id": "qwen/qwen3.7-plus:batch",
@@ -17450,6 +17575,14 @@
           "ctx": 198000
         },
         {
+          "id": "reflection/beam-1.0-501b-a23b",
+          "name": "Reflection: Beam 1.0 501B A23B",
+          "in": 0.25,
+          "out": 1.0,
+          "cache": 0.05,
+          "ctx": 1048576
+        },
+        {
           "id": "deepseek/deepseek-v3.1-terminus",
           "name": "DeepSeek: DeepSeek V3.1 Terminus",
           "in": 0.27,
@@ -17500,22 +17633,6 @@
           "ctx": 262144
         },
         {
-          "id": "reflection/beam-1.0-501b-a23b",
-          "name": "Reflection: Beam 1.0 501B A23B",
-          "in": 0.3,
-          "out": 1.0,
-          "cache": 0.04,
-          "ctx": 1048576
-        },
-        {
-          "id": "xiaomi/mimo-v2.5-pro",
-          "name": "Xiaomi: MiMo-V2.5-Pro",
-          "in": 0.435,
-          "out": 0.87,
-          "cache": 0.0036,
-          "ctx": 1048576
-        },
-        {
           "id": "xiaomi/mimo-v2.6-pro",
           "name": "Xiaomi: MiMo-V2.6-Pro",
           "in": 0.435,
@@ -17560,14 +17677,6 @@
           "out": 1.35,
           "cache": 0.018,
           "ctx": 262144
-        },
-        {
-          "id": "google/gemini-2.5-flash:batch",
-          "name": "Google: Gemini 2.5 Flash (batch)",
-          "in": 0.15,
-          "out": 1.25,
-          "cache": 0.03,
-          "ctx": 1048576
         },
         {
           "id": "google/gemini-3.5-flash-lite:batch",
@@ -17630,6 +17739,14 @@
           "in": 0.079,
           "out": 1.4,
           "cache": 0.078,
+          "ctx": 1048576
+        },
+        {
+          "id": "deepseek/deepseek-v4.1-flash-1017",
+          "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
+          "in": 0.3,
+          "out": 1.2,
+          "cache": 0.006,
           "ctx": 1048576
         },
         {
@@ -17945,13 +18062,6 @@
           "ctx": 1000000
         },
         {
-          "id": "qwen/qwen3.5-122b-a10b",
-          "name": "Qwen: Qwen3.5-122B-A10B",
-          "in": 0.26,
-          "out": 2.08,
-          "ctx": 262144
-        },
-        {
           "id": "mistralai/devstral-2512",
           "name": "Mistral: Devstral 2 2512",
           "in": 0.4,
@@ -18023,28 +18133,12 @@
           "ctx": 204800
         },
         {
-          "id": "z-ai/glm-5",
-          "name": "Z.ai: GLM 5",
-          "in": 0.6,
-          "out": 1.92,
-          "cache": 0.12,
-          "ctx": 198000
-        },
-        {
           "id": "openai/gpt-5.4-mini:batch",
           "name": "OpenAI: GPT-5.4 Mini (batch)",
           "in": 0.375,
           "out": 2.25,
           "cache": 0.0375,
           "ctx": 400000
-        },
-        {
-          "id": "deepseek/deepseek-v4-pro-0813",
-          "name": "DeepSeek: DeepSeek V4 Pro 0813",
-          "in": 0.66,
-          "out": 1.98,
-          "cache": 0.022,
-          "ctx": 1024000
         },
         {
           "id": "deepseek/deepseek-r1-0528",
@@ -18055,10 +18149,11 @@
           "ctx": 163840
         },
         {
-          "id": "qwen/qwen3.5-397b-a17b",
-          "name": "Qwen: Qwen3.5 397B A17B",
-          "in": 0.39,
-          "out": 2.34,
+          "id": "nvidia/nemotron-3-super-120b-a12b",
+          "name": "NVIDIA: Nemotron 3 Super",
+          "in": 0.3,
+          "out": 2.4,
+          "cache": 0.15,
           "ctx": 262144
         },
         {
@@ -18091,14 +18186,6 @@
           "out": 2.2,
           "cache": 0.11,
           "ctx": 204800
-        },
-        {
-          "id": "mistralai/mistral-large-4-0",
-          "name": "Mistral: Mistral Large 4",
-          "in": 0.68,
-          "out": 2.09,
-          "cache": 0.07,
-          "ctx": 1048576
         },
         {
           "id": "amazon/nova-2-lite-v1",
@@ -18237,14 +18324,6 @@
           "ctx": 256000
         },
         {
-          "id": "z-ai/glm-5.2",
-          "name": "Z.ai: GLM 5.2",
-          "in": 0.62,
-          "out": 2.42,
-          "cache": 0.14,
-          "ctx": 1048576
-        },
-        {
           "id": "moonshotai/kimi-k2-0905",
           "name": "MoonshotAI: Kimi K2 0905",
           "in": 0.6,
@@ -18309,6 +18388,13 @@
           "in": 0.6,
           "out": 3.0,
           "cache": 0.06,
+          "ctx": 262144
+        },
+        {
+          "id": "qwen/qwen3.5-122b-a10b",
+          "name": "Qwen: Qwen3.5-122B-A10B",
+          "in": 0.4,
+          "out": 3.2,
           "ctx": 262144
         },
         {
@@ -18388,14 +18474,6 @@
           "ctx": 1048576
         },
         {
-          "id": "z-ai/glm-5.1",
-          "name": "Z.ai: GLM 5.1",
-          "in": 0.966,
-          "out": 3.036,
-          "cache": 0.1794,
-          "ctx": 200000
-        },
-        {
           "id": "moonshotai/kimi-k2.7-code",
           "name": "MoonshotAI: Kimi K2.7 Code",
           "in": 0.6712,
@@ -18410,6 +18488,22 @@
           "out": 3.41,
           "cache": 0.15,
           "ctx": 262144
+        },
+        {
+          "id": "qwen/qwen3.5-397b-a17b",
+          "name": "Qwen: Qwen3.5 397B A17B",
+          "in": 0.5,
+          "out": 3.6,
+          "cache": 0.3,
+          "ctx": 262144
+        },
+        {
+          "id": "z-ai/glm-5",
+          "name": "Z.ai: GLM 5",
+          "in": 1.0,
+          "out": 3.2,
+          "cache": 0.2,
+          "ctx": 202752
         },
         {
           "id": "google/gemini-3.6-flash",
@@ -18531,6 +18625,14 @@
           "ctx": 400000
         },
         {
+          "id": "deepseek/deepseek-v4-pro-0813",
+          "name": "DeepSeek: DeepSeek V4 Pro 0813",
+          "in": 1.32,
+          "out": 3.96,
+          "cache": 0.044,
+          "ctx": 1048576
+        },
+        {
           "id": "meta/muse-spark-1.1",
           "name": "Meta: Muse Spark 1.1",
           "in": 1.25,
@@ -18595,11 +18697,11 @@
           "ctx": 200000
         },
         {
-          "id": "google/gemini-2.5-pro:batch",
-          "name": "Google: Gemini 2.5 Pro (batch)",
-          "in": 0.625,
-          "out": 5.0,
-          "cache": 0.125,
+          "id": "mistralai/mistral-large-4-0",
+          "name": "Mistral: Mistral Large 4",
+          "in": 1.36,
+          "out": 4.18,
+          "cache": 0.14,
           "ctx": 1048576
         },
         {
@@ -18617,6 +18719,14 @@
           "out": 5.0,
           "cache": 0.0625,
           "ctx": 400000
+        },
+        {
+          "id": "z-ai/glm-5.1",
+          "name": "Z.ai: GLM 5.1",
+          "in": 1.4,
+          "out": 4.4,
+          "cache": 0.26,
+          "ctx": 202752
         },
         {
           "id": "qwen/qwen3.7-max",
@@ -18736,6 +18846,14 @@
           "ctx": 1050000
         },
         {
+          "id": "z-ai/glm-5.2",
+          "name": "Z.ai: GLM 5.2",
+          "in": 0.0341,
+          "out": 7.0,
+          "cache": 0.033,
+          "ctx": 1048576
+        },
+        {
           "id": "anthracite-org/magnum-v4-72b",
           "name": "Magnum v4 72B",
           "in": 2.5,
@@ -18780,7 +18898,7 @@
           "in": 2.0,
           "out": 6.0,
           "cache": 0.25,
-          "ctx": 1000000
+          "ctx": 1010000
         },
         {
           "id": "qwen/qwen3.8-max-0902",
@@ -21187,7 +21305,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 787
+      "edge_rtt_ms": 247
     },
     {
       "id": "poe",
@@ -21209,6 +21327,13 @@
           "ctx": 1000000
         },
         {
+          "id": "gpt-oss-20b",
+          "name": "OpenAI: gpt-oss-20b",
+          "in": 0.0303,
+          "out": 0.1414,
+          "ctx": 131072
+        },
+        {
           "id": "nova-micro-1.0",
           "name": "nova-micro-1.0",
           "in": 0.0404,
@@ -21223,11 +21348,11 @@
           "ctx": 262144
         },
         {
-          "id": "ling-3-0-flash",
-          "name": "inclusionAI: Ling 3.0 Flash",
+          "id": "ling-3.0-flash-fin",
+          "name": "ling-3.0-flash-fin",
           "in": 0.0606,
           "out": 0.1818,
-          "ctx": null
+          "ctx": 256000
         },
         {
           "id": "glm-5.3-flash-el",
@@ -21265,20 +21390,6 @@
           "ctx": 400000
         },
         {
-          "id": "deepseek-v4-0731",
-          "name": "deepseek-v4-0731",
-          "in": 0.1414,
-          "out": 0.2828,
-          "ctx": 1000000
-        },
-        {
-          "id": "mimo-v2.6-flash",
-          "name": "Xiaomi: MiMo-V2.6-Flash",
-          "in": 0.1414,
-          "out": 0.2828,
-          "ctx": null
-        },
-        {
           "id": "mimo-v2.6-flash-el",
           "name": "mimo-v2.6-flash-el",
           "in": 0.1414,
@@ -21286,11 +21397,11 @@
           "ctx": 1048576
         },
         {
-          "id": "gpt-4.1-nano",
-          "name": "OpenAI: GPT-4.1 Nano",
-          "in": 0.0909,
-          "out": 0.3636,
-          "ctx": 1047576
+          "id": "mercury-3-vercel",
+          "name": "mercury-3-vercel",
+          "in": 0.101,
+          "out": 0.3535,
+          "ctx": 1000000
         },
         {
           "id": "qwen3.5-flash-el",
@@ -21300,30 +21411,16 @@
           "ctx": 1000000
         },
         {
-          "id": "glm-4.7-flash-n",
-          "name": "glm-4.7-flash-n",
+          "id": "glm-4.7-flash",
+          "name": "Z.ai: GLM 4.7 Flash",
           "in": 0.0707,
           "out": 0.404,
           "ctx": 200000
         },
         {
-          "id": "xiaomimimo-mimo-v2-5",
-          "name": "xiaomimimo-mimo-v2-5",
-          "in": 0.1697,
-          "out": 0.3394,
-          "ctx": null
-        },
-        {
-          "id": "gemma-4-26b-a4b",
-          "name": "Gemma 4 26B A4B",
-          "in": 0.1313,
-          "out": 0.404,
-          "ctx": null
-        },
-        {
-          "id": "gemma-4-31b-n",
-          "name": "gemma-4-31b-n",
-          "in": 0.1414,
+          "id": "gemma-4-31b-vercel",
+          "name": "gemma-4-31b-vercel",
+          "in": 0.1515,
           "out": 0.404,
           "ctx": 262144
         },
@@ -21333,6 +21430,13 @@
           "in": 0.101,
           "out": 0.5051,
           "ctx": 1000000
+        },
+        {
+          "id": "qwen3.8-flash",
+          "name": "Qwen: Qwen3.8 Flash",
+          "in": 0.1515,
+          "out": 0.4747,
+          "ctx": 991000
         },
         {
           "id": "seed-2.0-mini",
@@ -21384,6 +21488,13 @@
           "ctx": 262144
         },
         {
+          "id": "gemma-4-26b-a4b",
+          "name": "Gemma 4 26B A4B",
+          "in": 0.1515,
+          "out": 0.6061,
+          "ctx": 262144
+        },
+        {
           "id": "gpt-oss-120b",
           "name": "OpenAI: gpt-oss-120b",
           "in": 0.1515,
@@ -21412,18 +21523,11 @@
           "ctx": 128000
         },
         {
-          "id": "glm-4.6v-n",
-          "name": "glm-4.6v-n",
-          "in": 0.303,
-          "out": 0.9091,
-          "ctx": null
-        },
-        {
-          "id": "ling-3.1-flash",
-          "name": "inclusionAI: Ling 3.1 Flash",
-          "in": 0.303,
-          "out": 0.9091,
-          "ctx": null
+          "id": "llama-4-maverick",
+          "name": "Meta: Llama 4 Maverick",
+          "in": 0.2424,
+          "out": 0.9798,
+          "ctx": 128000
         },
         {
           "id": "gpt-5.4-nano",
@@ -21431,13 +21535,6 @@
           "in": 0.1818,
           "out": 1.1364,
           "ctx": 400000
-        },
-        {
-          "id": "mimo-v2.6-pro",
-          "name": "Xiaomi: MiMo-V2.6-Pro",
-          "in": 0.4394,
-          "out": 0.8788,
-          "ctx": null
         },
         {
           "id": "mimo-v2.6-pro-el",
@@ -21454,18 +21551,18 @@
           "ctx": 262144
         },
         {
-          "id": "deepseek-v4.1-1017",
-          "name": "deepseek-v4.1-1017",
-          "in": 0.303,
-          "out": 1.2121,
-          "ctx": null
+          "id": "llama-3.3-70b",
+          "name": "llama-3.3-70b",
+          "in": 0.7273,
+          "out": 0.7273,
+          "ctx": 128000
         },
         {
-          "id": "deepseek-v4.1-flash",
-          "name": "deepseek-v4.1-flash",
+          "id": "deepseek-v4.1-flash-1017",
+          "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
           "in": 0.303,
           "out": 1.2121,
-          "ctx": null
+          "ctx": 1048576
         },
         {
           "id": "ds-v4.1-flash-1017",
@@ -21503,25 +21600,18 @@
           "ctx": 512000
         },
         {
-          "id": "qwen3-next-80b",
-          "name": "qwen3-next-80b",
-          "in": 0.1515,
-          "out": 1.5152,
-          "ctx": null
-        },
-        {
-          "id": "qwen3-next-80b-think",
-          "name": "qwen3-next-80b-think",
-          "in": 0.1515,
-          "out": 1.5152,
-          "ctx": null
-        },
-        {
           "id": "ds-v4-flash-0731-el",
           "name": "ds-v4-flash-0731-el",
           "in": 0.4283,
           "out": 1.2848,
           "ctx": 1000000
+        },
+        {
+          "id": "qwen3-coder-next",
+          "name": "Qwen: Qwen3 Coder Next",
+          "in": 0.5051,
+          "out": 1.2121,
+          "ctx": 256000
         },
         {
           "id": "gemini-3.1-flash-lite",
@@ -21545,39 +21635,11 @@
           "ctx": 1000000
         },
         {
-          "id": "deepseek-vision-exp",
-          "name": "deepseek-vision-exp",
-          "in": 0.4444,
-          "out": 1.3333,
-          "ctx": null
-        },
-        {
-          "id": "gpt-3.5-turbo",
-          "name": "OpenAI: GPT-3.5 Turbo",
-          "in": 0.4545,
-          "out": 1.3636,
-          "ctx": 16384
-        },
-        {
-          "id": "gpt-3.5-turbo-raw",
-          "name": "gpt-3.5-turbo-raw",
-          "in": 0.4545,
-          "out": 1.3636,
-          "ctx": 4524
-        },
-        {
           "id": "gpt-4.1-mini",
           "name": "OpenAI: GPT-4.1 Mini",
           "in": 0.3636,
           "out": 1.4545,
           "ctx": 1047576
-        },
-        {
-          "id": "qwen3-vl-235b-a22b-i",
-          "name": "qwen3-vl-235b-a22b-i",
-          "in": 0.303,
-          "out": 1.5152,
-          "ctx": null
         },
         {
           "id": "gpt-5-mini",
@@ -21591,6 +21653,13 @@
           "name": "qwen3.5-plus-el",
           "in": 0.3636,
           "out": 2.2303,
+          "ctx": 1000000
+        },
+        {
+          "id": "deepseek-v4-pro-0813",
+          "name": "DeepSeek: DeepSeek V4 Pro 0813",
+          "in": 0.6667,
+          "out": 2.0,
           "ctx": 1000000
         },
         {
@@ -21620,13 +21689,6 @@
           "in": 0.3157,
           "out": 2.5253,
           "ctx": 256000
-        },
-        {
-          "id": "hy4-preview",
-          "name": "hy4-preview",
-          "in": 0.8424,
-          "out": 2.5263,
-          "ctx": null
         },
         {
           "id": "nano-banana-2",
@@ -21671,13 +21733,6 @@
           "ctx": 256000
         },
         {
-          "id": "qwen3.5-397b-a17b",
-          "name": "Qwen: Qwen3.5 397B A17B",
-          "in": 0.6061,
-          "out": 3.6364,
-          "ctx": 262144
-        },
-        {
           "id": "seed-2.0-code",
           "name": "ByteDance Seed: Seed-2.0-Code",
           "in": 0.6313,
@@ -21720,53 +21775,11 @@
           "ctx": 400000
         },
         {
-          "id": "qwen3-vl-235b-a22b-t",
-          "name": "qwen3-vl-235b-a22b-t",
-          "in": 0.9899,
-          "out": 3.9899,
-          "ctx": null
-        },
-        {
           "id": "kimi-k2.6",
           "name": "MoonshotAI: Kimi K2.6",
           "in": 0.9596,
           "out": 4.0404,
           "ctx": 262000
-        },
-        {
-          "id": "kimi-k2.7-code",
-          "name": "MoonshotAI: Kimi K2.7 Code",
-          "in": 0.9596,
-          "out": 4.0404,
-          "ctx": 256000
-        },
-        {
-          "id": "kimi-k2.7-code-n",
-          "name": "kimi-k2.7-code-n",
-          "in": 0.9596,
-          "out": 4.0404,
-          "ctx": null
-        },
-        {
-          "id": "o3-mini",
-          "name": "OpenAI: o3 Mini",
-          "in": 1.0,
-          "out": 4.0,
-          "ctx": 200000
-        },
-        {
-          "id": "o3-mini-high",
-          "name": "OpenAI: o3 Mini High",
-          "in": 1.0,
-          "out": 4.0,
-          "ctx": 200000
-        },
-        {
-          "id": "o4-mini",
-          "name": "OpenAI: o4 Mini",
-          "in": 1.0,
-          "out": 4.0,
-          "ctx": 200000
         },
         {
           "id": "inkling",
@@ -21788,13 +21801,6 @@
           "in": 1.3333,
           "out": 4.0,
           "ctx": 1048576
-        },
-        {
-          "id": "deepseek-v4-pro-0813",
-          "name": "DeepSeek: DeepSeek V4 Pro 0813",
-          "in": 1.3333,
-          "out": 4.0,
-          "ctx": null
         },
         {
           "id": "deepseek-v4-pro-0813-el",
@@ -21825,20 +21831,6 @@
           "ctx": 524288
         },
         {
-          "id": "glm-5.2-n",
-          "name": "glm-5.2-n",
-          "in": 1.4141,
-          "out": 4.4444,
-          "ctx": null
-        },
-        {
-          "id": "glm-5.3",
-          "name": "Z.ai: GLM 5.3",
-          "in": 1.4141,
-          "out": 4.4444,
-          "ctx": 1000000
-        },
-        {
           "id": "glm-5.3-el",
           "name": "glm-5.3-el",
           "in": 1.4141,
@@ -21851,6 +21843,13 @@
           "in": 1.5152,
           "out": 4.5455,
           "ctx": 256000
+        },
+        {
+          "id": "glm-5.3",
+          "name": "Z.ai: GLM 5.3",
+          "in": 1.697,
+          "out": 5.3333,
+          "ctx": 1000000
         },
         {
           "id": "deepseek-v4-pro-e",
@@ -21881,11 +21880,18 @@
           "ctx": 500000
         },
         {
-          "id": "qwen3.8-2.4t-a95b-n",
-          "name": "qwen3.8-2.4t-a95b-n",
+          "id": "qwen3.8-2.4t-a95b",
+          "name": "Qwen: Qwen3.8 2.4T A95B",
           "in": 2.0202,
           "out": 6.0606,
-          "ctx": null
+          "ctx": 262144
+        },
+        {
+          "id": "qwen3.8-max-0902",
+          "name": "Qwen: Qwen3.8 Max (0902)",
+          "in": 2.0202,
+          "out": 6.0606,
+          "ctx": 991000
         },
         {
           "id": "qwen3.8-max-0902-el",
@@ -21958,13 +21964,6 @@
           "ctx": 131072
         },
         {
-          "id": "qwen3-max-n",
-          "name": "qwen3-max-n",
-          "in": 2.1313,
-          "out": 8.5354,
-          "ctx": null
-        },
-        {
           "id": "mistral-medium",
           "name": "mistral-medium",
           "in": 2.7273,
@@ -21984,6 +21983,13 @@
           "in": 2.2727,
           "out": 9.0909,
           "ctx": 128000
+        },
+        {
+          "id": "glm-5.3-fast",
+          "name": "glm-5.3-fast",
+          "in": 2.8283,
+          "out": 8.8889,
+          "ctx": 1000000
         },
         {
           "id": "mistral-large-2",
@@ -22126,25 +22132,11 @@
           "ctx": 128000
         },
         {
-          "id": "gpt-4-turbo",
-          "name": "OpenAI: GPT-4 Turbo",
-          "in": 9.0909,
-          "out": 27.2727,
-          "ctx": 128000
-        },
-        {
           "id": "fugu-ultra-v1.0-el",
           "name": "fugu-ultra-v1.0-el",
           "in": 7.5758,
           "out": 45.4545,
           "ctx": 1000000
-        },
-        {
-          "id": "o1",
-          "name": "OpenAI: o1",
-          "in": 13.6364,
-          "out": 54.5455,
-          "ctx": 200000
         },
         {
           "id": "o3-pro",
@@ -22173,16 +22165,9 @@
           "in": 27.2727,
           "out": 163.6364,
           "ctx": 1050000
-        },
-        {
-          "id": "o1-pro",
-          "name": "OpenAI: o1-pro",
-          "in": 136.3636,
-          "out": 545.4545,
-          "ctx": 200000
         }
       ],
-      "edge_rtt_ms": 360
+      "edge_rtt_ms": 305
     },
     {
       "id": "vercel-ai-gateway",
@@ -22971,6 +22956,15 @@
           "base": "deepseek-v4.1-flash"
         },
         {
+          "id": "flint-40b-free",
+          "name": "flint-40b-free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "flint-40b"
+        },
+        {
           "id": "gemini-3-flash",
           "name": "gemini-3-flash",
           "in": null,
@@ -23311,15 +23305,6 @@
           "ctx": null
         },
         {
-          "id": "longcat-2.5-preview-free",
-          "name": "longcat-2.5-preview-free",
-          "in": null,
-          "out": null,
-          "ctx": null,
-          "free": true,
-          "base": "longcat-2.5-preview"
-        },
-        {
           "id": "mimo-v2.6-flash-free",
           "name": "Xiaomi: MiMo-V2.6-Flash",
           "in": null,
@@ -23350,15 +23335,6 @@
           "ctx": null
         },
         {
-          "id": "minimax-m3.1-flash-free",
-          "name": "minimax-m3.1-flash-free",
-          "in": null,
-          "out": null,
-          "ctx": null,
-          "free": true,
-          "base": "minimax-m3.1-flash"
-        },
-        {
           "id": "mistral-large-4",
           "name": "mistral-large-4",
           "in": null,
@@ -23375,6 +23351,13 @@
         {
           "id": "muse-spark-1.3",
           "name": "Meta: Muse Spark 1.3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "muse-wonder-1.0",
+          "name": "muse-wonder-1.0",
           "in": null,
           "out": null,
           "ctx": null
@@ -23433,7 +23416,7 @@
           "ctx": null
         }
       ],
-      "edge_rtt_ms": 541
+      "edge_rtt_ms": 655
     },
     {
       "id": "w-b-inference-gateway",
@@ -23633,6 +23616,14 @@
           "ctx": 1049000
         },
         {
+          "id": "wandb/reflection/Beam-1.0-501B-A23B",
+          "in": 1.0,
+          "out": 3.0,
+          "cache": 0.1,
+          "ctx": 1049000,
+          "name": "Reflection: Beam 1.0 501B A23B"
+        },
+        {
           "id": "wandb/moonshotai/Kimi-K2.6",
           "in": 0.65,
           "out": 3.41,
@@ -23655,6 +23646,14 @@
           "cache": 0.15,
           "ctx": 262000,
           "name": "MoonshotAI: Kimi K2.7 Code"
+        },
+        {
+          "id": "wandb/zai-org/GLM-5.3",
+          "in": 1.2,
+          "out": 4.0,
+          "cache": 0.19,
+          "ctx": 1049000,
+          "name": "Z.ai: GLM 5.3"
         },
         {
           "id": "wandb/deepseek-ai/DeepSeek-V4-Pro-0813",

@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-10-23",
+  "as_of": "2026-10-24",
   "kinds": [
     "first-party",
     "cloud",
@@ -12853,6 +12853,13 @@
           "ctx": null
         },
         {
+          "id": "nvidia/nemotron-3.5-bolt-e4b",
+          "name": "nvidia/nemotron-3.5-bolt-e4b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
           "id": "nvidia/nemotron-3.5-content-safety",
           "name": "NVIDIA: Nemotron 3.5 Content Safety",
           "in": null,
@@ -13043,7 +13050,7 @@
         }
       ],
       "free_tier": true,
-      "edge_rtt_ms": 170
+      "edge_rtt_ms": 169
     },
     {
       "id": "together-ai",
@@ -13197,6 +13204,14 @@
           "out": 0.5,
           "cache": 0.03,
           "ctx": 1048575
+        },
+        {
+          "id": "together_ai/MiniMaxAI/MiniMax-M3.1-Flash",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.015,
+          "ctx": 1048576,
+          "name": "MiniMax: MiniMax M3.1 Flash"
         },
         {
           "id": "together_ai/openai/gpt-oss-120b",
@@ -16518,6 +16533,14 @@
           "ctx": 262144
         },
         {
+          "id": "~z-ai/glm-flash-latest",
+          "name": "Z.ai: GLM Flash Latest",
+          "in": 0.0175,
+          "out": 0.1425,
+          "cache": 0.0175,
+          "ctx": 1048576
+        },
+        {
           "id": "qwen/qwen3.7-flash",
           "name": "Qwen: Qwen3.7 Flash",
           "in": 0.03,
@@ -16538,6 +16561,14 @@
           "in": 0.035,
           "out": 0.14,
           "ctx": 128000
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash-0731",
+          "name": "DeepSeek: DeepSeek V4 Flash 0731",
+          "in": 0.0444,
+          "out": 0.1333,
+          "cache": 0.0014,
+          "ctx": 1048576
         },
         {
           "id": "inference-net/schematron-v2-turbo",
@@ -16608,30 +16639,6 @@
           "ctx": 16384
         },
         {
-          "id": "z-ai/glm-5.3-flash",
-          "name": "Z.ai: GLM 5.3 Flash",
-          "in": 0.0052,
-          "out": 0.1985,
-          "cache": 0.0052,
-          "ctx": 1048576
-        },
-        {
-          "id": "~z-ai/glm-flash-latest",
-          "name": "Z.ai: GLM Flash Latest",
-          "in": 0.0052,
-          "out": 0.1985,
-          "cache": 0.0052,
-          "ctx": 1048576
-        },
-        {
-          "id": "~deepseek/deepseek-v4-flash-latest",
-          "name": "DeepSeek: DeepSeek V4 Flash Latest",
-          "in": 0.0475,
-          "out": 0.1568,
-          "cache": 0.028,
-          "ctx": 1048576
-        },
-        {
           "id": "microsoft/phi-4",
           "name": "Microsoft: Phi 4",
           "in": 0.07,
@@ -16639,12 +16646,12 @@
           "ctx": 16384
         },
         {
-          "id": "qwen/qwen3.5-9b",
-          "name": "Qwen: Qwen3.5-9B",
-          "in": 0.08,
-          "out": 0.13,
-          "cache": 0.04,
-          "ctx": 262144
+          "id": "~deepseek/deepseek-v4-flash-latest",
+          "name": "DeepSeek: DeepSeek V4 Flash Latest",
+          "in": 0.0422,
+          "out": 0.1694,
+          "cache": 0.028,
+          "ctx": 1048576
         },
         {
           "id": "tencent/hy-mt2-1.8b",
@@ -16738,6 +16745,14 @@
           "out": 0.23,
           "cache": 0.05,
           "ctx": 128000
+        },
+        {
+          "id": "google/gemma-4-26b-a4b-it",
+          "name": "Google: Gemma 4 26B A4B ",
+          "in": 0.0675,
+          "out": 0.225,
+          "cache": 0.0375,
+          "ctx": 262144
         },
         {
           "id": "amazon/nova-lite-v1",
@@ -16853,14 +16868,6 @@
           "in": 0.065,
           "out": 0.26,
           "ctx": 1000000
-        },
-        {
-          "id": "google/gemma-4-26b-a4b-it",
-          "name": "Google: Gemma 4 26B A4B ",
-          "in": 0.0765,
-          "out": 0.255,
-          "cache": 0.0425,
-          "ctx": 262144
         },
         {
           "id": "qwen/qwen3-coder-30b-a3b-instruct",
@@ -17002,6 +17009,13 @@
           "ctx": 131072
         },
         {
+          "id": "qwen/qwen3.5-9b",
+          "name": "Qwen: Qwen3.5-9B",
+          "in": 0.17,
+          "out": 0.25,
+          "ctx": 262144
+        },
+        {
           "id": "xiaomi/mimo-v2.6-flash",
           "name": "Xiaomi: MiMo-V2.6-Flash",
           "in": 0.14,
@@ -17062,14 +17076,6 @@
           "out": 0.4,
           "cache": 0.025,
           "ctx": 1047576
-        },
-        {
-          "id": "~deepseek/deepseek-flash-latest",
-          "name": "DeepSeek: DeepSeek Flash Latest",
-          "in": 0.07,
-          "out": 0.5,
-          "cache": 0.008,
-          "ctx": 1048576
         },
         {
           "id": "prism-ml/ternary-bonsai-2-27b",
@@ -17173,6 +17179,14 @@
           "ctx": 262144
         },
         {
+          "id": "z-ai/glm-5.3-flash",
+          "name": "Z.ai: GLM 5.3 Flash",
+          "in": 0.15,
+          "out": 0.5,
+          "cache": 0.03,
+          "ctx": 1048575
+        },
+        {
           "id": "tencent/hy3",
           "name": "Tencent: Hy3",
           "in": 0.132,
@@ -17232,6 +17246,14 @@
           "in": 0.15,
           "out": 0.6,
           "ctx": 128000
+        },
+        {
+          "id": "deepseek/deepseek-v4.1-flash-1017",
+          "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.003,
+          "ctx": 1048576
         },
         {
           "id": "liquid/lfm-2.5-24b-a2b",
@@ -17350,14 +17372,6 @@
           "ctx": 1024000
         },
         {
-          "id": "deepseek/deepseek-v4.1-flash",
-          "name": "DeepSeek: DeepSeek V4.1 Flash",
-          "in": 0.165,
-          "out": 0.66,
-          "cache": 0.006,
-          "ctx": 1048576
-        },
-        {
           "id": "meta-llama/llama-4-maverick",
           "name": "Meta: Llama 4 Maverick",
           "in": 0.1875,
@@ -17457,6 +17471,22 @@
           "in": 0.35,
           "out": 0.65,
           "ctx": 6144
+        },
+        {
+          "id": "deepseek/deepseek-v4.1-flash",
+          "name": "DeepSeek: DeepSeek V4.1 Flash",
+          "in": 0.02,
+          "out": 1.0,
+          "cache": 0.015,
+          "ctx": 1048576
+        },
+        {
+          "id": "~deepseek/deepseek-flash-latest",
+          "name": "DeepSeek: DeepSeek Flash Latest",
+          "in": 0.02,
+          "out": 1.0,
+          "cache": 0.015,
+          "ctx": 1048576
         },
         {
           "id": "qwen/qwen-plus",
@@ -17563,7 +17593,7 @@
           "name": "Z.ai: GLM 4.6V",
           "in": 0.3,
           "out": 0.9,
-          "cache": 0.055,
+          "cache": 0.05,
           "ctx": 131072
         },
         {
@@ -17581,6 +17611,14 @@
           "out": 1.0,
           "cache": 0.05,
           "ctx": 1048576
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek: DeepSeek V4 Pro 0423",
+          "in": 0.4188,
+          "out": 0.8376,
+          "cache": 0.0349,
+          "ctx": 1024000
         },
         {
           "id": "deepseek/deepseek-v3.1-terminus",
@@ -17671,14 +17709,6 @@
           "ctx": 32768
         },
         {
-          "id": "qwen/qwen3.8-27b",
-          "name": "Qwen: Qwen3.8 27B",
-          "in": 0.04,
-          "out": 1.35,
-          "cache": 0.018,
-          "ctx": 262144
-        },
-        {
           "id": "google/gemini-3.5-flash-lite:batch",
           "name": "Google: Gemini 3.5 Flash Lite (batch)",
           "in": 0.15,
@@ -17731,22 +17761,6 @@
           "in": 0.079,
           "out": 1.4,
           "cache": 0.078,
-          "ctx": 1048576
-        },
-        {
-          "id": "~z-ai/glm-latest",
-          "name": "Z.ai: GLM Latest",
-          "in": 0.079,
-          "out": 1.4,
-          "cache": 0.078,
-          "ctx": 1048576
-        },
-        {
-          "id": "deepseek/deepseek-v4.1-flash-1017",
-          "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
-          "in": 0.3,
-          "out": 1.2,
-          "cache": 0.006,
           "ctx": 1048576
         },
         {
@@ -17836,6 +17850,14 @@
           "ctx": 524288
         },
         {
+          "id": "~z-ai/glm-latest",
+          "name": "Z.ai: GLM Latest",
+          "in": 0.075,
+          "out": 1.575,
+          "cache": 0.075,
+          "ctx": 1048576
+        },
+        {
           "id": "qwen/qwen-2.5-coder-32b-instruct",
           "name": "Qwen2.5 Coder 32B Instruct",
           "in": 0.66,
@@ -17877,14 +17899,6 @@
           "in": 0.25,
           "out": 1.5,
           "cache": 0.025,
-          "ctx": 1048576
-        },
-        {
-          "id": "deepseek/deepseek-v4-flash-0731",
-          "name": "DeepSeek: DeepSeek V4 Flash 0731",
-          "in": 0.44,
-          "out": 1.32,
-          "cache": 0.014,
           "ctx": 1048576
         },
         {
@@ -18141,6 +18155,14 @@
           "ctx": 400000
         },
         {
+          "id": "deepseek/deepseek-v4-pro-0813",
+          "name": "DeepSeek: DeepSeek V4 Pro 0813",
+          "in": 0.66,
+          "out": 1.98,
+          "cache": 0.022,
+          "ctx": 1048576
+        },
+        {
           "id": "deepseek/deepseek-r1-0528",
           "name": "DeepSeek: R1 0528",
           "in": 0.5,
@@ -18154,6 +18176,14 @@
           "in": 0.3,
           "out": 2.4,
           "cache": 0.15,
+          "ctx": 262144
+        },
+        {
+          "id": "qwen/qwen3.8-27b",
+          "name": "Qwen: Qwen3.8 27B",
+          "in": 0.2,
+          "out": 2.5,
+          "cache": 0.09,
           "ctx": 262144
         },
         {
@@ -18246,14 +18276,6 @@
           "out": 2.2,
           "cache": 0.11,
           "ctx": 131072
-        },
-        {
-          "id": "deepseek/deepseek-v4-pro",
-          "name": "DeepSeek: DeepSeek V4 Pro 0423",
-          "in": 0.9553,
-          "out": 1.9105,
-          "cache": 0.0796,
-          "ctx": 1024000
         },
         {
           "id": "moonshotai/kimi-k2",
@@ -18478,7 +18500,7 @@
           "name": "MoonshotAI: Kimi K2.7 Code",
           "in": 0.6712,
           "out": 3.35,
-          "cache": 0.18,
+          "cache": 0.15,
           "ctx": 262144
         },
         {
@@ -18623,14 +18645,6 @@
           "out": 4.5,
           "cache": 0.075,
           "ctx": 400000
-        },
-        {
-          "id": "deepseek/deepseek-v4-pro-0813",
-          "name": "DeepSeek: DeepSeek V4 Pro 0813",
-          "in": 1.32,
-          "out": 3.96,
-          "cache": 0.044,
-          "ctx": 1048576
         },
         {
           "id": "meta/muse-spark-1.1",
@@ -18951,9 +18965,9 @@
         {
           "id": "~deepseek/deepseek-pro-latest",
           "name": "DeepSeek: DeepSeek Pro Latest",
-          "in": 0.225,
+          "in": 0.1188,
           "out": 8.0,
-          "cache": 0.23,
+          "cache": 0.12,
           "ctx": 1048576
         },
         {
@@ -19011,6 +19025,14 @@
           "ctx": 262144
         },
         {
+          "id": "~moonshotai/kimi-latest",
+          "name": "MoonshotAI: Kimi Latest",
+          "in": 0.19,
+          "out": 8.94,
+          "cache": 0.19,
+          "ctx": 1048576
+        },
+        {
           "id": "openai/gpt-4.1",
           "name": "OpenAI: GPT-4.1",
           "in": 2.0,
@@ -19054,6 +19076,14 @@
           "in": 1.5,
           "out": 9.0,
           "cache": 0.15,
+          "ctx": 1048576
+        },
+        {
+          "id": "moonshotai/kimi-k3",
+          "name": "MoonshotAI: Kimi K3",
+          "in": 0.239,
+          "out": 10.8,
+          "cache": 0.21,
           "ctx": 1048576
         },
         {
@@ -19145,6 +19175,14 @@
           "ctx": 1048576
         },
         {
+          "id": "moonshotai/kimi-k3.1-pro",
+          "name": "MoonshotAI: Kimi K3.1 Pro",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
           "id": "openai/gpt-5.6-sol-pro:batch",
           "name": "OpenAI: GPT-5.6 Sol Pro (batch)",
           "in": 2.0,
@@ -19215,14 +19253,6 @@
           "out": 10.0,
           "cache": 0.1,
           "ctx": 1050000
-        },
-        {
-          "id": "moonshotai/kimi-k3",
-          "name": "MoonshotAI: Kimi K3",
-          "in": 0.239,
-          "out": 11.936,
-          "cache": 0.21,
-          "ctx": 1048576
         },
         {
           "id": "cohere/command-a",
@@ -19428,14 +19458,6 @@
           "out": 12.0,
           "cache": 0.5,
           "ctx": 1000000
-        },
-        {
-          "id": "~moonshotai/kimi-latest",
-          "name": "MoonshotAI: Kimi Latest",
-          "in": 0.238,
-          "out": 16.0,
-          "cache": 0.228,
-          "ctx": 1048576
         },
         {
           "id": "openai/gpt-5.4",
@@ -20715,6 +20737,13 @@
           "ctx": 1000000
         },
         {
+          "id": "kimi/kimi-k3.1-pro",
+          "name": "MoonshotAI: Kimi K3.1 Pro",
+          "in": 2.0,
+          "out": 10.0,
+          "ctx": 1048576
+        },
+        {
           "id": "openai/gpt-6-sol",
           "name": "OpenAI: GPT-6 Sol",
           "in": 2.0,
@@ -21278,6 +21307,13 @@
           "ctx": 1000000
         },
         {
+          "id": "orcarouter/pod",
+          "name": "orcarouter/pod",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
           "id": "tencent/hy3-free",
           "name": "Tencent: Hy3 (Free)",
           "in": null,
@@ -21305,7 +21341,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 247
+      "edge_rtt_ms": 326
     },
     {
       "id": "poe",
@@ -22006,6 +22042,13 @@
           "ctx": 1000000
         },
         {
+          "id": "kimi-k3.1-pro",
+          "name": "MoonshotAI: Kimi K3.1 Pro",
+          "in": 2.0202,
+          "out": 10.101,
+          "ctx": 1048576
+        },
+        {
           "id": "mimo-v2.6-pro-ultraspeed-el",
           "name": "mimo-v2.6-pro-ultraspeed-el",
           "in": 4.3939,
@@ -22167,7 +22210,7 @@
           "ctx": 1050000
         }
       ],
-      "edge_rtt_ms": 305
+      "edge_rtt_ms": 284
     },
     {
       "id": "vercel-ai-gateway",
@@ -23416,7 +23459,7 @@
           "ctx": null
         }
       ],
-      "edge_rtt_ms": 655
+      "edge_rtt_ms": 662
     },
     {
       "id": "w-b-inference-gateway",

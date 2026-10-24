@@ -4330,6 +4330,46 @@ def _load_aa_deprecation():
         return {}
 
 
+def _family_newer_visible(name, models_meta, row_names):
+    """True when name's BRAND family has a VISIBLE shipped row with a
+    strictly newer created date — i.e. demoting `name` cannot orphan the
+    product line. Brand = leading alphabetic token of the normalized name
+    ('GLM-5-Turbo' -> 'glm', 'GPT-5.4 mini' -> 'gpt', 'Kimi K3' -> 'kimi'):
+    cross-variant succession (turbo/mini folded into the main line) is
+    invisible to the (family, variant) supersession chainer but obvious at
+    brand level. Undated candidates are hideable when ANY dated visible
+    brand sibling exists (undated rows are typically legacy listings).
+
+    stats-64 guard for the AA bare-deprecation branch (Ibrahim report,
+    2026-10-24): AA deprecated Kimi K3 the day K3.1 Pro launched, but the
+    successor had no benchmark coverage yet, so bare-stale hiding left the
+    Kimi line's top visible row at K2.7 Code. A deprecation signal may only
+    hide a row when the brand's catalog has actually moved past it ON the
+    board; otherwise the row stays visible (successor_pending) until the
+    successor ships."""
+    mine = models_meta.get(name) or {}
+    my_created = mine.get("created")
+    m = re.match(r"[a-z]+", name.strip().lower()) if name and name.strip() else None
+    if not m:
+        return True  # no brand context — preserve old behavior
+    brand = m.group(0)
+    for other in row_names:
+        if not other or other == name:
+            continue
+        om_brand = re.match(r"[a-z]+", other.strip().lower())
+        if not om_brand or om_brand.group(0) != brand:
+            continue
+        om = models_meta.get(other) or {}
+        if om.get("superseded_by") or om.get("stale"):
+            continue  # only VISIBLE rows keep a lineage represented
+        oc = om.get("created")
+        if not oc:
+            continue
+        if not my_created or oc > my_created:
+            return True
+    return False
+
+
 def annotate_aa_deprecation(models_meta, row_names):
     """stats-35: vendor deprecation evidence from the AA flight payload.
 
@@ -4341,10 +4381,16 @@ def annotate_aa_deprecation(models_meta, row_names):
     wins over a bare stale flag; targets are matched by exact shortName
     only (never guessed by family). Rows already hidden by us are only
     counted as agreement — a signal-quality metric for the daily report.
-    Returns (newly_hidden, targeted, agreement)."""
+
+    stats-64: a deprecation with NO resolvable target may only bare-hide
+    the row when its family has a newer visible shipped row (see
+    _family_newer_visible). Otherwise the row stays VISIBLE with
+    successor_pending=True — hiding it would leave the product line with
+    no representative until the (unqualified) successor ships. Returns
+    (newly_hidden, targeted, agreement, pending)."""
     dep = _load_aa_deprecation()
     if not dep or not models_meta:
-        return 0, 0, 0
+        return 0, 0, 0, 0
     slug_map = _load_aa_slug_map()
     slug_to_row = {}
     row_lower = {}
@@ -4354,7 +4400,7 @@ def annotate_aa_deprecation(models_meta, row_names):
         hit = row_lower.get(short.lower())
         if hit:
             slug_to_row.setdefault(slug, hit)
-    n = n_t = n_agree = 0
+    n = n_t = n_agree = n_pending = 0
     for name in row_names:
         rec = models_meta.get(name)
         if not rec:
@@ -4373,13 +4419,22 @@ def annotate_aa_deprecation(models_meta, row_names):
         if target and target != name:
             rec["superseded_by"] = target
             n_t += 1
-        else:
+            n += 1
+        elif _family_newer_visible(name, models_meta, row_names):
+            # Lineage represented upstream — safe to demote (Claude 3 Haiku
+            # behind the Claude 4.x line, MiMo-V2-* behind MiMo-V2.6, ...).
             rec["stale"] = True
-        n += 1
-    if n or n_agree:
+            n += 1
+        else:
+            # stats-64: unresolved successor that has not shipped yet — keep
+            # the row visible; ship the signal for monitoring instead.
+            rec["successor_pending"] = True
+            n_pending += 1
+    if n or n_agree or n_pending:
         print(f"  [AA deprecation] newly hidden={n} (targeted={n_t}, "
-              f"stale={n - n_t}) agrees-with-ours={n_agree}")
-    return n, n_t, n_agree
+              f"stale={n - n_t}) agrees-with-ours={n_agree} "
+              f"successor_pending={n_pending}")
+    return n, n_t, n_agree, n_pending
 
 
 

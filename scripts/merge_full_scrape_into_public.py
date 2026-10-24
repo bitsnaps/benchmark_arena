@@ -266,7 +266,12 @@ def main():
             continue
         base = dict(old)
         for f in ("aa_ttft_seconds", "pricing_aa_usd_per_1m",
-                  "pricing_usd_per_1m", "price_source", "no_bench_coverage"):
+                  "pricing_usd_per_1m", "price_source", "no_bench_coverage",
+                  # stats-64: successor_pending is a CURRENT-evaluation flag
+                  # from the scraper's AA-deprecation branch, never a static
+                  # fact — carrying it forward can contradict a freshly
+                  # re-derived stale/superseded flag on the same record.
+                  "successor_pending"):
             base.pop(f, None)
         for fk, fv in fresh.items():
             if fv is None or (isinstance(fv, list) and not fv):

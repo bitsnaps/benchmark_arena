@@ -13050,7 +13050,7 @@
         }
       ],
       "free_tier": true,
-      "edge_rtt_ms": 169
+      "edge_rtt_ms": 170
     },
     {
       "id": "together-ai",
@@ -16525,20 +16525,20 @@
           "ctx": 131072
         },
         {
+          "id": "~z-ai/glm-flash-latest",
+          "name": "Z.ai: GLM Flash Latest",
+          "in": 0.0393,
+          "out": 0.1028,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
           "id": "mistralai/ministral-8b-2512:batch",
           "name": "Mistral: Ministral 3 8B 2512 (batch)",
           "in": 0.075,
           "out": 0.075,
           "cache": 0.0075,
           "ctx": 262144
-        },
-        {
-          "id": "~z-ai/glm-flash-latest",
-          "name": "Z.ai: GLM Flash Latest",
-          "in": 0.0175,
-          "out": 0.1425,
-          "cache": 0.0175,
-          "ctx": 1048576
         },
         {
           "id": "qwen/qwen3.7-flash",
@@ -17419,6 +17419,14 @@
           "ctx": 262144
         },
         {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek: DeepSeek V4 Pro 0423",
+          "in": 0.3175,
+          "out": 0.6351,
+          "cache": 0.0265,
+          "ctx": 1024000
+        },
+        {
           "id": "z-ai/glm-4.5-air",
           "name": "Z.ai: GLM 4.5 Air",
           "in": 0.13,
@@ -17593,16 +17601,8 @@
           "name": "Z.ai: GLM 4.6V",
           "in": 0.3,
           "out": 0.9,
-          "cache": 0.05,
+          "cache": 0.055,
           "ctx": 131072
-        },
-        {
-          "id": "minimax/minimax-m2.5",
-          "name": "MiniMax: MiniMax M2.5",
-          "in": 0.27,
-          "out": 0.95,
-          "cache": 0.03,
-          "ctx": 198000
         },
         {
           "id": "reflection/beam-1.0-501b-a23b",
@@ -17611,14 +17611,6 @@
           "out": 1.0,
           "cache": 0.05,
           "ctx": 1048576
-        },
-        {
-          "id": "deepseek/deepseek-v4-pro",
-          "name": "DeepSeek: DeepSeek V4 Pro 0423",
-          "in": 0.4188,
-          "out": 0.8376,
-          "cache": 0.0349,
-          "ctx": 1024000
         },
         {
           "id": "deepseek/deepseek-v3.1-terminus",
@@ -17796,6 +17788,14 @@
           "ctx": 204800
         },
         {
+          "id": "minimax/minimax-m2.5",
+          "name": "MiniMax: MiniMax M2.5",
+          "in": 0.3,
+          "out": 1.2,
+          "cache": 0.03,
+          "ctx": 204800
+        },
+        {
           "id": "minimax/minimax-m2.7",
           "name": "MiniMax: MiniMax M2.7",
           "in": 0.3,
@@ -17848,14 +17848,6 @@
           "out": 1.2,
           "cache": 0.1,
           "ctx": 524288
-        },
-        {
-          "id": "~z-ai/glm-latest",
-          "name": "Z.ai: GLM Latest",
-          "in": 0.075,
-          "out": 1.575,
-          "cache": 0.075,
-          "ctx": 1048576
         },
         {
           "id": "qwen/qwen-2.5-coder-32b-instruct",
@@ -18526,6 +18518,14 @@
           "out": 3.2,
           "cache": 0.2,
           "ctx": 202752
+        },
+        {
+          "id": "~z-ai/glm-latest",
+          "name": "Z.ai: GLM Latest",
+          "in": 0.075,
+          "out": 4.295,
+          "cache": 0.075,
+          "ctx": 1048576
         },
         {
           "id": "google/gemini-3.6-flash",
@@ -21341,7 +21341,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 326
+      "edge_rtt_ms": 403
     },
     {
       "id": "poe",
@@ -22210,7 +22210,7 @@
           "ctx": 1050000
         }
       ],
-      "edge_rtt_ms": 284
+      "edge_rtt_ms": 286
     },
     {
       "id": "vercel-ai-gateway",
@@ -23459,7 +23459,7 @@
           "ctx": null
         }
       ],
-      "edge_rtt_ms": 662
+      "edge_rtt_ms": 654
     },
     {
       "id": "w-b-inference-gateway",

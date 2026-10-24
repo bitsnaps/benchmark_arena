@@ -4,9 +4,12 @@
 //
 // Mirror contract (keep in sync with src/stores/data.js):
 //   older  = meta.superseded_by || meta.stale
-//   rank/leader/preset lists exclude older rows; nothing is ever deleted.
+//   unranked = row.unranked === true (stats-65: single-source admission;
+//   excluded from ranks, tops, and the harmonization population)
+//   rank/leader/preset lists exclude older AND unranked rows; nothing is
+//   ever deleted.
 //   score (stats-35) = harmonized CL blend: every covered cell is z-mapped
-//   against every shipped row on that benchmark (50 = median model,
+//   against every shipped RANKED row on that benchmark (50 = median model,
 //   15 pts = 1 sd, clipped 0-100), then meaned over the selected set with
 //   uncovered benches contributing the neutral 50 prior — algebraically
 //   w·zMean + (1−w)·50, w = covered/selected. The z re-derivation below is
@@ -68,7 +71,8 @@ function snapStats() {
     const d = loadSnapshot();
     const rows = [...(d.unified_closed || []), ...(d.unified_open || [])];
     const seen = new Set();
-    const pivot = rows.filter((r) => !seen.has(r.name) && seen.add(r.name));
+    // stats-65: unranked rows never feed the z population (mirrors data.js)
+    const pivot = rows.filter((r) => !seen.has(r.name) && !r.unranked && seen.add(r.name));
     _snapStats = benchZStats(pivot, d.benchmarks || []);
   }
   return _snapStats;
@@ -106,15 +110,20 @@ export function makeMirror(data = loadSnapshot()) {
   const pivotAll = rows.filter((r) => !seen.has(r.name) && seen.add(r.name));
 
   const isOlder = (name) => !!(META[name] && (META[name].superseded_by || META[name].stale));
+  const isUnranked = (r) => !!r?.unranked;
   const supersededBy = (name) => (META[name] && META[name].superseded_by) || null;
-  const current = (list) => list.filter((r) => !isOlder(r.name));
-  const stats = benchZStats(pivotAll, data.benchmarks || []);
+  const current = (list) => list.filter((r) => !isOlder(r.name) && !isUnranked(r));
+  // stats-65: z population mirrors data.js — ranked rows only
+  const seenZ = new Set();
+  const zPivot = pivotAll.filter((r) => !r.unranked && !seenZ.has(r.name) && seenZ.add(r.name));
+  const stats = benchZStats(zPivot, data.benchmarks || []);
   const byAvg = (a, b) => avgForModel(b) - avgForModel(a);
   const byScore = (a, b) => scoreForModel(b, CORE_BENCHMARKS, stats) - scoreForModel(a, CORE_BENCHMARKS, stats);
 
   return {
-    data, META, closed, open, rows, pivotAll, isOlder, supersededBy, current, byAvg, byScore,
+    data, META, closed, open, rows, pivotAll, isOlder, isUnranked, supersededBy, current, byAvg, byScore,
     olderRows: (list = pivotAll) => list.filter((r) => isOlder(r.name)),
+    unrankedRows: (list = pivotAll) => list.filter((r) => isUnranked(r)),
     top: (list) => [...current(list)].sort(byScore),
     clOf: (row) => row.cl ?? 0,
   };

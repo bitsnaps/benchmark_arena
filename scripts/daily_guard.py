@@ -37,6 +37,17 @@ def rows_of(doc):
     return len(doc.get("unified_closed") or []) + len(doc.get("unified_open") or [])
 
 
+def ranked_rows_of(doc):
+    """stats-65: unranked rows (1-benchmark admissions) live in the same
+    tables but must not count toward the collapse/explosion band — the
+    feature itself adds ~90 of them on its first run (a false explosion).
+    The band watches the RANKED population; unranked counts are reported."""
+    return sum(
+        1 for r in (doc.get("unified_closed") or []) + (doc.get("unified_open") or [])
+        if not r.get("unranked")
+    )
+
+
 def meta_stats(doc):
     mm = doc.get("models_meta") or {}
     ttft = sum(1 for v in mm.values() if v.get("aa_ttft_seconds"))
@@ -67,11 +78,19 @@ def main():
         fail(f"timestamp {ts} is {age_h:.1f}h old - merge did not adopt a fresh scrape")
 
     # 2. row-count band vs HEAD (collapse = upstream layout change; explosion = dedup broken)
-    r_new, r_old = rows_of(doc), rows_of(head)
+    #    stats-65: band runs on RANKED rows only — the unranked section is
+    #    new-size-free and reported in the summary line instead.
+    r_new, r_old = ranked_rows_of(doc), ranked_rows_of(head)
+    n_unranked = rows_of(doc) - r_new
     if r_new < max(90, int(r_old * 0.85)):
-        fail(f"row count collapsed: {r_new} vs HEAD {r_old} (upstream layout change?)")
+        fail(f"ranked row count collapsed: {r_new} vs HEAD {r_old} (upstream layout change?)")
     if r_new > int(r_old * 1.3) + 10:
-        fail(f"row count exploded: {r_new} vs HEAD {r_old} (dedup broken?)")
+        fail(f"ranked row count exploded: {r_new} vs HEAD {r_old} (dedup broken?)")
+    if n_unranked > 450:
+        # stats-65 reality check: the AA census payload ships ~350 single-source
+        # no-catalog stubs on top of the ~65 matched rows — 360+ unranked rows
+        # is the EXPECTED first-run size (2026-10-24), not an admission bug.
+        fail(f"unranked section exploded: {n_unranked} rows (admission broken?)")
 
     # 3. meta layer — absolute floor + gentle shrink allowance (archivals happen)
     mm, tt_new, cr_new, mod_new = meta_stats(doc)
@@ -113,20 +132,29 @@ def main():
     if cr_new < cr_old - 10:
         fail(f"created coverage shrank: {cr_new} vs HEAD {cr_old}")
 
-    # 3b. stats-62: census completeness — every unified row must have a meta
-    # record, and no live row may carry the registry-only no_bench_coverage
-    # flag (the cells-vs-registry contradiction that mis-shipped on 10-18).
-    row_names = {r.get("name") for r in doc.get("unified_closed") or []}
-    row_names |= {r.get("name") for r in doc.get("unified_open") or []}
+    # 3b. stats-62: census completeness — every RANKED unified row must have a
+    # meta record, and no live row may carry the registry-only
+    # no_bench_coverage flag (the cells-vs-registry contradiction that
+    # mis-shipped on 10-18). stats-65: unranked rows are exempt from the
+    # meta floor — a not-yet-cataloged new model (no OpenRouter match, e.g.
+    # a launch-day AA-only row) is exactly the case the unranked section
+    # exists for; it gets a GUARD NOTE for visibility instead.
+    all_rows = (doc.get("unified_closed") or []) + (doc.get("unified_open") or [])
+    row_names = {r.get("name") for r in all_rows}
     row_names.discard(None)
+    unranked_names = {r.get("name") for r in all_rows if r.get("unranked")}
     no_meta = sorted(n for n in row_names if n not in mm)
-    if len(no_meta) > 3:
+    no_meta_ranked = sorted(n for n in no_meta if n not in unranked_names)
+    if len(no_meta_ranked) > 3:
         fail(
-            f"{len(no_meta)} unified rows lost their meta records (OR-retirement "
-            f"class, stats-62): {no_meta[:6]}"
+            f"{len(no_meta_ranked)} ranked unified rows lost their meta records (OR-retirement "
+            f"class, stats-62): {no_meta_ranked[:6]}"
         )
+    if no_meta_ranked:
+        print(f"GUARD NOTE {len(no_meta_ranked)} ranked row(s) without meta record: {no_meta_ranked[:4]}")
     if no_meta:
-        print(f"GUARD NOTE {len(no_meta)} row(s) without meta record: {no_meta[:4]}")
+        print(f"GUARD NOTE {len(no_meta)} unranked row(s) without meta record "
+              f"(expected for launch-day rows not yet in the provider catalog): {no_meta[:4]}")
     false_reg = sorted(
         n for n in row_names
         if isinstance(mm.get(n), dict) and mm[n].get("no_bench_coverage")
@@ -180,7 +208,7 @@ def main():
         except ValueError:
             continue
     print(
-        f"GUARD OK rows={r_new} (HEAD {r_old}) meta={len(mm)} "
+        f"GUARD OK rows={r_new} ranked (+{n_unranked} unranked) (HEAD {r_old}) meta={len(mm)} "
         f"aa_ttft={tt_new} created={cr_new} modalities={mod_new} approx_new_7d={fresh} ts={ts}"
     )
 

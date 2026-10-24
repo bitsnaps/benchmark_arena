@@ -29,7 +29,7 @@ const route = useRoute();
 const router = useRouter();
 const {
   pivotAll, scoreForModel, benchStats, filterPriceFor, hasFreeListingFor, metaFor,
-  tierOf, isOlder, releaseDateOf,
+  tierOf, isOlder, isUnranked, releaseDateOf,
 } = useData();
 
 // ── Wizard state ⇄ URL (shareable, loop-guarded by canonical forms) ─────
@@ -118,7 +118,7 @@ const allCandidates = computed(() => {
   if (!profile.value) return [];
   const out = [];
   for (const row of pivotAll.value) {
-    if (isOlder(row)) continue; // advising a superseded model is bad advice
+    if (isOlder(row) || isUnranked(row)) continue; // advising a superseded or unrated model is bad advice
     const { score, covered } = profileScoreFor(row, profile.value.benches, benchStats.value);
     let quality, tag;
     if (covered > 0) {

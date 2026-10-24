@@ -171,7 +171,12 @@ const stats = computed(() => ({
 // normalized. One stats table keeps the leaderboard and the advisor
 // parity-equal (tests/unit/advisor.test.js).
 const benchStats = computed(() =>
-  computeBenchStats(pivotAll.value, benchmarks.value));
+  // stats-65: unranked rows (single-source admissions) never feed the
+  // harmonization scale — their one noisy cell must not move the median of
+  // the ranked catalog, and ranked scores stay byte-identical to the
+  // pre-unranked era. The test mirror (tests/helpers/snapshot.mjs) applies
+  // the same filter, so app and expectations cannot drift.
+  computeBenchStats(pivotAll.value.filter(r => !isUnranked(r)), benchmarks.value));
 
 // ── Composite average over the selected benchmarks ────────────────────
 // Raw sparse mean: plain average of the selected scores a model actually
@@ -232,19 +237,19 @@ function scoreForModel(row) {
 }
 
 const topOverall = computed(() =>
-  [...pivotAll.value].filter(r => !isOlder(r))
+  [...pivotAll.value].filter(r => !isOlder(r) && !isUnranked(r))
     .sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1))[0] || null);
 const topClosed = computed(() =>
-  [...pivotClosed.value].filter(r => !isOlder(r))
+  [...pivotClosed.value].filter(r => !isOlder(r) && !isUnranked(r))
     .sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1))[0] || null);
 const topOpen = computed(() =>
-  [...pivotOpen.value].filter(r => !isOlder(r))
+  [...pivotOpen.value].filter(r => !isOlder(r) && !isUnranked(r))
     .sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1))[0] || null);
 
 // Per-benchmark leader cards for the overview (current-generation models only)
 const leaders = computed(() => LEADER_BENCHES.map(bench => {
   const rows = [...pivotClosed.value, ...pivotOpen.value]
-    .filter(r => !isOlder(r) && r[bench] !== null && r[bench] !== undefined);
+    .filter(r => !isOlder(r) && !isUnranked(r) && r[bench] !== null && r[bench] !== undefined);
   const top = rows.reduce((acc, r) =>
     acc === null || (r[bench] ?? -1) > (acc[bench] ?? -1) ? r : acc, null);
   return { bench, short: SHORT[bench] || bench, model: top?.name ?? '—', score: top?.[bench] ?? null, count: rows.length };
@@ -257,7 +262,9 @@ const leaders = computed(() => LEADER_BENCHES.map(bench => {
 // — are excluded so rank #1 is always the best current model.
 const rankMaps = computed(() => {
   const build = (list) => [...list]
-    .filter(r => !isOlder(r))
+    // stats-65: unranked rows consume no rank numbers — rank #N is a claim
+    // about ranked models only, and an unranked row renders '#' as '—'.
+    .filter(r => !isOlder(r) && !isUnranked(r))
     .sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1))
     .reduce((map, r, i) => map.set(r.name, i + 1), new Map());
   return { all: build(pivotAll.value), closed: build(pivotClosed.value), open: build(pivotOpen.value) };
@@ -318,6 +325,12 @@ const isSuperseded = (row) => !!supersededBy(row);
 // the data, but released ≥ 9 months before the newest snapshot release).
 // Both kinds hide behind the Older-versions toggle; neither is ever deleted.
 const isOlder = (row) => isSuperseded(row) || !!metaFor(row)?.stale;
+// stats-65: "unranked" = shipped with exactly ONE core benchmark source.
+// The flag is baked on the row itself by the scraper (NOT meta — a
+// launch-day row may have no meta record at all, e.g. no OpenRouter match
+// yet). These rows show real cells but no computed rating; they graduate
+// into the ranking automatically when a 2nd source lands.
+const isUnranked = (row) => !!row?.unranked;
 const releaseDateOf = (row) => metaFor(row)?.created || null;
 // stats-49: archived-page link for empty benchmark cells. Sources archive
 // models (dropped from their leaderboard table) but keep the model's OWN
@@ -455,7 +468,10 @@ const filterPriceFor = (row) => {
 // gate) resolve to null → the UI renders "Unrated" (overall/Quality) or
 // omits the chip (Value/Speed).
 const gradeMaps = computed(() => computeGradeMaps({
-  rows: pivotAll.value,
+  // stats-65: unranked rows get no grade — their score would be a
+  // mostly-prior blend, exactly the number the unranked section refuses
+  // to claim. The UI renders them Unrated via the null lookup.
+  rows: pivotAll.value.filter(r => !isUnranked(r)),
   scoreOf: scoreForModel,
   valueOf: valueFor,
   coverageOf: coveredCountForModel,
@@ -488,7 +504,7 @@ export function useData() {
     topOverall, topClosed, topOpen, leaders,
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
     modelSlugIndex, benchSlugIndex, benchRankIndex,
-    modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, isOlder, releaseDateOf,
+    modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, isOlder, isUnranked, releaseDateOf,
     archiveLinkFor,
     priceFor, valueFor, hfIdFor, hfUrlFor,
     availableAtFor, hasFreeListingFor, sellerCountFor, filterPriceFor,

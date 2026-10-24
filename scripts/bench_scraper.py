@@ -962,6 +962,11 @@ def enrich_modalities(models_meta):
                     ain, aout = aa_page_modalities(slug)
                     page_cache[slug] = {"in": ain, "out": aout, "mined_at": now}
                     cache_dirty = True
+                    # stats-65: save every fresh probe — killed windows used
+                    # to lose the whole batch (save only ran at loop end), so
+                    # retries re-probed the same prefix forever.
+                    _save_aa_modalities_cache(page_cache)
+                    cache_dirty = False
                 if ain:
                     inp, out, src = ain, aout, "artificialanalysis"
         if not inp:
@@ -1090,6 +1095,13 @@ def enrich_archive_links(models_meta, rows):
             cache[slug] = {"ok": ok, "at": now}
             cache_dirty = True
             n_new += 1
+            # stats-65: persist EVERY fresh probe — a killed run (10-min
+            # front-of-house cap) used to lose the whole window of probes
+            # because the cache only saved after the loop, so every retry
+            # re-probed the same prefix. Incremental saves make repeated
+            # windows converge on the full target set.
+            _save_aa_archive_cache(cache)
+            cache_dirty = False
             # be polite to the source: small gap between fresh probes
             time.sleep(0.4)
         if ok:
@@ -4065,6 +4077,7 @@ def annotate_supersession(models_meta):
             continue
         members.sort(reverse=True)          # date desc, then version desc
         newest_date, newest_ver, newest = members[0]
+        newest_or = (models_meta.get(newest) or {}).get("or_id")
         # stats-35: flash/marketing guard (Ibrahim's note). A NEWER release
         # can carry a LOWER version number (kimi-k2.8 landing after
         # kimi-k3, a flash variant outperforming the pro line). Date-first
@@ -4078,6 +4091,14 @@ def annotate_supersession(models_meta):
                       f"v{'.'.join(map(str, newest_ver))} — verify true "
                       f"successor, not a side-grade release")
         for _, _, name in members[1:]:
+            # stats-65: two rows sharing one OpenRouter or_id are the SAME
+            # catalog entry listed under two display names (source rename —
+            # 'Qwen3.8-Max' vs the freshly listed 'Qwen3.8-Max-0902', same
+            # qwen/qwen3.8-max-0902). That is a duplicate, not a succession:
+            # never chain one onto the other (the alphabetical name tiebreak
+            # would otherwise hide the established, better-covered row).
+            if newest_or and (models_meta.get(name) or {}).get("or_id") == newest_or:
+                continue
             models_meta[name]["superseded_by"] = newest
             n += 1
     return n
@@ -4330,29 +4351,36 @@ def _load_aa_deprecation():
         return {}
 
 
-def _family_newer_visible(name, models_meta, row_names):
-    """True when name's BRAND family has a VISIBLE shipped row with a
-    strictly newer created date — i.e. demoting `name` cannot orphan the
-    product line. Brand = leading alphabetic token of the normalized name
-    ('GLM-5-Turbo' -> 'glm', 'GPT-5.4 mini' -> 'gpt', 'Kimi K3' -> 'kimi'):
-    cross-variant succession (turbo/mini folded into the main line) is
-    invisible to the (family, variant) supersession chainer but obvious at
-    brand level. Undated candidates are hideable when ANY dated visible
-    brand sibling exists (undated rows are typically legacy listings).
+def _newer_visible_brand_sibling(name, models_meta, row_names):
+    """Newest VISIBLE shipped brand sibling strictly newer than `name`.
 
-    stats-64 guard for the AA bare-deprecation branch (Ibrahim report,
-    2026-10-24): AA deprecated Kimi K3 the day K3.1 Pro launched, but the
-    successor had no benchmark coverage yet, so bare-stale hiding left the
-    Kimi line's top visible row at K2.7 Code. A deprecation signal may only
-    hide a row when the brand's catalog has actually moved past it ON the
-    board; otherwise the row stays visible (successor_pending) until the
-    successor ships."""
+    Brand = leading alphabetic token of the normalized name ('GLM-5-Turbo'
+    -> 'glm', 'GPT-5.4 mini' -> 'gpt', 'Kimi K3' -> 'kimi'): cross-variant
+    succession (turbo/mini folded into the main line) is invisible to the
+    (family, variant) supersession chainer but obvious at brand level.
+    Undated `name` rows chain to ANY dated visible brand sibling (undated
+    rows are typically legacy listings).
+
+    Returns (hideable, sibling):
+      (True, name2)  — demoting `name` cannot orphan the line; chain it to
+                       sibling name2 (newest by created, alphabetical
+                       tiebreak for determinism).
+      (True, None)   — no brand context derivable: preserve pre-stats-64
+                       behavior (trust the vendor deprecation signal).
+      (False, None)  — the brand has NO newer visible shipped row: demoting
+                       `name` would orphan the line (stats-64, Ibrahim
+                       report 2026-10-24: AA deprecated Kimi K3 the day
+                       K3.1 Pro launched while the successor had no
+                       benchmark coverage — bare hiding left K2.7 Code as
+                       the line's top visible row).
+    """
     mine = models_meta.get(name) or {}
     my_created = mine.get("created")
     m = re.match(r"[a-z]+", name.strip().lower()) if name and name.strip() else None
     if not m:
-        return True  # no brand context — preserve old behavior
+        return True, None  # no brand context — preserve old behavior
     brand = m.group(0)
+    best = None  # (created, name) — max tuple for determinism
     for other in row_names:
         if not other or other == name:
             continue
@@ -4366,8 +4394,11 @@ def _family_newer_visible(name, models_meta, row_names):
         if not oc:
             continue
         if not my_created or oc > my_created:
-            return True
-    return False
+            if best is None or (oc, other) > best:
+                best = (oc, other)
+    if best:
+        return True, best[1]
+    return False, None
 
 
 def annotate_aa_deprecation(models_meta, row_names):
@@ -4383,8 +4414,9 @@ def annotate_aa_deprecation(models_meta, row_names):
     counted as agreement — a signal-quality metric for the daily report.
 
     stats-64: a deprecation with NO resolvable target may only bare-hide
-    the row when its family has a newer visible shipped row (see
-    _family_newer_visible). Otherwise the row stays VISIBLE with
+    the row when its brand has a newer visible shipped row (see
+    _newer_visible_brand_sibling) — stats-65 chains it to that sibling.
+    Otherwise the row stays VISIBLE with
     successor_pending=True — hiding it would leave the product line with
     no representative until the (unqualified) successor ships. Returns
     (newly_hidden, targeted, agreement, pending)."""
@@ -4400,7 +4432,7 @@ def annotate_aa_deprecation(models_meta, row_names):
         hit = row_lower.get(short.lower())
         if hit:
             slug_to_row.setdefault(slug, hit)
-    n = n_t = n_agree = n_pending = 0
+    n = n_t = n_agree = n_pending = n_chain = 0
     for name in row_names:
         rec = models_meta.get(name)
         if not rec:
@@ -4420,20 +4452,35 @@ def annotate_aa_deprecation(models_meta, row_names):
             rec["superseded_by"] = target
             n_t += 1
             n += 1
-        elif _family_newer_visible(name, models_meta, row_names):
-            # Lineage represented upstream — safe to demote (Claude 3 Haiku
-            # behind the Claude 4.x line, MiMo-V2-* behind MiMo-V2.6, ...).
-            rec["stale"] = True
-            n += 1
         else:
-            # stats-64: unresolved successor that has not shipped yet — keep
-            # the row visible; ship the signal for monitoring instead.
-            rec["successor_pending"] = True
-            n_pending += 1
-    if n or n_agree or n_pending:
+            hideable, sibling = _newer_visible_brand_sibling(name, models_meta, row_names)
+            if sibling:
+                # stats-65: the brand has moved past this row ON the board —
+                # chain it to the newest visible newer sibling instead of a
+                # bare stale flag. The stale label ("no successor ever
+                # shipped") would be a lie when the successor is ranked
+                # right there (Kimi K3 vs the freshly qualified K3.1 Pro),
+                # and the chain keeps the model-page banner + successor
+                # link navigable.
+                rec["superseded_by"] = sibling
+                n_chain += 1
+                n += 1
+            elif hideable:
+                # Lineage represented upstream, but nothing chainable —
+                # safe to demote (Claude 3 Haiku behind the Claude 4.x
+                # line, MiMo-V2-* behind MiMo-V2.6, ...).
+                rec["stale"] = True
+                n += 1
+            else:
+                # stats-64: unresolved successor that has not shipped yet —
+                # keep the row visible; ship the signal for monitoring
+                # instead.
+                rec["successor_pending"] = True
+                n_pending += 1
+    if n or n_agree or n_pending or n_chain:
         print(f"  [AA deprecation] newly hidden={n} (targeted={n_t}, "
-              f"stale={n - n_t}) agrees-with-ours={n_agree} "
-              f"successor_pending={n_pending}")
+              f"chained={n_chain}, stale={n - n_t - n_chain}) "
+              f"agrees-with-ours={n_agree} successor_pending={n_pending}")
     return n, n_t, n_agree, n_pending
 
 
@@ -5559,7 +5606,11 @@ def dedup_older_versions(rows, normalize_fn, core_benchmarks=None):
                 # stats-57: fold unique coverage into the kept row
                 src, dst = rows[idx], rows[best]
                 for b, v in src.items():
-                    if b in ('name', 'num_benchmarks', 'cl'):
+                    if b in ('name', 'num_benchmarks', 'cl', 'unranked'):
+                        # 'unranked' (stats-65) is a per-row ADMISSION flag, not
+                        # a cell — folding an unranked duplicate into a ranked
+                        # row must never carry the flag over (it would strip
+                        # the kept row's Score and rank).
                         continue
                     if dst.get(b) is None and v is not None:
                         dst[b] = v
@@ -5700,20 +5751,6 @@ def build_unified_table(all_results):
 
     # Build tables
     n_core = len(avg_benchmarks)  # total core benchmarks for CL calculation
-    # stats-57: families already tracked via the >=2-core floor. A new
-    # GENERATION of a tracked family (GPT-6.1 Sol after GPT-6 Sol) may enter
-    # the unified ranking on AA-only coverage — the AA Intelligence Index is
-    # itself a verified, comparable score, and flagship point releases ship
-    # on AA before other sources add them. Unknown single-source models still
-    # wait for a second benchmark (measured 2026-09-30: admits 2, keeps 91
-    # single-benchmark rows out — no leaderboard zoo).
-    _tracked_fams = set()
-    for _k, _d in model_scores.items():
-        _av = {b: s for b, s in _d["scores"].items() if b not in EXCLUDE_FROM_AVG}
-        if len(_av) >= 2:
-            _f, _v = get_model_family_and_version(_k)
-            if _f:
-                _tracked_fams.add(_f)
 
     def build_table(classification):
         rows = []
@@ -5721,15 +5758,28 @@ def build_unified_table(all_results):
             if data["classification"] != classification:
                 continue
             scores = data["scores"]
-            # Only include models meeting minimum CL threshold
             avg_scores = {b: s for b, s in scores.items() if b not in EXCLUDE_FROM_AVG}
             cl_pct = len(avg_scores) / n_core * 100
-            if len(avg_scores) < 2:  # ≥2 core benchmarks (configurable via MIN_CL_PERCENT)
-                # stats-57 exception: AA-scored new generation of a tracked family
-                _fam, _ver = get_model_family_and_version(key)
-                if not (avg_scores.get("Artificial Analysis") is not None
-                        and _fam is not None and _fam in _tracked_fams):
+            # Admission (stats-65, 2026-10-24 — Ibrahim proposal, approved):
+            #   >=2 core benchmarks  -> ranked row (unchanged rule)
+            #   exactly 1 core bench -> UNRANKED row: real cells ship, but the
+            #   row carries unranked=True and the frontend shows it in the
+            #   dimmed "New & unranked" section under the ranked table — no
+            #   computed rating, no rank number. It graduates automatically
+            #   when a 2nd source lands. This REPLACES the stats-57
+            #   tracked-family AA-only exception (one admission path; no more
+            #   diluted single-source "scores" where missing benches counted
+            #   as neutral 50). The family-key mismatch that silently broke
+            #   stats-57 ('Kimi K3.1 Pro' -> fam 'kimi k pro' vs tracked
+            #   'kimi k') becomes moot with the exception gone.
+            #   0 core benchmarks    -> still out (measured 2026-09-30: keeps
+            #   the metadata-only zoo off the board).
+            if len(avg_scores) < 2:
+                if len(avg_scores) != 1:
                     continue
+                unranked = True
+            else:
+                unranked = False
 
             # Confidence Level: fraction of core benchmarks covered
             cl = cl_pct
@@ -5738,6 +5788,8 @@ def build_unified_table(all_results):
                 "num_benchmarks": len(avg_scores),
                 "cl": round(cl, 1),
             }
+            if unranked:
+                row["unranked"] = True
             for b in all_benchmarks:
                 s = scores.get(b, None)
                 row[b] = round(s, 1) if s is not None else None
@@ -5931,7 +5983,10 @@ def format_results(all_results, closed_table, open_table, all_benchmarks, avg_be
         output.append("")
         output.append("=" * 80)
         n_show = min(TOP_N, len(table))
-        output.append(f"  {label} Models — Pivot ({n_show}/{len(table)} qualified, sorted by Artificial Analysis)")
+        n_ranked = sum(1 for r in table if not r.get("unranked"))
+        n_unranked = len(table) - n_ranked
+        output.append(f"  {label} Models — Pivot ({n_ranked} ranked"
+                      f"{f', {n_unranked} unranked' if n_unranked else ''} — {n_show}/{len(table)} shown, sorted by Artificial Analysis)")
         output.append("=" * 80)
         if not table:
             output.append("  No models found")
@@ -5953,16 +6008,22 @@ def format_results(all_results, closed_table, open_table, all_benchmarks, avg_be
                 else:
                     cells.append(" " * col_w)
             bench_str = "  ".join(cells)
-            output.append(f"  {idx:>{rank_w}}  {row['name'][:28]:<28}  {bench_str}  {row['cl']:>3.0f}%")
+            # unranked rows carry no rank claim in the text report either
+            rank_cell = "—" if row.get("unranked") else str(idx)
+            output.append(f"  {rank_cell:>{rank_w}}  {row['name'][:28]:<28}  {bench_str}  {row['cl']:>3.0f}%")
 
     # ── Summary stats ──
     output.append("")
     output.append("=" * 80)
     output.append("  SUMMARY")
     output.append("=" * 80)
-    n_qualified = len(closed_table) + len(open_table)
-    output.append(f"  Qualified models (>=2 core benchmarks): {n_qualified} "
-                  f"({len(closed_table)} closed, {len(open_table)} open-weight)")
+    all_rows = closed_table + open_table
+    n_qualified = sum(1 for r in all_rows if not r.get("unranked"))
+    n_unranked = len(all_rows) - n_qualified
+    output.append(f"  Ranked models (>=2 core benchmarks): {n_qualified} "
+                  f"({sum(1 for r in closed_table if not r.get('unranked'))} closed, "
+                  f"{sum(1 for r in open_table if not r.get('unranked'))} open-weight)")
+    output.append(f"  Unranked models (1 core benchmark — visible, no rating claim): {n_unranked}")
     output.append(f"  Core benchmarks ({len(avg_benchmarks)}): {', '.join(avg_benchmarks)}")
     output.append(f"  Non-core (shown but not counted in CL): {', '.join(b for b in all_benchmarks if b not in avg_benchmarks)}")
     output.append(f"  CL = core benchmarks covered / total core benchmarks")

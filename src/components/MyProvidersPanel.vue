@@ -47,13 +47,15 @@ const {
   addProvider, updateProvider, removeProvider, clearAll,
   setModels, setError, exportPayload, importPayload,
 } = useMyProviders();
-const { ensureLoaded, loading, rawData, pivotAll, modelsMeta, scoreForModel, clForModel, priceFor, isOlder } = useData();
+const { ensureLoaded, loading, rawData, pivotAll, modelsMeta, scoreForModel, clForModel, priceFor, isOlder, isUnranked } = useData();
 
 onMounted(() => { ensureMyProvidersLoaded(); ensureLoaded(); });
 
 // ── Catalog matching index (rebuilt when the snapshot loads) ──────────
+// stats-65: unranked rows stay out of the matcher index (same rule as the
+// matched-rows filter below — a model without a rating is not a pick).
 const catalogIndex = computed(() =>
-  (rawData.value ? buildCatalogIndex(pivotAll.value || [], modelsMeta.value || {}) : null));
+  (rawData.value ? buildCatalogIndex(pivotAll.value.filter(r => !r.unranked) || [], modelsMeta.value || {}) : null));
 const rowByName = computed(() => {
   const m = new Map();
   for (const r of pivotAll.value || []) if (r?.name) m.set(r.name, r);
@@ -294,12 +296,20 @@ function matchedRows(p) {
       older: row ? isOlder(row) : false,
     };
   });
+  // stats-65: unranked rows stay out of the provider picks (v1 scope —
+  // same rule as the advisor: a model without a rating is not a
+  // recommendation candidate). Rows with no catalog join at all still
+  // list (honest availability, no score attached).
+  const visibleRows = rows.filter(r => {
+    const row = rowByName.value.get(r.name);
+    return !row || !isUnranked(row);
+  });
   const dir = (a, b, cmp) => cmp(a, b) || a.name.localeCompare(b.name);
   const num = (v) => (v === null || v === undefined ? -Infinity : v);
-  if (p.intent === 'prices') rows.sort((a, b) => dir(a, b, (x, y) => num(x.price?.blend) - num(y.price?.blend)));
-  else if (p.intent === 'track') rows.sort((a, b) => a.name.localeCompare(b.name));
-  else rows.sort((a, b) => dir(a, b, (x, y) => num(y.score) - num(x.score))); // scores (default)
-  return rows;
+  if (p.intent === 'prices') visibleRows.sort((a, b) => dir(a, b, (x, y) => num(x.price?.blend) - num(y.price?.blend)));
+  else if (p.intent === 'track') visibleRows.sort((a, b) => a.name.localeCompare(b.name));
+  else visibleRows.sort((a, b) => dir(a, b, (x, y) => num(y.score) - num(x.score))); // scores (default)
+  return visibleRows;
 }
 
 function unlistedRows(p) {

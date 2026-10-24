@@ -13050,7 +13050,7 @@
         }
       ],
       "free_tier": true,
-      "edge_rtt_ms": 170
+      "edge_rtt_ms": 169
     },
     {
       "id": "together-ai",
@@ -16488,6 +16488,14 @@
           "ctx": 131072
         },
         {
+          "id": "~z-ai/glm-flash-latest",
+          "name": "Z.ai: GLM Flash Latest",
+          "in": 0.0507,
+          "out": 0.0702,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
           "id": "nex-agi/nex-n2.5-mini",
           "name": "Nex AGI: Nex-N2.5-Mini",
           "in": 0.025,
@@ -16523,14 +16531,6 @@
           "in": 0.024,
           "out": 0.112,
           "ctx": 131072
-        },
-        {
-          "id": "~z-ai/glm-flash-latest",
-          "name": "Z.ai: GLM Flash Latest",
-          "in": 0.0393,
-          "out": 0.1028,
-          "cache": 0.03,
-          "ctx": 1048576
         },
         {
           "id": "mistralai/ministral-8b-2512:batch",
@@ -16649,8 +16649,8 @@
           "id": "~deepseek/deepseek-v4-flash-latest",
           "name": "DeepSeek: DeepSeek V4 Flash Latest",
           "in": 0.0422,
-          "out": 0.1694,
-          "cache": 0.028,
+          "out": 0.1763,
+          "cache": 0.027,
           "ctx": 1048576
         },
         {
@@ -17002,6 +17002,14 @@
           "ctx": 262144
         },
         {
+          "id": "tencent/hy3",
+          "name": "Tencent: Hy3",
+          "in": 0.0825,
+          "out": 0.33,
+          "cache": 0.0206,
+          "ctx": 262144
+        },
+        {
           "id": "meta-llama/llama-3.3-70b-instruct",
           "name": "Meta: Llama 3.3 70B Instruct",
           "in": 0.1,
@@ -17164,6 +17172,14 @@
           "ctx": 1000000
         },
         {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek: DeepSeek V4 Pro 0423",
+          "in": 0.2088,
+          "out": 0.4176,
+          "cache": 0.0174,
+          "ctx": 1024000
+        },
+        {
           "id": "qwen/qwen3-235b-a22b-2507",
           "name": "Qwen: Qwen3 235B A22B Instruct 2507",
           "in": 0.09,
@@ -17185,14 +17201,6 @@
           "out": 0.5,
           "cache": 0.03,
           "ctx": 1048575
-        },
-        {
-          "id": "tencent/hy3",
-          "name": "Tencent: Hy3",
-          "in": 0.132,
-          "out": 0.528,
-          "cache": 0.033,
-          "ctx": 262144
         },
         {
           "id": "deepseek/deepseek-v3.2-exp",
@@ -17419,14 +17427,6 @@
           "ctx": 262144
         },
         {
-          "id": "deepseek/deepseek-v4-pro",
-          "name": "DeepSeek: DeepSeek V4 Pro 0423",
-          "in": 0.3175,
-          "out": 0.6351,
-          "cache": 0.0265,
-          "ctx": 1024000
-        },
-        {
           "id": "z-ai/glm-4.5-air",
           "name": "Z.ai: GLM 4.5 Air",
           "in": 0.13,
@@ -17449,13 +17449,6 @@
           "out": 0.75,
           "cache": 0.025,
           "ctx": 262144
-        },
-        {
-          "id": "openai/gpt-3.5-turbo:batch",
-          "name": "OpenAI: GPT-3.5 Turbo (batch)",
-          "in": 0.25,
-          "out": 0.75,
-          "ctx": 16385
         },
         {
           "id": "openai/gpt-4.1-mini:batch",
@@ -17748,14 +17741,6 @@
           "ctx": 400000
         },
         {
-          "id": "z-ai/glm-5.3",
-          "name": "Z.ai: GLM 5.3",
-          "in": 0.079,
-          "out": 1.4,
-          "cache": 0.078,
-          "ctx": 1048576
-        },
-        {
           "id": "meituan/longcat-2.0",
           "name": "Meituan: LongCat 2.0",
           "in": 0.3,
@@ -17864,6 +17849,14 @@
           "ctx": 131072
         },
         {
+          "id": "z-ai/glm-5.3",
+          "name": "Z.ai: GLM 5.3",
+          "in": 0.0908,
+          "out": 1.61,
+          "cache": 0.0897,
+          "ctx": 1048576
+        },
+        {
           "id": "google/gemini-3-flash-preview:batch",
           "name": "Google: Gemini 3 Flash Preview (batch)",
           "in": 0.25,
@@ -17937,13 +17930,6 @@
           "in": 1.0,
           "out": 1.0,
           "ctx": 131072
-        },
-        {
-          "id": "openai/gpt-3.5-turbo",
-          "name": "OpenAI: GPT-3.5 Turbo",
-          "in": 0.5,
-          "out": 1.5,
-          "ctx": 16385
         },
         {
           "id": "openai/gpt-4.1-mini",
@@ -18338,6 +18324,14 @@
           "ctx": 256000
         },
         {
+          "id": "tencent/hy4-preview",
+          "name": "Tencent: Hy4 preview",
+          "in": 0.7506,
+          "out": 2.2509,
+          "cache": 0.0378,
+          "ctx": 1048576
+        },
+        {
           "id": "moonshotai/kimi-k2-0905",
           "name": "MoonshotAI: Kimi K2 0905",
           "in": 0.6,
@@ -18351,14 +18345,6 @@
           "out": 2.5,
           "cache": 0.15,
           "ctx": 262144
-        },
-        {
-          "id": "tencent/hy4-preview",
-          "name": "Tencent: Hy4 preview",
-          "in": 0.834,
-          "out": 2.501,
-          "cache": 0.042,
-          "ctx": 1048576
         },
         {
           "id": "bytedance-seed/seed-2.0-code",
@@ -18388,13 +18374,6 @@
           "in": 0.5,
           "out": 3.0,
           "ctx": 65536
-        },
-        {
-          "id": "openai/gpt-3.5-turbo-instruct",
-          "name": "OpenAI: GPT-3.5 Turbo Instruct",
-          "in": 1.5,
-          "out": 2.0,
-          "ctx": 4095
         },
         {
           "id": "elorian/glimpse",
@@ -21341,7 +21320,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 403
+      "edge_rtt_ms": 310
     },
     {
       "id": "poe",
@@ -22210,7 +22189,7 @@
           "ctx": 1050000
         }
       ],
-      "edge_rtt_ms": 286
+      "edge_rtt_ms": 282
     },
     {
       "id": "vercel-ai-gateway",
@@ -22551,8 +22530,7 @@
           "id": "vercel_ai_gateway/openai/gpt-3.5-turbo-instruct",
           "in": 1.5,
           "out": 2.0,
-          "ctx": 8192,
-          "name": "OpenAI: GPT-3.5 Turbo Instruct"
+          "ctx": 8192
         },
         {
           "id": "vercel_ai_gateway/amazon/nova-pro",
@@ -23459,7 +23437,7 @@
           "ctx": null
         }
       ],
-      "edge_rtt_ms": 654
+      "edge_rtt_ms": 660
     },
     {
       "id": "w-b-inference-gateway",

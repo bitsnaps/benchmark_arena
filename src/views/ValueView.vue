@@ -32,7 +32,7 @@ import { useData } from '../stores/data.js';
 
 const route = useRoute();
 const router = useRouter();
-const { pivotFor, scoreForModel, clForModel, priceFor, valueFor, metaFor, isOlder, releaseDateOf, sellerCountFor } = useData();
+const { pivotFor, scoreForModel, clForModel, priceFor, valueFor, metaFor, isOlder, isUnranked, releaseDateOf, sellerCountFor } = useData();
 
 const xOptions = axisOptions(X_AXIS_IDS);
 const yOptions = axisOptions(Y_AXIS_IDS);
@@ -90,7 +90,9 @@ const tierTab = computed({
 });
 
 const built = computed(() =>
-  buildScatterPoints(pivotFor(tier.value), xId.value, yId.value, api, {
+  // stats-65: unranked rows have no rating claim — a value point would be
+  // Score ÷ price on a mostly-prior score, so they never plot here.
+  buildScatterPoints(pivotFor(tier.value).filter(r => !isUnranked(r)), xId.value, yId.value, api, {
     includeOlder: showOlder.value, xScale: effXScale.value, yScale: effYScale.value,
   }));
 
@@ -182,7 +184,7 @@ const legend = computed(() => {
   }
   return [...c.values()].sort((a, b) => b.n - a.n).slice(0, 12);
 });
-const currentCount = computed(() => pivotFor(tier.value).filter(r => !isOlder(r)).length);
+const currentCount = computed(() => pivotFor(tier.value).filter(r => !isOlder(r) && !isUnranked(r)).length);
 const olderCount = computed(() => pivotFor(tier.value).filter(r => isOlder(r)).length);
 const emptyState = computed(() => !built.value.points.length);
 const frontierLabel = computed(() =>

@@ -54,7 +54,11 @@ for (const r of [...(data.unified_closed || []), ...(data.unified_open || [])]) 
   rows.push(r);
 }
 const visible = rows.filter(r => !isOld(r));
-const valued = visible.map(r => ({ name: r.name, v: valueOf(r) })).filter(x => x.v !== null)
+// stats-65: unranked rows claim no value — the ranked table can never show
+// them, so the sort-end expectations must be ranked-only (and the unranked
+// rows that GAIN a 2nd source legitimately change these ends).
+const rankedVisible = visible.filter(r => !r.unranked);
+const valued = rankedVisible.map(r => ({ name: r.name, v: valueOf(r) })).filter(x => x.v !== null)
   .sort((a, b) => a.v - b.v);
 const WORST = valued[0];       // lowest value (frontier-priced)
 const BEST = valued[valued.length - 1]; // highest value (cheap + capable)
@@ -97,7 +101,9 @@ const ok = (msg) => console.log('  ok:', msg);
 
 
     // ── 1. Header order: SCORE, PRICE, VALUE, then the 8 core columns ──
-    const headers = (await page.locator('.b-table thead th').allInnerTexts()).map(s => s.trim().toUpperCase());
+    // stats-65: scope to the FIRST table — the "New & unranked" section
+    // below renders the same header set a second time.
+    const headers = (await page.locator('.b-table').first().locator('thead th').allInnerTexts()).map(s => s.trim().toUpperCase());
     const want = ['#', 'MODEL', 'SCORE', 'PRICE', 'VALUE', 'AA', 'BENCHLM', 'ARENA', 'SIMPLEB', 'ARC-2', 'DESIGN', 'SWE-M', 'FRONTIER', 'CL'];
     if (JSON.stringify(headers) === JSON.stringify(want)) ok('headers: SCORE PRICE VALUE + 8 core + CL');
     else fail('headers mismatch: ' + JSON.stringify(headers));

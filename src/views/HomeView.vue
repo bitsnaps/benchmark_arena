@@ -21,7 +21,7 @@ import TiersSelect from '../components/TiersSelect.vue';
 const route = useRoute();
 const router = useRouter();
 
-const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor, metaFor } = useData();
+const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, isUnranked, releaseDateOf, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor, metaFor } = useData();
 const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId, modFilter } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
@@ -242,13 +242,33 @@ const applyFilters = (list) => {
 };
 
 const rows = computed(() => {
-  const all = applyFilters(pivotFor(tier.value));
+  const all = applyFilters(pivotFor(tier.value)).filter(r => !isUnranked(r));
   if (!showOlder.value) return all.filter(r => !isOlder(r));
   // Toggle on: pre-sort the merged list by the CL-weighted score so older
   // models sit at their true rank position (the table's interactive sort
   // takes over from there).
   return [...all].sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1));
 });
+
+// stats-65: the "New & unranked" section — every admitted single-source row
+// (unranked flag baked by the scraper) that passes the SAME toolbar filters
+// as the ranked table. Newest release first; rows without a catalog date
+// (launch-day, not yet provider-matched) sink to the end alphabetically.
+// Older+unranked rows stay behind the Older-versions toggle like everywhere
+// else: hidden while the toggle is off, shown dimmed when it is on.
+const unrankedRows = computed(() => {
+  const list = applyFilters(pivotFor(tier.value))
+    .filter(r => isUnranked(r) && (showOlder.value || !isOlder(r)));
+  return [...list].sort((a, b) => {
+    const da = releaseDateOf(a);
+    const db = releaseDateOf(b);
+    if (da && db && da !== db) return da < db ? 1 : -1;
+    if (da !== db) return da ? -1 : 1;
+    return a.name.localeCompare(b.name);
+  });
+});
+const unrankedCount = computed(() =>
+  pivotFor(tier.value).filter(r => isUnranked(r) && (showOlder.value || !isOlder(r))).length);
 
 const olderCount = computed(() =>
   pivotFor(tier.value).filter(r => isOlder(r)).length);
@@ -446,6 +466,20 @@ const openModel = (name) =>
     <!-- The table — older models render inline (dimmed, unranked) when toggled on -->
     <div class="mt">
       <PivotTable :rows="rows" :tier="tier" />
+    </div>
+
+    <!-- stats-65: New & unranked — single-source rows the ranking is not
+         allowed to claim yet. Same columns, dimmed, no Score/rank; they
+         graduate into the ranked table automatically at 2 sources. -->
+    <div v-if="unrankedRows.length" class="mt-sm">
+      <div class="row" style="gap:.6rem;align-items:baseline;padding:0 .4rem .35rem">
+        <h2 class="section-title" style="font-size:1.05rem;margin:0">New &amp; unranked</h2>
+        <span class="cell-sub">
+          {{ unrankedCount }} model{{ unrankedCount === 1 ? '' : 's' }} with one benchmark source —
+          real scores shown as-is, no rating yet. They join the ranking automatically when a 2nd source lands.
+        </span>
+      </div>
+      <PivotTable :rows="unrankedRows" :tier="tier" unranked-mode />
     </div>
 
     <p class="cell-sub mt-sm" style="text-align:center">

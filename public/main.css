@@ -416,6 +416,19 @@ a.hbar:hover .name { color: var(--teal); }
   border: 1px solid color-mix(in srgb, var(--gold, #f5c15a) 35%, transparent);
 }
 
+/* ── stats-65: unranked rows — single-source admissions in the "New &
+   unranked" section under the ranked table. Same dimming family as older
+   rows (indigo accent instead of gold: a promise pending, not a retirement),
+   no Score rendered, "unranked" chip on the name. */
+.cov-table tbody tr.is-unranked-row { opacity: .5; }
+.cov-table tbody tr.is-unranked-row:hover { opacity: 1; }
+.cov-table tbody tr.is-unranked-row .rank { filter: grayscale(1); opacity: .7; }
+.unranked-chip {
+  color: #8b9cf5; cursor: help;
+  background: rgba(139, 156, 245, 0.13);
+  border: 1px solid rgba(139, 156, 245, 0.4);
+}
+
 /* stats-35: "limited data" badge — row covers fewer than half of the
    selected benchmarks, so its Score leans mostly on the neutral prior.
    Muted slate (distinct from gold "older" and indigo "new"). */

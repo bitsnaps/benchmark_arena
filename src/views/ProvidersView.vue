@@ -381,8 +381,12 @@ const mineCols = computed(() => (myProviders.value || [])
 
 // The matching index — built exactly like the My Providers panel's (same
 // pure fn over the same snapshot pieces), so both tabs can never disagree.
+// stats-65: unranked rows stay out of the matcher index — they claim no
+// score (the leaderboard renders '—'), so joining them here would leak
+// diluted single-source numbers into the price matrix, and the 2.8x bigger
+// index OOM-crashes the score-column render on modest devices.
 const mineCatalogIndex = computed(() =>
-  benchRaw.value ? buildCatalogIndex(pivotAll.value || [], modelsMeta.value || {}) : null);
+  benchRaw.value ? buildCatalogIndex(pivotAll.value.filter(r => !r.unranked) || [], modelsMeta.value || {}) : null);
 
 // arena name → provider id → matched SKUs (prices only as published)
 const mineOverlay = computed(() =>
@@ -544,7 +548,8 @@ watch(scoreOptions, (opts) => {
 });
 const boardByName = computed(() => {
   const m = new Map();
-  for (const r of pivotAll.value || []) if (r && r.name && !m.has(r.name)) m.set(r.name, r);
+  // stats-65: unranked rows have no unified score to join
+  for (const r of pivotAll.value || []) if (r && r.name && !r.unranked && !m.has(r.name)) m.set(r.name, r);
   return m;
 });
 // per-MODEL resolution: staged matcher (same join as the my-gateways

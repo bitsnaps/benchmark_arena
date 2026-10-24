@@ -120,7 +120,9 @@ const expectCount = async (page, selector, expected, label) => {
 
     await expectCount(page, '.b-table .table tbody tr', visible.length, 'default rows');
     await expectCount(page, '.b-table .free-chip', freeRows.length, 'free chips');
+    // stats-65: unranked rows render chip-free (slim tooltip layer) — excluded
     const availChipRows = visible.filter(r => {
+      if (r.unranked) return false;
       const n = avail(META[r.name]).length;
       if (!n) return false;
       return n >= 2 || avail(META[r.name])[0].p !== 'openrouter';

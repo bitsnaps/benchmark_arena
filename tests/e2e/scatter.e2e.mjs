@@ -70,7 +70,8 @@ for (const r of [...(data.unified_closed || []), ...(data.unified_open || [])]) 
 }
 
 const plot = (xf, yf, older) => rows
-  .filter(r => older || !isOld(r.name))
+  // stats-65: unranked rows never plot — no rating claim behind the points
+  .filter(r => !r.unranked && (older || !isOld(r.name)))
   .map(r => ({ name: r.name, x: xf(r), y: yf(r.name) }))
   .filter(p => p.x != null && p.y != null);
 

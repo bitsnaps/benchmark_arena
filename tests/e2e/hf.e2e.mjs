@@ -29,7 +29,8 @@ for (const r of [...(data.unified_closed || []), ...(data.unified_open || [])]) 
   rows.push(r);
 }
 const visible = rows.filter(r => !isOld(r));
-const withHf = visible.filter(r => META[r.name] && META[r.name].hugging_face_id);
+// stats-65: unranked rows render chip-free (slim tooltip layer) — excluded
+const withHf = visible.filter(r => !r.unranked && META[r.name] && META[r.name].hugging_face_id);
 
 // anchors: a stable open model with a repo + a stable closed model without.
 // Prefer an anchor whose name is not a substring of another row's name —

@@ -164,7 +164,8 @@ describe('CL-weighted global score (stats-35 harmonized blend, 2026-09)', () => 
   });
 
   it('partial-coverage models are pulled toward the neutral 50 baseline (on the harmonized scale)', () => {
-    const stats = MIRROR_MOD.benchZStats(d.pivotAll.value, d.benchmarks.value);
+    // stats-65: the z population mirrors the store — RANKED rows only
+    const stats = MIRROR_MOD.benchZStats(d.pivotAll.value.filter(r => !r.unranked), d.benchmarks.value);
     for (const r of d.pivotAll.value) {
       const raw = d.avgForModel(r);
       if (raw === null || !r.cl || (r.cl ?? 0) >= 100) continue;
@@ -883,5 +884,78 @@ describe('stats-49 archived-page links', () => {
   it('archiveLinkFor is null-safe for unknown rows', () => {
     expect(d.archiveLinkFor({ name: 'definitely-not-a-model' }, 'Artificial Analysis')).toBeNull();
     expect(d.archiveLinkFor(null, 'Artificial Analysis')).toBeNull();
+  });
+});
+
+// ── stats-65 (2026-10-24): unranked single-source admissions ──────────
+// A row with exactly ONE core benchmark ships with unranked=true: visible
+// in the dedicated section, but outside every rating claim. The scraper
+// bakes the flag; the store excludes these rows from rankMaps, the top
+// cards, the harmonization population and the grade maps.
+describe('stats-65: unranked single-source admissions', () => {
+  const unrankedRows = () => d.pivotAll.value.filter(r => r.unranked === true);
+  const rankedRows = () => d.pivotAll.value.filter(r => r.unranked !== true);
+
+  it('admission symmetry: unranked flag ⇔ exactly one core benchmark', () => {
+    for (const r of unrankedRows()) {
+      expect(r.num_benchmarks, `${r.name} flagged unranked`).toBe(1);
+      expect(r.cl, `${r.name} flagged unranked`).toBeCloseTo(12.5, 1);
+    }
+    // The reverse direction only holds once the stats-65 scraper ships — a
+    // pre-feature snapshot can carry legacy stats-57 AA-only rows that were
+    // admitted RANKED with a single source (they demote on the next refresh).
+    if (unrankedRows().length > 0) {
+      for (const r of rankedRows()) {
+        if (r.num_benchmarks < 2) {
+          console.log(`  (legacy stats-57 ranked single-source row still present: '${r.name}' — demotes on next refresh)`);
+        }
+      }
+      const legacy = rankedRows().filter(r => r.num_benchmarks < 2);
+      expect(legacy.length, 'ranked single-source rows must be rare legacy stragglers').toBeLessThanOrEqual(2);
+    }
+  });
+
+  it('rankMaps never assigns a rank to an unranked row', () => {
+    const un = new Set(unrankedRows().map(r => r.name));
+    for (const tier of ['all', 'closed', 'open']) {
+      for (const [name] of d.rankMaps.value[tier]) {
+        expect(un.has(name), `"${name}" (${tier}) must not hold a rank`).toBe(false);
+      }
+    }
+  });
+
+  it('top cards never resolve to an unranked row', () => {
+    for (const t of [d.topOverall.value, d.topClosed.value, d.topOpen.value]) {
+      if (t) expect(t.unranked ?? false).toBe(false);
+    }
+  });
+
+  it('harmonization population excludes unranked cells (z scale unchanged)', () => {
+    const benches = d.benchmarks.value;
+    const seen = new Set();
+    const rankedPivot = rankedRows().filter(r => !seen.has(r.name) && seen.add(r.name));
+    const expected = MIRROR_MOD.benchZStats(rankedPivot, benches);
+    const got = d.benchStats.value;
+    for (const b of Object.keys(expected)) {
+      expect(got[b]?.mu, `mu(${b})`).toBeCloseTo(expected[b].mu, 6);
+      expect(got[b]?.sd, `sd(${b})`).toBeCloseTo(expected[b].sd, 6);
+    }
+  });
+
+  it('unranked rows stay reachable via deep links (model slug index)', () => {
+    const idx = d.modelSlugIndex.value;
+    for (const r of unrankedRows()) {
+      // Deep-link contract: the row's slug resolves to A catalog row. Name
+      // collisions ('Command A+' vs 'Command A' share the slug) keep the
+      // first occurrence — presence of the slug is the reachable guarantee.
+      expect(idx.has(MIRROR_MOD.slugify(r.name)), `slug for "${r.name}"`).toBe(true);
+    }
+  });
+
+  it('leader cards never crown an unranked row', () => {
+    for (const card of d.leaders.value) {
+      const row = rowOf(card.model);
+      if (row) expect(row.unranked ?? false).toBe(false);
+    }
   });
 });

@@ -28,7 +28,7 @@ const score = r => mirrorScore(r);
 const META = data.models_meta || {};
 const supOf = name => (META[name] && META[name].superseded_by) || null;
 const isOld = r => !!(META[r.name] && (META[r.name].superseded_by || META[r.name].stale));
-const topOf = list => [...list].filter(r => !isOld(r)).sort((a,b)=>score(b)-score(a))[0]?.name;
+const topOf = list => [...list].filter(r => !isOld(r) && !r.unranked).sort((a,b)=>score(b)-score(a))[0]?.name;
 const slugify = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 const EXPECT = {
   all: topOf([...(data.unified_closed||[]), ...(data.unified_open||[])]),

@@ -159,8 +159,14 @@ def main(path):
             rows.append(r)
     meta = data.get("models_meta") or {}
     row_names = {r["name"] for r in rows}
+    # stats-65: unranked rows (single-source admissions) make no ranking
+    # claim — dimmed, no Score, no rank — so they are neither leak subjects
+    # nor leak evidence. Leaks are only about RANKED rows misrepresenting a
+    # product line's current generation.
+    unranked_names = {r["name"] for r in rows if r.get("unranked")}
+    ranked_rows = [r for r in rows if not r.get("unranked")]
     flagged = {n for n, m in meta.items() if m.get("superseded_by") or m.get("stale")}
-    visible = row_names - flagged
+    visible = row_names - flagged - unranked_names
 
     problems = []
 
@@ -196,8 +202,8 @@ def main(path):
             problems.append(f"contract: '{r['name']}' num_benchmarks={nb} > "
                             f"{scored} non-null scores present")
 
-    # 2 + 3 ── leaks
-    for old, new, why in iter_leaks(rows, meta):
+    # 2 + 3 ── leaks (ranked rows only — see stats-65 note above)
+    for old, new, why in iter_leaks(ranked_rows, meta):
         problems.append(f"leak: '{old}' visible but {why} ('{new}')")
 
     # 4 ── curated red lines
@@ -208,7 +214,8 @@ def main(path):
         if n in row_names and n in flagged:
             problems.append(f"red line: '{n}' must stay visible (distinct product line)")
 
-    print(f"leak_detector: {len(rows)} rows, {len(flagged)} flagged older, "
+    print(f"leak_detector: {len(rows)} rows ({len(rows) - len(unranked_names)} ranked, "
+          f"{len(unranked_names)} unranked), {len(flagged)} flagged older, "
           f"{len(visible)} visible, {len(meta)} meta entries"
           + (f", {n_registry} no-coverage registry rows" if n_registry else ""))
     if problems:

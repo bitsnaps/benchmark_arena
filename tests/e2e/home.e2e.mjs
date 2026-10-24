@@ -51,8 +51,14 @@ const ok = (msg) => console.log('  ok:', msg);
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
 
+  // stats-29b: read the anchor's leading text node only — the EQBench alias
+  // footnote (<span class="alias-star">★</span>) lives INSIDE .model-link,
+  // so innerText returns "Qwen3.8-Max★" for any footnote carrier. First open
+  // #1 footnote carrier: Qwen3.8-Max (2026-10-24 refresh) — exact-match
+  // assertions vs EXPECT.* must see the bare name, star is decoration.
   const firstName = () => page.locator('.b-table .table tbody tr').first()
-    .locator('.model-cell .model-link').first().innerText();
+    .locator('.model-cell .model-link').first()
+    .evaluate(el => (el.childNodes[0]?.textContent ?? el.innerText).trim());
 
   // ── 1. Home IS the leaderboard ──
   await page.goto(BASE, { waitUntil: 'networkidle' });

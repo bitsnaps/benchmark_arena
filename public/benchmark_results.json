@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-24 18:44",
+  "timestamp": "2026-10-25 03:12",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -1060,205 +1060,205 @@
       "closed": [
         [
           "Claude Opus 5.5",
-          98.28125
+          98.27856025039124
         ],
         [
           "GPT-6 Astra (xhigh)",
-          97.34375
+          97.339593114241
         ],
         [
           "Muse Wonder (max)",
-          96.25
+          96.40062597809077
         ],
         [
           "GPT-6.1 Sol",
-          93.4375
+          93.42723004694837
         ],
         [
           "Claude Sonnet 5.5",
-          92.96875
+          92.80125195618153
         ],
         [
           "Muse Spark 1.3 (xhigh)",
-          92.1875
+          92.17527386541471
         ],
         [
           "Muse Spark 1.3 Max",
-          92.03125
+          92.01877934272301
         ],
         [
           "GPT-5.6 Sol (xhigh)",
-          90.625
+          90.61032863849765
         ],
         [
           "Claude Fable 5.1",
-          89.6875
+          89.82785602503913
         ],
         [
           "Gemini 4 Argon",
-          88.90625
+          88.88888888888889
         ],
         [
           "Claude Opus 5",
-          87.96875
+          87.94992175273866
         ],
         [
           "Muse Spark 1.2",
-          86.09375
+          86.07198748043818
         ],
         [
           "Claude Fable 5",
-          85.78125
+          85.75899843505478
         ],
         [
           "Gemini 3.7 Flash",
-          85.46875
+          85.44600938967136
         ],
         [
           "Ling-3.1-flash",
-          85.0
+          84.97652582159625
         ],
         [
           "Gemini 3.8 Flash",
-          84.6875
+          84.66353677621284
         ],
         [
           "GPT-6 Sol",
-          84.0625
+          84.03755868544602
         ],
         [
           "Grok 4.6",
-          82.8125
+          82.94209702660407
         ],
         [
           "Gemini 3.6 Flash",
-          82.5
+          82.47261345852895
         ],
         [
           "Claude Opus 4.6",
-          82.34375
+          82.31611893583725
         ],
         [
           "Claude Haiku 5.5",
-          80.625
+          80.59467918622848
         ],
         [
           "Deca 2.6 Ultra",
-          80.625
+          80.59467918622848
         ],
         [
           "Claude Sonnet 5",
-          80.46875
+          80.43818466353677
         ],
         [
           "Muse Spark 1.1",
-          80.46875
+          80.43818466353677
         ],
         [
           "Claude Sonnet 4.6",
-          80.3125
+          80.28169014084507
         ]
       ],
       "open": [
         [
-          "Kimi K3.1 Pro",
-          93.75
+          "Kimi K3",
+          93.58372456964005
         ],
         [
-          "Kimi K3",
-          93.59375
+          "Kimi K3.1 Pro",
+          92.95774647887323
         ],
         [
           "DeepSeek-V4.1-Flash",
-          87.1875
+          87.32394366197182
         ],
         [
           "MiMo-V2.6-Pro",
-          86.71875
+          86.697965571205
         ],
         [
           "GLM-5.3",
-          84.53125
+          84.50704225352112
         ],
         [
           "MiniMax M3.1 Flash",
-          83.59375
+          83.56807511737088
         ],
         [
           "Qwen3.8 Max",
-          83.125
+          83.09859154929578
         ],
         [
           "GLM 5.2",
-          82.1875
+          82.15962441314554
         ],
         [
           "GLM-5.3-Flash",
-          81.09375
+          81.2206572769953
         ],
         [
           "Kimi K2.6",
-          79.6875
+          79.65571205007824
         ],
         [
           "GLM 5.1",
-          79.21875
+          79.18622848200313
         ],
         [
           "MiMo-V2.5-Pro",
-          78.90625
+          78.87323943661971
         ],
         [
           "GLM 5 Turbo",
-          78.125
+          78.09076682316119
         ],
         [
           "MiMo-V2.5",
-          77.96875
+          77.93427230046949
         ],
         [
           "Mistral Large 4",
-          77.8125
+          77.77777777777779
         ],
         [
           "Kimi K2.7 Code",
-          76.71875
+          76.68231611893583
         ],
         [
           "GLM 5",
-          75.78125
+          75.7433489827856
         ],
         [
           "MiniMax M3",
-          75.78125
+          75.7433489827856
         ],
         [
           "DeepSeek-V4-Pro",
-          74.84375
+          74.80438184663537
         ],
         [
           "Kimi K2.5 (Thinking)",
-          74.21875
+          74.17840375586854
         ],
         [
           "Qwen3.6 Plus",
-          74.21875
+          74.17840375586854
         ],
         [
           "MiniMax M2.7",
-          73.75
+          73.70892018779342
         ],
         [
           "DeepSeek-V4-Flash-0731",
-          73.125
+          73.0829420970266
         ],
         [
           "GLM 5V Turbo",
-          72.96875
+          72.9264475743349
         ],
         [
           "GLM 4.7",
-          71.09375
+          71.04851330203444
         ]
       ]
     },
@@ -2257,7 +2257,7 @@
       "Arena.ai Text": 88.9,
       "SimpleBench.com": 75.9,
       "ARC-AGI-2": 83.9,
-      "Design Arena": 93.0,
+      "Design Arena": 92.8,
       "DeepSWE": null,
       "VendingBench": 72.0,
       "SWE-Marathon": 96.6,
@@ -2311,7 +2311,7 @@
       "Arena.ai Text": 92.8,
       "SimpleBench.com": 86.6,
       "ARC-AGI-2": 90.0,
-      "Design Arena": 89.7,
+      "Design Arena": 89.8,
       "DeepSWE": null,
       "VendingBench": 34.9,
       "SWE-Marathon": 85.9,
@@ -2365,7 +2365,7 @@
       "Arena.ai Text": 93.7,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 96.2,
+      "Design Arena": 96.4,
       "DeepSWE": null,
       "VendingBench": 60.8,
       "SWE-Marathon": 98.9,
@@ -2383,7 +2383,7 @@
       "Arena.ai Text": 83.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": 61.4,
-      "Design Arena": 79.8,
+      "Design Arena": 80.0,
       "DeepSWE": null,
       "VendingBench": 67.9,
       "SWE-Marathon": 85.9,
@@ -2510,7 +2510,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 57.5,
-      "Design Arena": 71.4,
+      "Design Arena": 70.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2528,7 +2528,7 @@
       "Arena.ai Text": 83.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": 59.3,
-      "Design Arena": 79.4,
+      "Design Arena": 79.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": 52.9,
@@ -2658,7 +2658,7 @@
       "Arena.ai Text": 82.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": 23.5,
-      "Design Arena": 76.6,
+      "Design Arena": 77.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3213,7 +3213,7 @@
       "Arena.ai Text": 69.5,
       "SimpleBench.com": 22.1,
       "ARC-AGI-2": null,
-      "Design Arena": 31.4,
+      "Design Arena": 31.3,
       "DeepSWE": null,
       "VendingBench": 0.0,
       "SWE-Marathon": null,
@@ -3531,7 +3531,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 35.0,
+      "Design Arena": 34.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3808,7 +3808,7 @@
       "Arena.ai Text": 52.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 47.3,
+      "Design Arena": 47.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4159,7 +4159,7 @@
       "Arena.ai Text": 90.9,
       "SimpleBench.com": 80.6,
       "ARC-AGI-2": 90.4,
-      "Design Arena": 88.0,
+      "Design Arena": 87.9,
       "DeepSWE": 74.0,
       "VendingBench": 72.1,
       "SWE-Marathon": null,
@@ -4177,7 +4177,7 @@
       "Arena.ai Text": 75.5,
       "SimpleBench.com": 45.5,
       "ARC-AGI-2": 5.9,
-      "Design Arena": 60.8,
+      "Design Arena": 60.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4195,7 +4195,7 @@
       "Arena.ai Text": 85.4,
       "SimpleBench.com": 54.3,
       "ARC-AGI-2": 13.6,
-      "Design Arena": 65.8,
+      "Design Arena": 65.7,
       "DeepSWE": null,
       "VendingBench": 24.7,
       "SWE-Marathon": null,
@@ -4213,7 +4213,7 @@
       "Arena.ai Text": 82.3,
       "SimpleBench.com": 61.6,
       "ARC-AGI-2": 18.3,
-      "Design Arena": 67.2,
+      "Design Arena": 67.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4231,7 +4231,7 @@
       "Arena.ai Text": 89.5,
       "SimpleBench.com": 76.9,
       "ARC-AGI-2": 85.0,
-      "Design Arena": 78.0,
+      "Design Arena": 77.9,
       "DeepSWE": 67.0,
       "VendingBench": 48.5,
       "SWE-Marathon": null,
@@ -4249,7 +4249,7 @@
       "Arena.ai Text": 85.1,
       "SimpleBench.com": 46.8,
       "ARC-AGI-2": 59.5,
-      "Design Arena": 73.3,
+      "Design Arena": 73.2,
       "DeepSWE": 67.0,
       "VendingBench": 26.4,
       "SWE-Marathon": null,
@@ -4285,7 +4285,7 @@
       "Arena.ai Text": 86.0,
       "SimpleBench.com": 73.1,
       "ARC-AGI-2": 89.6,
-      "Design Arena": 84.1,
+      "Design Arena": 84.0,
       "DeepSWE": null,
       "VendingBench": 93.0,
       "SWE-Marathon": null,
@@ -4303,7 +4303,7 @@
       "Arena.ai Text": 78.3,
       "SimpleBench.com": 41.2,
       "ARC-AGI-2": 2.5,
-      "Design Arena": 46.6,
+      "Design Arena": 46.5,
       "DeepSWE": null,
       "VendingBench": 3.5,
       "SWE-Marathon": null,
@@ -4321,7 +4321,7 @@
       "Arena.ai Text": 83.8,
       "SimpleBench.com": 62.4,
       "ARC-AGI-2": 4.9,
-      "Design Arena": 61.1,
+      "Design Arena": 61.0,
       "DeepSWE": null,
       "VendingBench": 3.7,
       "SWE-Marathon": null,
@@ -4339,7 +4339,7 @@
       "Arena.ai Text": 88.2,
       "SimpleBench.com": 61.1,
       "ARC-AGI-2": 33.6,
-      "Design Arena": 66.9,
+      "Design Arena": 66.8,
       "DeepSWE": null,
       "VendingBench": 23.4,
       "SWE-Marathon": null,
@@ -4393,7 +4393,7 @@
       "Arena.ai Text": 90.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 84.6,
-      "Design Arena": 85.5,
+      "Design Arena": 85.4,
       "DeepSWE": 65.0,
       "VendingBench": null,
       "SWE-Marathon": 42.4,
@@ -4429,7 +4429,7 @@
       "Arena.ai Text": 85.5,
       "SimpleBench.com": 75.9,
       "ARC-AGI-2": 67.1,
-      "Design Arena": 82.8,
+      "Design Arena": 82.9,
       "DeepSWE": 67.0,
       "VendingBench": 58.3,
       "SWE-Marathon": null,
@@ -4483,7 +4483,7 @@
       "Arena.ai Text": 84.3,
       "SimpleBench.com": 60.0,
       "ARC-AGI-2": null,
-      "Design Arena": 64.5,
+      "Design Arena": 64.6,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4501,7 +4501,7 @@
       "Arena.ai Text": 79.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": 4.0,
-      "Design Arena": 55.2,
+      "Design Arena": 55.1,
       "DeepSWE": null,
       "VendingBench": 3.0,
       "SWE-Marathon": null,
@@ -4537,7 +4537,7 @@
       "Arena.ai Text": 87.7,
       "SimpleBench.com": 62.0,
       "ARC-AGI-2": null,
-      "Design Arena": 75.2,
+      "Design Arena": 75.1,
       "DeepSWE": null,
       "VendingBench": 32.0,
       "SWE-Marathon": null,
@@ -4609,7 +4609,7 @@
       "Arena.ai Text": 86.3,
       "SimpleBench.com": 60.6,
       "ARC-AGI-2": null,
-      "Design Arena": 80.5,
+      "Design Arena": 80.4,
       "DeepSWE": 54.0,
       "VendingBench": 41.1,
       "SWE-Marathon": null,
@@ -4717,7 +4717,7 @@
       "Arena.ai Text": 71.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": 0.4,
-      "Design Arena": 26.4,
+      "Design Arena": 26.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4735,7 +4735,7 @@
       "Arena.ai Text": 79.7,
       "SimpleBench.com": null,
       "ARC-AGI-2": 29.4,
-      "Design Arena": 53.0,
+      "Design Arena": 52.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4807,7 +4807,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 53.1,
       "ARC-AGI-2": 6.5,
-      "Design Arena": 40.3,
+      "Design Arena": 40.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4879,7 +4879,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 17.8,
       "ARC-AGI-2": null,
-      "Design Arena": 15.5,
+      "Design Arena": 15.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4987,7 +4987,7 @@
       "Arena.ai Text": 82.0,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 48.6,
+      "Design Arena": 48.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -5023,7 +5023,7 @@
       "Arena.ai Text": 68.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 40.6,
+      "Design Arena": 40.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -5041,7 +5041,7 @@
       "Arena.ai Text": 90.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 80.5,
+      "Design Arena": 80.4,
       "DeepSWE": null,
       "VendingBench": 42.0,
       "SWE-Marathon": null,
@@ -5095,7 +5095,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 38.7,
       "ARC-AGI-2": 6.1,
-      "Design Arena": 33.4,
+      "Design Arena": 33.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -5203,7 +5203,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 31.4,
+      "Design Arena": 31.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -5257,7 +5257,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 37.0,
+      "Design Arena": 36.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -5293,7 +5293,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 65.8,
+      "Design Arena": 65.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -5347,7 +5347,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 36.1,
       "ARC-AGI-2": null,
-      "Design Arena": 45.5,
+      "Design Arena": 45.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -5402,7 +5402,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 58.6,
+      "Design Arena": 58.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -5953,7 +5953,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 11.2,
+      "Design Arena": 11.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -5972,7 +5972,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 38.4,
+      "Design Arena": 38.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -6105,7 +6105,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 39.2,
+      "Design Arena": 39.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -6124,7 +6124,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 7.2,
+      "Design Arena": 7.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -6466,7 +6466,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 50.5,
+      "Design Arena": 50.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -6504,7 +6504,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 51.9,
+      "Design Arena": 51.8,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -6542,7 +6542,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 70.3,
+      "Design Arena": 70.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -6789,7 +6789,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 50.0,
+      "Design Arena": 49.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -6827,7 +6827,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 53.6,
+      "Design Arena": 53.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -7986,7 +7986,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 53.9,
+      "Design Arena": 53.8,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -8651,7 +8651,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 59.7,
+      "Design Arena": 59.6,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -8670,7 +8670,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 46.1,
+      "Design Arena": 46.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -8690,7 +8690,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 93.8,
+      "Design Arena": 93.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -8798,7 +8798,7 @@
       "Arena.ai Text": 88.6,
       "SimpleBench.com": null,
       "ARC-AGI-2": 65.8,
-      "Design Arena": 81.1,
+      "Design Arena": 81.2,
       "DeepSWE": 63.0,
       "VendingBench": null,
       "SWE-Marathon": 73.1,
@@ -8907,7 +8907,7 @@
       "Arena.ai Text": 83.1,
       "SimpleBench.com": 45.8,
       "ARC-AGI-2": null,
-      "Design Arena": 75.8,
+      "Design Arena": 75.7,
       "DeepSWE": null,
       "VendingBench": 13.9,
       "SWE-Marathon": null,
@@ -8925,7 +8925,7 @@
       "Arena.ai Text": 74.9,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 65.8,
+      "Design Arena": 65.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -8961,7 +8961,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 1.9,
-      "Design Arena": 61.4,
+      "Design Arena": 61.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -9016,7 +9016,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 41.7,
       "ARC-AGI-2": null,
-      "Design Arena": 60.2,
+      "Design Arena": 60.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -9274,7 +9274,7 @@
       "Arena.ai Text": 11.5,
       "SimpleBench.com": 27.7,
       "ARC-AGI-2": null,
-      "Design Arena": 18.4,
+      "Design Arena": 18.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -9423,7 +9423,7 @@
       "Arena.ai Text": 59.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 33.4,
+      "Design Arena": 33.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -9498,7 +9498,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 4.4,
+      "Design Arena": 4.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -9832,7 +9832,7 @@
       "Arena.ai Text": 80.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 4.0,
-      "Design Arena": 63.9,
+      "Design Arena": 63.8,
       "DeepSWE": null,
       "VendingBench": 6.7,
       "SWE-Marathon": null,
@@ -9886,7 +9886,7 @@
       "Arena.ai Text": 83.2,
       "SimpleBench.com": 47.7,
       "ARC-AGI-2": null,
-      "Design Arena": 71.1,
+      "Design Arena": 71.0,
       "DeepSWE": null,
       "VendingBench": 15.3,
       "SWE-Marathon": null,
@@ -9922,7 +9922,7 @@
       "Arena.ai Text": 79.8,
       "SimpleBench.com": 26.3,
       "ARC-AGI-2": null,
-      "Design Arena": 42.5,
+      "Design Arena": 42.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -9940,7 +9940,7 @@
       "Arena.ai Text": 75.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": 4.9,
-      "Design Arena": 69.5,
+      "Design Arena": 69.6,
       "DeepSWE": null,
       "VendingBench": 0.0,
       "SWE-Marathon": null,
@@ -9958,7 +9958,7 @@
       "Arena.ai Text": 79.1,
       "SimpleBench.com": 20.4,
       "ARC-AGI-2": null,
-      "Design Arena": 59.4,
+      "Design Arena": 59.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -9994,7 +9994,7 @@
       "Arena.ai Text": 79.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 64.7,
+      "Design Arena": 64.6,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -10012,7 +10012,7 @@
       "Arena.ai Text": 82.9,
       "SimpleBench.com": 61.1,
       "ARC-AGI-2": null,
-      "Design Arena": 69.4,
+      "Design Arena": 69.3,
       "DeepSWE": 53.0,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -10030,7 +10030,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 66.7,
       "ARC-AGI-2": 72.9,
-      "Design Arena": 87.2,
+      "Design Arena": 87.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -10084,7 +10084,7 @@
       "Arena.ai Text": 71.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 65.0,
+      "Design Arena": 64.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -10102,7 +10102,7 @@
       "Arena.ai Text": 82.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 73.0,
+      "Design Arena": 72.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -10192,7 +10192,7 @@
       "Arena.ai Text": 79.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 73.8,
+      "Design Arena": 73.7,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -10228,7 +10228,7 @@
       "Arena.ai Text": 82.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 54.4,
+      "Design Arena": 54.3,
       "DeepSWE": null,
       "VendingBench": 0.5,
       "SWE-Marathon": null,
@@ -10264,7 +10264,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 54.2,
+      "Design Arena": 54.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -10318,7 +10318,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 39.6,
       "ARC-AGI-2": null,
-      "Design Arena": 62.2,
+      "Design Arena": 62.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -10408,7 +10408,7 @@
       "Arena.ai Text": 70.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 22.7,
+      "Design Arena": 22.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -10516,7 +10516,7 @@
       "Arena.ai Text": 78.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 56.1,
+      "Design Arena": 56.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -10820,7 +10820,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 58.9,
+      "Design Arena": 58.8,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -11105,7 +11105,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 52.5,
+      "Design Arena": 52.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -11143,7 +11143,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 50.3,
+      "Design Arena": 50.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -11295,7 +11295,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 26.2,
+      "Design Arena": 26.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -11542,7 +11542,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 15.9,
+      "Design Arena": 15.8,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -12093,7 +12093,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 28.1,
+      "Design Arena": 28.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -12188,7 +12188,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 37.5,
+      "Design Arena": 37.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -12207,7 +12207,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 43.3,
+      "Design Arena": 43.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -12283,7 +12283,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 63.3,
+      "Design Arena": 63.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -14331,9 +14331,9 @@
       "active_params_b": 21.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0825,
-        "output": 0.33,
-        "cache_read": 0.0206
+        "input": 0.132,
+        "output": 0.528,
+        "cache_read": 0.033
       },
       "reasoning": {
         "mandatory": false,
@@ -15338,6 +15338,65 @@
           "out": 0.1414
         }
       ]
+    },
+    "LFM2.5-2.6B": {
+      "or_id": "liquid/lfm-2.5-2.6b",
+      "or_name": "LiquidAI: LFM2.5-2.6B",
+      "provider": "LiquidAI",
+      "created": "2026-08-11",
+      "context_length": 128000,
+      "max_output_tokens": 8192,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 2.6,
+      "active_params_b": null,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.35,
+        "output": 0.5,
+        "cache_read": 0.04
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "LiquidAI/LFM2.5-2.6B",
+      "or_free_variants": [
+        "liquid/lfm-2.5-2.6b:free"
+      ],
+      "description": "LFM2.5-2.6B is a compact reasoning model from Liquid AI. It is suited for agent workflows, data extraction, RAG, and long-context processing. Liquid advises against using it for agentic coding or...",
+      "superseded_by": null,
+      "match": "exact",
+      "modalities_source": "openrouter"
     },
     "Hermes 4 70B": {
       "or_id": "nousresearch/hermes-4-405b",
@@ -20526,9 +20585,9 @@
       "active_params_b": 49.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.7506,
-        "output": 2.2509,
-        "cache_read": 0.0378
+        "input": 0.834,
+        "output": 2.501,
+        "cache_read": 0.042
       },
       "reasoning": {
         "mandatory": false,
@@ -21149,9 +21208,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.0908,
-        "output": 1.61,
-        "cache_read": 0.0897
+        "input": 0.079,
+        "output": 1.4,
+        "cache_read": 0.078
       },
       "reasoning": {
         "mandatory": true,
@@ -25480,7 +25539,7 @@
       "provider": "DeepSeek",
       "created": "2026-07-31",
       "context_length": 1048576,
-      "max_output_tokens": 131072,
+      "max_output_tokens": 943718,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -25494,9 +25553,9 @@
       "active_params_b": 13.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0444,
-        "output": 0.1333,
-        "cache_read": 0.0014
+        "input": 0.0422,
+        "output": 0.1694,
+        "cache_read": 0.028
       },
       "reasoning": {
         "mandatory": false,
@@ -26368,7 +26427,7 @@
       "pricing_usd_per_1m": {
         "input": 0.3,
         "output": 0.9,
-        "cache_read": 0.055
+        "cache_read": 0.05
       },
       "reasoning": {
         "mandatory": false,
@@ -27654,14 +27713,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.1,
         "output": 0.3,
         "cache_read": 0.01
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.402,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 1.402
     },
     "JT-4.1 Flash 236B A21B": {
       "or_id": null,
@@ -27835,14 +27894,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 5,
         "output": 30,
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.885,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 0.885
     },
     "K2 Horizon MoVA 36B A4B": {
       "or_id": null,
@@ -28050,14 +28109,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.3,
         "output": 2.5,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.757,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 3.757
     },
     "ERNIE 5.0 Thinking Preview": {
       "or_id": null,
@@ -28126,14 +28185,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 1.25,
         "output": 10,
         "cache_read": 0.312
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 11.376,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 11.376
     },
     "Apriel-v1.6-15B-Thinker": {
       "or_id": null,
@@ -28202,14 +28261,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.3,
         "output": 2.5,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 16.052,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 16.052
     },
     "Magistral Medium 1.2": {
       "or_id": null,
@@ -28409,14 +28468,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0,
         "output": 0,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.525,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 2.525
     },
     "LongCat Flash Lite": {
       "or_id": null,
@@ -28509,14 +28568,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0,
         "output": 0,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.45,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 0.45
     },
     "Magistral Small 1.2": {
       "or_id": null,
@@ -28677,22 +28736,6 @@
       "or_free_variants": null,
       "description": null,
       "superseded_by": null,
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
-    "LFM2.5-2.6B": {
-      "hugging_face_id": "LiquidAI/LFM2.5-2.6B",
-      "total_params_b": 2.7,
-      "params_source": "huggingface",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "modality": "text->text",
-      "modalities_source": "huggingface",
-      "or_name": "LFM2.5-2.6B",
       "match": "no-catalog",
       "or_catalog_retired": true
     },
@@ -28942,14 +28985,14 @@
       "superseded_by": null,
       "match": "no-catalog",
       "stale": true,
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.035,
         "output": 0.14,
         "cache_read": 0.0088
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.862,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 0.862
     },
     "R1 1776": {
       "or_id": null,
@@ -29087,14 +29130,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.1,
         "output": 0.2,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.222,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 3.222
     },
     "Granite 4.0 H 1B": {
       "or_id": null,
@@ -29163,13 +29206,13 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0,
         "output": 0,
         "cache_read": null
       },
-      "price_source": "artificialanalysis",
-      "or_catalog_retired": true
+      "price_source": "artificialanalysis"
     },
     "Claude Sonnet 4": {
       "or_id": "anthropic/claude-sonnet-4",
@@ -32930,8 +32973,8 @@
       "superseded_by": null,
       "match": "no-catalog",
       "aa_deprecated": true,
-      "successor_pending": true,
-      "or_catalog_retired": true
+      "or_catalog_retired": true,
+      "successor_pending": true
     },
     "o1-2024-12-17 (med)": {
       "or_id": null,
@@ -33139,14 +33182,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.44,
         "output": 1.32,
         "cache_read": 0.014
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.512,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 1.512
     },
     "Solar Open2 250B": {
       "or_id": null,
@@ -33242,14 +33285,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.4,
         "output": 4.8,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.988,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 1.988
     },
     "Nemotron Cascade 2 30B A3B": {
       "or_id": null,
@@ -33295,14 +33338,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.1,
         "output": 0.8,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.785,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 1.785
     },
     "Qwen3 Next 80B A3B": {
       "or_id": null,
@@ -33325,14 +33368,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.1,
         "output": 1.1,
         "cache_read": 0.09
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.814,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 0.814
     },
     "Nemotron 3 Nano Omni 30B A3B": {
       "hugging_face_id": "nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-BF16",
@@ -33454,14 +33497,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.25,
         "output": 0.97,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.782,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 1.782
     },
     "Llama 3.1 Nemotron 70B Instruct": {
       "or_id": null,
@@ -33546,14 +33589,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.2,
         "output": 0.6,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.118,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 1.118
     },
     "NVIDIA Nemotron Nano 9B V2": {
       "or_id": null,
@@ -33576,14 +33619,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.04,
         "output": 0.16,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.791,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 0.791
     },
     "Olmo 3 7B Think": {
       "hugging_face_id": "allenai/Olmo-3-7B-Think",
@@ -33761,14 +33804,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.075,
         "output": 0.3,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.817,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 0.817
     },
     "DeepHermes 3 - Llama-3.1 8B (non-reasoning)": {
       "or_id": null,
@@ -34695,8 +34738,8 @@
       "superseded_by": null,
       "match": "no-catalog",
       "aa_deprecated": true,
-      "successor_pending": true,
-      "or_catalog_retired": true
+      "or_catalog_retired": true,
+      "successor_pending": true
     },
     "Jamba 1.5 Mini": {
       "or_id": null,
@@ -34720,8 +34763,8 @@
       "superseded_by": null,
       "match": "no-catalog",
       "aa_deprecated": true,
-      "successor_pending": true,
-      "or_catalog_retired": true
+      "or_catalog_retired": true,
+      "successor_pending": true
     },
     "Kimi K2 Thinking Turbo": {
       "or_id": null,
@@ -34982,8 +35025,8 @@
       "superseded_by": null,
       "match": "no-catalog",
       "aa_deprecated": true,
-      "successor_pending": true,
-      "or_catalog_retired": true
+      "or_catalog_retired": true,
+      "successor_pending": true
     },
     "Llama 3.3 Nemotron Super 49B v1.5": {
       "or_id": null,
@@ -35491,8 +35534,8 @@
       "superseded_by": null,
       "match": "no-catalog",
       "aa_deprecated": true,
-      "successor_pending": true,
-      "or_catalog_retired": true
+      "or_catalog_retired": true,
+      "successor_pending": true
     },
     "OpenHermes 2.5 Mistral 7B": {
       "or_id": null,

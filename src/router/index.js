@@ -48,6 +48,15 @@ const routes = [
     component: () => import('../views/ProvidersView.vue'),
   },
   {
+    // stats-66: per-provider full page — one sortable table with EVERY listed
+    // model (arena-matched + unlisted), paginated with the shared page size.
+    // The id is a localStorage key: it resolves only in the browser that
+    // created the provider; other devices land on the not-found state.
+    path: '/providers/mine/:id',
+    name: 'provider-mine',
+    component: () => import('../views/MyProviderDetailView.vue'),
+  },
+  {
     // stats-37: My Providers moved into the Providers page as its third tab
     // (?view=mine). Bookmarks of the old standalone route keep working.
     path: '/my-providers',

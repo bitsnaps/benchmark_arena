@@ -30,8 +30,9 @@
 // — key ba.myproviders.v1 UNCHANGED by the move, zero data migration).
 
 import { computed, onMounted, ref, watch } from 'vue';
-import { parseModelListing, buildCatalogIndex, matchListing, extractPricingFor, normalizePriceKeys, previewPricingKeys } from '../lib/myProviders.js';
-import { fmtScore, fmtCtx, fmtUsd, scoreColor, priceBlend, slugify } from '../lib/format.js';
+import { parseModelListing, buildCatalogIndex, matchListing, normalizePriceKeys, previewPricingKeys } from '../lib/myProviders.js';
+import { buildMatchedRows, buildUnlistedRows, sortMatchedRows, numSort, textSort } from '../lib/myProviderRows.js';
+import { fmtScore, fmtCtx, fmtUsd, scoreColor, priceBlend } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import {
   useMyProviders,
@@ -269,69 +270,24 @@ function matchOf(p) {
 }
 function nonChatCount(p) { return (p.models || []).filter(m => !m.chat).length; }
 
-// stats-39: preview/route/thinksearch added; combo passes ('route+dated')
-// render as 'route tag + dated snapshot' via the segment join below.
-const PASS_LABEL = {
-  exact: 'exact id', dated: 'dated snapshot', thinking: 'thinking route',
-  preview: 'preview build', route: 'route tag', thinksearch: 'think+search route',
-};
-const passLabelOf = (p) => String(p).split('+').map(s => PASS_LABEL[s] || s).join(' + ');
-
+// stats-66: row building lives in lib/myProviderRows.js now — one source of
+// truth shared with the per-provider full page. The card keeps its stats-37
+// contract: the focus intent decides the default order, unranked rows stay
+// out of the picks, unlisted rows carry metadata + provider prices only.
 function matchedRows(p) {
-  const { matched } = matchOf(p);
-  const rows = matched.map(en => {
-    const row = rowByName.value.get(en.name);
-    const pr = row ? priceFor(row) : null;
-    return {
-      key: en.model.id,
-      name: en.name,
-      slug: slugify(en.name),
-      pass: en.pass,
-      passLabel: passLabelOf(en.pass),
-      variant: en.model.variant,
-      free: en.model.free,
-      score: row ? scoreForModel(row) : null,
-      cl: row ? clForModel(row) : null,
-      price: pr,                       // arena reference (AA list first, 3:1 blend)
-      older: row ? isOlder(row) : false,
-    };
-  });
-  // stats-65: unranked rows stay out of the provider picks (v1 scope —
-  // same rule as the advisor: a model without a rating is not a
-  // recommendation candidate). Rows with no catalog join at all still
-  // list (honest availability, no score attached).
-  const visibleRows = rows.filter(r => {
-    const row = rowByName.value.get(r.name);
-    return !row || !isUnranked(row);
-  });
-  const dir = (a, b, cmp) => cmp(a, b) || a.name.localeCompare(b.name);
-  const num = (v) => (v === null || v === undefined ? -Infinity : v);
-  if (p.intent === 'prices') visibleRows.sort((a, b) => dir(a, b, (x, y) => num(x.price?.blend) - num(y.price?.blend)));
-  else if (p.intent === 'track') visibleRows.sort((a, b) => a.name.localeCompare(b.name));
-  else visibleRows.sort((a, b) => dir(a, b, (x, y) => num(y.score) - num(x.score))); // scores (default)
-  return visibleRows;
+  return sortMatchedRows(
+    buildMatchedRows(p, {
+      catalogIndex: catalogIndex.value,
+      rowByName: rowByName.value,
+      scoreForModel, clForModel, priceFor, isOlder, isUnranked,
+    }),
+    p.intent);
 }
-
 function unlistedRows(p) {
-  const { unlisted } = matchOf(p);
-  // stats-51: key-aware extraction — custom pricing keys resolve against
-  // each entry's raw listing (falls back to prompt/completion per side).
-  const priceOf = (m) => extractPricingFor(m, p.priceKeys);
-  const rows = unlisted.map(m => ({
-    key: m.id, ctx: m.context_length, endpoints: m.endpoints,
-    free: m.free, variant: m.variant, kind: 'chat',
-    price: priceOf(m),
-  }));
-  if (showNonChat.value.has(p.id)) {
-    for (const m of (p.models || []).filter(x => !x.chat)) {
-      rows.push({
-        key: m.id, ctx: m.context_length, endpoints: m.endpoints,
-        free: m.free, variant: m.variant, kind: 'non-chat',
-        price: priceOf(m),
-      });
-    }
-  }
-  return rows.sort((a, b) => a.key.localeCompare(b.key));
+  return buildUnlistedRows(p, {
+    catalogIndex: catalogIndex.value,
+    includeNonChat: showNonChat.value.has(p.id),
+  });
 }
 
 // stats-51 FIX: this used to call extractPricing(props.row) against the ROW
@@ -492,8 +448,12 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
           </div>
         </div>
         <div class="mp-actions-row">
-          <b-button size="is-small" :aria-label="'Resync ' + c.p.label" :disabled="busy" @click="resync(c.p)">
-            {{ c.p.mode === 'paste' ? 'Paste listing' : 'Resync' }}
+          <!-- stats-66: full page for this provider — one sortable table with
+               every listed model, paginated with the shared page size -->
+          <b-button tag="router-link" size="is-small" type="is-primary"
+            :to="{ name: 'provider-mine', params: { id: c.p.id } }"
+            :aria-label="'View all ' + (c.p.models || []).length + ' listed models for ' + c.p.label">
+            View all {{ (c.p.models || []).length }}
           </b-button>
           <b-button size="is-small" :aria-label="'Edit ' + c.p.label" @click="openEdit(c.p)">Edit</b-button>
           <b-button size="is-small" type="is-danger" :outlined="armedDelete !== c.p.id"
@@ -519,19 +479,30 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
       </div>
 
       <template v-else-if="catalogIndex">
-        <p class="mp-banner" role="status">
-          <strong>{{ matchOf(c.p).stats.matched }} of {{ matchOf(c.p).stats.total }}</strong> chat models matched the arena catalog
-          <template v-if="nonChatCount(c.p)">
-            · {{ nonChatCount(c.p) }} non-chat (image / embedding) models {{ showNonChat.has(c.p.id) ? 'shown —' : 'hidden —' }}
-            <button class="linklike" type="button" :aria-label="'Toggle non-chat models ' + c.p.label" @click="toggleNonChat(c.p.id)">
-              {{ showNonChat.has(c.p.id) ? 'hide' : 'show' }}
-            </button>
-          </template>
-        </p>
+        <div class="mp-banner-row">
+          <p class="mp-banner" role="status">
+            <strong>{{ matchOf(c.p).stats.matched }} of {{ matchOf(c.p).stats.total }}</strong> chat models matched the arena catalog
+            <template v-if="nonChatCount(c.p)">
+              · {{ nonChatCount(c.p) }} non-chat (image / embedding) models {{ showNonChat.has(c.p.id) ? 'shown —' : 'hidden —' }}
+              <button class="linklike" type="button" :aria-label="'Toggle non-chat models ' + c.p.label" @click="toggleNonChat(c.p.id)">
+                {{ showNonChat.has(c.p.id) ? 'hide' : 'show' }}
+              </button>
+            </template>
+          </p>
+          <!-- stats-66: the refresh lives ON the data — one request re-pours
+               both tables. Fetch mode re-reads GET /models from the provider;
+               paste mode reopens the paste dialog (the key never enters the
+               app unless you paste it). -->
+          <b-button size="is-small" icon-left="rotate" :disabled="busy" :loading="busy"
+            :aria-label="'Refresh listing for ' + c.p.label" @click="resync(c.p)">
+            {{ c.p.mode === 'paste' ? 'Paste fresh' : 'Refresh' }}
+          </b-button>
+        </div>
 
         <h3 class="mp-sec">On the arena <span class="chip chip-quiet">{{ c.matched.length }}</span></h3>
-        <b-table class="mp-table mp-matched" :data="c.matched" :hoverable="true" :paginated="c.matched.length > 12" per-page="12">
-          <b-table-column field="name" label="Arena model" width="260">
+        <b-table class="mp-table mp-matched" :data="c.matched" :hoverable="true" :paginated="c.matched.length > 12" per-page="12"
+          :custom-is-checked="undefined">
+          <b-table-column field="name" label="Arena model" width="260" sortable :custom-sort="textSort(r => r.name)">
             <template #default="props">
               <div class="model-cell">
                 <router-link class="model-link" :to="{ name: 'model', params: { slug: props.row.slug } }">{{ props.row.name }}</router-link>
@@ -539,7 +510,7 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
               </div>
             </template>
           </b-table-column>
-          <b-table-column field="key" label="Your provider lists" width="290">
+          <b-table-column field="key" label="Your provider lists" width="290" sortable>
             <template #default="props">
               <code class="mp-sku">{{ props.row.key }}</code>
               <span v-if="props.row.variant" class="chip chip-quiet" :title="'Reseller context/variant tag: [' + props.row.variant + ']'">[{{ props.row.variant }}]</span>
@@ -547,20 +518,20 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
               <span class="chip chip-match" :title="'Matched by the ' + props.row.pass + ' pass of the conservative matcher.'">{{ props.row.passLabel }}</span>
             </template>
           </b-table-column>
-          <b-table-column field="score" label="Score" width="90" centered numeric>
+          <b-table-column field="score" label="Score" width="90" centered numeric sortable :custom-sort="numSort(r => r.score)">
             <template #default="props">
               <span v-if="props.row.score !== null && props.row.score !== undefined" class="num"
                 :style="{ color: scoreColor(props.row.score), fontWeight: 600 }">{{ fmtScore(props.row.score) }}</span>
               <span v-else class="mp-dash">—</span>
             </template>
           </b-table-column>
-          <b-table-column field="cl" label="CL" width="80" centered numeric>
+          <b-table-column field="cl" label="CL" width="80" centered numeric sortable :custom-sort="numSort(r => r.cl)">
             <template #default="props">
               <span v-if="props.row.cl !== null && props.row.cl !== undefined">{{ Math.round(props.row.cl) + '%' }}</span>
               <span v-else class="mp-dash">—</span>
             </template>
           </b-table-column>
-          <b-table-column field="price" label="Arena ref $/1M" width="130" centered numeric>
+          <b-table-column field="price" label="Arena ref $/1M" width="130" centered numeric sortable :custom-sort="numSort(r => r.price?.blend ?? null)">
             <template #default="props">
               <span v-if="props.row.price" class="num"
                 :title="'in $' + props.row.price.input + ' / out $' + (props.row.price.output ?? '?') + ' per 1M tokens · arena reference price (AA / OpenRouter list) — your provider may charge differently'">
@@ -582,7 +553,7 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
             </button>
           </template>
           <b-table class="mp-table mp-unlisted-table" :data="c.unlisted" :hoverable="true" :paginated="c.unlisted.length > 14" per-page="14">
-            <b-table-column field="key" label="Listing id" width="320">
+            <b-table-column field="key" label="Listing id" width="320" sortable>
               <template #default="props">
                 <code class="mp-sku">{{ props.row.key }}</code>
                 <span v-if="props.row.kind === 'non-chat'" class="chip chip-quiet" title="Non-chat endpoint (image / embedding / other).">non-chat</span>
@@ -590,7 +561,7 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
                 <span v-if="props.row.free" class="chip chip-quiet">:free</span>
               </template>
             </b-table-column>
-            <b-table-column field="ctx" label="Context" width="110" centered numeric>
+            <b-table-column field="ctx" label="Context" width="110" centered numeric sortable :custom-sort="numSort(r => r.ctx ?? null)">
               <template #default="props">
                 <span v-if="props.row.ctx">{{ fmtCtx(props.row.ctx) }}</span>
                 <span v-else class="mp-dash">—</span>
@@ -601,7 +572,7 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
                 <span class="mp-eps">{{ fmtEndpoints(props.row.endpoints) }}</span>
               </template>
             </b-table-column>
-            <b-table-column field="price" label="Provider $/1M" width="130" centered numeric>
+            <b-table-column field="price" label="Provider $/1M" width="130" centered numeric sortable :custom-sort="numSort(r => providerPrice(r)?.blend ?? null)">
               <template #default="props">
                 <span v-if="providerPrice(props.row)" class="num"
                   :title="'in $' + props.row.price.in + ' / out $' + (props.row.price.out ?? '?') + ' per 1M tokens · as published by your provider' + (props.row.price.viaKeys ? ' · resolved via your custom pricing keys' : '')">
@@ -729,7 +700,10 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
 .mp-intent-q { font-weight: 600; }
 .mp-noModels { color: var(--ink-2, #556); font-size: 0.94em; }
 .linklike { background: none; border: none; padding: 0; color: var(--acc, #4b6bfb); cursor: pointer; text-decoration: underline; font: inherit; }
-.mp-banner { margin: 0 0 2px; color: var(--ink-2, #556); font-size: 0.94em; }
+.mp-banner { margin: 0; color: var(--ink-2, #556); font-size: 0.94em; }
+/* stats-66: the refresh button sits on the same line as the match banner —
+   the tables it re-pours are directly below */
+.mp-banner-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 0 0 2px; }
 .mp-sec { margin: 6px 0 2px; font-size: 0.95em; display: flex; align-items: center; gap: 8px; }
 .mp-table { width: 100%; }
 .model-cell { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }

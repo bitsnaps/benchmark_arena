@@ -59,7 +59,7 @@ import {
 } from '../lib/myProviders.js';
 import { useMyProviders } from '../stores/myProviders.js';
 
-const { rawData, loading, error, ensureProvidersLoaded } = useProviders();
+const { rawData, loading, error, ensureProvidersLoaded, reloadProviders } = useProviders();
 onMounted(ensureProvidersLoaded);
 // stats-24: AA TTFT lives in benchmark_results.json (models_meta), not in
 // providers.json — pull the data store too (module singleton; the fetch is
@@ -718,6 +718,12 @@ const pickerTitle = (p) =>
         icon="magnifying-glass" size="is-small" style="max-width:380px" />
       <span class="cell-sub">{{ totalShown }} of {{ totalRows }} catalog rows · {{ totalFree }} free listings</span>
       <span class="is-flex-grow-1"></span>
+      <!-- stats-66: hard refresh of the catalog — the JSON the browser cached
+           on a previous visit can predate the latest daily deploy. Hidden on
+           the My providers tab: its data is the user's own listings, which
+           carry their own per-provider refresh. -->
+      <b-button v-show="tab !== 2" size="is-small" icon-left="rotate" :loading="loading"
+        aria-label="Refresh catalog prices" @click="reloadProviders">Refresh prices</b-button>
       <!-- stats-21: one app-wide page size — this view inherits it; the
            cards below render their own pagers without repeating the control -->
       <div class="prov-size" style="display:flex;align-items:center;gap:.45rem">

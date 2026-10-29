@@ -2,18 +2,29 @@
 // ── stats-66: per-provider full page (My providers) ───────────────────
 // Route /providers/mine/:id — one provider, ONE sortable table with every
 // listed model: arena-matched rows and reseller-only rows share the same
-// columns, a Status column tells them apart, and every column sorts with
-// the leaderboard's discipline (nulls/dashes always sink, both directions).
+// columns, and every column sorts with the leaderboard's discipline
+// (nulls/dashes always sink, both directions).
 //
-// Contract carried over from the cards (stats-36..65) — unchanged:
+// stats-67 revision (Ibrahim's review):
+//   • ONE Model column — the arena name is primary and the exact listing id
+//     rides beneath it as a tag (two columns for the same info wasted space);
+//   • the Status / Listed as / Endpoints columns are gone (mostly constant
+//     values) — the filter chips + inline chips carry what Status used to;
+//   • prices are split into honest per-side columns: Provider IN/OUT +
+//     Arena IN/OUT, with a literal $0 (free) never conflated with a dash
+//     (unpublished);
+//   • the show/hide non-chat link is gone — non-chat endpoints are ALWAYS
+//     listed, tagged by the non-chat chip;
+//   • a checkbox at the top hides OUR Score + CL columns (they are the
+//     read-only mirror; the provider's own data is never toggled).
+//
+// Contract carried over from the cards (stats-36..66) — unchanged:
 //   • scores / CL / arena reference prices are MIRRORED READ-ONLY from the
 //     snapshot; a model not on the board shows an honest dash, never a
 //     fabricated number;
 //   • unranked rows stay out of the arena picks (stats-65);
 //   • custom pricing keys (stats-51) are a render-time lens on the raw
-//     listing — the "Provider $/1M" column re-resolves per render;
-//   • non-chat endpoints (image / embedding / other) stay hidden behind a
-//     toggle, default off, same as the cards;
+//     listing — the "Provider IN/OUT" columns re-resolve per render;
 //   • everything is localStorage-scoped: the :id only resolves in the
 //     browser that created this provider. A shared link on another device
 //     lands on the not-found state — by design, not a bug.
@@ -53,18 +64,14 @@ const rowByName = computed(() => {
   return m;
 });
 
-// ── non-chat toggle (default off — same as the cards) ─────────────────
-const showNonChat = ref(false);
-function nonChatCount(p) { return (p.models || []).filter(m => !m.chat).length; }
-
-// ── merged rows: arena + unlisted (+ non-chat when toggled) ───────────
+// ── merged rows: arena + unlisted + non-chat, always ──────────────────
 const allRows = computed(() => {
   if (!provider.value || !catalogIndex.value) return [];
   return buildMergedRows(provider.value, {
     catalogIndex: catalogIndex.value,
     rowByName: rowByName.value,
     scoreForModel, clForModel, priceFor, isOlder, isUnranked,
-  }, { includeNonChat: showNonChat.value });
+  }, { includeNonChat: true }); // stats-67: non-chat always listed, chip-marked
 });
 
 // status filter chips — All / On the arena / Unlisted. Non-chat rows ride
@@ -86,6 +93,8 @@ const countFor = (value) => {
   return allRows.value.filter(r => r.status !== 'arena').length;
 };
 
+function nonChatCount(p) { return (p.models || []).filter(m => !m.chat).length; }
+
 // matched banner stats (same numbers as the card — matchListing over the
 // chat models; free twins of arena models count as matched too)
 const stats = computed(() => {
@@ -101,8 +110,16 @@ const byName = textSort(r => r.name || r.key);
 const byScore = numSort(r => r.score);
 const byCl = numSort(r => r.cl);
 const byCtx = numSort(r => r.ctx ?? null);
-const byArenaPrice = numSort(r => r.price?.blend ?? null);
-const byOwnPrice = numSort(r => r.ownPrice?.blend ?? null);
+// stats-67: prices sort PER SIDE now (IN / OUT are separate columns); the
+// blend stays only in the row data as the intent-driven default order.
+const byOwnIn = numSort(r => (r.ownPrice && r.ownPrice.in != null) ? r.ownPrice.in : null);
+const byOwnOut = numSort(r => (r.ownPrice && r.ownPrice.out != null) ? r.ownPrice.out : null);
+const byArenaIn = numSort(r => (r.price && r.price.input != null) ? r.price.input : null);
+const byArenaOut = numSort(r => (r.price && r.price.output != null) ? r.price.output : null);
+
+// Ibrahim's checkbox: show/hide OUR score + CL values — they are the
+// mirror; the provider's own data is never toggled.
+const showScores = ref(true);
 
 // ── pagination: shared app-wide page size, this page owns the select ──
 const pageSize = usePageSize();
@@ -181,22 +198,11 @@ function deleteClicked() {
 }
 
 // ── cell helpers (same conventions as the cards) ──────────────────────
-function ownPriceOf(row) {
-  const pr = row.ownPrice;
-  if (!pr || (pr.in == null && pr.out == null)) return null;
-  return pr;
-}
-const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
 const INTENT_LABELS = { scores: 'Benchmark scores', prices: 'Price comparison', track: 'Just track models' };
 function fmtSync(ts) {
   if (!ts) return 'never synced';
   try { return 'synced ' + ts.slice(0, 16).replace('T', ' '); } catch { return 'synced'; }
 }
-const STATUS_META = {
-  arena: { label: 'On the arena', cls: 'chip-match', title: 'Matched the arena catalog — scores mirrored read-only.' },
-  unlisted: { label: 'Unlisted', cls: 'chip-quiet', title: 'Reseller-only model — metadata only, honest dashes.' },
-  'non-chat': { label: 'non-chat', cls: 'chip-quiet', title: 'Non-chat endpoint (image / embedding / other).' },
-};
 </script>
 
 <template>
@@ -271,13 +277,13 @@ const STATUS_META = {
           <p class="mp-banner" role="status">
             <strong>{{ stats.matched }} of {{ stats.total }}</strong> chat models matched the arena catalog
             <template v-if="nonChatCount(provider)">
-              · {{ nonChatCount(provider) }} non-chat (image / embedding) models {{ showNonChat ? 'shown —' : 'hidden —' }}
-              <button class="linklike" type="button" aria-label="Toggle non-chat models" @click="showNonChat = !showNonChat">
-                {{ showNonChat ? 'hide' : 'show' }}
-              </button>
+              · {{ nonChatCount(provider) }} non-chat (image / embedding) models tagged in the table
             </template>
           </p>
-          <div class="mpd-filters" role="group" aria-label="Filter rows by status">
+          <div class="mpd-filters" role="group" aria-label="Filter rows and toggle arena values">
+            <!-- stats-67: OUR values (score / CL) are the mirror — one
+                 checkbox hides the whole pair, provider data stays put -->
+            <b-checkbox v-model="showScores" size="is-small">Show arena scores &amp; CL</b-checkbox>
             <button v-for="f in FILTERS" :key="f.value" type="button" class="chip"
               :class="{ 'chip-quiet': statusFilter !== f.value }" :aria-pressed="statusFilter === f.value"
               @click="statusFilter = f.value">
@@ -307,42 +313,59 @@ const STATUS_META = {
             aria-page-label="Page" aria-current-label="Current page"
             @sort="onSortStart"
           >
-            <b-table-column field="status" label="Status" width="120" centered>
+            <!-- stats-67 column set (Ibrahim): Model (merged — arena name
+                 primary, exact listing id as a tag), Context, Provider IN/OUT,
+                 Score + CL behind the checkbox, Arena IN/OUT. The Status /
+                 Listed as / Endpoints columns are gone; unlisted rows read as
+                 raw ids with honest dashes, and the filter chips + non-chat
+                 chip carry what Status used to say. -->
+            <b-table-column field="name" label="Model" width="280" sortable :custom-sort="byName">
               <template #default="props">
-                <span class="chip" :class="STATUS_META[props.row.status].cls" :title="STATUS_META[props.row.status].title">
-                  {{ STATUS_META[props.row.status].label }}
-                </span>
-              </template>
-            </b-table-column>
-
-            <b-table-column field="name" label="Model" width="270" sortable :custom-sort="byName">
-              <template #default="props">
-                <div v-if="props.row.name" class="model-cell">
-                  <router-link class="model-link" :to="{ name: 'model', params: { slug: props.row.slug } }">{{ props.row.name }}</router-link>
-                  <span v-if="props.row.older" class="chip chip-quiet" title="An older generation on the arena — hidden from the default leaderboard view.">older</span>
+                <template v-if="props.row.name">
+                  <div class="model-cell">
+                    <router-link class="model-link" :to="{ name: 'model', params: { slug: props.row.slug } }">{{ props.row.name }}</router-link>
+                    <span v-if="props.row.older" class="chip chip-quiet" title="An older generation on the arena — hidden from the default leaderboard view.">older</span>
+                  </div>
+                  <div class="model-sub">
+                    <code class="mpd-sku" :title="'The exact id this provider lists it under.'">{{ props.row.key }}</code>
+                    <span v-if="props.row.variant" class="chip chip-quiet" :title="'Reseller context/variant tag: [' + props.row.variant + ']'">[{{ props.row.variant }}]</span>
+                    <span v-if="props.row.free" class="chip chip-quiet" title="Free twin of the paid SKU at this provider.">:free</span>
+                    <span v-if="props.row.passLabel" class="chip chip-match" :title="'Matched by the ' + props.row.pass + ' pass of the conservative matcher.'">{{ props.row.passLabel }}</span>
+                  </div>
+                </template>
+                <div v-else class="model-cell">
+                  <code class="mpd-sku">{{ props.row.key }}</code>
+                  <span v-if="props.row.status === 'non-chat'" class="chip chip-quiet" title="Non-chat endpoint (image / embedding / other).">non-chat</span>
+                  <span v-if="props.row.variant" class="chip chip-quiet">[{{ props.row.variant }}]</span>
+                  <span v-if="props.row.free" class="chip chip-quiet">:free</span>
                 </div>
-                <code v-else class="mpd-sku">{{ props.row.key }}</code>
               </template>
             </b-table-column>
 
-            <b-table-column field="key" label="Listed as" width="250">
-              <template #default="props">
-                <code v-if="props.row.name" class="mpd-sku">{{ props.row.key }}</code>
-                <span class="mpd-dash" v-else>—</span>
-                <span v-if="props.row.variant" class="chip chip-quiet" :title="'Reseller context/variant tag: [' + props.row.variant + ']'">[{{ props.row.variant }}]</span>
-                <span v-if="props.row.free" class="chip chip-quiet" title="Free twin of the paid SKU at this provider.">:free</span>
-                <span v-if="props.row.passLabel" class="chip chip-match" :title="'Matched by the ' + props.row.pass + ' pass of the conservative matcher.'">{{ props.row.passLabel }}</span>
-              </template>
-            </b-table-column>
-
-            <b-table-column field="ctx" label="Context" width="100" centered numeric sortable :custom-sort="byCtx">
+            <b-table-column field="ctx" label="Context" width="95" centered numeric sortable :custom-sort="byCtx">
               <template #default="props">
                 <span v-if="props.row.ctx">{{ fmtCtx(props.row.ctx) }}</span>
                 <span v-else class="mpd-dash">—</span>
               </template>
             </b-table-column>
 
-            <b-table-column field="score" label="Score" width="85" centered numeric sortable :custom-sort="byScore">
+            <b-table-column field="ownIn" label="Provider IN $/1M" width="105" centered numeric sortable :custom-sort="byOwnIn">
+              <template #default="props">
+                <span v-if="props.row.ownPrice && props.row.ownPrice.in != null" class="num"
+                  :title="'Input price per 1M tokens · as published by your provider' + (props.row.ownPrice.viaKeys ? ' · resolved via your custom pricing keys' : '')">{{ fmtUsd(props.row.ownPrice.in) }}</span>
+                <span v-else class="mpd-dash" title="No input price published for this listing id under the standard keys or your custom pricing keys.">—</span>
+              </template>
+            </b-table-column>
+
+            <b-table-column field="ownOut" label="Provider OUT $/1M" width="105" centered numeric sortable :custom-sort="byOwnOut">
+              <template #default="props">
+                <span v-if="props.row.ownPrice && props.row.ownPrice.out != null" class="num"
+                  :title="'Output price per 1M tokens · as published by your provider' + (props.row.ownPrice.viaKeys ? ' · resolved via your custom pricing keys' : '')">{{ fmtUsd(props.row.ownPrice.out) }}</span>
+                <span v-else class="mpd-dash" title="No output price published for this listing id under the standard keys or your custom pricing keys.">—</span>
+              </template>
+            </b-table-column>
+
+            <b-table-column v-if="showScores" field="score" label="Score" width="85" centered numeric sortable :custom-sort="byScore">
               <template #default="props">
                 <span v-if="props.row.score !== null && props.row.score !== undefined" class="num"
                   :style="{ color: scoreColor(props.row.score), fontWeight: 600 }">{{ fmtScore(props.row.score) }}</span>
@@ -350,36 +373,26 @@ const STATUS_META = {
               </template>
             </b-table-column>
 
-            <b-table-column field="cl" label="CL" width="75" centered numeric sortable :custom-sort="byCl">
+            <b-table-column v-if="showScores" field="cl" label="CL" width="75" centered numeric sortable :custom-sort="byCl">
               <template #default="props">
                 <span v-if="props.row.cl !== null && props.row.cl !== undefined">{{ Math.round(props.row.cl) + '%' }}</span>
                 <span v-else class="mpd-dash">—</span>
               </template>
             </b-table-column>
 
-            <b-table-column field="ownPrice" label="Provider $/1M" width="120" centered numeric sortable :custom-sort="byOwnPrice">
+            <b-table-column field="arenaIn" label="Arena IN $/1M" width="105" centered numeric sortable :custom-sort="byArenaIn">
               <template #default="props">
-                <span v-if="ownPriceOf(props.row)" class="num"
-                  :title="'in $' + ownPriceOf(props.row).in + ' / out $' + (ownPriceOf(props.row).out ?? '?') + ' per 1M tokens · as published by your provider' + (ownPriceOf(props.row).viaKeys ? ' · resolved via your custom pricing keys' : '')">
-                  {{ fmtUsd(ownPriceOf(props.row).blend) }}
-                </span>
-                <span v-else class="mpd-dash" title="No price published for this listing id under the standard keys or your custom pricing keys.">—</span>
+                <span v-if="props.row.price && props.row.price.input != null" class="num"
+                  :title="'Input price per 1M tokens · arena reference (AA / OpenRouter list) — your provider may charge differently'">{{ fmtUsd(props.row.price.input) }}</span>
+                <span v-else class="mpd-dash" title="No input price on the arena reference.">—</span>
               </template>
             </b-table-column>
 
-            <b-table-column field="price" label="Arena ref $/1M" width="120" centered numeric sortable :custom-sort="byArenaPrice">
+            <b-table-column field="arenaOut" label="Arena OUT $/1M" width="105" centered numeric sortable :custom-sort="byArenaOut">
               <template #default="props">
-                <span v-if="props.row.price" class="num"
-                  :title="'in $' + props.row.price.input + ' / out $' + (props.row.price.output ?? '?') + ' per 1M tokens · arena reference price (AA / OpenRouter list) — your provider may charge differently'">
-                  {{ fmtUsd(props.row.price.blend) }}
-                </span>
-                <span v-else class="mpd-dash">—</span>
-              </template>
-            </b-table-column>
-
-            <b-table-column field="endpoints" label="Endpoints">
-              <template #default="props">
-                <span class="mpd-eps">{{ fmtEndpoints(props.row.endpoints) }}</span>
+                <span v-if="props.row.price && props.row.price.output != null" class="num"
+                  :title="'Output price per 1M tokens · arena reference (AA / OpenRouter list) — your provider may charge differently'">{{ fmtUsd(props.row.price.output) }}</span>
+                <span v-else class="mpd-dash" title="No output price on the arena reference.">—</span>
               </template>
             </b-table-column>
 
@@ -425,7 +438,8 @@ const STATUS_META = {
 .mpd-table { width: 100%; }
 .mpd-sku { font-family: ui-monospace, monospace; font-size: 0.86em; background: rgba(127, 127, 127, 0.12); border-radius: 5px; padding: 1px 5px; margin-right: 4px; }
 .mpd-dash { opacity: 0.5; }
-.mpd-eps { font-size: 0.86em; color: var(--ink-2, #556); }
+.model-sub { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
+.model-sub .mpd-sku { font-size: 0.8em; }
 .mpd-filters { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .mpd-modal { display: flex; flex-direction: column; gap: 12px; padding: 1.4rem 1.25rem; }
 .mpd-modal-title { margin: 0; font-size: 1.05em; }

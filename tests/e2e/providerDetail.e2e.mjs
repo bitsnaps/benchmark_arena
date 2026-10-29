@@ -1,10 +1,14 @@
 // stats-66 e2e: the per-provider full page (#/providers/mine/:id) + the
 // stats-66 refresh affordances + card-table sorting.
+// stats-67 revision: merged Model column (exact id as a tag), Status /
+// Listed as / Endpoints columns gone, IN/OUT price split with $0-vs-dash
+// honesty, non-chat rows always listed (no show/hide link), and the
+// scores+CL checkbox.
 // Covers: card "View all" navigation, deep link, not-found state, the merged
-// arena/unlisted table (status chips + honest dashes), column sorting with
-// nulls-last, paste-mode refresh dialog, fetch-mode refresh against a MOCKED
-// provider endpoint (page.route — no network), shared page-size control,
-// the catalog "Refresh prices" hard re-fetch, and a clean console.
+// arena/unlisted table (honest dashes), column sorting with nulls-last,
+// paste-mode refresh dialog, fetch-mode refresh against a MOCKED provider
+// endpoint (page.route — no network), shared page-size control, the catalog
+// "Refresh prices" hard re-fetch, and a clean console.
 // Runs under tests/run-e2e.mjs (vite preview on 4173, base /benchmark_arena/).
 import { chromium } from 'playwright';
 
@@ -106,18 +110,40 @@ const MOCK_V2 = JSON.stringify({ object: 'list', data: [
   if (tableText.includes('my-private-gateway-model') && tableText.includes('aggregator-special-9b:free'))
     ok('unlisted rows share the same table (reseller-only ids present)');
   else fail('unlisted rows missing from the merged table');
-  const chipCount = await page.locator('.mpd-table .chip', { hasText: 'Unlisted' }).count();
-  if (chipCount >= 2) ok('status chips tag both unlisted rows (' + chipCount + ')');
-  else fail('status chips missing for unlisted rows: ' + chipCount);
 
-  // non-chat hidden by default, shown on toggle
-  if (!tableText.includes('image-forge-xl')) ok('non-chat model hidden by default');
-  else fail('non-chat model leaked into the default view');
-  await page.click('[aria-label="Toggle non-chat models"]');
-  await page.waitForTimeout(200);
-  if ((await page.locator('.mpd-table').innerText()).includes('image-forge-xl')) ok('non-chat toggle reveals the image model');
-  else fail('non-chat toggle did not reveal the model');
-  await page.click('[aria-label="Toggle non-chat models"]'); // back to hidden
+  // stats-67: Status / Listed as / Endpoints columns are GONE; the merged
+  // Model column carries the exact id as a tag under the arena name.
+  const headers = (await page.locator('.mpd-table th').allInnerTexts()).map(s => s.trim());
+  if (!headers.includes('Status') && !headers.includes('Listed as') && !headers.includes('Endpoints'))
+    ok('useless columns gone (Status / Listed as / Endpoints)');
+  else fail('old columns still present: ' + headers.join('|'));
+  const skuTags = await page.locator('.mpd-table .model-sub .mpd-sku').count();
+  if (skuTags >= 4) ok('exact-id tags ride under the arena names (' + skuTags + ')');
+  else fail('exact-id tags missing under arena rows: ' + skuTags);
+
+  // stats-67: non-chat rows are ALWAYS listed now — no show/hide link
+  const toggleCount = await page.locator('[aria-label="Toggle non-chat models"]').count();
+  if (!toggleCount) ok('show/hide non-chat link is gone');
+  else fail('non-chat toggle link still present');
+  const ncRow = page.locator('.mpd-table tbody tr', { hasText: 'image-forge-xl' });
+  if (await ncRow.count()) {
+    if ((await ncRow.first().innerText()).includes('non-chat')) ok('non-chat model listed by default with the non-chat chip');
+    else fail('non-chat chip missing on the image row');
+  } else fail('non-chat model missing from the default table');
+
+  // stats-67 pricing semantics: the :free twin publishes 0/0 → literal $0
+  // cells; the unpriced reseller ids stay honest dashes. Never conflated.
+  const freeRow = page.locator('.mpd-table tbody tr', { hasText: 'claude-opus-4.6:free' });
+  const freeCells = await freeRow.locator('td').allInnerTexts();
+  const dollars = freeCells.filter(c => c.trim() === '$0').length;
+  if (dollars >= 2) ok('free SKU shows literal $0 price cells (' + dollars + ')');
+  else fail('free SKU missing $0 cells: ' + JSON.stringify(freeCells));
+  const unpricedRow = page.locator('.mpd-table tbody tr', { hasText: 'my-private-gateway-model' });
+  const unpricedCells = await unpricedRow.locator('td').allInnerTexts();
+  const dashes = unpricedCells.filter(c => c.trim() === '—').length;
+  const zeros = unpricedCells.filter(c => c.trim() === '$0').length;
+  if (dashes >= 3 && zeros === 0) ok('unpriced row keeps dashes, never a fake $0 (' + dashes + ' dashes)');
+  else fail('unpriced row dash/0 mix wrong: ' + JSON.stringify(unpricedCells));
 
   // ── 5. status filter chips ──
   await page.locator('.mpd-filters button', { hasText: 'On the arena' }).click();
@@ -143,8 +169,8 @@ const MOCK_V2 = JSON.stringify({ object: 'list', data: [
   if (firstAsc !== firstDefault) ok('Score sort flips the merged order (' + rowsAll + ' rows in view)');
   else fail('merged Score sort did not change the first row');
   // in ASC, nulls (unlisted) must still be LAST — check the Score CELL of the
-  // first row is a number and the last row's is a dash (Score is td #5:
-  // Status, Model, Listed as, Context, Score)
+  // first row is a number and the last row's is a dash (stats-67 order:
+  // Model, Context, Provider IN/OUT, Score — Score is still td #5)
   const ascFirstScore = (await page.locator('.mpd-table tbody tr').first().locator('td').nth(4).innerText()).trim();
   const ascLastScore = (await page.locator('.mpd-table tbody tr').last().locator('td').nth(4).innerText()).trim();
   if (/^\d/.test(ascFirstScore) && ascLastScore === '—') ok('asc sort: numbers on top, unlisted (dash) rows sink');
@@ -154,6 +180,25 @@ const MOCK_V2 = JSON.stringify({ object: 'list', data: [
   const firstDesc = (await page.locator('.mpd-table tbody tr').first().innerText()).replace(/\s+/g, ' ').trim();
   if (firstDesc === firstDefault) ok('second click returns to the desc default');
   else fail('desc click mismatch');
+
+  // ── 6b. stats-67 checkbox: OUR Score + CL hide, provider data stays ──
+  await page.locator('.mpd-filters label.checkbox').first().click();
+  await page.waitForTimeout(200);
+  const headersNoScores = (await page.locator('.mpd-table th').allInnerTexts()).map(s => s.trim());
+  if (!headersNoScores.includes('Score') && !headersNoScores.includes('CL'))
+    ok('checkbox hides Score + CL');
+  else fail('Score/CL survived the checkbox: ' + headersNoScores.join('|'));
+  const upper = headersNoScores.map(s => s.toUpperCase());
+  if (upper.includes('PROVIDER IN $/1M') && upper.includes('ARENA IN $/1M'))
+    ok('price columns unaffected by the checkbox');
+  else fail('price columns lost with the checkbox: ' + headersNoScores.join('|'));
+  const unlistedRowWhenHidden = page.locator('.mpd-table tbody tr', { hasText: 'my-private-gateway-model' });
+  if (await unlistedRowWhenHidden.count()) ok('unlisted rows still listed while scores are hidden');
+  else fail('unlisted rows vanished with the scores');
+  await page.locator('.mpd-filters label.checkbox').first().click(); // back on
+  await page.waitForTimeout(200);
+  if ((await page.locator('.mpd-table th', { hasText: 'Score' }).count())) ok('checkbox back on: Score returns');
+  else fail('Score did not return');
 
   // ── 7. refresh in PASTE mode opens the paste dialog and re-pours ──
   await page.click('[aria-label="Refresh listing for Detail Page Gateway"]');

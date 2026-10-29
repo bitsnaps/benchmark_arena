@@ -32,7 +32,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { parseModelListing, buildCatalogIndex, matchListing, normalizePriceKeys, previewPricingKeys } from '../lib/myProviders.js';
 import { buildMatchedRows, buildUnlistedRows, sortMatchedRows, numSort, textSort } from '../lib/myProviderRows.js';
-import { fmtScore, fmtCtx, fmtUsd, scoreColor, priceBlend } from '../lib/format.js';
+import { fmtScore, fmtCtx, fmtUsd, scoreColor } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 import {
   useMyProviders,
@@ -256,12 +256,10 @@ const keysPreview = computed(() => {
 const fmtSample = (v) => (v == null ? '—' : '$' + (Math.round(v * 1e6) / 1e6));
 
 // ── Per-provider derived views ────────────────────────────────────────
-const showNonChat = ref(new Set()); // provider ids with the non-chat toggle on
-function toggleNonChat(id) {
-  const s = new Set(showNonChat.value);
-  s.has(id) ? s.delete(id) : s.add(id);
-  showNonChat.value = s;
-}
+// stats-67: the show/hide non-chat toggle is gone (Ibrahim — it read as
+// broken and its purpose was unclear). Non-chat endpoints (image /
+// embedding / other) are ALWAYS part of the Unlisted table now, carrying
+// their "non-chat" chip — the provider's listing is shown as published.
 
 function matchOf(p) {
   if (!catalogIndex.value) return { matched: [], unlisted: [], stats: { total: 0, matched: 0 } };
@@ -286,20 +284,14 @@ function matchedRows(p) {
 function unlistedRows(p) {
   return buildUnlistedRows(p, {
     catalogIndex: catalogIndex.value,
-    includeNonChat: showNonChat.value.has(p.id),
+    includeNonChat: true, // stats-67: always listed, chip-marked
   });
 }
 
-// stats-51 FIX: this used to call extractPricing(props.row) against the ROW
-// wrapper (no prompt/completion on it) — the "Provider $/1M" column dashed
-// EVEN when the provider published prices. Read the row's precomputed
-// key-aware price instead and blend it (3:1, same convention everywhere).
-function providerPrice(row) {
-  const pr = row && row.price;
-  if (!pr || (pr.in == null && pr.out == null)) return null;
-  const blend = priceBlend({ input: pr.in ?? undefined, output: pr.out ?? undefined });
-  return blend === null ? null : { blend, in: pr.in, out: pr.out, viaKeys: !!pr.viaKeys };
-}
+// stats-51 note (kept for the record): the provider's own price is read
+// from the row's precomputed key-aware `price` — never from the row
+// wrapper — so custom pricing keys resolve exactly as previewed. stats-67:
+// the blend helper is gone — cells render per-side (IN / OUT) directly.
 
 // ── Shared-search scoping (stats-37) ──────────────────────────────────
 // One card per stored provider with its rows pre-filtered by the page's
@@ -393,7 +385,6 @@ function fmtSync(ts) {
   if (!ts) return 'never synced';
   try { return 'synced ' + ts.slice(0, 16).replace('T', ' '); } catch { return 'synced'; }
 }
-const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
 </script>
 
 <template>
@@ -483,10 +474,7 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
           <p class="mp-banner" role="status">
             <strong>{{ matchOf(c.p).stats.matched }} of {{ matchOf(c.p).stats.total }}</strong> chat models matched the arena catalog
             <template v-if="nonChatCount(c.p)">
-              · {{ nonChatCount(c.p) }} non-chat (image / embedding) models {{ showNonChat.has(c.p.id) ? 'shown —' : 'hidden —' }}
-              <button class="linklike" type="button" :aria-label="'Toggle non-chat models ' + c.p.label" @click="toggleNonChat(c.p.id)">
-                {{ showNonChat.has(c.p.id) ? 'hide' : 'show' }}
-              </button>
+              · {{ nonChatCount(c.p) }} non-chat (image / embedding) models tagged in the Unlisted table
             </template>
           </p>
           <!-- stats-66: the refresh lives ON the data — one request re-pours
@@ -502,20 +490,22 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
         <h3 class="mp-sec">On the arena <span class="chip chip-quiet">{{ c.matched.length }}</span></h3>
         <b-table class="mp-table mp-matched" :data="c.matched" :hoverable="true" :paginated="c.matched.length > 12" per-page="12"
           :custom-is-checked="undefined">
-          <b-table-column field="name" label="Arena model" width="260" sortable :custom-sort="textSort(r => r.name)">
+          <!-- stats-67: ONE model column — arena name is primary, the exact
+               listing id rides as a tag beneath it (Ibrahim: two columns for
+               the same info wasted half the card). CL dropped (not useful
+               here); prices split into honest IN / OUT columns. -->
+          <b-table-column field="name" label="Model" width="300" sortable :custom-sort="textSort(r => r.name)">
             <template #default="props">
               <div class="model-cell">
                 <router-link class="model-link" :to="{ name: 'model', params: { slug: props.row.slug } }">{{ props.row.name }}</router-link>
                 <span v-if="props.row.older" class="chip chip-quiet" title="An older generation on the arena — hidden from the default leaderboard view.">older</span>
               </div>
-            </template>
-          </b-table-column>
-          <b-table-column field="key" label="Your provider lists" width="290" sortable>
-            <template #default="props">
-              <code class="mp-sku">{{ props.row.key }}</code>
-              <span v-if="props.row.variant" class="chip chip-quiet" :title="'Reseller context/variant tag: [' + props.row.variant + ']'">[{{ props.row.variant }}]</span>
-              <span v-if="props.row.free" class="chip chip-quiet" title="Free twin of the paid SKU at this provider.">:free</span>
-              <span class="chip chip-match" :title="'Matched by the ' + props.row.pass + ' pass of the conservative matcher.'">{{ props.row.passLabel }}</span>
+              <div class="model-sub">
+                <code class="mp-sku" :title="'The exact id this provider lists it under.'">{{ props.row.key }}</code>
+                <span v-if="props.row.variant" class="chip chip-quiet" :title="'Reseller context/variant tag: [' + props.row.variant + ']'">[{{ props.row.variant }}]</span>
+                <span v-if="props.row.free" class="chip chip-quiet" title="Free twin of the paid SKU at this provider.">:free</span>
+                <span class="chip chip-match" :title="'Matched by the ' + props.row.pass + ' pass of the conservative matcher.'">{{ props.row.passLabel }}</span>
+              </div>
             </template>
           </b-table-column>
           <b-table-column field="score" label="Score" width="90" centered numeric sortable :custom-sort="numSort(r => r.score)">
@@ -525,19 +515,18 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
               <span v-else class="mp-dash">—</span>
             </template>
           </b-table-column>
-          <b-table-column field="cl" label="CL" width="80" centered numeric sortable :custom-sort="numSort(r => r.cl)">
+          <b-table-column field="priceIn" label="Arena IN $/1M" width="105" centered numeric sortable :custom-sort="numSort(r => (r.price && r.price.input != null) ? r.price.input : null)">
             <template #default="props">
-              <span v-if="props.row.cl !== null && props.row.cl !== undefined">{{ Math.round(props.row.cl) + '%' }}</span>
-              <span v-else class="mp-dash">—</span>
+              <span v-if="props.row.price && props.row.price.input != null" class="num"
+                :title="'Input price per 1M tokens · arena reference (AA / OpenRouter list) — your provider may charge differently'">{{ fmtUsd(props.row.price.input) }}</span>
+              <span v-else class="mp-dash" title="No input price on the arena reference.">—</span>
             </template>
           </b-table-column>
-          <b-table-column field="price" label="Arena ref $/1M" width="130" centered numeric sortable :custom-sort="numSort(r => r.price?.blend ?? null)">
+          <b-table-column field="priceOut" label="Arena OUT $/1M" width="105" centered numeric sortable :custom-sort="numSort(r => (r.price && r.price.output != null) ? r.price.output : null)">
             <template #default="props">
-              <span v-if="props.row.price" class="num"
-                :title="'in $' + props.row.price.input + ' / out $' + (props.row.price.output ?? '?') + ' per 1M tokens · arena reference price (AA / OpenRouter list) — your provider may charge differently'">
-                {{ fmtUsd(props.row.price.blend) }}
-              </span>
-              <span v-else class="mp-dash">—</span>
+              <span v-if="props.row.price && props.row.price.output != null" class="num"
+                :title="'Output price per 1M tokens · arena reference (AA / OpenRouter list) — your provider may charge differently'">{{ fmtUsd(props.row.price.output) }}</span>
+              <span v-else class="mp-dash" title="No output price on the arena reference.">—</span>
             </template>
           </b-table-column>
         </b-table>
@@ -552,8 +541,12 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
               <span class="mp-unlisted-hint">— reseller-only models, metadata only, honest dashes</span>
             </button>
           </template>
+          <!-- stats-67: Model (id primary) · Context · Provider IN/OUT — the
+               constant-dash Score column and Endpoints are gone (Ibrahim:
+               useless columns), prices split per side with $0 (free) vs —
+               (unpublished) kept strictly apart. -->
           <b-table class="mp-table mp-unlisted-table" :data="c.unlisted" :hoverable="true" :paginated="c.unlisted.length > 14" per-page="14">
-            <b-table-column field="key" label="Listing id" width="320" sortable>
+            <b-table-column field="key" label="Model" width="320" sortable>
               <template #default="props">
                 <code class="mp-sku">{{ props.row.key }}</code>
                 <span v-if="props.row.kind === 'non-chat'" class="chip chip-quiet" title="Non-chat endpoint (image / embedding / other).">non-chat</span>
@@ -567,23 +560,18 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
                 <span v-else class="mp-dash">—</span>
               </template>
             </b-table-column>
-            <b-table-column field="endpoints" label="Endpoints">
+            <b-table-column field="priceIn" label="Provider IN $/1M" width="110" centered numeric sortable :custom-sort="numSort(r => (r.price && r.price.in != null) ? r.price.in : null)">
               <template #default="props">
-                <span class="mp-eps">{{ fmtEndpoints(props.row.endpoints) }}</span>
+                <span v-if="props.row.price && props.row.price.in != null" class="num"
+                  :title="'Input price per 1M tokens · as published by your provider' + (props.row.price.viaKeys ? ' · resolved via your custom pricing keys' : '')">{{ fmtUsd(props.row.price.in) }}</span>
+                <span v-else class="mp-dash" title="No input price published for this listing id under the standard keys or your custom pricing keys.">—</span>
               </template>
             </b-table-column>
-            <b-table-column field="price" label="Provider $/1M" width="130" centered numeric sortable :custom-sort="numSort(r => providerPrice(r)?.blend ?? null)">
+            <b-table-column field="priceOut" label="Provider OUT $/1M" width="110" centered numeric sortable :custom-sort="numSort(r => (r.price && r.price.out != null) ? r.price.out : null)">
               <template #default="props">
-                <span v-if="providerPrice(props.row)" class="num"
-                  :title="'in $' + props.row.price.in + ' / out $' + (props.row.price.out ?? '?') + ' per 1M tokens · as published by your provider' + (props.row.price.viaKeys ? ' · resolved via your custom pricing keys' : '')">
-                  {{ fmtUsd(providerPrice(props.row).blend) }}
-                </span>
-                <span v-else class="mp-dash" title="No price published for this listing id under the standard keys or your custom pricing keys.">—</span>
-              </template>
-            </b-table-column>
-            <b-table-column field="score" label="Score" width="90" centered numeric>
-              <template #default>
-                <span class="mp-dash" title="Not on the arena — no fabricated scores, ever.">—</span>
+                <span v-if="props.row.price && props.row.price.out != null" class="num"
+                  :title="'Output price per 1M tokens · as published by your provider' + (props.row.price.viaKeys ? ' · resolved via your custom pricing keys' : '')">{{ fmtUsd(props.row.price.out) }}</span>
+                <span v-else class="mp-dash" title="No output price published for this listing id under the standard keys or your custom pricing keys.">—</span>
               </template>
             </b-table-column>
           </b-table>
@@ -712,7 +700,8 @@ const fmtEndpoints = (list) => (list && list.length ? list.join(', ') : '—');
 .chip-match { border: 1px dashed currentColor; opacity: 0.85; }
 .chip-quiet { opacity: 0.75; }
 .mp-dash { opacity: 0.5; }
-.mp-eps { font-size: 0.86em; color: var(--ink-2, #556); }
+.model-sub { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
+.model-sub .mp-sku { font-size: 0.8em; }
 .mp-unlisted-toggle { background: none; }
 .mp-unlisted-hint { opacity: 0.6; font-size: 0.9em; }
 .mp-unlisted :deep(.collapse-content) { padding-top: 10px; }

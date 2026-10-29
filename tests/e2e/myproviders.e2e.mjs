@@ -138,19 +138,25 @@ const SOL_FIXTURE = JSON.stringify({
     else fail('model link href unexpected: ' + href);
   }
 
-  // ── 6. unlisted scores stay honest dashes ──
+  // ── 6. unlisted rows stay honest (stats-67: the constant-dash Score
+  //    column and Endpoints are GONE — the table is Model/Context/IN/OUT)
   const privateRow = page.locator('.mp-unlisted-table tbody tr', { hasText: 'my-private-gateway-model' });
   const cells = await privateRow.locator('td').allInnerTexts();
-  if (cells.some(c => c.trim() === '—') && cells.some(c => c.trim().includes('Not on the arena') || true)) {
-    const last = cells[cells.length - 1].trim();
-    if (last === '—') ok('unlisted score cell is an honest dash');
-    else fail('unlisted score cell not a dash: ' + JSON.stringify(cells));
-  } else fail('unlisted row cells unexpected: ' + JSON.stringify(cells));
+  const uHeaders = (await page.locator('.mp-unlisted-table th').allInnerTexts()).map(s => s.trim());
+  if (!uHeaders.includes('Score') && !uHeaders.includes('Endpoints') && !uHeaders.includes('CL'))
+    ok('unlisted table: Score / Endpoints / CL columns gone');
+  else fail('unlisted table kept dead columns: ' + uHeaders.join('|'));
+  if (cells.length === 4 && cells.every(c => c.trim() !== '') && !cells.some(c => c.includes('%')))
+    ok('unlisted row: 4 live columns (Model/Context/IN/OUT), zero score claims');
+  else fail('unlisted row cells unexpected: ' + JSON.stringify(cells));
 
-  // ── 7. non-chat toggle reveals the image model ──
-  await page.click('[aria-label^="Toggle non-chat models"]');
+  // ── 7. non-chat endpoints are ALWAYS listed now (stats-67: the
+  //    show/hide link is gone — Ibrahim found it broken and purposeless)
+  const toggleCount = await page.locator('[aria-label^="Toggle non-chat models"]').count();
+  if (!toggleCount) ok('non-chat show/hide link is gone');
+  else fail('non-chat toggle link still present');
   await page.waitForSelector('.mp-unlisted-table tbody tr:has-text("image-forge-xl")', { timeout: 5000 });
-  ok('non-chat toggle surfaces image-forge-xl with the non-chat tag');
+  ok('non-chat model listed in the unlisted table by default');
   if ((await page.locator('.mp-unlisted-table tbody tr', { hasText: 'image-forge-xl' }).innerText()).includes('non-chat')) {
     ok('non-chat row carries the non-chat chip');
   } else fail('non-chat chip missing');

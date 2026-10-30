@@ -21,7 +21,7 @@ import TiersSelect from '../components/TiersSelect.vue';
 const route = useRoute();
 const router = useRouter();
 
-const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, isUnranked, releaseDateOf, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor, metaFor } = useData();
+const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, isUnranked, releaseDateOf, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor, metaFor, modelSlug } = useData();
 const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId, modFilter } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
@@ -274,7 +274,7 @@ const olderCount = computed(() =>
   pivotFor(tier.value).filter(r => isOlder(r)).length);
 
 const openModel = (name) =>
-  router.push({ name: 'model', params: { slug: slugify(name) } });
+  router.push({ name: 'model', params: { slug: modelSlug(name) } });
 </script>
 
 <template>

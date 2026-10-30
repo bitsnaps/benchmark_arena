@@ -5,7 +5,7 @@
 // they interleave at their natural score position, dimmed (is-older-row),
 // with no rank number and a small "older" chip on the name.
 import { SHORT } from '../lib/constants.js';
-import { fmtScore, fmtUsd, fmtValue, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials, slugify } from '../lib/format.js';
+import { fmtScore, fmtUsd, fmtValue, scoreColor, barWidth, clTag, covClass, rankClass, providerColor, initials } from '../lib/format.js';
 import { isNewModel, newBadgeTitle } from '../lib/newFlag.js';
 import { GRADE_UNRATED, gradeTitle, valueGradeTitle, SPEED_TIER_TITLE } from '../lib/tiers.js';
 import { useData } from '../stores/data.js';
@@ -34,7 +34,7 @@ const perPage = computed(() => (pageSize.value === 0
 // filter/tab changes reshape the list — land back on the first page
 watch(() => props.rows.length, () => { page.value = 1; });
 
-const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, isUnranked, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor, archiveLinkFor, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, isUnranked, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor, archiveLinkFor, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue, modelSlug } = useData();
 const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions
@@ -248,12 +248,12 @@ const limitedTitle = (row) =>
           <b-tooltip v-if="!isUnranked(props.row)" :label="linkTip(props.row)" type="is-dark" multilined :delay="100" append-to-body>
             <router-link
               class="model-link has-text-weight-semibold"
-              :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
+              :to="{ name: 'model', params: { slug: modelSlug(props.row.name) } }"
             >{{ props.row.name }}<span v-if="aliasNote(props.row)" class="alias-star">★</span></router-link>
           </b-tooltip>
           <router-link v-else
             class="model-link has-text-weight-semibold"
-            :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
+            :to="{ name: 'model', params: { slug: modelSlug(props.row.name) } }"
             :title="modelLinkTitle(props.row)"
           >{{ props.row.name }}</router-link>
           <div class="cell-sub">

@@ -37,14 +37,14 @@ Useful flags / env:
 - `BENCH_CACHE_TTL=<seconds>` — per-site cache freshness window (default 300 s;
   raise when orchestrating multiple runs in one day to reuse the same-day cache).
 
-## Workspace-path assumption
+## Paths
 
-The scripts carry absolute workspace paths (`/home/z/my-project/...`) for the
-download/ snapshot area, the public JSONs they write and the `/tmp` scrape
-cache. They run as-is inside the workspace that hosts this repo. If the repo
-moves to another machine, adjust `PROVIDERS_JSON_PATH`, `PROVIDERS_PUBLIC_PATH`
-and the download paths at the top of each script's I/O section — or introduce
-env overrides then.
+The pipeline scripts (`bench_scraper.py`, `merge_full_scrape_into_public.py`,
+`merge_aa_into_public.py`) resolve `public/` from their own location, so the
+repo can live anywhere. The `download/` snapshot area defaults to a sibling of
+the repo (`<repo>/../download`); override it with `BENCH_DOWNLOAD_DIR=<dir>`.
+The scrape cache stays in `/tmp`. The one-off `apply_*` / `dryrun_*` scripts
+still carry the historical absolute workspace paths.
 
 ## Deploy contract (see `prepush.sh`)
 

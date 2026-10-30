@@ -48,7 +48,7 @@ const {
   addProvider, updateProvider, removeProvider, clearAll,
   setModels, setError, exportPayload, importPayload,
 } = useMyProviders();
-const { ensureLoaded, loading, rawData, pivotAll, modelsMeta, scoreForModel, clForModel, priceFor, isOlder, isUnranked } = useData();
+const { ensureLoaded, loading, rawData, pivotAll, modelsMeta, scoreForModel, clForModel, priceFor, isOlder, isUnranked, modelSlug } = useData();
 
 onMounted(() => { ensureMyProvidersLoaded(); ensureLoaded(); });
 
@@ -277,7 +277,7 @@ function matchedRows(p) {
     buildMatchedRows(p, {
       catalogIndex: catalogIndex.value,
       rowByName: rowByName.value,
-      scoreForModel, clForModel, priceFor, isOlder, isUnranked,
+      scoreForModel, clForModel, priceFor, isOlder, isUnranked, slugOf: modelSlug,
     }),
     p.intent);
 }

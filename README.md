@@ -1,6 +1,6 @@
 # Benchmark Arena
 
-LLM model performance aggregator — scores from 11 public leaderboards, unified into one view.
+LLM model performance aggregator — scores from 13 public leaderboards, unified into one view.
 
 **Live demo:** [benchmark_arena on GitHub Pages](https://bitsnaps.github.io/benchmark_arena/)
 
@@ -19,6 +19,8 @@ LLM model performance aggregator — scores from 11 public leaderboards, unified
 | 9 | SWE-Marathon | SWE |
 | 10 | FrontierSWE | SWE |
 | 11 | CyberGem | Security (non-core) |
+| 12 | EQBench CW | Creative writing (non-core) |
+| 13 | LLM Chess | Planning (non-core) |
 
 ## Features
 
@@ -27,7 +29,7 @@ LLM model performance aggregator — scores from 11 public leaderboards, unified
 - **Tier tabs** — All models (one merged ranking to spot the overall top LLM), Closed-source, Open-weight — deep-linkable via `?tier=`
 - **Model pages** — every model has a score card at `#/model/<slug>`: Avg, coverage, rank-in-benchmark bars, "leads" badges
 - **Benchmark deep links** — the explorer is addressable at `#/benchmarks/<slug>` (e.g. `#/benchmarks/arc-agi-2`)
-- **Model Comparison** — select up to 5 models on the leaderboard, or open the dedicated comparison page at `#/compare?models=<slug>,<slug,…>` — shareable, with a spec matrix (params, MoE active params, context, modalities, reasoning, tokenizer, release date), USD pricing per 1M tokens with blended 3:1 price and a score-per-dollar value metric, plus the full 11-leaderboard score matrix with best-in-row highlighting
+- **Model Comparison** — select up to 5 models on the leaderboard, or open the dedicated comparison page at `#/compare?models=<slug>,<slug,…>` — shareable, with a spec matrix (params, MoE active params, context, modalities, reasoning, tokenizer, release date), USD pricing per 1M tokens with blended 3:1 price and a score-per-dollar value metric, plus the full 13-leaderboard score matrix with best-in-row highlighting
 - **Search** — filter models by name, synced to `?q=` for shareable views
 - **Coverage Level (CL)** — shows what % of core benchmarks a model appears on
 - **Coverage opacity tiers** — leaderboard rows fade with benchmark coverage (full opacity at ≥7/8 core evals; hover solidifies) so thin data is visible at a glance without hiding anything
@@ -44,11 +46,13 @@ LLM model performance aggregator — scores from 11 public leaderboards, unified
 
 ## Updating Data
 
-Run the benchmark scraper and copy the output JSON to `public/benchmark_results.json`:
+The full refresh (scrape → merge into `public/` → guard → test gate → commit)
+is `scripts/daily_refresh.sh`; see `scripts/DATA_PIPELINE.md` for the steps and
+the `download/` snapshot location (`BENCH_DOWNLOAD_DIR`).
 
 ```bash
-python3 bench_scraper.py
-# copies to public/benchmark_results.json
+python3 scripts/bench_scraper.py                   # scrape -> download/benchmark_results.json
+python3 scripts/merge_full_scrape_into_public.py   # adopt into public/benchmark_results.json
 ```
 
 The output includes a `models_meta` section: per-model catalog metadata
@@ -65,8 +69,8 @@ Useful for in-depth side-by-side model comparisons.
 ## Dev
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ## Testing
@@ -108,6 +112,6 @@ pnpm run test:e2e                # 3. browser e2e (vite preview + playwright)
 ## Build
 
 ```bash
-npm run build
+pnpm run build
 # Output in dist/
 ```

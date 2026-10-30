@@ -38,6 +38,11 @@ from datetime import date, datetime, timezone
 
 # ── Configuration ──────────────────────────────────────────────────────────
 TMP_DIR = "/tmp"
+# Paths derive from the repo location; the download/ snapshot area defaults to
+# a sibling of the repo (override with BENCH_DOWNLOAD_DIR).
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PUBLIC_DIR = os.path.join(REPO_ROOT, "public")
+DOWNLOAD_DIR = os.environ.get("BENCH_DOWNLOAD_DIR") or os.path.join(os.path.dirname(REPO_ROOT), "download")
 BENCHMARKS = {
     "Artificial Analysis": {
         "url": "https://artificialanalysis.ai/leaderboards/models",
@@ -1636,7 +1641,7 @@ def _parse_arena_text_html(page_html):
 ARENA_TEXT_ASOF = None
 
 # stats-68: last-resort arena mirror = our own last published document.
-RESULTS_PUBLIC_PATH = "/home/z/my-project/benchmark_arena/public/benchmark_results.json"
+RESULTS_PUBLIC_PATH = os.path.join(PUBLIC_DIR, "benchmark_results.json")
 
 
 def _arena_recover_from_public():
@@ -4639,8 +4644,8 @@ LITELLM_PRICES_URL = ("https://raw.githubusercontent.com/BerriAI/litellm/main/"
 LITELLM_CACHE_PATH = os.path.join(TMP_DIR, "litellm_prices.json")
 LITELLM_CACHE_TTL = 6 * 3600  # seconds — prices move weekly, not by the minute
 
-PROVIDERS_JSON_PATH = "/home/z/my-project/download/providers.json"
-PROVIDERS_PUBLIC_PATH = "/home/z/my-project/benchmark_arena/public/providers.json"
+PROVIDERS_JSON_PATH = os.path.join(DOWNLOAD_DIR, "providers.json")
+PROVIDERS_PUBLIC_PATH = os.path.join(PUBLIC_DIR, "providers.json")
 
 # LiteLLM "<prefix>/" → (display name, kind). Shared display names merge into
 # one provider group with per-key dedupe (qwencloud + qwen_ai_platform, …).
@@ -6155,7 +6160,8 @@ def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg
             "open": [(n, s) for n, s in bdata["open"][:TOP_N]],
         }
 
-    path = "/home/z/my-project/download/benchmark_results.json"
+    os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+    path = os.path.join(DOWNLOAD_DIR, "benchmark_results.json")
     with open(path, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
     print(f"\n  Raw results saved to: {path}")
@@ -6172,7 +6178,7 @@ def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg
 # our current-gen flags so a human can trigger an in-depth check and curate
 # SUPERSEDE_OVERRIDES only when justified.
 
-BENCHLM_STATUS_PATH = "/home/z/my-project/download/benchlm_status.json"
+BENCHLM_STATUS_PATH = os.path.join(DOWNLOAD_DIR, "benchlm_status.json")
 
 
 def _save_benchlm_status(census, by_name, extra_by_name=None):
@@ -6324,7 +6330,7 @@ def _scrape_site(site_name):
 
 def _run_meta_only():
     """--meta-only: refresh OpenRouter metadata on the last saved results."""
-    path = "/home/z/my-project/download/benchmark_results.json"
+    path = os.path.join(DOWNLOAD_DIR, "benchmark_results.json")
     if not os.path.exists(path):
         print(f"  [meta-only] no saved results at {path}")
         return

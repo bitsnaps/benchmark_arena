@@ -24,6 +24,7 @@ export function ensureLoaded() {
         rawData.value = await res.json();
       } catch {
         error.value = 'Failed to load benchmark data.';
+        pending = null; // allow a later call to retry
       } finally {
         loading.value = false;
       }
@@ -279,14 +280,24 @@ const tierOf = (row) =>
 const isCore = (b) => coreBenchmarks.value.includes(b);
 
 // ── Slug indexes (deep links) ─────────────────────────────────────────
-const modelSlugIndex = computed(() => {
-  const m = new Map();
+// Names that slugify identically ('Command R' / 'Command R+') get a numeric
+// suffix in pivotAll order, so every row keeps its own reachable page and
+// the first occurrence keeps the bare slug (existing links stay valid).
+const modelSlugs = computed(() => {
+  const bySlug = new Map();
+  const byName = new Map();
   for (const r of pivotAll.value) {
-    const s = slugify(r.name);
-    if (!m.has(s)) m.set(s, r);
+    const base = slugify(r.name);
+    let s = base;
+    for (let n = 2; bySlug.has(s); n++) s = `${base}-${n}`;
+    bySlug.set(s, r);
+    byName.set(r.name, s);
   }
-  return m;
+  return { bySlug, byName };
 });
+const modelSlugIndex = computed(() => modelSlugs.value.bySlug);
+// Model-page slug for a row name; unknown names fall back to plain slugify.
+const modelSlug = (name) => modelSlugs.value.byName.get(name) ?? slugify(name);
 
 const benchSlugIndex = computed(() => {
   const m = new Map();
@@ -503,7 +514,7 @@ export function useData() {
     avgForModel, clForModel, coveredCountForModel, scoreForModel, benchStats,
     topOverall, topClosed, topOpen, leaders,
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,
-    modelSlugIndex, benchSlugIndex, benchRankIndex,
+    modelSlugIndex, modelSlug, benchSlugIndex, benchRankIndex,
     modelsMeta, metaFor, metaCoverage, supersededBy, isSuperseded, isOlder, isUnranked, releaseDateOf,
     archiveLinkFor,
     priceFor, valueFor, hfIdFor, hfUrlFor,

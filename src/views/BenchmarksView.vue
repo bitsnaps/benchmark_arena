@@ -10,7 +10,7 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 
 const route = useRoute();
 const router = useRouter();
-const { benchmarks, perBenchData, benchSlugIndex, modelSlugIndex, isCore, isOlder } = useData();
+const { benchmarks, perBenchData, benchSlugIndex, modelSlugIndex, modelSlug, isCore, isOlder } = useData();
 const { showOlder } = useLeaderboard();
 
 const benchFilter = ref('all');       // all | closed | open
@@ -58,7 +58,7 @@ const olderCountHere = computed(() => {
 // Open the model's score card; models that never made it into the
 // unified pivot fall back to a pre-filtered leaderboard search.
 const openModel = (name) => {
-  const slug = slugify(name);
+  const slug = modelSlug(name);
   if (modelSlugIndex.value.has(slug)) {
     router.push({ name: 'model', params: { slug } });
   } else {

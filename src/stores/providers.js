@@ -22,6 +22,7 @@ export function ensureProvidersLoaded() {
         rawData.value = await res.json();
       } catch {
         error.value = 'Failed to load provider pricing data.';
+        pending = null; // allow a later call to retry
       } finally {
         loading.value = false;
       }

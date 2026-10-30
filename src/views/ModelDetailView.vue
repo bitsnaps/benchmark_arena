@@ -14,7 +14,7 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, archiveLinkFor, tiersMode, gradeFor, gradeBoundsOverall } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, modelSlug, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, archiveLinkFor, tiersMode, gradeFor, gradeBoundsOverall } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 // stats-49: the archived-page icon is wordless — this tooltip + the link's
@@ -216,7 +216,7 @@ function addToCompare() {
       <i class="fas fa-clock-rotate-left"></i>
       <span v-if="successor">
         This model has been superseded by
-        <router-link :to="{ name: 'model', params: { slug: slugify(successor) } }">{{ successor }}</router-link>
+        <router-link :to="{ name: 'model', params: { slug: modelSlug(successor) } }">{{ successor }}</router-link>
         — a newer release of the same product line. It is excluded from the default
         leaderboard ranking and shown only in the “Older versions” section.
       </span>

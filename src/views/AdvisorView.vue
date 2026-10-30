@@ -22,7 +22,7 @@ import {
   profileScoreFor, coverageTag, weightFor, normalizeParams, survivors,
   rankCandidates, buildReasons, buildFlags, emptyStateHint, fmtComposite,
 } from '../lib/advisor.js';
-import { fmtUsd, fmtCtx, fmtSec, providerColor, initials, slugify } from '../lib/format.js';
+import { fmtUsd, fmtCtx, fmtSec, providerColor, initials } from '../lib/format.js';
 import { useData } from '../stores/data.js';
 
 const route = useRoute();
@@ -30,6 +30,7 @@ const router = useRouter();
 const {
   pivotAll, scoreForModel, benchStats, filterPriceFor, hasFreeListingFor, metaFor,
   tierOf, isOlder, isUnranked, releaseDateOf,
+  modelSlug,
 } = useData();
 
 // ── Wizard state ⇄ URL (shareable, loop-guarded by canonical forms) ─────
@@ -190,7 +191,7 @@ function toggleCompare(name) {
   else if (comparePicks.value.length < SHORTLIST_SIZE) comparePicks.value.push(name);
 }
 function goCompare() {
-  const models = comparePicks.value.map(slugify).join(',');
+  const models = comparePicks.value.map(modelSlug).join(',');
   router.push({ name: 'compare', query: models ? { models } : {} });
 }
 
@@ -313,7 +314,7 @@ const priceLabel = (c) => {
               <span v-for="f in r.flags" :key="f" class="tag-lab muted">{{ f }}</span>
             </div>
             <div class="row mt-sm">
-              <router-link class="btn tiny primary" :to="{ name: 'model', params: { slug: slugify(r.cand.name) } }">Details</router-link>
+              <router-link class="btn tiny primary" :to="{ name: 'model', params: { slug: modelSlug(r.cand.name) } }">Details</router-link>
               <button class="btn tiny" @click="toggleCompare(r.cand.name)">
                 {{ comparePicks.includes(r.cand.name) ? '✓ Picked' : 'Compare' }}
               </button>

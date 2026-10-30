@@ -8,7 +8,7 @@ import { computed, ref, watch, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SHORT } from '../lib/constants.js';
 import {
-  fmtScore, scoreColor, barWidth, providerColor, initials, slugify,
+  fmtScore, scoreColor, barWidth, providerColor, initials,
   fmtCtx, fmtB, fmtUsd, modalityIcon,
 } from '../lib/format.js';
 import { useData } from '../stores/data.js';
@@ -21,6 +21,7 @@ const {
   benchmarks, pivotAll, modelSlugIndex, scoreForModel, clForModel, coveredCountForModel, rankMaps, tierOf, isCore,
   stats, metaFor, metaCoverage, topClosed, topOpen, isOlder, archiveLinkFor,
   priceFor, valueFor, hasFreeListingFor,
+  modelSlug,
 } = useData();
 const { compareRows, compareMode } = useLeaderboard();
 
@@ -54,7 +55,7 @@ watch(
       // Landed with no ?models=: seed the URL from the checkbox selection
       // (navbar pill entry point) instead of wiping it.
       if (compareRows.value.length) {
-        router.replace({ query: { models: compareRows.value.map(r => slugify(r.name)).join(',') } });
+        router.replace({ query: { models: compareRows.value.map(r => modelSlug(r.name)).join(',') } });
       }
       return;
     }
@@ -70,7 +71,7 @@ watch(
 // Selection edits → URL (replace keeps the back button sane)
 watch(compareRows, (rows) => {
   if (route.name !== 'compare') return;
-  const want = rows.map(r => slugify(r.name)).join(',');
+  const want = rows.map(r => modelSlug(r.name)).join(',');
   const cur = typeof route.query.models === 'string' ? route.query.models : '';
   if (cur !== want) router.replace({ query: rows.length ? { models: want } : {} });
 });
@@ -385,7 +386,7 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
                 </button>
               </b-tooltip>
             </div>
-            <router-link class="model-link has-text-weight-semibold" :to="{ name: 'model', params: { slug: slugify(s.row.name) } }">
+            <router-link class="model-link has-text-weight-semibold" :to="{ name: 'model', params: { slug: modelSlug(s.row.name) } }">
               {{ s.row.name }}
             </router-link>
             <div class="cell-sub">{{ providerColor(s.row.name).name }}</div>

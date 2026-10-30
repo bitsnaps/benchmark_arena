@@ -30,11 +30,14 @@ Result written to BOTH copies so the deployed artifact and future
 --meta-only bases agree.
 """
 import json
+import os
 import re
 
-PUB = "/home/z/my-project/benchmark_arena/public/benchmark_results.json"
-DL = "/home/z/my-project/download/benchmark_results.json"
-PROV = "/home/z/my-project/benchmark_arena/public/providers.json"
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DOWNLOAD_DIR = os.environ.get("BENCH_DOWNLOAD_DIR") or os.path.join(os.path.dirname(REPO_ROOT), "download")
+PUB = os.path.join(REPO_ROOT, "public", "benchmark_results.json")
+DL = os.path.join(DOWNLOAD_DIR, "benchmark_results.json")
+PROV = os.path.join(REPO_ROOT, "public", "providers.json")
 
 
 def _norm_key(raw):

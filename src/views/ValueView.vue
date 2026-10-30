@@ -22,7 +22,7 @@
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { TIERS } from '../lib/constants.js';
-import { slugify, fmtScore, fmtUsd, fmtSec, fmtCtx, fmtValue, providerColor } from '../lib/format.js';
+import { fmtScore, fmtUsd, fmtSec, fmtCtx, fmtValue, providerColor } from '../lib/format.js';
 import { isNewModel } from '../lib/newFlag.js';
 import {
   AXES, X_AXIS_IDS, Y_AXIS_IDS, axisOptions,
@@ -32,7 +32,7 @@ import { useData } from '../stores/data.js';
 
 const route = useRoute();
 const router = useRouter();
-const { pivotFor, scoreForModel, clForModel, priceFor, valueFor, metaFor, isOlder, isUnranked, releaseDateOf, sellerCountFor } = useData();
+const { pivotFor, scoreForModel, clForModel, priceFor, valueFor, metaFor, isOlder, isUnranked, releaseDateOf, sellerCountFor, modelSlug } = useData();
 
 const xOptions = axisOptions(X_AXIS_IDS);
 const yOptions = axisOptions(Y_AXIS_IDS);
@@ -171,7 +171,7 @@ const tipRows = computed(() => {
   return out;
 });
 
-const go = (p) => router.push({ name: 'model', params: { slug: slugify(p.name) } });
+const go = (p) => router.push({ name: 'model', params: { slug: modelSlug(p.name) } });
 
 // ── Legend + honesty notes ───────────────────────────────────────────────
 const legend = computed(() => {

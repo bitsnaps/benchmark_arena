@@ -952,6 +952,14 @@ describe('stats-65: unranked single-source admissions', () => {
     }
   });
 
+  it('every row gets its own model slug (colliding names are suffixed)', () => {
+    const idx = d.modelSlugIndex.value;
+    expect(idx.size).toBe(d.pivotAll.value.length);
+    for (const r of d.pivotAll.value) {
+      expect(idx.get(d.modelSlug(r.name))?.name, `slug for "${r.name}"`).toBe(r.name);
+    }
+  });
+
   it('leader cards never crown an unranked row', () => {
     for (const card of d.leaders.value) {
       const row = rowOf(card.model);

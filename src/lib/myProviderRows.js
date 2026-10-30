@@ -58,7 +58,8 @@ export function textSort(accessor) {
 
 // ── Matched rows ("On the arena") ─────────────────────────────────────
 // ctx: { catalogIndex, rowByName, scoreForModel, clForModel, priceFor,
-//        isOlder, isUnranked } — the data store's read-only accessors.
+//        isOlder, isUnranked, slugOf? } — the data store's read-only accessors
+//        (slugOf = store modelSlug, so links resolve colliding names).
 // Each row: { key, name, slug, pass, passLabel, variant, free, score, cl,
 //             price (arena reference), older, ownPrice (provider-published) }.
 export function buildMatchedRows(p, ctx) {
@@ -72,7 +73,7 @@ export function buildMatchedRows(p, ctx) {
     return {
       key: en.model.id,
       name: en.name,
-      slug: slugify(en.name),
+      slug: ctx.slugOf ? ctx.slugOf(en.name) : slugify(en.name),
       pass: en.pass,
       passLabel: passLabelOf(en.pass),
       variant: en.model.variant,

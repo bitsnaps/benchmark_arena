@@ -10,13 +10,13 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { SHORT } from '../lib/constants.js';
 import { sinkLast } from '../lib/compareSort.js';
-import { fmtScore, scoreColor, providerColor, initials, slugify } from '../lib/format.js';
+import { fmtScore, scoreColor, providerColor, initials } from '../lib/format.js';
 import { GRADE_UNRATED, gradeTitle, valueGradeTitle, SPEED_TIER_TITLE } from '../lib/tiers.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
 const router = useRouter();
-const { benchmarks, coreBenchmarks, scoreForModel, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue } = useData();
+const { benchmarks, coreBenchmarks, scoreForModel, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue, modelSlug } = useData();
 const { compareRows, clearCompare, isBest } = useLeaderboard();
 
 // Score sorts by the live CL-weighted Score (follows the Avg set exactly
@@ -57,7 +57,7 @@ const valueTip = (row) => valueGradeTitle(gradeValueFor(row), gradeBoundsValue.v
           <div>
             <router-link
               class="model-link has-text-weight-semibold"
-              :to="{ name: 'model', params: { slug: slugify(props.row.name) } }"
+              :to="{ name: 'model', params: { slug: modelSlug(props.row.name) } }"
             >{{ props.row.name }}</router-link>
             <!-- stats-60: grade chips mirror the leaderboard (one shared mode) -->
             <div v-if="showGrades" class="cell-sub">

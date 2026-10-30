@@ -46,7 +46,7 @@ const {
   providers, ensureMyProvidersLoaded,
   setModels, removeProvider,
 } = useMyProviders();
-const { ensureLoaded, loading: snapshotLoading, pivotAll, modelsMeta, scoreForModel, clForModel, priceFor, isOlder, isUnranked } = useData();
+const { ensureLoaded, loading: snapshotLoading, pivotAll, modelsMeta, scoreForModel, clForModel, priceFor, isOlder, isUnranked, modelSlug } = useData();
 
 onMounted(() => { ensureMyProvidersLoaded(); ensureLoaded(); });
 
@@ -70,7 +70,7 @@ const allRows = computed(() => {
   return buildMergedRows(provider.value, {
     catalogIndex: catalogIndex.value,
     rowByName: rowByName.value,
-    scoreForModel, clForModel, priceFor, isOlder, isUnranked,
+    scoreForModel, clForModel, priceFor, isOlder, isUnranked, slugOf: modelSlug,
   }, { includeNonChat: true }); // stats-67: non-chat always listed, chip-marked
 });
 

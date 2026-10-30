@@ -760,7 +760,16 @@ const run = async () => {
     const expUnified = fmtScore(scoreForModel(benchRow));
     await searchBox.fill('DeepSeek V4 Flash');
     await page.waitForTimeout(400);
-    const dsRow = page.locator('.pm-table tbody tr', { hasText: 'DeepSeek V4 Flash' }).first();
+    // stats-68: exact successor-proof anchor — a row-level hasText matches
+    // every 'DeepSeek V4 Flash*' sibling; the AA redesign dropped the bare
+    // row's AA cell on 2026-10-30, the DOM order flipped, and .first()
+    // grabbed the 0731 row instead. The compare table prefixes the org
+    // ("DeepSeek: …"), and the staged matcher joins the bare bench row to
+    // the catalog '0423' entry — so anchor on the name with the successors
+    // (0731 / Vision / Latest) excluded instead of an exact full-text match.
+    const dsRow = page.locator('.pm-table tbody tr').filter({
+      has: page.locator('.prov-model', { hasText: /DeepSeek V4 Flash(?! ?(0731|Vision|Latest))/ }),
+    }).first();
     const dsScore = (await dsRow.locator('.score-cell .score-val').innerText()).trim();
     if (dsScore === expUnified) ok(`unified score joins through the staged matcher (${dsScore} = leaderboard score)`);
     else fail(`unified score: got "${dsScore}", expected "${expUnified}" (stats-35 mirror)`);

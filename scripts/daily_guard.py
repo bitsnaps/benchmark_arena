@@ -93,11 +93,27 @@ def main():
         fail(f"unranked section exploded: {n_unranked} rows (admission broken?)")
 
     # 3. meta layer — absolute floor + gentle shrink allowance (archivals happen)
+    #    stats-68 (2026-10-30): meta records mostly FOLLOW rows (per-row
+    #    matched + census records). When rows legitimately shrink inside the
+    #    check-2 band, a fixed (n_old - 10) meta floor is tighter than the
+    #    row band and fails on explained upstream data cuts (first seen:
+    #    AA leaderboard redesign — index coverage 83 of 274 rows, ~60
+    #    AA-only rows gone). Relax the floor by the observed row drop; a
+    #    meta collapse with STABLE rows (the stats-28 miner-death class)
+    #    still fails exactly as before.
     mm, tt_new, cr_new, mod_new = meta_stats(doc)
     _, tt_old, cr_old, mod_old = meta_stats(head)
     n_old = len(head.get("models_meta") or {})
-    if len(mm) < max(95, n_old - 10):
-        fail(f"models_meta shrank: {len(mm)} vs HEAD {n_old}")
+    row_drop = max(0, rows_of(head) - rows_of(doc))
+    meta_floor = max(95, n_old - 10 - row_drop)
+    if len(mm) < meta_floor:
+        fail(f"models_meta shrank: {len(mm)} vs HEAD {n_old} (floor {meta_floor})")
+    if row_drop and len(mm) < n_old - 10:
+        print(
+            f"GUARD NOTE models_meta {len(mm)} < HEAD {n_old}: floor relaxed by the "
+            f"{row_drop}-row upstream drop ({rows_of(doc)} rows vs {rows_of(head)}) — "
+            f"records follow rows (stats-68)"
+        )
     # 3a. AA TTFT floor — deprecation-aware (stats-62, 2026-10-18): AA
     # retires the payload latency/price records of models its census stubs
     # flag deprecated, so a coverage drop explained by vendor deprecation

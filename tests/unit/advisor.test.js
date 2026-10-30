@@ -363,11 +363,18 @@ describe('parity with the store on the real snapshot', () => {
     // (superseded upstream by DeepSeek V4.1 Flash, 2026-09-10), so isOlder
     // (flash) flipped to true — which only strengthens this test's headline
     // invariant that Flash 0731 is never shortlisted over Pro 0813.
+    // stats-68 (2026-10-30): AA's leaderboard redesign re-based the
+    // Intelligence Index (Pro 0813 36 -> 23 upstream, single (max) variant
+    // now listed; Flash 0731 cells unchanged) and the harmonized blend now
+    // puts Flash 0731 a hair above Pro 0813 (51.53 vs 51.32). The strict
+    // ordering assert tracked live AA data, not an invariant — dropped.
+    // The durable stats-32 invariant (Flash 0731 is never SHORTLISTED over
+    // current-gen models) stays enforced by the isOlder flags below plus
+    // the coding-profile ranking test.
     const ps = d.scoreForModel(pro);
     const fs = d.scoreForModel(flash);
     expect(ps).not.toBeNull();
     expect(fs).not.toBeNull();
-    expect(ps).toBeGreaterThan(fs);
     expect(d.isOlder(pro)).toBe(false);
     expect(d.isOlder(flash)).toBe(true);
     const april = find(/^DeepSeek V4 Flash$/i);

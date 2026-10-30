@@ -1581,32 +1581,95 @@ def _parse_arena_text_html(page_html):
     span ('claude-opus-5.5-high' + 'Anthropic · Proprietary'); Score cell =
     Elo span + CI span ('1513' + '±13', sometimes + 'Preliminary').
     Returns [{model: kebab, score: int}] — same shape as the browser eval.
+
+    stats-68: the leaderboard table is NOT always the first <table> in the
+    document — the Wayback Machine (mirror probe, 2026-10-30) injects its own
+    chrome tables (calendar widget) ahead of the archived content. Scan every
+    <table> and keep the one that yields the most valid rows; harmless on the
+    live page (it has exactly one data table).
     """
     from html import unescape as _u
 
-    m = re.search(r"<table.*?</table>", page_html, re.S)
-    if not m:
-        return []
-    table = m.group(0)
-    out = []
-    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", table, re.S):
-        cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.S)
-        if len(cells) < 4:
-            continue
-        # model: first span inside the Model cell (span[1] is org/license)
-        spans = re.findall(r"<span[^>]*>(.*?)</span>", cells[2], re.S)
-        model = _u(re.sub(r"<[^>]+>", "", spans[0])).strip() if spans else ""
-        if not model or model.lower() == "model":
-            continue  # header-duplicate row inside tbody
-        # score: leading integer of the Score cell's first span
-        s_spans = re.findall(r"<span[^>]*>(.*?)</span>", cells[3], re.S)
-        s_text = _u(re.sub(r"<[^>]+>", "", s_spans[0])).strip() if s_spans \
-            else re.sub(r"<[^>]+>", "", cells[3]).strip()
-        sm = re.match(r"^(\d+)", s_text)
-        if not sm:
-            continue
-        out.append({"model": model, "score": int(sm.group(1))})
-    return out
+    best = []
+    for table in re.findall(r"<table.*?</table>", page_html, re.S):
+        out = []
+        for row in re.findall(r"<tr[^>]*>(.*?)</tr>", table, re.S):
+            cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.S)
+            if len(cells) < 4:
+                continue
+            # model: first span inside the Model cell (span[1] is org/license)
+            spans = re.findall(r"<span[^>]*>(.*?)</span>", cells[2], re.S)
+            model = _u(re.sub(r"<[^>]+>", "", spans[0])).strip() if spans else ""
+            if not model or model.lower() == "model":
+                continue  # header-duplicate row inside tbody
+            # score: leading integer of the Score cell's first span
+            s_spans = re.findall(r"<span[^>]*>(.*?)</span>", cells[3], re.S)
+            s_text = _u(re.sub(r"<[^>]+>", "", s_spans[0])).strip() if s_spans \
+                else re.sub(r"<[^>]+>", "", cells[3]).strip()
+            sm = re.match(r"^(\d+)", s_text)
+            if not sm:
+                continue
+            out.append({"model": model, "score": int(sm.group(1))})
+        if len(out) > len(best):
+            best = out
+    return best
+
+
+# stats-68: vintage stamp for the doc — set ONLY by the prior-public
+# recovery (the published doc's own timestamp). Field absent = arena cells
+# are live-fresh (same vintage as the doc timestamp).
+ARENA_TEXT_ASOF = None
+
+# stats-68: last-resort arena mirror = our own last published document.
+RESULTS_PUBLIC_PATH = "/home/z/my-project/benchmark_arena/public/benchmark_results.json"
+
+
+def _arena_recover_from_public():
+    """
+    stats-68 (2026-10-30, Ibrahim): last-resort Arena.ai Text source.
+
+    2026-10-29: Cloudflare extended the managed challenge to the z-ai
+    page_reader service too (28,840-byte "Just a moment…" wall on both fetch
+    paths, deterministic across 7 attempts; re-probed 2026-10-30). Probing
+    the Wayback Machine showed its closest capture of /leaderboard/text is
+    2026-10-08 — OLDER than our own last published doc. So the freshest
+    honest arena mirror left is the previous public/benchmark_results.json
+    itself (arena vintage = its `timestamp`).
+
+    Cells are stored rescaled to 0-100 ((elo-900)/650 per _benchmark_scale);
+    this rebuilds the raw Elo so the normal rescale round-trips the
+    published cell exactly (93.7 -> 1509.05 -> 93.7). No guard checks cell
+    values, and the doc gets `arena_text_asof` so the vintage is auditable.
+    Live re-scraping resumes automatically (and re-stamps the doc) as soon
+    as the wall lifts — the live paths always run first.
+
+    Returns [(name, raw_elo)] — same shape as the live paths.
+    """
+    global ARENA_TEXT_ASOF
+    try:
+        with open(RESULTS_PUBLIC_PATH) as f:
+            pub = json.load(f)
+        asof = pub.get("timestamp") or "unknown"
+        rows = (pub.get("unified_closed") or []) + (pub.get("unified_open") or [])
+        out = []
+        for r in rows:
+            v = (r or {}).get("Arena.ai Text")
+            if isinstance(v, (int, float)) and 0 < v <= 100 and r.get("name"):
+                out.append((r["name"], round(v / 100.0 * 650.0 + 900.0, 1)))
+        if len(out) >= 200:
+            ARENA_TEXT_ASOF = asof
+            print(f"    [prior-public recovery] {len(out)} arena cells adopted "
+                  f"from the published doc (vintage {asof}) — Cloudflare wall "
+                  f"active; live re-scrape resumes when it lifts")
+            # same dict shape as the live paths (model/score keys);
+            # display=True marks names that are ALREADY canonical —
+            # they must bypass _kebab_to_model_name (it mangles display
+            # dashes: 'GPT-6 Astra' -> 'GPT 6 Astra')
+            return [{"model": n, "score": s, "display": True} for n, s in out]
+        print(f"    [prior-public recovery] only {len(out)} usable cells — refusing")
+    except Exception as e:  # noqa: BLE001
+        print(f"    [prior-public recovery] failed: {e}")
+    return []
 
 
 def scrape_arena_text():
@@ -1619,6 +1682,12 @@ def scrape_arena_text():
     fallback in case the wall is lifted (it would need span-based
     extraction now: model = Model-cell span[0], score = Score-cell span[0];
     the old <a>-link markup is gone).
+    2026-10-29: the wall reached the page_reader service as well (stats-68):
+    both live paths now return the 28,840-byte challenge page. Final layer
+    is the prior-public recovery (_arena_recover_from_public) — the previous
+    published doc is the freshest honest arena mirror (its 2026-10-25
+    vintage beats the Wayback Machine's 2026-10-08 closest capture), and the
+    doc is stamped `arena_text_asof` so the vintage is auditable.
     Names arrive kebab-case ('claude-opus-4-6-high') and go through
     _kebab_to_model_name. Rows without a usable Elo (<900) are skipped.
     """
@@ -1648,8 +1717,15 @@ def scrape_arena_text():
         if data:
             print(f"    [browser eval] got {len(data)} rows")
 
+    # stats-68: prior-public recovery (fresher than any archive mirror)
+    if not data:
+        data = _arena_recover_from_public()
+        if data:
+            print(f"    [recovery] adopted {len(data)} models from the prior doc")
+
     if not data or not isinstance(data, list):
-        print(f"    [WARN] No data from Arena.ai text (page_reader + eval both failed)")
+        print(f"    [WARN] No data from Arena.ai text (page_reader + eval + "
+              f"prior-public recovery all failed)")
         return []
 
     models = []
@@ -1660,7 +1736,10 @@ def scrape_arena_text():
         elo = item.get("score", 0)
         if not kebab or elo < 900:
             continue
-        name = _kebab_to_model_name(kebab)
+        if item.get("display"):  # stats-68: prior-public names are canonical
+            name = kebab
+        else:
+            name = _kebab_to_model_name(kebab)
         if name and len(name) > 3:
             models.append((name, float(elo)))
 
@@ -6051,6 +6130,10 @@ def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg
     }
     if models_meta:
         data["models_meta"] = models_meta
+    # stats-68: arena vintage stamp — present only when the prior-public
+    # recovery fed the arena column (Cloudflare wall); auditable in the doc.
+    if ARENA_TEXT_ASOF:
+        data["arena_text_asof"] = ARENA_TEXT_ASOF
     for bname, bdata in all_results.items():
         data["per_benchmark"][bname] = {
             "closed": [(n, s) for n, s in bdata["closed"][:TOP_N]],
@@ -6215,7 +6298,12 @@ def _scrape_site(site_name):
             os.remove(path)
         raise ValueError(f"No models found for {site_name}")
     with open(path, 'w') as f:
-        json.dump({'closed': closed, 'open': open_w}, f, ensure_ascii=False)
+        # stats-68: arena artifacts carry the vintage stamp so a cache-hit
+        # combine run (BENCH_CACHE_TTL) keeps doc.arena_text_asof even though
+        # scrape_arena_text() never runs in that process.
+        asof = ARENA_TEXT_ASOF if site_name == "Arena.ai Text" else None
+        json.dump({'closed': closed, 'open': open_w, 'asof': asof},
+                  f, ensure_ascii=False)
     print(f"  [{site_name}] {len(closed)}c {len(open_w)}o")
 
 
@@ -6331,6 +6419,7 @@ def main():
                 pass
 
     # Load all results
+    global ARENA_TEXT_ASOF
     for site_name, path in site_files.items():
         if os.path.exists(path):
             with open(path) as f:
@@ -6339,6 +6428,10 @@ def main():
                 'closed': [tuple(x) for x in data['closed']],
                 'open': [tuple(x) for x in data['open']],
             }
+            # stats-68: cache-hit combine run — restore the arena vintage
+            # stamp saved with the artifact (live runs re-set it in-process).
+            if site_name == "Arena.ai Text" and data.get("asof"):
+                ARENA_TEXT_ASOF = data["asof"]
 
     # Build unified table (handles rescaling internally via _rescale_score)
     closed_table, open_table, all_benchmarks, avg_benchmarks = build_unified_table(all_results)

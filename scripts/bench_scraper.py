@@ -561,7 +561,11 @@ def scrape_artificial_analysis():
 })()"""
     # stats-28: the flight payload now streams late — at 8s the script tags
     # hold ~3KB (no model records); the full ~1.5MB payload lands by ~20s.
-    data = load_and_eval(url, js, wait_ms=20000)
+    # stats-68: the TABLE render is also late-variable on cold loads (83 vs
+    # 274 rows observed across two loads on 2026-10-30) — wait past the
+    # payload window so the virtual table has painted its rows; the payload
+    # merge above covers any residual shortfall.
+    data = load_and_eval(url, js, wait_ms=28000)
     models = []
     pricing = {}
     slugs = {}
@@ -597,17 +601,28 @@ def scrape_artificial_analysis():
                     models.append((name, score))
             except (ValueError, TypeError):
                 pass
-        if len(models) < 5 and payload_models:
-            seen = set()
-            for item in payload_models:
-                nm, sc = item.get("name"), item.get("score")
-                if (nm and nm not in seen and len(nm) >= 3
-                        and isinstance(sc, (int, float)) and sc > 0):
-                    models.append((nm, float(sc)))
-                    seen.add(nm)
-            if models:
-                print(f"    [WARN] table eval thin ({len(models)} rows) — "
-                      f"payload records used as the model list ({len(seen)} added)")
+        # stats-68 (2026-10-30): the visible table now virtualizes — it
+        # rendered only 83 rows (was ~300 on 10-25) while the flight payload
+        # carries intelligenceIndex for EVERY record. Payload records merge
+        # into the table set (table wins on name conflicts) so leaderboard
+        # depth tracks the data, not the viewport. The old <5 fallback stays
+        # covered by the same merge.
+        have = {n.lower() for n, _ in models}
+        added = 0
+        for item in payload_models or []:
+            nm, sc = item.get("name"), item.get("score")
+            if (not nm or len(nm) < 3 or nm.lower() in have
+                    or not isinstance(sc, (int, float)) or sc <= 0):
+                continue
+            models.append((nm, float(sc)))
+            have.add(nm.lower())
+            added += 1
+        if len(models_raw) < 5 and payload_models:
+            print(f"    [WARN] table eval thin ({len(models_raw)} rows) — "
+                  f"payload records used as the model list")
+        if added:
+            print(f"    [AA] +{added} payload-only models merged "
+                  f"(table virtualized at {len(models_raw)} rows)")
         if pricing or slugs or payload_dep:
             global _AA_PRICING_LAST, _AA_SLUGS_LAST, _AA_DEPRECATED_LAST
             _AA_PRICING_LAST = pricing

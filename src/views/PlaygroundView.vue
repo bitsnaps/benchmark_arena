@@ -775,7 +775,7 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
         </p>
         <div class="pg-modal-actions">
           <button type="button" class="button is-primary is-small" data-test="pg-setup-save" :disabled="!setup.baseUrl.trim()" @click="saveSetup">Save and use here</button>
-          <button type="button" class="button is-ghost is-small" data-test="pg-setup-cancel" @click="setup = null">Not now</button>
+          <button type="button" class="button is-ghost is-small" data-test="pg-setup-cancel" @click="setupOpen = false">Not now</button>
         </div>
       </div>
     </b-modal>

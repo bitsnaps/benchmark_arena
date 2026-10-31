@@ -276,6 +276,8 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     else fail('catalog pick should show the setup hint after dismissing the modal');
     await page.locator('[data-test="pg-setup-open"]').click();
     await modal.waitFor({ timeout: 5000 });
+    // (the auto-open already fired once for fixlab; "Not now" recorded the
+    // dismissal, so picking another catalog model must stay modal-free)
     await page.locator('[data-test="pg-setup-url"]').fill(FIXBASE);
     await page.locator('[data-test="pg-setup-key"]').fill('sk-fixlab-1');
     const overrideVal = await page.locator('[data-test="pg-setup-model"]').inputValue();
@@ -302,6 +304,9 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     if (fixReq?.headers.authorization === 'Bearer sk-fixlab-1' && fixReq?.body.model === 'fix-mini'
       && fixReq?.body.messages?.at(-1)?.content === 'hello') ok('catalog chat request: mocked base URL, bearer key from the linked entry, overridden model id');
     else fail('catalog request unexpected: ' + JSON.stringify(fixReq));
+    await pickViaPicker('fix-free'); // second catalog model of the same provider
+    if (await modal.count() === 0) ok('dismissed setup does not re-pop on further catalog picks in the same session');
+    else fail('setup modal re-opened after "Not now" — browsing feels like whack-a-mole');
     const idbDump = JSON.stringify(await readConvs());
     if (!idbDump.includes('sk-fixlab-1') && !idbDump.includes('sk-e2e-test')) ok('no key from either path leaks into the Playground IndexedDB store');
     else fail('key leaked into playground storage');

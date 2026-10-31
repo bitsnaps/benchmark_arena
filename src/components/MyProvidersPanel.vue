@@ -46,7 +46,7 @@ const props = defineProps({
 const {
   providers, ensureMyProvidersLoaded,
   addProvider, updateProvider, removeProvider, clearAll,
-  setModels, setError, exportPayload, importPayload,
+  setModels, setError, exportPayload, importPayload, hasAnyKey,
 } = useMyProviders();
 const { ensureLoaded, loading, rawData, pivotAll, modelsMeta, scoreForModel, clForModel, priceFor, isOlder, isUnranked, modelSlug } = useData();
 
@@ -68,6 +68,10 @@ const modalOpen = ref(false);
 const editingId = ref(null);      // null = adding a new provider
 const formMode = ref('fetch');    // 'fetch' | 'paste'
 const form = ref({ label: '', baseUrl: '', key: '', paste: '', keyIn: '', keyOut: '', unit: 'token' });
+// Key + plain-http base URL (localhost exempt) → the key would travel in clear.
+const insecureKeyUrl = computed(() => !!form.value.key
+  && /^http:\/\//i.test(form.value.baseUrl.trim())
+  && !/^http:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/i.test(form.value.baseUrl.trim()));
 const formError = ref('');
 const busy = ref(false);
 
@@ -354,8 +358,10 @@ function deleteClicked(p) {
   note('Provider removed.');
 }
 
+const exportKeys = ref(false);
 function exportClicked() {
-  const blob = new Blob([exportPayload()], { type: 'application/json' });
+  const includeKeys = exportKeys.value && hasAnyKey.value;
+  const blob = new Blob([exportPayload({ includeKeys })], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'benchmark-arena-my-providers.json';
@@ -363,7 +369,9 @@ function exportClicked() {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-  note('Exported your providers JSON.');
+  note(includeKeys
+    ? 'Exported your providers JSON — it contains your API keys, keep it private.'
+    : 'Exported your providers JSON (API keys left out).');
 }
 // stats-38 style pass: Import is a real button over a hidden file input
 // (was a disguised <label class="chip">) — and it must stay enabled with
@@ -403,6 +411,8 @@ function fmtSync(ts) {
         aria-label="Add provider" @click="openAdd">Add provider</b-button>
       <span class="mp-spacer"></span>
       <b-button size="is-small" :disabled="!providers || !providers.length" @click="exportClicked">Export</b-button>
+      <b-checkbox v-if="hasAnyKey" v-model="exportKeys" size="is-small" class="mp-export-keys"
+        title="Off by default: anyone holding the exported file can use your keys">Include API keys</b-checkbox>
       <b-button size="is-small" @click="fileInput?.click()">Import</b-button>
       <input ref="fileInput" type="file" accept="application/json,.json"
         aria-label="Import providers JSON" style="display:none" @change="importClicked" />
@@ -595,7 +605,10 @@ function fmtSync(ts) {
           <b-input v-model="form.baseUrl" aria-label="Provider base URL" placeholder="https://api.unorouter.com/v1" />
         </b-field>
         <b-field label="API key (optional)"
-          message="Stored only in this browser's localStorage; sent only to the base URL above. For private keys, prefer paste mode — the key never enters the app.">
+          :type="insecureKeyUrl ? 'is-warning' : ''"
+          :message="insecureKeyUrl
+            ? 'This base URL uses plain http:// — the key would travel unencrypted. Use https:// unless this is a local server.'
+            : 'Stored only in this browser\'s localStorage; sent only to the base URL above. For private keys, prefer paste mode — the key never enters the app.'">
           <b-input v-model="form.key" type="password" aria-label="API key optional" password-reveal
             placeholder="Bearer key — stored only in this browser" autocomplete="off" />
         </b-field>

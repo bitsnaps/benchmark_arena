@@ -115,14 +115,19 @@ export function setError(id, message) {
 }
 
 // ── Export / import (backup + future SaaS migration shape) ───────────
-export function exportPayload() {
+// API keys are left out unless explicitly requested: backups get shared,
+// and a key in a JSON file is a leaked key.
+export function exportPayload({ includeKeys = false } = {}) {
+  const list = (providers.value || []).map(p => (includeKeys ? p : { ...p, key: '' }));
   return JSON.stringify({
     kind: 'benchmark-arena-my-providers',
     version: SCHEMA_VERSION,
     exportedAt: new Date().toISOString(),
-    providers: providers.value || [],
+    providers: list,
   }, null, 2);
 }
+
+export const hasAnyKey = computed(() => (providers.value || []).some(p => !!p.key));
 
 export function importPayload(text) {
   let doc;
@@ -130,13 +135,16 @@ export function importPayload(text) {
   if (!doc || doc.kind !== 'benchmark-arena-my-providers' || !Array.isArray(doc.providers)) {
     return { ok: false, error: 'Not a My Providers export file.' };
   }
+  // A keyless backup re-imported into the same browser keeps the keys
+  // already stored for those providers (matched by id + base URL).
+  const existing = new Map((providers.value || []).map(p => [p.id, p]));
   const clean = doc.providers
     .filter(p => p && p.id && p.label)
     .map(p => ({
       id: String(p.id),
       label: String(p.label).slice(0, 80),
       baseUrl: String(p.baseUrl || ''),
-      key: String(p.key || ''),
+      key: String(p.key || '') || keptKey(existing.get(String(p.id)), p),
       mode: p.mode === 'paste' ? 'paste' : 'fetch',
       intent: INTENTS.includes(p.intent) ? p.intent : '',
       // stats-51: defensive mapping — a hand-edited export with garbage
@@ -152,12 +160,16 @@ export function importPayload(text) {
   return { ok: true, count: clean.length };
 }
 
+function keptKey(prev, p) {
+  return prev && prev.baseUrl === String(p.baseUrl || '') ? prev.key || '' : '';
+}
+
 // ── Derived ───────────────────────────────────────────────────────────
 const hasAny = computed(() => (providers.value || []).length > 0);
 
 export function useMyProviders() {
   return {
-    providers, hasAny, ensureMyProvidersLoaded,
+    providers, hasAny, hasAnyKey, ensureMyProvidersLoaded,
     addProvider, updateProvider, removeProvider, clearAll,
     setModels, setError, exportPayload, importPayload,
   };

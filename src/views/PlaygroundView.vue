@@ -12,7 +12,7 @@ import { useData } from '../stores/data.js';
 import { useMyProviders } from '../stores/myProviders.js';
 import { usePlayground } from '../stores/playground.js';
 import { buildCatalogIndex } from '../lib/myProviders.js';
-import { buildPlaygroundGroups, filterGroups, findOption } from '../lib/playgroundModels.js';
+import { buildPlaygroundGroups, filterByProvider, filterGroups, findOption } from '../lib/playgroundModels.js';
 import { buildPayload, sendChat, estimateTokens, estimateCost, fmtCost, fmtMs } from '../lib/chat.js';
 import { renderMarkdown } from '../lib/miniMarkdown.js';
 import { fmtScore, scoreColor, fmtUsd, fmtCtx } from '../lib/format.js';
@@ -21,7 +21,11 @@ const route = useRoute();
 const router = useRouter();
 const { ensureLoaded, rawData, pivotAll, modelsMeta, scoreForModel, priceFor, isOlder, isUnranked, modelSlug } = useData();
 const { providers, ensureMyProvidersLoaded } = useMyProviders();
-const { settings, messages, ensurePlaygroundLoaded, setSettings, addMessage, updateMessage, truncateFrom, clearConversation } = usePlayground();
+const {
+  conversations, activeId, ui, persistent, ready, settings, messages,
+  ensurePlaygroundLoaded, setSettings, setUi, addMessage, updateMessage, truncateFrom,
+  newConversation, switchTo, renameConversation, deleteConversation, deleteAllHistory, flushPersist,
+} = usePlayground();
 
 ensurePlaygroundLoaded();
 onMounted(() => { ensureMyProvidersLoaded(); ensureLoaded(); });
@@ -38,21 +42,33 @@ const groups = computed(() => buildPlaygroundGroups(providers.value || [], {
   catalogIndex: catalogIndex.value, rowByName: rowByName.value,
   scoreForModel, priceFor, isOlder, isUnranked, slugOf: modelSlug,
 }));
-const modelCount = computed(() => groups.value.reduce((n, g) => n + g.items.length, 0));
+const totalModels = computed(() => groups.value.reduce((n, g) => n + g.items.length, 0));
 const providersReady = computed(() => providers.value !== null);
 
 const selected = computed(() => findOption(groups.value, settings.value.providerId, settings.value.modelId));
 const selectedProvider = computed(() => (providers.value || []).find(p => p.id === settings.value.providerId) || null);
 
+// ── Provider filter ("All providers" + one per provider), composes with the search ──
+const providerFilter = computed({
+  get: () => ui.value.providerFilter,
+  set: (v) => setUi({ providerFilter: String(v || '') }),
+});
+const providerOptions = computed(() => groups.value.map(g => ({ id: g.providerId, label: g.label, n: g.items.length })));
+const visibleGroups = computed(() => filterByProvider(groups.value, providerFilter.value));
+const modelCount = computed(() => visibleGroups.value.reduce((n, g) => n + g.items.length, 0));
+const pickedOutsideFilter = computed(() => !!selected.value && !!providerFilter.value && selected.value.providerId !== providerFilter.value);
+
 const query = ref('');
-const filtered = computed(() => filterGroups(groups.value, query.value));
+const filtered = computed(() => filterGroups(visibleGroups.value, query.value));
 const optionLabel = (o) => (o ? o.modelId + ' · ' + o.providerLabel : '');
 
 function pick(o) {
   if (!o) return;
   setSettings({ providerId: o.providerId, modelId: o.modelId });
   query.value = optionLabel(o);
-  router.replace({ query: { ...route.query, p: o.providerId, m: o.modelId } });
+  // The active conversation now carries the model binding; keep the URL
+  // clean so a reload restores THIS chat instead of opening a fresh one.
+  if (route.query.p || route.query.m) router.replace({ query: {} });
   nextTick(() => composerEl.value?.focus());
 }
 
@@ -63,23 +79,6 @@ function pickerBlur() {
     if (selected.value && query.value !== optionLabel(selected.value)) query.value = optionLabel(selected.value);
   }, 200);
 }
-
-// Deep link (?p=&m=) wins over the remembered pick; otherwise default to
-// the best-rated model once listings are in.
-watch([groups, () => route.query.p, () => route.query.m], () => {
-  const { p, m } = route.query;
-  if (p && m) {
-    const hit = findOption(groups.value, String(p), String(m));
-    if (hit && (settings.value.providerId !== hit.providerId || settings.value.modelId !== hit.modelId)) {
-      setSettings({ providerId: hit.providerId, modelId: hit.modelId });
-    }
-  }
-  if (!selected.value && groups.value.length) {
-    const best = groups.value.flatMap(g => g.items).sort((a, b) => (b.score ?? -1) - (a.score ?? -1))[0];
-    if (best) setSettings({ providerId: best.providerId, modelId: best.modelId });
-  }
-  if (selected.value && !query.value) query.value = optionLabel(selected.value);
-}, { immediate: true });
 
 // ── Settings ──────────────────────────────────────────────────────────
 const customTemp = computed({
@@ -116,6 +115,110 @@ const composerEl = ref(null);
 const scroller = ref(null);
 const busy = ref(false);
 let controller = null;
+
+// Deep link (?p=&m=): always open a FRESH conversation pre-bound to that
+// model, then strip the query so reloading the same URL is an explicit new
+// chat rather than a silent duplicate. Blocked while a reply streams —
+// switching chats mid-stream would scatter the reply (decided: lock).
+let deepHandled = '';
+// `ready` is a source on purpose: the default bind and deep links must wait
+// for the IDB boot — setSettings before that no-ops and `groups` alone may
+// never change again (the boot-vs-listings race).
+watch([groups, ready, () => route.query.p, () => route.query.m], () => {
+  if (!ready.value) return;
+  const { p, m } = route.query;
+  if (!p || !m) { deepHandled = ''; }
+  else if (deepHandled !== String(p) + '\u0001' + String(m)) {
+    const hit = findOption(groups.value, String(p), String(m));
+    if (hit && !busy.value) {
+      deepHandled = String(p) + '\u0001' + String(m);
+      newConversation({ providerId: hit.providerId, modelId: hit.modelId });
+      router.replace({ query: {} });
+    }
+  }
+  // Otherwise default to the best-rated model once listings are in.
+  if (!route.query.p && !selected.value && groups.value.length) {
+    const best = groups.value.flatMap(g => g.items).sort((a, b) => (b.score ?? -1) - (a.score ?? -1))[0];
+    if (best) setSettings({ providerId: best.providerId, modelId: best.modelId });
+  }
+  if (selected.value && !query.value) query.value = optionLabel(selected.value);
+}, { immediate: true });
+
+const railOpen = computed({
+  get: () => ui.value.railOpen !== false, // default open
+  set: (v) => setUi({ railOpen: !!v }),
+});
+
+// ── History (all chats live in IndexedDB, this browser only) ──────────
+const sortedConvs = computed(() =>
+  conversations.value.slice().sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))));
+
+function relTime(iso) {
+  const t = Date.parse(iso);
+  if (!Number.isFinite(t)) return '';
+  const s = Math.max(0, (Date.now() - t) / 1000);
+  if (s < 60) return 'now';
+  if (s < 3600) return Math.floor(s / 60) + 'm';
+  if (s < 86400) return Math.floor(s / 3600) + 'h';
+  if (s < 7 * 86400) return Math.floor(s / 86400) + 'd';
+  return new Date(iso).toLocaleDateString();
+}
+
+function openConv(id) { if (!busy.value || id === activeId.value) switchTo(id); }
+
+const renamingId = ref('');
+const renameText = ref('');
+function startRename(c) { renamingId.value = c.id; renameText.value = c.title; }
+function commitRename(c) {
+  if (renamingId.value !== c.id) return;
+  renameConversation(c.id, renameText.value);
+  renamingId.value = '';
+}
+
+function removeConv(c) {
+  if (busy.value) return;
+  if (!window.confirm(`Delete “${c.title}”? This cannot be undone.`)) return;
+  deleteConversation(c.id);
+}
+
+function newChat() {
+  if (busy.value) stop();
+  newConversation({ ...settings.value }); // fresh thread, same model + settings
+  nextTick(() => {
+    if (selected.value) query.value = optionLabel(selected.value);
+    composerEl.value?.focus();
+  });
+}
+
+function clearAllHistory() {
+  if (busy.value) return;
+  if (!window.confirm('Delete ALL saved chats? This cannot be undone.')) return;
+  deleteAllHistory();
+  const best = groups.value.flatMap(g => g.items).sort((a, b) => (b.score ?? -1) - (a.score ?? -1))[0];
+  if (best) setSettings({ providerId: best.providerId, modelId: best.modelId });
+  nextTick(() => composerEl.value?.focus());
+}
+
+// ── Message edit / delete ────────────────────────────────────────────
+// User messages: “Edit” reloads the composer and truncates the turn, so
+// sending re-runs it (existing behavior). Assistant messages: edit in
+// place. Delete always removes the message AND everything after it —
+// a user turn without its reply would be an orphan.
+const editingId = ref('');
+const editingText = ref('');
+function startEditAssistant(m) { editingId.value = m.id; editingText.value = m.content; }
+function cancelEdit() { editingId.value = ''; editingText.value = ''; }
+function saveEditAssistant() {
+  const id = editingId.value;
+  if (!id || !messages.value.some(m => m.id === id)) return cancelEdit();
+  updateMessage(id, { content: editingText.value, error: null, stopped: false });
+  cancelEdit();
+}
+function delMsg(m) {
+  if (busy.value) return;
+  truncateFrom(m.id);
+  if (editingId.value) cancelEdit();
+}
 
 const STARTERS = [
   'Explain the difference between a process and a thread, with an example.',
@@ -186,6 +289,9 @@ async function runAssistant() {
     if (e?.name === 'AbortError') updateMessage(aid, { pending: false, content, reasoning, stopped: true, meta: metaNow(null) });
     else updateMessage(aid, { pending: false, content, reasoning, error: e?.message || String(e) });
   } finally {
+    // Durably write the settled reply before the spinner clears — a tab
+    // closed right after the reply loses nothing.
+    await flushPersist();
     busy.value = false;
     controller = null;
     stickToBottom(true);
@@ -214,12 +320,6 @@ function editUser(m) {
   draft.value = m.content;
   truncateFrom(m.id);
   nextTick(() => { composerEl.value?.focus(); autosize(); });
-}
-
-function clearChat() {
-  if (busy.value) stop();
-  clearConversation();
-  nextTick(() => composerEl.value?.focus());
 }
 
 const copiedId = ref(null);
@@ -283,7 +383,7 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
     </div>
 
     <!-- No providers yet: explain where models come from -->
-    <div v-if="providersReady && !modelCount" class="panel-lab pg-empty" data-test="pg-empty">
+    <div v-if="providersReady && !totalModels" class="panel-lab pg-empty" data-test="pg-empty">
       <i class="fas fa-plug pg-empty-icon" aria-hidden="true"></i>
       <h2 class="pg-empty-title">Connect a provider to start chatting</h2>
       <p class="muted">
@@ -297,9 +397,54 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
       <p class="pg-fine">Keys stay in this browser and are sent only to the base URL you set.</p>
     </div>
 
-    <div v-else-if="providersReady" class="pg-grid">
+    <div v-else-if="!ready" class="panel-lab pg-empty" data-test="pg-loading">
+      <p class="muted">Loading your chats…</p>
+    </div>
+
+    <div v-else-if="providersReady" class="pg-grid" :class="{ 'rail-closed': !railOpen }">
       <!-- ── Settings rail ── -->
       <aside class="panel-lab pg-rail" aria-label="Playground settings">
+        <p v-if="!persistent" class="pg-warn" data-test="pg-volatile">
+          <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+          Private browsing — history won't be saved in this session.
+        </p>
+
+        <!-- History: every chat lives in IndexedDB, this browser only -->
+        <div class="pg-hist-head">
+          <div class="lbl">History</div>
+          <button type="button" class="pg-act" data-test="pg-new-chat" :disabled="busy" title="Start a new chat (keeps the current model)" @click="newChat">
+            <i class="fas fa-plus" aria-hidden="true"></i><span class="sr-only">New chat</span>
+          </button>
+        </div>
+        <div class="pg-hist" role="list">
+          <div v-for="c in sortedConvs" :key="c.id" class="pg-hist-item" :class="{ active: c.id === activeId }" role="listitem"
+            :data-test="c.id === activeId ? 'pg-hist-active' : 'pg-hist-item'">
+            <input v-if="renamingId === c.id" v-model="renameText" class="input is-small pg-rename" aria-label="Chat title"
+              @keydown.enter.prevent="commitRename(c)" @keydown.esc="renamingId = ''" @blur="commitRename(c)" />
+            <template v-else>
+              <button type="button" class="pg-hist-open" :disabled="busy && c.id !== activeId"
+                :title="busy && c.id !== activeId ? 'Wait for the reply to finish' : c.title" @click="openConv(c.id)">
+                <span class="pg-hist-title">{{ c.title }}</span>
+                <span class="pg-hist-time">{{ relTime(c.updatedAt) }}</span>
+              </button>
+              <span class="pg-actions">
+                <button type="button" class="pg-act" title="Rename chat" @click="startRename(c)"><i class="fas fa-pen" aria-hidden="true"></i><span class="sr-only">Rename</span></button>
+                <button type="button" class="pg-act" title="Delete chat" @click="removeConv(c)"><i class="fas fa-trash-can" aria-hidden="true"></i><span class="sr-only">Delete chat</span></button>
+              </span>
+            </template>
+          </div>
+        </div>
+        <button v-if="sortedConvs.length > 1" type="button" class="pg-hist-clear" data-test="pg-clear-all" :disabled="busy" @click="clearAllHistory">
+          <i class="fas fa-trash-can" aria-hidden="true"></i> Delete all history
+        </button>
+
+        <div class="pg-sep"></div>
+
+        <div class="lbl">Provider</div>
+        <select v-model="providerFilter" class="input is-small pg-provsel" data-test="pg-prov-filter" aria-label="Filter models by provider">
+          <option value="">All providers ({{ totalModels }})</option>
+          <option v-for="p in providerOptions" :key="p.id" :value="p.id">{{ p.label }} ({{ p.n }})</option>
+        </select>
         <div class="lbl">Model</div>
         <b-autocomplete
           v-model="query"
@@ -331,7 +476,10 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
           </template>
           <template #empty>No model matches “{{ query }}”.</template>
         </b-autocomplete>
-        <div class="pg-count">{{ modelCount }} chat model{{ modelCount === 1 ? '' : 's' }} across {{ groups.length }} provider{{ groups.length === 1 ? '' : 's' }}</div>
+        <div class="pg-count" data-test="pg-count">
+          {{ modelCount }} chat model{{ modelCount === 1 ? '' : 's' }} across {{ visibleGroups.length }} provider{{ visibleGroups.length === 1 ? '' : 's' }}
+          <span v-if="pickedOutsideFilter" class="pg-off" data-test="pg-off-filter">· current model sits outside this filter</span>
+        </div>
 
         <!-- Arena card for the selected model -->
         <div v-if="selected" class="pg-card" data-test="pg-model-card">
@@ -392,10 +540,16 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
       <div class="panel-lab pg-chat">
         <div class="pg-chat-head">
           <div class="pg-chat-title">
+            <button type="button" class="pg-act pg-rail-toggle" data-test="pg-rail-toggle"
+              :title="railOpen ? 'Hide the settings panel' : 'Show the settings panel'"
+              :aria-label="railOpen ? 'Hide the settings panel' : 'Show the settings panel'"
+              @click="railOpen = !railOpen">
+              <i class="fas" :class="railOpen ? 'fa-angles-left' : 'fa-angles-right'" aria-hidden="true"></i>
+            </button>
             <span class="pg-dot" :class="{ live: busy }"></span>
             {{ selected ? selected.modelId : 'No model selected' }}
           </div>
-          <b-button size="is-small" type="is-ghost" icon-left="broom" :disabled="!messages.length" data-test="pg-clear" @click="clearChat">New chat</b-button>
+          <b-button size="is-small" type="is-ghost" icon-left="plus" :disabled="busy" data-test="pg-new-chat" title="Start a new chat (keeps the current model)" @click="newChat">New chat</b-button>
         </div>
 
         <div ref="scroller" class="pg-log" aria-live="polite">
@@ -411,6 +565,7 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
               <div class="pg-bubble user">{{ m.content }}</div>
               <div class="pg-actions">
                 <button type="button" class="pg-act" title="Edit and resend" :disabled="busy" @click="editUser(m)"><i class="fas fa-pen" aria-hidden="true"></i><span class="sr-only">Edit</span></button>
+                <button type="button" class="pg-act" title="Delete this message and everything after it" :disabled="busy" @click="delMsg(m)"><i class="fas fa-trash-can" aria-hidden="true"></i><span class="sr-only">Delete</span></button>
               </div>
             </template>
             <template v-else>
@@ -423,7 +578,16 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
                 <summary>Thinking{{ m.pending && !m.content ? '…' : '' }}</summary>
                 <div class="pg-think-body">{{ m.reasoning }}</div>
               </details>
-              <div v-if="m.content" class="pg-bubble bot md" v-html="md(m.content)"></div>
+              <template v-if="editingId === m.id">
+                <div class="pg-edit" data-test="pg-edit-box">
+                  <textarea v-model="editingText" class="textarea is-small" rows="4" aria-label="Edit reply"></textarea>
+                  <div class="pg-edit-actions">
+                    <b-button size="is-small" type="is-primary" data-test="pg-edit-save" @click="saveEditAssistant">Save</b-button>
+                    <b-button size="is-small" type="is-ghost" @click="cancelEdit">Cancel</b-button>
+                  </div>
+                </div>
+              </template>
+              <div v-else-if="m.content" class="pg-bubble bot md" v-html="md(m.content)"></div>
               <div v-else-if="m.pending" class="pg-bubble bot pg-typing" aria-label="Waiting for the reply"><span></span><span></span><span></span></div>
               <div v-if="m.error" class="pg-error" role="alert" data-test="pg-error">
                 <i class="fas fa-circle-exclamation" aria-hidden="true"></i> {{ m.error }}
@@ -439,6 +603,8 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
                 </template>
                 <span class="pg-actions inline">
                   <button v-if="m.content" type="button" class="pg-act" :title="copiedId === m.id ? 'Copied' : 'Copy'" @click="copy(m)"><i class="fas" :class="copiedId === m.id ? 'fa-check' : 'fa-copy'" aria-hidden="true"></i><span class="sr-only">Copy</span></button>
+                  <button v-if="m.content" type="button" class="pg-act" title="Edit reply" :disabled="busy" @click="startEditAssistant(m)"><i class="fas fa-pen" aria-hidden="true"></i><span class="sr-only">Edit reply</span></button>
+                  <button type="button" class="pg-act" title="Delete this message and everything after it" :disabled="busy" @click="delMsg(m)"><i class="fas fa-trash-can" aria-hidden="true"></i><span class="sr-only">Delete</span></button>
                   <button v-if="m.id === lastAssistantId" type="button" class="pg-act" :title="m.error ? 'Retry' : 'Regenerate'" :disabled="busy || !selected" data-test="pg-regen" @click="regenerate(m.id)"><i class="fas fa-rotate-right" aria-hidden="true"></i><span class="sr-only">{{ m.error ? 'Retry' : 'Regenerate' }}</span></button>
                 </span>
               </div>
@@ -458,11 +624,16 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
         </form>
       </div>
     </div>
+
+    <!-- Mobile drawer backdrop (visible ≤1023px only) -->
+    <div v-if="railOpen" class="pg-backdrop" aria-hidden="true" @click="railOpen = false"></div>
   </section>
 </template>
 
 <style scoped>
 .pg-grid { display: grid; grid-template-columns: minmax(260px, 320px) minmax(0, 1fr); gap: 1rem; align-items: start; }
+.pg-grid.rail-closed { grid-template-columns: minmax(0, 1fr); }
+.pg-grid.rail-closed .pg-rail { display: none; }
 .pg-rail { padding: 1rem; display: flex; flex-direction: column; gap: .55rem; position: sticky; top: 4.5rem; }
 .pg-count { color: var(--faint); font-size: .74rem; }
 .pg-sep { border-top: 1px solid var(--line); margin: .35rem 0; }
@@ -473,6 +644,28 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 .pg-system { min-height: 4.5rem; resize: vertical; }
 .pg-fine { color: var(--faint); font-size: .76rem; line-height: 1.45; margin: 0; }
 .pg-warn { color: var(--gold); font-size: .78rem; margin: 0; }
+
+/* History list */
+.pg-hist-head { display: flex; align-items: center; justify-content: space-between; }
+.pg-hist { display: flex; flex-direction: column; gap: 2px; max-height: 13rem; overflow-y: auto; }
+.pg-hist-item { display: flex; align-items: center; border-radius: 8px; padding-right: .2rem; }
+.pg-hist-item:hover { background: var(--surface-2); }
+.pg-hist-item.active { background: var(--teal-dim); }
+.pg-hist-open { flex: 1; min-width: 0; background: none; border: 0; text-align: left; padding: .32rem .5rem; cursor: pointer; display: flex; flex-direction: column; gap: .05rem; color: var(--text); border-radius: 8px; }
+.pg-hist-open:disabled { cursor: not-allowed; opacity: .6; }
+.pg-hist-title { font-size: .82rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-hist-time { font-size: .68rem; color: var(--faint); }
+.pg-hist-item .pg-actions { opacity: 0; }
+.pg-hist-item:hover .pg-actions, .pg-hist-item:focus-within .pg-actions { opacity: 1; }
+.pg-rename { width: 100%; }
+.pg-hist-clear { background: none; border: 0; color: var(--faint); font-size: .72rem; cursor: pointer; text-align: left; padding: .15rem 0; }
+.pg-hist-clear:hover:not(:disabled) { color: var(--rose); }
+.pg-provsel { width: 100%; }
+.pg-off { color: var(--gold); }
+.pg-rail-toggle { font-size: .95rem; }
+.pg-edit { display: flex; flex-direction: column; gap: .4rem; max-width: min(46rem, 92%); }
+.pg-edit-actions { display: flex; gap: .4rem; justify-content: flex-end; }
+.pg-backdrop { display: none; }
 
 .pg-opt { display: flex; justify-content: space-between; gap: .6rem; align-items: baseline; }
 .pg-opt-id { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -554,8 +747,11 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 
 @media (max-width: 1023px) {
   .pg-grid { grid-template-columns: 1fr; }
-  .pg-rail { position: static; }
+  .pg-grid.rail-closed .pg-rail { display: none; }
   .pg-chat { height: 75vh; }
+  /* Rail becomes an overlay drawer; the backdrop behind it closes on tap. */
+  .pg-rail { position: fixed; top: 4.2rem; left: .6rem; right: .6rem; bottom: .6rem; z-index: 40; overflow-y: auto; }
+  .pg-backdrop { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 39; }
 }
 @media (max-width: 600px) {
   .pg-bubble { max-width: 100%; }

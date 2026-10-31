@@ -88,8 +88,9 @@ function pick(o) {
   query.value = optionLabel(o);
   pickerOpen.value = false;
   // Catalog models are browsable without setup; chatting from one needs a
-  // base URL + key, so the setup modal opens right away (send is guarded).
-  if (!o.custom && !selectedProvider.value) openSetup(o);
+  // base URL + key, so the setup modal opens right away (send is guarded)
+  // — once per provider per session, "Not now" is respected afterwards.
+  if (!o.custom && !selectedProvider.value && !setupDismissed.has(o.catalogId)) openSetup(o);
   else nextTick(() => composerEl.value?.focus());
   // The active conversation now carries the model binding; keep the URL
   // clean so a reload restores THIS chat instead of opening a fresh one.
@@ -162,9 +163,18 @@ function pickerKey(e) {
 
 // ── Setup modal (catalog models: collect what a request needs) ────────
 const setup = ref(null);
+// "Not now" is remembered for the browser session: dismissing the modal
+// must not make browsing the catalog feel like whack-a-mole. The card
+// hint, the Set up button and the send guard always still offer it.
+const setupDismissed = new Set();
 const setupOpen = computed({
   get: () => setup.value !== null,
-  set: (v) => { if (!v) setup.value = null; },
+  set: (v) => {
+    if (!v) {
+      if (setup.value) setupDismissed.add(setup.value.catalogId);
+      setup.value = null;
+    }
+  },
 });
 function openSetup(opt) {
   if (!opt?.catalogId) return;
@@ -765,7 +775,7 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
         </p>
         <div class="pg-modal-actions">
           <button type="button" class="button is-primary is-small" data-test="pg-setup-save" :disabled="!setup.baseUrl.trim()" @click="saveSetup">Save and use here</button>
-          <button type="button" class="button is-ghost is-small" data-test="pg-setup-cancel" @click="setup = null">Not now</button>
+          <button type="button" class="button is-ghost is-small" data-test="pg-setup-cancel" @click="setupOpen = false">Not now</button>
         </div>
       </div>
     </b-modal>

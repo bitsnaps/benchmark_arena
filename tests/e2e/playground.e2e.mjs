@@ -274,6 +274,13 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     await modal.waitFor({ state: 'hidden', timeout: 5000 });
     if (await page.locator('[data-test="pg-setup-hint"]').count() === 1) ok('"Not now" keeps the pick; the card shows the not-connected hint');
     else fail('catalog pick should show the setup hint after dismissing the modal');
+    // Dismissal memory, for real: fixlab has NO linked entry yet, so another
+    // catalog pick must NOT re-pop the modal (content is v-if-gated; the
+    // hidden b-modal shell stays in the DOM with destroy-on-hide=false).
+    await pickViaPicker('fix-free');
+    if (await modal.count() === 0 && !(await modal.isVisible().catch(() => false))) ok('dismissed setup does not re-pop on further catalog picks in the same session');
+    else fail('setup modal re-opened after "Not now" — browsing feels like whack-a-mole');
+    await pickViaPicker('org/fix-mini'); // re-bind the target model (no modal: dismissed)
     await page.locator('[data-test="pg-setup-open"]').click();
     await modal.waitFor({ timeout: 5000 });
     await page.locator('[data-test="pg-setup-url"]').fill(FIXBASE);

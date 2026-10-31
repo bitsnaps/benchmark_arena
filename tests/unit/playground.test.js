@@ -1,11 +1,11 @@
 // Playground: chat client helpers, safe markdown, model options, store.
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
-  chatUrl, buildPayload, parseChunk, createSseParser, estimateTokens,
-  estimateCost, errorFromResponse, sendChat, CORS_MESSAGE,
+  chatUrl, modelsUrl, buildPayload, parseChunk, createSseParser, estimateTokens,
+  estimateCost, errorFromResponse, sendChat, testConnection, CORS_MESSAGE,
 } from '../../src/lib/chat.js';
 import { renderMarkdown } from '../../src/lib/miniMarkdown.js';
-import { buildPlaygroundGroups, buildCatalogGroups, catalogProviderEntry, applyModelOverride, capGroupItems, providerOptGroups, filterGroups, filterByProvider, findOption, optionsForArenaName } from '../../src/lib/playgroundModels.js';
+import { buildPlaygroundGroups, buildCatalogGroups, catalogProviderEntry, stripCatalogPrefix, capGroupItems, providerOptions, filterGroups, filterByProvider, findOption, optionsForArenaName } from '../../src/lib/playgroundModels.js';
 import { parseModelListing } from '../../src/lib/myProviders.js';
 
 describe('chatUrl', () => {
@@ -18,6 +18,49 @@ describe('chatUrl', () => {
     ['https://generativelanguage.googleapis.com/v1beta/openai', 'https://generativelanguage.googleapis.com/v1beta/openai/v1/chat/completions'],
     ['', ''],
   ])('%s', (base, url) => expect(chatUrl(base)).toBe(url));
+});
+
+describe('modelsUrl', () => {
+  it.each([
+    ['https://gw.test/v1', 'https://gw.test/v1/models'],
+    ['https://gw.test/v1/chat/completions', 'https://gw.test/v1/models'],
+    ['https://gw.test/v1/models', 'https://gw.test/v1/models'],
+    ['gw.test', 'https://gw.test/v1/models'],
+    ['', ''],
+  ])('%s', (base, url) => expect(modelsUrl(base)).toBe(url));
+});
+
+describe('testConnection', () => {
+  it('reports the connected model list (openai shape) for the id check', async () => {
+    const fetchImpl = vi.fn(async () => new Response(JSON.stringify({ data: [{ id: 'fix-mini' }, { id: 'fix-large' }] }), { status: 200, headers: { 'content-type': 'application/json' } }));
+    const r = await testConnection({ baseUrl: 'https://api.fixlab.test/v1', key: 'sk-1', fetchImpl });
+    expect(r).toMatchObject({ ok: true, count: 2, models: ['fix-mini', 'fix-large'] });
+    expect(r.message).toMatch(/Connected — 2 models/);
+    const [url, init] = fetchImpl.mock.calls[0];
+    expect(url).toBe('https://api.fixlab.test/v1/models');
+    expect(init.headers.Authorization).toBe('Bearer sk-1');
+  });
+  it('reads bare arrays and models-key shapes, and accepts keyless endpoints', async () => {
+    const fetchImpl = async (u, i) => {
+      expect(i.headers).not.toHaveProperty('Authorization');
+      return new Response(JSON.stringify({ models: ['a', { id: 'b' }, 'c'] }), { status: 200 });
+    };
+    const r = await testConnection({ baseUrl: 'gw.test', fetchImpl });
+    expect(r.models).toEqual(['a', 'b', 'c']);
+  });
+  it('reports a rejected key, a missing list, and CORS honestly', async () => {
+    const key401 = await testConnection({ baseUrl: 'gw.test', fetchImpl: async () => new Response('{}', { status: 401 }) });
+    expect(key401.ok).toBe(false);
+    expect(key401.message).toMatch(/rejected the key \(HTTP 401\)/);
+    const noList = await testConnection({ baseUrl: 'gw.test', fetchImpl: async () => new Response('', { status: 404 }) });
+    expect(noList.message).toMatch(/HTTP 404/);
+    expect(noList.message).toMatch(/can still save/);
+    const boom = await testConnection({ baseUrl: 'gw.test', fetchImpl: async () => { throw new TypeError('Failed to fetch'); } });
+    expect(boom.cors).toBe(true);
+    expect(boom.message).toBe(CORS_MESSAGE);
+    const nothing = await testConnection({ baseUrl: '', fetchImpl: async () => new Response('[]') });
+    expect(nothing.message).toMatch(/base URL first/);
+  });
 });
 
 describe('buildPayload', () => {
@@ -230,23 +273,25 @@ describe('catalog provider groups (providers.json → playground)', () => {
     expect(hidden).toBe(3); // third lab item + both later groups
   });
 
-  it('rewrites one model id (setup override) and re-derives the matcher fields', () => {
+  it('stripCatalogPrefix drops the org segment from every slashed id and re-derives the matcher fields', () => {
     const entry = catalogProviderEntry(CATALOG[0]);
-    const out = applyModelOverride(entry.models, 'org/fix-mini', 'fix-mini-real');
-    expect(out.find(m => m.id === 'fix-mini-real')).toMatchObject({ base: 'fix-mini-real', key: 'fixminireal' });
-    expect(out.find(m => m.id === 'org/fix-mini')).toBeUndefined();
-    expect(out.find(m => m.id === 'org/fix-free')).toBeDefined();
-    expect(applyModelOverride(entry.models, 'org/fix-mini', 'org/fix-mini')).toBe(entry.models);
+    const out = stripCatalogPrefix(entry.models);
+    expect(out.map(m => m.id)).toEqual(['fix-mini', 'fix-free', 'off-arena']); // bare ids untouched
+    expect(out[0]).toMatchObject({ base: 'fix-mini', key: 'fixmini', pricing: entry.models[0].pricing });
+    expect(out[1].free).toBe(true); // decorations survive the rewrite
+    const regrouped = buildPlaygroundGroups([{ ...entry, custom: true }].map(p => ({ ...p, models: out })), ctx);
+    expect(regrouped[0].items[0]).toMatchObject({ modelId: 'fix-mini', arenaName: 'Fix Mini', score: 80 }); // arena join survives
   });
 
-  it('groups the rail filter: My providers first, then labs, then the other kinds', () => {
+  it('rail filter options are flat: My providers first, then by kind, alphabetical inside each kind', () => {
     const gs = [
-      ...buildPlaygroundGroups([{ id: 'p1', label: 'Gateway', baseUrl: '', key: 'k', custom: true, models: [{ id: 'a', chat: true, key: 'a', base: 'a' }] }], ctx),
+      ...buildPlaygroundGroups([{ id: 'p1', label: 'Zeta Gateway', baseUrl: '', key: 'k', custom: true, models: [{ id: 'a', chat: true, key: 'a', base: 'a' }] }], ctx),
       ...buildCatalogGroups(CATALOG, [], ctx),
     ];
-    const ogs = providerOptGroups(gs);
-    expect(ogs.map(g => g.label)).toEqual(['My providers', 'Labs', 'Cloud', 'Aggregators & gateways']);
-    expect(ogs[0].options[0]).toMatchObject({ id: 'p1', label: 'Gateway' });
+    const opts = providerOptions(gs);
+    expect(opts.map(o => o.id)).toEqual(['p1', 'cat:fixlab', 'cat:cloudone', 'cat:aggone']); // mine → labs → cloud → aggregators
+    expect(opts[0]).toMatchObject({ id: 'p1', label: 'Zeta Gateway', n: 1, custom: true });
+    expect(opts[1]).toMatchObject({ id: 'cat:fixlab', kind: 'first-party', n: 3 });
   });
 });
 

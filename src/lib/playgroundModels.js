@@ -166,14 +166,21 @@ export function capGroupItems(groups, max) {
   return { groups: out, hidden };
 }
 
-// Rewrite one model's id inside a listing (setup-modal override for
-// catalogs that prefix ids differently than the real API expects). The
-// matcher fields are re-derived so arena joins keep working.
-export function applyModelOverride(models, oldId, newId) {
-  const to = String(newId || '').trim();
-  if (!to || to === oldId) return models || [];
+// Setup-modal bulk fix (Ibrahim: "the model ... does not exist"): catalog
+// ids arrive in the scraper's org-prefixed namespace ('gemini/…',
+// 'dashscope/…'), but first-party APIs expect the bare id. Stripping the
+// first '/' segment rewrites the whole seeded listing, so what the picker
+// shows is EXACTLY what the request sends — no hidden runtime transform.
+// Ids without a '/' (already bare, or aggregators that keep the prefix as
+// part of the real id) stay untouched; the checkbox in the modal decides
+// per provider, and the Test button verifies the result against the live
+// /models list. Matcher fields are re-derived so arena joins keep working.
+export function stripCatalogPrefix(models) {
   return (models || []).map((m) => {
-    if (m.id !== oldId) return m;
+    const i = m.id.indexOf('/');
+    if (i <= 0) return m;
+    const to = m.id.slice(i + 1);
+    if (!to) return m;
     const pid = parseProviderId(to);
     return { ...m, id: to, key: pid.key, base: pid.base, variant: pid.variant, free: pid.free || m.free, raw: { ...(m.raw || {}), id: to } };
   });
@@ -192,19 +199,14 @@ export function filterGroups(groups, query) {
     .filter(g => g.items.length);
 }
 
-// Rail provider filter groups: optgroup label per kind, custom entries on
-// top. Unknown kinds (a future catalog addition) fall into their own group.
-export const KIND_LABELS = Object.freeze({
-  'first-party': 'Labs',
-  'cloud': 'Cloud',
-  'serverless': 'Serverless',
-  'aggregator': 'Aggregators & gateways',
-});
-
-export function providerOptGroups(groups) {
+// Rail provider filter options — FLAT, for the type-to-filter autocomplete
+// (Ibrahim: "no need to put them into optgroups"). Custom entries first,
+// then catalog providers by kind rank, alphabetical inside each kind. `n`
+// = chat models served; shown as a right-aligned count in the list.
+export function providerOptions(groups) {
   const mine = [], byKind = new Map();
   for (const g of groups || []) {
-    const opt = { id: g.providerId, label: g.label, n: g.items.length };
+    const opt = { id: g.providerId, label: g.label, n: g.items.length, kind: g.kind || null, custom: !!g.custom };
     if (g.custom) mine.push(opt);
     else {
       const k = g.kind || 'other';
@@ -212,11 +214,9 @@ export function providerOptGroups(groups) {
       byKind.get(k).push(opt);
     }
   }
-  const out = mine.length ? [{ label: 'My providers', options: mine }] : [];
-  for (const [k, options] of byKind) {
-    out.push({ label: KIND_LABELS[k] || k, options });
-  }
-  return out;
+  const kinds = [...byKind.keys()].sort((a, b) =>
+    ((KIND_RANK[a] ?? 9) - (KIND_RANK[b] ?? 9)) || String(a).localeCompare(String(b)));
+  return [...mine, ...kinds.flatMap(k => byKind.get(k).sort((a, b) => a.label.localeCompare(b.label)))];
 }
 
 // Provider rail filter ('' = all providers). Composes with filterGroups:

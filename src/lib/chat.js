@@ -16,6 +16,58 @@ export function chatUrl(base) {
   return b + '/v1/chat/completions';
 }
 
+// GET {base}/models — same normalization rules as chatUrl, so a base URL
+// that works for chat works for the listing too (setup modal's Test button).
+export function modelsUrl(base) {
+  let b = String(base || '').trim().replace(/\/+$/, '');
+  if (!b) return '';
+  if (!/^https?:\/\//i.test(b)) b = 'https://' + b;
+  b = b.replace(/\/models$/i, '');
+  if (/\/chat\/completions$/i.test(b)) b = b.replace(/\/chat\/completions$/i, '');
+  if (/\/v\d+[a-z]*$/i.test(b)) return b + '/models';
+  return b + '/v1/models';
+}
+
+// Connection check for the setup modal, BEFORE the user commits: GET the
+// model list with the given key and report honestly — connected (+ how
+// many models, + the ids for the view's "is my model id listed?" check),
+// key rejected, no model list at this URL, or CORS/network blocked.
+// Never throws; the result is shown as-is.
+export async function testConnection({ baseUrl, key, fetchImpl = globalThis.fetch } = {}) {
+  const url = modelsUrl(baseUrl);
+  if (!url) return { ok: false, message: 'Add a base URL first — there is nothing to test yet.' };
+  let res;
+  try {
+    res = await fetchImpl(url, { headers: { ...(key ? { Authorization: 'Bearer ' + key } : {}) } });
+  } catch (e) {
+    if (e?.name === 'AbortError') return { ok: false, aborted: true, message: 'Test cancelled.' };
+    return { ok: false, cors: true, message: CORS_MESSAGE };
+  }
+  if (res.status === 401 || res.status === 403) {
+    return { ok: false, status: res.status, message: `The provider rejected the key (HTTP ${res.status}). Check the API key.` };
+  }
+  if (res.status === 404 || res.status === 405) {
+    return { ok: false, status: res.status, message: `HTTP ${res.status} at ${url} — the base URL may be wrong, or the provider does not expose a model list. You can still save and chat.` };
+  }
+  if (!res.ok) {
+    return { ok: false, status: res.status, message: `Provider returned HTTP ${res.status} for the model list.` };
+  }
+  let ids = [];
+  try {
+    const j = await res.json();
+    const arr = Array.isArray(j) ? j : (Array.isArray(j?.data) ? j.data : (Array.isArray(j?.models) ? j.models : []));
+    ids = arr
+      .map((m) => (typeof m === 'string' ? m : String(m?.id ?? m?.name ?? m?.model ?? '')).trim())
+      .filter(Boolean);
+  } catch {
+    return { ok: true, status: 200, message: 'Connected — the endpoint answered, but the model list was not readable JSON.' };
+  }
+  return {
+    ok: true, status: 200, models: ids, count: ids.length,
+    message: `Connected — ${ids.length} model${ids.length === 1 ? '' : 's'} listed.`,
+  };
+}
+
 // Messages are {role, content}; UI-only fields never leave the browser.
 export function buildPayload({ model, messages, system = '', temperature = null, maxTokens = null, stream = true }) {
   const out = [];

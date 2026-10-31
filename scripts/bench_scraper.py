@@ -5481,6 +5481,20 @@ def normalize_model_name(name):
     """
     n = clean_model_name(name).strip()
 
+    # ── Formatting-only wrappers (stats-70) ──
+    # "Grok 3 [Beta]" ↔ "grok-3-beta": square brackets carry no identity.
+    n = re.sub(r'\s*\[([^\]]*)\]', r' \1 ', n)
+    # Parenthesised dates are the same snapshot as the bare spelling:
+    # "o3 (2025-04-16)" ↔ "o3 2025-04-16", "… Preview (09-2025)" ↔ "… Preview 09-2025".
+    n = re.sub(r'\s*\((\d{2,4}(?:[-./]\d{2,4})+)\)', r' \1', n)
+    # Slash-written snapshot dates fold to the compact tail:
+    # "DeepSeek R1 (05/28)" ↔ "DeepSeek-R1-0528", "Instruct (25/07)" ↔ "Instruct-2507".
+    n = re.sub(r'(?<!\d)(\d{2})/(\d{2})(?!\d)', r'\1\2', n)
+    # MoE size pairs are identity (Qwen3 235B-A22B vs 30B-A3B): pin them to
+    # one hyphenated token so the size-suffix strip below can't drop either
+    # half. "Qwen3 235B-A22B" ↔ "Qwen3-235B-A22B".
+    n = re.sub(r'[\s-]+(\d+(?:\.\d+)?)[Bb][\s-]+[Aa](\d+(?:\.\d+)?)[Bb]\b', r'-\1b-a\2b', n)
+
     # ── Remove API-mode / non-variant parentheticals entirely ──
     n = re.sub(r'\s*\(with fallback\)', '', n, flags=re.IGNORECASE)
     n = re.sub(r'\s*\(thinking\)', '', n, flags=re.IGNORECASE)
@@ -5528,8 +5542,11 @@ def normalize_model_name(name):
     # makes both spellings join the same (distinct) dated row. The hyphenated
     # spelling ("GPT-5.6 Luna 2026-07-30") folds too, before the generic
     # hyphen->space pass would shatter it into "2026 07 30".
-    n = re.sub(r'\s+(?:19|20)\d{2}(\d{4})(?!\d)', r' \1', n)
-    n = re.sub(r'\s+(?:19|20)\d{2}-(\d{2})-(\d{2})(?!\d)', r' \1\2', n)
+    # stats-70: a hyphen before the year ("o1-2024-12-17") and the dotted
+    # "YYYY.MM DD" spelling ("o3 2025.04 16") fold the same way.
+    n = re.sub(r'[\s-]+(?:19|20)\d{2}(\d{4})(?!\d)', r' \1', n)
+    n = re.sub(r'[\s-]+(?:19|20)\d{2}-(\d{2})-(\d{2})(?!\d)', r' \1\2', n)
+    n = re.sub(r'[\s-]+(?:19|20)\d{2}\.(\d{2})[\s.-]+(\d{2})(?!\d)', r' \1\2', n)
 
     # ── KEEP 4-digit date suffixes — they are model identity, not noise ──
     # (stats-28) Dated snapshots are DISTINCT models: "DeepSeek V4 Pro 0813"

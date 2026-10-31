@@ -33,6 +33,8 @@ import json
 import os
 import re
 
+from merge_duplicate_rows import merge_duplicate_rows
+
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOWNLOAD_DIR = os.environ.get("BENCH_DOWNLOAD_DIR") or os.path.join(os.path.dirname(REPO_ROOT), "download")
 PUB = os.path.join(REPO_ROOT, "public", "benchmark_results.json")
@@ -311,6 +313,10 @@ def main():
     # live unified row (the contract test resolves against rows) and the
     # normKey match is unique. Registry rows (kept above) are left alone
     # when no fresh twin exists — the monitor still sees them.
+    # stats-70: fold rows that are one model under two spellings before the
+    # chain rewrite, so superseded_by targets resolve against the final rows.
+    merge_duplicate_rows(dl)
+
     row_names = {r.get("name") for r in dl.get("unified_closed", [])}
     row_names |= {r.get("name") for r in dl.get("unified_open", [])}
     row_nk = {}

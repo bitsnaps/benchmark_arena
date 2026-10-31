@@ -1,8 +1,21 @@
-name: Deploy to GitHub Pages
+name: Test and deploy to GitHub Pages
 
+# Pull requests run the full test gate only; Pages deploys only from main.
 on:
   push:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'index.html'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'vite.config.js'
+      - 'vitest.config.js'
+      - '.github/workflows/**'
+  pull_request:
     paths:
       - 'src/**'
       - 'public/**'
@@ -18,19 +31,13 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
 
 jobs:
-  build-deploy:
+  test:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: test-${{ github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v4
       # pnpm version is read from the "packageManager" field in package.json
@@ -52,9 +59,24 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm run build
       - run: pnpm run test:e2e
-      # ── deploy ──
-      - uses: actions/upload-pages-artifact@v3
+      - if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
+  deploy:
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4

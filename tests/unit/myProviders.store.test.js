@@ -104,6 +104,33 @@ describe('myProviders store', () => {
     expect(s.importPayload('{"kind":"other"}').ok).toBe(false);
   });
 
+  it('export leaves API keys out unless asked; keyless re-import keeps stored keys', async () => {
+    const s = await freshStore();
+    await s.ensureMyProvidersLoaded();
+    const p = s.addProvider({ label: 'K', baseUrl: 'https://k/v1', key: 'sk-secret' });
+    expect(s.useMyProviders().hasAnyKey.value).toBe(true);
+
+    const plain = s.exportPayload();
+    expect(plain).not.toContain('sk-secret');
+    expect(JSON.parse(plain).providers[0].key).toBe('');
+    expect(s.exportPayload({ includeKeys: true })).toContain('sk-secret');
+
+    // same browser: keyless backup does not wipe the stored key
+    expect(s.importPayload(plain).ok).toBe(true);
+    expect(s.useMyProviders().providers.value[0].key).toBe('sk-secret');
+
+    // a changed base URL never inherits the old key
+    const moved = JSON.parse(plain);
+    moved.providers[0].baseUrl = 'https://elsewhere/v1';
+    s.importPayload(JSON.stringify(moved));
+    expect(s.useMyProviders().providers.value[0].key).toBe('');
+
+    // fresh browser: keyless import has no key to keep
+    s.clearAll();
+    s.importPayload(plain);
+    expect(s.useMyProviders().providers.value[0]).toMatchObject({ id: p.id, key: '' });
+  });
+
   it('removeProvider and updateProvider mutate + persist', async () => {
     const s = await freshStore();
     await s.ensureMyProvidersLoaded();

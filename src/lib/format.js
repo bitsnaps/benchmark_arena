@@ -67,6 +67,7 @@ export function initials(name) {
 }
 
 // URL slug for model / benchmark deep links ("GPT-5.2 Pro" → "gpt-5-2-pro")
+// ci-smoke: exercises the pull_request trigger added in PR #3 (comment-only change).
 export function slugify(s) {
   return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }

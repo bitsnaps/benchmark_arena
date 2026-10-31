@@ -207,7 +207,10 @@ describe('CL-weighted global score (stats-35 harmonized blend, 2026-09)', () => 
       if (!row) continue;
       const rec = d.metaFor(row) || {};
       expect(rec.created, `created of "${name}"`).toBe(iso);
-      expect(rec.created_source).toBe('display_name');
+      // stats-70: a real upstream record may supply the same date with its
+      // own provenance (created_source unset). The display_name pin only
+      // applies to records the recovery itself created.
+      if (rec.created_source) expect(rec.created_source).toBe('display_name');
       expect(d.isOlder(row), `${name} hidden by the staleness ladder`).toBe(true);
     }
   });

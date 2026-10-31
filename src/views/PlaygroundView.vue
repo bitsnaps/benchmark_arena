@@ -1,18 +1,26 @@
 <script setup>
-// ── Playground: chat with any model your own providers serve ──────────
+// ── Playground: chat with any model the catalog or your own gateways serve ──
 // Browser → provider, directly (static site, no proxy): the request goes
-// to the selected My Providers entry's base URL with that entry's key.
-// Models are the chat models in those listings, joined read-only to the
-// arena for score / price / context — the same matcher as the provider
-// cards. Conversation + settings persist in this browser only; keys are
-// never copied into the Playground store.
+// to the selected provider's base URL with that provider's key. Models
+// come from EVERYWHERE the arena knows: the full public provider catalog
+// (labs, cloud, serverless, aggregators) browsable without setup, plus
+// the user's own My Providers listings. Picking a catalog model opens a
+// setup modal that collects whatever is missing (base URL, API key) and
+// links a real My Providers entry. Arena joins (score / price / context)
+// are read-only. Conversation + settings persist in this browser only;
+// keys are never copied into the Playground store.
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useData } from '../stores/data.js';
-import { useMyProviders } from '../stores/myProviders.js';
+import { useMyProviders, addProvider, setModels } from '../stores/myProviders.js';
+import { useProviders } from '../stores/providers.js';
 import { usePlayground } from '../stores/playground.js';
 import { buildCatalogIndex } from '../lib/myProviders.js';
-import { buildPlaygroundGroups, filterByProvider, filterGroups, findOption } from '../lib/playgroundModels.js';
+import {
+  buildPlaygroundGroups, buildCatalogGroups, catalogProviderEntry, applyModelOverride,
+  capGroupItems, providerOptGroups, filterByProvider, filterGroups, findOption,
+  KNOWN_ENDPOINTS,
+} from '../lib/playgroundModels.js';
 import { buildPayload, sendChat, estimateTokens, estimateCost, fmtCost, fmtMs } from '../lib/chat.js';
 import { renderMarkdown } from '../lib/miniMarkdown.js';
 import { fmtScore, scoreColor, fmtUsd, fmtCtx } from '../lib/format.js';
@@ -21,6 +29,7 @@ const route = useRoute();
 const router = useRouter();
 const { ensureLoaded, rawData, pivotAll, modelsMeta, scoreForModel, priceFor, isOlder, isUnranked, modelSlug } = useData();
 const { providers, ensureMyProvidersLoaded } = useMyProviders();
+const { rawData: providerCatalogRaw, ensureProvidersLoaded } = useProviders();
 const {
   conversations, activeId, ui, persistent, ready, settings, messages,
   ensurePlaygroundLoaded, setSettings, setUi, addMessage, updateMessage, truncateFrom,
@@ -28,7 +37,7 @@ const {
 } = usePlayground();
 
 ensurePlaygroundLoaded();
-onMounted(() => { ensureMyProvidersLoaded(); ensureLoaded(); });
+onMounted(() => { ensureMyProvidersLoaded(); ensureProvidersLoaded(); ensureLoaded(); });
 
 // ── Model options ─────────────────────────────────────────────────────
 const catalogIndex = computed(() =>
@@ -38,22 +47,33 @@ const rowByName = computed(() => {
   for (const r of pivotAll.value || []) if (r?.name) m.set(r.name, r);
   return m;
 });
-const groups = computed(() => buildPlaygroundGroups(providers.value || [], {
-  catalogIndex: catalogIndex.value, rowByName: rowByName.value,
-  scoreForModel, priceFor, isOlder, isUnranked, slugOf: modelSlug,
-}));
+const groups = computed(() => {
+  const ctx = {
+    catalogIndex: catalogIndex.value, rowByName: rowByName.value,
+    scoreForModel, priceFor, isOlder, isUnranked, slugOf: modelSlug,
+  };
+  const linkedCatalogIds = (providers.value || []).map(p => p.catalogId).filter(Boolean);
+  return [
+    ...buildPlaygroundGroups((providers.value || []).map(p => ({ ...p, custom: true })), ctx), // user's own — chat-ready
+    ...buildCatalogGroups(providerCatalogRaw.value?.providers || [], linkedCatalogIds, ctx), // browsable, setup on chat
+  ];
+});
 const totalModels = computed(() => groups.value.reduce((n, g) => n + g.items.length, 0));
 const providersReady = computed(() => providers.value !== null);
+const catalogProviders = computed(() => providerCatalogRaw.value?.providers || []);
 
 const selected = computed(() => findOption(groups.value, settings.value.providerId, settings.value.modelId));
 const selectedProvider = computed(() => (providers.value || []).find(p => p.id === settings.value.providerId) || null);
+// Catalog picks bind to a 'cat:…' group id until the setup modal links a
+// real My Providers entry — no entry means the request has no destination.
+const needsSetup = computed(() => !!selected.value && !selectedProvider.value);
 
 // ── Provider filter ("All providers" + one per provider), composes with the search ──
 const providerFilter = computed({
   get: () => ui.value.providerFilter,
   set: (v) => setUi({ providerFilter: String(v || '') }),
 });
-const providerOptions = computed(() => groups.value.map(g => ({ id: g.providerId, label: g.label, n: g.items.length })));
+const optGroups = computed(() => providerOptGroups(groups.value));
 const visibleGroups = computed(() => filterByProvider(groups.value, providerFilter.value));
 const modelCount = computed(() => visibleGroups.value.reduce((n, g) => n + g.items.length, 0));
 const pickedOutsideFilter = computed(() => !!selected.value && !!providerFilter.value && selected.value.providerId !== providerFilter.value);
@@ -66,18 +86,111 @@ function pick(o) {
   if (!o) return;
   setSettings({ providerId: o.providerId, modelId: o.modelId });
   query.value = optionLabel(o);
+  pickerOpen.value = false;
+  // Catalog models are browsable without setup; chatting from one needs a
+  // base URL + key, so the setup modal opens right away (send is guarded).
+  if (!o.custom && !selectedProvider.value) openSetup(o);
+  else nextTick(() => composerEl.value?.focus());
   // The active conversation now carries the model binding; keep the URL
   // clean so a reload restores THIS chat instead of opening a fresh one.
   if (route.query.p || route.query.m) router.replace({ query: {} });
-  nextTick(() => composerEl.value?.focus());
 }
 
-// Focus shows the whole list; leaving without a pick restores the label.
-function pickerFocus() { query.value = ''; }
-function pickerBlur() {
+// ── Model picker (hand-rolled, deterministic) ─────────────────────────
+// Replaces b-autocomplete: option buttons use mousedown.prevent, so the
+// input never loses focus and a click ALWAYS selects (the old picker
+// could silently drop the first click — Ibrahim had to select twice).
+// The list is capped at PICK_CAP rows; the footer counts the rest.
+const PICK_CAP = 120;
+const pickerOpen = ref(false);
+const activeIdx = ref(0);
+const pickerFocused = ref(false);
+const pickerRows = computed(() => {
+  const { groups: capped, hidden } = capGroupItems(filtered.value, PICK_CAP);
+  const rows = [];
+  let idx = 0;
+  for (const g of capped) {
+    rows.push({ type: 'group', key: 'g:' + g.providerId, label: g.label });
+    for (const it of g.items) rows.push({ type: 'item', key: it.key, opt: it, idx: idx++ });
+  }
+  return { rows, shown: idx, hidden };
+});
+
+function pickerFocus() { query.value = ''; pickerOpen.value = true; activeIdx.value = 0; }
+// A click on the already-focused input fires no focus event — without this,
+// reopening the list after a pick would need a click elsewhere first.
+function pickerMousedown() {
+  if (!pickerOpen.value && pickerFocused.value) {
+    pickerOpen.value = true;
+    query.value = '';
+    activeIdx.value = 0;
+  }
+}
+function onPickerFocusin() { pickerFocused.value = true; }
+function onPickerFocusout() {
+  pickerFocused.value = false;
+  // Focus may hop to the scrollbar or a button briefly; only close when it
+  // really left, and restore the selected model's label when it does.
   setTimeout(() => {
-    if (selected.value && query.value !== optionLabel(selected.value)) query.value = optionLabel(selected.value);
-  }, 200);
+    if (pickerFocused.value) return;
+    pickerOpen.value = false;
+    if (selected.value) query.value = optionLabel(selected.value);
+  }, 120);
+}
+function pickerKey(e) {
+  if (e.key === 'Escape') {
+    if (pickerOpen.value) {
+      e.preventDefault();
+      pickerOpen.value = false;
+      if (selected.value) query.value = optionLabel(selected.value);
+    }
+    return;
+  }
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (!pickerOpen.value) { pickerOpen.value = true; return; }
+    const last = Math.max(0, pickerRows.value.shown - 1);
+    activeIdx.value = e.key === 'ArrowDown' ? Math.min(activeIdx.value + 1, last) : Math.max(activeIdx.value - 1, 0);
+    nextTick(() => document.querySelector('.pg-pick-item.is-active')?.scrollIntoView({ block: 'nearest' }));
+    return;
+  }
+  if (e.key === 'Enter' && pickerOpen.value) {
+    const row = pickerRows.value.rows.find(r => r.type === 'item' && r.idx === activeIdx.value);
+    if (row) { e.preventDefault(); pick(row.opt); }
+  }
+}
+
+// ── Setup modal (catalog models: collect what a request needs) ────────
+const setup = ref(null);
+const setupOpen = computed({
+  get: () => setup.value !== null,
+  set: (v) => { if (!v) setup.value = null; },
+});
+function openSetup(opt) {
+  if (!opt?.catalogId) return;
+  setup.value = {
+    catalogId: opt.catalogId,
+    label: opt.providerLabel,
+    baseUrl: KNOWN_ENDPOINTS[opt.catalogId] || '',
+    key: '',
+    modelId: opt.modelId,
+    origModelId: opt.modelId,
+  };
+}
+function saveSetup() {
+  const s = setup.value;
+  if (!s || !s.baseUrl.trim()) return;
+  const modelId = s.modelId.trim() || s.origModelId;
+  // A real My Providers entry backs the chat: base URL + key live there
+  // (never in the Playground store), seeded with the provider's catalog
+  // models so the whole group stays chat-ready after one setup.
+  const entry = addProvider({ label: s.label, baseUrl: s.baseUrl.trim(), key: s.key.trim(), mode: 'catalog', catalogId: s.catalogId });
+  const prov = catalogProviders.value.find(p => p.id === s.catalogId);
+  const listing = catalogProviderEntry(prov || { id: s.catalogId, name: s.label, models: [] }).models;
+  setModels(entry.id, applyModelOverride(listing, s.origModelId, modelId));
+  setSettings({ providerId: entry.id, modelId });
+  setup.value = null;
+  nextTick(() => composerEl.value?.focus());
 }
 
 // ── Settings ──────────────────────────────────────────────────────────
@@ -227,7 +340,7 @@ const STARTERS = [
   'A bat and a ball cost $1.10 in total. The bat costs $1 more than the ball. How much is the ball?',
 ];
 
-const canSend = computed(() => !!selected.value && !busy.value && draft.value.trim().length > 0);
+const canSend = computed(() => !!selected.value && !needsSetup.value && !busy.value && draft.value.trim().length > 0);
 const draftTokens = computed(() => estimateTokens(draft.value));
 const lastAssistantId = computed(() => {
   for (let i = messages.value.length - 1; i >= 0; i--) if (messages.value[i].role === 'assistant') return messages.value[i].id;
@@ -241,6 +354,7 @@ function historyForRequest() {
 async function runAssistant() {
   const opt = selected.value;
   const prov = selectedProvider.value;
+  if (opt && !prov) return openSetup(opt); // catalog pick without setup — ask, don't fail
   if (!opt || !prov) return;
   const history = historyForRequest();
   const payload = buildPayload({
@@ -301,6 +415,7 @@ async function runAssistant() {
 async function send(text = draft.value) {
   const t = String(text || '').trim();
   if (!t || busy.value || !selected.value) return;
+  if (needsSetup.value) return openSetup(selected.value);
   addMessage({ role: 'user', content: t });
   draft.value = '';
   stickToBottom(true);
@@ -377,8 +492,9 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
       <div class="kicker">Chat · straight from your browser to your provider</div>
       <h1 class="section-title">Playground</h1>
       <p class="section-sub">
-        Talk to any chat model your own providers serve, side by side with what the arena knows about it — score,
-        price and context. Requests go directly to the provider you pick, with your key; nothing passes through us.
+        Talk to any chat model — every lab, provider and gateway in the arena catalog plus your own My Providers
+        entries, side by side with what the arena knows about each one: score, price and context. Requests go directly
+        to the provider you pick, with your key; nothing passes through us.
       </p>
     </div>
 
@@ -387,9 +503,9 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
       <i class="fas fa-plug pg-empty-icon" aria-hidden="true"></i>
       <h2 class="pg-empty-title">Connect a provider to start chatting</h2>
       <p class="muted">
-        The Playground chats with models listed by your <strong>My Providers</strong> entries — any OpenAI-compatible
-        endpoint (OpenRouter, OpenAI, Groq, a self-hosted gateway…). Add one with its base URL and key, sync its model
-        list, and every chat model it serves shows up here.
+        The Playground chats with models from the arena's provider catalog and your <strong>My Providers</strong>
+        entries — any OpenAI-compatible endpoint (OpenRouter, OpenAI, Groq, a self-hosted gateway…). Add one with its
+        base URL and key, sync its model list, and every chat model it serves shows up here.
       </p>
       <router-link class="button is-primary is-small" :to="{ name: 'providers', query: { view: 'mine' } }">
         <i class="fas fa-plus" aria-hidden="true"></i>&nbsp; Add a provider
@@ -443,39 +559,38 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
         <div class="lbl">Provider</div>
         <select v-model="providerFilter" class="input is-small pg-provsel" data-test="pg-prov-filter" aria-label="Filter models by provider">
           <option value="">All providers ({{ totalModels }})</option>
-          <option v-for="p in providerOptions" :key="p.id" :value="p.id">{{ p.label }} ({{ p.n }})</option>
+          <optgroup v-for="og in optGroups" :key="og.label" :label="og.label">
+            <option v-for="p in og.options" :key="p.id" :value="p.id">{{ p.label }} ({{ p.n }})</option>
+          </optgroup>
         </select>
         <div class="lbl">Model</div>
-        <b-autocomplete
-          v-model="query"
-          :data="filtered"
-          group-field="label"
-          group-options="items"
-          field="modelId"
-          :custom-formatter="optionLabel"
-          placeholder="Search models or providers"
-          open-on-focus
-          keep-first
-          clearable
-          icon="magnifying-glass"
-          size="is-small"
-          max-height="360px"
-          aria-label="Choose a model"
-          class="pg-picker"
-          @select="pick"
-          @focus="pickerFocus"
-          @blur="pickerBlur"
-        >
-          <template #default="{ option }">
-            <div class="pg-opt">
-              <span class="pg-opt-id">{{ option.modelId }}</span>
-              <span v-if="option.score != null" class="pg-opt-score" :style="{ color: scoreColor(option.score) }">{{ fmtScore(option.score) }}</span>
-              <span v-else-if="option.arenaName" class="pg-opt-dim">unranked</span>
-            </div>
-            <div v-if="option.arenaName && option.arenaName.toLowerCase() !== option.modelId.toLowerCase()" class="pg-opt-sub">{{ option.arenaName }}</div>
-          </template>
-          <template #empty>No model matches “{{ query }}”.</template>
-        </b-autocomplete>
+        <!-- Hand-rolled picker: option buttons mousedown.prevent, so a click
+             always selects — no blur/close race, no second click needed. -->
+        <div class="pg-picker" @focusin="onPickerFocusin" @focusout="onPickerFocusout" @keydown="pickerKey">
+          <input v-model="query" class="input is-small" type="text" role="combobox" autocomplete="off"
+            :aria-expanded="pickerOpen ? 'true' : 'false'" aria-controls="pg-picklist" aria-autocomplete="list"
+            placeholder="Search models or providers" data-test="pg-model-input"
+            @focus="pickerFocus" @mousedown="pickerMousedown" />
+          <div v-if="pickerOpen" id="pg-picklist" class="pg-picklist" role="listbox" aria-label="Models" data-test="pg-picklist">
+            <template v-for="row in pickerRows.rows" :key="row.key">
+              <div v-if="row.type === 'group'" class="pg-pick-group">{{ row.label }}</div>
+              <button v-else type="button" class="pg-pick-item" :class="{ 'is-active': row.idx === activeIdx }"
+                role="option" :data-idx="row.idx"
+                :aria-selected="row.opt.providerId === settings.providerId && row.opt.modelId === settings.modelId"
+                @mousedown.prevent @click="pick(row.opt)">
+                <span class="pg-opt">
+                  <span class="pg-opt-id">{{ row.opt.modelId }}</span>
+                  <span v-if="row.opt.score != null" class="pg-opt-score" :style="{ color: scoreColor(row.opt.score) }">{{ fmtScore(row.opt.score) }}</span>
+                  <span v-else-if="row.opt.arenaName" class="pg-opt-dim">unranked</span>
+                  <span v-if="!row.opt.custom" class="pg-opt-setup" title="Needs a base URL and key before it can chat"><i class="fas fa-plug" aria-hidden="true"></i></span>
+                </span>
+                <span v-if="row.opt.arenaName && row.opt.arenaName.toLowerCase() !== row.opt.modelId.toLowerCase()" class="pg-opt-sub">{{ row.opt.arenaName }}</span>
+              </button>
+            </template>
+            <div v-if="!pickerRows.shown" class="pg-pick-none">No model matches “{{ query }}”.</div>
+            <div v-else-if="pickerRows.hidden" class="pg-pick-more">{{ pickerRows.hidden }} more — type to narrow the list.</div>
+          </div>
+        </div>
         <div class="pg-count" data-test="pg-count">
           {{ modelCount }} chat model{{ modelCount === 1 ? '' : 's' }} across {{ visibleGroups.length }} provider{{ visibleGroups.length === 1 ? '' : 's' }}
           <span v-if="pickedOutsideFilter" class="pg-off" data-test="pg-off-filter">· current model sits outside this filter</span>
@@ -500,6 +615,10 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
             <span class="tag-lab" title="Context window"><i class="fas fa-ruler-horizontal" aria-hidden="true"></i>&nbsp;{{ fmtCtx(selected.ctx) }}</span>
             <span v-if="selected.free" class="tag-lab teal">free</span>
             <span v-if="selected.older" class="tag-lab" title="An older generation on the arena — hidden from the default leaderboard view.">older</span>
+          </div>
+          <div v-if="needsSetup" class="pg-setup-row" data-test="pg-setup-hint">
+            <span class="pg-fine">Not connected yet — needs a base URL and your API key.</span>
+            <button type="button" class="button is-primary is-small" data-test="pg-setup-open" @click="openSetup(selected)">Set up</button>
           </div>
         </div>
 
@@ -614,8 +733,8 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 
         <form class="pg-composer" @submit.prevent="send()">
           <textarea ref="composerEl" v-model="draft" class="textarea pg-input" rows="1"
-            :placeholder="selected ? 'Message ' + selected.modelId + '  (Enter to send, Shift+Enter for a new line)' : 'Pick a model first'"
-            :disabled="!selected" aria-label="Message" @keydown="onKey"></textarea>
+            :placeholder="needsSetup ? 'Set up this provider to start chatting' : (selected ? 'Message ' + selected.modelId + '  (Enter to send, Shift+Enter for a new line)' : 'Pick a model first')"
+            :disabled="!selected || needsSetup" aria-label="Message" @keydown="onKey"></textarea>
           <div class="pg-compose-side">
             <span v-if="draft" class="pg-est" title="Rough token estimate">≈{{ draftTokens }} tok</span>
             <b-button v-if="busy" type="is-danger" size="is-small" icon-left="stop" data-test="pg-stop" @click="stop">Stop</b-button>
@@ -624,6 +743,32 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
         </form>
       </div>
     </div>
+
+    <!-- Setup modal: collect what a catalog model needs to chat -->
+    <b-modal v-model="setupOpen" :width="520" :destroy-on-hide="false" aria-role="dialog" aria-label="Set up provider">
+      <div v-if="setup" class="pg-modal panel-lab" data-test="pg-setup-modal">
+        <h2 class="pg-modal-title">Set up {{ setup.label }}</h2>
+        <p class="muted pg-modal-sub">
+          The Playground calls this provider straight from your browser over its OpenAI-compatible API. The values
+          below are a starting point from the catalog — fix anything your provider expects.
+        </p>
+        <label class="lbl" for="pg-setup-url">Base URL</label>
+        <input id="pg-setup-url" v-model="setup.baseUrl" class="input is-small" data-test="pg-setup-url" placeholder="https://…/v1" spellcheck="false" />
+        <label class="lbl" for="pg-setup-key">API key</label>
+        <input id="pg-setup-key" v-model="setup.key" class="input is-small" type="password" data-test="pg-setup-key"
+          placeholder="sk-…" autocomplete="off" />
+        <label class="lbl" for="pg-setup-model">Model ID <span class="pg-modal-id-hint">(catalog: {{ setup.origModelId }})</span></label>
+        <input id="pg-setup-model" v-model="setup.modelId" class="input is-small" data-test="pg-setup-model" spellcheck="false" />
+        <p class="pg-fine">
+          Catalogs sometimes prefix org names (e.g. <code>gemini/…</code>) — use the ID your provider's API expects.
+          The key stays in this browser and is sent only to this base URL.
+        </p>
+        <div class="pg-modal-actions">
+          <button type="button" class="button is-primary is-small" data-test="pg-setup-save" :disabled="!setup.baseUrl.trim()" @click="saveSetup">Save and use here</button>
+          <button type="button" class="button is-ghost is-small" data-test="pg-setup-cancel" @click="setup = null">Not now</button>
+        </div>
+      </div>
+    </b-modal>
 
     <!-- Mobile drawer backdrop (visible ≤1023px only) -->
     <div v-if="railOpen" class="pg-backdrop" aria-hidden="true" @click="railOpen = false"></div>
@@ -667,10 +812,33 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 .pg-edit-actions { display: flex; gap: .4rem; justify-content: flex-end; }
 .pg-backdrop { display: none; }
 
+.pg-picker { position: relative; }
+.pg-picklist {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 30;
+  background: var(--bg-elev, var(--surface-2)); border: 1px solid var(--line-2, var(--line));
+  border-radius: 10px; box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  max-height: 340px; overflow-y: auto; padding: .25rem;
+}
+.pg-pick-group { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--faint); padding: .45rem .5rem .2rem; }
+.pg-pick-item { display: block; width: 100%; text-align: left; background: none; border: 0; color: var(--text); cursor: pointer; padding: .3rem .5rem; border-radius: 8px; }
+.pg-pick-item:hover, .pg-pick-item.is-active { background: var(--teal-dim); }
+.pg-pick-none, .pg-pick-more { color: var(--faint); font-size: .76rem; padding: .45rem .5rem; }
+
 .pg-opt { display: flex; justify-content: space-between; gap: .6rem; align-items: baseline; }
 .pg-opt-id { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pg-opt-score { font-weight: 800; font-variant-numeric: tabular-nums; }
 .pg-opt-dim, .pg-opt-sub { color: var(--faint); font-size: .74rem; }
+.pg-opt-sub { display: block; }
+.pg-opt-setup { color: var(--gold); font-size: .68rem; flex: none; }
+
+.pg-setup-row { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-top: .55rem; }
+
+/* Setup modal */
+.pg-modal { display: flex; flex-direction: column; gap: .5rem; }
+.pg-modal-title { font-size: 1.05rem; font-weight: 700; margin: 0; }
+.pg-modal-sub { font-size: .82rem; margin: 0; line-height: 1.45; }
+.pg-modal-id-hint { color: var(--faint); font-weight: 400; }
+.pg-modal-actions { display: flex; gap: .5rem; justify-content: flex-end; margin-top: .3rem; }
 
 .pg-card { border: 1px solid var(--line); border-radius: 12px; padding: .7rem .8rem; background: var(--surface-2); }
 .pg-card-top { display: flex; gap: .6rem; align-items: flex-start; }

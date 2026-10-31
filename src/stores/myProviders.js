@@ -61,13 +61,17 @@ function commit() {
 }
 
 // ── Actions ───────────────────────────────────────────────────────────
-export function addProvider({ label, baseUrl = '', key = '', mode = 'fetch', priceKeys = null }) {
+export function addProvider({ label, baseUrl = '', key = '', mode = 'fetch', priceKeys = null, catalogId = '' }) {
   const p = {
     id: uid(),
     label: String(label || 'Untitled provider').slice(0, 80),
     baseUrl: String(baseUrl || '').trim(),
     key: String(key || ''),
-    mode, // 'fetch' | 'paste'
+    mode, // 'fetch' | 'paste' | 'catalog' (created by the Playground setup modal)
+    // Playground catalog link: the providers.json id this entry was created
+    // from (setup modal). '' for user-added entries. Additive optional
+    // field — storage schema stays v1, older records keep loading.
+    catalogId: String(catalogId || '').slice(0, 64),
     intent: '', // '' | 'scores' | 'prices' | 'track' (post-sync question)
     // stats-51: custom pricing key paths (validated; null = feature off).
     // Additive optional field — storage schema stays v1, older records
@@ -150,6 +154,7 @@ export function importPayload(text) {
       // stats-51: defensive mapping — a hand-edited export with garbage
       // keys imports as null (feature off) instead of poisoning the store.
       priceKeys: normalizePriceKeys(p.priceKeys).priceKeys ?? null,
+      catalogId: String(p.catalogId || '').slice(0, 64),
       addedAt: p.addedAt || null,
       lastSyncAt: p.lastSyncAt || null,
       lastError: null,

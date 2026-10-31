@@ -63,6 +63,14 @@ export function filterGroups(groups, query) {
     .filter(g => g.items.length);
 }
 
+// Provider rail filter ('' = all providers). Composes with filterGroups:
+// narrow by provider first, then let the text search do its thing.
+export function filterByProvider(groups, providerId) {
+  const f = String(providerId || '');
+  if (!f) return groups;
+  return (groups || []).filter(g => g.providerId === f);
+}
+
 export function findOption(groups, providerId, modelId) {
   for (const g of groups || []) {
     if (g.providerId !== providerId) continue;

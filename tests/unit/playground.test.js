@@ -5,7 +5,7 @@ import {
   estimateCost, errorFromResponse, sendChat, CORS_MESSAGE,
 } from '../../src/lib/chat.js';
 import { renderMarkdown } from '../../src/lib/miniMarkdown.js';
-import { buildPlaygroundGroups, filterGroups, findOption, optionsForArenaName } from '../../src/lib/playgroundModels.js';
+import { buildPlaygroundGroups, filterGroups, filterByProvider, findOption, optionsForArenaName } from '../../src/lib/playgroundModels.js';
 import { parseModelListing } from '../../src/lib/myProviders.js';
 
 describe('chatUrl', () => {
@@ -170,52 +170,129 @@ describe('playground model options', () => {
     expect(findOption(groups, 'p2', 'model-a')).toBeNull();
     expect(optionsForArenaName(groups, 'Model A').map(o => o.modelId)).toEqual(['model-a']);
   });
+
+  it('narrow by provider, compose with the text search', () => {
+    expect(filterByProvider(groups, 'p1')).toHaveLength(1);
+    expect(filterByProvider(groups, '')).toBe(groups);
+    expect(filterByProvider(groups, 'nope')).toEqual([]);
+    const narrowed = filterByProvider(groups, 'p1');
+    expect(filterGroups(narrowed, 'zeta')[0].items.map(i => i.modelId)).toEqual(['zeta-private']);
+    expect(filterGroups(narrowed, 'nothing')).toEqual([]);
+  });
 });
 
-describe('playground store', () => {
+describe('playground store v2 — conversations in a driver', () => {
   const mem = new Map();
   globalThis.localStorage = {
     getItem: (k) => (mem.has(k) ? mem.get(k) : null),
     setItem: (k, v) => mem.set(k, String(v)),
     removeItem: (k) => mem.delete(k),
   };
-  let S;
+  let S, drv;
   beforeEach(async () => {
     mem.clear();
     vi.resetModules();
     S = await import('../../src/stores/playground.js');
+    drv = (await import('../../src/lib/idb.js')).createMemoryDriver();
+    S.setDriver(drv);
   });
 
-  it('persists settings and messages, never an in-flight flag or a key', () => {
-    S.ensurePlaygroundLoaded();
+  it('boots with one fresh chat; ops persist into the driver without transient fields', async () => {
+    await S.ensurePlaygroundLoaded();
+    const { conversations, activeId } = S.usePlayground();
+    expect(conversations.value).toHaveLength(1);
+    expect(activeId.value).toBe(conversations.value[0].id);
     S.setSettings({ providerId: 'p', modelId: 'm', temperature: 0.4 });
     S.addMessage({ role: 'user', content: 'q' });
-    const aid = S.addMessage({ role: 'assistant', content: 'partial', pending: true });
-    S.updateMessage(aid, { content: 'partial answer' });
-    const doc = JSON.parse(mem.get(S.STORAGE_KEY));
-    expect(doc.settings).toMatchObject({ providerId: 'p', modelId: 'm', temperature: 0.4, stream: true });
-    expect(doc.messages.map(m => m.content)).toEqual(['q', 'partial answer']);
-    expect(doc.messages[1]).not.toHaveProperty('pending');
-    expect(JSON.stringify(doc)).not.toMatch(/key/i);
+    const aid = S.addMessage({ role: 'assistant', content: 'partial', pending: true, reasoning: 'thoughts' });
+    S.updateMessage(aid, { content: 'answer' });
+    await S.flushPersist();
+    const recs = await drv.listConversations();
+    expect(recs).toHaveLength(1);
+    expect(recs[0].settings).toMatchObject({ providerId: 'p', modelId: 'm', temperature: 0.4, stream: true });
+    expect(recs[0].messages.map(m => m.content)).toEqual(['q', 'answer']);
+    expect(recs[0].messages[1]).not.toHaveProperty('pending');
+    expect(recs[0].messages[1]).not.toHaveProperty('reasoning');
+    expect(JSON.stringify(recs)).not.toMatch(/sk-/i);
   });
-  it('reloads, truncates from a message, and clears', async () => {
-    S.ensurePlaygroundLoaded();
+
+  it('migrates the legacy single-chat localStorage doc once, then drops the key', async () => {
+    mem.set('ba.playground.v1', JSON.stringify({
+      settings: { providerId: 'p1', modelId: 'm1' },
+      messages: [{ id: 'a', role: 'user', content: 'hello world' }, { id: 'b', role: 'assistant', content: 'hi' }],
+    }));
+    await S.ensurePlaygroundLoaded();
+    const { conversations } = S.usePlayground();
+    expect(conversations.value).toHaveLength(1);
+    expect(conversations.value[0].title).toBe('hello world');
+    expect(conversations.value[0].settings.modelId).toBe('m1');
+    expect(conversations.value[0].messages.map(m => m.content)).toEqual(['hello world', 'hi']);
+    expect(mem.has('ba.playground.v1')).toBe(false);
+    const recs = await drv.listConversations();
+    expect(recs[0].messages).toHaveLength(2);
+  });
+
+  it('restores conversations, ui prefs and the active chat across a reload', async () => {
+    await S.ensurePlaygroundLoaded();
+    S.setUi({ railOpen: false, providerFilter: 'p9' });
+    const id1 = S.newConversation({ providerId: 'x', modelId: 'y' });
+    S.renameConversation(id1, 'My chat');
+    S.addMessage({ role: 'user', content: 'persisted?' });
+    await S.flushPersist();
+    vi.resetModules();
+    S = await import('../../src/stores/playground.js');
+    S.setDriver(drv);
+    await S.ensurePlaygroundLoaded();
+    const { conversations, activeId, ui, messages } = S.usePlayground();
+    expect(conversations.value).toHaveLength(2);
+    expect(activeId.value).toBe(id1);
+    expect(ui.value).toMatchObject({ railOpen: false, providerFilter: 'p9' });
+    expect(messages.value.map(m => m.content)).toEqual(['persisted?']);
+    const c = conversations.value.find(c => c.id === id1);
+    expect(c.title).toBe('My chat');
+    expect(c.settings).toMatchObject({ providerId: 'x', modelId: 'y' });
+  });
+
+  it('switches, deletes, and falls back to the most recent chat', async () => {
+    await S.ensurePlaygroundLoaded();
+    const { conversations, activeId } = S.usePlayground();
+    const a = activeId.value;
+    const b = S.newConversation();
+    S.switchTo(a);
+    expect(activeId.value).toBe(a);
+    S.deleteConversation(a);
+    expect(activeId.value).toBe(b);
+    S.deleteConversation(b);
+    expect(conversations.value).toHaveLength(1);
+    expect(activeId.value).toBe(conversations.value[0].id);
+    await S.flushPersist();
+    expect(await drv.listConversations()).toHaveLength(1);
+  });
+
+  it('truncates from a message and caps stored messages per chat at 200', async () => {
+    await S.ensurePlaygroundLoaded();
+    const { messages, activeId } = S.usePlayground();
     const u1 = S.addMessage({ role: 'user', content: 'one' });
     S.addMessage({ role: 'assistant', content: 'two' });
-    vi.resetModules();
-    const S2 = await import('../../src/stores/playground.js');
-    S2.ensurePlaygroundLoaded();
-    const { messages } = S2.usePlayground();
-    expect(messages.value.map(m => m.content)).toEqual(['one', 'two']);
-    S2.truncateFrom(u1);
+    S.truncateFrom(u1);
     expect(messages.value).toEqual([]);
-    S2.addMessage({ role: 'user', content: 'x' });
-    S2.clearConversation();
-    expect(JSON.parse(mem.get(S2.STORAGE_KEY)).messages).toEqual([]);
+    for (let i = 0; i < 205; i++) S.addMessage({ role: 'user', content: 'm' + i });
+    await S.flushPersist();
+    const rec = (await drv.listConversations()).find(r => r.id === activeId.value);
+    expect(rec.messages).toHaveLength(200);
+    expect(rec.messages.at(-1).content).toBe('m204');
   });
-  it('ignores corrupt storage', async () => {
-    mem.set('ba.playground.v1', '{not json');
-    S.ensurePlaygroundLoaded();
-    expect(S.usePlayground().messages.value).toEqual([]);
+
+  it('deleteAllHistory leaves one fresh chat and a clean driver', async () => {
+    await S.ensurePlaygroundLoaded();
+    S.newConversation();
+    S.deleteAllHistory();
+    const { conversations, messages, activeId } = S.usePlayground();
+    expect(conversations.value).toHaveLength(1);
+    expect(messages.value).toEqual([]);
+    await S.flushPersist();
+    const recs = await drv.listConversations();
+    expect(recs).toHaveLength(1);
+    expect(recs[0].id).toBe(activeId.value);
   });
 });

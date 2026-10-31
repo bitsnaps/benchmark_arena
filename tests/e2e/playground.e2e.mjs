@@ -1,11 +1,14 @@
 // Playground e2e: the chat journey against a mocked OpenAI-compatible
 // provider (page.route — no network, no real key). Covers: navbar item,
-// empty state without providers, model picker fed by a My Providers listing
-// with the arena join on the card, request shape (URL, bearer key, system
-// prompt, model), streamed markdown with raw HTML escaped, reported-usage
-// metrics, persistence across reload, a 401 rendered inline + Retry, the
-// CORS/network explanation, deep links, New chat, and a clean console.
-// Runs under tests/run-e2e.mjs (vite preview on 4173, base /benchmark_arena/).
+// empty state without providers, model picker fed by two My Providers
+// listings with the arena join on the card, request shape (URL, bearer
+// key, system prompt, model), streamed markdown with raw HTML escaped,
+// reported-usage metrics, IndexedDB persistence across reload, a 401
+// rendered inline + Retry, the CORS/network explanation, deep links (fresh
+// pre-bound chat), history switch/rename/delete, the provider filter, the
+// collapsible rail, in-place reply edit, message delete, and a clean
+// console. Runs under tests/run-e2e.mjs (vite preview on 4173, base
+// /benchmark_arena/).
 import { chromium } from 'playwright';
 import { parseModelListing } from '../../src/lib/myProviders.js';
 
@@ -21,6 +24,10 @@ const models = parseModelListing(JSON.stringify({ data: [
 const STORE = JSON.stringify({ version: 1, providers: [{
   id: 'pgtest', label: 'Test Gateway', baseUrl: GW, key: 'sk-e2e-test', mode: 'fetch', intent: '',
   priceKeys: null, addedAt: '2026-01-01T00:00:00Z', lastSyncAt: '2026-01-01T00:00:00Z', lastError: null, models,
+}, {
+  id: 'pgtest2', label: 'Second Hub', baseUrl: 'https://hub.playground.test/v1', key: 'sk-e2e-2', mode: 'fetch', intent: '',
+  priceKeys: null, addedAt: '2026-01-01T00:00:00Z', lastSyncAt: '2026-01-01T00:00:00Z', lastError: null,
+  models: parseModelListing(JSON.stringify({ data: [{ id: 'hub-mini' }] })).models,
 }] });
 
 const REPLY = [
@@ -41,6 +48,7 @@ const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-headers
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   page.setDefaultNavigationTimeout(60000);
+  page.on('dialog', (d) => d.accept()); // history delete confirms
   const errors = [];
   page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
   page.on('console', (m) => {
@@ -48,10 +56,33 @@ const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-headers
     if (m.type() === 'error' && !/401|Failed to load resource|ERR_FAILED|CORS/i.test(m.text())) errors.push('console: ' + m.text());
   });
 
+  // Full local-store reset (localStorage + the Playground IndexedDB).
+  const resetStores = () => page.evaluate(async () => {
+    localStorage.clear();
+    await new Promise((resolve) => {
+      const r = indexedDB.deleteDatabase('ba.playground');
+      r.onsuccess = r.onerror = r.onblocked = () => resolve();
+    });
+  });
+  // Read the persisted conversations straight from IndexedDB.
+  const readConvs = () => page.evaluate(async () => {
+    const db = await new Promise((resolve, reject) => {
+      const r = indexedDB.open('ba.playground');
+      r.onsuccess = () => resolve(r.result);
+      r.onerror = () => reject(r.error);
+    });
+    const out = await new Promise((resolve) => {
+      const q = db.transaction('conversations', 'readonly').objectStore('conversations').getAll();
+      q.onsuccess = () => resolve(q.result);
+    });
+    db.close();
+    return out;
+  });
+
   try {
     // ── 1. navbar + empty state ─────────────────────────────────────
     await page.goto(BASE + '#/');
-    await page.evaluate(() => { localStorage.clear(); });
+    await resetStores();
     const nav = page.locator('.navbar-start .navbar-item', { hasText: 'Playground' });
     await nav.click();
     await page.waitForURL(/#\/playground/);
@@ -106,12 +137,15 @@ const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-headers
     else fail('metrics line unexpected: ' + meta);
 
     // ── 4. persistence ──────────────────────────────────────────────
+    // Send button back = the write queue drained (busy cleared after flush).
+    await page.locator('[data-test="pg-send"]').waitFor({ timeout: 5000 });
     await page.reload();
     await page.locator('.pg-msg.assistant .md').first().waitFor({ timeout: 15000 });
     const n = await page.locator('.pg-msg').count();
-    const stored = await page.evaluate(() => localStorage.getItem('ba.playground.v1') || '');
-    if (n === 2 && !stored.includes('sk-e2e-test')) ok('conversation survives reload; the key is not copied into Playground storage');
-    else fail(`after reload: ${n} messages, key in playground storage: ${stored.includes('sk-e2e-test')}`);
+    const convs = await readConvs();
+    const dumped = JSON.stringify(convs);
+    if (n === 2 && convs.length >= 1 && !dumped.includes('sk-e2e-test')) ok('conversation survives reload in IndexedDB; the key is not copied into Playground storage');
+    else fail(`after reload: ${n} messages, ${convs.length} convs in IDB, key in storage: ${dumped.includes('sk-e2e-test')}`);
 
     // ── 5. 401 inline + Retry ───────────────────────────────────────
     mode = '401';
@@ -146,9 +180,64 @@ const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-headers
     const dlScore = (await page.locator('[data-test="pg-model-card"] .pg-card-score').innerText()).trim();
     if (dl === 'my-private-model' && dlScore === '—') ok('deep link selects the listing; off-arena model shows a dash, no invented score');
     else fail(`deep link: "${dl}" score "${dlScore}"`);
-    await page.locator('[data-test="pg-clear"]').click();
-    if (await page.locator('.pg-msg').count() === 0 && await page.locator('.pg-starter').count() > 0) ok('New chat clears the conversation and shows starters');
-    else fail('New chat did not clear');
+    const dlHist = await page.locator('.pg-hist-item').count();
+    const dlMsgs = await page.locator('.pg-msg').count();
+    if (dlHist === 2 && dlMsgs === 0) ok('deep link opened a FRESH pre-bound conversation (2 chats in history, none of the old thread)');
+    else fail(`deep link should start a fresh chat: ${dlHist} history items, ${dlMsgs} messages`);
+    await page.locator('.pg-chat-head [data-test="pg-new-chat"]').click();
+    if (await page.locator('.pg-msg').count() === 0 && await page.locator('.pg-starter').count() > 0) ok('New chat opens a fresh empty conversation with starters');
+    else fail('New chat did not start empty');
+    if (await page.locator('.pg-hist-item').count() === 3) ok('previous chats stay in history (3 chats now)');
+    else fail('history should hold 3 chats, got ' + await page.locator('.pg-hist-item').count());
+
+    // ── 7b. history: rename, switch back, delete ────────────────────
+    await page.locator('[data-test="pg-hist-active"] .pg-act[title="Rename chat"]').click();
+    await page.locator('[data-test="pg-hist-active"] input.pg-rename').fill('Project notes');
+    await page.keyboard.press('Enter');
+    await page.locator('[data-test="pg-hist-active"]').filter({ hasText: 'Project notes' }).waitFor({ timeout: 5000 });
+    ok('history: rename updates the list');
+    await page.locator('.pg-hist-item .pg-hist-open', { hasText: 'Say hi' }).click();
+    await page.locator('.pg-msg.assistant .md').first().waitFor({ timeout: 15000 });
+    if (await page.locator('.pg-msg').count() === 6) ok('history: switching back restores the conversation (all 3 turns intact)');
+    else fail('switching back did not restore the 6-message thread, got ' + await page.locator('.pg-msg').count());
+    const beforeDel = await page.locator('.pg-hist-item').count();
+    await page.locator('[data-test="pg-hist-item"]').first().locator('.pg-act[title="Delete chat"]').click();
+    await page.waitForFunction((b) => document.querySelectorAll('.pg-hist-item').length === b - 1, beforeDel, { timeout: 5000 }).catch(() => {});
+    if (await page.locator('.pg-hist-item').count() === beforeDel - 1) ok('history: delete removes a chat (confirm auto-accepted)');
+    else fail('delete chat did not remove an item');
+
+    // ── 7c. provider filter ─────────────────────────────────────────
+    const countAll = await page.locator('[data-test="pg-count"]').innerText();
+    await page.locator('[data-test="pg-prov-filter"]').selectOption('pgtest');
+    const countFiltered = await page.locator('[data-test="pg-count"]').innerText();
+    if (/across 1 provider/.test(countFiltered) && /across 2 providers/.test(countAll)) ok('provider dropdown narrows the picker (count line: 2 providers → 1)');
+    else fail(`filter counts: all="${countAll.trim()}" filtered="${countFiltered.trim()}"`);
+    await page.locator('[data-test="pg-prov-filter"]').selectOption('');
+
+    // ── 7d. collapsible rail ────────────────────────────────────────
+    await page.locator('[data-test="pg-rail-toggle"]').click();
+    const closed = await page.locator('.pg-grid').evaluate(el => el.classList.contains('rail-closed'))
+      && !(await page.locator('.pg-rail').isVisible().catch(() => false));
+    if (closed) ok('rail collapses; the chat area takes the full width');
+    else fail('rail did not collapse');
+    await page.locator('[data-test="pg-rail-toggle"]').click();
+    await page.locator('.pg-rail').waitFor({ state: 'visible', timeout: 5000 });
+    ok('rail expands again');
+
+    // ── 7e. edit reply in place + delete a message ──────────────────
+    const botMsg = page.locator('.pg-msg.assistant').filter({ has: page.locator('.md') }).first();
+    await botMsg.locator('.pg-act[title="Edit reply"]').click();
+    const editBox = page.locator('[data-test="pg-edit-box"] textarea');
+    await editBox.waitFor({ timeout: 5000 });
+    await editBox.fill('Edited in place.');
+    await page.locator('[data-test="pg-edit-save"]').click();
+    await page.locator('.pg-msg.assistant .md', { hasText: 'Edited in place.' }).waitFor({ timeout: 5000 });
+    ok('assistant reply edited in place');
+    await page.locator('.pg-msg.user').first().hover();
+    await page.locator('.pg-msg.user').first().locator('.pg-act[title^="Delete this message"]').click();
+    await page.locator('.pg-starter').first().waitFor({ timeout: 5000 });
+    if (await page.locator('.pg-msg').count() === 0) ok('deleting the first user turn removes the whole thread (message + replies)');
+    else fail('delete message left messages behind');
 
     // ── 8. mobile layout ────────────────────────────────────────────
     await page.setViewportSize({ width: 390, height: 844 });

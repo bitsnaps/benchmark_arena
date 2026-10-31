@@ -1,0 +1,564 @@
+<script setup>
+// ── Playground: chat with any model your own providers serve ──────────
+// Browser → provider, directly (static site, no proxy): the request goes
+// to the selected My Providers entry's base URL with that entry's key.
+// Models are the chat models in those listings, joined read-only to the
+// arena for score / price / context — the same matcher as the provider
+// cards. Conversation + settings persist in this browser only; keys are
+// never copied into the Playground store.
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useData } from '../stores/data.js';
+import { useMyProviders } from '../stores/myProviders.js';
+import { usePlayground } from '../stores/playground.js';
+import { buildCatalogIndex } from '../lib/myProviders.js';
+import { buildPlaygroundGroups, filterGroups, findOption } from '../lib/playgroundModels.js';
+import { buildPayload, sendChat, estimateTokens, estimateCost, fmtCost, fmtMs } from '../lib/chat.js';
+import { renderMarkdown } from '../lib/miniMarkdown.js';
+import { fmtScore, scoreColor, fmtUsd, fmtCtx } from '../lib/format.js';
+
+const route = useRoute();
+const router = useRouter();
+const { ensureLoaded, rawData, pivotAll, modelsMeta, scoreForModel, priceFor, isOlder, isUnranked, modelSlug } = useData();
+const { providers, ensureMyProvidersLoaded } = useMyProviders();
+const { settings, messages, ensurePlaygroundLoaded, setSettings, addMessage, updateMessage, truncateFrom, clearConversation } = usePlayground();
+
+ensurePlaygroundLoaded();
+onMounted(() => { ensureMyProvidersLoaded(); ensureLoaded(); });
+
+// ── Model options ─────────────────────────────────────────────────────
+const catalogIndex = computed(() =>
+  (rawData.value ? buildCatalogIndex(pivotAll.value.filter(r => !r.unranked) || [], modelsMeta.value || {}) : null));
+const rowByName = computed(() => {
+  const m = new Map();
+  for (const r of pivotAll.value || []) if (r?.name) m.set(r.name, r);
+  return m;
+});
+const groups = computed(() => buildPlaygroundGroups(providers.value || [], {
+  catalogIndex: catalogIndex.value, rowByName: rowByName.value,
+  scoreForModel, priceFor, isOlder, isUnranked, slugOf: modelSlug,
+}));
+const modelCount = computed(() => groups.value.reduce((n, g) => n + g.items.length, 0));
+const providersReady = computed(() => providers.value !== null);
+
+const selected = computed(() => findOption(groups.value, settings.value.providerId, settings.value.modelId));
+const selectedProvider = computed(() => (providers.value || []).find(p => p.id === settings.value.providerId) || null);
+
+const query = ref('');
+const filtered = computed(() => filterGroups(groups.value, query.value));
+const optionLabel = (o) => (o ? o.modelId + ' · ' + o.providerLabel : '');
+
+function pick(o) {
+  if (!o) return;
+  setSettings({ providerId: o.providerId, modelId: o.modelId });
+  query.value = optionLabel(o);
+  router.replace({ query: { ...route.query, p: o.providerId, m: o.modelId } });
+  nextTick(() => composerEl.value?.focus());
+}
+
+// Focus shows the whole list; leaving without a pick restores the label.
+function pickerFocus() { query.value = ''; }
+function pickerBlur() {
+  setTimeout(() => {
+    if (selected.value && query.value !== optionLabel(selected.value)) query.value = optionLabel(selected.value);
+  }, 200);
+}
+
+// Deep link (?p=&m=) wins over the remembered pick; otherwise default to
+// the best-rated model once listings are in.
+watch([groups, () => route.query.p, () => route.query.m], () => {
+  const { p, m } = route.query;
+  if (p && m) {
+    const hit = findOption(groups.value, String(p), String(m));
+    if (hit && (settings.value.providerId !== hit.providerId || settings.value.modelId !== hit.modelId)) {
+      setSettings({ providerId: hit.providerId, modelId: hit.modelId });
+    }
+  }
+  if (!selected.value && groups.value.length) {
+    const best = groups.value.flatMap(g => g.items).sort((a, b) => (b.score ?? -1) - (a.score ?? -1))[0];
+    if (best) setSettings({ providerId: best.providerId, modelId: best.modelId });
+  }
+  if (selected.value && !query.value) query.value = optionLabel(selected.value);
+}, { immediate: true });
+
+// ── Settings ──────────────────────────────────────────────────────────
+const customTemp = computed({
+  get: () => settings.value.temperature !== null,
+  set: (on) => setSettings({ temperature: on ? 0.7 : null }),
+});
+const tempValue = computed({
+  get: () => settings.value.temperature ?? 0.7,
+  set: (v) => setSettings({ temperature: Math.round(Number(v) * 100) / 100 }),
+});
+const maxTokensText = computed({
+  get: () => (settings.value.maxTokens == null ? '' : String(settings.value.maxTokens)),
+  set: (v) => {
+    const n = parseInt(String(v).replace(/\D/g, ''), 10);
+    setSettings({ maxTokens: Number.isFinite(n) && n > 0 ? n : null });
+  },
+});
+const systemText = computed({
+  get: () => settings.value.system,
+  set: (v) => setSettings({ system: v }),
+});
+const streamOn = computed({
+  get: () => settings.value.stream,
+  set: (v) => setSettings({ stream: !!v }),
+});
+const insecure = computed(() => {
+  const b = selectedProvider.value?.baseUrl || '';
+  return /^http:\/\//i.test(b) && !/^http:\/\/(localhost|127\.0\.0\.1|\[::1\])(:|\/|$)/i.test(b);
+});
+
+// ── Conversation ──────────────────────────────────────────────────────
+const draft = ref('');
+const composerEl = ref(null);
+const scroller = ref(null);
+const busy = ref(false);
+let controller = null;
+
+const STARTERS = [
+  'Explain the difference between a process and a thread, with an example.',
+  'Write a Python function that merges overlapping intervals, with tests.',
+  'Summarise the trade-offs of SQL vs. NoSQL for a small SaaS in 5 bullets.',
+  'A bat and a ball cost $1.10 in total. The bat costs $1 more than the ball. How much is the ball?',
+];
+
+const canSend = computed(() => !!selected.value && !busy.value && draft.value.trim().length > 0);
+const draftTokens = computed(() => estimateTokens(draft.value));
+const lastAssistantId = computed(() => {
+  for (let i = messages.value.length - 1; i >= 0; i--) if (messages.value[i].role === 'assistant') return messages.value[i].id;
+  return null;
+});
+
+function historyForRequest() {
+  return messages.value.filter(m => !m.pending && !m.error && m.content);
+}
+
+async function runAssistant() {
+  const opt = selected.value;
+  const prov = selectedProvider.value;
+  if (!opt || !prov) return;
+  const history = historyForRequest();
+  const payload = buildPayload({
+    model: opt.modelId,
+    messages: history,
+    system: settings.value.system,
+    temperature: settings.value.temperature,
+    maxTokens: settings.value.maxTokens,
+    stream: settings.value.stream,
+  });
+  const aid = addMessage({
+    role: 'assistant', content: '', reasoning: '', pending: true,
+    model: opt.modelId, provider: opt.providerLabel, arenaName: opt.arenaName, slug: opt.slug,
+  });
+  busy.value = true;
+  controller = new AbortController();
+  const t0 = performance.now();
+  let ttft = null, content = '', reasoning = '';
+  const metaNow = (usage) => {
+    const total = performance.now() - t0;
+    const est = !usage || usage.input == null || usage.output == null;
+    const u = est
+      ? { input: estimateTokens(settings.value.system + history.map(m => m.content).join('\n')), output: estimateTokens(content + reasoning) }
+      : usage;
+    const genMs = ttft == null ? null : total - ttft;
+    return {
+      ttft, total, usage: u, estimated: est,
+      tps: genMs && genMs > 50 && u.output ? u.output / (genMs / 1000) : null,
+      cost: estimateCost(u, opt.price), priceSource: opt.price?.source || null,
+    };
+  };
+  try {
+    const { usage, finish } = await sendChat({
+      baseUrl: prov.baseUrl, key: prov.key, payload, signal: controller.signal,
+      onDelta(c) {
+        if (ttft === null) ttft = performance.now() - t0;
+        content += c.content || '';
+        reasoning += c.reasoning || '';
+        updateMessage(aid, { content, reasoning }, { persist: false });
+        stickToBottom();
+      },
+    });
+    if (!content && !reasoning) throw new Error('The provider finished without returning any text' + (finish ? ` (finish reason: ${finish})` : '') + '.');
+    updateMessage(aid, { pending: false, content, reasoning, finish, meta: metaNow(usage) });
+  } catch (e) {
+    if (e?.name === 'AbortError') updateMessage(aid, { pending: false, content, reasoning, stopped: true, meta: metaNow(null) });
+    else updateMessage(aid, { pending: false, content, reasoning, error: e?.message || String(e) });
+  } finally {
+    busy.value = false;
+    controller = null;
+    stickToBottom(true);
+  }
+}
+
+async function send(text = draft.value) {
+  const t = String(text || '').trim();
+  if (!t || busy.value || !selected.value) return;
+  addMessage({ role: 'user', content: t });
+  draft.value = '';
+  stickToBottom(true);
+  await runAssistant();
+}
+
+function stop() { controller?.abort(); }
+
+function regenerate(id) {
+  if (busy.value) return;
+  truncateFrom(id);
+  runAssistant();
+}
+
+function editUser(m) {
+  if (busy.value) return;
+  draft.value = m.content;
+  truncateFrom(m.id);
+  nextTick(() => { composerEl.value?.focus(); autosize(); });
+}
+
+function clearChat() {
+  if (busy.value) stop();
+  clearConversation();
+  nextTick(() => composerEl.value?.focus());
+}
+
+const copiedId = ref(null);
+async function copy(m) {
+  try {
+    await navigator.clipboard.writeText(m.content);
+    copiedId.value = m.id;
+    setTimeout(() => { if (copiedId.value === m.id) copiedId.value = null; }, 1500);
+  } catch { /* clipboard blocked — nothing to do */ }
+}
+
+function onKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+    e.preventDefault();
+    if (canSend.value) send();
+  }
+}
+
+function autosize() {
+  const el = composerEl.value;
+  if (!el) return;
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 240) + 'px';
+}
+watch(draft, () => nextTick(autosize));
+
+// Follow the stream only while the reader is already at the bottom.
+function stickToBottom(force = false) {
+  nextTick(() => {
+    const el = scroller.value;
+    if (!el) return;
+    const near = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+    if (force || near) el.scrollTop = el.scrollHeight;
+  });
+}
+onMounted(() => stickToBottom(true));
+onBeforeUnmount(() => controller?.abort());
+
+const md = (s) => renderMarkdown(s);
+const tokLabel = (m) => {
+  const u = m.meta?.usage;
+  if (!u) return '';
+  const pre = m.meta.estimated ? '≈' : '';
+  return `${pre}${u.input ?? '?'} in · ${pre}${u.output ?? '?'} out`;
+};
+const costTitle = (m) => (m.meta?.priceSource === 'provider'
+  ? 'Estimated from the price your provider publishes in its listing'
+  : 'Estimated from the arena reference price (AA / OpenRouter list) — your provider may charge differently')
+  + (m.meta?.estimated ? '. Token counts are estimated (the provider sent no usage block).' : '.');
+</script>
+
+<template>
+  <section class="pg-page">
+    <div class="page-head">
+      <div class="kicker">Chat · straight from your browser to your provider</div>
+      <h1 class="section-title">Playground</h1>
+      <p class="section-sub">
+        Talk to any chat model your own providers serve, side by side with what the arena knows about it — score,
+        price and context. Requests go directly to the provider you pick, with your key; nothing passes through us.
+      </p>
+    </div>
+
+    <!-- No providers yet: explain where models come from -->
+    <div v-if="providersReady && !modelCount" class="panel-lab pg-empty" data-test="pg-empty">
+      <i class="fas fa-plug pg-empty-icon" aria-hidden="true"></i>
+      <h2 class="pg-empty-title">Connect a provider to start chatting</h2>
+      <p class="muted">
+        The Playground chats with models listed by your <strong>My Providers</strong> entries — any OpenAI-compatible
+        endpoint (OpenRouter, OpenAI, Groq, a self-hosted gateway…). Add one with its base URL and key, sync its model
+        list, and every chat model it serves shows up here.
+      </p>
+      <router-link class="button is-primary is-small" :to="{ name: 'providers', query: { view: 'mine' } }">
+        <i class="fas fa-plus" aria-hidden="true"></i>&nbsp; Add a provider
+      </router-link>
+      <p class="pg-fine">Keys stay in this browser and are sent only to the base URL you set.</p>
+    </div>
+
+    <div v-else-if="providersReady" class="pg-grid">
+      <!-- ── Settings rail ── -->
+      <aside class="panel-lab pg-rail" aria-label="Playground settings">
+        <div class="lbl">Model</div>
+        <b-autocomplete
+          v-model="query"
+          :data="filtered"
+          group-field="label"
+          group-options="items"
+          field="modelId"
+          :custom-formatter="optionLabel"
+          placeholder="Search models or providers"
+          open-on-focus
+          keep-first
+          clearable
+          icon="magnifying-glass"
+          size="is-small"
+          max-height="360px"
+          aria-label="Choose a model"
+          class="pg-picker"
+          @select="pick"
+          @focus="pickerFocus"
+          @blur="pickerBlur"
+        >
+          <template #default="{ option }">
+            <div class="pg-opt">
+              <span class="pg-opt-id">{{ option.modelId }}</span>
+              <span v-if="option.score != null" class="pg-opt-score" :style="{ color: scoreColor(option.score) }">{{ fmtScore(option.score) }}</span>
+              <span v-else-if="option.arenaName" class="pg-opt-dim">unranked</span>
+            </div>
+            <div v-if="option.arenaName && option.arenaName.toLowerCase() !== option.modelId.toLowerCase()" class="pg-opt-sub">{{ option.arenaName }}</div>
+          </template>
+          <template #empty>No model matches “{{ query }}”.</template>
+        </b-autocomplete>
+        <div class="pg-count">{{ modelCount }} chat model{{ modelCount === 1 ? '' : 's' }} across {{ groups.length }} provider{{ groups.length === 1 ? '' : 's' }}</div>
+
+        <!-- Arena card for the selected model -->
+        <div v-if="selected" class="pg-card" data-test="pg-model-card">
+          <div class="pg-card-top">
+            <div class="grow">
+              <router-link v-if="selected.slug" class="pg-card-name" :to="{ name: 'model', params: { slug: selected.slug } }">{{ selected.arenaName }}</router-link>
+              <span v-else class="pg-card-name plain">{{ selected.modelId }}</span>
+              <div class="pg-card-sub">via {{ selected.providerLabel }}</div>
+            </div>
+            <b-tooltip :label="selected.score != null ? 'Arena Score (0–100, cross-benchmark)' : (selected.arenaName ? 'On the arena, but not enough benchmark coverage to rank' : 'Not on the arena — no benchmark data for this listing')" type="is-dark" multilined :delay="100" position="is-left">
+              <span class="pg-card-score" :style="{ color: scoreColor(selected.score) }">{{ fmtScore(selected.score) }}</span>
+            </b-tooltip>
+          </div>
+          <div class="pg-card-facts">
+            <b-tooltip :label="selected.price ? (selected.price.source === 'provider' ? 'Price published by your provider (per 1M tokens, in / out)' : 'Arena reference price (per 1M tokens, in / out) — your provider may charge differently') : 'No price on record'" type="is-dark" multilined :delay="100">
+              <span class="tag-lab"><i class="fas fa-coins" aria-hidden="true"></i>&nbsp;{{ selected.price ? fmtUsd(selected.price.in) + ' / ' + fmtUsd(selected.price.out) : '—' }}</span>
+            </b-tooltip>
+            <span class="tag-lab" title="Context window"><i class="fas fa-ruler-horizontal" aria-hidden="true"></i>&nbsp;{{ fmtCtx(selected.ctx) }}</span>
+            <span v-if="selected.free" class="tag-lab teal">free</span>
+            <span v-if="selected.older" class="tag-lab" title="An older generation on the arena — hidden from the default leaderboard view.">older</span>
+          </div>
+        </div>
+
+        <div class="pg-sep"></div>
+
+        <label class="lbl" for="pg-system">System prompt</label>
+        <textarea id="pg-system" v-model.lazy="systemText" class="textarea is-small pg-system" rows="3"
+          placeholder="Optional — e.g. “You are a concise senior engineer.”"></textarea>
+
+        <div class="pg-row">
+          <b-switch v-model="customTemp" size="is-small" type="is-success">Temperature</b-switch>
+          <span class="pg-val">{{ customTemp ? tempValue.toFixed(2) : 'default' }}</span>
+        </div>
+        <b-slider v-if="customTemp" v-model="tempValue" :min="0" :max="2" :step="0.05" size="is-small" type="is-success" :tooltip="false" aria-label="Temperature" />
+
+        <div class="pg-row">
+          <label class="pg-inline-lbl" for="pg-max">Max output tokens</label>
+          <input id="pg-max" v-model.lazy="maxTokensText" class="input is-small pg-max" inputmode="numeric" placeholder="default" />
+        </div>
+
+        <div class="pg-row">
+          <b-tooltip label="Show the reply as it is generated. Turn off for providers that don't support streaming." type="is-dark" multilined :delay="100">
+            <b-switch v-model="streamOn" size="is-small" type="is-success">Stream replies</b-switch>
+          </b-tooltip>
+        </div>
+
+        <div class="pg-sep"></div>
+        <p v-if="insecure" class="pg-warn"><i class="fas fa-triangle-exclamation" aria-hidden="true"></i> This provider uses plain <code>http://</code> — your key and messages travel unencrypted.</p>
+        <p class="pg-fine">
+          <i class="fas fa-lock" aria-hidden="true"></i>
+          Sent from your browser straight to <strong>{{ selectedProvider?.baseUrl || 'your provider' }}</strong>.
+          The chat is saved in this browser only.
+          <router-link :to="{ name: 'providers', query: { view: 'mine' } }">Manage providers</router-link>
+        </p>
+      </aside>
+
+      <!-- ── Chat ── -->
+      <div class="panel-lab pg-chat">
+        <div class="pg-chat-head">
+          <div class="pg-chat-title">
+            <span class="pg-dot" :class="{ live: busy }"></span>
+            {{ selected ? selected.modelId : 'No model selected' }}
+          </div>
+          <b-button size="is-small" type="is-ghost" icon-left="broom" :disabled="!messages.length" data-test="pg-clear" @click="clearChat">New chat</b-button>
+        </div>
+
+        <div ref="scroller" class="pg-log" aria-live="polite">
+          <div v-if="!messages.length" class="pg-start">
+            <p class="muted">Ask anything, or start from one of these:</p>
+            <div class="pg-starters">
+              <button v-for="s in STARTERS" :key="s" type="button" class="chip pg-starter" :disabled="!selected" @click="send(s)">{{ s }}</button>
+            </div>
+          </div>
+
+          <div v-for="m in messages" :key="m.id" class="pg-msg" :class="m.role" :data-role="m.role">
+            <template v-if="m.role === 'user'">
+              <div class="pg-bubble user">{{ m.content }}</div>
+              <div class="pg-actions">
+                <button type="button" class="pg-act" title="Edit and resend" :disabled="busy" @click="editUser(m)"><i class="fas fa-pen" aria-hidden="true"></i><span class="sr-only">Edit</span></button>
+              </div>
+            </template>
+            <template v-else>
+              <div class="pg-who">
+                <router-link v-if="m.slug" :to="{ name: 'model', params: { slug: m.slug } }">{{ m.arenaName }}</router-link>
+                <span v-else>{{ m.model }}</span>
+                <span class="pg-who-sub">· {{ m.provider }}</span>
+              </div>
+              <details v-if="m.reasoning" class="pg-think" :open="m.pending && !m.content">
+                <summary>Thinking{{ m.pending && !m.content ? '…' : '' }}</summary>
+                <div class="pg-think-body">{{ m.reasoning }}</div>
+              </details>
+              <div v-if="m.content" class="pg-bubble bot md" v-html="md(m.content)"></div>
+              <div v-else-if="m.pending" class="pg-bubble bot pg-typing" aria-label="Waiting for the reply"><span></span><span></span><span></span></div>
+              <div v-if="m.error" class="pg-error" role="alert" data-test="pg-error">
+                <i class="fas fa-circle-exclamation" aria-hidden="true"></i> {{ m.error }}
+              </div>
+              <div v-if="!m.pending" class="pg-meta">
+                <template v-if="m.meta">
+                  <span v-if="m.stopped" class="pg-stopped">stopped</span>
+                  <span title="Time to first token">TTFT {{ fmtMs(m.meta.ttft) }}</span>
+                  <span title="Total time">{{ fmtMs(m.meta.total) }}</span>
+                  <span v-if="m.meta.tps" title="Output tokens per second, after the first token">{{ Math.round(m.meta.tps) }} tok/s</span>
+                  <span :title="m.meta.estimated ? 'Estimated — the provider sent no usage block' : 'Reported by the provider'">{{ tokLabel(m) }}</span>
+                  <span v-if="m.meta.cost != null" :title="costTitle(m)">≈ {{ fmtCost(m.meta.cost) }}</span>
+                </template>
+                <span class="pg-actions inline">
+                  <button v-if="m.content" type="button" class="pg-act" :title="copiedId === m.id ? 'Copied' : 'Copy'" @click="copy(m)"><i class="fas" :class="copiedId === m.id ? 'fa-check' : 'fa-copy'" aria-hidden="true"></i><span class="sr-only">Copy</span></button>
+                  <button v-if="m.id === lastAssistantId" type="button" class="pg-act" :title="m.error ? 'Retry' : 'Regenerate'" :disabled="busy || !selected" data-test="pg-regen" @click="regenerate(m.id)"><i class="fas fa-rotate-right" aria-hidden="true"></i><span class="sr-only">{{ m.error ? 'Retry' : 'Regenerate' }}</span></button>
+                </span>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <form class="pg-composer" @submit.prevent="send()">
+          <textarea ref="composerEl" v-model="draft" class="textarea pg-input" rows="1"
+            :placeholder="selected ? 'Message ' + selected.modelId + '  (Enter to send, Shift+Enter for a new line)' : 'Pick a model first'"
+            :disabled="!selected" aria-label="Message" @keydown="onKey"></textarea>
+          <div class="pg-compose-side">
+            <span v-if="draft" class="pg-est" title="Rough token estimate">≈{{ draftTokens }} tok</span>
+            <b-button v-if="busy" type="is-danger" size="is-small" icon-left="stop" data-test="pg-stop" @click="stop">Stop</b-button>
+            <b-button v-else native-type="submit" type="is-primary" size="is-small" icon-left="paper-plane" :disabled="!canSend" data-test="pg-send">Send</b-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</template>
+
+<style scoped>
+.pg-grid { display: grid; grid-template-columns: minmax(260px, 320px) minmax(0, 1fr); gap: 1rem; align-items: start; }
+.pg-rail { padding: 1rem; display: flex; flex-direction: column; gap: .55rem; position: sticky; top: 4.5rem; }
+.pg-count { color: var(--faint); font-size: .74rem; }
+.pg-sep { border-top: 1px solid var(--line); margin: .35rem 0; }
+.pg-row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.pg-val { color: var(--muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
+.pg-inline-lbl { font-size: .85rem; color: var(--text); }
+.pg-max { max-width: 7rem; text-align: right; }
+.pg-system { min-height: 4.5rem; resize: vertical; }
+.pg-fine { color: var(--faint); font-size: .76rem; line-height: 1.45; margin: 0; }
+.pg-warn { color: var(--gold); font-size: .78rem; margin: 0; }
+
+.pg-opt { display: flex; justify-content: space-between; gap: .6rem; align-items: baseline; }
+.pg-opt-id { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-opt-score { font-weight: 800; font-variant-numeric: tabular-nums; }
+.pg-opt-dim, .pg-opt-sub { color: var(--faint); font-size: .74rem; }
+
+.pg-card { border: 1px solid var(--line); border-radius: 12px; padding: .7rem .8rem; background: var(--surface-2); }
+.pg-card-top { display: flex; gap: .6rem; align-items: flex-start; }
+.pg-card-name { font-weight: 700; color: var(--text); word-break: break-word; }
+.pg-card-name:hover { color: var(--teal); }
+.pg-card-sub { color: var(--muted); font-size: .76rem; }
+.pg-card-score { font-size: 1.5rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; cursor: help; }
+.pg-card-facts { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .55rem; }
+
+.pg-chat { display: flex; flex-direction: column; height: calc(100vh - 7.5rem); min-height: 480px; overflow: hidden; }
+.pg-chat-head { display: flex; justify-content: space-between; align-items: center; padding: .6rem .9rem; border-bottom: 1px solid var(--line); }
+.pg-chat-title { font-weight: 700; display: flex; align-items: center; gap: .5rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--faint); flex: none; }
+.pg-dot.live { background: var(--teal); box-shadow: 0 0 0 0 var(--teal-dim); animation: pg-pulse 1.2s infinite; }
+@keyframes pg-pulse { 0% { box-shadow: 0 0 0 0 rgba(46,230,199,.5); } 100% { box-shadow: 0 0 0 8px rgba(46,230,199,0); } }
+
+.pg-log { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 1rem; scroll-behavior: smooth; }
+.pg-start { margin: auto 0; text-align: center; }
+.pg-starters { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .5rem; margin-top: .7rem; }
+.pg-starter { border-radius: 12px; text-align: left; padding: .6rem .8rem; line-height: 1.35; white-space: normal; font-weight: 500; }
+.pg-starter:disabled { opacity: .5; cursor: not-allowed; }
+
+.pg-msg { display: flex; flex-direction: column; max-width: 100%; }
+.pg-msg.user { align-items: flex-end; }
+.pg-bubble { border-radius: 14px; padding: .6rem .85rem; max-width: min(46rem, 92%); word-wrap: break-word; }
+.pg-bubble.user { background: var(--indigo-dim); border: 1px solid rgba(139,156,255,.35); white-space: pre-wrap; }
+.pg-bubble.bot { background: var(--surface-2); border: 1px solid var(--line); }
+.pg-who { font-size: .76rem; color: var(--muted); margin-bottom: .25rem; font-weight: 600; }
+.pg-who a { color: var(--teal); }
+.pg-who-sub { color: var(--faint); font-weight: 400; margin-left: .3rem; }
+.pg-think { font-size: .8rem; color: var(--muted); margin-bottom: .35rem; max-width: min(46rem, 92%); }
+.pg-think summary { cursor: pointer; color: var(--faint); }
+.pg-think-body { white-space: pre-wrap; border-left: 2px solid var(--line-2); padding-left: .6rem; margin-top: .3rem; max-height: 14rem; overflow-y: auto; }
+.pg-error { color: var(--rose); background: var(--rose-dim); border-radius: 10px; padding: .5rem .7rem; font-size: .85rem; margin-top: .35rem; max-width: min(46rem, 92%); }
+.pg-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .2rem .8rem; color: var(--faint); font-size: .72rem; margin-top: .3rem; font-variant-numeric: tabular-nums; }
+.pg-stopped { color: var(--gold); }
+.pg-actions { display: flex; gap: .15rem; opacity: .0; transition: opacity .12s; }
+.pg-msg:hover .pg-actions, .pg-actions:focus-within, .pg-actions.inline { opacity: 1; }
+.pg-act { background: none; border: 0; color: var(--faint); cursor: pointer; padding: .15rem .3rem; border-radius: 6px; }
+.pg-act:hover:not(:disabled) { color: var(--teal); background: var(--teal-dim); }
+.pg-act:disabled { opacity: .4; cursor: not-allowed; }
+
+.pg-typing { display: inline-flex; gap: .3rem; padding: .8rem .9rem; width: fit-content; }
+.pg-typing span { width: .4rem; height: .4rem; border-radius: 50%; background: var(--muted); animation: pg-blink 1.2s infinite both; }
+.pg-typing span:nth-child(2) { animation-delay: .2s; }
+.pg-typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes pg-blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+
+.pg-composer { display: flex; gap: .6rem; align-items: flex-end; padding: .7rem .9rem; border-top: 1px solid var(--line); background: var(--bg-elev); }
+.pg-input { flex: 1 1 auto; min-width: 0; width: auto; resize: none; min-height: 2.6rem; max-height: 240px; overflow-y: auto; }
+.pg-compose-side { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: .3rem; }
+.pg-est { color: var(--faint); font-size: .7rem; font-variant-numeric: tabular-nums; }
+
+.pg-empty { padding: 2.2rem 1.5rem; text-align: center; max-width: 40rem; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: .7rem; }
+.pg-empty-icon { font-size: 1.8rem; color: var(--teal); }
+.pg-empty-title { font-size: 1.15rem; font-weight: 700; margin: 0; }
+.muted { color: var(--muted); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Markdown inside replies */
+.md :deep(p) { margin: 0 0 .55rem; }
+.md :deep(p:last-child), .md :deep(ul:last-child), .md :deep(ol:last-child), .md :deep(pre:last-child) { margin-bottom: 0; }
+.md :deep(ul), .md :deep(ol) { margin: 0 0 .55rem 1.25rem; }
+.md :deep(ul) { list-style: disc; }
+.md :deep(ol) { list-style: decimal; }
+.md :deep(h3), .md :deep(h4), .md :deep(h5), .md :deep(h6) { font-weight: 700; margin: .7rem 0 .35rem; font-size: 1rem; }
+.md :deep(code) { background: var(--surface-3); color: var(--teal); border-radius: 5px; padding: .05rem .3rem; font-size: .85em; }
+.md :deep(pre) { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: .7rem .8rem; overflow-x: auto; margin: 0 0 .55rem; position: relative; }
+.md :deep(pre code) { background: none; color: var(--text); padding: 0; font-size: .82rem; }
+.md :deep(pre[data-lang])::before { content: attr(data-lang); position: absolute; top: .25rem; right: .5rem; color: var(--faint); font-size: .68rem; text-transform: lowercase; }
+.md :deep(blockquote) { border-left: 3px solid var(--line-2); padding-left: .7rem; color: var(--muted); margin: 0 0 .55rem; }
+.md :deep(a) { color: var(--teal); text-decoration: underline; }
+.md :deep(hr) { background: var(--line); height: 1px; margin: .7rem 0; }
+
+@media (max-width: 1023px) {
+  .pg-grid { grid-template-columns: 1fr; }
+  .pg-rail { position: static; }
+  .pg-chat { height: 75vh; }
+}
+@media (max-width: 600px) {
+  .pg-bubble { max-width: 100%; }
+  .pg-log { padding: .7rem; }
+}
+</style>

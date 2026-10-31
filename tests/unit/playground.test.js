@@ -5,7 +5,7 @@ import {
   estimateCost, errorFromResponse, sendChat, CORS_MESSAGE,
 } from '../../src/lib/chat.js';
 import { renderMarkdown } from '../../src/lib/miniMarkdown.js';
-import { buildPlaygroundGroups, filterGroups, filterByProvider, findOption, optionsForArenaName } from '../../src/lib/playgroundModels.js';
+import { buildPlaygroundGroups, buildCatalogGroups, catalogProviderEntry, applyModelOverride, capGroupItems, providerOptGroups, filterGroups, filterByProvider, findOption, optionsForArenaName } from '../../src/lib/playgroundModels.js';
 import { parseModelListing } from '../../src/lib/myProviders.js';
 
 describe('chatUrl', () => {
@@ -178,6 +178,75 @@ describe('playground model options', () => {
     const narrowed = filterByProvider(groups, 'p1');
     expect(filterGroups(narrowed, 'zeta')[0].items.map(i => i.modelId)).toEqual(['zeta-private']);
     expect(filterGroups(narrowed, 'nothing')).toEqual([]);
+  });
+});
+
+describe('catalog provider groups (providers.json → playground)', () => {
+  const rows = new Map([['Fix Mini', { name: 'Fix Mini' }]]);
+  const index = new Map([['fixmini', { name: 'Fix Mini' }]]); // normKey shape
+  const ctx = {
+    catalogIndex: index, rowByName: rows,
+    scoreForModel: () => 80, priceFor: () => null, isOlder: () => false, isUnranked: () => false,
+    slugOf: (n) => n.toLowerCase().replace(/\s+/g, '-'),
+  };
+  const CATALOG = [
+    { id: 'fixlab', name: 'Fixlab', kind: 'first-party', models: [
+      { id: 'org/fix-mini', in: 0.5, out: 1.5, ctx: 8192, name: 'Fixlab: Fix Mini' },
+      { id: 'org/fix-free', in: 0, out: 0, ctx: 4096 },
+      { id: 'off-arena', in: null, out: null, ctx: null },
+    ] },
+    { id: 'aggone', name: 'Agg One', kind: 'aggregator', models: [{ id: 'agg/mini', in: 1, out: 2, ctx: 4096 }] },
+    { id: 'cloudone', name: 'Cloud One', kind: 'cloud', models: [{ id: 'cloud/mini', in: 1, out: 2 }] },
+  ];
+
+  it('converts per-1M prices to per-token listing shape, flags free/ctx, marks items non-custom', () => {
+    const entry = catalogProviderEntry(CATALOG[0]);
+    expect(entry).toMatchObject({ id: 'cat:fixlab', label: 'Fixlab', catalogId: 'fixlab', kind: 'first-party', custom: false });
+    const [a, f, g] = entry.models;
+    expect(a).toMatchObject({ id: 'org/fix-mini', chat: true, context_length: 8192 });
+    expect(Number(a.pricing.prompt) * 1e6).toBeCloseTo(0.5);
+    expect(Number(a.pricing.completion) * 1e6).toBeCloseTo(1.5);
+    expect(f.free).toBe(true);
+    expect(g.free).toBe(false);
+    expect(g.pricing).toBeNull();
+    const [g0] = buildPlaygroundGroups([{ ...entry, custom: true }], ctx);
+    expect(g0).toMatchObject({ providerId: 'cat:fixlab', label: 'Fixlab', custom: true, catalogId: 'fixlab', kind: 'first-party' });
+    expect(g0.items[0]).toMatchObject({ modelId: 'org/fix-mini', custom: true, arenaName: 'Fix Mini', score: 80 }); // normKey joins on the last path segment
+    expect(g0.items.map(i => i.modelId)).toContain('off-arena');
+  });
+
+  it('skips linked catalog ids, sorts labs before providers then by name', () => {
+    const gs = buildCatalogGroups(CATALOG, [], ctx);
+    expect(gs.map(g => g.catalogId)).toEqual(['fixlab', 'cloudone', 'aggone']);
+    expect(buildCatalogGroups(CATALOG, ['fixlab'], ctx).map(g => g.catalogId)).toEqual(['cloudone', 'aggone']);
+    expect(buildCatalogGroups([CATALOG[0], { id: 'empty', name: 'Empty', kind: 'cloud', models: [] }], [], ctx)).toHaveLength(1);
+  });
+
+  it('caps the rendered items per group without losing the hidden count', () => {
+    const gs = buildCatalogGroups(CATALOG, [], ctx);
+    const { groups: capped, hidden } = capGroupItems(gs, 2);
+    expect(capped[0].items).toHaveLength(2); // lab keeps both of its first two
+    expect(capped).toHaveLength(1);
+    expect(hidden).toBe(3); // third lab item + both later groups
+  });
+
+  it('rewrites one model id (setup override) and re-derives the matcher fields', () => {
+    const entry = catalogProviderEntry(CATALOG[0]);
+    const out = applyModelOverride(entry.models, 'org/fix-mini', 'fix-mini-real');
+    expect(out.find(m => m.id === 'fix-mini-real')).toMatchObject({ base: 'fix-mini-real', key: 'fixminireal' });
+    expect(out.find(m => m.id === 'org/fix-mini')).toBeUndefined();
+    expect(out.find(m => m.id === 'org/fix-free')).toBeDefined();
+    expect(applyModelOverride(entry.models, 'org/fix-mini', 'org/fix-mini')).toBe(entry.models);
+  });
+
+  it('groups the rail filter: My providers first, then labs, then the other kinds', () => {
+    const gs = [
+      ...buildPlaygroundGroups([{ id: 'p1', label: 'Gateway', baseUrl: '', key: 'k', custom: true, models: [{ id: 'a', chat: true, key: 'a', base: 'a' }] }], ctx),
+      ...buildCatalogGroups(CATALOG, [], ctx),
+    ];
+    const ogs = providerOptGroups(gs);
+    expect(ogs.map(g => g.label)).toEqual(['My providers', 'Labs', 'Cloud', 'Aggregators & gateways']);
+    expect(ogs[0].options[0]).toMatchObject({ id: 'p1', label: 'Gateway' });
   });
 });
 

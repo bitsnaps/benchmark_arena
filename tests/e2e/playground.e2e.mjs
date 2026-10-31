@@ -1,14 +1,18 @@
 // Playground e2e: the chat journey against a mocked OpenAI-compatible
 // provider (page.route — no network, no real key). Covers: navbar item,
 // empty state without providers, model picker fed by two My Providers
-// listings with the arena join on the card, request shape (URL, bearer
+// listings with the arena join on the card, ONE-CLICK picks on the
+// hand-rolled picker (regression: the old b-autocomplete sometimes
+// dropped the first click), the full provider CATALOG (routed providers.json
+// fixture) with the setup modal (base URL + key + model-ID override →
+// linked My Providers entry → real request), request shape (URL, bearer
 // key, system prompt, model), streamed markdown with raw HTML escaped,
 // reported-usage metrics, IndexedDB persistence across reload, a 401
 // rendered inline + Retry, the CORS/network explanation, deep links (fresh
-// pre-bound chat), history switch/rename/delete, the provider filter, the
-// collapsible rail, in-place reply edit, message delete, and a clean
-// console. Runs under tests/run-e2e.mjs (vite preview on 4173, base
-// /benchmark_arena/).
+// pre-bound chat), history switch/rename/delete, the provider filter
+// optgroups, the collapsible rail, in-place reply edit, message delete,
+// and a clean console. Runs under tests/run-e2e.mjs (vite preview on 4173,
+// base /benchmark_arena/).
 import { chromium } from 'playwright';
 import { parseModelListing } from '../../src/lib/myProviders.js';
 
@@ -43,6 +47,18 @@ const sse = (chunks, usage) => chunks
   + (usage ? `data: ${JSON.stringify({ choices: [], usage })}\n\n` : '')
   + 'data: [DONE]\n\n';
 const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*' };
+
+// The catalog fixture: served for public/providers.json so the catalog
+// groups are deterministic (the real file churns with every scrape).
+let CATALOG = []; // empty during the no-providers empty-state check
+const FIXLAB = {
+  id: 'fixlab', name: 'Fixlab', kind: 'first-party',
+  models: [
+    { id: 'org/fix-mini', in: 0.5, out: 1.5, ctx: 8192, name: 'Fixlab: Fix Mini' },
+    { id: 'fix-free', in: 0, out: 0, ctx: 4096 },
+  ],
+};
+const FIXBASE = 'https://api.fixlab.test/v1';
 
 (async () => {
   const browser = await chromium.launch();
@@ -80,6 +96,10 @@ const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-headers
   });
 
   try {
+    // Deterministic catalog: every spec page fetch of providers.json gets
+    // the fixture (swapped between sections via the CATALOG variable).
+    await page.route('**/providers.json', (route) => route.fulfill({ status: 200, headers: CORS, body: JSON.stringify({ as_of: '2026-11-01', kinds: ['first-party'], sources: {}, providers: CATALOG }) }));
+
     // ── 1. navbar + empty state ─────────────────────────────────────
     await page.goto(BASE + '#/');
     await resetStores();
@@ -92,6 +112,7 @@ const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-headers
     else fail('empty-state CTA should link to ?view=mine, got ' + href);
 
     // ── 2. picker + arena card ──────────────────────────────────────
+    CATALOG = [FIXLAB]; // catalog goes live for the rest of the spec
     await page.evaluate((s) => localStorage.setItem('ba.myproviders.v1', s), STORE);
     let lastReq = null;
     let mode = 'ok';
@@ -113,6 +134,25 @@ const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-headers
     const price = (await card.locator('.tag-lab').first().innerText()).trim();
     if (price.includes('$2') && price.includes('$10')) ok('card shows the provider-published price ($2 / $10)');
     else fail('card price should be the provider listing price, got ' + price);
+
+    // ── 2b. ONE-CLICK picks (regression: b-autocomplete dropped clicks) ─
+    const pickInput = page.locator('[data-test="pg-model-input"]');
+    const pickViaPicker = async (want) => {
+      await pickInput.click();
+      await page.locator('[data-test="pg-picklist"] .pg-pick-item', { hasText: want }).first().click();
+      await page.locator('[data-test="pg-picklist"]').waitFor({ state: 'hidden', timeout: 3000 });
+    };
+    for (const [label, cardText] of [
+      ['hub-mini', 'hub-mini'],
+      ['claude-opus-4.6', 'Claude Opus 4.6'], // joined models show the arena name
+      ['hub-mini', 'hub-mini'],
+      ['claude-opus-4.6', 'Claude Opus 4.6'], // leave the default model bound for section 3
+    ]) {
+      await pickViaPicker(label);
+      const nm = (await card.locator('.pg-card-name').innerText()).trim();
+      if (nm === cardText) ok(`one click picked ${label} — card updated without a second click`);
+      else fail(`single pick should show "${cardText}" on the card, got "${nm}"`);
+    }
 
     // ── 3. send + stream + request shape ────────────────────────────
     await page.locator('#pg-system').fill('Answer briefly.');
@@ -206,13 +246,65 @@ const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-headers
     if (await page.locator('.pg-hist-item').count() === beforeDel - 1) ok('history: delete removes a chat (confirm auto-accepted)');
     else fail('delete chat did not remove an item');
 
-    // ── 7c. provider filter ─────────────────────────────────────────
+    // ── 7c. provider filter (optgroups: My providers + catalog kinds) ─
     const countAll = await page.locator('[data-test="pg-count"]').innerText();
     await page.locator('[data-test="pg-prov-filter"]').selectOption('pgtest');
     const countFiltered = await page.locator('[data-test="pg-count"]').innerText();
-    if (/across 1 provider/.test(countFiltered) && /across 2 providers/.test(countAll)) ok('provider dropdown narrows the picker (count line: 2 providers → 1)');
+    if (/across 1 provider/.test(countFiltered) && /across 3 providers/.test(countAll)) ok('provider dropdown narrows the picker (2 own + 1 catalog → 1)');
     else fail(`filter counts: all="${countAll.trim()}" filtered="${countFiltered.trim()}"`);
+    const labsOpt = page.locator('[data-test="pg-prov-filter"] optgroup[label="Labs"] option', { hasText: 'Fixlab' });
+    if (await labsOpt.count() === 1) ok('filter lists catalog labs in their own optgroup (Fixlab under Labs)');
+    else fail('catalog provider missing from the Labs optgroup');
     await page.locator('[data-test="pg-prov-filter"]').selectOption('');
+
+    // ── 7f. catalog pick → setup modal → linked entry → real request ──
+    let fixReq = null;
+    await page.route(FIXBASE + '/chat/completions', async (route) => {
+      const req = route.request();
+      if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: CORS });
+      fixReq = { headers: req.headers(), body: JSON.parse(req.postData() || '{}') };
+      return route.fulfill({ status: 200, headers: { ...CORS, 'content-type': 'text/event-stream' }, body: sse(['Fixlab says hi.\n']) });
+    });
+    await pickViaPicker('org/fix-mini');
+    const modal = page.locator('[data-test="pg-setup-modal"]');
+    await modal.waitFor({ timeout: 5000 });
+    if ((await modal.locator('.pg-modal-title').innerText()).includes('Fixlab')) ok('picking a catalog model opens the setup modal right away');
+    else fail('setup modal title wrong');
+    await page.locator('[data-test="pg-setup-cancel"]').click();
+    await modal.waitFor({ state: 'hidden', timeout: 5000 });
+    if (await page.locator('[data-test="pg-setup-hint"]').count() === 1) ok('"Not now" keeps the pick; the card shows the not-connected hint');
+    else fail('catalog pick should show the setup hint after dismissing the modal');
+    await page.locator('[data-test="pg-setup-open"]').click();
+    await modal.waitFor({ timeout: 5000 });
+    await page.locator('[data-test="pg-setup-url"]').fill(FIXBASE);
+    await page.locator('[data-test="pg-setup-key"]').fill('sk-fixlab-1');
+    const overrideVal = await page.locator('[data-test="pg-setup-model"]').inputValue();
+    if (overrideVal === 'org/fix-mini') ok('model ID field prefilled with the catalog id');
+    else fail('model ID prefill: ' + overrideVal);
+    await page.locator('[data-test="pg-setup-model"]').fill('fix-mini'); // catalog prefixes must be correctable
+    await page.locator('[data-test="pg-setup-save"]').click();
+    await modal.waitFor({ state: 'hidden', timeout: 5000 });
+    const nm = (await card.locator('.pg-card-name').innerText()).trim();
+    if (nm === 'fix-mini') ok('after setup the card shows the overridden model id');
+    else fail('card after setup: ' + nm);
+    const mine = JSON.parse(await page.evaluate(() => localStorage.getItem('ba.myproviders.v1')));
+    const entry = (mine.providers || []).find(p => p.catalogId === 'fixlab');
+    if (entry && entry.mode === 'catalog' && entry.key === 'sk-fixlab-1' && entry.baseUrl === FIXBASE) ok('setup links a My Providers entry (catalogId, key lives there, not in the Playground)');
+    else fail('catalog entry not stored correctly: ' + JSON.stringify(mine.providers?.map(p => ({ id: p.id, c: p.catalogId }))));
+    const inMine = await page.locator('[data-test="pg-prov-filter"] optgroup[label="My providers"] option', { hasText: 'Fixlab' }).count();
+    const inLabs = await page.locator('[data-test="pg-prov-filter"] optgroup[label="Labs"] option', { hasText: 'Fixlab' }).count();
+    if (inMine === 1 && inLabs === 0) ok('linked provider moves from Labs into My providers (catalog group replaced)');
+    else fail(`linked provider should replace the catalog group in the filter (mine=${inMine}, labs=${inLabs})`);
+    await page.locator('textarea[aria-label="Message"]').fill('hello');
+    await page.keyboard.press('Enter');
+    const fixMsg = page.locator('.pg-msg.assistant').last();
+    await fixMsg.locator('.pg-meta').waitFor({ timeout: 15000 });
+    if (fixReq?.headers.authorization === 'Bearer sk-fixlab-1' && fixReq?.body.model === 'fix-mini'
+      && fixReq?.body.messages?.at(-1)?.content === 'hello') ok('catalog chat request: mocked base URL, bearer key from the linked entry, overridden model id');
+    else fail('catalog request unexpected: ' + JSON.stringify(fixReq));
+    const idbDump = JSON.stringify(await readConvs());
+    if (!idbDump.includes('sk-fixlab-1') && !idbDump.includes('sk-e2e-test')) ok('no key from either path leaks into the Playground IndexedDB store');
+    else fail('key leaked into playground storage');
 
     // ── 7d. collapsible rail ────────────────────────────────────────
     await page.locator('[data-test="pg-rail-toggle"]').click();

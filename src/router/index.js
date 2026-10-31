@@ -13,6 +13,8 @@
 //                         client-side (stats-36, re-homed as tab 3 in
 //                         stats-37; localStorage overlay — Home untouched)
 //   /compare              Side-by-side comparison (?models=slug,slug)
+//   /playground           Chat with models served by the user's own
+//                         My Providers entries (browser → provider, no proxy)
 //   /methodology          How the site works + how to read the data
 //                         (static content, stats-45; navbar last item)
 //   /leaderboard/...      Legacy redirects → /?tier=...
@@ -71,6 +73,11 @@ const routes = [
     path: '/compare',
     name: 'compare',
     component: () => import('../views/CompareView.vue'),
+  },
+  {
+    path: '/playground',
+    name: 'playground',
+    component: () => import('../views/PlaygroundView.vue'),
   },
   {
     // stats-45: the plain-language contract — pipeline, Score math, how to

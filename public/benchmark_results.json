@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-31 02:54",
+  "timestamp": "2026-10-31 11:00",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -509,6 +509,10 @@
           80.80000000000001
         ],
         [
+          "Granite 4.2 3B",
+          67.6923076923077
+        ],
+        [
           "Claude Fable 5",
           92.80000000000001
         ],
@@ -535,10 +539,6 @@
         [
           "GPT-5.5 Pro",
           89.5076923076923
-        ],
-        [
-          "GPT-5.6 Luna",
-          85.10769230769232
         ]
       ],
       "open": [
@@ -1076,7 +1076,7 @@
         ],
         [
           "Claude Sonnet 5.5",
-          92.34375
+          92.1875
         ],
         [
           "Muse Spark 1.3 (xhigh)",
@@ -1111,11 +1111,11 @@
           85.78125
         ],
         [
-          "Gemini 3.7 Flash",
-          85.3125
+          "Muse Spark Open (xhigh)",
+          85.46875
         ],
         [
-          "Muse Spark Open (xhigh)",
+          "Gemini 3.7 Flash",
           85.3125
         ],
         [
@@ -1177,12 +1177,12 @@
           86.875
         ],
         [
-          "GLM-5.3",
+          "MiniMax M3.1 Flash",
           84.0625
         ],
         [
-          "MiniMax M3.1 Flash",
-          84.0625
+          "GLM-5.3",
+          83.90625
         ],
         [
           "Qwen3.8 Max",
@@ -1202,7 +1202,7 @@
         ],
         [
           "GLM 5.1",
-          79.0625
+          79.21875
         ],
         [
           "MiMo-V2.5-Pro",
@@ -1511,6 +1511,10 @@
         [
           "Qwen 3.5 35B A3B",
           2.8
+        ],
+        [
+          "Qwen 3.5 27B",
+          1.2
         ],
         [
           "MiniMax-M2",
@@ -2175,7 +2179,7 @@
           28.803632700473486
         ],
         [
-          "Nemotron-3-Nano",
+          "nemotron-3-nano",
           26.399825962866124
         ],
         [
@@ -2368,7 +2372,7 @@
       "Arena.ai Text": 88.9,
       "SimpleBench.com": 75.9,
       "ARC-AGI-2": 83.9,
-      "Design Arena": 92.3,
+      "Design Arena": 92.2,
       "DeepSWE": null,
       "VendingBench": 67.7,
       "SWE-Marathon": 96.6,
@@ -2665,7 +2669,7 @@
       "Arena.ai Text": 83.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": 61.4,
-      "Design Arena": 79.4,
+      "Design Arena": 79.2,
       "DeepSWE": null,
       "VendingBench": 63.9,
       "SWE-Marathon": 85.9,
@@ -2776,7 +2780,7 @@
       "Arena.ai Text": 83.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": 59.3,
-      "Design Arena": 78.9,
+      "Design Arena": 79.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": 52.9,
@@ -2813,7 +2817,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 57.5,
-      "Design Arena": 85.3,
+      "Design Arena": 85.5,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2831,7 +2835,7 @@
       "Arena.ai Text": 82.5,
       "SimpleBench.com": null,
       "ARC-AGI-2": 23.5,
-      "Design Arena": 72.5,
+      "Design Arena": 72.8,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2922,7 +2926,7 @@
       "Arena.ai Text": 80.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 60.5,
+      "Design Arena": 60.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3346,6 +3350,24 @@
       "LLM Chess": null
     },
     {
+      "name": "o3 2025.04 16",
+      "num_benchmarks": 5,
+      "cl": 62.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 45.2,
+      "Arena.ai Text": 81.8,
+      "SimpleBench.com": 53.1,
+      "ARC-AGI-2": 6.5,
+      "Design Arena": 40.3,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 74.6,
+      "LLM Chess": 66.1
+    },
+    {
       "name": "Claude 3.7 Sonnet",
       "num_benchmarks": 4,
       "cl": 50.0,
@@ -3706,24 +3728,6 @@
       "LLM Chess": 25.7
     },
     {
-      "name": "o3 2025.04 16",
-      "num_benchmarks": 5,
-      "cl": 62.5,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 45.2,
-      "Arena.ai Text": 81.8,
-      "SimpleBench.com": 53.1,
-      "ARC-AGI-2": 6.5,
-      "Design Arena": 40.3,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 74.6,
-      "LLM Chess": 66.1
-    },
-    {
       "name": "o3-mini",
       "num_benchmarks": 4,
       "cl": 50.0,
@@ -3760,6 +3764,42 @@
       "LLM Chess": 28.6
     },
     {
+      "name": "GPT 4o (2024-05-13)",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 29.3,
+      "Arena.ai Text": 68.6,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": 15.5,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": 30.1
+    },
+    {
+      "name": "GPT 4o mini (2024-07-18)",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 25.7,
+      "Arena.ai Text": 64.3,
+      "SimpleBench.com": 10.7,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 33.9,
+      "LLM Chess": 24.3
+    },
+    {
       "name": "GPT-4 Turbo",
       "num_benchmarks": 3,
       "cl": 37.5,
@@ -3776,24 +3816,6 @@
       "CyberGem": null,
       "EQBench CW": null,
       "LLM Chess": 30.3
-    },
-    {
-      "name": "GPT-4o 08-06",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 29.3,
-      "Arena.ai Text": null,
-      "SimpleBench.com": 17.8,
-      "ARC-AGI-2": null,
-      "Design Arena": 15.5,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": 30.1
     },
     {
       "name": "GPT-5 mini",
@@ -3994,6 +4016,24 @@
       "LLM Chess": null
     },
     {
+      "name": "grok-3-beta",
+      "num_benchmarks": 3,
+      "cl": 37.5,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 40.7,
+      "Arena.ai Text": null,
+      "SimpleBench.com": 36.1,
+      "ARC-AGI-2": null,
+      "Design Arena": 45.5,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 49.9,
+      "LLM Chess": 28.9
+    },
+    {
       "name": "o1 mini",
       "num_benchmarks": 3,
       "cl": 37.5,
@@ -4156,24 +4196,6 @@
       "LLM Chess": null
     },
     {
-      "name": "GPT-4o mini",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 25.7,
-      "Arena.ai Text": null,
-      "SimpleBench.com": 10.7,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 33.9,
-      "LLM Chess": 24.3
-    },
-    {
       "name": "GPT-5.3 Codex",
       "num_benchmarks": 2,
       "cl": 25.0,
@@ -4208,6 +4230,24 @@
       "CyberGem": null,
       "EQBench CW": null,
       "LLM Chess": 21.9
+    },
+    {
+      "name": "Gemini 2.5 Flash Preview 09-2025",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 77.4,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": 53.4,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
     },
     {
       "name": "Grok Code Fast 1",
@@ -4388,24 +4428,6 @@
       "CyberGem": null,
       "EQBench CW": 53.6,
       "LLM Chess": 30.0
-    },
-    {
-      "name": "grok-3-beta",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 40.7,
-      "Arena.ai Text": null,
-      "SimpleBench.com": 36.1,
-      "ARC-AGI-2": null,
-      "Design Arena": 45.5,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 49.9,
-      "LLM Chess": 28.9
     },
     {
       "name": "o1-preview",
@@ -5137,7 +5159,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 72.8,
+      "Design Arena": 73.0,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -5432,25 +5454,6 @@
       "LLM Chess": null
     },
     {
-      "name": "GPT 4o (2024-05-13)",
-      "num_benchmarks": 1,
-      "cl": 12.5,
-      "unranked": true,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 68.6,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
       "name": "GPT 4o (2024-08-06)",
       "num_benchmarks": 1,
       "cl": 12.5,
@@ -5458,25 +5461,6 @@
       "Artificial Analysis": null,
       "BenchLM.ai": null,
       "Arena.ai Text": 67.1,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "GPT 4o mini (2024-07-18)",
-      "num_benchmarks": 1,
-      "cl": 12.5,
-      "unranked": true,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 64.3,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -5554,6 +5538,25 @@
       "BenchLM.ai": null,
       "Arena.ai Text": 88.2,
       "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "GPT-4o 08-06",
+      "num_benchmarks": 1,
+      "cl": 12.5,
+      "unranked": true,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": 17.8,
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
@@ -5917,24 +5920,6 @@
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": 49.8,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Gemini 2.5 Flash Preview 09-2025",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 77.4,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": 53.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -6865,7 +6850,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 73.3,
+      "Design Arena": 73.1,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -7985,7 +7970,7 @@
       "Arena.ai Text": 89.4,
       "SimpleBench.com": 66.2,
       "ARC-AGI-2": null,
-      "Design Arena": 84.1,
+      "Design Arena": 83.9,
       "DeepSWE": 69.0,
       "VendingBench": 49.5,
       "SWE-Marathon": 80.0,
@@ -8140,14 +8125,14 @@
     },
     {
       "name": "Nemotron 3.5 Super VL",
-      "num_benchmarks": 4,
-      "cl": 50.0,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 14.0,
-      "BenchLM.ai": 49.0,
+      "BenchLM.ai": null,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 1.9,
-      "Design Arena": 61.1,
+      "Design Arena": 60.9,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -8166,6 +8151,25 @@
       "SimpleBench.com": 41.7,
       "ARC-AGI-2": null,
       "Design Arena": 60.2,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "Nemotron 3 Ultra 550B A55B",
+      "num_benchmarks": 1,
+      "cl": 12.5,
+      "unranked": true,
+      "Artificial Analysis": 11.8,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -8212,7 +8216,7 @@
       "LLM Chess": null
     },
     {
-      "name": "Nemotron-3-Nano",
+      "name": "nemotron-3-nano",
       "num_benchmarks": 1,
       "cl": 12.5,
       "unranked": true,
@@ -8402,7 +8406,7 @@
       "Arena.ai Text": 86.9,
       "SimpleBench.com": 55.1,
       "ARC-AGI-2": null,
-      "Design Arena": 79.1,
+      "Design Arena": 79.2,
       "DeepSWE": null,
       "VendingBench": 34.2,
       "SWE-Marathon": null,
@@ -8772,42 +8776,6 @@
       "LLM Chess": null
     },
     {
-      "name": "Qwen3 235B A22B Thinking",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 38.9,
-      "Arena.ai Text": 82.2,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": 54.4,
-      "DeepSWE": null,
-      "VendingBench": 0.4,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Qwen3.5 Plus",
-      "num_benchmarks": 3,
-      "cl": 37.5,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 55.5,
-      "Arena.ai Text": 86.9,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": 65.3,
-      "DeepSWE": null,
-      "VendingBench": 2.8,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
       "name": "Qwen3.6 Plus",
       "num_benchmarks": 3,
       "cl": 37.5,
@@ -8826,12 +8794,12 @@
       "LLM Chess": null
     },
     {
-      "name": "Command R+",
+      "name": "Command R+ (08-2024)",
       "num_benchmarks": 2,
       "cl": 25.0,
       "Artificial Analysis": null,
       "BenchLM.ai": null,
-      "Arena.ai Text": 55.7,
+      "Arena.ai Text": 57.8,
       "SimpleBench.com": 17.4,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -8877,6 +8845,24 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": 62.8,
+      "LLM Chess": null
+    },
+    {
+      "name": "DeepSeek-R1-0528",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": 1.1,
+      "Design Arena": 58.9,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": 61.8,
       "LLM Chess": null
     },
     {
@@ -9168,6 +9154,42 @@
       "LLM Chess": null
     },
     {
+      "name": "Qwen3",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 38.9,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": 54.4,
+      "DeepSWE": null,
+      "VendingBench": 0.4,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "Qwen3 235B-A22B",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": 31.0,
+      "ARC-AGI-2": null,
+      "Design Arena": 37.5,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": 1.9,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
       "name": "Qwen3 Coder 30B A3B Instruct",
       "num_benchmarks": 2,
       "cl": 25.0,
@@ -9176,9 +9198,45 @@
       "Arena.ai Text": 75.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 59.5,
+      "Design Arena": 51.7,
       "DeepSWE": null,
       "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "Qwen3-235B-A22B-Instruct-2507",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": 1.3,
+      "Design Arena": 43.3,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": 28.8
+    },
+    {
+      "name": "Qwen3-235B-A22B-Thinking-2507",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": 82.2,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": 42.3,
+      "DeepSWE": null,
+      "VendingBench": 0.0,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
@@ -9197,6 +9255,24 @@
       "Design Arena": null,
       "DeepSWE": null,
       "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "Qwen3.5 Plus",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 55.5,
+      "Arena.ai Text": 86.9,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": 1.2,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
@@ -9297,25 +9373,6 @@
       "LLM Chess": null
     },
     {
-      "name": "Command R",
-      "num_benchmarks": 1,
-      "cl": 12.5,
-      "unranked": true,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 50.3,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
       "name": "Command R (08-2024)",
       "num_benchmarks": 1,
       "cl": 12.5,
@@ -9323,25 +9380,6 @@
       "Artificial Analysis": null,
       "BenchLM.ai": null,
       "Arena.ai Text": 53.8,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Command R+ (08-2024)",
-      "num_benchmarks": 1,
-      "cl": 12.5,
-      "unranked": true,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": 57.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -9525,24 +9563,6 @@
       "LLM Chess": null
     },
     {
-      "name": "DeepSeek-R1-0528",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 1.1,
-      "Design Arena": 58.9,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": 61.8,
-      "LLM Chess": null
-    },
-    {
       "name": "Dolphin 2.2.1 Mistral 7B",
       "num_benchmarks": 1,
       "cl": 12.5,
@@ -9702,6 +9722,25 @@
       "Artificial Analysis": null,
       "BenchLM.ai": null,
       "Arena.ai Text": 64.3,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "Gemma 4 26B A4B",
+      "num_benchmarks": 1,
+      "cl": 12.5,
+      "unranked": true,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 41.8,
+      "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -10474,6 +10513,25 @@
       "LLM Chess": null
     },
     {
+      "name": "Nemotron 3.5 Super VL 120B A12B",
+      "num_benchmarks": 1,
+      "cl": 12.5,
+      "unranked": true,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 49.0,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
       "name": "Nemotron 4 340B Instruct",
       "num_benchmarks": 1,
       "cl": 12.5,
@@ -10854,6 +10912,25 @@
       "LLM Chess": null
     },
     {
+      "name": "Qwen3 Coder 480B A35B Instruct",
+      "num_benchmarks": 1,
+      "cl": 12.5,
+      "unranked": true,
+      "Artificial Analysis": null,
+      "BenchLM.ai": null,
+      "Arena.ai Text": null,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": 59.5,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
       "name": "Qwen3 Next 80B A3B Instruct",
       "num_benchmarks": 1,
       "cl": 12.5,
@@ -10930,43 +11007,7 @@
       "LLM Chess": null
     },
     {
-      "name": "Qwen3-235B-A22B",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": null,
-      "SimpleBench.com": 31.0,
-      "ARC-AGI-2": null,
-      "Design Arena": 37.5,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": 1.9,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Qwen3-235B-A22B-Instruct-2507",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": null,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": 1.3,
-      "Design Arena": 43.3,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": 28.8
-    },
-    {
-      "name": "Qwen3-235B-A22B-Thinking-2507",
+      "name": "Qwen3.5 397B A17B",
       "num_benchmarks": 1,
       "cl": 12.5,
       "unranked": true,
@@ -10975,13 +11016,13 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 42.3,
+      "Design Arena": 65.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
-      "EQBench CW": null,
+      "EQBench CW": 64.7,
       "LLM Chess": null
     },
     {
@@ -11053,7 +11094,7 @@
       "ARC-AGI-2": null,
       "Design Arena": null,
       "DeepSWE": null,
-      "VendingBench": null,
+      "VendingBench": 2.8,
       "SWE-Marathon": null,
       "FrontierSWE": null,
       "CyberGem": null,
@@ -12510,77 +12551,6 @@
           "out": 4.2929
         }
       ]
-    },
-    "Beam 1.0": {
-      "or_id": "reflection/beam-1.0-501b-a23b",
-      "or_name": "Reflection: Beam 1.0 501B A23B",
-      "provider": "Reflection",
-      "created": "2026-10-16",
-      "context_length": 1048576,
-      "max_output_tokens": 131072,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": "2026-06-30",
-      "total_params_b": 501.0,
-      "active_params_b": 23.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.25,
-        "output": 1.0,
-        "cache_read": 0.05
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": [
-          "max",
-          "xhigh",
-          "high",
-          "medium",
-          "low"
-        ],
-        "default_effort": "max"
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "reasoning_effort",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "reflection/Beam-1.0-501B-A23B",
-      "or_free_variants": null,
-      "description": "Beam 1.0 is Reflection's open-weight reasoning model for coding and long-horizon agentic workflows. It uses a sparse mixture-of-experts architecture with 501B total and 23B active parameters per token, and a...",
-      "superseded_by": null,
-      "match": "exact",
-      "pricing_aa_usd_per_1m": {
-        "input": 0.4,
-        "output": 1.2,
-        "cache_read": 0.04
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.642,
-      "modalities_source": "openrouter"
     },
     "Inkling Small": {
       "or_id": "thinkingmachines/inkling-small",
@@ -14870,6 +14840,55 @@
         }
       ]
     },
+    "o3 2025.04 16": {
+      "or_id": "openai/o3",
+      "or_name": "OpenAI: o3",
+      "provider": "OpenAI",
+      "created": "2025-04-16",
+      "context_length": 200000,
+      "max_output_tokens": 100000,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "image",
+        "text",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2024-06-30",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 2.0,
+        "output": 8.0,
+        "cache_read": 0.5
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "o3 is a well-rounded and powerful model across domains. It sets a new standard for math, science, coding, and visual reasoning tasks. It also excels at technical writing and instruction-following....",
+      "superseded_by": null,
+      "match": "subset",
+      "stale": true,
+      "modalities_source": "openrouter"
+    },
     "Claude 4.1 Opus": {
       "or_id": "anthropic/claude-opus-4.1",
       "or_name": "Anthropic: Claude Opus 4.1",
@@ -16296,6 +16315,113 @@
         }
       ]
     },
+    "GPT 4o (2024-05-13)": {
+      "or_id": "openai/gpt-4o-2024-05-13",
+      "or_name": "OpenAI: GPT-4o (2024-05-13)",
+      "provider": "OpenAI",
+      "created": "2024-05-13",
+      "context_length": 128000,
+      "max_output_tokens": 4096,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2023-10-31",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 5.0,
+        "output": 15.0
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "presence_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_logprobs",
+        "top_p",
+        "web_search_options"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-4o (\"o\" for \"omni\") is OpenAI's latest AI model, supporting both text and image inputs with text outputs. It maintains the intelligence level of [GPT-4 Turbo](/models/openai/gpt-4-turbo) while being twice as...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/gpt-4o-2024-05-13"
+      }
+    },
+    "GPT 4o mini (2024-07-18)": {
+      "or_id": "openai/gpt-4o-mini-2024-07-18",
+      "or_name": "OpenAI: GPT-4o-mini (2024-07-18)",
+      "provider": "OpenAI",
+      "created": "2024-07-18",
+      "context_length": 128000,
+      "max_output_tokens": 16384,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2023-10-31",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.15,
+        "output": 0.6,
+        "cache_read": 0.075
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "prediction",
+        "presence_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_logprobs",
+        "top_p",
+        "web_search_options"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-4o mini is OpenAI's newest model after [GPT-4 Omni](/models/openai/gpt-4o), supporting both text and image inputs with text outputs. As their most advanced small model, it is many multiples more affordable...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter"
+    },
     "GPT-5 mini": {
       "or_id": "openai/gpt-5-mini",
       "or_name": "OpenAI: GPT-5 Mini",
@@ -17294,72 +17420,6 @@
         }
       ]
     },
-    "GPT-4o mini": {
-      "or_id": "openai/gpt-4o-mini",
-      "or_name": "OpenAI: GPT-4o-mini",
-      "provider": "OpenAI",
-      "created": "2024-07-18",
-      "context_length": 128000,
-      "max_output_tokens": 16384,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2023-10-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": 0.075
-      },
-      "reasoning": null,
-      "supported_parameters": [
-        "frequency_penalty",
-        "logit_bias",
-        "logprobs",
-        "max_completion_tokens",
-        "max_tokens",
-        "prediction",
-        "presence_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_logprobs",
-        "top_p",
-        "web_search_options"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "GPT-4o mini is OpenAI's newest model after [GPT-4 Omni](/models/openai/gpt-4o), supporting both text and image inputs with text outputs. As their most advanced small model, it is many multiples more affordable...",
-      "superseded_by": null,
-      "match": "exact",
-      "stale": true,
-      "aa_deprecated": true,
-      "modalities_source": "openrouter",
-      "archive_links": {
-        "aa": "https://artificialanalysis.ai/models/gpt-4o-mini"
-      },
-      "available_at": [
-        {
-          "p": "poe",
-          "n": "Poe",
-          "in": 0.1364,
-          "out": 0.5455
-        }
-      ]
-    },
     "GPT-5.3 Codex": {
       "or_id": "openai/gpt-5.3-codex",
       "or_name": "OpenAI: GPT-5.3-Codex",
@@ -17959,6 +18019,70 @@
       "stale": true,
       "modalities_source": "openrouter"
     },
+    "Beam 1.0 501B-A23B": {
+      "or_id": "reflection/beam-1.0-501b-a23b",
+      "or_name": "Reflection: Beam 1.0 501B A23B",
+      "provider": "Reflection",
+      "created": "2026-10-16",
+      "context_length": 1048576,
+      "max_output_tokens": 131072,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": "2026-06-30",
+      "total_params_b": 501.0,
+      "active_params_b": 23.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.25,
+        "output": 1.0,
+        "cache_read": 0.05
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "max"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "reflection/Beam-1.0-501B-A23B",
+      "or_free_variants": null,
+      "description": "Beam 1.0 is Reflection's open-weight reasoning model for coding and long-horizon agentic workflows. It uses a sparse mixture-of-experts architecture with 501B total and 23B active parameters per token, and a...",
+      "superseded_by": null,
+      "match": "exact",
+      "modalities_source": "openrouter"
+    },
     "Claude 4.1 Opus Thinking": {
       "or_id": "anthropic/claude-opus-4.1",
       "or_name": "Anthropic: Claude Opus 4.1",
@@ -18114,59 +18238,139 @@
       "stale": true,
       "modalities_source": "openrouter"
     },
-    "GPT 4o (2024-05-13)": {
-      "or_id": "openai/gpt-4o-2024-05-13",
-      "or_name": "OpenAI: GPT-4o (2024-05-13)",
+    "GPT 4.1 (2025-04-14)": {
+      "or_id": "openai/gpt-4.1",
+      "or_name": "OpenAI: GPT-4.1",
       "provider": "OpenAI",
-      "created": "2024-05-13",
-      "context_length": 128000,
-      "max_output_tokens": 4096,
+      "created": "2025-04-14",
+      "context_length": 1047576,
+      "max_output_tokens": 32768,
       "modality": "text+image+file->text",
       "input_modalities": [
-        "text",
         "image",
+        "text",
         "file"
       ],
       "output_modalities": [
         "text"
       ],
       "tokenizer": "GPT",
-      "knowledge_cutoff": "2023-10-31",
+      "knowledge_cutoff": "2024-06-30",
       "total_params_b": null,
       "active_params_b": null,
       "params_source": null,
       "pricing_usd_per_1m": {
-        "input": 5.0,
-        "output": 15.0
+        "input": 2.0,
+        "output": 8.0,
+        "cache_read": 0.5
       },
       "reasoning": null,
       "supported_parameters": [
-        "frequency_penalty",
-        "logit_bias",
-        "logprobs",
         "max_completion_tokens",
-        "presence_penalty",
+        "max_tokens",
         "response_format",
         "seed",
-        "stop",
         "structured_outputs",
         "temperature",
         "tool_choice",
         "tools",
-        "top_logprobs",
-        "top_p",
-        "web_search_options"
+        "top_p"
       ],
       "hugging_face_id": null,
       "or_free_variants": null,
-      "description": "GPT-4o (\"o\" for \"omni\") is OpenAI's latest AI model, supporting both text and image inputs with text outputs. It maintains the intelligence level of [GPT-4 Turbo](/models/openai/gpt-4-turbo) while being twice as...",
-      "superseded_by": null,
-      "match": "exact",
-      "stale": true,
-      "modalities_source": "openrouter",
-      "archive_links": {
-        "aa": "https://artificialanalysis.ai/models/gpt-4o-2024-05-13"
-      }
+      "description": "GPT-4.1 is a flagship large language model optimized for advanced instruction following, real-world software engineering, and long-context reasoning. It supports a 1 million token context window and outperforms GPT-4o and...",
+      "superseded_by": "GPT 5.5 Instant",
+      "match": "subset",
+      "modalities_source": "openrouter"
+    },
+    "GPT 4.1 mini (2025-04-14)": {
+      "or_id": "openai/gpt-4.1-mini",
+      "or_name": "OpenAI: GPT-4.1 Mini",
+      "provider": "OpenAI",
+      "created": "2025-04-14",
+      "context_length": 1047576,
+      "max_output_tokens": 32768,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "image",
+        "text",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2024-06-30",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.4,
+        "output": 1.6,
+        "cache_read": 0.1
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "max_completion_tokens",
+        "max_tokens",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-4.1 Mini is a mid-sized model delivering performance competitive with GPT-4o at substantially lower latency and cost. It retains a 1 million token context window and scores 45.1% on hard...",
+      "superseded_by": "GPT-5.4 mini",
+      "match": "subset",
+      "modalities_source": "openrouter"
+    },
+    "GPT 4.1 nano (2025-04-14)": {
+      "or_id": "openai/gpt-4.1-nano",
+      "or_name": "OpenAI: GPT-4.1 Nano",
+      "provider": "OpenAI",
+      "created": "2025-04-14",
+      "context_length": 1047576,
+      "max_output_tokens": 942818,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "image",
+        "text",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2024-06-30",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.1,
+        "output": 0.4,
+        "cache_read": 0.03
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "max_completion_tokens",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "For tasks that demand low latency, GPT‑4.1 nano is the fastest and cheapest model in the GPT-4.1 series. It delivers exceptional performance at a small size with its 1 million...",
+      "superseded_by": "GPT-5.4 nano",
+      "match": "subset",
+      "modalities_source": "openrouter"
     },
     "GPT 4o (2024-08-06)": {
       "or_id": "openai/gpt-4o-2024-08-06",
@@ -18224,59 +18428,6 @@
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-4o-2024-08-06"
       }
-    },
-    "GPT 4o mini (2024-07-18)": {
-      "or_id": "openai/gpt-4o-mini-2024-07-18",
-      "or_name": "OpenAI: GPT-4o-mini (2024-07-18)",
-      "provider": "OpenAI",
-      "created": "2024-07-18",
-      "context_length": 128000,
-      "max_output_tokens": 16384,
-      "modality": "text+image+file->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "file"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "GPT",
-      "knowledge_cutoff": "2023-10-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.15,
-        "output": 0.6,
-        "cache_read": 0.075
-      },
-      "reasoning": null,
-      "supported_parameters": [
-        "frequency_penalty",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "prediction",
-        "presence_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_logprobs",
-        "top_p",
-        "web_search_options"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "GPT-4o mini is OpenAI's newest model after [GPT-4 Omni](/models/openai/gpt-4o), supporting both text and image inputs with text outputs. As their most advanced small model, it is many multiples more affordable...",
-      "superseded_by": null,
-      "match": "exact",
-      "stale": true,
-      "modalities_source": "openrouter"
     },
     "GPT 5 Chat": {
       "or_id": "openai/gpt-5",
@@ -19845,7 +19996,7 @@
       "provider": "Z.ai",
       "created": "2026-08-26",
       "context_length": 1048576,
-      "max_output_tokens": 943718,
+      "max_output_tokens": 131072,
       "modality": "text+image+video->text",
       "input_modalities": [
         "text",
@@ -19861,9 +20012,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.0227,
-        "output": 0.0625,
-        "cache_read": 0.0207
+        "input": 0.0163,
+        "output": 0.1479,
+        "cache_read": 0.0163
       },
       "reasoning": {
         "mandatory": true,
@@ -20490,6 +20641,68 @@
         }
       ]
     },
+    "Nemotron 3 Ultra 550B A55B": {
+      "or_id": "nvidia/nemotron-3-ultra-550b-a55b",
+      "or_name": "NVIDIA: Nemotron 3 Ultra",
+      "provider": "NVIDIA",
+      "created": "2026-06-04",
+      "context_length": 202800,
+      "max_output_tokens": 182520,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 550.0,
+      "active_params_b": 55.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.6,
+        "output": 2.4,
+        "cache_read": 0.12
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "high",
+          "medium",
+          "none"
+        ],
+        "default_effort": "high"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16",
+      "or_free_variants": [
+        "nvidia/nemotron-3-ultra-550b-a55b:free"
+      ],
+      "description": "NVIDIA Nemotron 3 Ultra is an open frontier-reasoning and orchestration model from NVIDIA, with 55B active parameters out of 550B total (MoE). Built on a hybrid Transformer-Mamba mixture-of-experts architecture, it...",
+      "superseded_by": null,
+      "match": "exact",
+      "modalities_source": "openrouter"
+    },
     "Nemotron 3.5 Lightning": {
       "or_id": "nvidia/nemotron-3.5-lightning",
       "or_name": "NVIDIA: Nemotron 3.5 Lightning",
@@ -20632,63 +20845,6 @@
           "out": 0.6
         }
       ]
-    },
-    "NVIDIA Nemotron 3 Nano 4B": {
-      "or_id": "nvidia/nemotron-3-nano-30b-a3b",
-      "or_name": "NVIDIA: Nemotron 3 Nano 30B A3B",
-      "provider": "NVIDIA",
-      "created": "2025-12-14",
-      "context_length": 262144,
-      "max_output_tokens": 235929,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 30.0,
-      "active_params_b": 3.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.06,
-        "output": 0.24,
-        "cache_read": 0.012
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
-      "or_free_variants": null,
-      "description": "NVIDIA Nemotron 3 Nano 30B A3B is a small language MoE model with highest compute efficiency and accuracy for developers to build specialized agentic AI systems. The model is fully...",
-      "superseded_by": null,
-      "match": "exact",
-      "stale": true,
-      "modalities_source": "openrouter"
     },
     "Kimi K3": {
       "or_id": "moonshotai/kimi-k3",
@@ -20897,7 +21053,7 @@
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.006,
-        "output": 7.0,
+        "output": 6.8,
         "cache_read": 0.005
       },
       "reasoning": {
@@ -23046,63 +23202,6 @@
         }
       ]
     },
-    "Qwen3 235B A22B Thinking": {
-      "or_id": "qwen/qwen3-14b",
-      "or_name": "Qwen: Qwen3 14B",
-      "provider": "Qwen",
-      "created": "2025-04-28",
-      "context_length": 40960,
-      "max_output_tokens": 16384,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Qwen3",
-      "knowledge_cutoff": "2025-03-31",
-      "total_params_b": 14.8,
-      "active_params_b": null,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.12,
-        "output": 0.24
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "Qwen/Qwen3-14B",
-      "or_free_variants": null,
-      "description": "Qwen3-14B is a dense 14.8B parameter causal language model from the Qwen3 series, designed for both complex reasoning and efficient dialogue. It supports seamless switching between a \"thinking\" mode for...",
-      "superseded_by": null,
-      "match": "subset",
-      "stale": true,
-      "modalities_source": "openrouter"
-    },
     "Qwen3.6 Plus": {
       "or_id": "qwen/qwen3.6-plus",
       "or_name": "Qwen: Qwen3.6 Plus",
@@ -23185,6 +23284,52 @@
           "out": 3.0
         }
       ]
+    },
+    "Command R+ (08-2024)": {
+      "or_id": "cohere/command-r-plus-08-2024",
+      "or_name": "Cohere: Command R+ (08-2024)",
+      "provider": "Cohere",
+      "created": "2024-08-30",
+      "context_length": 128000,
+      "max_output_tokens": 4000,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Cohere",
+      "knowledge_cutoff": "2024-03-31",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 2.5,
+        "output": 10.0
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "max_tokens",
+        "presence_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "command-r-plus-08-2024 is an update of the [Command R+](/models/cohere/command-r-plus) with roughly 50% higher throughput and 25% lower latencies as compared to the previous Command R+ version, while keeping the hardware footprint...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter"
     },
     "DeepSeek V3 0324": {
       "or_id": "deepseek/deepseek-chat-v3-0324",
@@ -23301,6 +23446,64 @@
       "superseded_by": "DeepSeek V4.1 Flash 1017",
       "match": "exact",
       "aa_deprecated": true,
+      "modalities_source": "openrouter"
+    },
+    "DeepSeek-R1-0528": {
+      "or_id": "deepseek/deepseek-r1-0528",
+      "or_name": "DeepSeek: R1 0528",
+      "provider": "DeepSeek",
+      "created": "2025-05-28",
+      "context_length": 163840,
+      "max_output_tokens": 32768,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "DeepSeek",
+      "knowledge_cutoff": "2025-03-31",
+      "total_params_b": 671.0,
+      "active_params_b": 37.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.5,
+        "output": 2.15,
+        "cache_read": 0.35
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "deepseek-ai/DeepSeek-R1-0528",
+      "or_free_variants": null,
+      "description": "May 28th update to the [original DeepSeek R1](/deepseek/deepseek-r1) Performance on par with [OpenAI o1](/openai/o1), but open-sourced and with fully open reasoning tokens. It's 671B parameters in size, with 37B active...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
       "modalities_source": "openrouter"
     },
     "Gemma 3 4B IT": {
@@ -23979,6 +24182,63 @@
         "aa": "https://artificialanalysis.ai/models/qwen2-5-coder-32b-instruct"
       }
     },
+    "Qwen3": {
+      "or_id": "qwen/qwen3-14b",
+      "or_name": "Qwen: Qwen3 14B",
+      "provider": "Qwen",
+      "created": "2025-04-28",
+      "context_length": 40960,
+      "max_output_tokens": 16384,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": "2025-03-31",
+      "total_params_b": 14.8,
+      "active_params_b": null,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.12,
+        "output": 0.24
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3-14B",
+      "or_free_variants": null,
+      "description": "Qwen3-14B is a dense 14.8B parameter causal language model from the Qwen3 series, designed for both complex reasoning and efficient dialogue. It supports seamless switching between a \"thinking\" mode for...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter"
+    },
     "Qwen3 Coder 30B A3B Instruct": {
       "or_id": "qwen/qwen3-coder-30b-a3b-instruct",
       "or_name": "Qwen: Qwen3 Coder 30B A3B Instruct",
@@ -24026,6 +24286,109 @@
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/qwen3-coder-30b-a3b-instruct"
       }
+    },
+    "Qwen3-235B-A22B-Instruct-2507": {
+      "or_id": "qwen/qwen3-235b-a22b-2507",
+      "or_name": "Qwen: Qwen3 235B A22B Instruct 2507",
+      "provider": "Qwen",
+      "created": "2025-07-21",
+      "context_length": 262144,
+      "max_output_tokens": 16384,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": "2025-06-30",
+      "total_params_b": 235.0,
+      "active_params_b": 22.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.09,
+        "output": 0.55
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+      "or_free_variants": null,
+      "description": "Qwen3-235B-A22B-Instruct-2507 is a multilingual, instruction-tuned mixture-of-experts language model based on the Qwen3-235B architecture, with 22B active parameters per forward pass. It is optimized for general-purpose text generation, including instruction following,...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/qwen3-235b-a22b-instruct-2507"
+      }
+    },
+    "Qwen3-235B-A22B-Thinking-2507": {
+      "or_id": "qwen/qwen3-235b-a22b-thinking-2507",
+      "or_name": "Qwen: Qwen3 235B A22B Thinking 2507",
+      "provider": "Qwen",
+      "created": "2025-07-25",
+      "context_length": 128000,
+      "max_output_tokens": 16384,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": "2025-06-30",
+      "total_params_b": 235.0,
+      "active_params_b": 22.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.45,
+        "output": 3.5
+      },
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "stop",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+      "or_free_variants": null,
+      "description": "Qwen3-235B-A22B-Thinking-2507 is a high-performance, open-weight Mixture-of-Experts (MoE) language model optimized for complex reasoning tasks. It activates 22B of its 235B parameters per forward pass and natively supports up to 262,144...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter"
     },
     "Qwen3.5 Flash": {
       "or_id": "qwen/qwen3.5-flash-02-23",
@@ -24102,9 +24465,9 @@
       "active_params_b": null,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.15,
-        "output": 1.875,
-        "cache_read": 0.0375
+        "input": 0.04,
+        "output": 2.3,
+        "cache_read": 0.02
       },
       "reasoning": {
         "mandatory": false,
@@ -24269,52 +24632,6 @@
       "stale": true,
       "modalities_source": "openrouter"
     },
-    "Command R+ (08-2024)": {
-      "or_id": "cohere/command-r-plus-08-2024",
-      "or_name": "Cohere: Command R+ (08-2024)",
-      "provider": "Cohere",
-      "created": "2024-08-30",
-      "context_length": 128000,
-      "max_output_tokens": 4000,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Cohere",
-      "knowledge_cutoff": "2024-03-31",
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 2.5,
-        "output": 10.0
-      },
-      "reasoning": null,
-      "supported_parameters": [
-        "frequency_penalty",
-        "max_tokens",
-        "presence_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_p"
-      ],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": "command-r-plus-08-2024 is an update of the [Command R+](/models/cohere/command-r-plus) with roughly 50% higher throughput and 25% lower latencies as compared to the previous Command R+ version, while keeping the hardware footprint...",
-      "superseded_by": null,
-      "match": "exact",
-      "stale": true,
-      "modalities_source": "openrouter"
-    },
     "DeepSeek V4 Flash Vision Exp": {
       "or_id": "deepseek/deepseek-v4-flash-vision-exp",
       "or_name": "DeepSeek: DeepSeek V4 Flash Vision Exp",
@@ -24445,66 +24762,6 @@
       "match": "subset",
       "modalities_source": "openrouter"
     },
-    "DeepSeek-R1-0528": {
-      "or_id": "deepseek/deepseek-r1-0528",
-      "or_name": "DeepSeek: R1 0528",
-      "provider": "DeepSeek",
-      "created": "2025-05-28",
-      "context_length": 163840,
-      "max_output_tokens": 32768,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "DeepSeek",
-      "knowledge_cutoff": "2025-03-31",
-      "total_params_b": 671.0,
-      "active_params_b": 37.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.5,
-        "output": 2.15,
-        "cache_read": 0.35
-      },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "deepseek-ai/DeepSeek-R1-0528",
-      "or_free_variants": null,
-      "description": "May 28th update to the [original DeepSeek R1](/deepseek/deepseek-r1) Performance on par with [OpenAI o1](/openai/o1), but open-sourced and with fully open reasoning tokens. It's 671B parameters in size, with 37B active...",
-      "superseded_by": "DeepSeek V4.1 Flash 1017",
-      "match": "exact",
-      "stale": true,
-      "modalities_source": "openrouter",
-      "aa_deprecated": true,
-      "or_catalog_retired": true
-    },
     "GLM 4.5V": {
       "or_id": "z-ai/glm-4.5v",
       "or_name": "Z.ai: GLM 4.5V",
@@ -24618,6 +24875,86 @@
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/glm-4-6v"
       }
+    },
+    "Gemma 4 26B A4B": {
+      "or_id": "google/gemma-4-26b-a4b-it",
+      "or_name": "Google: Gemma 4 26B A4B ",
+      "provider": "Google",
+      "created": "2026-04-03",
+      "context_length": 262144,
+      "max_output_tokens": 235929,
+      "modality": "text+image+video->text",
+      "input_modalities": [
+        "image",
+        "text",
+        "video"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Gemma",
+      "knowledge_cutoff": null,
+      "total_params_b": 25.2,
+      "active_params_b": 3.8,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.0675,
+        "output": 0.225,
+        "cache_read": 0.0375
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "google/gemma-4-26B-A4B-it",
+      "or_free_variants": [
+        "google/gemma-4-26b-a4b-it:free"
+      ],
+      "description": "Gemma 4 26B A4B IT is an instruction-tuned Mixture-of-Experts (MoE) model from Google DeepMind. Despite 25.2B total parameters, only 3.8B activate per token during inference — delivering near-31B quality at...",
+      "superseded_by": null,
+      "match": "exact",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.1,
+        "output": 0.34,
+        "cache_read": 0.05
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.949,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/gemma-4-26b-a4b"
+      },
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.1515,
+          "out": 0.6061
+        }
+      ]
     },
     "Kimi K2 0905 Preview": {
       "or_id": "moonshotai/kimi-k2-0905",
@@ -24852,71 +25189,6 @@
       "match": "subset",
       "modalities_source": "openrouter"
     },
-    "NVIDIA Nemotron 3 Super 120B A12B": {
-      "or_id": "nvidia/nemotron-3-super-120b-a12b",
-      "or_name": "NVIDIA: Nemotron 3 Super",
-      "provider": "NVIDIA",
-      "created": "2026-03-11",
-      "context_length": 1048576,
-      "max_output_tokens": 262144,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 12.0,
-      "active_params_b": 12.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.3,
-        "output": 2.4,
-        "cache_read": 0.15
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "medium",
-          "low",
-          "none"
-        ],
-        "default_effort": "medium"
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "reasoning_effort",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-FP8",
-      "or_free_variants": null,
-      "description": "NVIDIA Nemotron 3 Super is a 120B-parameter open hybrid MoE model, activating just 12B parameters for maximum compute efficiency and accuracy in complex multi-agent applications. Built on a hybrid Mamba-Transformer...",
-      "superseded_by": null,
-      "match": "exact",
-      "modalities_source": "openrouter",
-      "archive_links": {
-        "aa": "https://artificialanalysis.ai/models/nvidia-nemotron-3-super-120b-a12b"
-      }
-    },
     "Qwen 3.6 Flash": {
       "or_id": "qwen/qwen3.6-flash",
       "or_name": "Qwen: Qwen3.6 Flash",
@@ -25072,6 +25344,118 @@
         "aa": "https://artificialanalysis.ai/models/qwen2-5-72b-instruct"
       }
     },
+    "Qwen3 (2025-09-23)": {
+      "or_id": "qwen/qwen3-14b",
+      "or_name": "Qwen: Qwen3 14B",
+      "provider": "Qwen",
+      "created": "2025-04-28",
+      "context_length": 40960,
+      "max_output_tokens": 16384,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": "2025-03-31",
+      "total_params_b": 14.8,
+      "active_params_b": null,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.12,
+        "output": 0.24
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3-14B",
+      "or_free_variants": null,
+      "description": "Qwen3-14B is a dense 14.8B parameter causal language model from the Qwen3 series, designed for both complex reasoning and efficient dialogue. It supports seamless switching between a \"thinking\" mode for...",
+      "superseded_by": null,
+      "match": "subset",
+      "stale": true,
+      "modalities_source": "openrouter"
+    },
+    "Qwen3 30B-A3B": {
+      "or_id": "qwen/qwen3-30b-a3b",
+      "or_name": "Qwen: Qwen3 30B A3B",
+      "provider": "Qwen",
+      "created": "2025-04-28",
+      "context_length": 40960,
+      "max_output_tokens": 16384,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": "2025-03-31",
+      "total_params_b": 30.0,
+      "active_params_b": 3.0,
+      "params_source": "openrouter",
+      "pricing_usd_per_1m": {
+        "input": 0.12,
+        "output": 0.5
+      },
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3-30B-A3B",
+      "or_free_variants": null,
+      "description": "Qwen3, the latest generation in the Qwen large language model series, features both dense and mixture-of-experts (MoE) architectures to excel in reasoning, multilingual support, and advanced agent tasks. Its unique...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter"
+    },
     "Qwen3 Next 80B A3B Instruct": {
       "or_id": "qwen/qwen3-next-80b-a3b-instruct",
       "or_name": "Qwen: Qwen3 Next 80B A3B Instruct",
@@ -25127,29 +25511,29 @@
       }
     },
     "Qwen3 VL 235B A22B Instruct": {
-      "or_id": "qwen/qwen3-vl-8b-instruct",
-      "or_name": "Qwen: Qwen3 VL 8B Instruct",
+      "or_id": "qwen/qwen3-vl-235b-a22b-instruct",
+      "or_name": "Qwen: Qwen3 VL 235B A22B Instruct",
       "provider": "Qwen",
-      "created": "2025-10-14",
-      "context_length": 262144,
-      "max_output_tokens": 235929,
+      "created": "2025-09-23",
+      "context_length": 131072,
+      "max_output_tokens": 32768,
       "modality": "text+image->text",
       "input_modalities": [
-        "image",
-        "text"
+        "text",
+        "image"
       ],
       "output_modalities": [
         "text"
       ],
       "tokenizer": "Qwen3",
-      "knowledge_cutoff": null,
-      "total_params_b": 8.8,
-      "active_params_b": null,
-      "params_source": "huggingface",
+      "knowledge_cutoff": "2025-03-31",
+      "total_params_b": 235.0,
+      "active_params_b": 22.0,
+      "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.25,
-        "output": 0.75,
-        "cache_read": 0.12
+        "input": 0.21,
+        "output": 1.9,
+        "cache_read": 0.1
       },
       "reasoning": null,
       "supported_parameters": [
@@ -25157,6 +25541,7 @@
         "logit_bias",
         "logprobs",
         "max_tokens",
+        "min_p",
         "presence_penalty",
         "repetition_penalty",
         "response_format",
@@ -25170,9 +25555,9 @@
         "top_logprobs",
         "top_p"
       ],
-      "hugging_face_id": "Qwen/Qwen3-VL-8B-Instruct",
+      "hugging_face_id": "Qwen/Qwen3-VL-235B-A22B-Instruct",
       "or_free_variants": null,
-      "description": "Qwen3-VL-8B-Instruct is a multimodal vision-language model from the Qwen3-VL series, built for high-fidelity understanding and reasoning across text, images, and video. It features improved multimodal fusion with Interleaved-MRoPE for long-horizon...",
+      "description": "Qwen3-VL-235B-A22B Instruct is an open-weight multimodal model that unifies strong text generation with visual understanding across images and video. The Instruct model targets general vision-language use (VQA, document parsing, chart/table...",
       "superseded_by": null,
       "match": "exact",
       "stale": true,
@@ -25182,104 +25567,74 @@
         "aa": "https://artificialanalysis.ai/models/qwen3-vl-235b-a22b-instruct"
       }
     },
-    "Qwen3 VL 235B A22B Thinking": {
-      "or_id": "qwen/qwen3-vl-30b-a3b-thinking",
-      "or_name": "Qwen: Qwen3 VL 30B A3B Thinking",
+    "Qwen3.5 397B A17B": {
+      "or_id": "qwen/qwen3.5-397b-a17b",
+      "or_name": "Qwen: Qwen3.5 397B A17B",
       "provider": "Qwen",
-      "created": "2025-10-06",
+      "created": "2026-02-16",
       "context_length": 262144,
       "max_output_tokens": 235929,
-      "modality": "text+image->text",
+      "modality": "text+image+video->text",
       "input_modalities": [
         "text",
-        "image"
+        "image",
+        "video"
       ],
       "output_modalities": [
         "text"
       ],
       "tokenizer": "Qwen3",
-      "knowledge_cutoff": "2025-03-31",
-      "total_params_b": 30.0,
-      "active_params_b": 3.0,
+      "knowledge_cutoff": null,
+      "total_params_b": 397.0,
+      "active_params_b": 17.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.29,
-        "output": 1.0
+        "input": 0.5,
+        "output": 3.6,
+        "cache_read": 0.3
       },
       "reasoning": {
-        "mandatory": true,
+        "mandatory": false,
         "supported_efforts": null,
         "default_effort": null
       },
       "supported_parameters": [
         "frequency_penalty",
         "include_reasoning",
+        "logit_bias",
+        "logprobs",
         "max_tokens",
+        "min_p",
+        "presence_penalty",
         "reasoning",
+        "repetition_penalty",
         "response_format",
+        "seed",
+        "stop",
         "structured_outputs",
         "temperature",
         "tool_choice",
         "tools",
         "top_k",
+        "top_logprobs",
         "top_p"
       ],
-      "hugging_face_id": "Qwen/Qwen3-VL-30B-A3B-Thinking",
+      "hugging_face_id": "Qwen/Qwen3.5-397B-A17B",
       "or_free_variants": null,
-      "description": "Qwen3-VL-30B-A3B-Thinking is a multimodal model that unifies strong text generation with visual understanding for images and videos. Its Thinking variant enhances reasoning in STEM, math, and complex tasks. It excels...",
+      "description": "The Qwen3.5 series 397B-A17B native vision-language model is built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. It delivers...",
       "superseded_by": null,
       "match": "exact",
-      "stale": true,
-      "modalities_source": "openrouter"
-    },
-    "Qwen3-235B-A22B-Thinking-2507": {
-      "or_id": "qwen/qwen3-235b-a22b-thinking-2507",
-      "or_name": "Qwen: Qwen3 235B A22B Thinking 2507",
-      "provider": "Qwen",
-      "created": "2025-07-25",
-      "context_length": 128000,
-      "max_output_tokens": 16384,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Qwen3",
-      "knowledge_cutoff": "2025-06-30",
-      "total_params_b": 235.0,
-      "active_params_b": 22.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.45,
-        "output": 3.5
+      "pricing_aa_usd_per_1m": {
+        "input": 0.6,
+        "output": 3.6,
+        "cache_read": null
       },
-      "reasoning": {
-        "mandatory": true,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "max_tokens",
-        "presence_penalty",
-        "reasoning",
-        "stop",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_p"
-      ],
-      "hugging_face_id": "Qwen/Qwen3-235B-A22B-Thinking-2507",
-      "or_free_variants": null,
-      "description": "Qwen3-235B-A22B-Thinking-2507 is a high-performance, open-weight Mixture-of-Experts (MoE) language model optimized for complex reasoning tasks. It activates 22B of its 235B parameters per forward pass and natively supports up to 262,144...",
-      "superseded_by": null,
-      "match": "exact",
-      "stale": true,
-      "modalities_source": "openrouter"
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 2.242,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/qwen3-5-397b-a17b"
+      }
     },
     "Qwen3.5 Plus 02-15": {
       "or_id": "qwen/qwen3.5-plus-02-15",
@@ -26161,6 +26516,73 @@
       "match": "no-catalog",
       "or_catalog_retired": true
     },
+    "Beam 1.0": {
+      "or_id": "reflection/beam-1.0-501b-a23b",
+      "or_name": "Beam 1.0",
+      "provider": "Reflection",
+      "created": "2026-10-16",
+      "context_length": 1048576,
+      "max_output_tokens": 131072,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": "2026-06-30",
+      "total_params_b": 501.0,
+      "active_params_b": 23.0,
+      "params_source": "openrouter",
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low"
+        ],
+        "default_effort": "max"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "reflection/Beam-1.0-501B-A23B",
+      "or_free_variants": null,
+      "description": "Beam 1.0 is Reflection's open-weight reasoning model for coding and long-horizon agentic workflows. It uses a sparse mixture-of-experts architecture with 501B total and 23B active parameters per token, and a...",
+      "superseded_by": null,
+      "match": "no-catalog",
+      "modalities_source": "openrouter",
+      "pricing_aa_usd_per_1m": {
+        "input": 0.4,
+        "output": 1.2,
+        "cache_read": 0.04
+      },
+      "price_source": "artificialanalysis",
+      "aa_ttft_seconds": 0.642,
+      "or_catalog_retired": true
+    },
     "K2 Horizon 375B A23B": {
       "or_id": null,
       "or_name": "K2 Horizon 375B A23B",
@@ -26320,14 +26742,6 @@
         "aa": "https://artificialanalysis.ai/models/grok-4-1-fast"
       },
       "or_name": "Grok 4.1 Fast",
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
-    "o3 2025.04 16": {
-      "created": "2025-04-16",
-      "created_source": "display_name",
-      "stale": true,
-      "or_name": "o3 2025.04 16",
       "match": "no-catalog",
       "or_catalog_retired": true
     },
@@ -26495,29 +26909,6 @@
       ],
       "or_catalog_retired": true
     },
-    "GPT-4o 08-06": {
-      "or_id": null,
-      "or_name": "GPT-4o 08-06",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": null,
-      "superseded_by": null,
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
     "Gemini 1.5 Pro": {
       "superseded_by": "Gemini 3.1 Pro",
       "archive_links": {
@@ -26577,6 +26968,12 @@
       ],
       "or_catalog_retired": true
     },
+    "grok-3-beta": {
+      "superseded_by": "Grok 4.7",
+      "or_name": "grok-3-beta",
+      "match": "no-catalog",
+      "or_catalog_retired": true
+    },
     "o1 mini": {
       "or_id": null,
       "or_name": "o1 mini",
@@ -26607,8 +27004,7 @@
       "or_name": "o1-2024-12-17",
       "match": "no-catalog",
       "or_catalog_retired": true,
-      "aa_deprecated": true,
-      "successor_pending": true
+      "aa_deprecated": true
     },
     "o4-mini": {
       "or_id": "openai/o4-mini",
@@ -26791,6 +27187,29 @@
       "match": "no-catalog",
       "or_catalog_retired": true
     },
+    "Gemini 2.5 Flash Preview 09-2025": {
+      "or_id": null,
+      "or_name": "Gemini 2.5 Flash Preview 09-2025",
+      "provider": null,
+      "created": null,
+      "context_length": null,
+      "max_output_tokens": null,
+      "modality": null,
+      "input_modalities": [],
+      "output_modalities": [],
+      "tokenizer": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "reasoning": null,
+      "supported_parameters": [],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": null,
+      "superseded_by": null,
+      "match": "no-catalog",
+      "or_catalog_retired": true
+    },
     "Grok Code Fast 1": {
       "or_id": null,
       "or_name": "Grok Code Fast 1",
@@ -26895,12 +27314,6 @@
     "gpt-4.5-preview": {
       "superseded_by": "GPT-5 Pro",
       "or_name": "gpt-4.5-preview",
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
-    "grok-3-beta": {
-      "superseded_by": "Grok 4.7",
-      "or_name": "grok-3-beta",
       "match": "no-catalog",
       "or_catalog_retired": true
     },
@@ -27216,29 +27629,6 @@
     "Aya Expanse 8B": {
       "or_id": null,
       "or_name": "Aya Expanse 8B",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": null,
-      "superseded_by": null,
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
-    "Beam 1.0 501B-A23B": {
-      "or_id": null,
-      "or_name": "Beam 1.0 501B-A23B",
       "provider": null,
       "created": null,
       "context_length": null,
@@ -27986,75 +28376,6 @@
       "match": "no-catalog",
       "or_catalog_retired": true
     },
-    "GPT 4.1 (2025-04-14)": {
-      "or_id": null,
-      "or_name": "GPT 4.1 (2025-04-14)",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": null,
-      "superseded_by": null,
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
-    "GPT 4.1 mini (2025-04-14)": {
-      "or_id": null,
-      "or_name": "GPT 4.1 mini (2025-04-14)",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": null,
-      "superseded_by": null,
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
-    "GPT 4.1 nano (2025-04-14)": {
-      "or_id": null,
-      "or_name": "GPT 4.1 nano (2025-04-14)",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": null,
-      "superseded_by": null,
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
     "GPT 4.5 Preview (2025-02-27)": {
       "or_id": null,
       "or_name": "GPT 4.5 Preview (2025-02-27)",
@@ -28081,6 +28402,29 @@
     "GPT 5.3 Chat": {
       "or_id": null,
       "or_name": "GPT 5.3 Chat",
+      "provider": null,
+      "created": null,
+      "context_length": null,
+      "max_output_tokens": null,
+      "modality": null,
+      "input_modalities": [],
+      "output_modalities": [],
+      "tokenizer": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "reasoning": null,
+      "supported_parameters": [],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": null,
+      "superseded_by": null,
+      "match": "no-catalog",
+      "or_catalog_retired": true
+    },
+    "GPT-4o 08-06": {
+      "or_id": null,
+      "or_name": "GPT-4o 08-06",
       "provider": null,
       "created": null,
       "context_length": null,
@@ -28429,29 +28773,6 @@
     "Gemini 2.5 Flash Lite Preview 09-2025": {
       "or_id": null,
       "or_name": "Gemini 2.5 Flash Lite Preview 09-2025",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": null,
-      "superseded_by": null,
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
-    "Gemini 2.5 Flash Preview 09-2025": {
-      "or_id": null,
-      "or_name": "Gemini 2.5 Flash Preview 09-2025",
       "provider": null,
       "created": null,
       "context_length": null,
@@ -30700,6 +31021,112 @@
       "match": "no-catalog",
       "or_catalog_retired": true
     },
+    "nemotron-3-nano": {
+      "or_id": "nvidia/nemotron-3-nano-30b-a3b",
+      "or_name": "nemotron-3-nano",
+      "provider": "NVIDIA",
+      "created": "2025-12-14",
+      "context_length": 262144,
+      "max_output_tokens": 235929,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 30.0,
+      "active_params_b": 3.0,
+      "params_source": "openrouter",
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "or_free_variants": null,
+      "description": "NVIDIA Nemotron 3 Nano 30B A3B is a small language MoE model with highest compute efficiency and accuracy for developers to build specialized agentic AI systems. The model is fully...",
+      "superseded_by": null,
+      "match": "no-catalog",
+      "stale": true,
+      "modalities_source": "openrouter",
+      "or_catalog_retired": true
+    },
+    "NVIDIA Nemotron 3 Nano 4B": {
+      "or_id": "nvidia/nemotron-3-nano-30b-a3b",
+      "or_name": "NVIDIA Nemotron 3 Nano 4B",
+      "provider": "NVIDIA",
+      "created": "2025-12-14",
+      "context_length": 262144,
+      "max_output_tokens": 235929,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 30.0,
+      "active_params_b": 3.0,
+      "params_source": "openrouter",
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "or_free_variants": null,
+      "description": "NVIDIA Nemotron 3 Nano 30B A3B is a small language MoE model with highest compute efficiency and accuracy for developers to build specialized agentic AI systems. The model is fully...",
+      "superseded_by": null,
+      "match": "no-catalog",
+      "stale": true,
+      "modalities_source": "openrouter",
+      "or_catalog_retired": true
+    },
     "DeepSeek-R1": {
       "or_id": "deepseek/deepseek-r1",
       "or_name": "DeepSeek-R1",
@@ -30904,57 +31331,6 @@
       "match": "no-catalog",
       "or_catalog_retired": true
     },
-    "Qwen3.5 Plus": {
-      "superseded_by": "Qwen3.7 Plus",
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "modality": "text+image->text",
-      "modalities_source": "curated",
-      "available_at": [
-        {
-          "p": "opencode-zen",
-          "n": "OpenCode Zen"
-        },
-        {
-          "p": "orcarouter",
-          "n": "OrcaRouter",
-          "in": 0.115,
-          "out": 0.688
-        }
-      ],
-      "or_name": "Qwen3.5 Plus",
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
-    "Command R+": {
-      "or_id": null,
-      "or_name": "Command R+",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": null,
-      "superseded_by": null,
-      "match": "no-catalog",
-      "or_catalog_retired": true,
-      "stale": true
-    },
     "Llama 3.1 Nemotron 70B Instruct": {
       "or_id": null,
       "or_name": "Llama 3.1 Nemotron 70B Instruct",
@@ -31090,6 +31466,56 @@
       "match": "no-catalog",
       "or_catalog_retired": true
     },
+    "Qwen3 235B-A22B": {
+      "or_id": null,
+      "or_name": "Qwen3 235B-A22B",
+      "provider": null,
+      "created": null,
+      "context_length": null,
+      "max_output_tokens": null,
+      "modality": null,
+      "input_modalities": [],
+      "output_modalities": [],
+      "tokenizer": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": null,
+      "reasoning": null,
+      "supported_parameters": [],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": null,
+      "superseded_by": null,
+      "match": "no-catalog"
+    },
+    "Qwen3.5 Plus": {
+      "superseded_by": "Qwen3.7 Plus",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "modality": "text+image->text",
+      "modalities_source": "curated",
+      "available_at": [
+        {
+          "p": "opencode-zen",
+          "n": "OpenCode Zen"
+        },
+        {
+          "p": "orcarouter",
+          "n": "OrcaRouter",
+          "in": 0.115,
+          "out": 0.688
+        }
+      ],
+      "or_name": "Qwen3.5 Plus",
+      "match": "no-catalog",
+      "or_catalog_retired": true
+    },
     "ChatGLM2 6B": {
       "or_id": null,
       "or_name": "ChatGLM2 6B",
@@ -31157,30 +31583,6 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
-      "or_catalog_retired": true
-    },
-    "Command R": {
-      "or_id": null,
-      "or_name": "Command R",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": null,
-      "superseded_by": null,
-      "match": "no-catalog",
-      "stale": true,
       "or_catalog_retired": true
     },
     "DBRX Instruct Preview": {
@@ -32165,6 +32567,67 @@
       "match": "no-catalog",
       "or_catalog_retired": true
     },
+    "NVIDIA Nemotron 3 Super 120B A12B": {
+      "or_id": "nvidia/nemotron-3-super-120b-a12b",
+      "or_name": "NVIDIA Nemotron 3 Super 120B A12B",
+      "provider": "NVIDIA",
+      "created": "2026-03-11",
+      "context_length": 1048576,
+      "max_output_tokens": 262144,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Other",
+      "knowledge_cutoff": null,
+      "total_params_b": 12.0,
+      "active_params_b": 12.0,
+      "params_source": "openrouter",
+      "reasoning": {
+        "mandatory": false,
+        "supported_efforts": [
+          "medium",
+          "low",
+          "none"
+        ],
+        "default_effort": "medium"
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "hugging_face_id": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-FP8",
+      "or_free_variants": null,
+      "description": "NVIDIA Nemotron 3 Super is a 120B-parameter open hybrid MoE model, activating just 12B parameters for maximum compute efficiency and accuracy in complex multi-agent applications. Built on a hybrid Mamba-Transformer...",
+      "superseded_by": null,
+      "match": "no-catalog",
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/nvidia-nemotron-3-super-120b-a12b"
+      },
+      "or_catalog_retired": true
+    },
     "NVIDIA Nemotron 3 Ultra 550B A55B (NVFP4)": {
       "or_id": null,
       "or_name": "NVIDIA Nemotron 3 Ultra 550B A55B (NVFP4)",
@@ -32308,6 +32771,29 @@
       "superseded_by": null,
       "match": "no-catalog",
       "or_catalog_retired": true
+    },
+    "Nemotron 3.5 Super VL 120B A12B": {
+      "or_id": null,
+      "or_name": "Nemotron 3.5 Super VL 120B A12B",
+      "provider": null,
+      "created": null,
+      "context_length": null,
+      "max_output_tokens": null,
+      "modality": null,
+      "input_modalities": [],
+      "output_modalities": [],
+      "tokenizer": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": null,
+      "reasoning": null,
+      "supported_parameters": [],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": null,
+      "superseded_by": null,
+      "match": "no-catalog"
     },
     "Nemotron 4 340B Instruct": {
       "or_id": null,
@@ -32604,29 +33090,6 @@
       "match": "no-catalog",
       "or_catalog_retired": true
     },
-    "Qwen3 (2025-09-23)": {
-      "or_id": null,
-      "or_name": "Qwen3 (2025-09-23)",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": null,
-      "superseded_by": null,
-      "match": "no-catalog",
-      "or_catalog_retired": true
-    },
     "Qwen3 235B A22B (Non-Thinking)": {
       "or_id": null,
       "or_name": "Qwen3 235B A22B (Non-Thinking)",
@@ -32679,9 +33142,9 @@
       "match": "no-catalog",
       "or_catalog_retired": true
     },
-    "Qwen3 30B-A3B": {
+    "Qwen3 Coder 480B A35B Instruct": {
       "or_id": null,
-      "or_name": "Qwen3 30B-A3B",
+      "or_name": "Qwen3 Coder 480B A35B Instruct",
       "provider": null,
       "created": null,
       "context_length": null,
@@ -32693,14 +33156,15 @@
       "total_params_b": null,
       "active_params_b": null,
       "params_source": null,
+      "pricing_usd_per_1m": null,
       "reasoning": null,
       "supported_parameters": [],
       "hugging_face_id": null,
       "or_free_variants": null,
       "description": null,
-      "superseded_by": null,
+      "superseded_by": "Qwen3.8-Max-0902",
       "match": "no-catalog",
-      "or_catalog_retired": true
+      "aa_deprecated": true
     },
     "Qwen3 Next 80B A3B Thinking": {
       "or_id": "qwen/qwen3-next-80b-a3b-thinking",
@@ -32754,50 +33218,51 @@
       "modalities_source": "openrouter",
       "or_catalog_retired": true
     },
-    "Qwen3-235B-A22B": {
-      "or_id": null,
-      "or_name": "Qwen3-235B-A22B",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
+    "Qwen3 VL 235B A22B Thinking": {
+      "or_id": "qwen/qwen3-vl-30b-a3b-thinking",
+      "or_name": "Qwen3 VL 235B A22B Thinking",
+      "provider": "Qwen",
+      "created": "2025-10-06",
+      "context_length": 262144,
+      "max_output_tokens": 235929,
+      "modality": "text+image->text",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": "2025-03-31",
+      "total_params_b": 30.0,
+      "active_params_b": 3.0,
+      "params_source": "openrouter",
+      "reasoning": {
+        "mandatory": true,
+        "supported_efforts": null,
+        "default_effort": null
+      },
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen3-VL-30B-A3B-Thinking",
       "or_free_variants": null,
-      "description": null,
+      "description": "Qwen3-VL-30B-A3B-Thinking is a multimodal model that unifies strong text generation with visual understanding for images and videos. Its Thinking variant enhances reasoning in STEM, math, and complex tasks. It excels...",
       "superseded_by": null,
       "match": "no-catalog",
-      "or_catalog_retired": true
-    },
-    "Qwen3-235B-A22B-Instruct-2507": {
-      "or_id": null,
-      "or_name": "Qwen3-235B-A22B-Instruct-2507",
-      "provider": null,
-      "created": null,
-      "context_length": null,
-      "max_output_tokens": null,
-      "modality": null,
-      "input_modalities": [],
-      "output_modalities": [],
-      "tokenizer": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "reasoning": null,
-      "supported_parameters": [],
-      "hugging_face_id": null,
-      "or_free_variants": null,
-      "description": null,
-      "superseded_by": null,
-      "match": "no-catalog",
+      "stale": true,
+      "modalities_source": "openrouter",
       "or_catalog_retired": true
     },
     "Qwen3.6-Max": {
@@ -33195,13 +33660,80 @@
         }
       ]
     },
-    "Nemotron-3-Nano": {
-      "or_id": "nvidia/nemotron-3-nano-30b-a3b",
-      "or_name": "NVIDIA: Nemotron 3 Nano 30B A3B",
-      "provider": "NVIDIA",
-      "created": "2025-12-14",
-      "context_length": 262144,
-      "max_output_tokens": 235929,
+    "GPT-4o mini": {
+      "or_id": "openai/gpt-4o-mini",
+      "or_name": "OpenAI: GPT-4o-mini",
+      "provider": "OpenAI",
+      "created": "2024-07-18",
+      "context_length": 128000,
+      "max_output_tokens": 16384,
+      "modality": "text+image+file->text",
+      "input_modalities": [
+        "text",
+        "image",
+        "file"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "GPT",
+      "knowledge_cutoff": "2023-10-31",
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "pricing_usd_per_1m": {
+        "input": 0.15,
+        "output": 0.6,
+        "cache_read": 0.075
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "prediction",
+        "presence_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_logprobs",
+        "top_p",
+        "web_search_options"
+      ],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": "GPT-4o mini is OpenAI's newest model after [GPT-4 Omni](/models/openai/gpt-4o), supporting both text and image inputs with text outputs. As their most advanced small model, it is many multiples more affordable...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "aa_deprecated": true,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/gpt-4o-mini"
+      },
+      "available_at": [
+        {
+          "p": "poe",
+          "n": "Poe",
+          "in": 0.1364,
+          "out": 0.5455
+        }
+      ],
+      "no_bench_coverage": true
+    },
+    "Qwen3 235B A22B Thinking": {
+      "or_id": "qwen/qwen3-14b",
+      "or_name": "Qwen: Qwen3 14B",
+      "provider": "Qwen",
+      "created": "2025-04-28",
+      "context_length": 40960,
+      "max_output_tokens": 16384,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -33209,15 +33741,14 @@
       "output_modalities": [
         "text"
       ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": 30.0,
-      "active_params_b": 3.0,
+      "tokenizer": "Qwen3",
+      "knowledge_cutoff": "2025-03-31",
+      "total_params_b": 14.8,
+      "active_params_b": null,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.06,
-        "output": 0.24,
-        "cache_read": 0.012
+        "input": 0.12,
+        "output": 0.24
       },
       "reasoning": {
         "mandatory": false,
@@ -33230,6 +33761,7 @@
         "logit_bias",
         "logprobs",
         "max_tokens",
+        "min_p",
         "presence_penalty",
         "reasoning",
         "repetition_penalty",
@@ -33244,13 +33776,88 @@
         "top_logprobs",
         "top_p"
       ],
-      "hugging_face_id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "hugging_face_id": "Qwen/Qwen3-14B",
       "or_free_variants": null,
-      "description": "NVIDIA Nemotron 3 Nano 30B A3B is a small language MoE model with highest compute efficiency and accuracy for developers to build specialized agentic AI systems. The model is fully...",
+      "description": "Qwen3-14B is a dense 14.8B parameter causal language model from the Qwen3 series, designed for both complex reasoning and efficient dialogue. It supports seamless switching between a \"thinking\" mode for...",
       "superseded_by": null,
-      "match": "exact",
+      "match": "subset",
       "stale": true,
-      "modalities_source": "openrouter"
+      "modalities_source": "openrouter",
+      "no_bench_coverage": true
+    },
+    "Command R+": {
+      "or_id": null,
+      "or_name": "Command R+",
+      "provider": null,
+      "created": null,
+      "context_length": null,
+      "max_output_tokens": null,
+      "modality": null,
+      "input_modalities": [],
+      "output_modalities": [],
+      "tokenizer": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "reasoning": null,
+      "supported_parameters": [],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": null,
+      "superseded_by": null,
+      "match": "no-catalog",
+      "or_catalog_retired": true,
+      "stale": true,
+      "no_bench_coverage": true
+    },
+    "Command R": {
+      "or_id": null,
+      "or_name": "Command R",
+      "provider": null,
+      "created": null,
+      "context_length": null,
+      "max_output_tokens": null,
+      "modality": null,
+      "input_modalities": [],
+      "output_modalities": [],
+      "tokenizer": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "reasoning": null,
+      "supported_parameters": [],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": null,
+      "superseded_by": null,
+      "match": "no-catalog",
+      "stale": true,
+      "or_catalog_retired": true,
+      "no_bench_coverage": true
+    },
+    "Qwen3-235B-A22B": {
+      "or_id": null,
+      "or_name": "Qwen3-235B-A22B",
+      "provider": null,
+      "created": null,
+      "context_length": null,
+      "max_output_tokens": null,
+      "modality": null,
+      "input_modalities": [],
+      "output_modalities": [],
+      "tokenizer": null,
+      "total_params_b": null,
+      "active_params_b": null,
+      "params_source": null,
+      "reasoning": null,
+      "supported_parameters": [],
+      "hugging_face_id": null,
+      "or_free_variants": null,
+      "description": null,
+      "superseded_by": null,
+      "match": "no-catalog",
+      "or_catalog_retired": true,
+      "no_bench_coverage": true
     },
     "Granite 4.2 8B": {
       "or_id": "ibm-granite/granite-4.2-8b",
@@ -34716,141 +35323,6 @@
       "modalities_source": "openrouter",
       "no_bench_coverage": true
     },
-    "Qwen3.5 397B A17B": {
-      "or_id": "qwen/qwen3.5-397b-a17b",
-      "or_name": "Qwen: Qwen3.5 397B A17B",
-      "provider": "Qwen",
-      "created": "2026-02-16",
-      "context_length": 262144,
-      "max_output_tokens": 235929,
-      "modality": "text+image+video->text",
-      "input_modalities": [
-        "text",
-        "image",
-        "video"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Qwen3",
-      "knowledge_cutoff": null,
-      "total_params_b": 397.0,
-      "active_params_b": 17.0,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.55,
-        "output": 3.5,
-        "cache_read": 0.225
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "Qwen/Qwen3.5-397B-A17B",
-      "or_free_variants": null,
-      "description": "The Qwen3.5 series 397B-A17B native vision-language model is built on a hybrid architecture that integrates a linear attention mechanism with a sparse mixture-of-experts model, achieving higher inference efficiency. It delivers...",
-      "superseded_by": null,
-      "match": "exact",
-      "pricing_aa_usd_per_1m": {
-        "input": 0.6,
-        "output": 3.6,
-        "cache_read": null
-      },
-      "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.256,
-      "modalities_source": "openrouter",
-      "no_bench_coverage": true
-    },
-    "Gemma 4 26B A4B": {
-      "or_id": "google/gemma-4-26b-a4b-it",
-      "or_name": "Google: Gemma 4 26B A4B ",
-      "provider": "Google",
-      "created": "2026-04-03",
-      "context_length": 262144,
-      "max_output_tokens": 235929,
-      "modality": "text+image+video->text",
-      "input_modalities": [
-        "image",
-        "text",
-        "video"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Gemma",
-      "knowledge_cutoff": null,
-      "total_params_b": 25.2,
-      "active_params_b": 3.8,
-      "params_source": "openrouter",
-      "pricing_usd_per_1m": {
-        "input": 0.0675,
-        "output": 0.225,
-        "cache_read": 0.0375
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": null,
-        "default_effort": null
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "logprobs",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_logprobs",
-        "top_p"
-      ],
-      "hugging_face_id": "google/gemma-4-26B-A4B-it",
-      "or_free_variants": [
-        "google/gemma-4-26b-a4b-it:free"
-      ],
-      "description": "Gemma 4 26B A4B IT is an instruction-tuned Mixture-of-Experts (MoE) model from Google DeepMind. Despite 25.2B total parameters, only 3.8B activate per token during inference — delivering near-31B quality at...",
-      "superseded_by": null,
-      "match": "exact",
-      "pricing_aa_usd_per_1m": {
-        "input": 0.1,
-        "output": 0.37,
-        "cache_read": 0.06
-      },
-      "price_source": "artificialanalysis",
-      "modalities_source": "openrouter",
-      "no_bench_coverage": true
-    },
     "GPT 5": {
       "or_id": "openai/gpt-5",
       "or_name": "OpenAI: GPT-5",
@@ -35025,5 +35497,5 @@
       "no_bench_coverage": true
     }
   },
-  "arena_text_asof": "2026-10-30 08:40"
+  "arena_text_asof": "2026-10-31 02:54"
 }

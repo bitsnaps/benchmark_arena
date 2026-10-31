@@ -960,6 +960,18 @@ describe('stats-65: unranked single-source admissions', () => {
     }
   });
 
+  it('no model appears twice under formatting-only spellings', () => {
+    // stats-70: "o3 2025.04 16" / "o3 (2025-04-16)", "Qwen3 235B-A22B" /
+    // "Qwen3-235B-A22B" were separate rows. Folding to [a-z0-9+] keeps real
+    // variants apart ("Command R" vs "Command R+").
+    const seen = new Map();
+    for (const r of d.pivotAll.value) {
+      const k = r.name.toLowerCase().replace(/[^a-z0-9+]/g, '');
+      expect(seen.get(k), `"${r.name}" duplicates "${seen.get(k)}"`).toBeUndefined();
+      seen.set(k, r.name);
+    }
+  });
+
   it('leader cards never crown an unranked row', () => {
     for (const card of d.leaders.value) {
       const row = rowOf(card.model);

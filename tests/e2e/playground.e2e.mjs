@@ -4,15 +4,17 @@
 // listings with the arena join on the card, ONE-CLICK picks on the
 // hand-rolled picker (regression: the old b-autocomplete sometimes
 // dropped the first click), the full provider CATALOG (routed providers.json
-// fixture) with the setup modal (base URL + key + model-ID override →
-// linked My Providers entry → real request), request shape (URL, bearer
+// fixture) with the setup modal (base URL + key + strip-prefix checkbox +
+// Test connection → linked My Providers entry → real request), the
+// strip-prefix default for labs (org/fix-mini → fix-mini, "for all models"),
+// free-text model ids sent exactly as typed, request shape (URL, bearer
 // key, system prompt, model), streamed markdown with raw HTML escaped,
 // reported-usage metrics, IndexedDB persistence across reload, a 401
 // rendered inline + Retry, the CORS/network explanation, deep links (fresh
-// pre-bound chat), history switch/rename/delete, the provider filter
-// optgroups, the collapsible rail, in-place reply edit, message delete,
-// and a clean console. Runs under tests/run-e2e.mjs (vite preview on 4173,
-// base /benchmark_arena/).
+// pre-bound chat), history switch/rename/delete, the type-to-filter
+// provider autocomplete (flat list), the collapsible rail, in-place reply
+// edit, message delete, and a clean console. Runs under tests/run-e2e.mjs
+// (vite preview on 4173, base /benchmark_arena/).
 import { chromium } from 'playwright';
 import { parseModelListing } from '../../src/lib/myProviders.js';
 
@@ -214,6 +216,9 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     mode = 'ok';
 
     // ── 7. deep link + New chat ─────────────────────────────────────
+    // Send button back = the stream's finally ran (busy false) — the deep
+    // link below must never race an in-flight reply.
+    await page.locator('[data-test="pg-send"]').waitFor({ timeout: 5000 });
     await page.goto(BASE + '#/playground?p=pgtest&m=my-private-model');
     await page.locator('[data-test="pg-model-card"] .pg-card-name.plain').waitFor({ timeout: 15000 });
     const dl = (await page.locator('[data-test="pg-model-card"] .pg-card-name').innerText()).trim();
@@ -246,19 +251,33 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     if (await page.locator('.pg-hist-item').count() === beforeDel - 1) ok('history: delete removes a chat (confirm auto-accepted)');
     else fail('delete chat did not remove an item');
 
-    // ── 7c. provider filter (optgroups: My providers + catalog kinds) ─
+    // ── 7c. provider filter: type-to-filter autocomplete, flat list ───
     const countAll = await page.locator('[data-test="pg-count"]').innerText();
-    await page.locator('[data-test="pg-prov-filter"]').selectOption('pgtest');
+    const provSel = page.locator('[data-test="pg-prov-filter"]');
+    await provSel.click();
+    await provSel.fill('Test');
+    await page.locator('[data-test="pg-prov-option"]', { hasText: 'Test Gateway' }).first().click();
     const countFiltered = await page.locator('[data-test="pg-count"]').innerText();
-    if (/across 1 provider/.test(countFiltered) && /across 3 providers/.test(countAll)) ok('provider dropdown narrows the picker (2 own + 1 catalog → 1)');
+    if (/across 1 provider/.test(countFiltered) && /across 3 providers/.test(countAll)) ok('provider autocomplete narrows the picker (2 own + 1 catalog → 1)');
     else fail(`filter counts: all="${countAll.trim()}" filtered="${countFiltered.trim()}"`);
-    const labsOpt = page.locator('[data-test="pg-prov-filter"] optgroup[label="Labs"] option', { hasText: 'Fixlab' });
-    if (await labsOpt.count() === 1) ok('filter lists catalog labs in their own optgroup (Fixlab under Labs)');
-    else fail('catalog provider missing from the Labs optgroup');
-    await page.locator('[data-test="pg-prov-filter"]').selectOption('');
+    await provSel.click();
+    await provSel.fill('Fix');
+    const fixOpt = page.locator('[data-test="pg-prov-option"]', { hasText: 'Fixlab' }).first();
+    await fixOpt.waitFor({ timeout: 3000 });
+    ok('typing filters the flat provider list (catalog lab found by "Fix")');
+    await fixOpt.click();
+    if (/across 1 provider/.test(await page.locator('[data-test="pg-count"]').innerText())) ok('catalog provider is selectable the same way');
+    else fail('selecting the catalog provider did not narrow the picker');
+    await provSel.click();
+    await provSel.fill('');
+    if (/across 3 providers/.test(await page.locator('[data-test="pg-count"]').innerText())) ok('clearing the filter restores all providers');
+    else fail('clearing the filter did not reset to All providers');
+    await provSel.press('Escape'); // dismiss the open dropdown before touching the model picker below
+    await page.locator('[data-test="pg-prov-option"]').first().waitFor({ state: 'hidden', timeout: 3000 });
 
     // ── 7f. catalog pick → setup modal → linked entry → real request ──
     let fixReq = null;
+    await page.route(FIXBASE + '/models', (route) => route.fulfill({ status: 200, headers: CORS, body: JSON.stringify({ data: [{ id: 'fix-mini' }, { id: 'fix-large' }] }) }));
     await page.route(FIXBASE + '/chat/completions', async (route) => {
       const req = route.request();
       if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: CORS });
@@ -287,30 +306,59 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     // dismissal, so picking another catalog model must stay modal-free)
     await page.locator('[data-test="pg-setup-url"]').fill(FIXBASE);
     await page.locator('[data-test="pg-setup-key"]').fill('sk-fixlab-1');
-    const overrideVal = await page.locator('[data-test="pg-setup-model"]').inputValue();
-    if (overrideVal === 'org/fix-mini') ok('model ID field prefilled with the catalog id');
-    else fail('model ID prefill: ' + overrideVal);
-    await page.locator('[data-test="pg-setup-model"]').fill('fix-mini'); // catalog prefixes must be correctable
+    // Labs ship prefixed catalog ids; strip defaults ON and the "Model
+    // sent" line previews the id the API will actually get.
+    const sendCode = (await page.locator('[data-test="pg-setup-send"] code').innerText()).trim();
+    const sendHint = await page.locator('[data-test="pg-setup-send"]').innerText();
+    if (sendCode === 'fix-mini' && /catalog: org\/fix-mini/.test(sendHint)) ok('modal previews the stripped model id (org/fix-mini → fix-mini, catalog id shown beside)');
+    else fail('model preview wrong: ' + sendHint);
+    if (await page.locator('[data-test="pg-setup-strip"] input').isChecked()) ok('strip-prefix defaults ON for a first-party catalog provider');
+    else fail('strip-prefix should default ON for first-party catalogs');
+    await page.locator('[data-test="pg-setup-test-btn"]').click();
+    const testLine = page.locator('[data-test="pg-setup-test"]');
+    await testLine.waitFor({ timeout: 5000 });
+    const testText = await testLine.innerText();
+    if (/Connected — 2 models/.test(testText) && /fix-mini is listed/.test(testText)) ok('Test connection verifies base URL + key and confirms the model id against the live list');
+    else fail('test result unexpected: ' + testText);
     await page.locator('[data-test="pg-setup-save"]').click();
     await modal.waitFor({ state: 'hidden', timeout: 5000 });
     const nm = (await card.locator('.pg-card-name').innerText()).trim();
-    if (nm === 'fix-mini') ok('after setup the card shows the overridden model id');
+    if (nm === 'fix-mini') ok('after setup the card shows the stripped model id');
     else fail('card after setup: ' + nm);
     const mine = JSON.parse(await page.evaluate(() => localStorage.getItem('ba.myproviders.v1')));
     const entry = (mine.providers || []).find(p => p.catalogId === 'fixlab');
-    if (entry && entry.mode === 'catalog' && entry.key === 'sk-fixlab-1' && entry.baseUrl === FIXBASE) ok('setup links a My Providers entry (catalogId, key lives there, not in the Playground)');
-    else fail('catalog entry not stored correctly: ' + JSON.stringify(mine.providers?.map(p => ({ id: p.id, c: p.catalogId }))));
-    const inMine = await page.locator('[data-test="pg-prov-filter"] optgroup[label="My providers"] option', { hasText: 'Fixlab' }).count();
-    const inLabs = await page.locator('[data-test="pg-prov-filter"] optgroup[label="Labs"] option', { hasText: 'Fixlab' }).count();
-    if (inMine === 1 && inLabs === 0) ok('linked provider moves from Labs into My providers (catalog group replaced)');
-    else fail(`linked provider should replace the catalog group in the filter (mine=${inMine}, labs=${inLabs})`);
+    const entryIds = (entry?.models || []).map(m => m.id);
+    if (entry && entry.mode === 'catalog' && entry.key === 'sk-fixlab-1' && entry.baseUrl === FIXBASE
+      && entryIds.includes('fix-mini') && entryIds.includes('fix-free') && !entryIds.some(i => i.startsWith('org/'))) {
+      ok('setup links a My Providers entry; the WHOLE seeded listing is prefix-stripped ("for all models")');
+    } else fail('catalog entry not stored correctly: ' + JSON.stringify({ mode: entry?.mode, baseUrl: entry?.baseUrl, ids: entryIds }));
+    const optText = await page.locator('[data-test="pg-prov-option"]').allInnerTexts();
+    const at = (s) => optText.findIndex(t => t.includes(s));
+    if (at('Test Gateway') === 0 && at('Second Hub') === 1 && at('Fixlab') === 2) ok('linked provider joins My providers at the top of the flat filter list (catalog group replaced)');
+    else fail('filter order after linking: ' + JSON.stringify(optText));
     await page.locator('textarea[aria-label="Message"]').fill('hello');
     await page.keyboard.press('Enter');
     const fixMsg = page.locator('.pg-msg.assistant').last();
     await fixMsg.locator('.pg-meta').waitFor({ timeout: 15000 });
     if (fixReq?.headers.authorization === 'Bearer sk-fixlab-1' && fixReq?.body.model === 'fix-mini'
-      && fixReq?.body.messages?.at(-1)?.content === 'hello') ok('catalog chat request: mocked base URL, bearer key from the linked entry, overridden model id');
+      && fixReq?.body.messages?.at(-1)?.content === 'hello') ok('catalog chat request: mocked base URL, bearer key from the linked entry, stripped model id');
     else fail('catalog request unexpected: ' + JSON.stringify(fixReq));
+    // Free text (Ibrahim): a model id no listing carries can be typed and
+    // sent as-is — no catalog update, no modal, exact bytes on the wire.
+    await pickInput.click();
+    await pickInput.fill('brand-new-model');
+    const customRow = page.locator('[data-test="pg-pick-custom"]');
+    await customRow.waitFor({ timeout: 3000 });
+    await customRow.click();
+    await page.locator('[data-test="pg-picklist"]').waitFor({ state: 'hidden', timeout: 3000 });
+    const customNm = (await card.locator('.pg-card-name').innerText()).trim();
+    if (customNm === 'brand-new-model') ok('free text: the typed id becomes the model (plain card, no invented score)');
+    else fail('free-text pick: ' + customNm);
+    await page.locator('textarea[aria-label="Message"]').fill('ping');
+    await page.keyboard.press('Enter');
+    await page.locator('.pg-msg.assistant').last().locator('.pg-meta').waitFor({ timeout: 15000 });
+    if (fixReq?.body.model === 'brand-new-model' && fixReq?.headers.authorization === 'Bearer sk-fixlab-1') ok('free-text model id is sent exactly as typed to the linked provider');
+    else fail('free-text request: ' + JSON.stringify(fixReq?.body));
     await pickViaPicker('fix-free'); // second catalog model of the same provider
     if (await modal.count() === 0) ok('dismissed setup does not re-pop on further catalog picks in the same session');
     else fail('setup modal re-opened after "Not now" — browsing feels like whack-a-mole');

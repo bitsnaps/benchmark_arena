@@ -17,11 +17,11 @@ import { useProviders } from '../stores/providers.js';
 import { usePlayground } from '../stores/playground.js';
 import { buildCatalogIndex } from '../lib/myProviders.js';
 import {
-  buildPlaygroundGroups, buildCatalogGroups, catalogProviderEntry, applyModelOverride,
-  capGroupItems, providerOptGroups, filterByProvider, filterGroups, findOption,
+  buildPlaygroundGroups, buildCatalogGroups, catalogProviderEntry, stripCatalogPrefix,
+  capGroupItems, providerOptions, filterByProvider, filterGroups, findOption,
   KNOWN_ENDPOINTS,
 } from '../lib/playgroundModels.js';
-import { buildPayload, sendChat, estimateTokens, estimateCost, fmtCost, fmtMs } from '../lib/chat.js';
+import { buildPayload, sendChat, testConnection, estimateTokens, estimateCost, fmtCost, fmtMs } from '../lib/chat.js';
 import { renderMarkdown } from '../lib/miniMarkdown.js';
 import { fmtScore, scoreColor, fmtUsd, fmtCtx } from '../lib/format.js';
 
@@ -62,18 +62,61 @@ const totalModels = computed(() => groups.value.reduce((n, g) => n + g.items.len
 const providersReady = computed(() => providers.value !== null);
 const catalogProviders = computed(() => providerCatalogRaw.value?.providers || []);
 
-const selected = computed(() => findOption(groups.value, settings.value.providerId, settings.value.modelId));
+// Free-text models (Ibrahim): an id no listing carries still resolves — a
+// synthetic option binds it to the selected provider so it is sent exactly
+// as typed. Arena joins are honestly empty for it (no score, no price,
+// plain id on the card).
+const selected = computed(() => {
+  const hit = findOption(groups.value, settings.value.providerId, settings.value.modelId);
+  if (hit) return hit;
+  const g = groups.value.find(g => g.providerId === settings.value.providerId);
+  if (!g || !settings.value.modelId) return null;
+  return {
+    key: g.providerId + '\u0001' + settings.value.modelId,
+    providerId: g.providerId, providerLabel: g.label,
+    catalogId: g.catalogId || null, kind: g.kind || null, custom: !!g.custom,
+    modelId: settings.value.modelId, arenaName: null, slug: null,
+    score: null, older: false, ctx: null, free: false, price: null,
+  };
+});
 const selectedProvider = computed(() => (providers.value || []).find(p => p.id === settings.value.providerId) || null);
 // Catalog picks bind to a 'cat:…' group id until the setup modal links a
 // real My Providers entry — no entry means the request has no destination.
 const needsSetup = computed(() => !!selected.value && !selectedProvider.value);
 
-// ── Provider filter ("All providers" + one per provider), composes with the search ──
+// ── Provider filter — type-to-filter autocomplete, flat list ──────
+// Replaces the native select (its optgroups had no way to filter by typing).
+// The stored filter commits on select / clear only, so typing never flips
+// the model list underneath; blur restores the committed label.
 const providerFilter = computed({
   get: () => ui.value.providerFilter,
   set: (v) => setUi({ providerFilter: String(v || '') }),
 });
-const optGroups = computed(() => providerOptGroups(groups.value));
+const providerOptionsList = computed(() => {
+  const all = providerOptions(groups.value);
+  const q = String(provFilterText.value || '').toLowerCase().trim();
+  if (!q) return all;
+  return all.filter(o => o.label.toLowerCase().includes(q)); // type-to-filter
+});
+const totalProviders = computed(() => groups.value.length);
+const allProvidersPlaceholder = computed(() => `All providers (${totalProviders.value})`);
+const committedFilterLabel = computed(() => {
+  const id = providerFilter.value;
+  if (!id) return '';
+  return groups.value.find(g => g.providerId === id)?.label || '';
+});
+const provFilterText = ref('');
+watch(committedFilterLabel, (v) => { provFilterText.value = v; }, { immediate: true });
+function onProvType(v) {
+  provFilterText.value = v;
+  if (!String(v || '').trim()) setUi({ providerFilter: '' }); // cleared → All providers
+}
+function onProvPick(opt) {
+  if (!opt) return;
+  setUi({ providerFilter: opt.id });
+  provFilterText.value = opt.label;
+}
+function onProvBlur() { provFilterText.value = committedFilterLabel.value; }
 const visibleGroups = computed(() => filterByProvider(groups.value, providerFilter.value));
 const modelCount = computed(() => visibleGroups.value.reduce((n, g) => n + g.items.length, 0));
 const pickedOutsideFilter = computed(() => !!selected.value && !!providerFilter.value && selected.value.providerId !== providerFilter.value);
@@ -97,6 +140,22 @@ function pick(o) {
   if (route.query.p || route.query.m) router.replace({ query: {} });
 }
 
+// Free-text pick: the typed text becomes the model id on the CURRENT
+// provider — new or unlisted models need no catalog update and no modal.
+function pickCustom(text) {
+  const t = String(text || '').trim();
+  if (!t) return;
+  setSettings({ modelId: t });
+  pickerOpen.value = false;
+  nextTick(() => {
+    if (selected.value) query.value = optionLabel(selected.value);
+    composerEl.value?.focus();
+  });
+  if (route.query.p || route.query.m) router.replace({ query: {} });
+}
+const currentProviderLabel = computed(() =>
+  groups.value.find(g => g.providerId === settings.value.providerId)?.label || 'the current provider');
+
 // ── Model picker (hand-rolled, deterministic) ─────────────────────────
 // Replaces b-autocomplete: option buttons use mousedown.prevent, so the
 // input never loses focus and a click ALWAYS selects (the old picker
@@ -110,6 +169,14 @@ const pickerRows = computed(() => {
   const { groups: capped, hidden } = capGroupItems(filtered.value, PICK_CAP);
   const rows = [];
   let idx = 0;
+  // The free-text row: typed text no listing matches becomes a pickable
+  // first row. Only when a provider is bound — otherwise there is nowhere
+  // to send it.
+  const q = query.value.trim();
+  if (q && settings.value.providerId
+    && !filtered.value.some(g => g.items.some(i => i.modelId.toLowerCase() === q.toLowerCase()))) {
+    rows.push({ type: 'custom', key: 'custom:' + q, text: q, idx: idx++ });
+  }
   for (const g of capped) {
     rows.push({ type: 'group', key: 'g:' + g.providerId, label: g.label });
     for (const it of g.items) rows.push({ type: 'item', key: it.key, opt: it, idx: idx++ });
@@ -167,6 +234,7 @@ const setup = ref(null);
 // must not make browsing the catalog feel like whack-a-mole. The card
 // hint, the Set up button and the send guard always still offer it.
 const setupDismissed = new Set();
+const testState = ref(null); // null | { busy, ok, msg }
 const setupOpen = computed({
   get: () => setup.value !== null,
   set: (v) => {
@@ -184,20 +252,63 @@ function openSetup(opt) {
     baseUrl: KNOWN_ENDPOINTS[opt.catalogId] || '',
     key: '',
     modelId: opt.modelId,
-    origModelId: opt.modelId,
+    // Labs prefix their catalog ids ('gemini/…') while their API wants the
+    // bare id; aggregators keep the prefix (it IS the API id there). The
+    // Test button verifies the guess against the provider's own list.
+    strip: opt.kind === 'first-party' && opt.modelId.includes('/'),
   };
+  testState.value = null;
 }
+
+// What Save will actually send and persist: the checkbox rewrites the whole
+// seeded listing, so the picked id gets the same treatment.
+const setupWillSend = computed(() => {
+  const s = setup.value;
+  if (!s) return '';
+  return s.strip && s.modelId.includes('/') ? s.modelId.slice(s.modelId.indexOf('/') + 1) : s.modelId;
+});
+
+// "Test connection": GET the provider's model list with the entered key
+// BEFORE anything is saved, then reconcile the id forms — when the
+// provider's own list says the other form is the right one, the checkbox
+// flips automatically.
+async function runTest() {
+  const s = setup.value;
+  if (!s || !s.baseUrl.trim() || testState.value?.busy) return;
+  testState.value = { busy: true, ok: false, msg: '' };
+  const r = await testConnection({ baseUrl: s.baseUrl, key: s.key });
+  if (setup.value !== s) return; // modal closed while testing
+  if (r.ok && Array.isArray(r.models)) {
+    const send = setupWillSend.value;
+    const listed = r.models.some(m => m === send);
+    const altListed = send !== s.modelId && r.models.some(m => m === s.modelId);
+    if (altListed) {
+      s.strip = !s.strip;
+      testState.value = { busy: false, ok: true, msg: `${r.message} The provider lists ${s.modelId} — switched the prefix option for you.` };
+    } else if (!listed) {
+      testState.value = { busy: false, ok: true, msg: `${r.message} ${send} is not in the list — new or unlisted IDs are sent exactly as typed.` };
+    } else {
+      testState.value = { busy: false, ok: true, msg: `${r.message} ${send} is listed.` };
+    }
+  } else {
+    testState.value = { busy: false, ok: r.ok === true, msg: r.message };
+  }
+}
+
 function saveSetup() {
   const s = setup.value;
   if (!s || !s.baseUrl.trim()) return;
-  const modelId = s.modelId.trim() || s.origModelId;
+  const modelId = setupWillSend.value;
   // A real My Providers entry backs the chat: base URL + key live there
   // (never in the Playground store), seeded with the provider's catalog
-  // models so the whole group stays chat-ready after one setup.
+  // models so the whole group stays chat-ready after one setup. The strip
+  // option rewrites EVERY seeded id (Ibrahim: "for all models") — what the
+  // picker shows is exactly what the request sends.
   const entry = addProvider({ label: s.label, baseUrl: s.baseUrl.trim(), key: s.key.trim(), mode: 'catalog', catalogId: s.catalogId });
   const prov = catalogProviders.value.find(p => p.id === s.catalogId);
-  const listing = catalogProviderEntry(prov || { id: s.catalogId, name: s.label, models: [] }).models;
-  setModels(entry.id, applyModelOverride(listing, s.origModelId, modelId));
+  let listing = catalogProviderEntry(prov || { id: s.catalogId, name: s.label, models: [] }).models;
+  if (s.strip) listing = stripCatalogPrefix(listing);
+  setModels(entry.id, listing);
   setSettings({ providerId: entry.id, modelId });
   setup.value = null;
   nextTick(() => composerEl.value?.focus());
@@ -246,8 +357,10 @@ let controller = null;
 let deepHandled = '';
 // `ready` is a source on purpose: the default bind and deep links must wait
 // for the IDB boot — setSettings before that no-ops and `groups` alone may
-// never change again (the boot-vs-listings race).
-watch([groups, ready, () => route.query.p, () => route.query.m], () => {
+// never change again (the boot-vs-listings race). `busy` too: a deep link
+// that arrives while a reply streams must bind WHEN the stream ends, not
+// never (single-fire watch — the stream's end is its only retry).
+watch([groups, ready, busy, () => route.query.p, () => route.query.m], () => {
   if (!ready.value) return;
   const { p, m } = route.query;
   if (!p || !m) { deepHandled = ''; }
@@ -567,12 +680,17 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
         <div class="pg-sep"></div>
 
         <div class="lbl">Provider</div>
-        <select v-model="providerFilter" class="input is-small pg-provsel" data-test="pg-prov-filter" aria-label="Filter models by provider">
-          <option value="">All providers ({{ totalModels }})</option>
-          <optgroup v-for="og in optGroups" :key="og.label" :label="og.label">
-            <option v-for="p in og.options" :key="p.id" :value="p.id">{{ p.label }} ({{ p.n }})</option>
-          </optgroup>
-        </select>
+        <b-autocomplete v-model="provFilterText" :data="providerOptionsList" field="label" size="is-small"
+          icon="filter" clearable keep-first open-on-focus :placeholder="allProvidersPlaceholder"
+          data-test="pg-prov-filter" aria-label="Filter models by provider"
+          @update:model-value="onProvType" @select="onProvPick" @blur="onProvBlur">
+          <template #default="{ option }">
+            <span class="pg-prov-opt" data-test="pg-prov-option">
+              <span class="pg-prov-label">{{ option.label }}</span>
+              <span class="pg-prov-n">{{ option.n }}</span>
+            </span>
+          </template>
+        </b-autocomplete>
         <div class="lbl">Model</div>
         <!-- Hand-rolled picker: option buttons mousedown.prevent, so a click
              always selects — no blur/close race, no second click needed. -->
@@ -584,6 +702,16 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
           <div v-if="pickerOpen" id="pg-picklist" class="pg-picklist" role="listbox" aria-label="Models" data-test="pg-picklist">
             <template v-for="row in pickerRows.rows" :key="row.key">
               <div v-if="row.type === 'group'" class="pg-pick-group">{{ row.label }}</div>
+              <button v-else-if="row.type === 'custom'" type="button" class="pg-pick-item pg-pick-custom"
+                role="option" :class="{ 'is-active': row.idx === activeIdx }" :data-idx="row.idx"
+                :aria-selected="false" data-test="pg-pick-custom"
+                @mousedown.prevent @click="pickCustom(row.text)">
+                <span class="pg-opt">
+                  <span class="pg-opt-id">Use “{{ row.text }}” as the model ID</span>
+                  <span class="pg-opt-setup" title="Free text — sent exactly as typed"><i class="fas fa-keyboard" aria-hidden="true"></i></span>
+                </span>
+                <span class="pg-opt-sub">Not in any listing — sent exactly as typed to {{ currentProviderLabel }}</span>
+              </button>
               <button v-else type="button" class="pg-pick-item" :class="{ 'is-active': row.idx === activeIdx }"
                 role="option" :data-idx="row.idx"
                 :aria-selected="row.opt.providerId === settings.providerId && row.opt.modelId === settings.modelId"
@@ -755,7 +883,7 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
     </div>
 
     <!-- Setup modal: collect what a catalog model needs to chat -->
-    <b-modal v-model="setupOpen" :width="520" :destroy-on-hide="false" aria-role="dialog" aria-label="Set up provider">
+    <b-modal v-model="setupOpen" aria-role="dialog" aria-label="Set up provider">
       <div v-if="setup" class="pg-modal panel-lab" data-test="pg-setup-modal">
         <h2 class="pg-modal-title">Set up {{ setup.label }}</h2>
         <p class="muted pg-modal-sub">
@@ -767,13 +895,25 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
         <label class="lbl" for="pg-setup-key">API key</label>
         <input id="pg-setup-key" v-model="setup.key" class="input is-small" type="password" data-test="pg-setup-key"
           placeholder="sk-…" autocomplete="off" />
-        <label class="lbl" for="pg-setup-model">Model ID <span class="pg-modal-id-hint">(catalog: {{ setup.origModelId }})</span></label>
-        <input id="pg-setup-model" v-model="setup.modelId" class="input is-small" data-test="pg-setup-model" spellcheck="false" />
+        <p class="pg-modal-send" data-test="pg-setup-send">
+          Model sent: <code>{{ setupWillSend }}</code>
+          <span v-if="setupWillSend !== setup.modelId" class="pg-modal-id-hint">catalog: {{ setup.modelId }}</span>
+        </p>
+        <b-checkbox v-model="setup.strip" size="is-small" data-test="pg-setup-strip">
+          Strip the catalog prefix from model IDs — applies to every model of this provider
+        </b-checkbox>
         <p class="pg-fine">
-          Catalogs sometimes prefix org names (e.g. <code>gemini/…</code>) — use the ID your provider's API expects.
-          The key stays in this browser and is sent only to this base URL.
+          The key stays in this browser and is sent only to this base URL. Model IDs not in the provider's list are
+          sent exactly as typed, so brand-new or unlisted models work without updating anything.
+        </p>
+        <p v-if="testState && testState.msg && !testState.busy" class="pg-setup-test" :class="testState.ok ? 'is-ok' : 'is-err'" role="status" data-test="pg-setup-test">
+          {{ testState.msg }}
         </p>
         <div class="pg-modal-actions">
+          <button type="button" class="button is-small" data-test="pg-setup-test-btn"
+            :disabled="!setup.baseUrl.trim() || (testState && testState.busy)" @click="runTest">
+            {{ testState && testState.busy ? 'Testing…' : 'Test connection' }}
+          </button>
           <button type="button" class="button is-primary is-small" data-test="pg-setup-save" :disabled="!setup.baseUrl.trim()" @click="saveSetup">Save and use here</button>
           <button type="button" class="button is-ghost is-small" data-test="pg-setup-cancel" @click="setupOpen = false">Not now</button>
         </div>
@@ -815,7 +955,8 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 .pg-rename { width: 100%; }
 .pg-hist-clear { background: none; border: 0; color: var(--faint); font-size: .72rem; cursor: pointer; text-align: left; padding: .15rem 0; }
 .pg-hist-clear:hover:not(:disabled) { color: var(--rose); }
-.pg-provsel { width: 100%; }
+.pg-prov-opt { display: flex; justify-content: space-between; gap: .6rem; align-items: baseline; min-width: 0; width: 100%; }
+.pg-prov-n { color: var(--faint); font-size: .74rem; flex: none; }
 .pg-off { color: var(--gold); }
 .pg-rail-toggle { font-size: .95rem; }
 .pg-edit { display: flex; flex-direction: column; gap: .4rem; max-width: min(46rem, 92%); }
@@ -843,12 +984,20 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 
 .pg-setup-row { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-top: .55rem; }
 
-/* Setup modal */
-.pg-modal { display: flex; flex-direction: column; gap: .5rem; }
+/* Setup modal — padding + fluid width match the site's other modals
+   (mp-modal / tiers-modal); the old edge-to-edge 520px box overflowed
+   small screens and looked unstyled. */
+.pg-modal { display: flex; flex-direction: column; gap: .5rem; padding: 1.4rem 1.25rem; max-width: 520px; }
 .pg-modal-title { font-size: 1.05rem; font-weight: 700; margin: 0; }
 .pg-modal-sub { font-size: .82rem; margin: 0; line-height: 1.45; }
-.pg-modal-id-hint { color: var(--faint); font-weight: 400; }
-.pg-modal-actions { display: flex; gap: .5rem; justify-content: flex-end; margin-top: .3rem; }
+.pg-modal-id-hint { color: var(--faint); font-weight: 400; margin-left: .35rem; }
+.pg-modal-send { font-size: .84rem; margin: 0; }
+.pg-modal-send code { background: var(--surface-3, var(--surface-2)); color: var(--teal); border-radius: 5px; padding: .08rem .35rem; }
+.pg-setup-test { font-size: .8rem; margin: 0; }
+.pg-setup-test.is-ok { color: var(--teal); }
+.pg-setup-test.is-err { color: var(--rose); }
+.pg-modal-actions { display: flex; gap: .5rem; justify-content: flex-end; margin-top: .3rem; flex-wrap: wrap; }
+.pg-pick-custom .pg-opt-sub { display: block; }
 
 .pg-card { border: 1px solid var(--line); border-radius: 12px; padding: .7rem .8rem; background: var(--surface-2); }
 .pg-card-top { display: flex; gap: .6rem; align-items: flex-start; }

@@ -101,16 +101,27 @@ def main():
     #    AA-only rows gone). Relax the floor by the observed row drop; a
     #    meta collapse with STABLE rows (the stats-28 miner-death class)
     #    still fails exactly as before.
+    #    stats-69 (2026-11-01): the counts are normKey-set based. The meta
+    #    layer's rename-follow (stats-61) reshelves records under the fresh
+    #    source spelling ('MiniMax M2' -> 'MiniMax-M2') and duplicate-spelling
+    #    keys collapse on join; a raw-key count misreads both as shrinkage.
+    #    normKeys see through renames, so only true retirements count.
     mm, tt_new, cr_new, mod_new = meta_stats(doc)
     _, tt_old, cr_old, mod_old = meta_stats(head)
-    n_old = len(head.get("models_meta") or {})
+    def _nk_set(d):
+        out = {}
+        for k in d or {}:
+            out.setdefault(_nk(k), k)
+        return out
+    ns_old, ns_new = _nk_set(head.get("models_meta")), _nk_set(mm)
+    n_old = len(ns_old)
     row_drop = max(0, rows_of(head) - rows_of(doc))
     meta_floor = max(95, n_old - 10 - row_drop)
-    if len(mm) < meta_floor:
-        fail(f"models_meta shrank: {len(mm)} vs HEAD {n_old} (floor {meta_floor})")
-    if row_drop and len(mm) < n_old - 10:
+    if len(ns_new) < meta_floor:
+        fail(f"models_meta shrank: {len(ns_new)} vs HEAD {n_old} (floor {meta_floor})")
+    if row_drop and len(ns_new) < n_old - 10:
         print(
-            f"GUARD NOTE models_meta {len(mm)} < HEAD {n_old}: floor relaxed by the "
+            f"GUARD NOTE models_meta {len(ns_new)} < HEAD {n_old}: floor relaxed by the "
             f"{row_drop}-row upstream drop ({rows_of(doc)} rows vs {rows_of(head)}) — "
             f"records follow rows (stats-68)"
         )

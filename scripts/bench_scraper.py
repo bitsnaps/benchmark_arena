@@ -13,7 +13,7 @@ Usage: python3 bench_scraper.py            # full fresh scrape + metadata
 Benchmarks covered:
   1. Artificial Analysis  - https://artificialanalysis.ai/leaderboards/models
   2. BenchLM.ai           - https://benchlm.ai/
-  3. Arena.ai Text        - https://arena.ai/leaderboard/text
+  3. Arena.ai Text        - https://arena.ai/leaderboard/chat/text
   4. SimpleBench.com      - https://simple-bench.com/
   5. ARC-AGI-2           - https://arcprize.org/leaderboard (ARC-AGI-2 scores)
   6. Design Arena         - https://www.designarena.ai/leaderboard
@@ -59,7 +59,7 @@ BENCHMARKS = {
         "type": "general",
     },
     "Arena.ai Text": {
-        "url": "https://arena.ai/leaderboard/text",
+        "url": "https://arena.ai/leaderboard/chat/text",
         "wait_after_load": 12000,
         "snapshot_depth": 6,
         "type": "general",
@@ -1594,32 +1594,47 @@ def _arena_fetch_html(url, attempts=3):
 
 def _parse_arena_text_html(page_html):
     """
-    Parse the Arena.ai text-leaderboard HTML (2026-10 server-rendered table).
+    Parse the Arena.ai text-leaderboard HTML (2026-10/11 table layouts).
 
-    Layout: one <table>, 7 columns (Rank | Rank Spread | Model | Score |
-    Votes | Price $/M | Context). Model cell = kebab name span + org/license
-    span ('claude-opus-5.5-high' + 'Anthropic · Proprietary'); Score cell =
-    Elo span + CI span ('1513' + '±13', sometimes + 'Preliminary').
-    Returns [{model: kebab, score: int}] — same shape as the browser eval.
+    2026-10 layout: 7 columns (Rank | Rank Spread | Model | Score | Votes |
+    Price $/M | Context), model cell = kebab name span ('claude-opus-5.5-high')
+    + org/license span; Score cell = Elo span + CI span ('1513' + '±13').
+    2026-11 layout (stats-69): 8 columns — a Cost/Task P50 column was
+    inserted before Price $/M, and the model name is now a DISPLAY name
+    ("Claude Opus 5.5 (High)") whose full string lives in the span[title]
+    attr. Model/Score kept cells 2/3 in the rebuild, so both layouts parse
+    with the same cell indices.
 
     stats-68: the leaderboard table is NOT always the first <table> in the
     document — the Wayback Machine (mirror probe, 2026-10-30) injects its own
     chrome tables (calendar widget) ahead of the archived content. Scan every
-    <table> and keep the one that yields the most valid rows; harmless on the
-    live page (it has exactly one data table).
+    <table>; stats-69: a table whose header carries Model + Score outranks a
+    bigger chrome table, most rows wins otherwise.
+    Returns [{model: name, score: int}] — same shape as the browser eval.
     """
     from html import unescape as _u
 
-    best = []
+    candidates = []  # (header_match, rows) per table
     for table in re.findall(r"<table.*?</table>", page_html, re.S):
+        head_ok = False
+        head = re.search(r"<thead.*?</thead>", table, re.S)
+        if head:
+            head_text = _u(re.sub(r"<[^>]+>", " ", head.group(0)))
+            head_ok = "Model" in head_text and "Score" in head_text
         out = []
         for row in re.findall(r"<tr[^>]*>(.*?)</tr>", table, re.S):
             cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.S)
             if len(cells) < 4:
                 continue
-            # model: first span inside the Model cell (span[1] is org/license)
-            spans = re.findall(r"<span[^>]*>(.*?)</span>", cells[2], re.S)
-            model = _u(re.sub(r"<[^>]+>", "", spans[0])).strip() if spans else ""
+            # model: span[title] first (2026-11 display-name layout — the
+            # full string survives CSS truncation in the attr), then the
+            # first span (2026-10 kebab layout; span[1] is org/license)
+            tm = re.search(r'<span[^>]*\btitle="([^"]+)"', cells[2])
+            if tm:
+                model = _u(tm.group(1)).strip()
+            else:
+                spans = re.findall(r"<span[^>]*>(.*?)</span>", cells[2], re.S)
+                model = _u(re.sub(r"<[^>]+>", "", spans[0])).strip() if spans else ""
             if not model or model.lower() == "model":
                 continue  # header-duplicate row inside tbody
             # score: leading integer of the Score cell's first span
@@ -1630,9 +1645,14 @@ def _parse_arena_text_html(page_html):
             if not sm:
                 continue
             out.append({"model": model, "score": int(sm.group(1))})
-        if len(out) > len(best):
-            best = out
-    return best
+        candidates.append((head_ok, out))
+    best = None
+    for head_ok, out in candidates:
+        if not out:
+            continue
+        if best is None or (head_ok, len(out)) > (best[0], len(best[1])):
+            best = (head_ok, out)
+    return best[1] if best else []
 
 
 # stats-68: vintage stamp for the doc — set ONLY by the prior-public
@@ -1694,7 +1714,7 @@ def _arena_recover_from_public():
 
 def scrape_arena_text():
     """
-    Arena.ai text leaderboard (Elo-based, ~953-1508 range).
+    Arena.ai text leaderboard (Elo-based, ~953-1528 range).
     2026-10-14: arena.ai is behind a Cloudflare managed challenge the local
     headless browser cannot pass — primary path is now the z-ai page_reader
     service (server-rendered HTML, all ~415 rows), parsed by
@@ -1706,20 +1726,51 @@ def scrape_arena_text():
     both live paths now return the 28,840-byte challenge page. Final layer
     is the prior-public recovery (_arena_recover_from_public) — the previous
     published doc is the freshest honest arena mirror (its 2026-10-25
-    vintage beats the Wayback Machine's 2026-10-08 closest capture), and the
-    doc is stamped `arena_text_asof` so the vintage is auditable.
-    Names arrive kebab-case ('claude-opus-4-6-high') and go through
+    vintage beats the Wayback Machine's 2026-10-08 closest capture), and
+    the doc is stamped `arena_text_asof` so the vintage is auditable.
+    2026-11-01 (stats-69): arena.ai rebuilt the leaderboard — the table
+    moved to /leaderboard/chat/text, names are now display names, and the
+    wall held against every fetcher we have (page_reader challenge, local
+    browser incl. a Turnstile click, curl_cffi Chrome TLS 403). New first
+    source: data/arena_manual.html (gitignored) — a browser export of the
+    table Ibrahim drops in, used only if younger than 36h. Live paths stay
+    first in line for the day the wall lifts; prior-public recovery remains
+    the last resort.
+    Names: 2026-11 display names are used as-is; strict kebab slugs
+    ('claude-opus-4-6-high', 2026-10 layout) go through
     _kebab_to_model_name. Rows without a usable Elo (<900) are skipped.
     """
-    url = "https://arena.ai/leaderboard/text"
+    url = "https://arena.ai/leaderboard/chat/text"
+    drop_file = os.path.normpath(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                     "..", "data", "arena_manual.html"))
 
     data = None
 
-    # Primary: page_reader service (bypasses the Cloudflare challenge)
-    page_html = _arena_fetch_html(url)
-    if page_html:
-        data = _parse_arena_text_html(page_html)
-        print(f"    [page_reader] parsed {len(data)} rows from HTML table")
+    # stats-69 source 0: manual drop file (fresh browser export — bypasses
+    # the Cloudflare wall entirely)
+    try:
+        age_h = (time.time() - os.path.getmtime(drop_file)) / 3600.0
+        if age_h < 36:
+            with open(drop_file, encoding="utf-8") as f:
+                data = _parse_arena_text_html(f.read())
+            print(f"    [manual drop] {drop_file} ({age_h:.1f}h old) "
+                  f"-> {len(data)} rows")
+            if not data:
+                data = None  # unparsable drop — fall through to live paths
+        else:
+            print(f"    [manual drop] {drop_file} is {age_h:.1f}h old "
+                  f"(>36h) — skipped")
+    except OSError:
+        pass  # no drop file — the normal case while the wall is down
+
+    # Primary: page_reader service (bypassed the Cloudflare challenge until
+    # 2026-10-29; retried anyway — walls lift)
+    if not data:
+        page_html = _arena_fetch_html(url)
+        if page_html:
+            data = _parse_arena_text_html(page_html)
+            print(f"    [page_reader] parsed {len(data)} rows from HTML table")
 
     # Fallback: local browser JS eval (pre-Cloudflare path; likely blocked)
     if not data:
@@ -1744,24 +1795,35 @@ def scrape_arena_text():
             print(f"    [recovery] adopted {len(data)} models from the prior doc")
 
     if not data or not isinstance(data, list):
-        print(f"    [WARN] No data from Arena.ai text (page_reader + eval + "
-              f"prior-public recovery all failed)")
+        print(f"    [WARN] No data from Arena.ai text (manual drop + "
+              f"page_reader + eval + prior-public recovery all failed)")
         return []
 
     models = []
     for item in data:
         if not isinstance(item, dict):
             continue
-        kebab = item.get("model", "")
+        raw_name = item.get("model", "")
         elo = item.get("score", 0)
-        if not kebab or elo < 900:
+        if not raw_name or elo < 900:
             continue
-        if item.get("display"):  # stats-68: prior-public names are canonical
-            name = kebab
+        # stats-69: 2026-11 layout serves display names; prior-public
+        # recovery names are canonical (stats-68 display flag). Only strict
+        # kebab slugs ('claude-opus-4-6-high', 2026-10 layout) need the
+        # conversion — the normalizer folds hyphen/space/case, so display
+        # and kebab spellings join the same canonical row either way.
+        if item.get("display"):
+            name = raw_name
+        elif re.fullmatch(r"[a-z0-9.]+(?:-[a-z0-9.]+)+", raw_name):
+            name = _kebab_to_model_name(raw_name)
         else:
-            name = _kebab_to_model_name(kebab)
+            name = raw_name
         if name and len(name) > 3:
             models.append((name, float(elo)))
+
+    if not models:
+        print("    [WARN] Arena.ai table parsed but no valid Elo rows")
+        return []
 
     print(f"    Got {len(models)} models (Elo {min(m[1] for m in models):.0f}-{max(m[1] for m in models):.0f})")
     return models

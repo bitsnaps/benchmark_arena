@@ -5658,6 +5658,14 @@ def normalize_model_name(name):
     # Handles "MiniMax-M3" ↔ "MiniMax M3", "Nex-N2-Pro" ↔ "Nex N2 Pro", etc.
     # Safe because org suffixes are already stripped; all hyphens are within the model name.
     n = re.sub(r'-', ' ', n)
+    # stats-69 NOTE: deliberately NO parameter-size re-strip here. Folding
+    # "-27B"/"-32B" sizes after hyphen normalization would collapse hyphenated
+    # size variants ('Qwen3.8-27B') into the family key ('qwen 3.8') that
+    # spaced sources ('Qwen3.8 Max') already occupy — live incident: the
+    # 27B row vanished and its BenchLM/ARC/EQBench cells folded into the
+    # Qwen3.8-Max row. Hyphenated sources (BenchLM, 2026-11 Arena) keep
+    # size-distinct keys; formatting-only spelling forks are healed at the
+    # merge layer instead (stats-69 established-name pass + stats-70 dedup).
 
     # ── Add space between letter and digit when directly adjacent (no separator) ──
     # "GPT4o" → "GPT 4o", "Claude4" → "Claude 4", "Qwen3.7 Max" → "Qwen 3.7 Max"

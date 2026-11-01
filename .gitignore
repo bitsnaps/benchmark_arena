@@ -49,3 +49,6 @@ __screenshots__/
 tests/e2e/shots/
 test-results/
 __pycache__/
+
+# Manual scrape drops (browser exports; never commit)
+data/

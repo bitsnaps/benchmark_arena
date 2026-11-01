@@ -95,6 +95,62 @@ def main():
     dl = json.load(open(DL))
     mp, md = pub["models_meta"], dl["models_meta"]
 
+    # stats-69 (2026-11-01): formatting-only spelling stability. Sources
+    # jitter separators — "DeepSeek V4 Flash" -> "DeepSeek-V4-Flash" arrived
+    # with the 2026-11 Arena display names, and shortest-display tie-breaks
+    # baked the fresh spelling into rows + meta keys, renaming anchored rows
+    # out from under the unit tests; a second pair ("Qwen2.5 Coder 32B
+    # Instruct" / "Qwen2.5-Coder-32B-Instruct") forked into two rows and
+    # tripped stats-70's dedup contract test. A fresh name whose fold key
+    # matches an established public name therefore adopts the ESTABLISHED
+    # spelling here — rows and meta keys, before any join. The fold keeps
+    # '+' (stats-70 discipline): "Command R" and "Command R+" are distinct
+    # products even though _norm_key erases the plus. Real renames (different
+    # words/numbers) still follow the fresh name through the normKey /
+    # v-fold / token-sort tiers below (stats-61 policy). Case-only drift
+    # adopts the published casing (stability first; the scraper's
+    # display-casing canon still governs brand-new names).
+    def _fmt_key(raw):
+        if not raw:
+            return None
+        s = re.sub(r"[^a-z0-9+]", "", str(raw).lower())
+        return s or None
+
+    pub_by_fk = {}
+    for k in mp:
+        pub_by_fk.setdefault(_fmt_key(k), k)
+
+    fmt_renames = {}
+
+    def _establish(name):
+        if not name:
+            return name
+        est = pub_by_fk.get(_fmt_key(name))
+        if est and est != name:
+            fmt_renames.setdefault(name, est)
+            return est
+        return name
+
+    for tbl in ("unified_closed", "unified_open"):
+        for r in dl.get(tbl) or []:
+            r["name"] = _establish(r.get("name"))
+    if fmt_renames:
+        md2, src_key = {}, {}
+        for k, v in md.items():
+            nk = fmt_renames.get(k, k)
+            # exact-spelling record wins over a folded variant; the variant
+            # record survives under its own key only when no exact one exists
+            if nk not in md2 or (src_key[nk] != nk and k == nk):
+                md2[nk] = v
+                src_key[nk] = k
+        md = md2
+        dl["models_meta"] = md
+        print(f"stats-69: {len(fmt_renames)} formatting-only spelling(s) "
+              f"adopted the established names: "
+              f"{[f'{a!r} -> {b!r}' for a, b in sorted(fmt_renames.items())[:6]]}"
+              + (" ..." if len(fmt_renames) > 6 else ""))
+
+
     # stats-30: case-insensitive key join. The scrape doc owns key casing now
     # (display-casing canon in bench_scraper.py), so casing-only drift between
     # the fresh doc and the public meta must not fork a record into two

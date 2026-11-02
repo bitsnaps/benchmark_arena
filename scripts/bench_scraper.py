@@ -14,6 +14,9 @@ Benchmarks covered:
   1. Artificial Analysis  - https://artificialanalysis.ai/leaderboards/models
   2. BenchLM.ai           - https://benchlm.ai/
   3. Arena.ai Text        - https://arena.ai/leaderboard/chat/text
+       (primary since 2026-11-02: the official leaderboard dataset
+       lmarena-ai/leaderboard-dataset on HuggingFace, CC-BY-4.0 — same
+       style-controlled ratings the site renders, no Cloudflare wall)
   4. SimpleBench.com      - https://simple-bench.com/
   5. ARC-AGI-2           - https://arcprize.org/leaderboard (ARC-AGI-2 scores)
   6. Design Arena         - https://www.designarena.ai/leaderboard
@@ -33,6 +36,7 @@ import os
 import shutil
 import urllib.request
 import urllib.error
+import urllib.parse
 from collections import defaultdict
 from datetime import date, datetime, timezone
 
@@ -1712,9 +1716,86 @@ def _arena_recover_from_public():
     return []
 
 
+def _arena_fetch_dataset(attempts=4):
+    """
+    stats-70 (2026-11-02): PRIMARY Arena.ai Text source — the official
+    leaderboard dataset Arena's own org publishes on HuggingFace:
+    lmarena-ai/leaderboard-dataset (CC-BY-4.0; "updated each day we do a
+    leaderboard update" per the Arena org in HF discussions #80/#85).
+
+    Config 'text_style_control' + category 'overall' is the exact pair the
+    site's chat/text table renders — verified 2026-11-02: rank 1
+    'Gemini 4 Carbon (High)' = 1528 with 4,403 votes, identical to the live
+    page (the plain 'text' config carries unadjusted ratings, 1540 — do NOT
+    mix them; the style-controlled scale is what our Arena column always
+    carried).
+
+    Fetched via the datasets-server /filter API: plain JSON over HTTPS, no
+    auth, no Cloudflare wall, no new dependencies (urllib already in use),
+    100 rows/page — 419 rows -> 5 calls. Names arrive as DISPLAY names
+    ("Claude Opus 5.5 (High)") and are flagged display=True so they bypass
+    _kebab_to_model_name (same contract as the stats-68 recovery, whose
+    names are canonical too).
+
+    Returns [] on any failure — the ladder (manual drop / page_reader /
+    eval / prior-public) stays in charge.
+    """
+    for attempt in range(attempts):
+        out = []
+        try:
+            offset, total = 0, 0
+            while True:
+                params = {
+                    "dataset": "lmarena-ai/leaderboard-dataset",
+                    "config": "text_style_control",
+                    "split": "latest",
+                    "where": '"category"=\'overall\'',
+                    "offset": offset,
+                    "length": 100,
+                }
+                api = ("https://datasets-server.huggingface.co/filter?"
+                       + urllib.parse.urlencode(params))
+                req = urllib.request.Request(
+                    api, headers={"User-Agent": "benchmark-arena-scraper"})
+                # datasets-server is erratic under load (observed 2026-11-02:
+                # 0.4s / 0.4s / 42s on identical calls, plus 502s) — the
+                # generous read timeout + retries absorb the slow tail.
+                with urllib.request.urlopen(req, timeout=60) as resp:
+                    payload = json.load(resp)
+                rows = payload.get("rows") or []
+                total = payload.get("num_rows_total") or 0
+                for wrap in rows:
+                    r = wrap.get("row") or {}
+                    name = r.get("model_name")
+                    rating = r.get("rating")
+                    if isinstance(name, str) and isinstance(rating, (int, float)):
+                        # site renders the rounded integer (1527.5 -> 1528)
+                        out.append({"model": name.strip(),
+                                    "score": int(rating + 0.5),
+                                    "display": True})
+                offset += len(rows)
+                if not rows or offset >= total or len(out) > 2000:
+                    break
+            if out:
+                print(f"    [hf dataset] {len(out)} rows "
+                      f"(lmarena-ai/leaderboard-dataset, style-control overall)")
+                return out
+            print(f"    [hf dataset] attempt {attempt+1}: 0 rows")
+        except Exception as e:  # noqa: BLE001
+            print(f"    [hf dataset] attempt {attempt+1} failed: {e}")
+        time.sleep(8)
+    return []
+
+
 def scrape_arena_text():
     """
     Arena.ai text leaderboard (Elo-based, ~953-1528 range).
+    2026-11-02 (stats-70): PRIMARY source is now the official leaderboard
+    dataset Arena's org publishes on HuggingFace (CC-BY-4.0,
+    lmarena-ai/leaderboard-dataset) via the datasets-server /filter API —
+    the same style-controlled ratings the site renders, no wall, no auth.
+    It updates with every leaderboard publish, so the manual drop is only
+    a mid-day refresh rung now.
     2026-10-14: arena.ai is behind a Cloudflare managed challenge the local
     headless browser cannot pass — primary path is now the z-ai page_reader
     service (server-rendered HTML, all ~415 rows), parsed by
@@ -1736,16 +1817,24 @@ def scrape_arena_text():
     table Ibrahim drops in, used only if younger than 36h. Live paths stay
     first in line for the day the wall lifts; prior-public recovery remains
     the last resort.
-    Names: 2026-11 display names are used as-is; strict kebab slugs
-    ('claude-opus-4-6-high', 2026-10 layout) go through
-    _kebab_to_model_name. Rows without a usable Elo (<900) are skipped.
+    Names: 2026-11 display names (HF dataset + manual drop + page_reader
+    title attr) are used as-is; strict kebab slugs ('claude-opus-4-6-high',
+    2026-10 layout) go through _kebab_to_model_name. Rows without a usable
+    Elo (<900) are skipped.
     """
     url = "https://arena.ai/leaderboard/chat/text"
     drop_file = os.path.normpath(
         os.path.join(os.path.dirname(os.path.abspath(__file__)),
                      "..", "data", "arena_manual.html"))
 
-    data = None
+    # stats-70 source -1: the official HF dataset (no wall, no auth). The
+    # freshest honest Arena feed since 2026-11-02 — it updates with every
+    # leaderboard publish and carries the exact style-controlled ratings
+    # the site table renders. The manual drop below (when present and
+    # <36h old) still overwrites it — a fresh browser export is by
+    # definition newer than any published dataset snapshot.
+    ds_data = _arena_fetch_dataset()
+    data = ds_data
 
     # stats-69 source 0: manual drop file (fresh browser export — bypasses
     # the Cloudflare wall entirely)
@@ -1757,7 +1846,7 @@ def scrape_arena_text():
             print(f"    [manual drop] {drop_file} ({age_h:.1f}h old) "
                   f"-> {len(data)} rows")
             if not data:
-                data = None  # unparsable drop — fall through to live paths
+                data = ds_data  # unparsable drop — keep the dataset rows
         else:
             print(f"    [manual drop] {drop_file} is {age_h:.1f}h old "
                   f"(>36h) — skipped")
@@ -1795,8 +1884,9 @@ def scrape_arena_text():
             print(f"    [recovery] adopted {len(data)} models from the prior doc")
 
     if not data or not isinstance(data, list):
-        print(f"    [WARN] No data from Arena.ai text (manual drop + "
-              f"page_reader + eval + prior-public recovery all failed)")
+        print(f"    [WARN] No data from Arena.ai text (HF dataset + "
+              f"manual drop + page_reader + eval + "
+              f"prior-public recovery all failed)")
         return []
 
     models = []

@@ -29,7 +29,11 @@ export const DEFAULT_SETTINGS = Object.freeze({
   maxTokens: null,   // null = provider default
   stream: true,
 });
-const DEFAULT_UI = Object.freeze({ railOpen: true, providerFilter: '' });
+// Two rail preferences: the desktop side-rail (default open) and the
+// mobile drawer (default CLOSED — on a phone the overlay buries the chat,
+// so the chat must come first). Splitting them keeps a tablet rotation or
+// a desktop "hide the rail" click from leaking into the other layout.
+const DEFAULT_UI = Object.freeze({ railOpen: true, railOpenMobile: false, providerFilter: '' });
 
 const conversations = ref([]);
 const activeId = ref('');

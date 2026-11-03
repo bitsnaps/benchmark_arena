@@ -134,7 +134,12 @@ function pick(o) {
   // base URL + key, so the setup modal opens right away (send is guarded)
   // — once per provider per session, "Not now" is respected afterwards.
   if (!o.custom && !selectedProvider.value && !setupDismissed.has(o.catalogId)) openSetup(o);
-  else nextTick(() => composerEl.value?.focus());
+  else {
+    // On the phone the card + composer sit behind the drawer — close it so
+    // the pick visibly lands in the chat instead of behind the sheet.
+    if (isNarrow.value) railOpen.value = false;
+    nextTick(() => composerEl.value?.focus());
+  }
   // The active conversation now carries the model binding; keep the URL
   // clean so a reload restores THIS chat instead of opening a fresh one.
   if (route.query.p || route.query.m) router.replace({ query: {} });
@@ -147,6 +152,7 @@ function pickCustom(text) {
   if (!t) return;
   setSettings({ modelId: t });
   pickerOpen.value = false;
+  if (isNarrow.value) railOpen.value = false;
   nextTick(() => {
     if (selected.value) query.value = optionLabel(selected.value);
     composerEl.value?.focus();
@@ -377,12 +383,28 @@ watch([groups, ready, busy, () => route.query.p, () => route.query.m], () => {
     const best = groups.value.flatMap(g => g.items).sort((a, b) => (b.score ?? -1) - (a.score ?? -1))[0];
     if (best) setSettings({ providerId: best.providerId, modelId: best.modelId });
   }
-  if (selected.value && !query.value) query.value = optionLabel(selected.value);
+  // Restore the label only while the user is NOT inside the picker. Its
+  // resting state while browsing is an empty query (focus clears it), and
+  // writing the label here whenever any source of this watch changed
+  // HIJACKED the open list: late data (providers.json, listings, a stream
+  // ending) rewrote the query mid-tap and the list collapsed to the
+  // selected option — the tap users aimed at their model hit nothing
+  // (Ibrahim: "selection is not working properly, reactivity").
+  if (selected.value && !pickerFocused.value && !query.value) query.value = optionLabel(selected.value);
 }, { immediate: true });
 
+// ── Responsive rail: side panel on desktop, overlay drawer on mobile ──
+// The drawer covers the chat, so it gets its own preference and defaults
+// CLOSED — landing on a phone must show the conversation, not a settings
+// sheet (ui.railOpenMobile !== true → closed until the user opens it).
+const narrowMq = window.matchMedia('(max-width: 1023px)');
+const isNarrow = ref(narrowMq.matches);
+const onNarrowChange = (e) => { isNarrow.value = e.matches; }; // tablet rotation
+onMounted(() => narrowMq.addEventListener('change', onNarrowChange));
+onBeforeUnmount(() => narrowMq.removeEventListener('change', onNarrowChange));
 const railOpen = computed({
-  get: () => ui.value.railOpen !== false, // default open
-  set: (v) => setUi({ railOpen: !!v }),
+  get: () => (isNarrow.value ? ui.value.railOpenMobile === true : ui.value.railOpen !== false),
+  set: (v) => setUi(isNarrow.value ? { railOpenMobile: !!v } : { railOpen: !!v }),
 });
 
 // ── History (all chats live in IndexedDB, this browser only) ──────────
@@ -801,7 +823,7 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
               :title="railOpen ? 'Hide the settings panel' : 'Show the settings panel'"
               :aria-label="railOpen ? 'Hide the settings panel' : 'Show the settings panel'"
               @click="railOpen = !railOpen">
-              <i class="fas" :class="railOpen ? 'fa-angles-left' : 'fa-angles-right'" aria-hidden="true"></i>
+              <i class="fas" :class="railOpen ? (isNarrow ? 'fa-xmark' : 'fa-angles-left') : (isNarrow ? 'fa-sliders' : 'fa-angles-right')" aria-hidden="true"></i>
             </button>
             <span class="pg-dot" :class="{ live: busy }"></span>
             {{ selected ? selected.modelId : 'No model selected' }}
@@ -968,7 +990,7 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
   position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 30;
   background: var(--bg-elev, var(--surface-2)); border: 1px solid var(--line-2, var(--line));
   border-radius: 10px; box-shadow: 0 10px 28px rgba(0,0,0,.35);
-  max-height: 340px; overflow-y: auto; padding: .25rem;
+  max-height: 340px; overflow-y: auto; overscroll-behavior: contain; padding: .25rem;
 }
 .pg-pick-group { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--faint); padding: .45rem .5rem .2rem; }
 .pg-pick-item { display: block; width: 100%; text-align: left; background: none; border: 0; color: var(--text); cursor: pointer; padding: .3rem .5rem; border-radius: 8px; }
@@ -1075,13 +1097,25 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 @media (max-width: 1023px) {
   .pg-grid { grid-template-columns: 1fr; }
   .pg-grid.rail-closed .pg-rail { display: none; }
-  .pg-chat { height: 75vh; }
-  /* Rail becomes an overlay drawer; the backdrop behind it closes on tap. */
-  .pg-rail { position: fixed; top: 4.2rem; left: .6rem; right: .6rem; bottom: .6rem; z-index: 40; overflow-y: auto; }
+  /* dvh follows the collapsing URL bar; the vh line is the fallback. */
+  .pg-chat { height: calc(100vh - 16rem); height: calc(100dvh - 16rem); min-height: 360px; }
+  /* Rail becomes an overlay drawer; the backdrop behind it closes on tap.
+     The drawer keeps scroll gestures to itself so the page under it never
+     scrolls through, and a bigger hit area on the toggle (open state). */
+  .pg-rail { position: fixed; top: 4.2rem; left: .6rem; right: .6rem; bottom: .6rem; z-index: 40; overflow-y: auto; overscroll-behavior: contain; }
   .pg-backdrop { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 39; }
+  .pg-rail-toggle { font-size: 1.05rem; padding: .3rem .55rem; }
+  /* 16px fields: iOS zooms any focused input smaller than 16px. */
+  .pg-rail .input, .pg-rail .textarea, .pg-input { font-size: 1rem; }
+  /* Kill the double-tap-zoom pause on the controls users tap in bursts. */
+  .pg-pick-item, .pg-act, .pg-starter, .pg-hist-open, .pg-rail-toggle { touch-action: manipulation; }
 }
 @media (max-width: 600px) {
   .pg-bubble { max-width: 100%; }
   .pg-log { padding: .7rem; }
+  /* The intro paragraph costs ~90px of the chat panel — vertical space is
+     the scarce resource on a phone, the chat head already says the rest. */
+  .pg-page .section-sub { display: none; }
+  .pg-chat { height: calc(100vh - 13rem); height: calc(100dvh - 13rem); min-height: 340px; }
 }
 </style>

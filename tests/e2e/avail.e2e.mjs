@@ -133,10 +133,18 @@ const expectCount = async (page, selector, expected, label) => {
     // (stats-26: Buefy b-tooltip — hover the chip, read .tooltip-content)
     if (ANCHOR) {
       const anchorRow = page.locator('.b-table tbody tr', { has: page.locator('.model-link', { hasText: exact(ANCHOR.name) }) }).first();
-      const anchorChip = anchorRow.locator('.free-chip').first();
-      await anchorChip.hover();
-      await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
-      const chipTitle = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
+      // Buefy TELEPORTS an open tooltip's content to <body> (the closed
+      // copies stay in place behind v-show), so the content cannot be
+      // paired back to the chip's own wrapper. What IS deterministic: the
+      // content our hover just opened is the LAST visible one in DOM
+      // (teleport appends; a stray tooltip opened earlier by focus or the
+      // mouse path sits before it). A page-global .first() grabbed exactly
+      // such a stray in CI 2026-11-03 ('Open the EQBench CW explorer').
+      const chipWrap = anchorRow.locator('.b-tooltip', { has: page.locator('.free-chip') }).first();
+      await chipWrap.locator('.free-chip').first().hover();
+      const chipTip = page.locator('.tooltip-content:visible').last();
+      await chipTip.waitFor({ state: 'visible', timeout: 5000 });
+      const chipTitle = (await chipTip.innerText()).replace(/\s+/g, ' ');
       await page.mouse.move(0, 0);
       await page.evaluate(() => window.scrollTo(0, 0)); // hover scrolled deep — navbar covers the header controls otherwise
       await page.waitForTimeout(200);
@@ -249,10 +257,14 @@ const expectCount = async (page, selector, expected, label) => {
     const zenRow = page.locator('.avail-row', { has: page.locator('.avail-seller', { hasText: 'OpenCode Zen' }) }).first();
     if (await zenRow.locator('.free-chip').count()) ok(`Zen seller row carries the free chip (${ZEN_ROW.name})`);
     else fail('Zen seller row missing free chip');
-    // stats-26: the chip tooltip is a Buefy b-tooltip = exact caveat
-    await zenRow.locator('.free-chip').hover();
-    await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
-    const zenChipTitle = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ').trim();
+    // stats-26: the chip tooltip is a Buefy b-tooltip = exact caveat — the
+    // open content teleports to <body>, so read the LAST visible one (the
+    // one our hover just opened; see the anchor note above)
+    const zenWrap = zenRow.locator('.b-tooltip', { has: page.locator('.free-chip') }).first();
+    await zenWrap.locator('.free-chip').first().hover();
+    const zenTip = page.locator('.tooltip-content:visible').last();
+    await zenTip.waitFor({ state: 'visible', timeout: 5000 });
+    const zenChipTitle = (await zenTip.innerText()).replace(/\s+/g, ' ').trim();
     await page.mouse.move(0, 0);
     await page.evaluate(() => window.scrollTo(0, 0));
     if (zenChipTitle === 'Free tier — rate limits apply, not unlimited') ok('free chip tooltip = exact caveat');

@@ -13,7 +13,9 @@
 // rendered inline + Retry, the CORS/network explanation, deep links (fresh
 // pre-bound chat), history switch/rename/delete, the type-to-filter
 // provider autocomplete (flat list), the collapsible rail, in-place reply
-// edit, message delete, and a clean console. Runs under tests/run-e2e.mjs
+// edit, message delete, a clean console, the late-data picker hijack
+// regression, and a touch-context mobile section (drawer default, one-tap
+// picks). Runs under tests/run-e2e.mjs
 // (vite preview on 4173, base /benchmark_arena/).
 import { chromium } from 'playwright';
 import { parseModelListing } from '../../src/lib/myProviders.js';
@@ -112,6 +114,42 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     const href = await page.locator('[data-test="pg-empty"] a.button').getAttribute('href');
     if (/view=mine/.test(href || '')) ok('no providers → empty state links to My Providers');
     else fail('empty-state CTA should link to ?view=mine, got ' + href);
+
+    // ── 1b. reactivity: late data must not hijack the open picker ────
+    // Regression (Ibrahim: "selection is not working properly —
+    // reactivity"): the boot/labels watch restored the selected model's
+    // label on EVERY change of its sources. The picker's resting state
+    // while browsing is a focused input with an empty query, so a late
+    // providers.json response rewrote the query mid-interaction and the
+    // open list collapsed to the selected option — the tap users aimed at
+    // their model hit nothing and it took a second try to select.
+    await page.addInitScript((s) => localStorage.setItem('ba.myproviders.v1', s), STORE);
+    let delayCatalog = true;
+    await page.route('**/providers.json', async (route) => {
+      if (delayCatalog) {
+        // one-shot delayed payload so `groups` really changes content while
+        // the picker is open; later fetches get the CATALOG fixture again
+        // (this handler shadows the plain one below — Playwright matches
+        // routes last-registered-first).
+        delayCatalog = false;
+        await new Promise((r) => setTimeout(r, 2500));
+        return route.fulfill({ status: 200, headers: CORS, body: JSON.stringify({ as_of: '2026-11-01', kinds: ['first-party'], sources: {}, providers: [{ id: 'fixlab', name: 'Fixlab', kind: 'first-party', models: [{ id: 'org/fix-mini', in: 0.5, out: 1.5, ctx: 8192 }] }] }) });
+      }
+      await route.fulfill({ status: 200, headers: CORS, body: JSON.stringify({ as_of: '2026-11-01', kinds: ['first-party'], sources: {}, providers: CATALOG }) });
+    });
+    // The SPA already sits on #/playground after section 1 — a goto to the
+    // same URL would be a same-document hash navigation (no reload, init
+    // script skipped), so force a real reload to boot with the seeded store.
+    await page.reload();
+    const lateInput = page.locator('[data-test="pg-model-input"]');
+    await lateInput.waitFor({ timeout: 15000 });
+    await lateInput.click(); // open the list, empty the query — user is browsing
+    await page.locator('[data-test="pg-picklist"]').waitFor({ timeout: 3000 });
+    await page.waitForTimeout(3300); // providers.json lands while the list is open
+    const q = await lateInput.inputValue();
+    const openRows = await page.locator('[data-test="pg-picklist"] .pg-pick-item').count();
+    if (q === '' && openRows >= 4) ok(`late catalog data does not hijack the focused picker (query "${q}", ${openRows} options still listed)`);
+    else fail(`picker hijacked while open: query="${q}", ${openRows} options left (want "" and >= 4)`);
 
     // ── 2. picker + arena card ──────────────────────────────────────
     CATALOG = [FIXLAB]; // catalog goes live for the rest of the spec
@@ -391,11 +429,46 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     if (await page.locator('.pg-msg').count() === 0) ok('deleting the first user turn removes the whole thread (message + replies)');
     else fail('delete message left messages behind');
 
-    // ── 8. mobile layout ────────────────────────────────────────────
-    await page.setViewportSize({ width: 390, height: 844 });
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-    if (overflow <= 1) ok('mobile (390px): no horizontal overflow');
-    else fail('mobile horizontal overflow: ' + overflow + 'px');
+    // ── 8. mobile layout (separate touch context) ─────────────
+    // Phone checks: no horizontal overflow, the drawer does NOT bury the
+    // chat on first visit (its own preference, default closed), the
+    // composer is fully on screen (dvh, no clipped Send), and ONE tap on a
+    // picker option selects it and closes the drawer (touch ≠ click). One
+    // touch context; tap() requires hasTouch.
+    const mctx = await browser.newContext({
+      viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true,
+    });
+    const mp = await mctx.newPage();
+    mp.on('pageerror', (e) => errors.push('pageerror(mobile): ' + e.message));
+    await mp.addInitScript((s) => localStorage.setItem('ba.myproviders.v1', s), STORE);
+    await mp.route('**/providers.json', (route) => route.fulfill({ status: 200, headers: CORS, body: JSON.stringify({ as_of: '2026-11-01', kinds: ['first-party'], sources: {}, providers: CATALOG }) }));
+    await mp.goto(BASE + '#/playground');
+    const mcard = mp.locator('[data-test="pg-model-card"]');
+    // The card lives in the drawer, which is hidden by default on phones —
+    // wait on the always-visible chat head instead, then assert the drawer.
+    await mp.locator('[data-test="pg-rail-toggle"]').waitFor({ timeout: 15000 });
+    if (!(await mp.locator('.pg-rail').isVisible())) ok('mobile: the settings drawer does not bury the chat on first visit (default closed)');
+    else fail('mobile: drawer covers the chat on first visit');
+    const comp = await mp.locator('textarea[aria-label="Message"]').boundingBox();
+    const mvh = await mp.evaluate(() => window.innerHeight);
+    if (comp && comp.y + comp.height <= mvh + 2) ok(`mobile: composer fully on screen (bottom ${Math.round(comp.y + comp.height)} / viewport ${mvh})`);
+    else fail(`mobile: composer clipped (bottom ${comp && Math.round(comp.y + comp.height)} / viewport ${mvh})`);
+
+    const pickTouch = async (want, cardText) => {
+      if (!(await mp.locator('.pg-rail').isVisible())) await mp.locator('[data-test="pg-rail-toggle"]').tap();
+      await mp.locator('[data-test="pg-model-input"]').tap();
+      await mp.locator('[data-test="pg-picklist"]').waitFor({ timeout: 3000 });
+      await mp.locator('[data-test="pg-picklist"] .pg-pick-item', { hasText: want }).first().tap();
+      await mp.waitForTimeout(300);
+      const nm = (await mcard.locator('.pg-card-name').textContent()).trim(); // card may be display:none now
+      if (nm === cardText) ok(`mobile: one tap picked ${want} — card shows ${cardText}`);
+      else fail(`mobile one-tap pick: expected ${cardText}, got "${nm}"`);
+      if (!(await mp.locator('.pg-rail').isVisible())) ok('mobile: drawer closed after the pick — the chat is visible again');
+      else fail('mobile: drawer still covers the chat after picking a model');
+    };
+    await pickTouch('hub-mini', 'hub-mini');
+    await pickTouch('claude-opus-4.6', 'Claude Opus 4.6');
+    await mctx.close();
 
     if (errors.length) fail('console errors:\n  ' + errors.join('\n  '));
     else ok('clean console');

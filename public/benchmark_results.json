@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-06 06:43",
+  "timestamp": "2026-11-06 11:56",
   "benchmarks": [
     "Artificial Analysis",
     "BenchLM.ai",
@@ -453,12 +453,12 @@
           88.60000000000001
         ],
         [
-          "GPT-6.1 Sol",
-          89.39999999999999
-        ],
-        [
           "Claude Sonnet 5.5",
           88.80000000000001
+        ],
+        [
+          "GPT-6.1 Sol",
+          89.39999999999999
         ],
         [
           "Claude Fable 5.1",
@@ -481,6 +481,10 @@
           83.2
         ],
         [
+          "Inkling 2 Small",
+          83.39999999999999
+        ],
+        [
           "Gemini 3.8 Flash",
           91.70769230769228
         ],
@@ -495,10 +499,6 @@
         [
           "Inkling Small",
           77.8
-        ],
-        [
-          "Inkling",
-          83.39999999999999
         ],
         [
           "Gemini 3.5 Flash-Lite",
@@ -571,6 +571,14 @@
           82.89230769230768
         ],
         [
+          "Mistral Medium 3.5",
+          80.89230769230768
+        ],
+        [
+          "Gemma 4 31B",
+          84.8923076923077
+        ],
+        [
           "Kimi K3",
           90.49230769230769
         ],
@@ -587,16 +595,16 @@
           84.60000000000001
         ],
         [
-          "DeepSeek-R1",
-          80.19999999999999
-        ],
-        [
           "DeepSeek V3.2 Exp",
           80.80000000000001
         ],
         [
           "DeepSeek V4 Pro",
           85.80000000000001
+        ],
+        [
+          "DeepSeek-R1",
+          80.19999999999999
         ],
         [
           "GLM-4.7",
@@ -633,14 +641,6 @@
         [
           "DeepSeek V4 Flash",
           82.89230769230768
-        ],
-        [
-          "GLM-4.5-Air",
-          78.60000000000001
-        ],
-        [
-          "GLM-4.6",
-          80.60000000000002
         ]
       ]
     },
@@ -1064,7 +1064,7 @@
         ],
         [
           "Muse Wonder (max)",
-          97.81591263650546
+          97.65990639625585
         ],
         [
           "Claude Opus 5.5",
@@ -1072,7 +1072,7 @@
         ],
         [
           "Inkling 2 Small",
-          95.47581903276131
+          95.3198127925117
         ],
         [
           "GPT-6.1 Sol",
@@ -1112,11 +1112,15 @@
         ],
         [
           "Gemini 3.7 Flash",
-          85.17940717628704
+          85.02340093603745
         ],
         [
           "Ling-3.1-flash",
           84.71138845553821
+        ],
+        [
+          "Muse Spark Open (xhigh)",
+          84.399375975039
         ],
         [
           "Gemini 3.8 Flash",
@@ -1127,12 +1131,8 @@
           84.399375975039
         ],
         [
-          "Muse Spark Open (xhigh)",
-          84.24336973478938
-        ],
-        [
           "GPT-6 Sol",
-          83.30733229329174
+          83.46333853354135
         ],
         [
           "Grok 4.6",
@@ -1182,7 +1182,7 @@
         ],
         [
           "GLM-5.3",
-          83.46333853354135
+          83.30733229329174
         ],
         [
           "Qwen3.8 Max",
@@ -1194,7 +1194,7 @@
         ],
         [
           "GLM-5.3-Flash",
-          80.81123244929798
+          80.65522620904837
         ],
         [
           "Kimi K2.6",
@@ -1222,7 +1222,7 @@
         ],
         [
           "Kimi K2.7 Code",
-          76.5990639625585
+          76.4430577223089
         ],
         [
           "MiniMax M3",
@@ -2576,7 +2576,7 @@
       "Arena.ai Text": 93.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 97.8,
+      "Design Arena": 97.7,
       "DeepSWE": null,
       "VendingBench": 57.2,
       "SWE-Marathon": 98.9,
@@ -2680,15 +2680,14 @@
     },
     {
       "name": "Tencent Hy4",
-      "num_benchmarks": 1,
-      "cl": 12.5,
-      "unranked": true,
+      "num_benchmarks": 3,
+      "cl": 37.5,
       "Artificial Analysis": 35.0,
-      "BenchLM.ai": null,
+      "BenchLM.ai": 61.6,
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": null,
+      "Design Arena": 75.8,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2725,7 +2724,7 @@
       "Arena.ai Text": 83.4,
       "SimpleBench.com": 50.0,
       "ARC-AGI-2": 36.5,
-      "Design Arena": 95.5,
+      "Design Arena": 95.3,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2817,7 +2816,7 @@
       "Arena.ai Text": 83.2,
       "SimpleBench.com": null,
       "ARC-AGI-2": 59.3,
-      "Design Arena": 78.8,
+      "Design Arena": 78.6,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": 52.9,
@@ -2854,7 +2853,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 57.5,
-      "Design Arena": 84.2,
+      "Design Arena": 84.4,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -2891,7 +2890,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": null,
       "ARC-AGI-2": 23.5,
-      "Design Arena": 73.0,
+      "Design Arena": 73.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -3217,7 +3216,7 @@
       "Arena.ai Text": 85.8,
       "SimpleBench.com": 73.1,
       "ARC-AGI-2": 89.6,
-      "Design Arena": 83.3,
+      "Design Arena": 83.5,
       "DeepSWE": null,
       "VendingBench": 87.5,
       "SWE-Marathon": null,
@@ -3343,7 +3342,7 @@
       "Arena.ai Text": 90.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 84.6,
-      "Design Arena": 85.2,
+      "Design Arena": 85.0,
       "DeepSWE": 65.0,
       "VendingBench": null,
       "SWE-Marathon": 42.4,
@@ -4333,7 +4332,7 @@
       "Arena.ai Text": 77.4,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
-      "Design Arena": 53.4,
+      "Design Arena": 53.2,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -4370,24 +4369,6 @@
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": 72.4,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
-      "name": "Hy4",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 61.6,
-      "Arena.ai Text": null,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": 76.6,
       "DeepSWE": null,
       "VendingBench": null,
       "SWE-Marathon": null,
@@ -8119,7 +8100,7 @@
       "Arena.ai Text": 89.4,
       "SimpleBench.com": 66.2,
       "ARC-AGI-2": null,
-      "Design Arena": 83.5,
+      "Design Arena": 83.3,
       "DeepSWE": 69.0,
       "VendingBench": 49.5,
       "SWE-Marathon": 80.0,
@@ -8173,7 +8154,7 @@
       "Arena.ai Text": 88.8,
       "SimpleBench.com": null,
       "ARC-AGI-2": 65.8,
-      "Design Arena": 80.8,
+      "Design Arena": 80.7,
       "DeepSWE": 63.0,
       "VendingBench": null,
       "SWE-Marathon": 73.1,
@@ -8825,7 +8806,7 @@
       "Arena.ai Text": null,
       "SimpleBench.com": 57.9,
       "ARC-AGI-2": null,
-      "Design Arena": 76.6,
+      "Design Arena": 76.4,
       "DeepSWE": null,
       "VendingBench": 30.8,
       "SWE-Marathon": null,
@@ -9345,6 +9326,24 @@
       "Artificial Analysis": null,
       "BenchLM.ai": 23.2,
       "Arena.ai Text": 54.8,
+      "SimpleBench.com": null,
+      "ARC-AGI-2": null,
+      "Design Arena": null,
+      "DeepSWE": null,
+      "VendingBench": null,
+      "SWE-Marathon": null,
+      "FrontierSWE": null,
+      "CyberGem": null,
+      "EQBench CW": null,
+      "LLM Chess": null
+    },
+    {
+      "name": "Qwen2.5-Coder-32B-Instruct",
+      "num_benchmarks": 2,
+      "cl": 25.0,
+      "Artificial Analysis": null,
+      "BenchLM.ai": 27.3,
+      "Arena.ai Text": 57.1,
       "SimpleBench.com": null,
       "ARC-AGI-2": null,
       "Design Arena": null,
@@ -11096,24 +11095,6 @@
       "LLM Chess": null
     },
     {
-      "name": "Qwen2.5 Coder 32B Instruct",
-      "num_benchmarks": 2,
-      "cl": 25.0,
-      "Artificial Analysis": null,
-      "BenchLM.ai": 27.3,
-      "Arena.ai Text": 57.1,
-      "SimpleBench.com": null,
-      "ARC-AGI-2": null,
-      "Design Arena": null,
-      "DeepSWE": null,
-      "VendingBench": null,
-      "SWE-Marathon": null,
-      "FrontierSWE": null,
-      "CyberGem": null,
-      "EQBench CW": null,
-      "LLM Chess": null
-    },
-    {
       "name": "Qwen2.5 Plus",
       "num_benchmarks": 1,
       "cl": 12.5,
@@ -11867,7 +11848,7 @@
         "cache_read": 1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 124.089,
+      "aa_ttft_seconds": 123.486,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -11961,7 +11942,7 @@
         "cache_read": 0.1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.375,
+      "aa_ttft_seconds": 5.259,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -12033,7 +12014,7 @@
         "cache_read": 0.1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 78.185,
+      "aa_ttft_seconds": 77.29,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -12106,7 +12087,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.697,
+      "aa_ttft_seconds": 1.688,
       "modalities_source": "openrouter"
     },
     "Claude Fable 5.1": {
@@ -12170,7 +12151,7 @@
         "cache_read": 0.25
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 8.971,
+      "aa_ttft_seconds": 8.904,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -12271,7 +12252,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 40.797,
+      "aa_ttft_seconds": 39.99,
       "modalities_source": "openrouter"
     },
     "Muse Wonder": {
@@ -12339,7 +12320,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 9.603,
+      "aa_ttft_seconds": 9.659,
       "modalities_source": "openrouter"
     },
     "Claude Haiku 5.5": {
@@ -12404,7 +12385,7 @@
         "cache_read": 0.01
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 25.168,
+      "aa_ttft_seconds": 24.802,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -12479,7 +12460,7 @@
         "cache_read": 0.5
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 8.867,
+      "aa_ttft_seconds": 9.628,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -12525,25 +12506,17 @@
         "default_effort": "high"
       },
       "supported_parameters": [
-        "frequency_penalty",
         "include_reasoning",
-        "logit_bias",
         "max_completion_tokens",
         "max_tokens",
-        "min_p",
-        "presence_penalty",
         "reasoning",
         "reasoning_effort",
-        "repetition_penalty",
         "response_format",
-        "seed",
         "stop",
         "structured_outputs",
         "temperature",
         "tool_choice",
-        "tools",
-        "top_k",
-        "top_p"
+        "tools"
       ],
       "hugging_face_id": "tencent/Hy4",
       "or_free_variants": null,
@@ -12621,7 +12594,7 @@
         "cache_read": 0.075
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 8.359,
+      "aa_ttft_seconds": 10.007,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -12790,7 +12763,7 @@
         "cache_read": 0.1
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.381,
+      "aa_ttft_seconds": 2.289,
       "modalities_source": "openrouter"
     },
     "GPT-6 Luna": {
@@ -12855,7 +12828,7 @@
         "cache_read": 0.01
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 25.444,
+      "aa_ttft_seconds": 25.414,
       "modalities_source": "openrouter"
     },
     "Muse Spark Open": {
@@ -12878,9 +12851,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": 822.0,
+      "total_params_b": null,
       "active_params_b": null,
-      "params_source": "huggingface",
+      "params_source": null,
       "pricing_usd_per_1m": {
         "input": 1.25,
         "output": 4.25,
@@ -12929,7 +12902,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.038,
+      "aa_ttft_seconds": 2.026,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -13007,7 +12980,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.681,
+      "aa_ttft_seconds": 1.69,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -13094,7 +13067,7 @@
         "cache_read": 0.03
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.189,
+      "aa_ttft_seconds": 5.197,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -13281,7 +13254,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.985,
+      "aa_ttft_seconds": 0.983,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -13364,7 +13337,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 17.733,
+      "aa_ttft_seconds": 16.89,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -16437,9 +16410,9 @@
       "active_params_b": 5.1,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.015,
-        "output": 0.057,
-        "cache_read": 0.014
+        "input": 0.018,
+        "output": 0.067,
+        "cache_read": 0.016
       },
       "reasoning": {
         "mandatory": true,
@@ -17537,7 +17510,7 @@
         "cache_read": 0.08
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.662,
+      "aa_ttft_seconds": 2.661,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/qwen3-7-plus"
@@ -17842,7 +17815,7 @@
         "cache_read": 0.175
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 55.451,
+      "aa_ttft_seconds": 55.899,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gpt-5-3-codex"
@@ -17937,7 +17910,7 @@
         "cache_read": 0.034
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 5.039,
+      "aa_ttft_seconds": 5.031,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/hy3"
@@ -17975,68 +17948,6 @@
           "out": 0.5859
         }
       ]
-    },
-    "Hy4": {
-      "or_id": "tencent/hy4",
-      "or_name": "Tencent: Hy4",
-      "provider": "Tencent",
-      "created": "2026-11-04",
-      "context_length": 1048576,
-      "max_output_tokens": 65536,
-      "modality": "text+image->text",
-      "input_modalities": [
-        "text",
-        "image"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Other",
-      "knowledge_cutoff": null,
-      "total_params_b": null,
-      "active_params_b": null,
-      "params_source": null,
-      "pricing_usd_per_1m": {
-        "input": 0.417,
-        "output": 1.2505,
-        "cache_read": 0.021
-      },
-      "reasoning": {
-        "mandatory": false,
-        "supported_efforts": [
-          "high",
-          "low",
-          "none"
-        ],
-        "default_effort": "high"
-      },
-      "supported_parameters": [
-        "frequency_penalty",
-        "include_reasoning",
-        "logit_bias",
-        "max_completion_tokens",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "reasoning",
-        "reasoning_effort",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "structured_outputs",
-        "temperature",
-        "tool_choice",
-        "tools",
-        "top_k",
-        "top_p"
-      ],
-      "hugging_face_id": "tencent/Hy4",
-      "or_free_variants": null,
-      "description": "The official release of Hy4 delivers comprehensive and substantial improvements over Hy4 Preview, with particularly strong gains in agentic capabilities and performance across a wide range of long-horizon, real-world productivity...",
-      "superseded_by": null,
-      "match": "exact",
-      "modalities_source": "openrouter"
     },
     "Ling 3.1 Flash": {
       "or_id": "inclusionai/ling-3.1-flash",
@@ -18099,7 +18010,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.438,
+      "aa_ttft_seconds": 2.504,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/ling-3-1-flash"
@@ -18170,7 +18081,7 @@
         "cache_read": 0.02
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.407,
+      "aa_ttft_seconds": 2.414,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/mercury-2-5"
@@ -19784,7 +19695,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.946,
+      "aa_ttft_seconds": 0.939,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/reka-flash-3"
@@ -19989,7 +19900,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.722,
+      "aa_ttft_seconds": 4.703,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -20095,13 +20006,13 @@
       ],
       "tokenizer": "DeepSeek",
       "knowledge_cutoff": null,
-      "total_params_b": 763.2,
+      "total_params_b": null,
       "active_params_b": null,
-      "params_source": "huggingface",
+      "params_source": null,
       "pricing_usd_per_1m": {
-        "input": 0.3,
-        "output": 1.2,
-        "cache_read": 0.006
+        "input": 0.15,
+        "output": 0.6,
+        "cache_read": 0.003
       },
       "reasoning": {
         "mandatory": false,
@@ -20148,7 +20059,7 @@
         "cache_read": 0.006
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.321,
+      "aa_ttft_seconds": 1.325,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -20175,9 +20086,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": null,
+      "total_params_b": 753.3,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.0699,
         "output": 1.4,
@@ -20226,7 +20137,7 @@
         "cache_read": 0.26
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.647,
+      "aa_ttft_seconds": 3.757,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -20347,7 +20258,7 @@
         "cache_read": 0.0036
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 4.208,
+      "aa_ttft_seconds": 4.211,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -20428,7 +20339,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.659,
+      "aa_ttft_seconds": 1.684,
       "modalities_source": "openrouter"
     },
     "GLM-5.3-Flash": {
@@ -20449,9 +20360,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": null,
+      "total_params_b": 321.3,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.15,
         "output": 0.5,
@@ -20500,7 +20411,7 @@
         "cache_read": 0.03
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 3.521,
+      "aa_ttft_seconds": 3.526,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -20616,7 +20527,7 @@
         "cache_read": 0.0028
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 6.335,
+      "aa_ttft_seconds": 6.371,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -20689,7 +20600,7 @@
         "cache_read": 0.07
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.864,
+      "aa_ttft_seconds": 2.885,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -20720,9 +20631,9 @@
       "active_params_b": null,
       "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.111,
-        "output": 4.44,
-        "cache_read": 0.106
+        "input": 0.1165,
+        "output": 4.66,
+        "cache_read": 0.111
       },
       "reasoning": {
         "mandatory": false,
@@ -20767,7 +20678,7 @@
         "cache_read": 0.044
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.24,
+      "aa_ttft_seconds": 2.231,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -20841,7 +20752,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.066,
+      "aa_ttft_seconds": 2.114,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -20986,7 +20897,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.985,
+      "aa_ttft_seconds": 0.984,
       "modalities_source": "openrouter"
     },
     "Nemotron 3 Ultra": {
@@ -21055,7 +20966,7 @@
         "cache_read": 0.12
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.808,
+      "aa_ttft_seconds": 1.797,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -21271,7 +21182,7 @@
         "cache_read": 0.15
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 6.838,
+      "aa_ttft_seconds": 6.831,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -21353,7 +21264,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.919,
+      "aa_ttft_seconds": 0.92,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -21483,7 +21394,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.57,
+      "aa_ttft_seconds": 1.563,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -21702,9 +21613,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": 753.3,
+      "total_params_b": null,
       "active_params_b": null,
-      "params_source": "huggingface",
+      "params_source": null,
       "pricing_usd_per_1m": {
         "input": 0.006,
         "output": 6.8,
@@ -21860,9 +21771,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": 1026.9,
+      "total_params_b": null,
       "active_params_b": null,
-      "params_source": "huggingface",
+      "params_source": null,
       "pricing_usd_per_1m": {
         "input": 0.5,
         "output": 2.5,
@@ -22181,9 +22092,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": 358.3,
+      "total_params_b": null,
       "active_params_b": null,
-      "params_source": "huggingface",
+      "params_source": null,
       "pricing_usd_per_1m": {
         "input": 0.6,
         "output": 2.2,
@@ -22400,9 +22311,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": "2024-12-31",
-      "total_params_b": null,
+      "total_params_b": 1026.4,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.57,
         "output": 2.3
@@ -22449,9 +22360,9 @@
       ],
       "tokenizer": "Llama4",
       "knowledge_cutoff": "2024-08-31",
-      "total_params_b": null,
+      "total_params_b": 401.6,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.35,
         "output": 1.0,
@@ -22488,7 +22399,7 @@
         "cache_read": 0.22
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.633,
+      "aa_ttft_seconds": 1.628,
       "modalities_source": "openrouter",
       "alias_note": "LLM Chess lists this model under its HF name llama-4-maverick-17b-128e-instruct",
       "archive_links": {
@@ -22531,9 +22442,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": null,
+      "total_params_b": 228.7,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.27,
         "output": 0.95,
@@ -22640,8 +22551,8 @@
       "or_name": "DeepSeek: DeepSeek V3",
       "provider": "DeepSeek",
       "created": "2024-12-26",
-      "context_length": 128000,
-      "max_output_tokens": 16000,
+      "context_length": 163840,
+      "max_output_tokens": 16384,
       "modality": "text->text",
       "input_modalities": [
         "text"
@@ -22651,12 +22562,12 @@
       ],
       "tokenizer": "DeepSeek",
       "knowledge_cutoff": "2024-07-31",
-      "total_params_b": null,
+      "total_params_b": 684.5,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
-        "input": 0.2574,
-        "output": 1.0287
+        "input": 0.32,
+        "output": 0.89
       },
       "reasoning": null,
       "supported_parameters": [
@@ -22953,8 +22864,8 @@
       "active_params_b": 8.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0486,
-        "output": 0.54,
+        "input": 0.051,
+        "output": 0.567,
         "cache_read": 0.018
       },
       "reasoning": {
@@ -23082,9 +22993,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": "2025-03-31",
-      "total_params_b": 356.8,
+      "total_params_b": null,
       "active_params_b": null,
-      "params_source": "huggingface",
+      "params_source": null,
       "pricing_usd_per_1m": {
         "input": 0.5,
         "output": 2.0,
@@ -23149,9 +23060,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": null,
+      "total_params_b": 31.2,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.0605,
         "output": 0.4
@@ -23270,9 +23181,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": null,
+      "total_params_b": 1026.9,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.65,
         "output": 3.41,
@@ -23409,9 +23320,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": null,
-      "total_params_b": 1026.9,
+      "total_params_b": null,
       "active_params_b": null,
-      "params_source": "huggingface",
+      "params_source": null,
       "pricing_usd_per_1m": {
         "input": 0.6,
         "output": 3.5,
@@ -23455,7 +23366,7 @@
         "cache_read": 0.19
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 6.605,
+      "aa_ttft_seconds": 6.579,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/kimi-k2-7-code"
@@ -24281,7 +24192,7 @@
         "cache_read": 0.05
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.658,
+      "aa_ttft_seconds": 1.654,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/gemma-4-26b-a4b"
@@ -24534,7 +24445,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.298,
+      "aa_ttft_seconds": 1.292,
       "modalities_source": "openrouter",
       "alias_note": "LLM Chess lists this model under its HF name llama4-scout-17b-instruct-v1:0",
       "archive_links": {
@@ -24678,9 +24589,9 @@
       ],
       "tokenizer": "Other",
       "knowledge_cutoff": "2024-06-30",
-      "total_params_b": null,
+      "total_params_b": 14.7,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.07,
         "output": 0.14
@@ -24713,10 +24624,59 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.23,
+      "aa_ttft_seconds": 2.221,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/phi-4"
+      }
+    },
+    "Qwen2.5-Coder-32B-Instruct": {
+      "or_id": "qwen/qwen-2.5-coder-32b-instruct",
+      "or_name": "Qwen2.5 Coder 32B Instruct",
+      "provider": null,
+      "created": "2024-11-11",
+      "context_length": 32768,
+      "max_output_tokens": 29491,
+      "modality": "text->text",
+      "input_modalities": [
+        "text"
+      ],
+      "output_modalities": [
+        "text"
+      ],
+      "tokenizer": "Qwen",
+      "knowledge_cutoff": "2024-06-30",
+      "total_params_b": 32.8,
+      "active_params_b": null,
+      "params_source": "huggingface",
+      "pricing_usd_per_1m": {
+        "input": 0.66,
+        "output": 1.0
+      },
+      "reasoning": null,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "temperature",
+        "top_k",
+        "top_p"
+      ],
+      "hugging_face_id": "Qwen/Qwen2.5-Coder-32B-Instruct",
+      "or_free_variants": null,
+      "description": "Qwen2.5-Coder is the latest series of Code-Specific Qwen large language models (formerly known as CodeQwen). Qwen2.5-Coder brings the following improvements upon CodeQwen1.5: - Significantly improvements in **code generation**, **code reasoning**...",
+      "superseded_by": null,
+      "match": "exact",
+      "stale": true,
+      "modalities_source": "openrouter",
+      "archive_links": {
+        "aa": "https://artificialanalysis.ai/models/qwen2-5-coder-32b-instruct"
       }
     },
     "Qwen3 30B-A3B": {
@@ -24886,7 +24846,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.523,
+      "aa_ttft_seconds": 2.521,
       "modalities_source": "openrouter",
       "archive_links": {
         "aa": "https://artificialanalysis.ai/models/qwen3-5-397b-a17b"
@@ -25192,7 +25152,7 @@
         "cache_read": 0.06
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.206,
+      "aa_ttft_seconds": 2.193,
       "modalities_source": "openrouter",
       "available_at": [
         {
@@ -25266,9 +25226,9 @@
       ],
       "tokenizer": "DeepSeek",
       "knowledge_cutoff": null,
-      "total_params_b": 304.6,
+      "total_params_b": null,
       "active_params_b": null,
-      "params_source": "huggingface",
+      "params_source": null,
       "pricing_usd_per_1m": {
         "input": 0.44,
         "output": 1.32,
@@ -25334,8 +25294,8 @@
       "active_params_b": 8.0,
       "params_source": "openrouter",
       "pricing_usd_per_1m": {
-        "input": 0.0486,
-        "output": 0.54,
+        "input": 0.051,
+        "output": 0.567,
         "cache_read": 0.018
       },
       "reasoning": {
@@ -25555,9 +25515,9 @@
       ],
       "tokenizer": "Llama3",
       "knowledge_cutoff": "2023-12-31",
-      "total_params_b": null,
+      "total_params_b": 70.6,
       "active_params_b": null,
-      "params_source": null,
+      "params_source": "huggingface",
       "pricing_usd_per_1m": {
         "input": 0.72,
         "output": 0.72
@@ -26356,7 +26316,7 @@
         "cache_read": 0.01
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.123,
+      "aa_ttft_seconds": 2.136,
       "modalities_source": "openrouter"
     },
     "Gemini 4 Carbon": {
@@ -26387,7 +26347,7 @@
         "cache_read": 0.2
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 31.52
+      "aa_ttft_seconds": 30.611
     },
     "Claude Opus 5.5 (Max, Default Fallback)": {
       "or_id": null,
@@ -26715,14 +26675,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0.3,
         "output": 1,
         "cache_read": 0.03
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.054,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 2.027
     },
     "Claude Sonnet 5.5 (Medium, Default Fallback)": {
       "or_id": null,
@@ -26858,7 +26818,7 @@
         "cache_read": 0.04
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.829
+      "aa_ttft_seconds": 0.828
     },
     "K2 Horizon 375B A23B": {
       "or_id": null,
@@ -26888,7 +26848,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 12.453
+      "aa_ttft_seconds": 12.138
     },
     "North Mini Code": {
       "or_id": null,
@@ -26911,14 +26871,14 @@
       "description": null,
       "superseded_by": null,
       "match": "no-catalog",
+      "or_catalog_retired": true,
       "pricing_aa_usd_per_1m": {
         "input": 0,
         "output": 0,
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.633,
-      "or_catalog_retired": true
+      "aa_ttft_seconds": 0.632
     },
     "Claude Sonnet 4": {
       "or_id": "anthropic/claude-sonnet-4",
@@ -27645,7 +27605,7 @@
         "cache_read": 0.015
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.23
+      "aa_ttft_seconds": 2.251
     },
     "dots3-note Preview": {
       "or_id": null,
@@ -27911,7 +27871,7 @@
         "cache_read": 0.03
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 1.048
+      "aa_ttft_seconds": 1.041
     },
     "Athene V2 Chat": {
       "or_id": null,
@@ -27987,7 +27947,7 @@
         "cache_read": 0.02
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 0.693
+      "aa_ttft_seconds": 0.7
     },
     "Claude 3 Sonnet": {
       "or_id": null,
@@ -30163,7 +30123,7 @@
         "cache_read": null
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.805
+      "aa_ttft_seconds": 2.784
     },
     "MiniCPM5-1B": {
       "hugging_face_id": "openbmb/MiniCPM5-1B",
@@ -34127,7 +34087,7 @@
         "cache_read": 0.016
       },
       "price_source": "artificialanalysis",
-      "aa_ttft_seconds": 2.77
+      "aa_ttft_seconds": 2.756
     },
     "SOLAR 10.7B Instruct v1.0": {
       "or_id": null,
@@ -34476,56 +34436,6 @@
           "out": 72.7273
         }
       ]
-    },
-    "Qwen2.5-Coder-32B-Instruct": {
-      "or_id": "qwen/qwen-2.5-coder-32b-instruct",
-      "or_name": "Qwen2.5 Coder 32B Instruct",
-      "provider": null,
-      "created": "2024-11-11",
-      "context_length": 32768,
-      "max_output_tokens": 29491,
-      "modality": "text->text",
-      "input_modalities": [
-        "text"
-      ],
-      "output_modalities": [
-        "text"
-      ],
-      "tokenizer": "Qwen",
-      "knowledge_cutoff": "2024-06-30",
-      "total_params_b": 32.8,
-      "active_params_b": null,
-      "params_source": "huggingface",
-      "pricing_usd_per_1m": {
-        "input": 0.66,
-        "output": 1.0
-      },
-      "reasoning": null,
-      "supported_parameters": [
-        "frequency_penalty",
-        "logit_bias",
-        "max_tokens",
-        "min_p",
-        "presence_penalty",
-        "repetition_penalty",
-        "response_format",
-        "seed",
-        "stop",
-        "temperature",
-        "top_k",
-        "top_p"
-      ],
-      "hugging_face_id": "Qwen/Qwen2.5-Coder-32B-Instruct",
-      "or_free_variants": null,
-      "description": "Qwen2.5-Coder is the latest series of Code-Specific Qwen large language models (formerly known as CodeQwen). Qwen2.5-Coder brings the following improvements upon CodeQwen1.5: - Significantly improvements in **code generation**, **code reasoning**...",
-      "superseded_by": null,
-      "match": "exact",
-      "stale": true,
-      "modalities_source": "openrouter",
-      "archive_links": {
-        "aa": "https://artificialanalysis.ai/models/qwen2-5-coder-32b-instruct"
-      },
-      "no_bench_coverage": true
     },
     "Inkling": {
       "or_id": "thinkingmachines/inkling",
@@ -36836,5 +36746,5 @@
       "no_bench_coverage": true
     }
   },
-  "arena_text_asof": "2026-11-03 03:03"
+  "arena_text_asof": "2026-11-06 06:43"
 }

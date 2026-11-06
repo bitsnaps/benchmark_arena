@@ -430,6 +430,13 @@ def scrape_artificial_analysis():
     now open with "slug":"…","shortName":"…" and the display name moved
     from "name" to "shortName"; the old name→shortName→slug anchor matched
     nothing, which darkened BOTH the pricing and the TTFT layers.
+
+    stats-73 (2026-11-06): AA renamed the latency field —
+    medianTimeToFirstTokenSeconds is now timeToFirstToken (same unit:
+    seconds; timeToFirstAnswerToken mirrors it, outputSpeed sits nearby).
+    Prices kept their keys, so only the TTFT layer went dark (guard:
+    coverage 65 -> 0, Hy4 refresh blocked). Grab the new key first, keep
+    the old one as fallback in case the payload reverts.
     """
     url = "https://artificialanalysis.ai/leaderboards/models"
     print(f"  Scraping all models via JS eval (table + flight-payload pricing)...")
@@ -458,6 +465,8 @@ def scrape_artificial_analysis():
     if (t.length >= 10) parts.push(t);
   }
   var s = parts.join('\n');
+  // stats-73: the latency key was renamed — timeToFirstToken (seconds) is
+  // the new medianTimeToFirstTokenSeconds; grabbed with fallback below.
   var pricing = {}, slugs = {}, deprecation = {}, payloadModels = [], conflicts = 0;
   // stats-35: AA inserted a 'name' field between slug and shortName in the
   // 2026-09-13 payload (breaks the old slug->shortName adjacency). Anchor
@@ -532,10 +541,12 @@ def scrape_artificial_analysis():
       conflicts++;
       if (prev.input !== null) continue;
     }
+    var tt = grab('timeToFirstToken');
+    if (tt === null) tt = grab('medianTimeToFirstTokenSeconds');
     pricing[name] = {
       input: inp, output: outp,
       cache_read: grab('cacheHitPrice'),
-      ttft_seconds: grab('medianTimeToFirstTokenSeconds')
+      ttft_seconds: tt
     };
   }
   // stats-62 (2026-10-18): AA retired deprecated models' rich records into a

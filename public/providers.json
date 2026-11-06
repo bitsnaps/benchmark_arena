@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-11-03",
+  "as_of": "2026-11-06",
   "kinds": [
     "first-party",
     "cloud",
@@ -609,7 +609,7 @@
           "in": 12.5,
           "out": 75.0,
           "cache": 1.25,
-          "ctx": 400000
+          "ctx": 272000
         },
         {
           "id": "gpt-4",
@@ -629,6 +629,13 @@
           "in": 15.0,
           "out": 75.0,
           "cache": 1.5,
+          "ctx": 922000
+        },
+        {
+          "id": "gpt-6-cyber",
+          "in": 20.0,
+          "out": 100.0,
+          "cache": 2.0,
           "ctx": 922000
         }
       ]
@@ -1509,7 +1516,7 @@
           "id": "gemini-omni-flash-preview",
           "in": 1.5,
           "out": 9.0,
-          "ctx": 1048576
+          "ctx": 131072
         },
         {
           "id": "gemini/gemini-3.5-flash",
@@ -1523,7 +1530,15 @@
           "id": "gemini/gemini-omni-1.1-flash",
           "in": 1.5,
           "out": 9.0,
-          "ctx": 1048576
+          "ctx": 131072,
+          "name": "Google: Gemini Omni 1.1 Flash"
+        },
+        {
+          "id": "gemini/gemini-omni-1.2-flash",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 131072,
+          "name": "Google: Gemini Omni 1.2 Flash"
         },
         {
           "id": "gemini/gemini-omni-flash-preview",
@@ -1911,17 +1926,17 @@
         },
         {
           "id": "mistral/mistral-large-4",
-          "in": 1.36,
-          "out": 4.18,
-          "cache": 0.14,
+          "in": 0.7,
+          "out": 2.1,
+          "cache": 0.07,
           "ctx": 1048576,
           "name": "Mistral Large 4"
         },
         {
           "id": "mistral/mistral-large-4-0",
-          "in": 1.36,
-          "out": 4.18,
-          "cache": 0.14,
+          "in": 0.7,
+          "out": 2.1,
+          "cache": 0.07,
           "ctx": 1048576,
           "name": "Mistral: Mistral Large 4"
         },
@@ -3177,16 +3192,14 @@
           "in": 0.3,
           "out": 1.2,
           "cache": 0.03,
-          "ctx": 200000,
-          "name": "MiniMax: MiniMax M2"
+          "ctx": 200000
         },
         {
           "id": "minimax/MiniMax-M2.1",
           "in": 0.3,
           "out": 1.2,
           "cache": 0.03,
-          "ctx": 1000000,
-          "name": "MiniMax: MiniMax M2.1"
+          "ctx": 1000000
         },
         {
           "id": "minimax/MiniMax-M2.5",
@@ -3411,6 +3424,18 @@
           "ctx": 128000
         },
         {
+          "id": "bedrock_mantle/us-gov-east-1/nvidia.nemotron-nano-9b-v2",
+          "in": 0.072,
+          "out": 0.276,
+          "ctx": 128000
+        },
+        {
+          "id": "bedrock_mantle/us-gov-west-1/nvidia.nemotron-nano-9b-v2",
+          "in": 0.072,
+          "out": 0.276,
+          "ctx": 128000
+        },
+        {
           "id": "bedrock/us-east-1/mistral.mistral-7b-instruct-v0:2",
           "in": 0.15,
           "out": 0.2,
@@ -3437,6 +3462,18 @@
         },
         {
           "id": "bedrock/us-gov-west-1/nvidia.nemotron-nano-3-30b",
+          "in": 0.072,
+          "out": 0.288,
+          "ctx": 262144
+        },
+        {
+          "id": "bedrock_mantle/us-gov-east-1/nvidia.nemotron-nano-3-30b",
+          "in": 0.072,
+          "out": 0.288,
+          "ctx": 262144
+        },
+        {
+          "id": "bedrock_mantle/us-gov-west-1/nvidia.nemotron-nano-3-30b",
           "in": 0.072,
           "out": 0.288,
           "ctx": 262144
@@ -3653,6 +3690,30 @@
         },
         {
           "id": "bedrock/us-gov-west-1/nvidia.nemotron-super-3-120b",
+          "in": 0.18,
+          "out": 0.78,
+          "ctx": 256000
+        },
+        {
+          "id": "bedrock_mantle/us-gov-east-1/nvidia.nemotron-nano-12b-v2",
+          "in": 0.24,
+          "out": 0.72,
+          "ctx": 128000
+        },
+        {
+          "id": "bedrock_mantle/us-gov-east-1/nvidia.nemotron-super-3-120b",
+          "in": 0.18,
+          "out": 0.78,
+          "ctx": 256000
+        },
+        {
+          "id": "bedrock_mantle/us-gov-west-1/nvidia.nemotron-nano-12b-v2",
+          "in": 0.24,
+          "out": 0.72,
+          "ctx": 128000
+        },
+        {
+          "id": "bedrock_mantle/us-gov-west-1/nvidia.nemotron-super-3-120b",
           "in": 0.18,
           "out": 0.78,
           "ctx": 256000
@@ -3908,6 +3969,18 @@
           "in": 0.36,
           "out": 1.44,
           "ctx": 196000
+        },
+        {
+          "id": "bedrock/us-gov-east-1/anthropic.claude-3-haiku-20240307-v1:0",
+          "in": 0.3,
+          "out": 1.5,
+          "ctx": 195904
+        },
+        {
+          "id": "bedrock/us-gov-west-1/anthropic.claude-3-haiku-20240307-v1:0",
+          "in": 0.3,
+          "out": 1.5,
+          "ctx": 195904
         },
         {
           "id": "bedrock/us-gov-east-1/amazon.titan-text-premier-v1:0",
@@ -4332,6 +4405,13 @@
           "ctx": 500000
         },
         {
+          "id": "bedrock_mantle/xai.grok-4.7",
+          "in": 2.2,
+          "out": 6.6,
+          "cache": 0.55,
+          "ctx": 524288
+        },
+        {
           "id": "bedrock/ap-northeast-1/anthropic.claude-instant-v1",
           "in": 2.23,
           "out": 7.55,
@@ -4351,11 +4431,25 @@
           "ctx": 500000
         },
         {
+          "id": "bedrock_mantle/us-gov-east-1/xai.grok-4.7",
+          "in": 2.64,
+          "out": 7.92,
+          "cache": 0.66,
+          "ctx": 524288
+        },
+        {
           "id": "bedrock_mantle/us-gov-west-1/xai.grok-4.6",
           "in": 2.64,
           "out": 7.92,
           "cache": 0.66,
           "ctx": 500000
+        },
+        {
+          "id": "bedrock_mantle/us-gov-west-1/xai.grok-4.7",
+          "in": 2.64,
+          "out": 7.92,
+          "cache": 0.66,
+          "ctx": 524288
         },
         {
           "id": "bedrock/eu-central-1/anthropic.claude-instant-v1",
@@ -4470,6 +4564,19 @@
           "ctx": 32000
         },
         {
+          "id": "bedrock/us-gov-east-1/anthropic.claude-3-5-sonnet-20240620-v1:0",
+          "in": 3.6,
+          "out": 18.0,
+          "ctx": 200000
+        },
+        {
+          "id": "bedrock/us-gov-east-1/anthropic.claude-3-7-sonnet-20250219-v1:0",
+          "in": 3.6,
+          "out": 18.0,
+          "cache": 0.36,
+          "ctx": 200000
+        },
+        {
           "id": "bedrock/us-gov-east-1/anthropic.claude-sonnet-4-5-20250929-v1:0",
           "in": 3.6,
           "out": 18.0,
@@ -4478,6 +4585,19 @@
         },
         {
           "id": "bedrock/us-gov-east-1/claude-sonnet-4-5-20250929-v1:0",
+          "in": 3.6,
+          "out": 18.0,
+          "cache": 0.36,
+          "ctx": 200000
+        },
+        {
+          "id": "bedrock/us-gov-west-1/anthropic.claude-3-5-sonnet-20240620-v1:0",
+          "in": 3.6,
+          "out": 18.0,
+          "ctx": 200000
+        },
+        {
+          "id": "bedrock/us-gov-west-1/anthropic.claude-3-7-sonnet-20250219-v1:0",
           "in": 3.6,
           "out": 18.0,
           "cache": 0.36,
@@ -4496,6 +4616,20 @@
           "out": 18.0,
           "cache": 0.36,
           "ctx": 200000
+        },
+        {
+          "id": "bedrock/us-gov-east-1/moonshotai.kimi-k3",
+          "in": 3.96,
+          "out": 19.8,
+          "cache": 0.396,
+          "ctx": 868928
+        },
+        {
+          "id": "bedrock/us-gov-west-1/moonshotai.kimi-k3",
+          "in": 3.96,
+          "out": 19.8,
+          "cache": 0.396,
+          "ctx": 868928
         },
         {
           "id": "bedrock/claude_platform/claude-opus-5-5",
@@ -5213,19 +5347,6 @@
           "name": "OpenAI: GPT-6.1 Terra"
         },
         {
-          "id": "azure/gpt-35-turbo-16k",
-          "in": 3.0,
-          "out": 4.0,
-          "ctx": 16385,
-          "name": "OpenAI: GPT-3.5 Turbo 16k"
-        },
-        {
-          "id": "azure/gpt-35-turbo-16k-0613",
-          "in": 3.0,
-          "out": 4.0,
-          "ctx": 16385
-        },
-        {
           "id": "azure/apac/gpt-6.1-terra",
           "in": 1.2,
           "out": 6.0,
@@ -5797,12 +5918,6 @@
           "ctx": 922000
         },
         {
-          "id": "azure/command-r-plus",
-          "in": 3.0,
-          "out": 15.0,
-          "ctx": 128000
-        },
-        {
           "id": "azure/eu/gpt-5.4",
           "in": 2.75,
           "out": 16.5,
@@ -6111,13 +6226,6 @@
           "ctx": 200000
         },
         {
-          "id": "azure/eu/o1-preview",
-          "in": 16.5,
-          "out": 66.0,
-          "cache": 8.25,
-          "ctx": 128000
-        },
-        {
           "id": "azure/us/o1",
           "in": 16.5,
           "out": 66.0,
@@ -6130,865 +6238,6 @@
           "out": 66.0,
           "cache": 8.25,
           "ctx": 200000
-        },
-        {
-          "id": "azure/us/o1-preview",
-          "in": 16.5,
-          "out": 66.0,
-          "cache": 8.25,
-          "ctx": 128000
-        },
-        {
-          "id": "azure/gpt-4",
-          "in": 30.0,
-          "out": 60.0,
-          "ctx": 8192,
-          "name": "OpenAI: GPT-4"
-        },
-        {
-          "id": "azure/gpt-4-0613",
-          "in": 30.0,
-          "out": 60.0,
-          "ctx": 8192
-        },
-        {
-          "id": "azure/gpt-4-32k",
-          "in": 60.0,
-          "out": 120.0,
-          "ctx": 32768
-        },
-        {
-          "id": "azure/gpt-4-32k-0613",
-          "in": 60.0,
-          "out": 120.0,
-          "ctx": 32768
-        },
-        {
-          "id": "azure/gpt-4.5-preview",
-          "in": 75.0,
-          "out": 150.0,
-          "cache": 37.5,
-          "ctx": 128000
-        }
-      ]
-    },
-    {
-      "id": "azure-ai-foundry",
-      "name": "Azure AI Foundry",
-      "kind": "cloud",
-      "models": [
-        {
-          "id": "azure_ai/ministral-3b",
-          "in": 0.04,
-          "out": 0.04,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/model-router",
-          "in": 0.14,
-          "out": 0.0,
-          "ctx": 200000
-        },
-        {
-          "id": "azure_ai/model_router",
-          "in": 0.14,
-          "out": 0.0,
-          "ctx": 200000
-        },
-        {
-          "id": "azure_ai/FW-Nemotron-Lightning-3.5-30B-A3B",
-          "in": 0.06,
-          "out": 0.22,
-          "cache": 0.01,
-          "ctx": 262144
-        },
-        {
-          "id": "azure_ai/mistral-nemo",
-          "in": 0.15,
-          "out": 0.15,
-          "ctx": 131072,
-          "name": "Mistral: Mistral Nemo"
-        },
-        {
-          "id": "azure_ai/Phi-4-mini-instruct",
-          "in": 0.075,
-          "out": 0.3,
-          "ctx": 131072
-        },
-        {
-          "id": "azure_ai/Phi-4-mini-reasoning",
-          "in": 0.075,
-          "out": 0.3,
-          "ctx": 131072
-        },
-        {
-          "id": "azure_ai/Phi-4-multimodal-instruct",
-          "in": 0.08,
-          "out": 0.32,
-          "ctx": 131072
-        },
-        {
-          "id": "azure_ai/mistral-small-2503",
-          "in": 0.1,
-          "out": 0.3,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/FW-DeepSeek-V4-Flash",
-          "in": 0.15,
-          "out": 0.31,
-          "cache": 0.03,
-          "ctx": 1000000
-        },
-        {
-          "id": "azure_ai/claude-haiku-5-5",
-          "in": 0.1,
-          "out": 0.5,
-          "cache": 0.01,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Haiku 5.5"
-        },
-        {
-          "id": "azure_ai/gpt-6-luna",
-          "in": 0.1,
-          "out": 0.5,
-          "cache": 0.01,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Luna"
-        },
-        {
-          "id": "azure_ai/Phi-4",
-          "in": 0.125,
-          "out": 0.5,
-          "ctx": 16384,
-          "name": "Microsoft: Phi 4"
-        },
-        {
-          "id": "azure_ai/Phi-4-reasoning",
-          "in": 0.125,
-          "out": 0.5,
-          "ctx": 32768
-        },
-        {
-          "id": "azure_ai/Phi-3-mini-128k-instruct",
-          "in": 0.13,
-          "out": 0.52,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/Phi-3-mini-4k-instruct",
-          "in": 0.13,
-          "out": 0.52,
-          "ctx": 4096
-        },
-        {
-          "id": "azure_ai/Phi-3.5-mini-instruct",
-          "in": 0.13,
-          "out": 0.52,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/Phi-3.5-vision-instruct",
-          "in": 0.13,
-          "out": 0.52,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/deepseek-v4-flash",
-          "in": 0.19,
-          "out": 0.51,
-          "cache": 0.028,
-          "ctx": 1000000
-        },
-        {
-          "id": "azure_ai/grok-4-1-fast-non-reasoning",
-          "in": 0.2,
-          "out": 0.5,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/grok-4-1-fast-reasoning",
-          "in": 0.2,
-          "out": 0.5,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/grok-4-fast-non-reasoning",
-          "in": 0.2,
-          "out": 0.5,
-          "ctx": null
-        },
-        {
-          "id": "azure_ai/grok-4-fast-reasoning",
-          "in": 0.2,
-          "out": 0.5,
-          "ctx": null
-        },
-        {
-          "id": "azure_ai/Phi-3-small-128k-instruct",
-          "in": 0.15,
-          "out": 0.6,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/Phi-3-small-8k-instruct",
-          "in": 0.15,
-          "out": 0.6,
-          "ctx": 8192
-        },
-        {
-          "id": "azure_ai/gpt-oss-120b",
-          "in": 0.15,
-          "out": 0.6,
-          "ctx": 131072,
-          "name": "OpenAI: gpt-oss-120b"
-        },
-        {
-          "id": "azure_ai/Phi-3.5-MoE-instruct",
-          "in": 0.16,
-          "out": 0.64,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/FW-GLM-5.3-Flash",
-          "in": 0.188,
-          "out": 0.625,
-          "cache": 0.038,
-          "ctx": 1048576
-        },
-        {
-          "id": "azure_ai/FW-GPT-OSS-120B",
-          "in": 0.165,
-          "out": 0.66,
-          "cache": 0.082,
-          "ctx": 131072
-        },
-        {
-          "id": "azure_ai/Phi-3-medium-128k-instruct",
-          "in": 0.17,
-          "out": 0.68,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/Phi-3-medium-4k-instruct",
-          "in": 0.17,
-          "out": 0.68,
-          "ctx": 4096
-        },
-        {
-          "id": "azure_ai/Llama-4-Scout-17B-16E-Instruct",
-          "in": 0.2,
-          "out": 0.78,
-          "ctx": 10000000
-        },
-        {
-          "id": "azure_ai/Codestral-2501",
-          "in": 0.3,
-          "out": 0.9,
-          "ctx": 256000
-        },
-        {
-          "id": "azure_ai/jamba-instruct",
-          "in": 0.5,
-          "out": 0.7,
-          "ctx": 70000
-        },
-        {
-          "id": "azure_ai/Llama-4-Maverick-17B-128E-Instruct-FP8",
-          "in": 0.25,
-          "out": 1.0,
-          "ctx": 1000000
-        },
-        {
-          "id": "azure_ai/MAI-Code-1.1-Flash",
-          "in": 0.2,
-          "out": 1.2,
-          "cache": 0.02,
-          "ctx": 256000
-        },
-        {
-          "id": "azure_ai/Llama-3.3-70B-Instruct",
-          "in": 0.71,
-          "out": 0.71,
-          "ctx": 128000,
-          "name": "Meta: Llama 3.3 70B Instruct"
-        },
-        {
-          "id": "azure_ai/gpt-5.4-nano",
-          "in": 0.2,
-          "out": 1.25,
-          "cache": 0.02,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5.4 Nano"
-        },
-        {
-          "id": "azure_ai/gpt-5.4-nano-2026-03-17",
-          "in": 0.2,
-          "out": 1.25,
-          "cache": 0.02,
-          "ctx": 272000
-        },
-        {
-          "id": "azure_ai/Meta-Llama-3-70B-Instruct",
-          "in": 1.1,
-          "out": 0.37,
-          "ctx": 8192
-        },
-        {
-          "id": "azure_ai/deepseek-v4.1-flash",
-          "in": 0.3,
-          "out": 1.2,
-          "cache": 0.006,
-          "ctx": 1000000
-        },
-        {
-          "id": "azure_ai/grok-3-mini",
-          "in": 0.25,
-          "out": 1.27,
-          "ctx": null
-        },
-        {
-          "id": "azure_ai/FW-MiniMax-M2.5",
-          "in": 0.33,
-          "out": 1.32,
-          "cache": 0.033,
-          "ctx": 1000000
-        },
-        {
-          "id": "azure_ai/FW-MiniMax-M3",
-          "in": 0.33,
-          "out": 1.32,
-          "cache": 0.066,
-          "ctx": 512000
-        },
-        {
-          "id": "azure_ai/grok-code-fast-1",
-          "in": 0.2,
-          "out": 1.5,
-          "ctx": 256000
-        },
-        {
-          "id": "azure_ai/DeepSeek-V4-Flash-0731",
-          "in": 0.44,
-          "out": 1.32,
-          "cache": 0.014,
-          "ctx": 1000000,
-          "name": "DeepSeek: DeepSeek V4 Flash 0731"
-        },
-        {
-          "id": "azure_ai/FW-DeepSeek-V4.1-Flash",
-          "in": 0.375,
-          "out": 1.5,
-          "cache": 0.008,
-          "ctx": 1000000
-        },
-        {
-          "id": "azure_ai/mistral-large-3",
-          "in": 0.5,
-          "out": 1.5,
-          "ctx": 256000
-        },
-        {
-          "id": "azure_ai/deepseek-v3.2",
-          "in": 0.58,
-          "out": 1.68,
-          "ctx": 128000,
-          "name": "DeepSeek: DeepSeek V3.2"
-        },
-        {
-          "id": "azure_ai/deepseek-v3.2-speciale",
-          "in": 0.58,
-          "out": 1.68,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/mistral-medium-2505",
-          "in": 0.4,
-          "out": 2.0,
-          "ctx": 131072
-        },
-        {
-          "id": "azure_ai/FW-DeepSeek-V3.2",
-          "in": 0.62,
-          "out": 1.85,
-          "cache": 0.31,
-          "ctx": 163840
-        },
-        {
-          "id": "azure_ai/kimi-k2-thinking",
-          "in": 0.6,
-          "out": 2.5,
-          "ctx": 262144,
-          "name": "MoonshotAI: Kimi K2 Thinking"
-        },
-        {
-          "id": "azure_ai/FW-Nemotron-3-Ultra-NVFP4",
-          "in": 0.66,
-          "out": 2.64,
-          "cache": 0.13,
-          "ctx": 262144
-        },
-        {
-          "id": "azure_ai/kimi-k2.5",
-          "in": 0.6,
-          "out": 3.0,
-          "cache": 0.1,
-          "ctx": 262144,
-          "name": "MoonshotAI: Kimi K2.5"
-        },
-        {
-          "id": "azure_ai/grok-4-20-non-reasoning",
-          "in": 1.25,
-          "out": 2.5,
-          "cache": 1.25,
-          "ctx": 262000
-        },
-        {
-          "id": "azure_ai/grok-4-20-reasoning",
-          "in": 1.25,
-          "out": 2.5,
-          "cache": 1.25,
-          "ctx": 262000
-        },
-        {
-          "id": "azure_ai/grok-4.3",
-          "in": 1.25,
-          "out": 2.5,
-          "cache": 0.2,
-          "ctx": 200000,
-          "name": "SpaceXAI: Grok 4.3"
-        },
-        {
-          "id": "azure_ai/FW-Kimi-K2.5",
-          "in": 0.66,
-          "out": 3.3,
-          "cache": 0.11,
-          "ctx": 262144
-        },
-        {
-          "id": "azure_ai/Cohere-command-a-plus-05-2026",
-          "in": 0.8,
-          "out": 3.2,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/mistral-small",
-          "in": 1.0,
-          "out": 3.0,
-          "ctx": 32000
-        },
-        {
-          "id": "azure_ai/MAI-Cyber-1-Flash",
-          "in": 0.6,
-          "out": 3.5,
-          "cache": 0.06,
-          "ctx": 256000
-        },
-        {
-          "id": "azure_ai/FW-GLM-5",
-          "in": 1.1,
-          "out": 3.52,
-          "cache": 0.22,
-          "ctx": 200000
-        },
-        {
-          "id": "azure_ai/kimi-k2.6",
-          "in": 0.95,
-          "out": 4.0,
-          "cache": 0.16,
-          "ctx": 262144,
-          "name": "MoonshotAI: Kimi K2.6"
-        },
-        {
-          "id": "azure_ai/kimi-k2.7-code",
-          "in": 0.95,
-          "out": 4.0,
-          "cache": 0.19,
-          "ctx": 262144,
-          "name": "MoonshotAI: Kimi K2.7 Code"
-        },
-        {
-          "id": "azure_ai/deepseek-v4-pro",
-          "in": 1.74,
-          "out": 3.48,
-          "cache": 0.145,
-          "ctx": 1000000
-        },
-        {
-          "id": "azure_ai/gpt-5.4-mini",
-          "in": 0.75,
-          "out": 4.5,
-          "cache": 0.075,
-          "ctx": 272000,
-          "name": "OpenAI: GPT-5.4 Mini"
-        },
-        {
-          "id": "azure_ai/gpt-5.4-mini-2026-03-17",
-          "in": 0.75,
-          "out": 4.5,
-          "cache": 0.075,
-          "ctx": 272000
-        },
-        {
-          "id": "azure_ai/FW-Kimi-K2.6",
-          "in": 1.045,
-          "out": 4.4,
-          "cache": 0.176,
-          "ctx": 262144
-        },
-        {
-          "id": "azure_ai/FW-Kimi-K2.7-Code",
-          "in": 1.05,
-          "out": 4.4,
-          "cache": 0.21,
-          "ctx": 262144
-        },
-        {
-          "id": "azure_ai/FW-Inkling",
-          "in": 1.1,
-          "out": 4.46,
-          "cache": 0.19,
-          "ctx": 1048576
-        },
-        {
-          "id": "azure_ai/deepseek-v3",
-          "in": 1.14,
-          "out": 4.56,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/deepseek-v3-0324",
-          "in": 1.14,
-          "out": 4.56,
-          "ctx": null
-        },
-        {
-          "id": "azure_ai/FW-DeepSeek-V4-Pro",
-          "in": 1.925,
-          "out": 3.828,
-          "cache": 0.165,
-          "ctx": 1000000
-        },
-        {
-          "id": "azure_ai/claude-haiku-4-5",
-          "in": 1.0,
-          "out": 5.0,
-          "cache": 0.1,
-          "ctx": 200000,
-          "name": "Anthropic: Claude Haiku 4.5"
-        },
-        {
-          "id": "azure_ai/gpt-6.1-terra",
-          "in": 1.0,
-          "out": 5.0,
-          "cache": 0.05,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6.1 Terra"
-        },
-        {
-          "id": "azure_ai/deepseek-v3.1",
-          "in": 1.23,
-          "out": 4.94,
-          "ctx": null
-        },
-        {
-          "id": "azure_ai/Meta-Llama-3.1-70B-Instruct",
-          "in": 2.68,
-          "out": 3.54,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/FW-GLM-5.1",
-          "in": 1.54,
-          "out": 4.84,
-          "cache": 0.286,
-          "ctx": 202800
-        },
-        {
-          "id": "azure_ai/FW-GLM-5.2",
-          "in": 1.54,
-          "out": 4.84,
-          "cache": 0.15,
-          "ctx": 1048576
-        },
-        {
-          "id": "azure_ai/MAI-DS-R1",
-          "in": 1.35,
-          "out": 5.4,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/deepseek-r1",
-          "in": 1.35,
-          "out": 5.4,
-          "ctx": null
-        },
-        {
-          "id": "azure_ai/FW-GLM-5.3",
-          "in": 1.75,
-          "out": 5.5,
-          "cache": 0.325,
-          "ctx": 1048576
-        },
-        {
-          "id": "azure_ai/grok-4.6",
-          "in": 2.0,
-          "out": 6.0,
-          "cache": 0.5,
-          "ctx": 200000,
-          "name": "SpaceXAI: Grok 4.6"
-        },
-        {
-          "id": "azure_ai/grok-4.7",
-          "in": 2.0,
-          "out": 6.0,
-          "cache": 0.5,
-          "ctx": 500000,
-          "name": "SpaceXAI: Grok 4.7"
-        },
-        {
-          "id": "azure_ai/mistral-large-2407",
-          "in": 2.0,
-          "out": 6.0,
-          "ctx": 128000,
-          "name": "Mistral Large 2407"
-        },
-        {
-          "id": "azure_ai/mistral-large-latest",
-          "in": 2.0,
-          "out": 6.0,
-          "ctx": 128000
-        },
-        {
-          "id": "azure_ai/mistral-medium-3-5",
-          "in": 1.5,
-          "out": 7.5,
-          "ctx": 128000,
-          "name": "Mistral: Mistral Medium 3.5"
-        },
-        {
-          "id": "azure_ai/FW-GLM-5.2-Fast",
-          "in": 2.31,
-          "out": 7.26,
-          "cache": 0.231,
-          "ctx": 1048576
-        },
-        {
-          "id": "azure_ai/MAI-Thinking-1",
-          "in": 2.0,
-          "out": 8.0,
-          "cache": 0.2,
-          "ctx": 256000
-        },
-        {
-          "id": "azure_ai/claude-sonnet-5",
-          "in": 2.0,
-          "out": 10.0,
-          "cache": 0.2,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Sonnet 5"
-        },
-        {
-          "id": "azure_ai/claude-sonnet-5-5",
-          "in": 2.0,
-          "out": 10.0,
-          "cache": 0.1,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Sonnet 5.5"
-        },
-        {
-          "id": "azure_ai/gpt-6-sol",
-          "in": 2.0,
-          "out": 10.0,
-          "cache": 0.2,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Sol"
-        },
-        {
-          "id": "azure_ai/gpt-6.1-sol",
-          "in": 2.0,
-          "out": 10.0,
-          "cache": 0.1,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6.1 Sol"
-        },
-        {
-          "id": "azure_ai/cohere-command-a",
-          "in": 2.5,
-          "out": 10.0,
-          "ctx": 131072
-        },
-        {
-          "id": "azure_ai/mistral-large",
-          "in": 4.0,
-          "out": 12.0,
-          "ctx": 32000,
-          "name": "Mistral Large"
-        },
-        {
-          "id": "azure_ai/gpt-5.4",
-          "in": 2.5,
-          "out": 15.0,
-          "cache": 0.25,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.4"
-        },
-        {
-          "id": "azure_ai/gpt-5.4-2026-03-05",
-          "in": 2.5,
-          "out": 15.0,
-          "cache": 0.25,
-          "ctx": 922000
-        },
-        {
-          "id": "azure_ai/FW-Kimi-K3",
-          "in": 3.0,
-          "out": 15.0,
-          "cache": 0.3,
-          "ctx": 1048576
-        },
-        {
-          "id": "azure_ai/claude-sonnet-4-5",
-          "in": 3.0,
-          "out": 15.0,
-          "cache": 0.3,
-          "ctx": 200000,
-          "name": "Anthropic: Claude Sonnet 4.5"
-        },
-        {
-          "id": "azure_ai/claude-sonnet-4-6",
-          "in": 3.0,
-          "out": 15.0,
-          "cache": 0.3,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Sonnet 4.6"
-        },
-        {
-          "id": "azure_ai/grok-3",
-          "in": 3.0,
-          "out": 15.0,
-          "ctx": null
-        },
-        {
-          "id": "azure_ai/grok-4",
-          "in": 3.0,
-          "out": 15.0,
-          "ctx": 262000
-        },
-        {
-          "id": "azure_ai/claude-opus-5-5",
-          "in": 4.0,
-          "out": 20.0,
-          "cache": 0.2,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Opus 5.5"
-        },
-        {
-          "id": "azure_ai/claude-opus-4-5",
-          "in": 5.0,
-          "out": 25.0,
-          "cache": 0.5,
-          "ctx": 200000,
-          "name": "Anthropic: Claude Opus 4.5"
-        },
-        {
-          "id": "azure_ai/claude-opus-4-6",
-          "in": 5.0,
-          "out": 25.0,
-          "cache": 0.5,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Opus 4.6"
-        },
-        {
-          "id": "azure_ai/claude-opus-4-7",
-          "in": 5.0,
-          "out": 25.0,
-          "cache": 0.5,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Opus 4.7"
-        },
-        {
-          "id": "azure_ai/claude-opus-4-8",
-          "in": 5.0,
-          "out": 25.0,
-          "cache": 0.5,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Opus 4.8"
-        },
-        {
-          "id": "azure_ai/claude-opus-5",
-          "in": 5.0,
-          "out": 25.0,
-          "cache": 0.5,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Opus 5"
-        },
-        {
-          "id": "azure_ai/gpt-5.5",
-          "in": 5.0,
-          "out": 30.0,
-          "cache": 0.5,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-5.5"
-        },
-        {
-          "id": "azure_ai/gpt-5.5-2026-04-23",
-          "in": 5.0,
-          "out": 30.0,
-          "cache": 0.5,
-          "ctx": 922000
-        },
-        {
-          "id": "azure_ai/gpt-5.5-2026-04-24",
-          "in": 5.0,
-          "out": 30.0,
-          "cache": 0.5,
-          "ctx": 922000
-        },
-        {
-          "id": "azure_ai/gpt-chat-latest",
-          "in": 5.0,
-          "out": 30.0,
-          "cache": 0.5,
-          "ctx": 128000,
-          "name": "OpenAI: GPT Chat Latest"
-        },
-        {
-          "id": "azure_ai/claude-opus-5-5-fast",
-          "in": 8.0,
-          "out": 40.0,
-          "cache": 0.4,
-          "ctx": 1000000
-        },
-        {
-          "id": "azure_ai/claude-fable-5",
-          "in": 10.0,
-          "out": 50.0,
-          "cache": 1.0,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Fable 5"
-        },
-        {
-          "id": "azure_ai/claude-fable-5-1",
-          "in": 10.0,
-          "out": 50.0,
-          "cache": 0.25,
-          "ctx": 1000000,
-          "name": "Anthropic: Claude Fable 5.1"
-        },
-        {
-          "id": "azure_ai/gpt-6-astra",
-          "in": 10.0,
-          "out": 50.0,
-          "cache": 1.0,
-          "ctx": 922000,
-          "name": "OpenAI: GPT-6 Astra"
-        },
-        {
-          "id": "azure_ai/jais-30b-chat",
-          "in": 3200.0,
-          "out": 9710.0,
-          "ctx": 8192
         }
       ]
     },
@@ -7524,13 +6773,21 @@
           "id": "vertex_ai/gemini-omni-1.1-flash",
           "in": 1.5,
           "out": 9.0,
-          "ctx": null
+          "ctx": null,
+          "name": "Google: Gemini Omni 1.1 Flash"
         },
         {
           "id": "vertex_ai/gemini-omni-1.1-flash-preview",
           "in": 1.5,
           "out": 9.0,
-          "ctx": 57920
+          "ctx": 131072
+        },
+        {
+          "id": "vertex_ai/gemini-omni-1.2-flash",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 131072,
+          "name": "Google: Gemini Omni 1.2 Flash"
         },
         {
           "id": "vertex_ai/claude-sonnet-5",
@@ -7786,18 +7043,735 @@
           "out": 50.0,
           "cache": 1.0,
           "ctx": 1000000
+        }
+      ]
+    },
+    {
+      "id": "azure-ai-foundry",
+      "name": "Azure AI Foundry",
+      "kind": "cloud",
+      "models": [
+        {
+          "id": "azure_ai/ministral-3b",
+          "in": 0.04,
+          "out": 0.04,
+          "ctx": 128000
         },
         {
-          "id": "vertex_ai/claude-3-opus",
-          "in": 15.0,
-          "out": 75.0,
+          "id": "azure_ai/model-router",
+          "in": 0.14,
+          "out": 0.0,
           "ctx": 200000
         },
         {
-          "id": "vertex_ai/claude-3-opus@20240229",
-          "in": 15.0,
-          "out": 75.0,
+          "id": "azure_ai/model_router",
+          "in": 0.14,
+          "out": 0.0,
           "ctx": 200000
+        },
+        {
+          "id": "azure_ai/FW-Nemotron-Lightning-3.5-30B-A3B",
+          "in": 0.06,
+          "out": 0.22,
+          "cache": 0.01,
+          "ctx": 262144
+        },
+        {
+          "id": "azure_ai/mistral-nemo",
+          "in": 0.15,
+          "out": 0.15,
+          "ctx": 131072,
+          "name": "Mistral: Mistral Nemo"
+        },
+        {
+          "id": "azure_ai/Phi-4-mini-instruct",
+          "in": 0.075,
+          "out": 0.3,
+          "ctx": 131072
+        },
+        {
+          "id": "azure_ai/Phi-4-mini-reasoning",
+          "in": 0.075,
+          "out": 0.3,
+          "ctx": 131072
+        },
+        {
+          "id": "azure_ai/Phi-4-multimodal-instruct",
+          "in": 0.08,
+          "out": 0.32,
+          "ctx": 131072
+        },
+        {
+          "id": "azure_ai/mistral-small-2503",
+          "in": 0.1,
+          "out": 0.3,
+          "ctx": 128000
+        },
+        {
+          "id": "azure_ai/FW-DeepSeek-V4-Flash",
+          "in": 0.15,
+          "out": 0.31,
+          "cache": 0.03,
+          "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/claude-haiku-5-5",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Haiku 5.5"
+        },
+        {
+          "id": "azure_ai/gpt-6-luna",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Luna"
+        },
+        {
+          "id": "azure_ai/Phi-4",
+          "in": 0.125,
+          "out": 0.5,
+          "ctx": 16384,
+          "name": "Microsoft: Phi 4"
+        },
+        {
+          "id": "azure_ai/Phi-4-reasoning",
+          "in": 0.125,
+          "out": 0.5,
+          "ctx": 32768
+        },
+        {
+          "id": "azure_ai/deepseek-v4-flash",
+          "in": 0.19,
+          "out": 0.51,
+          "cache": 0.028,
+          "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/grok-4-1-fast-non-reasoning",
+          "in": 0.2,
+          "out": 0.5,
+          "ctx": 128000
+        },
+        {
+          "id": "azure_ai/grok-4-1-fast-reasoning",
+          "in": 0.2,
+          "out": 0.5,
+          "ctx": 128000
+        },
+        {
+          "id": "azure_ai/grok-4-fast-non-reasoning",
+          "in": 0.2,
+          "out": 0.5,
+          "ctx": null
+        },
+        {
+          "id": "azure_ai/grok-4-fast-reasoning",
+          "in": 0.2,
+          "out": 0.5,
+          "ctx": null
+        },
+        {
+          "id": "azure_ai/gpt-oss-120b",
+          "in": 0.15,
+          "out": 0.6,
+          "ctx": 131072,
+          "name": "OpenAI: gpt-oss-120b"
+        },
+        {
+          "id": "azure_ai/FW-GLM-5.3-Flash",
+          "in": 0.188,
+          "out": 0.625,
+          "cache": 0.038,
+          "ctx": 1048576
+        },
+        {
+          "id": "azure_ai/FW-GPT-OSS-120B",
+          "in": 0.165,
+          "out": 0.66,
+          "cache": 0.082,
+          "ctx": 131072
+        },
+        {
+          "id": "azure_ai/Llama-4-Scout-17B-16E-Instruct",
+          "in": 0.2,
+          "out": 0.78,
+          "ctx": 10000000
+        },
+        {
+          "id": "azure_ai/Codestral-2501",
+          "in": 0.3,
+          "out": 0.9,
+          "ctx": 256000
+        },
+        {
+          "id": "azure_ai/Llama-4-Maverick-17B-128E-Instruct-FP8",
+          "in": 0.25,
+          "out": 1.0,
+          "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/MAI-Code-1.1-Flash",
+          "in": 0.2,
+          "out": 1.2,
+          "cache": 0.02,
+          "ctx": 256000
+        },
+        {
+          "id": "azure_ai/Llama-3.3-70B-Instruct",
+          "in": 0.71,
+          "out": 0.71,
+          "ctx": 128000,
+          "name": "Meta: Llama 3.3 70B Instruct"
+        },
+        {
+          "id": "azure_ai/gpt-5.4-nano",
+          "in": 0.2,
+          "out": 1.25,
+          "cache": 0.02,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5.4 Nano"
+        },
+        {
+          "id": "azure_ai/gpt-5.4-nano-2026-03-17",
+          "in": 0.2,
+          "out": 1.25,
+          "cache": 0.02,
+          "ctx": 272000
+        },
+        {
+          "id": "azure_ai/deepseek-v4.1-flash",
+          "in": 0.3,
+          "out": 1.2,
+          "cache": 0.006,
+          "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/grok-3-mini",
+          "in": 0.25,
+          "out": 1.27,
+          "ctx": null
+        },
+        {
+          "id": "azure_ai/FW-MiniMax-M2.5",
+          "in": 0.33,
+          "out": 1.32,
+          "cache": 0.033,
+          "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/FW-MiniMax-M3",
+          "in": 0.33,
+          "out": 1.32,
+          "cache": 0.066,
+          "ctx": 512000
+        },
+        {
+          "id": "azure_ai/grok-code-fast-1",
+          "in": 0.2,
+          "out": 1.5,
+          "ctx": 256000
+        },
+        {
+          "id": "azure_ai/DeepSeek-V4-Flash-0731",
+          "in": 0.44,
+          "out": 1.32,
+          "cache": 0.014,
+          "ctx": 1000000,
+          "name": "DeepSeek: DeepSeek V4 Flash 0731"
+        },
+        {
+          "id": "azure_ai/FW-DeepSeek-V4.1-Flash",
+          "in": 0.375,
+          "out": 1.5,
+          "cache": 0.008,
+          "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/mistral-large-3",
+          "in": 0.5,
+          "out": 1.5,
+          "ctx": 256000
+        },
+        {
+          "id": "azure_ai/deepseek-v3.2",
+          "in": 0.58,
+          "out": 1.68,
+          "ctx": 128000,
+          "name": "DeepSeek: DeepSeek V3.2"
+        },
+        {
+          "id": "azure_ai/deepseek-v3.2-speciale",
+          "in": 0.58,
+          "out": 1.68,
+          "ctx": 128000
+        },
+        {
+          "id": "azure_ai/mistral-medium-2505",
+          "in": 0.4,
+          "out": 2.0,
+          "ctx": 131072
+        },
+        {
+          "id": "azure_ai/FW-DeepSeek-V3.2",
+          "in": 0.62,
+          "out": 1.85,
+          "cache": 0.31,
+          "ctx": 163840
+        },
+        {
+          "id": "azure_ai/kimi-k2-thinking",
+          "in": 0.6,
+          "out": 2.5,
+          "ctx": 262144,
+          "name": "MoonshotAI: Kimi K2 Thinking"
+        },
+        {
+          "id": "azure_ai/FW-Nemotron-3-Ultra-NVFP4",
+          "in": 0.66,
+          "out": 2.64,
+          "cache": 0.13,
+          "ctx": 262144
+        },
+        {
+          "id": "azure_ai/kimi-k2.5",
+          "in": 0.6,
+          "out": 3.0,
+          "cache": 0.1,
+          "ctx": 262144,
+          "name": "MoonshotAI: Kimi K2.5"
+        },
+        {
+          "id": "azure_ai/grok-4-20-non-reasoning",
+          "in": 1.25,
+          "out": 2.5,
+          "cache": 1.25,
+          "ctx": 262000
+        },
+        {
+          "id": "azure_ai/grok-4-20-reasoning",
+          "in": 1.25,
+          "out": 2.5,
+          "cache": 1.25,
+          "ctx": 262000
+        },
+        {
+          "id": "azure_ai/grok-4.3",
+          "in": 1.25,
+          "out": 2.5,
+          "cache": 0.2,
+          "ctx": 200000,
+          "name": "SpaceXAI: Grok 4.3"
+        },
+        {
+          "id": "azure_ai/FW-Kimi-K2.5",
+          "in": 0.66,
+          "out": 3.3,
+          "cache": 0.11,
+          "ctx": 262144
+        },
+        {
+          "id": "azure_ai/Cohere-command-a-plus-05-2026",
+          "in": 0.8,
+          "out": 3.2,
+          "ctx": 128000
+        },
+        {
+          "id": "azure_ai/MAI-Cyber-1-Flash",
+          "in": 0.6,
+          "out": 3.5,
+          "cache": 0.06,
+          "ctx": 256000
+        },
+        {
+          "id": "azure_ai/FW-GLM-5",
+          "in": 1.1,
+          "out": 3.52,
+          "cache": 0.22,
+          "ctx": 200000
+        },
+        {
+          "id": "azure_ai/kimi-k2.6",
+          "in": 0.95,
+          "out": 4.0,
+          "cache": 0.16,
+          "ctx": 262144,
+          "name": "MoonshotAI: Kimi K2.6"
+        },
+        {
+          "id": "azure_ai/kimi-k2.7-code",
+          "in": 0.95,
+          "out": 4.0,
+          "cache": 0.19,
+          "ctx": 262144,
+          "name": "MoonshotAI: Kimi K2.7 Code"
+        },
+        {
+          "id": "azure_ai/deepseek-v4-pro",
+          "in": 1.74,
+          "out": 3.48,
+          "cache": 0.145,
+          "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/gpt-5.4-mini",
+          "in": 0.75,
+          "out": 4.5,
+          "cache": 0.075,
+          "ctx": 272000,
+          "name": "OpenAI: GPT-5.4 Mini"
+        },
+        {
+          "id": "azure_ai/gpt-5.4-mini-2026-03-17",
+          "in": 0.75,
+          "out": 4.5,
+          "cache": 0.075,
+          "ctx": 272000
+        },
+        {
+          "id": "azure_ai/FW-Kimi-K2.6",
+          "in": 1.045,
+          "out": 4.4,
+          "cache": 0.176,
+          "ctx": 262144
+        },
+        {
+          "id": "azure_ai/FW-Kimi-K2.7-Code",
+          "in": 1.05,
+          "out": 4.4,
+          "cache": 0.21,
+          "ctx": 262144
+        },
+        {
+          "id": "azure_ai/FW-Inkling",
+          "in": 1.1,
+          "out": 4.46,
+          "cache": 0.19,
+          "ctx": 1048576
+        },
+        {
+          "id": "azure_ai/deepseek-v3-0324",
+          "in": 1.14,
+          "out": 4.56,
+          "ctx": null
+        },
+        {
+          "id": "azure_ai/FW-DeepSeek-V4-Pro",
+          "in": 1.925,
+          "out": 3.828,
+          "cache": 0.165,
+          "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/claude-haiku-4-5",
+          "in": 1.0,
+          "out": 5.0,
+          "cache": 0.1,
+          "ctx": 200000,
+          "name": "Anthropic: Claude Haiku 4.5"
+        },
+        {
+          "id": "azure_ai/gpt-6.1-terra",
+          "in": 1.0,
+          "out": 5.0,
+          "cache": 0.05,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6.1 Terra"
+        },
+        {
+          "id": "azure_ai/deepseek-v3.1",
+          "in": 1.23,
+          "out": 4.94,
+          "ctx": null
+        },
+        {
+          "id": "azure_ai/FW-GLM-5.1",
+          "in": 1.54,
+          "out": 4.84,
+          "cache": 0.286,
+          "ctx": 202800
+        },
+        {
+          "id": "azure_ai/FW-GLM-5.2",
+          "in": 1.54,
+          "out": 4.84,
+          "cache": 0.15,
+          "ctx": 1048576
+        },
+        {
+          "id": "azure_ai/MAI-DS-R1",
+          "in": 1.35,
+          "out": 5.4,
+          "ctx": 128000
+        },
+        {
+          "id": "azure_ai/deepseek-r1",
+          "in": 1.35,
+          "out": 5.4,
+          "ctx": null
+        },
+        {
+          "id": "azure_ai/FW-GLM-5.3",
+          "in": 1.75,
+          "out": 5.5,
+          "cache": 0.325,
+          "ctx": 1048576
+        },
+        {
+          "id": "azure_ai/grok-4.6",
+          "in": 2.0,
+          "out": 6.0,
+          "cache": 0.5,
+          "ctx": 200000,
+          "name": "SpaceXAI: Grok 4.6"
+        },
+        {
+          "id": "azure_ai/grok-4.7",
+          "in": 2.0,
+          "out": 6.0,
+          "cache": 0.5,
+          "ctx": 500000,
+          "name": "SpaceXAI: Grok 4.7"
+        },
+        {
+          "id": "azure_ai/mistral-large-latest",
+          "in": 2.0,
+          "out": 6.0,
+          "ctx": 128000
+        },
+        {
+          "id": "azure_ai/mistral-medium-3-5",
+          "in": 1.5,
+          "out": 7.5,
+          "ctx": 128000,
+          "name": "Mistral: Mistral Medium 3.5"
+        },
+        {
+          "id": "azure_ai/FW-GLM-5.2-Fast",
+          "in": 2.31,
+          "out": 7.26,
+          "cache": 0.231,
+          "ctx": 1048576
+        },
+        {
+          "id": "azure_ai/MAI-Thinking-1",
+          "in": 2.0,
+          "out": 8.0,
+          "cache": 0.2,
+          "ctx": 256000
+        },
+        {
+          "id": "azure_ai/claude-sonnet-5",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Sonnet 5"
+        },
+        {
+          "id": "azure_ai/claude-sonnet-5-5",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.1,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Sonnet 5.5"
+        },
+        {
+          "id": "azure_ai/gpt-6-sol",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Sol"
+        },
+        {
+          "id": "azure_ai/gpt-6.1-sol",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.1,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6.1 Sol"
+        },
+        {
+          "id": "azure_ai/cohere-command-a",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 131072
+        },
+        {
+          "id": "azure_ai/gpt-5.4",
+          "in": 2.5,
+          "out": 15.0,
+          "cache": 0.25,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.4"
+        },
+        {
+          "id": "azure_ai/gpt-5.4-2026-03-05",
+          "in": 2.5,
+          "out": 15.0,
+          "cache": 0.25,
+          "ctx": 922000
+        },
+        {
+          "id": "azure_ai/FW-Kimi-K3",
+          "in": 3.0,
+          "out": 15.0,
+          "cache": 0.3,
+          "ctx": 1048576
+        },
+        {
+          "id": "azure_ai/claude-sonnet-4-5",
+          "in": 3.0,
+          "out": 15.0,
+          "cache": 0.3,
+          "ctx": 200000,
+          "name": "Anthropic: Claude Sonnet 4.5"
+        },
+        {
+          "id": "azure_ai/claude-sonnet-4-6",
+          "in": 3.0,
+          "out": 15.0,
+          "cache": 0.3,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Sonnet 4.6"
+        },
+        {
+          "id": "azure_ai/grok-3",
+          "in": 3.0,
+          "out": 15.0,
+          "ctx": null
+        },
+        {
+          "id": "azure_ai/grok-4",
+          "in": 3.0,
+          "out": 15.0,
+          "ctx": 262000
+        },
+        {
+          "id": "azure_ai/claude-opus-5-5",
+          "in": 4.0,
+          "out": 20.0,
+          "cache": 0.2,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Opus 5.5"
+        },
+        {
+          "id": "azure_ai/claude-opus-4-5",
+          "in": 5.0,
+          "out": 25.0,
+          "cache": 0.5,
+          "ctx": 200000,
+          "name": "Anthropic: Claude Opus 4.5"
+        },
+        {
+          "id": "azure_ai/claude-opus-4-6",
+          "in": 5.0,
+          "out": 25.0,
+          "cache": 0.5,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Opus 4.6"
+        },
+        {
+          "id": "azure_ai/claude-opus-4-7",
+          "in": 5.0,
+          "out": 25.0,
+          "cache": 0.5,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Opus 4.7"
+        },
+        {
+          "id": "azure_ai/claude-opus-4-8",
+          "in": 5.0,
+          "out": 25.0,
+          "cache": 0.5,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Opus 4.8"
+        },
+        {
+          "id": "azure_ai/claude-opus-5",
+          "in": 5.0,
+          "out": 25.0,
+          "cache": 0.5,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Opus 5"
+        },
+        {
+          "id": "azure_ai/gpt-5.5",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-5.5"
+        },
+        {
+          "id": "azure_ai/gpt-5.5-2026-04-23",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 922000
+        },
+        {
+          "id": "azure_ai/gpt-5.5-2026-04-24",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 922000
+        },
+        {
+          "id": "azure_ai/gpt-chat-latest",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 128000,
+          "name": "OpenAI: GPT Chat Latest"
+        },
+        {
+          "id": "azure_ai/claude-opus-5-5-fast",
+          "in": 8.0,
+          "out": 40.0,
+          "cache": 0.4,
+          "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/claude-fable-5",
+          "in": 10.0,
+          "out": 50.0,
+          "cache": 1.0,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Fable 5"
+        },
+        {
+          "id": "azure_ai/claude-fable-5-1",
+          "in": 10.0,
+          "out": 50.0,
+          "cache": 0.25,
+          "ctx": 1000000,
+          "name": "Anthropic: Claude Fable 5.1"
+        },
+        {
+          "id": "azure_ai/claude-mythos-5-1",
+          "in": 10.0,
+          "out": 50.0,
+          "cache": 0.25,
+          "ctx": 1000000
+        },
+        {
+          "id": "azure_ai/gpt-6-astra",
+          "in": 10.0,
+          "out": 50.0,
+          "cache": 1.0,
+          "ctx": 922000,
+          "name": "OpenAI: GPT-6 Astra"
+        },
+        {
+          "id": "azure_ai/jais-30b-chat",
+          "in": 3200.0,
+          "out": 9710.0,
+          "ctx": 8192
         }
       ]
     },
@@ -8099,6 +8073,13 @@
           "out": 10.0,
           "cache": 0.1,
           "ctx": 1000000
+        },
+        {
+          "id": "databricks/databricks-kimi-k3-1-pro",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 1048576
         },
         {
           "id": "databricks/databricks-gemini-3-5-flash",
@@ -9795,6 +9776,13 @@
           "ctx": 1048576
         },
         {
+          "id": "fireworks_ai/accounts/fireworks/models/ultramarine-1-flash-us",
+          "in": 0.15,
+          "out": 0.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
           "id": "fireworks_ai/glm-5p3-flash",
           "in": 0.15,
           "out": 0.5,
@@ -9886,13 +9874,6 @@
           "in": 0.22,
           "out": 0.66,
           "cache": 0.007,
-          "ctx": 1048576
-        },
-        {
-          "id": "fireworks_ai/accounts/fireworks/models/ultramarine-1-flash-us",
-          "in": 0.225,
-          "out": 0.75,
-          "cache": 0.045,
           "ctx": 1048576
         },
         {
@@ -10054,8 +10035,7 @@
           "id": "fireworks_ai/accounts/fireworks/models/minimax-m2",
           "in": 0.3,
           "out": 1.2,
-          "ctx": 196608,
-          "name": "MiniMax: MiniMax M2"
+          "ctx": 196608
         },
         {
           "id": "fireworks_ai/accounts/fireworks/models/minimax-m2p1",
@@ -10957,6 +10937,20 @@
           "ctx": 202800
         },
         {
+          "id": "fireworks_ai/accounts/fireworks/models/kimi-k3p1-pro",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 1048576
+        },
+        {
+          "id": "fireworks_ai/accounts/fireworks/routers/deepseek-v4p1-flash-1017-ultrafast",
+          "in": 2.4,
+          "out": 9.6,
+          "cache": 0.048,
+          "ctx": 1048576
+        },
+        {
           "id": "fireworks_ai/accounts/fireworks/routers/kimi-k3-spot",
           "in": 2.1,
           "out": 10.5,
@@ -11133,6 +11127,14 @@
           "name": "Microsoft: Phi 4"
         },
         {
+          "id": "deepinfra/deepseek-ai/DeepSeek-V4-Flash-0731",
+          "in": 0.06,
+          "out": 0.18,
+          "cache": 0.015,
+          "ctx": 1048576,
+          "name": "DeepSeek: DeepSeek V4 Flash 0731"
+        },
+        {
           "id": "deepinfra/google/gemma-3-27b-it",
           "in": 0.08,
           "out": 0.16,
@@ -11161,14 +11163,6 @@
           "cache": 0.025,
           "ctx": 262144,
           "name": "NVIDIA: Nemotron 3 Nano 30B A3B"
-        },
-        {
-          "id": "deepinfra/deepseek-ai/DeepSeek-V4-Flash-0731",
-          "in": 0.08,
-          "out": 0.18,
-          "cache": 0.016,
-          "ctx": 1048576,
-          "name": "DeepSeek: DeepSeek V4 Flash 0731"
         },
         {
           "id": "deepinfra/deepseek-ai/DeepSeek-V4-Flash",
@@ -11272,13 +11266,6 @@
           "ctx": 131072
         },
         {
-          "id": "deepinfra/google/gemma-4-31B-it",
-          "in": 0.13,
-          "out": 0.38,
-          "ctx": 262144,
-          "name": "Google: Gemma 4 31B"
-        },
-        {
           "id": "deepinfra/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
           "in": 0.27,
           "out": 0.27,
@@ -11304,6 +11291,13 @@
           "cache": 0.0042,
           "ctx": 1048576,
           "name": "DeepSeek: DeepSeek V4.1 Flash 1017"
+        },
+        {
+          "id": "deepinfra/google/gemma-4-31B-it",
+          "in": 0.2,
+          "out": 0.4,
+          "ctx": 262144,
+          "name": "Google: Gemma 4 31B"
         },
         {
           "id": "deepinfra/Qwen/Qwen3-30B-A3B",
@@ -11468,7 +11462,7 @@
           "id": "deepinfra/deepseek-ai/DeepSeek-V3.1",
           "in": 0.25,
           "out": 0.95,
-          "cache": 0.216,
+          "cache": 0.13,
           "ctx": 163840
         },
         {
@@ -11649,7 +11643,7 @@
           "id": "deepinfra/deepseek-ai/DeepSeek-R1-0528",
           "in": 0.5,
           "out": 2.15,
-          "cache": 0.4,
+          "cache": 0.35,
           "ctx": 163840,
           "name": "DeepSeek: R1 0528"
         },
@@ -12423,16 +12417,14 @@
           "in": 0.3,
           "out": 1.2,
           "cache": 0.03,
-          "ctx": 204800,
-          "name": "MiniMax: MiniMax M2"
+          "ctx": 204800
         },
         {
           "id": "novita/minimax/minimax-m2.1",
           "in": 0.3,
           "out": 1.2,
           "cache": 0.03,
-          "ctx": 204800,
-          "name": "MiniMax: MiniMax M2.1"
+          "ctx": 204800
         },
         {
           "id": "novita/minimax/minimax-m2.5",
@@ -12497,6 +12489,13 @@
           "in": 0.42,
           "out": 1.25,
           "ctx": 123000
+        },
+        {
+          "id": "novita/mindai/macaron-v1-tall",
+          "in": 0.2475,
+          "out": 1.43,
+          "cache": 0.044,
+          "ctx": 262144
         },
         {
           "id": "novita/qwen/qwen3-coder-next",
@@ -12658,13 +12657,6 @@
           "name": "MiniMax M2.7 highspeed"
         },
         {
-          "id": "novita/mindai/macaron-v1-tall",
-          "in": 0.45,
-          "out": 2.6,
-          "cache": 0.08,
-          "ctx": 262144
-        },
-        {
           "id": "novita/moonshotai/kimi-k2-0905",
           "in": 0.6,
           "out": 2.5,
@@ -12698,6 +12690,13 @@
           "in": 0.7,
           "out": 2.5,
           "ctx": 64000
+        },
+        {
+          "id": "novita/mindai/macaron-v1-venti",
+          "in": 0.825,
+          "out": 2.475,
+          "cache": 0.165,
+          "ctx": 1048576
         },
         {
           "id": "novita/qwen/qwen3-235b-a22b-thinking-2507",
@@ -12801,7 +12800,7 @@
           "id": "novita/deepseek/deepseek-v4-pro-0813",
           "in": 1.32,
           "out": 3.96,
-          "cache": 0.132,
+          "cache": 0.044,
           "ctx": 1048576,
           "name": "DeepSeek: DeepSeek V4 Pro 0813"
         },
@@ -12828,13 +12827,6 @@
           "cache": 0.26,
           "ctx": 1048576,
           "name": "Z.ai: GLM 5.3"
-        },
-        {
-          "id": "novita/mindai/macaron-v1-venti",
-          "in": 1.5,
-          "out": 4.5,
-          "cache": 0.3,
-          "ctx": 1048576
         },
         {
           "id": "novita/deepseek/deepseek-r1",
@@ -12870,6 +12862,866 @@
           "cache": 0.3,
           "ctx": 1048576,
           "name": "MoonshotAI: Kimi K3"
+        }
+      ]
+    },
+    {
+      "id": "gmi-cloud",
+      "name": "GMI Cloud",
+      "kind": "serverless",
+      "models": [
+        {
+          "id": "gmi/openai/gpt-oss-20b",
+          "in": 0.04,
+          "out": 0.15,
+          "ctx": 131072,
+          "name": "OpenAI: gpt-oss-20b"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-V4-Flash",
+          "in": 0.091,
+          "out": 0.182,
+          "cache": 0.0182,
+          "ctx": 1048575
+        },
+        {
+          "id": "gmi/openai/gpt-oss-120b",
+          "in": 0.05,
+          "out": 0.25,
+          "ctx": 131072,
+          "name": "OpenAI: gpt-oss-120b"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+          "in": 0.1,
+          "out": 0.2,
+          "ctx": 131072
+        },
+        {
+          "id": "gmi/zai-org/GLM-5.3-Flash",
+          "in": 0.075,
+          "out": 0.25,
+          "cache": 0.015,
+          "ctx": 1048576
+        },
+        {
+          "id": "gmi/Qwen/Qwen3-30B-A3B",
+          "in": 0.08,
+          "out": 0.25,
+          "ctx": 40946,
+          "name": "Qwen: Qwen3 30B A3B"
+        },
+        {
+          "id": "gmi/XiaomiMiMo/MiMo-V2.6-Flash",
+          "in": 0.112,
+          "out": 0.224,
+          "cache": 0.0022,
+          "ctx": 1050000,
+          "name": "Xiaomi: MiMo-V2.6-Flash"
+        },
+        {
+          "id": "gmi/XiaomiMiMo/MiMo-V2.5",
+          "in": 0.119,
+          "out": 0.238,
+          "cache": 0.0024,
+          "ctx": 1050000,
+          "name": "Xiaomi: MiMo-V2.5"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+          "in": 0.2,
+          "out": 0.2,
+          "ctx": 131072
+        },
+        {
+          "id": "gmi/Qwen/Qwen3-235B-A22B-Instruct-2507-FP8",
+          "in": 0.0875,
+          "out": 0.35,
+          "cache": 0.0175,
+          "ctx": 262144
+        },
+        {
+          "id": "gmi/zai-org/GLM-4.7-Flash",
+          "in": 0.07,
+          "out": 0.4,
+          "ctx": 202752,
+          "name": "Z.ai: GLM 4.7 Flash"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+          "in": 0.14,
+          "out": 0.39,
+          "ctx": 131072
+        },
+        {
+          "id": "gmi/google/gemma-4-26b-a4b-it",
+          "in": 0.13,
+          "out": 0.4,
+          "ctx": 256000,
+          "name": "Google: Gemma 4 26B A4B "
+        },
+        {
+          "id": "gmi/google/gemma-4-31b-it",
+          "in": 0.14,
+          "out": 0.4,
+          "cache": 0.1,
+          "ctx": 262144,
+          "name": "Google: Gemma 4 31B"
+        },
+        {
+          "id": "gmi/MiniMaxAI/MiniMax-M3.1-Flash",
+          "in": 0.1125,
+          "out": 0.45,
+          "cache": 0.0112,
+          "ctx": 1048576
+        },
+        {
+          "id": "gmi/meta-llama/Llama-4-Scout-17B-16E-Instruct",
+          "in": 0.08,
+          "out": 0.5,
+          "ctx": 1048576
+        },
+        {
+          "id": "gmi/nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.05,
+          "ctx": 32768
+        },
+        {
+          "id": "gmi/openai/gpt-6-luna",
+          "in": 0.1,
+          "out": 0.5,
+          "cache": 0.01,
+          "ctx": 1050000,
+          "name": "OpenAI: GPT-6 Luna"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.8-Flash",
+          "in": 0.16,
+          "out": 0.47,
+          "cache": 0.016,
+          "ctx": 1048575,
+          "name": "Qwen: Qwen3.8 Flash"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-V3.2-Exp",
+          "in": 0.27,
+          "out": 0.41,
+          "ctx": 163840,
+          "name": "DeepSeek: DeepSeek V3.2 Exp"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-V3.2",
+          "in": 0.28,
+          "out": 0.4,
+          "ctx": 163840,
+          "name": "DeepSeek: DeepSeek V3.2"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-V3.2-Speciale",
+          "in": 0.28,
+          "out": 0.4,
+          "ctx": 163840
+        },
+        {
+          "id": "gmi/Qwen/Qwen3-32B-FP8",
+          "in": 0.1,
+          "out": 0.6,
+          "ctx": 32768
+        },
+        {
+          "id": "gmi/tencent/Hy3",
+          "in": 0.14,
+          "out": 0.58,
+          "cache": 0.035,
+          "ctx": 262144
+        },
+        {
+          "id": "gmi/openai/gpt-4o-mini",
+          "in": 0.15,
+          "out": 0.6,
+          "ctx": 131072,
+          "name": "OpenAI: GPT-4o-mini"
+        },
+        {
+          "id": "gmi/tencent/hy3-preview",
+          "in": 0.18,
+          "out": 0.6,
+          "cache": 0.06,
+          "ctx": 262144,
+          "name": "Tencent: Hy3 preview"
+        },
+        {
+          "id": "gmi/gmicloud/Ripple-65B-Preview",
+          "in": 0.2,
+          "out": 0.6,
+          "cache": 0.05,
+          "ctx": 1000000,
+          "name": "ricursiveAI/Ripple-65B-Preview"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-V4.1-Flash",
+          "in": 0.18,
+          "out": 0.72,
+          "cache": 0.0036,
+          "ctx": 1048575
+        },
+        {
+          "id": "gmi/deepseek-ai/deepseek-v4.1-flash-1017",
+          "in": 0.18,
+          "out": 0.72,
+          "cache": 0.0036,
+          "ctx": 1048575,
+          "name": "DeepSeek: DeepSeek V4.1 Flash 1017"
+        },
+        {
+          "id": "gmi/XiaomiMiMo/MiMo-V2.5-Pro",
+          "in": 0.3045,
+          "out": 0.609,
+          "cache": 0.0025,
+          "ctx": 1050000,
+          "name": "Xiaomi: MiMo-V2.5-Pro"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+          "in": 0.25,
+          "out": 0.75,
+          "ctx": 131072
+        },
+        {
+          "id": "gmi/meta-llama/Llama-3.3-70B-Instruct",
+          "in": 0.25,
+          "out": 0.75,
+          "ctx": 131072,
+          "name": "Meta: Llama 3.3 70B Instruct"
+        },
+        {
+          "id": "gmi/tencent/HunyuanOCR",
+          "in": 0.5,
+          "out": 0.5,
+          "ctx": 32768
+        },
+        {
+          "id": "gmi/XiaomiMiMo/MiMo-V2.6-Pro",
+          "in": 0.348,
+          "out": 0.696,
+          "cache": 0.0029,
+          "ctx": 1050000,
+          "name": "Xiaomi: MiMo-V2.6-Pro"
+        },
+        {
+          "id": "gmi/MiniMaxAI/MiniMax-M2.7",
+          "in": 0.21,
+          "out": 0.84,
+          "cache": 0.042,
+          "ctx": 196608,
+          "name": "MiniMax: MiniMax M2.7"
+        },
+        {
+          "id": "gmi/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
+          "in": 0.25,
+          "out": 0.8,
+          "ctx": 1048576
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-V4-Flash-0731",
+          "in": 0.286,
+          "out": 0.858,
+          "cache": 0.0091,
+          "ctx": 1048576,
+          "name": "DeepSeek: DeepSeek V4 Flash 0731"
+        },
+        {
+          "id": "gmi/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+          "in": 0.15,
+          "out": 1.0,
+          "cache": 0.05,
+          "ctx": 65536
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-V3-0324",
+          "in": 0.28,
+          "out": 0.88,
+          "ctx": 163840
+        },
+        {
+          "id": "gmi/MiniMaxAI/MiniMax-M3",
+          "in": 0.24,
+          "out": 0.96,
+          "cache": 0.048,
+          "ctx": 1048576,
+          "name": "MiniMax: MiniMax M3"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3-235B-A22B-FP8",
+          "in": 0.17,
+          "out": 1.09,
+          "ctx": 32768
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-V3.1",
+          "in": 0.27,
+          "out": 1.0,
+          "ctx": 163840
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-V3.1-Terminus",
+          "in": 0.27,
+          "out": 1.0,
+          "ctx": 131072,
+          "name": "DeepSeek: DeepSeek V3.1 Terminus"
+        },
+        {
+          "id": "gmi/zai-org/GLM-4.5-Air-FP8",
+          "in": 0.2,
+          "out": 1.1,
+          "ctx": 131076
+        },
+        {
+          "id": "gmi/stepfun-ai/Step-3.7-Flash",
+          "in": 0.2,
+          "out": 1.15,
+          "cache": 0.04,
+          "ctx": 256000,
+          "name": "StepFun: Step 3.7 Flash"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+          "in": 0.5,
+          "out": 0.9,
+          "ctx": 131072
+        },
+        {
+          "id": "gmi/openai/gpt-5.4-nano",
+          "in": 0.2,
+          "out": 1.25,
+          "cache": 0.02,
+          "ctx": 409600,
+          "name": "OpenAI: GPT-5.4 Nano"
+        },
+        {
+          "id": "gmi/MiniMaxAI/MiniMax-M2",
+          "in": 0.3,
+          "out": 1.2,
+          "ctx": 196608
+        },
+        {
+          "id": "gmi/MiniMaxAI/MiniMax-M2.1",
+          "in": 0.3,
+          "out": 1.2,
+          "ctx": 196608
+        },
+        {
+          "id": "gmi/MiniMaxAI/MiniMax-M2.5",
+          "in": 0.3,
+          "out": 1.2,
+          "cache": 0.03,
+          "ctx": 196608,
+          "name": "MiniMax: MiniMax M2.5"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3-Next-80B-A3B-Instruct",
+          "in": 0.15,
+          "out": 1.5,
+          "ctx": 262144,
+          "name": "Qwen: Qwen3 Next 80B A3B Instruct"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3-Next-80B-A3B-Thinking",
+          "in": 0.15,
+          "out": 1.5,
+          "ctx": 262144
+        },
+        {
+          "id": "gmi/tencent/hy4",
+          "in": 0.417,
+          "out": 1.2505,
+          "cache": 0.021,
+          "ctx": 1000000,
+          "name": "Tencent: Hy4"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3-VL-235B-A22B-Instruct-FP8",
+          "in": 0.3,
+          "out": 1.4,
+          "ctx": 262144
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.6-35B-A3B",
+          "in": 0.248,
+          "out": 1.485,
+          "ctx": 262144,
+          "name": "Qwen: Qwen3.6 35B A3B"
+        },
+        {
+          "id": "gmi/google/gemini-3.1-flash-lite-preview",
+          "in": 0.25,
+          "out": 1.5,
+          "cache": 0.025,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.1 Flash Lite Preview"
+        },
+        {
+          "id": "gmi/deepseek-ai/deepseek-v4-flash-vision-exp",
+          "in": 0.44,
+          "out": 1.32,
+          "cache": 0.014,
+          "ctx": 1048575
+        },
+        {
+          "id": "gmi/moonshotai/Kimi-K2-Thinking",
+          "in": 0.8,
+          "out": 1.2,
+          "ctx": 262144,
+          "name": "MoonshotAI: Kimi K2 Thinking"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.5-35B-A3B",
+          "in": 0.25,
+          "out": 2.0,
+          "ctx": 262144,
+          "name": "Qwen: Qwen3.5-35B-A3B"
+        },
+        {
+          "id": "gmi/zai-org/GLM-4.7-FP8",
+          "in": 0.4,
+          "out": 2.0,
+          "ctx": 202752
+        },
+        {
+          "id": "gmi/zai-org/GLM-5-FP8",
+          "in": 0.6,
+          "out": 1.92,
+          "cache": 0.12,
+          "ctx": 202752
+        },
+        {
+          "id": "gmi/zai-org/GLM-4.6",
+          "in": 0.6,
+          "out": 2.0,
+          "ctx": 204800,
+          "name": "Z.ai: GLM 4.6"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-Prover-V2-671B",
+          "in": 0.5,
+          "out": 2.18,
+          "ctx": 131072
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-R1",
+          "in": 0.5,
+          "out": 2.18,
+          "ctx": 131072
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.5-27B",
+          "in": 0.3,
+          "out": 2.4,
+          "ctx": 262144,
+          "name": "Qwen: Qwen3.5-27B"
+        },
+        {
+          "id": "gmi/google/gemini-3.5-flash-lite",
+          "in": 0.3,
+          "out": 2.5,
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "gmi/zai-org/GLM-4.5-FP8",
+          "in": 0.6,
+          "out": 2.2,
+          "ctx": 131072
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-R1-0528",
+          "in": 0.57,
+          "out": 2.29,
+          "cache": 0.23,
+          "ctx": 131072,
+          "name": "DeepSeek: R1 0528"
+        },
+        {
+          "id": "gmi/moonshotai/Kimi-K2-Instruct-0905",
+          "in": 0.57,
+          "out": 2.29,
+          "cache": 0.14,
+          "ctx": 262144
+        },
+        {
+          "id": "gmi/zai-org/GLM-5.3",
+          "in": 0.7,
+          "out": 2.2,
+          "cache": 0.13,
+          "ctx": 1048576,
+          "name": "Z.ai: GLM 5.3"
+        },
+        {
+          "id": "gmi/tencent/hy4-preview",
+          "in": 0.834,
+          "out": 2.501,
+          "cache": 0.042,
+          "ctx": 262144
+        },
+        {
+          "id": "gmi/nvidia/nemotron-3-ultra-550b-a55b",
+          "in": 0.8,
+          "out": 2.6,
+          "cache": 0.1,
+          "ctx": 262144,
+          "name": "NVIDIA: Nemotron 3 Ultra"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.6-Plus",
+          "in": 0.5,
+          "out": 3.0,
+          "ctx": 262144,
+          "name": "Qwen: Qwen3.6 Plus"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.6-Plus-2026-04-02",
+          "in": 0.5,
+          "out": 3.0,
+          "ctx": 262144
+        },
+        {
+          "id": "gmi/google/gemini-3-flash-preview",
+          "in": 0.5,
+          "out": 3.0,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3 Flash Preview"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.5-122B-A10B",
+          "in": 0.4,
+          "out": 3.2,
+          "ctx": 262144,
+          "name": "Qwen: Qwen3.5-122B-A10B"
+        },
+        {
+          "id": "gmi/moonshotai/Kimi-K2.5",
+          "in": 0.6,
+          "out": 3.0,
+          "ctx": 262144,
+          "name": "MoonshotAI: Kimi K2.5"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.8-27B",
+          "in": 0.45,
+          "out": 3.2,
+          "cache": 0.25,
+          "ctx": 1048575,
+          "name": "Qwen: Qwen3.8 27B"
+        },
+        {
+          "id": "gmi/stepfun-ai/Step-5-Preview",
+          "in": 1.0,
+          "out": 2.7,
+          "cache": 0.1,
+          "ctx": 1048576,
+          "name": "StepFun: Step 5 Preview"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.5-397B-A17B",
+          "in": 0.6,
+          "out": 3.6,
+          "ctx": 262144,
+          "name": "Qwen: Qwen3.5 397B A17B"
+        },
+        {
+          "id": "gmi/deepseek-ai/DeepSeek-V4-Pro-0813",
+          "in": 1.056,
+          "out": 3.168,
+          "cache": 0.0352,
+          "ctx": 1048575,
+          "name": "DeepSeek: DeepSeek V4 Pro 0813"
+        },
+        {
+          "id": "gmi/moonshotai/Kimi-K2.6",
+          "in": 0.855,
+          "out": 3.6,
+          "cache": 0.144,
+          "ctx": 262144,
+          "name": "MoonshotAI: Kimi K2.6"
+        },
+        {
+          "id": "gmi/google/gemini-3.7-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.7 Flash"
+        },
+        {
+          "id": "gmi/google/gemini-3.8-flash",
+          "in": 0.75,
+          "out": 3.75,
+          "cache": 0.075,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.8 Flash"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3-235B-A22B-Thinking-2507-FP8",
+          "in": 0.35,
+          "out": 4.2,
+          "ctx": 262141
+        },
+        {
+          "id": "gmi/moonshotai/kimi-k2.7-code",
+          "in": 0.95,
+          "out": 4.0,
+          "cache": 0.19,
+          "ctx": 262144,
+          "name": "MoonshotAI: Kimi K2.7 Code"
+        },
+        {
+          "id": "gmi/openai/gpt-5.4-mini",
+          "in": 0.75,
+          "out": 4.5,
+          "cache": 0.075,
+          "ctx": 409600,
+          "name": "OpenAI: GPT-5.4 Mini"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
+          "in": 0.9,
+          "out": 4.5,
+          "cache": 0.18,
+          "ctx": 262128
+        },
+        {
+          "id": "gmi/zai-org/GLM-5.1-FP8",
+          "in": 1.4,
+          "out": 4.4,
+          "cache": 0.26,
+          "ctx": 202752
+        },
+        {
+          "id": "gmi/zai-org/GLM-5.2-FP8",
+          "in": 1.4,
+          "out": 4.4,
+          "cache": 0.26,
+          "ctx": 1048576
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.8-Max-0902",
+          "in": 1.65,
+          "out": 4.951,
+          "cache": 0.206,
+          "ctx": 262144,
+          "name": "Qwen: Qwen3.8 Max (0902)"
+        },
+        {
+          "id": "gmi/openai/gpt-5.6-luna",
+          "in": 1.0,
+          "out": 6.0,
+          "cache": 0.1,
+          "ctx": 1050000,
+          "name": "OpenAI: GPT-5.6 Luna"
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.8-Max",
+          "in": 2.0,
+          "out": 6.0,
+          "cache": 0.25,
+          "ctx": 262144,
+          "name": "Qwen: Qwen3.8 Max"
+        },
+        {
+          "id": "gmi/x-ai/grok-4.5",
+          "in": 2.0,
+          "out": 6.0,
+          "cache": 0.5,
+          "ctx": 2000000
+        },
+        {
+          "id": "gmi/xai/grok4.6",
+          "in": 2.0,
+          "out": 6.0,
+          "cache": 0.5,
+          "ctx": 2000000,
+          "name": "SpaceXAI: Grok 4.6"
+        },
+        {
+          "id": "gmi/google/gemini-3.6-flash",
+          "in": 1.5,
+          "out": 7.5,
+          "cache": 0.15,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.6 Flash"
+        },
+        {
+          "id": "gmi/moonshotai/kimi-k2.7-code-highspeed",
+          "in": 1.9,
+          "out": 8.0,
+          "cache": 0.38,
+          "ctx": 262144
+        },
+        {
+          "id": "gmi/Qwen/Qwen3.7-Max",
+          "in": 2.5,
+          "out": 7.5,
+          "cache": 0.25,
+          "ctx": 262144,
+          "name": "Qwen: Qwen3.7 Max"
+        },
+        {
+          "id": "gmi/google/gemini-3.5-flash",
+          "in": 1.5,
+          "out": 9.0,
+          "cache": 0.15,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.5 Flash"
+        },
+        {
+          "id": "gmi/openai/gpt-5",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 409600,
+          "name": "OpenAI: GPT-5"
+        },
+        {
+          "id": "gmi/openai/gpt-5.1",
+          "in": 1.25,
+          "out": 10.0,
+          "ctx": 409600,
+          "name": "OpenAI: GPT-5.1"
+        },
+        {
+          "id": "gmi/google/gemini-4-argon",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.1,
+          "ctx": 1048576,
+          "name": "Google: Gemini 4 Argon"
+        },
+        {
+          "id": "gmi/moonshotai/kimi-k3.1-pro",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 1048576,
+          "name": "MoonshotAI: Kimi K3.1 Pro"
+        },
+        {
+          "id": "gmi/openai/gpt-6-sol",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 1050000,
+          "name": "OpenAI: GPT-6 Sol"
+        },
+        {
+          "id": "gmi/openai/gpt-6.1-sol",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.1,
+          "ctx": 1050000,
+          "name": "OpenAI: GPT-6.1 Sol"
+        },
+        {
+          "id": "gmi/openai/gpt-4o",
+          "in": 2.5,
+          "out": 10.0,
+          "ctx": 131072,
+          "name": "OpenAI: GPT-4o"
+        },
+        {
+          "id": "gmi/google/gemini-3.1-pro-preview",
+          "in": 2.0,
+          "out": 12.0,
+          "ctx": 1048576,
+          "name": "Google: Gemini 3.1 Pro Preview"
+        },
+        {
+          "id": "gmi/openai/gpt-5.2",
+          "in": 1.75,
+          "out": 14.0,
+          "ctx": 409600,
+          "name": "OpenAI: GPT-5.2"
+        },
+        {
+          "id": "gmi/openai/gpt-5.4",
+          "in": 2.5,
+          "out": 15.0,
+          "cache": 0.25,
+          "ctx": 409600,
+          "name": "OpenAI: GPT-5.4"
+        },
+        {
+          "id": "gmi/openai/gpt-5.6-terra",
+          "in": 2.5,
+          "out": 15.0,
+          "cache": 0.25,
+          "ctx": 1050000,
+          "name": "OpenAI: GPT-5.6 Terra"
+        },
+        {
+          "id": "gmi/anthropic/claude-sonnet-4",
+          "in": 3.0,
+          "out": 15.0,
+          "ctx": 409600
+        },
+        {
+          "id": "gmi/anthropic/claude-sonnet-4.5",
+          "in": 3.0,
+          "out": 15.0,
+          "ctx": 409600,
+          "name": "Anthropic: Claude Sonnet 4.5"
+        },
+        {
+          "id": "gmi/moonshotai/kimi-k3",
+          "in": 3.0,
+          "out": 15.0,
+          "cache": 0.3,
+          "ctx": 1048576,
+          "name": "MoonshotAI: Kimi K3"
+        },
+        {
+          "id": "gmi/anthropic/claude-opus-4.5",
+          "in": 5.0,
+          "out": 25.0,
+          "ctx": 409600,
+          "name": "Anthropic: Claude Opus 4.5"
+        },
+        {
+          "id": "gmi/openai/gpt-5.5",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 1050000,
+          "name": "OpenAI: GPT-5.5"
+        },
+        {
+          "id": "gmi/openai/gpt-5.6-sol",
+          "in": 5.0,
+          "out": 30.0,
+          "cache": 0.5,
+          "ctx": 1050000,
+          "name": "OpenAI: GPT-5.6 Sol"
+        },
+        {
+          "id": "gmi/openai/gpt-6-astra",
+          "in": 10.0,
+          "out": 50.0,
+          "cache": 1.0,
+          "ctx": 1050000,
+          "name": "OpenAI: GPT-6 Astra"
+        },
+        {
+          "id": "gmi/anthropic/claude-opus-4",
+          "in": 15.0,
+          "out": 75.0,
+          "ctx": 409600
+        },
+        {
+          "id": "gmi/openai/gpt-5.4-pro",
+          "in": 30.0,
+          "out": 180.0,
+          "ctx": 409600,
+          "name": "OpenAI: GPT-5.4 Pro"
         }
       ]
     },
@@ -13028,13 +13880,6 @@
         {
           "id": "meta/codellama-70b",
           "name": "meta/codellama-70b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "meta/llama-3.2-11b-vision-instruct",
-          "name": "meta/llama-3.2-11b-vision-instruct",
           "in": null,
           "out": null,
           "ctx": null
@@ -13540,40 +14385,16 @@
           "ctx": 131072
         },
         {
-          "id": "together_ai/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
-          "in": 0.18,
-          "out": 0.18,
-          "ctx": 131072
-        },
-        {
           "id": "together_ai/meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
           "in": 0.18,
           "out": 0.18,
           "ctx": 131072
         },
         {
-          "id": "together_ai/meta-llama/Llama-3-8b-chat-hf",
-          "in": 0.2,
-          "out": 0.2,
-          "ctx": 8192
-        },
-        {
-          "id": "together_ai/meta-llama/Meta-Llama-3-8B-Instruct",
-          "in": 0.2,
-          "out": 0.2,
-          "ctx": 8192
-        },
-        {
           "id": "together_ai/mistralai/Ministral-3-14B-Instruct-2512",
           "in": 0.2,
           "out": 0.2,
           "ctx": 262144
-        },
-        {
-          "id": "together_ai/mistralai/Mistral-7B-Instruct-v0.1",
-          "in": 0.2,
-          "out": 0.2,
-          "ctx": 32768
         },
         {
           "id": "together_ai/mistralai/Mistral-7B-Instruct-v0.3",
@@ -13651,17 +14472,19 @@
           "ctx": 1048576
         },
         {
+          "id": "together_ai/ricursive-ai/Ripple-65B-Preview",
+          "in": 0.2,
+          "out": 0.6,
+          "cache": 0.02,
+          "ctx": 131072,
+          "name": "ricursiveAI/Ripple-65B-Preview"
+        },
+        {
           "id": "together_ai/Qwen/Qwen3-VL-8B-Instruct",
           "in": 0.18,
           "out": 0.68,
           "ctx": 262144,
           "name": "Qwen: Qwen3 VL 8B Instruct"
-        },
-        {
-          "id": "together_ai/NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO",
-          "in": 0.6,
-          "out": 0.6,
-          "ctx": 32768
         },
         {
           "id": "together_ai/mistralai/Mixtral-8x7B-Instruct-v0.1",
@@ -13720,31 +14543,11 @@
           "ctx": 32768
         },
         {
-          "id": "together_ai/Qwen/Qwen2.5-Coder-32B-Instruct",
-          "in": 0.8,
-          "out": 0.8,
-          "ctx": 16384,
-          "name": "Qwen2.5 Coder 32B Instruct"
-        },
-        {
           "id": "together_ai/Qwen/Qwen3.7-Plus",
           "in": 0.32,
           "out": 1.28,
           "ctx": 1000000,
           "name": "Qwen: Qwen3.7 Plus"
-        },
-        {
-          "id": "together_ai/deepseek-ai/deepseek-coder-33b-instruct",
-          "in": 0.8,
-          "out": 0.8,
-          "ctx": 16384
-        },
-        {
-          "id": "together_ai/google/gemma-2-27b-it",
-          "in": 0.8,
-          "out": 0.8,
-          "ctx": 8192,
-          "name": "Google: Gemma 2 27B"
         },
         {
           "id": "together_ai/reflection/Beam-1.0-501B-A23B",
@@ -13774,28 +14577,10 @@
           "ctx": 262144
         },
         {
-          "id": "together_ai/meta-llama/Meta-Llama-3-70B-Instruct-Turbo",
-          "in": 0.88,
-          "out": 0.88,
-          "ctx": 8192
-        },
-        {
           "id": "together_ai/meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo",
           "in": 0.88,
           "out": 0.88,
           "ctx": 131072
-        },
-        {
-          "id": "together_ai/nvidia/Llama-3.1-Nemotron-70B-Instruct-HF",
-          "in": 0.88,
-          "out": 0.88,
-          "ctx": 32768
-        },
-        {
-          "id": "together_ai/Qwen/Qwen2-72B-Instruct",
-          "in": 0.9,
-          "out": 0.9,
-          "ctx": 32768
         },
         {
           "id": "together_ai/meta-models/Muse-Glimmer-30B",
@@ -13822,18 +14607,6 @@
           "in": 0.6,
           "out": 1.7,
           "ctx": 131072
-        },
-        {
-          "id": "together_ai/Qwen/QwQ-32B",
-          "in": 1.2,
-          "out": 1.2,
-          "ctx": 131072
-        },
-        {
-          "id": "together_ai/Qwen/Qwen2-VL-72B-Instruct",
-          "in": 1.2,
-          "out": 1.2,
-          "ctx": 32768
         },
         {
           "id": "together_ai/Qwen/Qwen2.5-72B-Instruct",
@@ -13869,12 +14642,6 @@
           "name": "Z.ai: GLM 4.6"
         },
         {
-          "id": "together_ai/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
-          "in": 1.6,
-          "out": 1.6,
-          "ctx": 131072
-        },
-        {
           "id": "together_ai/moonshotai/Kimi-K2.5-fp4",
           "in": 0.5,
           "out": 2.8,
@@ -13892,12 +14659,6 @@
           "in": 2.0,
           "out": 2.0,
           "ctx": 262144
-        },
-        {
-          "id": "together_ai/deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-          "in": 2.0,
-          "out": 2.0,
-          "ctx": 131072
         },
         {
           "id": "together_ai/moonshotai/Kimi-K2-Instruct",
@@ -14028,6 +14789,14 @@
           "name": "DeepSeek: R1 0528"
         },
         {
+          "id": "together_ai/moonshotai/Kimi-K3.1-Pro",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 1048576,
+          "name": "MoonshotAI: Kimi K3.1 Pro"
+        },
+        {
           "id": "together_ai/moonshotai/Kimi-K3",
           "in": 3.0,
           "out": 15.0,
@@ -14082,6 +14851,7 @@
           "id": "nebius/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
           "in": 0.06,
           "out": 0.24,
+          "cache": 0.012,
           "ctx": 262144
         },
         {
@@ -14094,6 +14864,7 @@
           "id": "nebius/nvidia/Nemotron-3_5-Lightning",
           "in": 0.06,
           "out": 0.24,
+          "cache": 0.03,
           "ctx": 1048576,
           "name": "NVIDIA: Nemotron 3.5 Lightning"
         },
@@ -14121,6 +14892,7 @@
           "id": "nebius/Qwen/Qwen3-30B-A3B-Instruct-2507",
           "in": 0.1,
           "out": 0.3,
+          "cache": 0.1,
           "ctx": 262144,
           "name": "Qwen: Qwen3 30B A3B Instruct 2507"
         },
@@ -14135,6 +14907,7 @@
           "id": "nebius/google/gemma-3-27b-it",
           "in": 0.1,
           "out": 0.3,
+          "cache": 0.04,
           "ctx": 110000,
           "name": "Google: Gemma 3 27B"
         },
@@ -14154,7 +14927,8 @@
           "id": "nebius/deepseek-ai/DeepSeek-V4-Flash-0731",
           "in": 0.14,
           "out": 0.28,
-          "ctx": 1024000,
+          "cache": 0.01,
+          "ctx": 1048576,
           "name": "DeepSeek: DeepSeek V4 Flash 0731"
         },
         {
@@ -14205,12 +14979,21 @@
           "id": "nebius/zai-org/GLM-5.3-Flash",
           "in": 0.15,
           "out": 0.5,
-          "ctx": 1024000
+          "cache": 0.03,
+          "ctx": 1048576
+        },
+        {
+          "id": "nebius/MiniMaxAI/MiniMax-M3.1-Flash",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.015,
+          "ctx": 1048576
         },
         {
           "id": "nebius/openai/gpt-oss-120b",
           "in": 0.15,
           "out": 0.6,
+          "cache": 0.1,
           "ctx": 131072,
           "name": "OpenAI: gpt-oss-120b"
         },
@@ -14224,6 +15007,7 @@
           "id": "nebius/Qwen/Qwen3-235B-A22B-Instruct-2507",
           "in": 0.2,
           "out": 0.6,
+          "cache": 0.05,
           "ctx": 262144
         },
         {
@@ -14240,9 +15024,18 @@
           "ctx": 128000
         },
         {
+          "id": "nebius/nvidia/Nemotron-3.5-Super-VL",
+          "in": 0.3,
+          "out": 0.9,
+          "cache": 0.06,
+          "ctx": 1048576,
+          "name": "NVIDIA: Nemotron 3.5 Super VL"
+        },
+        {
           "id": "nebius/nvidia/nemotron-3-super-120b-a12b",
           "in": 0.3,
           "out": 0.9,
+          "cache": 0.06,
           "ctx": 262144,
           "name": "NVIDIA: Nemotron 3 Super"
         },
@@ -14250,6 +15043,7 @@
           "id": "nebius/reflection/beam",
           "in": 0.25,
           "out": 1.0,
+          "cache": 0.05,
           "ctx": 1048576,
           "name": "Beam Free"
         },
@@ -14270,6 +15064,7 @@
           "id": "nebius/MiniMaxAI/MiniMax-M3",
           "in": 0.3,
           "out": 1.2,
+          "cache": 0.06,
           "ctx": 1048576,
           "name": "MiniMax: MiniMax M3"
         },
@@ -14277,12 +15072,22 @@
           "id": "nebius/deepseek-ai/DeepSeek-V4.1-Flash",
           "in": 0.3,
           "out": 1.2,
-          "ctx": 1048000
+          "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "nebius/deepseek-ai/DeepSeek-V4.1-Flash-1017",
+          "in": 0.3,
+          "out": 1.2,
+          "cache": 0.006,
+          "ctx": 1048576,
+          "name": "DeepSeek: DeepSeek V4.1 Flash 1017"
         },
         {
           "id": "nebius/openbmb/MiniCPM-V-4_5",
           "in": 0.658,
           "out": 1.11,
+          "cache": 0.13,
           "ctx": 32000
         },
         {
@@ -14326,6 +15131,7 @@
           "id": "nebius/Qwen/Qwen3.8-27B",
           "in": 0.45,
           "out": 3.0,
+          "cache": 0.1,
           "ctx": 262144,
           "name": "Qwen: Qwen3.8 27B"
         },
@@ -14339,6 +15145,7 @@
           "id": "nebius/NousResearch/Hermes-4-405B",
           "in": 1.0,
           "out": 3.0,
+          "cache": 0.2,
           "ctx": 131072,
           "name": "Nous: Hermes 4 405B"
         },
@@ -14352,6 +15159,7 @@
           "id": "nebius/nvidia/Nemotron-3-Ultra-550b-a55b",
           "in": 1.0,
           "out": 3.0,
+          "cache": 0.12,
           "ctx": 1048576,
           "name": "NVIDIA: Nemotron 3 Ultra"
         },
@@ -14359,6 +15167,7 @@
           "id": "nebius/Qwen/Qwen3.5-397B-A17B",
           "in": 0.6,
           "out": 3.6,
+          "cache": 0.12,
           "ctx": 262144,
           "name": "Qwen: Qwen3.5 397B A17B"
         },
@@ -14366,6 +15175,7 @@
           "id": "nebius/moonshotai/Kimi-K2.6",
           "in": 0.95,
           "out": 4.0,
+          "cache": 0.16,
           "ctx": 262144,
           "name": "MoonshotAI: Kimi K2.6"
         },
@@ -14373,6 +15183,7 @@
           "id": "nebius/moonshotai/Kimi-K2.7-Code",
           "in": 0.95,
           "out": 4.0,
+          "cache": 0.15,
           "ctx": 262144,
           "name": "MoonshotAI: Kimi K2.7 Code"
         },
@@ -14380,19 +15191,30 @@
           "id": "nebius/deepseek-ai/DeepSeek-V4-Pro",
           "in": 1.75,
           "out": 3.5,
+          "cache": 0.14,
           "ctx": 1048576
         },
         {
           "id": "nebius/deepseek-ai/DeepSeek-V4-Pro-0813",
           "in": 1.32,
           "out": 3.96,
-          "ctx": 979000,
+          "cache": 0.04,
+          "ctx": 1048576,
           "name": "DeepSeek: DeepSeek V4 Pro 0813"
+        },
+        {
+          "id": "nebius/meta-models/muse-spark-open",
+          "in": 1.25,
+          "out": 4.25,
+          "cache": 0.15,
+          "ctx": 1048576,
+          "name": "Meta: Muse Spark Open"
         },
         {
           "id": "nebius/zai-org/GLM-5.1",
           "in": 1.4,
           "out": 4.4,
+          "cache": 0.26,
           "ctx": 202752,
           "name": "Z.ai: GLM 5.1"
         },
@@ -14400,6 +15222,7 @@
           "id": "nebius/zai-org/GLM-5.2",
           "in": 1.4,
           "out": 4.4,
+          "cache": 0.14,
           "ctx": 1048576,
           "name": "Z.ai: GLM 5.2"
         },
@@ -14407,14 +15230,24 @@
           "id": "nebius/zai-org/GLM-5.3",
           "in": 1.4,
           "out": 4.4,
-          "ctx": 1024000,
+          "cache": 0.26,
+          "ctx": 1048576,
           "name": "Z.ai: GLM 5.3"
+        },
+        {
+          "id": "nebius/moonshotai/Kimi-K3.1-Pro",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": null,
+          "name": "MoonshotAI: Kimi K3.1 Pro"
         },
         {
           "id": "nebius/moonshotai/Kimi-K3",
           "in": 3.0,
           "out": 15.0,
-          "ctx": 1024000,
+          "cache": 0.3,
+          "ctx": 1048576,
           "name": "MoonshotAI: Kimi K3"
         }
       ]
@@ -14908,6 +15741,14 @@
           "ctx": 1048576
         },
         {
+          "id": "baseten/moonshotai/Kimi-K3.1-Pro",
+          "in": 2.0,
+          "out": 10.0,
+          "cache": 0.2,
+          "ctx": 1000000,
+          "name": "MoonshotAI: Kimi K3.1 Pro"
+        },
+        {
           "id": "baseten/moonshotai/Kimi-K3",
           "in": 3.0,
           "out": 15.0,
@@ -15379,120 +16220,6 @@
           "in": 0.8,
           "out": 0.8,
           "ctx": 131072
-        }
-      ]
-    },
-    {
-      "id": "gmi-cloud",
-      "name": "GMI Cloud",
-      "kind": "serverless",
-      "models": [
-        {
-          "id": "gmi/deepseek-ai/DeepSeek-V3.2",
-          "in": 0.28,
-          "out": 0.4,
-          "ctx": 163840,
-          "name": "DeepSeek: DeepSeek V3.2"
-        },
-        {
-          "id": "gmi/openai/gpt-4o-mini",
-          "in": 0.15,
-          "out": 0.6,
-          "ctx": 131072,
-          "name": "OpenAI: GPT-4o-mini"
-        },
-        {
-          "id": "gmi/deepseek-ai/DeepSeek-V3-0324",
-          "in": 0.28,
-          "out": 0.88,
-          "ctx": 163840
-        },
-        {
-          "id": "gmi/MiniMaxAI/MiniMax-M2.1",
-          "in": 0.3,
-          "out": 1.2,
-          "ctx": 196608,
-          "name": "MiniMax: MiniMax M2.1"
-        },
-        {
-          "id": "gmi/Qwen/Qwen3-VL-235B-A22B-Instruct-FP8",
-          "in": 0.3,
-          "out": 1.4,
-          "ctx": 262144
-        },
-        {
-          "id": "gmi/moonshotai/Kimi-K2-Thinking",
-          "in": 0.8,
-          "out": 1.2,
-          "ctx": 262144,
-          "name": "MoonshotAI: Kimi K2 Thinking"
-        },
-        {
-          "id": "gmi/zai-org/GLM-4.7-FP8",
-          "in": 0.4,
-          "out": 2.0,
-          "ctx": 202752
-        },
-        {
-          "id": "gmi/google/gemini-3-flash-preview",
-          "in": 0.5,
-          "out": 3.0,
-          "ctx": 1048576,
-          "name": "Google: Gemini 3 Flash Preview"
-        },
-        {
-          "id": "gmi/openai/gpt-5",
-          "in": 1.25,
-          "out": 10.0,
-          "ctx": 409600,
-          "name": "OpenAI: GPT-5"
-        },
-        {
-          "id": "gmi/openai/gpt-5.1",
-          "in": 1.25,
-          "out": 10.0,
-          "ctx": 409600,
-          "name": "OpenAI: GPT-5.1"
-        },
-        {
-          "id": "gmi/openai/gpt-4o",
-          "in": 2.5,
-          "out": 10.0,
-          "ctx": 131072,
-          "name": "OpenAI: GPT-4o"
-        },
-        {
-          "id": "gmi/openai/gpt-5.2",
-          "in": 1.75,
-          "out": 14.0,
-          "ctx": 409600,
-          "name": "OpenAI: GPT-5.2"
-        },
-        {
-          "id": "gmi/anthropic/claude-sonnet-4",
-          "in": 3.0,
-          "out": 15.0,
-          "ctx": 409600
-        },
-        {
-          "id": "gmi/anthropic/claude-sonnet-4.5",
-          "in": 3.0,
-          "out": 15.0,
-          "ctx": 409600,
-          "name": "Anthropic: Claude Sonnet 4.5"
-        },
-        {
-          "id": "gmi/anthropic/claude-opus-4.5",
-          "in": 5.0,
-          "out": 25.0,
-          "ctx": 409600,
-          "name": "Anthropic: Claude Opus 4.5"
-        },
-        {
-          "id": "gmi/anthropic/claude-opus-4",
-          "in": 15.0,
-          "out": 75.0,
-          "ctx": 409600
         }
       ]
     },
@@ -16196,70 +16923,6 @@
       ]
     },
     {
-      "id": "cerebras",
-      "name": "Cerebras",
-      "kind": "serverless",
-      "models": [
-        {
-          "id": "cerebras/llama-3.1-8b",
-          "in": 0.1,
-          "out": 0.1,
-          "ctx": 128000
-        },
-        {
-          "id": "cerebras/llama3.1-8b",
-          "in": 0.1,
-          "out": 0.1,
-          "ctx": 128000
-        },
-        {
-          "id": "cerebras/gpt-oss-120b",
-          "in": 0.35,
-          "out": 0.75,
-          "ctx": 131072,
-          "name": "OpenAI: gpt-oss-120b"
-        },
-        {
-          "id": "cerebras/llama-3.1-70b",
-          "in": 0.6,
-          "out": 0.6,
-          "ctx": 128000
-        },
-        {
-          "id": "cerebras/llama3.1-70b",
-          "in": 0.6,
-          "out": 0.6,
-          "ctx": 128000
-        },
-        {
-          "id": "cerebras/qwen-3-32b",
-          "in": 0.4,
-          "out": 0.8,
-          "ctx": 128000,
-          "name": "Qwen: Qwen3 32B"
-        },
-        {
-          "id": "cerebras/llama-3.3-70b",
-          "in": 0.85,
-          "out": 1.2,
-          "ctx": 128000
-        },
-        {
-          "id": "cerebras/gemma-4-31b",
-          "in": 0.99,
-          "out": 1.49,
-          "ctx": 131072
-        },
-        {
-          "id": "cerebras/qwen-3.8-27b",
-          "in": 0.99,
-          "out": 1.49,
-          "ctx": 65536,
-          "name": "Qwen: Qwen3.8 27B"
-        }
-      ]
-    },
-    {
       "id": "publicai",
       "name": "PublicAI",
       "kind": "serverless",
@@ -16317,6 +16980,64 @@
           "in": 0.0,
           "out": 0.0,
           "ctx": 8192
+        }
+      ]
+    },
+    {
+      "id": "cerebras",
+      "name": "Cerebras",
+      "kind": "serverless",
+      "models": [
+        {
+          "id": "cerebras/llama-3.1-8b",
+          "in": 0.1,
+          "out": 0.1,
+          "ctx": 128000
+        },
+        {
+          "id": "cerebras/llama3.1-8b",
+          "in": 0.1,
+          "out": 0.1,
+          "ctx": 128000
+        },
+        {
+          "id": "cerebras/gpt-oss-120b",
+          "in": 0.35,
+          "out": 0.75,
+          "ctx": 131072,
+          "name": "OpenAI: gpt-oss-120b"
+        },
+        {
+          "id": "cerebras/llama-3.1-70b",
+          "in": 0.6,
+          "out": 0.6,
+          "ctx": 128000
+        },
+        {
+          "id": "cerebras/qwen-3-32b",
+          "in": 0.4,
+          "out": 0.8,
+          "ctx": 128000,
+          "name": "Qwen: Qwen3 32B"
+        },
+        {
+          "id": "cerebras/llama-3.3-70b",
+          "in": 0.85,
+          "out": 1.2,
+          "ctx": 128000
+        },
+        {
+          "id": "cerebras/gemma-4-31b",
+          "in": 0.99,
+          "out": 1.49,
+          "ctx": 131072
+        },
+        {
+          "id": "cerebras/qwen-3.8-27b",
+          "in": 0.99,
+          "out": 1.49,
+          "ctx": 65536,
+          "name": "Qwen: Qwen3.8 27B"
         }
       ]
     },
@@ -16526,12 +17247,6 @@
           "cache": 0.037,
           "ctx": 131072,
           "name": "OpenAI: gpt-oss-safeguard-20b"
-        },
-        {
-          "id": "groq/llama-guard-3-8b",
-          "in": 0.2,
-          "out": 0.2,
-          "ctx": 8192
         },
         {
           "id": "groq/openai/gpt-oss-120b",
@@ -16818,16 +17533,8 @@
           "free": true
         },
         {
-          "id": "thinkingmachines/inkling-small:free",
-          "name": "Thinking Machines: Inkling Small (free)",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 1048576,
-          "free": true
-        },
-        {
-          "id": "thinkingmachines/inkling:free",
-          "name": "Thinking Machines: Inkling (free)",
+          "id": "stealth/crouton-alpha",
+          "name": "Crouton Alpha",
           "in": 0.0,
           "out": 0.0,
           "ctx": 1048576,
@@ -16863,6 +17570,22 @@
           "ctx": 131072
         },
         {
+          "id": "inclusionai/ling-3.0-tiny",
+          "name": "inclusionAI: Ling 3.0 Tiny",
+          "in": 0.015,
+          "out": 0.045,
+          "cache": 0.003,
+          "ctx": 262144
+        },
+        {
+          "id": "openai/gpt-oss-120b",
+          "name": "OpenAI: gpt-oss-120b",
+          "in": 0.015,
+          "out": 0.057,
+          "cache": 0.014,
+          "ctx": 131072
+        },
+        {
           "id": "inclusionai/ling-3.0-flash",
           "name": "inclusionAI: Ling 3.0 Flash",
           "in": 0.021,
@@ -16878,19 +17601,11 @@
           "ctx": 8192
         },
         {
-          "id": "z-ai/glm-5.3-flash",
-          "name": "Z.ai: GLM 5.3 Flash",
-          "in": 0.0285,
-          "out": 0.0923,
-          "cache": 0.0285,
-          "ctx": 1048576
-        },
-        {
           "id": "~z-ai/glm-flash-latest",
           "name": "Z.ai: GLM Flash Latest",
-          "in": 0.0285,
+          "in": 0.0284,
           "out": 0.0923,
-          "cache": 0.0285,
+          "cache": 0.0284,
           "ctx": 1048576
         },
         {
@@ -16915,14 +17630,6 @@
           "in": 0.05,
           "out": 0.08,
           "ctx": 32768
-        },
-        {
-          "id": "google/gemma-4-26b-a4b-it",
-          "name": "Google: Gemma 4 26B A4B ",
-          "in": 0.033,
-          "out": 0.098,
-          "cache": 0.016,
-          "ctx": 262144
         },
         {
           "id": "openai/gpt-oss-20b:batch",
@@ -16999,14 +17706,6 @@
           "ctx": 260000
         },
         {
-          "id": "deepseek/deepseek-v4.1-flash:batch",
-          "name": "DeepSeek: DeepSeek V4.1 Flash (batch)",
-          "in": 0.05,
-          "out": 0.15,
-          "cache": 0.004,
-          "ctx": 1048576
-        },
-        {
           "id": "google/gemma-3-12b-it",
           "name": "Google: Gemma 3 12B",
           "in": 0.05,
@@ -17027,14 +17726,6 @@
           "in": 0.1,
           "out": 0.1,
           "ctx": 16384
-        },
-        {
-          "id": "ibm-granite/granite-4.2-8b",
-          "name": "IBM: Granite 4.2 8B",
-          "in": 0.06,
-          "out": 0.15,
-          "cache": 0.015,
-          "ctx": 131072
         },
         {
           "id": "microsoft/phi-4",
@@ -17230,6 +17921,14 @@
           "ctx": 65536
         },
         {
+          "id": "ibm-granite/granite-4.2-8b",
+          "name": "IBM: Granite 4.2 8B",
+          "in": 0.06,
+          "out": 0.25,
+          "cache": 0.015,
+          "ctx": 131072
+        },
+        {
           "id": "nex-agi/nex-n2.5-pro",
           "name": "Nex AGI: Nex-N2.5-Pro",
           "in": 0.075,
@@ -17326,6 +18025,14 @@
           "ctx": 80000
         },
         {
+          "id": "google/gemma-4-26b-a4b-it",
+          "name": "Google: Gemma 4 26B A4B ",
+          "in": 0.09,
+          "out": 0.3,
+          "cache": 0.05,
+          "ctx": 262144
+        },
+        {
           "id": "meta-llama/llama-4-scout",
           "name": "Meta: Llama 4 Scout",
           "in": 0.1,
@@ -17394,6 +18101,14 @@
           "ctx": 131072
         },
         {
+          "id": "deepseek/deepseek-v4.1-flash:batch",
+          "name": "DeepSeek: DeepSeek V4.1 Flash (batch)",
+          "in": 0.112,
+          "out": 0.336,
+          "cache": 0.0034,
+          "ctx": 1048576
+        },
+        {
           "id": "inception/mercury-3",
           "name": "Inception: Mercury 3",
           "in": 0.1,
@@ -17442,17 +18157,9 @@
         {
           "id": "~deepseek/deepseek-flash-latest",
           "name": "DeepSeek: DeepSeek Flash Latest",
-          "in": 0.035,
+          "in": 0.006,
           "out": 0.5,
           "cache": 0.005,
-          "ctx": 1048576
-        },
-        {
-          "id": "deepseek/deepseek-v4.1-flash",
-          "name": "DeepSeek: DeepSeek V4.1 Flash",
-          "in": 0.045,
-          "out": 0.5,
-          "cache": 0.006,
           "ctx": 1048576
         },
         {
@@ -17470,6 +18177,14 @@
           "out": 0.5,
           "cache": 0.0375,
           "ctx": 262144
+        },
+        {
+          "id": "deepseek/deepseek-v4.1-flash",
+          "name": "DeepSeek: DeepSeek V4.1 Flash",
+          "in": 0.0486,
+          "out": 0.54,
+          "cache": 0.018,
+          "ctx": 1048576
         },
         {
           "id": "anthropic/claude-haiku-5.5",
@@ -17550,19 +18265,20 @@
           "ctx": 163840
         },
         {
-          "id": "qwen/qwen3-235b-a22b-2507",
-          "name": "Qwen: Qwen3 235B A22B Instruct 2507",
-          "in": 0.09,
-          "out": 0.55,
-          "ctx": 262144
-        },
-        {
           "id": "nvidia/nemotron-3.5-super-vl",
           "name": "NVIDIA: Nemotron 3.5 Super VL",
           "in": 0.15,
           "out": 0.5,
           "cache": 0.02,
-          "ctx": 262144
+          "ctx": 1048576
+        },
+        {
+          "id": "z-ai/glm-5.3-flash",
+          "name": "Z.ai: GLM 5.3 Flash",
+          "in": 0.15,
+          "out": 0.5,
+          "cache": 0.03,
+          "ctx": 1048575
         },
         {
           "id": "tencent/hy3",
@@ -17600,14 +18316,6 @@
           "name": "Tencent: Hunyuan A13B Instruct",
           "in": 0.14,
           "out": 0.57,
-          "ctx": 131072
-        },
-        {
-          "id": "meta-llama/llama-3.3-70b-instruct",
-          "name": "Meta: Llama 3.3 70B Instruct",
-          "in": 0.2,
-          "out": 0.52,
-          "cache": 0.1,
           "ctx": 131072
         },
         {
@@ -17666,14 +18374,6 @@
           "ctx": 128000
         },
         {
-          "id": "openai/gpt-oss-120b",
-          "name": "OpenAI: gpt-oss-120b",
-          "in": 0.15,
-          "out": 0.6,
-          "cache": 0.075,
-          "ctx": 131072
-        },
-        {
           "id": "qwen/qwen3-coder-30b-a3b-instruct",
           "name": "Qwen: Qwen3 Coder 30B A3B Instruct",
           "in": 0.15,
@@ -17711,19 +18411,20 @@
           "ctx": 262144
         },
         {
-          "id": "meta-llama/llama-3.1-70b-instruct",
-          "name": "Meta: Llama 3.1 70B Instruct",
-          "in": 0.4,
-          "out": 0.4,
-          "ctx": 131072
-        },
-        {
           "id": "mistralai/mistral-saba",
           "name": "Mistral: Saba",
           "in": 0.2,
           "out": 0.6,
           "cache": 0.02,
           "ctx": 32768
+        },
+        {
+          "id": "ricursiveai/ripple-65b-preview",
+          "name": "ricursiveAI/Ripple-65B-Preview",
+          "in": 0.2,
+          "out": 0.6,
+          "cache": 0.05,
+          "ctx": 1048576
         },
         {
           "id": "thedrummer/cydonia-24b-v4.1",
@@ -17741,28 +18442,12 @@
           "ctx": 1024000
         },
         {
-          "id": "meta-llama/llama-4-maverick",
-          "name": "Meta: Llama 4 Maverick",
-          "in": 0.1875,
-          "out": 0.6525,
-          "cache": 0.05,
-          "ctx": 128000
-        },
-        {
           "id": "liquid/lfm-2.5-2.6b",
           "name": "LiquidAI: LFM2.5-2.6B",
           "in": 0.35,
           "out": 0.5,
           "cache": 0.04,
           "ctx": 128000
-        },
-        {
-          "id": "deepseek/deepseek-v4-flash-vision-exp",
-          "name": "DeepSeek: DeepSeek V4 Flash Vision Exp",
-          "in": 0.2156,
-          "out": 0.6468,
-          "cache": 0.0069,
-          "ctx": 1048576
         },
         {
           "id": "google/gemini-3.1-flash-lite:batch",
@@ -17786,6 +18471,14 @@
           "out": 0.8,
           "cache": 0.07,
           "ctx": 262144
+        },
+        {
+          "id": "qwen/qwen3-235b-a22b-2507",
+          "name": "Qwen: Qwen3 235B A22B Instruct 2507",
+          "in": 0.14,
+          "out": 0.8,
+          "cache": 0.05,
+          "ctx": 131072
         },
         {
           "id": "z-ai/glm-4.5-air",
@@ -17843,6 +18536,14 @@
           "ctx": 1000000
         },
         {
+          "id": "minimax/minimax-m2.7",
+          "name": "MiniMax: MiniMax M2.7",
+          "in": 0.21,
+          "out": 0.84,
+          "cache": 0.042,
+          "ctx": 196608
+        },
+        {
           "id": "cognitivecomputations/dolphin-mistral-24b-venice-edition",
           "name": "Venice: Uncensored",
           "in": 0.2,
@@ -17888,6 +18589,13 @@
           "ctx": 1000000
         },
         {
+          "id": "qwen/qwen3-next-80b-a3b-instruct",
+          "name": "Qwen: Qwen3 Next 80B A3B Instruct",
+          "in": 0.09,
+          "out": 1.1,
+          "ctx": 262144
+        },
+        {
           "id": "deepseek/deepseek-chat-v3.1",
           "name": "DeepSeek: DeepSeek V3.1",
           "in": 0.25,
@@ -17912,14 +18620,6 @@
           "ctx": 131072
         },
         {
-          "id": "qwen/qwen3-next-80b-a3b-instruct",
-          "name": "Qwen: Qwen3 Next 80B A3B Instruct",
-          "in": 0.1,
-          "out": 1.1,
-          "cache": 0.07,
-          "ctx": 262144
-        },
-        {
           "id": "minimax/minimax-m2.5",
           "name": "MiniMax: MiniMax M2.5",
           "in": 0.27,
@@ -17928,26 +18628,11 @@
           "ctx": 198000
         },
         {
-          "id": "reflection/beam-1.0-501b-a23b",
-          "name": "Reflection: Beam 1.0 501B A23B",
-          "in": 0.25,
-          "out": 1.0,
-          "cache": 0.05,
-          "ctx": 1048576
-        },
-        {
           "id": "deepseek/deepseek-v3.1-terminus",
           "name": "DeepSeek: DeepSeek V3.1 Terminus",
           "in": 0.27,
           "out": 1.0,
           "ctx": 163840
-        },
-        {
-          "id": "minimax/minimax-m2",
-          "name": "MiniMax: MiniMax M2",
-          "in": 0.255,
-          "out": 1.02,
-          "ctx": 204800
         },
         {
           "id": "deepseek/deepseek-chat",
@@ -17971,19 +18656,20 @@
           "ctx": 8192
         },
         {
-          "id": "minimax/minimax-01",
-          "name": "MiniMax: MiniMax-01",
-          "in": 0.2,
-          "out": 1.1,
-          "ctx": 1000192
-        },
-        {
           "id": "qwen/qwen3-coder",
           "name": "Qwen: Qwen3 Coder 480B A35B",
           "in": 0.3,
           "out": 1.0,
           "cache": 0.1,
           "ctx": 262144
+        },
+        {
+          "id": "reflection/beam-1.0-501b-a23b",
+          "name": "Reflection: Beam 1.0 501B A23B",
+          "in": 0.3,
+          "out": 1.0,
+          "cache": 0.04,
+          "ctx": 1048576
         },
         {
           "id": "xiaomi/mimo-v2.6-pro",
@@ -18009,12 +18695,28 @@
           "ctx": 256000
         },
         {
+          "id": "meta-llama/llama-4-maverick",
+          "name": "Meta: Llama 4 Maverick",
+          "in": 0.35,
+          "out": 1.0,
+          "cache": 0.17,
+          "ctx": 524288
+        },
+        {
           "id": "thedrummer/skyfall-36b-v2",
           "name": "TheDrummer: Skyfall 36B V2",
           "in": 0.55,
           "out": 0.8,
           "cache": 0.25,
           "ctx": 32768
+        },
+        {
+          "id": "meta-llama/llama-3.3-70b-instruct",
+          "name": "Meta: Llama 3.3 70B Instruct",
+          "in": 0.59,
+          "out": 0.79,
+          "cache": 0.295,
+          "ctx": 131072
         },
         {
           "id": "google/gemini-3.5-flash-lite:batch",
@@ -18049,12 +18751,27 @@
           "ctx": 128000
         },
         {
+          "id": "meta-llama/llama-3.1-70b-instruct",
+          "name": "Meta: Llama 3.1 70B Instruct",
+          "in": 0.72,
+          "out": 0.72,
+          "ctx": 131072
+        },
+        {
           "id": "openai/gpt-5.4-nano",
           "name": "OpenAI: GPT-5.4 Nano",
           "in": 0.2,
           "out": 1.25,
           "cache": 0.02,
           "ctx": 400000
+        },
+        {
+          "id": "z-ai/glm-5.3",
+          "name": "Z.ai: GLM 5.3",
+          "in": 0.0699,
+          "out": 1.4,
+          "cache": 0.0689,
+          "ctx": 1048576
         },
         {
           "id": "~z-ai/glm-latest",
@@ -18087,30 +18804,6 @@
           "out": 1.2,
           "cache": 0.04,
           "ctx": 131072
-        },
-        {
-          "id": "minimax/minimax-m2-her",
-          "name": "MiniMax: MiniMax M2-her",
-          "in": 0.3,
-          "out": 1.2,
-          "cache": 0.03,
-          "ctx": 65536
-        },
-        {
-          "id": "minimax/minimax-m2.1",
-          "name": "MiniMax: MiniMax M2.1",
-          "in": 0.3,
-          "out": 1.2,
-          "cache": 0.03,
-          "ctx": 204800
-        },
-        {
-          "id": "minimax/minimax-m2.7",
-          "name": "MiniMax: MiniMax M2.7",
-          "in": 0.3,
-          "out": 1.2,
-          "cache": 0.06,
-          "ctx": 204800
         },
         {
           "id": "minimax/minimax-m3",
@@ -18174,6 +18867,14 @@
           "ctx": 32768
         },
         {
+          "id": "tencent/hy4",
+          "name": "Tencent: Hy4",
+          "in": 0.417,
+          "out": 1.2505,
+          "cache": 0.021,
+          "ctx": 1048576
+        },
+        {
           "id": "sao10k/l3.1-euryale-70b",
           "name": "Sao10K: Llama 3.1 Euryale 70B v2.2",
           "in": 0.85,
@@ -18209,6 +18910,14 @@
           "out": 1.5,
           "cache": 0.025,
           "ctx": 1048576
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash-vision-exp",
+          "name": "DeepSeek: DeepSeek V4 Flash Vision Exp",
+          "in": 0.44,
+          "out": 1.32,
+          "cache": 0.014,
+          "ctx": 1048575
         },
         {
           "id": "cohere/command-a-plus",
@@ -18587,6 +19296,14 @@
           "ctx": 262144
         },
         {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek: DeepSeek V4 Pro 0423",
+          "in": 0.9553,
+          "out": 1.9105,
+          "cache": 0.0796,
+          "ctx": 1024000
+        },
+        {
           "id": "moonshotai/kimi-k2",
           "name": "MoonshotAI: Kimi K2 0711",
           "in": 0.57,
@@ -18738,14 +19455,6 @@
           "ctx": 262144
         },
         {
-          "id": "z-ai/glm-5.3",
-          "name": "Z.ai: GLM 5.3",
-          "in": 0.08,
-          "out": 3.6,
-          "cache": 0.076,
-          "ctx": 1048576
-        },
-        {
           "id": "stepfun/step-5-preview",
           "name": "StepFun: Step 5 Preview",
           "in": 1.0,
@@ -18835,7 +19544,7 @@
           "name": "MoonshotAI: Kimi K2.7 Code",
           "in": 0.6,
           "out": 3.5,
-          "cache": 0.15,
+          "cache": 0.16,
           "ctx": 262144
         },
         {
@@ -18845,14 +19554,6 @@
           "out": 3.6,
           "cache": 0.3,
           "ctx": 262144
-        },
-        {
-          "id": "deepseek/deepseek-v4-pro-0813",
-          "name": "DeepSeek: DeepSeek V4 Pro 0813",
-          "in": 0.115,
-          "out": 4.0,
-          "cache": 0.11,
-          "ctx": 1048576
         },
         {
           "id": "z-ai/glm-5",
@@ -18902,11 +19603,11 @@
           "ctx": 1048576
         },
         {
-          "id": "deepseek/deepseek-v4-pro",
-          "name": "DeepSeek: DeepSeek V4 Pro 0423",
-          "in": 1.6,
-          "out": 3.2,
-          "cache": 0.135,
+          "id": "deepseek/deepseek-v4-pro-0813",
+          "name": "DeepSeek: DeepSeek V4 Pro 0813",
+          "in": 0.111,
+          "out": 4.44,
+          "cache": 0.106,
           "ctx": 1048576
         },
         {
@@ -19150,6 +19851,22 @@
           "ctx": 128000
         },
         {
+          "id": "x-ai/grok-4.6:batch",
+          "name": "SpaceXAI: Grok 4.6 (batch)",
+          "in": 1.6,
+          "out": 4.8,
+          "cache": 0.4,
+          "ctx": 500000
+        },
+        {
+          "id": "x-ai/grok-4.7:batch",
+          "name": "SpaceXAI: Grok 4.7 (batch)",
+          "in": 1.6,
+          "out": 4.8,
+          "cache": 0.4,
+          "ctx": 500000
+        },
+        {
           "id": "writer/palmyra-x5",
           "name": "Writer: Palmyra X5",
           "in": 0.6,
@@ -19239,7 +19956,7 @@
           "in": 2.0,
           "out": 6.0,
           "cache": 0.25,
-          "ctx": 1000000
+          "ctx": 1048576
         },
         {
           "id": "qwen/qwen3.8-max-0902",
@@ -19292,9 +20009,9 @@
         {
           "id": "~deepseek/deepseek-pro-latest",
           "name": "DeepSeek: DeepSeek Pro Latest",
-          "in": 0.1035,
+          "in": 0.0999,
           "out": 8.0,
-          "cache": 0.1,
+          "cache": 0.0999,
           "ctx": 1048576
         },
         {
@@ -19352,14 +20069,6 @@
           "ctx": 262144
         },
         {
-          "id": "~moonshotai/kimi-latest",
-          "name": "MoonshotAI: Kimi Latest",
-          "in": 0.151,
-          "out": 9.3388,
-          "cache": 0.15,
-          "ctx": 1048576
-        },
-        {
           "id": "openai/gpt-4.1",
           "name": "OpenAI: GPT-4.1",
           "in": 2.0,
@@ -19403,6 +20112,28 @@
           "in": 1.5,
           "out": 9.0,
           "cache": 0.15,
+          "ctx": 1048576
+        },
+        {
+          "id": "google/gemini-omni-1.1-flash",
+          "name": "Google: Gemini Omni 1.1 Flash",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 131072
+        },
+        {
+          "id": "google/gemini-omni-1.2-flash",
+          "name": "Google: Gemini Omni 1.2 Flash",
+          "in": 1.5,
+          "out": 9.0,
+          "ctx": 131072
+        },
+        {
+          "id": "~moonshotai/kimi-latest",
+          "name": "MoonshotAI: Kimi Latest",
+          "in": 0.1824,
+          "out": 10.5539,
+          "cache": 0.18,
           "ctx": 1048576
         },
         {
@@ -19731,14 +20462,6 @@
           "ctx": 1000000
         },
         {
-          "id": "moonshotai/kimi-k3",
-          "name": "MoonshotAI: Kimi K3",
-          "in": 0.192,
-          "out": 15.0,
-          "cache": 0.182,
-          "ctx": 1048576
-        },
-        {
           "id": "openai/gpt-5.2",
           "name": "OpenAI: GPT-5.2",
           "in": 1.75,
@@ -19777,6 +20500,14 @@
           "out": 12.0,
           "cache": 0.5,
           "ctx": 1000000
+        },
+        {
+          "id": "moonshotai/kimi-k3",
+          "name": "MoonshotAI: Kimi K3",
+          "in": 0.192,
+          "out": 16.0,
+          "cache": 0.182,
+          "ctx": 1048576
         },
         {
           "id": "openai/gpt-5.4",
@@ -21062,6 +21793,13 @@
           "ctx": 1000000
         },
         {
+          "id": "google/gemini-4-argon",
+          "name": "Google: Gemini 4 Argon",
+          "in": 2.0,
+          "out": 10.0,
+          "ctx": null
+        },
+        {
           "id": "kimi/kimi-k3.1-pro",
           "name": "MoonshotAI: Kimi K3.1 Pro",
           "in": 2.0,
@@ -21596,8 +22334,8 @@
           "ctx": null
         },
         {
-          "id": "orca/dub",
-          "name": "OrcaDub: OrcaDub 1.0",
+          "id": "orca/orcac2-1.0",
+          "name": "Orca: OrcaC2 1.0",
           "in": null,
           "out": null,
           "ctx": null
@@ -21666,7 +22404,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 340
+      "edge_rtt_ms": 255
     },
     {
       "id": "poe",
@@ -21842,13 +22580,6 @@
           "ctx": 124096
         },
         {
-          "id": "hy3",
-          "name": "hy3",
-          "in": 0.1414,
-          "out": 0.5859,
-          "ctx": 262144
-        },
-        {
           "id": "gemma-4-26b-a4b",
           "name": "Gemma 4 26B A4B",
           "in": 0.1515,
@@ -21934,7 +22665,7 @@
         },
         {
           "id": "minimax-m2.1",
-          "name": "MiniMax: MiniMax M2.1",
+          "name": "minimax-m2.1",
           "in": 0.303,
           "out": 1.2121,
           "ctx": 204800
@@ -22312,7 +23043,14 @@
         },
         {
           "id": "gemini-omni-1.1-flash",
-          "name": "gemini-omni-1.1-flash",
+          "name": "Google: Gemini Omni 1.1 Flash",
+          "in": 1.5152,
+          "out": 9.0909,
+          "ctx": 131072
+        },
+        {
+          "id": "gemini-omni-1.2-flash",
+          "name": "Google: Gemini Omni 1.2 Flash",
           "in": 1.5152,
           "out": 9.0909,
           "ctx": 131072
@@ -22528,7 +23266,7 @@
           "ctx": 1050000
         }
       ],
-      "edge_rtt_ms": 281
+      "edge_rtt_ms": 458
     },
     {
       "id": "vercel-ai-gateway",
@@ -23276,6 +24014,15 @@
           "ctx": null
         },
         {
+          "id": "crouton-alpha-free",
+          "name": "Crouton Alpha Free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "crouton-alpha"
+        },
+        {
           "id": "deepseek-v4-pro",
           "name": "DeepSeek V4 Pro",
           "in": null,
@@ -23731,7 +24478,7 @@
           "ctx": null
         }
       ],
-      "edge_rtt_ms": 759
+      "edge_rtt_ms": 474
     },
     {
       "id": "w-b-inference-gateway",

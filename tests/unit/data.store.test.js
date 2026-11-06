@@ -725,14 +725,32 @@ describe('hugging face identity (open-weight repo links)', () => {
   it('free variants persist on the record but never become a price', () => {
     // :free catalog twins are stored raw for the future per-provider
     // "free at which seller" feature — data only, nothing renders them
+    // stats-73 (2026-11-06): AA renamed Inkling -> Inkling 2 Small, so the
+    // exact-name row can vanish per the stats-29 churn policy — the name
+    // pin degrades to a logged skip; the mechanism itself stays covered by
+    // the snapshot-wide invariants below (shape + paid listing intact).
     const inkling = d.metaFor(rowOf('Inkling'));
-    expect(inkling?.or_free_variants).toEqual(['thinkingmachines/inkling:free']);
-    expect(d.priceFor(rowOf('Inkling'))).not.toBeNull(); // paid listing untouched
+    if (!inkling) {
+      console.log(`  (skip: 'Inkling' absent from this snapshot — upstream churn)`);
+    } else {
+      expect(inkling.or_free_variants).toEqual(['thinkingmachines/inkling:free']);
+    }
+    const inkRow = rowOf('Inkling');
+    if (inkRow) expect(d.priceFor(inkRow)).not.toBeNull(); // paid listing untouched
+    let withFree = 0;
     for (const [name, m] of Object.entries(META)) {
       for (const fid of m.or_free_variants || []) {
         expect(fid.endsWith(':free'), `${name}: ${fid}`).toBe(true);
       }
     }
+    for (const r of d.pivotAll.value) {
+      const m = d.metaFor(r);
+      if (m?.or_free_variants?.length) {
+        withFree++;
+        expect(d.priceFor(r), `${r.name}: free twin must never become the price`).not.toBeNull();
+      }
+    }
+    expect(withFree, 'mechanism must fire on at least one live row').toBeGreaterThan(0);
   });
 
   it('hfUrlFor builds the huggingface.co link; helpers null-safe', () => {

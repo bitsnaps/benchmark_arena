@@ -14320,7 +14320,7 @@
         }
       ],
       "free_tier": true,
-      "edge_rtt_ms": 169
+      "edge_rtt_ms": 170
     },
     {
       "id": "together-ai",
@@ -17493,14 +17493,6 @@
           "free": true
         },
         {
-          "id": "nvidia/nemotron-3.5-content-safety:free",
-          "name": "NVIDIA: Nemotron 3.5 Content Safety (free)",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 128000,
-          "free": true
-        },
-        {
           "id": "nvidia/nemotron-3.5-lightning:free",
           "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
           "in": 0.0,
@@ -17578,20 +17570,20 @@
           "ctx": 262144
         },
         {
-          "id": "openai/gpt-oss-120b",
-          "name": "OpenAI: gpt-oss-120b",
-          "in": 0.015,
-          "out": 0.057,
-          "cache": 0.014,
-          "ctx": 131072
-        },
-        {
           "id": "inclusionai/ling-3.0-flash",
           "name": "inclusionAI: Ling 3.0 Flash",
           "in": 0.021,
           "out": 0.063,
           "cache": 0.0042,
           "ctx": 262144
+        },
+        {
+          "id": "openai/gpt-oss-120b",
+          "name": "OpenAI: gpt-oss-120b",
+          "in": 0.018,
+          "out": 0.067,
+          "cache": 0.016,
+          "ctx": 131072
         },
         {
           "id": "sao10k/l3-lunaris-8b",
@@ -18132,6 +18124,13 @@
           "ctx": 131072
         },
         {
+          "id": "nvidia/nemotron-3-super-120b-a12b",
+          "name": "NVIDIA: Nemotron 3 Super",
+          "in": 0.075,
+          "out": 0.4,
+          "ctx": 262144
+        },
+        {
           "id": "bytedance-seed/seed-2.0-mini",
           "name": "ByteDance Seed: Seed-2.0-Mini",
           "in": 0.1,
@@ -18179,14 +18178,6 @@
           "ctx": 262144
         },
         {
-          "id": "deepseek/deepseek-v4.1-flash",
-          "name": "DeepSeek: DeepSeek V4.1 Flash",
-          "in": 0.0486,
-          "out": 0.54,
-          "cache": 0.018,
-          "ctx": 1048576
-        },
-        {
           "id": "anthropic/claude-haiku-5.5",
           "name": "Anthropic: Claude Haiku 5.5",
           "in": 0.1,
@@ -18232,6 +18223,14 @@
           "in": 0.2,
           "out": 0.4,
           "ctx": 262144
+        },
+        {
+          "id": "deepseek/deepseek-v4.1-flash",
+          "name": "DeepSeek: DeepSeek V4.1 Flash",
+          "in": 0.051,
+          "out": 0.567,
+          "cache": 0.018,
+          "ctx": 1048576
         },
         {
           "id": "qwen/qwen3-30b-a3b",
@@ -18332,6 +18331,14 @@
           "in": 0.15,
           "out": 0.6,
           "ctx": 128000
+        },
+        {
+          "id": "deepseek/deepseek-v4.1-flash-1017",
+          "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.003,
+          "ctx": 1048576
         },
         {
           "id": "liquid/lfm-2.5-24b-a2b",
@@ -18620,6 +18627,13 @@
           "ctx": 131072
         },
         {
+          "id": "deepseek/deepseek-chat",
+          "name": "DeepSeek: DeepSeek V3",
+          "in": 0.32,
+          "out": 0.89,
+          "ctx": 163840
+        },
+        {
           "id": "minimax/minimax-m2.5",
           "name": "MiniMax: MiniMax M2.5",
           "in": 0.27,
@@ -18633,13 +18647,6 @@
           "in": 0.27,
           "out": 1.0,
           "ctx": 163840
-        },
-        {
-          "id": "deepseek/deepseek-chat",
-          "name": "DeepSeek: DeepSeek V3",
-          "in": 0.2574,
-          "out": 1.0287,
-          "ctx": 128000
         },
         {
           "id": "qwen/qwen3-vl-30b-a3b-thinking",
@@ -18779,14 +18786,6 @@
           "in": 0.0699,
           "out": 1.4,
           "cache": 0.0689,
-          "ctx": 1048576
-        },
-        {
-          "id": "deepseek/deepseek-v4.1-flash-1017",
-          "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
-          "in": 0.3,
-          "out": 1.2,
-          "cache": 0.006,
           "ctx": 1048576
         },
         {
@@ -19180,14 +19179,6 @@
           "out": 2.15,
           "cache": 0.35,
           "ctx": 163840
-        },
-        {
-          "id": "nvidia/nemotron-3-super-120b-a12b",
-          "name": "NVIDIA: Nemotron 3 Super",
-          "in": 0.3,
-          "out": 2.4,
-          "cache": 0.15,
-          "ctx": 1048576
         },
         {
           "id": "minimax/minimax-m1",
@@ -19605,9 +19596,9 @@
         {
           "id": "deepseek/deepseek-v4-pro-0813",
           "name": "DeepSeek: DeepSeek V4 Pro 0813",
-          "in": 0.111,
-          "out": 4.44,
-          "cache": 0.106,
+          "in": 0.1165,
+          "out": 4.66,
+          "cache": 0.111,
           "ctx": 1048576
         },
         {
@@ -20069,6 +20060,14 @@
           "ctx": 262144
         },
         {
+          "id": "~moonshotai/kimi-latest",
+          "name": "MoonshotAI: Kimi Latest",
+          "in": 0.1824,
+          "out": 9.3388,
+          "cache": 0.18,
+          "ctx": 1048576
+        },
+        {
           "id": "openai/gpt-4.1",
           "name": "OpenAI: GPT-4.1",
           "in": 2.0,
@@ -20127,14 +20126,6 @@
           "in": 1.5,
           "out": 9.0,
           "ctx": 131072
-        },
-        {
-          "id": "~moonshotai/kimi-latest",
-          "name": "MoonshotAI: Kimi Latest",
-          "in": 0.1824,
-          "out": 10.5539,
-          "cache": 0.18,
-          "ctx": 1048576
         },
         {
           "id": "google/gemini-2.5-pro",
@@ -22404,7 +22395,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 255
+      "edge_rtt_ms": 234
     },
     {
       "id": "poe",
@@ -23266,7 +23257,7 @@
           "ctx": 1050000
         }
       ],
-      "edge_rtt_ms": 458
+      "edge_rtt_ms": 344
     },
     {
       "id": "vercel-ai-gateway",
@@ -24478,7 +24469,7 @@
           "ctx": null
         }
       ],
-      "edge_rtt_ms": 474
+      "edge_rtt_ms": 491
     },
     {
       "id": "w-b-inference-gateway",

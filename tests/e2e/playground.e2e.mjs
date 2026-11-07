@@ -1,21 +1,24 @@
 // Playground e2e: the chat journey against a mocked OpenAI-compatible
 // provider (page.route — no network, no real key). Covers: navbar item,
 // empty state without providers, model picker fed by two My Providers
-// listings with the arena join on the card, ONE-CLICK picks on the
-// hand-rolled picker (regression: the old b-autocomplete sometimes
-// dropped the first click), the full provider CATALOG (routed providers.json
-// fixture) with the setup modal (base URL + key + strip-prefix checkbox +
-// Test connection → linked My Providers entry → real request), the
-// strip-prefix default for labs (org/fix-mini → fix-mini, "for all models"),
-// free-text model ids sent exactly as typed, request shape (URL, bearer
-// key, system prompt, model), streamed markdown with raw HTML escaped,
-// reported-usage metrics, IndexedDB persistence across reload, a 401
-// rendered inline + Retry, the CORS/network explanation, deep links (fresh
-// pre-bound chat), history switch/rename/delete, the type-to-filter
-// provider autocomplete (flat list), the collapsible rail, in-place reply
-// edit, message delete, a clean console, the late-data picker hijack
-// regression, and a touch-context mobile section (drawer default, one-tap
-// picks). Runs under tests/run-e2e.mjs
+// listings with the arena join on the card, the PICKER MODAL (stats-75):
+// snapshot frozen against late providers.json, local draft + explicit
+// "Use this model" confirm, Cancel leaves the chat untouched, reopen
+// shows the fresh listing, ONE click selects + ONE confirm commits
+// (regression: the old b-autocomplete sometimes dropped the first
+// click), the full provider CATALOG (routed providers.json fixture) with
+// the setup modal (base URL + key + strip-prefix checkbox + Test
+// connection → linked My Providers entry → real request), the
+// strip-prefix default for labs (org/fix-mini → fix-mini, "for all
+// models"), free-text model ids sent exactly as typed, request shape
+// (URL, bearer key, system prompt, model), streamed markdown with raw
+// HTML escaped, reported-usage metrics, IndexedDB persistence across
+// reload, a 401 rendered inline + Retry, the CORS/network explanation,
+// deep links (fresh pre-bound chat), history switch/rename/delete, the
+// picker modal's provider column search, the collapsible rail, in-place
+// reply edit, message delete, a clean console, and a touch-context
+// mobile section (drawer default, confirm-through-modal taps). Runs
+// under tests/run-e2e.mjs
 // (vite preview on 4173, base /benchmark_arena/).
 import { chromium } from 'playwright';
 import { parseModelListing } from '../../src/lib/myProviders.js';
@@ -115,22 +118,23 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     if (/view=mine/.test(href || '')) ok('no providers → empty state links to My Providers');
     else fail('empty-state CTA should link to ?view=mine, got ' + href);
 
-    // ── 1b. reactivity: late data must not hijack the open picker ────
-    // Regression (Ibrahim: "selection is not working properly —
-    // reactivity"): the boot/labels watch restored the selected model's
-    // label on EVERY change of its sources. The picker's resting state
-    // while browsing is a focused input with an empty query, so a late
-    // providers.json response rewrote the query mid-interaction and the
-    // open list collapsed to the selected option — the tap users aimed at
-    // their model hit nothing and it took a second try to select.
+    // ── 1b. picker modal: snapshot + explicit confirm ────────────────
+    // Regression history: the inline picker fought reactivity twice
+    // (dropped first clicks, then the late-data query hijack, stats-72).
+    // The modal kills the whole class BY CONSTRUCTION: open freezes a
+    // snapshot, the draft is local, only "Use this model" commits.
+    // Here: a providers.json payload lands WHILE the modal is open — the
+    // open list must not change, Cancel must not move the chat, and the
+    // next open must serve the fresh listing (Ibrahim: "a clear
+    // confirmation then we update the listing").
     await page.addInitScript((s) => localStorage.setItem('ba.myproviders.v1', s), STORE);
     let delayCatalog = true;
     await page.route('**/providers.json', async (route) => {
       if (delayCatalog) {
-        // one-shot delayed payload so `groups` really changes content while
-        // the picker is open; later fetches get the CATALOG fixture again
-        // (this handler shadows the plain one below — Playwright matches
-        // routes last-registered-first).
+        // one-shot delayed payload so the catalog really changes while the
+        // modal is open; later fetches get the CATALOG fixture again (this
+        // handler shadows the plain one below — Playwright matches routes
+        // last-registered-first).
         delayCatalog = false;
         await new Promise((r) => setTimeout(r, 2500));
         return route.fulfill({ status: 200, headers: CORS, body: JSON.stringify({ as_of: '2026-11-01', kinds: ['first-party'], sources: {}, providers: [{ id: 'fixlab', name: 'Fixlab', kind: 'first-party', models: [{ id: 'org/fix-mini', in: 0.5, out: 1.5, ctx: 8192 }] }] }) });
@@ -141,15 +145,35 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     // same URL would be a same-document hash navigation (no reload, init
     // script skipped), so force a real reload to boot with the seeded store.
     await page.reload();
-    const lateInput = page.locator('[data-test="pg-model-input"]');
-    await lateInput.waitFor({ timeout: 15000 });
-    await lateInput.click(); // open the list, empty the query — user is browsing
-    await page.locator('[data-test="pg-picklist"]').waitFor({ timeout: 3000 });
-    await page.waitForTimeout(3300); // providers.json lands while the list is open
-    const q = await lateInput.inputValue();
-    const openRows = await page.locator('[data-test="pg-picklist"] .pg-pick-item').count();
-    if (q === '' && openRows >= 4) ok(`late catalog data does not hijack the focused picker (query "${q}", ${openRows} options still listed)`);
-    else fail(`picker hijacked while open: query="${q}", ${openRows} options left (want "" and >= 4)`);
+    const openBtn = page.locator('[data-test="pg-model-open"]');
+    await openBtn.waitFor({ timeout: 15000 });
+    await openBtn.click();
+    const sel = page.locator('[data-test="pg-picker-modal"]');
+    await sel.waitFor({ timeout: 5000 });
+    const provRows0 = await sel.locator('[data-test="pg-prov-row"]').count();
+    await page.waitForTimeout(3300); // providers.json lands while the modal is open
+    const provRows1 = await sel.locator('[data-test="pg-prov-row"]').count();
+    const countLine = await sel.locator('[data-test="pg-picker-count"]').innerText();
+    if (provRows0 === 2 && provRows1 === 2 && /across 2 providers/.test(countLine)) ok(`open modal is frozen against late data (${provRows1} providers before and after the late payload)`);
+    else fail(`modal snapshot failed: provider rows ${provRows0} → ${provRows1}, "${countLine.trim()}"`);
+    // Draft: pick a provider + model, then CANCEL — the chat must not move.
+    await sel.locator('[data-test="pg-prov-row"]', { hasText: 'Second Hub' }).click();
+    await sel.locator('[data-test="pg-model-row"]', { hasText: 'hub-mini' }).first().click();
+    const draftTxt = (await page.locator('[data-test="pg-picker-draft"]').innerText()).trim();
+    if (draftTxt === 'hub-mini · Second Hub') ok('draft selection shows in the modal footer before confirming');
+    else fail('draft footer unexpected: ' + draftTxt);
+    await page.locator('[data-test="pg-picker-cancel"]').click();
+    await sel.waitFor({ state: 'hidden', timeout: 5000 });
+    const headAfterCancel = (await page.locator('[data-test="pg-open-label"]').innerText()).trim();
+    if (headAfterCancel === 'claude-opus-4.6') ok('Cancel discards the draft — the chat keeps its model');
+    else fail('cancel leaked the draft: ' + headAfterCancel);
+    // Reopen: FRESH snapshot — the late catalog provider is there now.
+    await openBtn.click();
+    await sel.waitFor({ timeout: 5000 });
+    await sel.locator('[data-test="pg-prov-row"]', { hasText: 'Fixlab' }).waitFor({ timeout: 5000 });
+    ok('reopen rebuilds the snapshot — the late-arriving catalog provider appears');
+    await page.locator('[data-test="pg-picker-cancel"]').click();
+    await sel.waitFor({ state: 'hidden', timeout: 5000 });
 
     // ── 2. picker + arena card ──────────────────────────────────────
     CATALOG = [FIXLAB]; // catalog goes live for the rest of the spec
@@ -175,23 +199,27 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     if (price.includes('$2') && price.includes('$10')) ok('card shows the provider-published price ($2 / $10)');
     else fail('card price should be the provider listing price, got ' + price);
 
-    // ── 2b. ONE-CLICK picks (regression: b-autocomplete dropped clicks) ─
-    const pickInput = page.locator('[data-test="pg-model-input"]');
-    const pickViaPicker = async (want) => {
-      await pickInput.click();
-      await page.locator('[data-test="pg-picklist"] .pg-pick-item', { hasText: want }).first().click();
-      await page.locator('[data-test="pg-picklist"]').waitFor({ state: 'hidden', timeout: 3000 });
+    // ── 2b. confirm-through-modal picks (regression: b-autocomplete
+    //    dropped clicks — here ONE click selects, ONE confirm commits) ─
+    const pickViaModal = async (provLabel, want) => {
+      await page.locator('[data-test="pg-model-open"]').click();
+      const mod = page.locator('[data-test="pg-picker-modal"]');
+      await mod.waitFor({ timeout: 5000 });
+      await mod.locator('[data-test="pg-prov-row"]', { hasText: provLabel }).first().click();
+      await mod.locator('[data-test="pg-model-row"]', { hasText: want }).first().click();
+      await page.locator('[data-test="pg-picker-confirm"]').click();
+      await mod.waitFor({ state: 'hidden', timeout: 5000 });
     };
-    for (const [label, cardText] of [
-      ['hub-mini', 'hub-mini'],
-      ['claude-opus-4.6', 'Claude Opus 4.6'], // joined models show the arena name
-      ['hub-mini', 'hub-mini'],
-      ['claude-opus-4.6', 'Claude Opus 4.6'], // leave the default model bound for section 3
+    for (const [prov, label, cardText] of [
+      ['Second Hub', 'hub-mini', 'hub-mini'],
+      ['Test Gateway', 'claude-opus-4.6', 'Claude Opus 4.6'], // joined models show the arena name
+      ['Second Hub', 'hub-mini', 'hub-mini'],
+      ['Test Gateway', 'claude-opus-4.6', 'Claude Opus 4.6'], // leave the default model bound for section 3
     ]) {
-      await pickViaPicker(label);
+      await pickViaModal(prov, label);
       const nm = (await card.locator('.pg-card-name').innerText()).trim();
-      if (nm === cardText) ok(`one click picked ${label} — card updated without a second click`);
-      else fail(`single pick should show "${cardText}" on the card, got "${nm}"`);
+      if (nm === cardText) ok(`one confirm picked ${label} via ${prov} — card updated without a second try`);
+      else fail(`single confirm should show "${cardText}" on the card, got "${nm}"`);
     }
 
     // ── 3. send + stream + request shape ────────────────────────────
@@ -289,29 +317,28 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     if (await page.locator('.pg-hist-item').count() === beforeDel - 1) ok('history: delete removes a chat (confirm auto-accepted)');
     else fail('delete chat did not remove an item');
 
-    // ── 7c. provider filter: type-to-filter autocomplete, flat list ───
-    const countAll = await page.locator('[data-test="pg-count"]').innerText();
-    const provSel = page.locator('[data-test="pg-prov-filter"]');
-    await provSel.click();
-    await provSel.fill('Test');
-    await page.locator('[data-test="pg-prov-option"]', { hasText: 'Test Gateway' }).first().click();
-    const countFiltered = await page.locator('[data-test="pg-count"]').innerText();
-    if (/across 1 provider/.test(countFiltered) && /across 3 providers/.test(countAll)) ok('provider autocomplete narrows the picker (2 own + 1 catalog → 1)');
-    else fail(`filter counts: all="${countAll.trim()}" filtered="${countFiltered.trim()}"`);
-    await provSel.click();
-    await provSel.fill('Fix');
-    const fixOpt = page.locator('[data-test="pg-prov-option"]', { hasText: 'Fixlab' }).first();
+    // ── 7c. picker modal: provider column search, counts, model list ──
+    await page.locator('[data-test="pg-model-open"]').click();
+    const selC = page.locator('[data-test="pg-picker-modal"]');
+    await selC.waitFor({ timeout: 5000 });
+    const countAll = await selC.locator('[data-test="pg-picker-count"]').innerText();
+    await page.locator('[data-test="pg-prov-search"]').fill('Test');
+    const rowsT = await selC.locator('[data-test="pg-prov-row"]').count();
+    if (rowsT === 1 && /across 3 providers/.test(countAll)) ok('provider search narrows the column (3 → 1); the header count stays global (2 own + 1 catalog)');
+    else fail(`provider search: rows=${rowsT}, header="${countAll.trim()}"`);
+    await page.locator('[data-test="pg-prov-search"]').fill('Fix');
+    const fixOpt = selC.locator('[data-test="pg-prov-row"]', { hasText: 'Fixlab' }).first();
     await fixOpt.waitFor({ timeout: 3000 });
-    ok('typing filters the flat provider list (catalog lab found by "Fix")');
+    ok('typing filters the provider column (catalog lab found by "Fix")');
     await fixOpt.click();
-    if (/across 1 provider/.test(await page.locator('[data-test="pg-count"]').innerText())) ok('catalog provider is selectable the same way');
-    else fail('selecting the catalog provider did not narrow the picker');
-    await provSel.click();
-    await provSel.fill('');
-    if (/across 3 providers/.test(await page.locator('[data-test="pg-count"]').innerText())) ok('clearing the filter restores all providers');
-    else fail('clearing the filter did not reset to All providers');
-    await provSel.press('Escape'); // dismiss the open dropdown before touching the model picker below
-    await page.locator('[data-test="pg-prov-option"]').first().waitFor({ state: 'hidden', timeout: 3000 });
+    const fixModels = await selC.locator('[data-test="pg-model-row"]').count();
+    if (fixModels === 2) ok('choosing a provider lists its models (Fixlab: 2, fresh from the snapshot)');
+    else fail('model rows after choosing Fixlab: ' + fixModels);
+    await page.locator('[data-test="pg-prov-search"]').fill('');
+    if ((await selC.locator('[data-test="pg-prov-row"]').count()) === 3) ok('clearing the search restores all providers');
+    else fail('clearing the provider search did not restore the column');
+    await page.locator('[data-test="pg-picker-cancel"]').click();
+    await selC.waitFor({ state: 'hidden', timeout: 5000 });
 
     // ── 7f. catalog pick → setup modal → linked entry → real request ──
     let fixReq = null;
@@ -322,7 +349,7 @@ const FIXBASE = 'https://api.fixlab.test/v1';
       fixReq = { headers: req.headers(), body: JSON.parse(req.postData() || '{}') };
       return route.fulfill({ status: 200, headers: { ...CORS, 'content-type': 'text/event-stream' }, body: sse(['Fixlab says hi.\n']) });
     });
-    await pickViaPicker('org/fix-mini');
+    await pickViaModal('Fixlab', 'org/fix-mini');
     const modal = page.locator('[data-test="pg-setup-modal"]');
     await modal.waitFor({ timeout: 5000 });
     if ((await modal.locator('.pg-modal-title').innerText()).includes('Fixlab')) ok('picking a catalog model opens the setup modal right away');
@@ -334,10 +361,10 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     // Dismissal memory, for real: fixlab has NO linked entry yet, so another
     // catalog pick must NOT re-pop the modal (content is v-if-gated; the
     // hidden b-modal shell stays in the DOM with destroy-on-hide=false).
-    await pickViaPicker('fix-free');
+    await pickViaModal('Fixlab', 'fix-free');
     if (await modal.count() === 0 && !(await modal.isVisible().catch(() => false))) ok('dismissed setup does not re-pop on further catalog picks in the same session');
     else fail('setup modal re-opened after "Not now" — browsing feels like whack-a-mole');
-    await pickViaPicker('org/fix-mini'); // re-bind the target model (no modal: dismissed)
+    await pickViaModal('Fixlab', 'org/fix-mini'); // re-bind the target model (no modal: dismissed)
     await page.locator('[data-test="pg-setup-open"]').click();
     await modal.waitFor({ timeout: 5000 });
     // (the auto-open already fired once for fixlab; "Not now" recorded the
@@ -370,10 +397,18 @@ const FIXBASE = 'https://api.fixlab.test/v1';
       && entryIds.includes('fix-mini') && entryIds.includes('fix-free') && !entryIds.some(i => i.startsWith('org/'))) {
       ok('setup links a My Providers entry; the WHOLE seeded listing is prefix-stripped ("for all models")');
     } else fail('catalog entry not stored correctly: ' + JSON.stringify({ mode: entry?.mode, baseUrl: entry?.baseUrl, ids: entryIds }));
-    const optText = await page.locator('[data-test="pg-prov-option"]').allInnerTexts();
+    const optText = await (async () => {
+      await page.locator('[data-test="pg-model-open"]').click();
+      const mod = page.locator('[data-test="pg-picker-modal"]');
+      await mod.waitFor({ timeout: 5000 });
+      const t = await mod.locator('[data-test="pg-prov-row"]').allInnerTexts();
+      await page.locator('[data-test="pg-picker-cancel"]').click();
+      await mod.waitFor({ state: 'hidden', timeout: 5000 });
+      return t;
+    })();
     const at = (s) => optText.findIndex(t => t.includes(s));
-    if (at('Test Gateway') === 0 && at('Second Hub') === 1 && at('Fixlab') === 2) ok('linked provider joins My providers at the top of the flat filter list (catalog group replaced)');
-    else fail('filter order after linking: ' + JSON.stringify(optText));
+    if (at('Test Gateway') === 0 && at('Second Hub') === 1 && at('Fixlab') === 2) ok('linked provider joins My providers at the top of the modal provider column (catalog group replaced)');
+    else fail('provider column order after linking: ' + JSON.stringify(optText));
     await page.locator('textarea[aria-label="Message"]').fill('hello');
     await page.keyboard.press('Enter');
     const fixMsg = page.locator('.pg-msg.assistant').last();
@@ -383,12 +418,16 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     else fail('catalog request unexpected: ' + JSON.stringify(fixReq));
     // Free text (Ibrahim): a model id no listing carries can be typed and
     // sent as-is — no catalog update, no modal, exact bytes on the wire.
-    await pickInput.click();
-    await pickInput.fill('brand-new-model');
-    const customRow = page.locator('[data-test="pg-pick-custom"]');
+    // In the picker modal the typed id binds to the DRAFT provider.
+    await page.locator('[data-test="pg-model-open"]').click();
+    const selF = page.locator('[data-test="pg-picker-modal"]');
+    await selF.waitFor({ timeout: 5000 });
+    await page.locator('[data-test="pg-model-search"]').fill('brand-new-model');
+    const customRow = page.locator('[data-test="pg-model-custom"]');
     await customRow.waitFor({ timeout: 3000 });
     await customRow.click();
-    await page.locator('[data-test="pg-picklist"]').waitFor({ state: 'hidden', timeout: 3000 });
+    await page.locator('[data-test="pg-picker-confirm"]').click();
+    await selF.waitFor({ state: 'hidden', timeout: 5000 });
     const customNm = (await card.locator('.pg-card-name').innerText()).trim();
     if (customNm === 'brand-new-model') ok('free text: the typed id becomes the model (plain card, no invented score)');
     else fail('free-text pick: ' + customNm);
@@ -397,7 +436,7 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     await page.locator('.pg-msg.assistant').last().locator('.pg-meta').waitFor({ timeout: 15000 });
     if (fixReq?.body.model === 'brand-new-model' && fixReq?.headers.authorization === 'Bearer sk-fixlab-1') ok('free-text model id is sent exactly as typed to the linked provider');
     else fail('free-text request: ' + JSON.stringify(fixReq?.body));
-    await pickViaPicker('fix-free'); // second catalog model of the same provider
+    await pickViaModal('Fixlab', 'fix-free'); // second catalog model of the same provider
     if (await modal.count() === 0) ok('dismissed setup does not re-pop on further catalog picks in the same session');
     else fail('setup modal re-opened after "Not now" — browsing feels like whack-a-mole');
     const idbDump = JSON.stringify(await readConvs());
@@ -454,20 +493,35 @@ const FIXBASE = 'https://api.fixlab.test/v1';
     if (comp && comp.y + comp.height <= mvh + 2) ok(`mobile: composer fully on screen (bottom ${Math.round(comp.y + comp.height)} / viewport ${mvh})`);
     else fail(`mobile: composer clipped (bottom ${comp && Math.round(comp.y + comp.height)} / viewport ${mvh})`);
 
-    const pickTouch = async (want, cardText) => {
+    const pickTouch = async (prov, want, cardText) => {
       if (!(await mp.locator('.pg-rail').isVisible())) await mp.locator('[data-test="pg-rail-toggle"]').tap();
-      await mp.locator('[data-test="pg-model-input"]').tap();
-      await mp.locator('[data-test="pg-picklist"]').waitFor({ timeout: 3000 });
-      await mp.locator('[data-test="pg-picklist"] .pg-pick-item', { hasText: want }).first().tap();
+      await mp.locator('[data-test="pg-model-open"]').tap();
+      const msel = mp.locator('[data-test="pg-picker-modal"]');
+      await msel.waitFor({ timeout: 3000 });
+      await msel.locator('[data-test="pg-prov-row"]', { hasText: prov }).first().tap();
+      await msel.locator('[data-test="pg-model-row"]', { hasText: want }).first().tap();
+      await mp.locator('[data-test="pg-picker-confirm"]').tap();
+      await msel.waitFor({ state: 'hidden', timeout: 3000 });
       await mp.waitForTimeout(300);
       const nm = (await mcard.locator('.pg-card-name').textContent()).trim(); // card may be display:none now
-      if (nm === cardText) ok(`mobile: one tap picked ${want} — card shows ${cardText}`);
-      else fail(`mobile one-tap pick: expected ${cardText}, got "${nm}"`);
-      if (!(await mp.locator('.pg-rail').isVisible())) ok('mobile: drawer closed after the pick — the chat is visible again');
+      if (nm === cardText) ok(`mobile: one confirm picked ${want} — card shows ${cardText}`);
+      else fail(`mobile modal pick: expected ${cardText}, got "${nm}"`);
+      if (!(await mp.locator('.pg-rail').isVisible())) ok('mobile: drawer closed after the confirm — the chat is visible again');
       else fail('mobile: drawer still covers the chat after picking a model');
     };
-    await pickTouch('hub-mini', 'hub-mini');
-    await pickTouch('claude-opus-4.6', 'Claude Opus 4.6');
+    await pickTouch('Second Hub', 'hub-mini', 'hub-mini');
+    // Second pick straight from the chat head — the rail stays closed.
+    await mp.locator('[data-test="pg-model-open-head"]').tap();
+    const msel2 = mp.locator('[data-test="pg-picker-modal"]');
+    await msel2.waitFor({ timeout: 3000 });
+    await msel2.locator('[data-test="pg-prov-row"]', { hasText: 'Test Gateway' }).first().tap();
+    await msel2.locator('[data-test="pg-model-row"]', { hasText: 'claude-opus-4.6' }).first().tap();
+    await mp.locator('[data-test="pg-picker-confirm"]').tap();
+    await msel2.waitFor({ state: 'hidden', timeout: 3000 });
+    await mp.waitForTimeout(300);
+    const mname = (await mcard.locator('.pg-card-name').textContent()).trim();
+    if (mname === 'Claude Opus 4.6') ok('mobile: the chat-head button opens the picker too — claude-opus-4.6 confirmed with the rail closed');
+    else fail('mobile head-button pick: ' + mname);
     await mctx.close();
 
     if (errors.length) fail('console errors:\n  ' + errors.join('\n  '));

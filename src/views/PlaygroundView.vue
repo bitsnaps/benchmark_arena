@@ -4,11 +4,16 @@
 // to the selected provider's base URL with that provider's key. Models
 // come from EVERYWHERE the arena knows: the full public provider catalog
 // (labs, cloud, serverless, aggregators) browsable without setup, plus
-// the user's own My Providers listings. Picking a catalog model opens a
-// setup modal that collects whatever is missing (base URL, API key) and
-// links a real My Providers entry. Arena joins (score / price / context)
-// are read-only. Conversation + settings persist in this browser only;
-// keys are never copied into the Playground store.
+// the user's own My Providers listings. Provider + model selection lives
+// in a dedicated PICKER MODAL (Ibrahim: "a clear confirmation, then we
+// update the listing"): opening freezes a snapshot of the listings, the
+// draft selection is local to the modal, and only "Use this model"
+// commits — late data can never flip a selection mid-tap again, and a
+// freshly synced listing is always one open away. Picking a catalog
+// model opens the setup modal that collects whatever is missing (base
+// URL, API key) and links a real My Providers entry. Arena joins (score
+// / price / context) are read-only. Conversation + settings persist in
+// this browser only; keys are never copied into the Playground store.
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useData } from '../stores/data.js';
@@ -18,7 +23,7 @@ import { usePlayground } from '../stores/playground.js';
 import { buildCatalogIndex } from '../lib/myProviders.js';
 import {
   buildPlaygroundGroups, buildCatalogGroups, catalogProviderEntry, stripCatalogPrefix,
-  capGroupItems, providerOptions, filterByProvider, filterGroups, findOption,
+  capGroupItems, providerOptions, filterGroups, findOption,
   KNOWN_ENDPOINTS,
 } from '../lib/playgroundModels.js';
 import { buildPayload, sendChat, testConnection, estimateTokens, estimateCost, fmtCost, fmtMs } from '../lib/chat.js';
@@ -84,56 +89,117 @@ const selectedProvider = computed(() => (providers.value || []).find(p => p.id =
 // real My Providers entry — no entry means the request has no destination.
 const needsSetup = computed(() => !!selected.value && !selectedProvider.value);
 
-// ── Provider filter — type-to-filter autocomplete, flat list ──────
-// Replaces the native select (its optgroups had no way to filter by typing).
-// The stored filter commits on select / clear only, so typing never flips
-// the model list underneath; blur restores the committed label.
-const providerFilter = computed({
-  get: () => ui.value.providerFilter,
-  set: (v) => setUi({ providerFilter: String(v || '') }),
-});
-const providerOptionsList = computed(() => {
-  const all = providerOptions(groups.value);
-  const q = String(provFilterText.value || '').toLowerCase().trim();
-  if (!q) return all;
-  return all.filter(o => o.label.toLowerCase().includes(q)); // type-to-filter
-});
-const totalProviders = computed(() => groups.value.length);
-const allProvidersPlaceholder = computed(() => `All providers (${totalProviders.value})`);
-const committedFilterLabel = computed(() => {
-  const id = providerFilter.value;
-  if (!id) return '';
-  return groups.value.find(g => g.providerId === id)?.label || '';
-});
-const provFilterText = ref('');
-watch(committedFilterLabel, (v) => { provFilterText.value = v; }, { immediate: true });
-function onProvType(v) {
-  provFilterText.value = v;
-  if (!String(v || '').trim()) setUi({ providerFilter: '' }); // cleared → All providers
-}
-function onProvPick(opt) {
-  if (!opt) return;
-  setUi({ providerFilter: opt.id });
-  provFilterText.value = opt.label;
-}
-function onProvBlur() { provFilterText.value = committedFilterLabel.value; }
-const visibleGroups = computed(() => filterByProvider(groups.value, providerFilter.value));
-const modelCount = computed(() => visibleGroups.value.reduce((n, g) => n + g.items.length, 0));
-const pickedOutsideFilter = computed(() => !!selected.value && !!providerFilter.value && selected.value.providerId !== providerFilter.value);
+// ── Picker modal (provider + model, draft + explicit confirm) ─────────
+// Replaces the rail's inline filter autocomplete + model combobox
+// (Ibrahim: selection kept fighting reactivity — "place the provider or
+// models into a separate modal dialog, so the user can make a clear
+// confirmation then we update the listing"). Contract:
+//   • openPicker() freezes a SNAPSHOT of the listings; the modal renders
+//     only from it, so a late providers.json / listing sync can never
+//     mutate the open list mid-tap (the stats-72 hijack, now by design).
+//   • the draft (provider + model) is local to the modal; Cancel, Esc or
+//     the backdrop discard it — nothing commits until "Use this model".
+//   • every open rebuilds the snapshot, so a freshly synced listing is
+//     always exactly one open away.
+const pick = ref(null); // draft state: { groups, totalModels, provId, modelId, qProv, qModel } — null = closed
+const pickerOpen = computed(() => pick.value !== null);
+function closePicker() { pick.value = null; } // discard the draft — nothing committed
 
-const query = ref('');
-const filtered = computed(() => filterGroups(visibleGroups.value, query.value));
 const optionLabel = (o) => (o ? o.modelId + ' · ' + o.providerLabel : '');
 
-function pick(o) {
-  if (!o) return;
-  setSettings({ providerId: o.providerId, modelId: o.modelId });
-  query.value = optionLabel(o);
-  pickerOpen.value = false;
-  // Catalog models are browsable without setup; chatting from one needs a
-  // base URL + key, so the setup modal opens right away (send is guarded)
-  // — once per provider per session, "Not now" is respected afterwards.
-  if (!o.custom && !selectedProvider.value && !setupDismissed.has(o.catalogId)) openSetup(o);
+function openPicker() {
+  pick.value = {
+    groups: groups.value, totalModels: totalModels.value,
+    provId: settings.value.providerId || '', modelId: settings.value.modelId || '',
+    qProv: '', qModel: '',
+  };
+  // The committed provider may be absent from this snapshot (entry
+  // deleted, catalog unlinked) — start from a clean draft, never a ghost.
+  if (pick.value.provId && !pick.value.groups.some(g => g.providerId === pick.value.provId)) {
+    pick.value.provId = '';
+    pick.value.modelId = '';
+  }
+  nextTick(() => pickerEl.value?.focus());
+}
+const pickerEl = ref(null);
+// Esc closes while open — capture phase, so it wins over any other
+// document-level key handler (b-modal's own Escape listener included).
+const onPickerKey = (e) => {
+  if (e.key === 'Escape' && pick.value) { e.stopPropagation(); closePicker(); }
+};
+watch(pickerOpen, (v) => {
+  if (v) document.addEventListener('keydown', onPickerKey, true);
+  else document.removeEventListener('keydown', onPickerKey, true);
+});
+onBeforeUnmount(() => document.removeEventListener('keydown', onPickerKey, true));
+
+const snapProvOptions = computed(() => {
+  const p = pick.value;
+  if (!p) return [];
+  const q = String(p.qProv || '').toLowerCase().trim();
+  const all = providerOptions(p.groups);
+  return q ? all.filter(o => o.label.toLowerCase().includes(q)) : all;
+});
+const draftGroup = computed(() =>
+  pick.value ? pick.value.groups.find(g => g.providerId === pick.value.provId) || null : null);
+const SNAP_CAP = 120; // same jank guard the inline list had
+const snapModels = computed(() => {
+  const p = pick.value, g = draftGroup.value;
+  if (!p || !g) return { items: [], hidden: 0 };
+  const { groups: capped, hidden } = capGroupItems(filterGroups([g], p.qModel), SNAP_CAP);
+  return { items: capped[0]?.items || [], hidden };
+});
+// Exact-match free text (Ibrahim): an id the listing doesn't carry becomes
+// a pickable row — it binds to the DRAFT provider, sent exactly as typed.
+const snapCustomText = computed(() => {
+  const p = pick.value;
+  const t = p ? String(p.qModel || '').trim() : '';
+  if (!t || !draftGroup.value) return '';
+  return snapModels.value.items.some(i => i.modelId.toLowerCase() === t.toLowerCase()) ? '' : t;
+});
+// Same synthetic shape as `selected` — a draft id no listing carries.
+const draftItem = computed(() => {
+  const p = pick.value, g = draftGroup.value;
+  if (!p || !g || !p.modelId) return null;
+  const hit = g.items.find(i => i.modelId === p.modelId);
+  if (hit) return hit;
+  return {
+    key: g.providerId + '\u0001' + p.modelId,
+    providerId: g.providerId, providerLabel: g.label,
+    catalogId: g.catalogId || null, kind: g.kind || null, custom: !!g.custom,
+    modelId: p.modelId, arenaName: null, slug: null,
+    score: null, older: false, ctx: null, free: false, price: null,
+  };
+});
+const draftLabel = computed(() => {
+  if (!pick.value) return '';
+  const g = draftGroup.value, it = draftItem.value;
+  if (!g) return 'Pick a provider first';
+  return it ? it.modelId + ' · ' + g.label : g.label + ' — pick a model';
+});
+
+function chooseProv(o) {
+  if (!pick.value || !o || pick.value.provId === o.id) return;
+  pick.value.provId = o.id;
+  pick.value.modelId = ''; // a model id only makes sense under its provider
+  pick.value.qModel = '';
+}
+function chooseModel(it) { if (pick.value && it) pick.value.modelId = it.modelId; }
+function chooseCustom() {
+  const t = snapCustomText.value;
+  if (pick.value && t) pick.value.modelId = t;
+}
+
+// The commit — the ONLY path from the modal to live settings. Catalog
+// models stay browsable without setup; chatting from one opens the setup
+// modal right away (send is guarded) — once per provider per session,
+// "Not now" is respected afterwards. An already-linked pick just lands.
+function confirmPick() {
+  const it = draftItem.value;
+  if (!it) return;
+  setSettings({ providerId: it.providerId, modelId: it.modelId });
+  closePicker();
+  if (!it.custom && !selectedProvider.value && !setupDismissed.has(it.catalogId)) openSetup(it);
   else {
     // On the phone the card + composer sit behind the drawer — close it so
     // the pick visibly lands in the chat instead of behind the sheet.
@@ -143,95 +209,6 @@ function pick(o) {
   // The active conversation now carries the model binding; keep the URL
   // clean so a reload restores THIS chat instead of opening a fresh one.
   if (route.query.p || route.query.m) router.replace({ query: {} });
-}
-
-// Free-text pick: the typed text becomes the model id on the CURRENT
-// provider — new or unlisted models need no catalog update and no modal.
-function pickCustom(text) {
-  const t = String(text || '').trim();
-  if (!t) return;
-  setSettings({ modelId: t });
-  pickerOpen.value = false;
-  if (isNarrow.value) railOpen.value = false;
-  nextTick(() => {
-    if (selected.value) query.value = optionLabel(selected.value);
-    composerEl.value?.focus();
-  });
-  if (route.query.p || route.query.m) router.replace({ query: {} });
-}
-const currentProviderLabel = computed(() =>
-  groups.value.find(g => g.providerId === settings.value.providerId)?.label || 'the current provider');
-
-// ── Model picker (hand-rolled, deterministic) ─────────────────────────
-// Replaces b-autocomplete: option buttons use mousedown.prevent, so the
-// input never loses focus and a click ALWAYS selects (the old picker
-// could silently drop the first click — Ibrahim had to select twice).
-// The list is capped at PICK_CAP rows; the footer counts the rest.
-const PICK_CAP = 120;
-const pickerOpen = ref(false);
-const activeIdx = ref(0);
-const pickerFocused = ref(false);
-const pickerRows = computed(() => {
-  const { groups: capped, hidden } = capGroupItems(filtered.value, PICK_CAP);
-  const rows = [];
-  let idx = 0;
-  // The free-text row: typed text no listing matches becomes a pickable
-  // first row. Only when a provider is bound — otherwise there is nowhere
-  // to send it.
-  const q = query.value.trim();
-  if (q && settings.value.providerId
-    && !filtered.value.some(g => g.items.some(i => i.modelId.toLowerCase() === q.toLowerCase()))) {
-    rows.push({ type: 'custom', key: 'custom:' + q, text: q, idx: idx++ });
-  }
-  for (const g of capped) {
-    rows.push({ type: 'group', key: 'g:' + g.providerId, label: g.label });
-    for (const it of g.items) rows.push({ type: 'item', key: it.key, opt: it, idx: idx++ });
-  }
-  return { rows, shown: idx, hidden };
-});
-
-function pickerFocus() { query.value = ''; pickerOpen.value = true; activeIdx.value = 0; }
-// A click on the already-focused input fires no focus event — without this,
-// reopening the list after a pick would need a click elsewhere first.
-function pickerMousedown() {
-  if (!pickerOpen.value && pickerFocused.value) {
-    pickerOpen.value = true;
-    query.value = '';
-    activeIdx.value = 0;
-  }
-}
-function onPickerFocusin() { pickerFocused.value = true; }
-function onPickerFocusout() {
-  pickerFocused.value = false;
-  // Focus may hop to the scrollbar or a button briefly; only close when it
-  // really left, and restore the selected model's label when it does.
-  setTimeout(() => {
-    if (pickerFocused.value) return;
-    pickerOpen.value = false;
-    if (selected.value) query.value = optionLabel(selected.value);
-  }, 120);
-}
-function pickerKey(e) {
-  if (e.key === 'Escape') {
-    if (pickerOpen.value) {
-      e.preventDefault();
-      pickerOpen.value = false;
-      if (selected.value) query.value = optionLabel(selected.value);
-    }
-    return;
-  }
-  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-    e.preventDefault();
-    if (!pickerOpen.value) { pickerOpen.value = true; return; }
-    const last = Math.max(0, pickerRows.value.shown - 1);
-    activeIdx.value = e.key === 'ArrowDown' ? Math.min(activeIdx.value + 1, last) : Math.max(activeIdx.value - 1, 0);
-    nextTick(() => document.querySelector('.pg-pick-item.is-active')?.scrollIntoView({ block: 'nearest' }));
-    return;
-  }
-  if (e.key === 'Enter' && pickerOpen.value) {
-    const row = pickerRows.value.rows.find(r => r.type === 'item' && r.idx === activeIdx.value);
-    if (row) { e.preventDefault(); pick(row.opt); }
-  }
 }
 
 // ── Setup modal (catalog models: collect what a request needs) ────────
@@ -383,14 +360,8 @@ watch([groups, ready, busy, () => route.query.p, () => route.query.m], () => {
     const best = groups.value.flatMap(g => g.items).sort((a, b) => (b.score ?? -1) - (a.score ?? -1))[0];
     if (best) setSettings({ providerId: best.providerId, modelId: best.modelId });
   }
-  // Restore the label only while the user is NOT inside the picker. Its
-  // resting state while browsing is an empty query (focus clears it), and
-  // writing the label here whenever any source of this watch changed
-  // HIJACKED the open list: late data (providers.json, listings, a stream
-  // ending) rewrote the query mid-tap and the list collapsed to the
-  // selected option — the tap users aimed at their model hit nothing
-  // (Ibrahim: "selection is not working properly, reactivity").
-  if (selected.value && !pickerFocused.value && !query.value) query.value = optionLabel(selected.value);
+  // No label juggling here anymore: the picker modal snapshots on open,
+  // so late data has no inline query to hijack (stats-72 regression).
 }, { immediate: true });
 
 // ── Responsive rail: side panel on desktop, overlay drawer on mobile ──
@@ -442,10 +413,7 @@ function removeConv(c) {
 function newChat() {
   if (busy.value) stop();
   newConversation({ ...settings.value }); // fresh thread, same model + settings
-  nextTick(() => {
-    if (selected.value) query.value = optionLabel(selected.value);
-    composerEl.value?.focus();
-  });
+  nextTick(() => composerEl.value?.focus());
 }
 
 function clearAllHistory() {
@@ -701,60 +669,18 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 
         <div class="pg-sep"></div>
 
-        <div class="lbl">Provider</div>
-        <b-autocomplete v-model="provFilterText" :data="providerOptionsList" field="label" size="is-small"
-          icon="filter" clearable keep-first open-on-focus :placeholder="allProvidersPlaceholder"
-          data-test="pg-prov-filter" aria-label="Filter models by provider"
-          @update:model-value="onProvType" @select="onProvPick" @blur="onProvBlur">
-          <template #default="{ option }">
-            <span class="pg-prov-opt" data-test="pg-prov-option">
-              <span class="pg-prov-label">{{ option.label }}</span>
-              <span class="pg-prov-n">{{ option.n }}</span>
-            </span>
-          </template>
-        </b-autocomplete>
         <div class="lbl">Model</div>
-        <!-- Hand-rolled picker: option buttons mousedown.prevent, so a click
-             always selects — no blur/close race, no second click needed. -->
-        <div class="pg-picker" @focusin="onPickerFocusin" @focusout="onPickerFocusout" @keydown="pickerKey">
-          <input v-model="query" class="input is-small" type="text" role="combobox" autocomplete="off"
-            :aria-expanded="pickerOpen ? 'true' : 'false'" aria-controls="pg-picklist" aria-autocomplete="list"
-            placeholder="Search models or providers" data-test="pg-model-input"
-            @focus="pickerFocus" @mousedown="pickerMousedown" />
-          <div v-if="pickerOpen" id="pg-picklist" class="pg-picklist" role="listbox" aria-label="Models" data-test="pg-picklist">
-            <template v-for="row in pickerRows.rows" :key="row.key">
-              <div v-if="row.type === 'group'" class="pg-pick-group">{{ row.label }}</div>
-              <button v-else-if="row.type === 'custom'" type="button" class="pg-pick-item pg-pick-custom"
-                role="option" :class="{ 'is-active': row.idx === activeIdx }" :data-idx="row.idx"
-                :aria-selected="false" data-test="pg-pick-custom"
-                @mousedown.prevent @click="pickCustom(row.text)">
-                <span class="pg-opt">
-                  <span class="pg-opt-id">Use “{{ row.text }}” as the model ID</span>
-                  <span class="pg-opt-setup" title="Free text — sent exactly as typed"><i class="fas fa-keyboard" aria-hidden="true"></i></span>
-                </span>
-                <span class="pg-opt-sub">Not in any listing — sent exactly as typed to {{ currentProviderLabel }}</span>
-              </button>
-              <button v-else type="button" class="pg-pick-item" :class="{ 'is-active': row.idx === activeIdx }"
-                role="option" :data-idx="row.idx"
-                :aria-selected="row.opt.providerId === settings.providerId && row.opt.modelId === settings.modelId"
-                @mousedown.prevent @click="pick(row.opt)">
-                <span class="pg-opt">
-                  <span class="pg-opt-id">{{ row.opt.modelId }}</span>
-                  <span v-if="row.opt.score != null" class="pg-opt-score" :style="{ color: scoreColor(row.opt.score) }">{{ fmtScore(row.opt.score) }}</span>
-                  <span v-else-if="row.opt.arenaName" class="pg-opt-dim">unranked</span>
-                  <span v-if="!row.opt.custom" class="pg-opt-setup" title="Needs a base URL and key before it can chat"><i class="fas fa-plug" aria-hidden="true"></i></span>
-                </span>
-                <span v-if="row.opt.arenaName && row.opt.arenaName.toLowerCase() !== row.opt.modelId.toLowerCase()" class="pg-opt-sub">{{ row.opt.arenaName }}</span>
-              </button>
-            </template>
-            <div v-if="!pickerRows.shown" class="pg-pick-none">No model matches “{{ query }}”.</div>
-            <div v-else-if="pickerRows.hidden" class="pg-pick-more">{{ pickerRows.hidden }} more — type to narrow the list.</div>
-          </div>
-        </div>
-        <div class="pg-count" data-test="pg-count">
-          {{ modelCount }} chat model{{ modelCount === 1 ? '' : 's' }} across {{ visibleGroups.length }} provider{{ visibleGroups.length === 1 ? '' : 's' }}
-          <span v-if="pickedOutsideFilter" class="pg-off" data-test="pg-off-filter">· current model sits outside this filter</span>
-        </div>
+        <!-- One clear entry point: the picker modal. Nothing about the
+             chat changes until "Use this model" is pressed there. -->
+        <button type="button" class="pg-pick-btn" data-test="pg-model-open"
+          :title="selected ? 'Change the model — now ' + optionLabel(selected) : 'Choose a model'"
+          @click="openPicker">
+          <span class="pg-pick-btn-main">
+            <span class="pg-pick-btn-id" data-test="pg-open-label">{{ selected ? selected.modelId : 'Pick a model' }}</span>
+            <span class="pg-pick-btn-sub">{{ selected ? 'via ' + selected.providerLabel : totalModels + ' chat models across the catalog' }}</span>
+          </span>
+          <i class="fas fa-arrow-right-arrow-left" aria-hidden="true"></i>
+        </button>
 
         <!-- Arena card for the selected model -->
         <div v-if="selected" class="pg-card" data-test="pg-model-card">
@@ -826,7 +752,12 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
               <i class="fas" :class="railOpen ? (isNarrow ? 'fa-xmark' : 'fa-angles-left') : (isNarrow ? 'fa-sliders' : 'fa-angles-right')" aria-hidden="true"></i>
             </button>
             <span class="pg-dot" :class="{ live: busy }"></span>
-            {{ selected ? selected.modelId : 'No model selected' }}
+            <button type="button" class="pg-chat-model" data-test="pg-model-open-head"
+              :title="selected ? 'Change the model — now ' + optionLabel(selected) : 'Choose a model'"
+              @click="openPicker">
+              {{ selected ? selected.modelId : 'No model selected' }}
+              <i class="fas fa-chevron-down pg-chat-model-caret" aria-hidden="true"></i>
+            </button>
           </div>
           <b-button size="is-small" type="is-ghost" icon-left="plus" :disabled="busy" data-test="pg-new-chat" title="Start a new chat (keeps the current model)" @click="newChat">New chat</b-button>
         </div>
@@ -904,6 +835,87 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
       </div>
     </div>
 
+    <!-- Picker modal: provider + model with a local draft and an explicit
+         confirm. Renders ONLY from the snapshot taken at open — late data
+         (providers.json, a listing sync, a stream ending) cannot touch it.
+         Hand-rolled overlay on purpose (stats-75): the picker cycles
+         open→close→reopen in quick bursts, and b-modal's Transition got
+         corrupted entering-during-leave — stuck `enter-from` classes left
+         the reopened modal permanently invisible. No transition, no state
+         reuse: every open is a fresh overlay, deterministic for tests. -->
+    <div v-if="pick" ref="pickerEl" class="pg-sel-root" role="dialog" aria-modal="true" aria-label="Choose a model"
+      tabindex="-1" data-test="pg-picker-root">
+      <div class="pg-sel-backdrop" aria-hidden="true" @click="closePicker"></div>
+      <div class="pg-sel panel-lab" data-test="pg-picker-modal">
+        <div class="pg-sel-head">
+          <h2 class="pg-modal-title">Choose a model</h2>
+          <span class="pg-sel-count" data-test="pg-picker-count">{{ pick.totalModels }} chat model{{ pick.totalModels === 1 ? '' : 's' }} across {{ pick.groups.length }} provider{{ pick.groups.length === 1 ? '' : 's' }}</span>
+        </div>
+        <div class="pg-sel-grid">
+          <div class="pg-sel-col">
+            <label class="pg-sel-lbl" for="pg-sel-prov-q">Provider</label>
+            <input id="pg-sel-prov-q" v-model="pick.qProv" class="input is-small" type="text" autocomplete="off"
+              placeholder="Filter providers…" data-test="pg-prov-search" />
+            <div class="pg-sel-list" role="listbox" aria-label="Providers">
+              <button v-for="o in snapProvOptions" :key="o.id" type="button" role="option"
+                class="pg-sel-row" :class="{ 'is-active': o.id === pick.provId }"
+                :aria-selected="o.id === pick.provId" data-test="pg-prov-row" @click="chooseProv(o)">
+                <span class="pg-opt">
+                  <span class="pg-opt-id">{{ o.label }}</span>
+                  <span v-if="o.id === settings.providerId" class="pg-opt-cur">in use</span>
+                </span>
+                <span class="pg-prov-n">{{ o.n }}</span>
+              </button>
+              <div v-if="!snapProvOptions.length" class="pg-pick-none">No provider matches “{{ pick.qProv }}”.</div>
+            </div>
+          </div>
+          <div class="pg-sel-col">
+            <label class="pg-sel-lbl" for="pg-sel-model-q">Model</label>
+            <input id="pg-sel-model-q" v-model="pick.qModel" class="input is-small" type="text" autocomplete="off"
+              :placeholder="draftGroup ? 'Search ' + draftGroup.label + '…' : 'Pick a provider first'"
+              :disabled="!draftGroup" data-test="pg-model-search" />
+            <div class="pg-sel-list" role="listbox" aria-label="Models">
+              <template v-if="draftGroup">
+                <button v-if="snapCustomText" type="button" role="option" class="pg-sel-row pg-sel-custom"
+                  :class="{ 'is-active': pick.modelId === snapCustomText }" :aria-selected="pick.modelId === snapCustomText"
+                  data-test="pg-model-custom" @click="chooseCustom">
+                  <span class="pg-opt">
+                    <span class="pg-opt-id">Use “{{ snapCustomText }}” as the model ID</span>
+                    <span class="pg-opt-setup" title="Free text — sent exactly as typed"><i class="fas fa-keyboard" aria-hidden="true"></i></span>
+                  </span>
+                  <span class="pg-opt-sub">Not in the listing — sent exactly as typed to {{ draftGroup.label }}</span>
+                </button>
+                <button v-for="it in snapModels.items" :key="it.key" type="button" role="option"
+                  class="pg-sel-row" :class="{ 'is-active': pick.modelId === it.modelId }"
+                  :aria-selected="pick.modelId === it.modelId" :data-model="it.modelId" data-test="pg-model-row"
+                  @click="chooseModel(it)">
+                  <span class="pg-opt">
+                    <span class="pg-opt-id">{{ it.modelId }}</span>
+                    <span v-if="it.score != null" class="pg-opt-score" :style="{ color: scoreColor(it.score) }">{{ fmtScore(it.score) }}</span>
+                    <span v-else-if="it.arenaName" class="pg-opt-dim">unranked</span>
+                    <span v-if="it.free" class="pg-opt-free">free</span>
+                    <span v-if="!it.custom" class="pg-opt-setup" title="Needs a base URL and key before it can chat"><i class="fas fa-plug" aria-hidden="true"></i></span>
+                  </span>
+                  <span v-if="it.providerId === settings.providerId && it.modelId === settings.modelId" class="pg-opt-cur">in use</span>
+                </button>
+                <div v-if="!snapModels.items.length && !snapCustomText" class="pg-pick-none">No model matches “{{ pick.qModel }}”.</div>
+                <div v-else-if="snapModels.hidden" class="pg-pick-more">{{ snapModels.hidden }} more — type to narrow the list.</div>
+              </template>
+              <div v-else class="pg-pick-none">Choose a provider on the left.</div>
+            </div>
+          </div>
+        </div>
+        <div class="pg-sel-foot">
+          <span class="pg-sel-draft" data-test="pg-picker-draft">{{ draftLabel }}</span>
+          <span class="pg-sel-btns">
+            <button type="button" class="button is-ghost is-small" data-test="pg-picker-cancel" @click="closePicker">Cancel</button>
+            <button type="button" class="button is-primary is-small" data-test="pg-picker-confirm"
+              :disabled="!draftItem" @click="confirmPick">Use this model</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
     <!-- Setup modal: collect what a catalog model needs to chat -->
     <b-modal v-model="setupOpen" aria-role="dialog" aria-label="Set up provider">
       <div v-if="setup" class="pg-modal panel-lab" data-test="pg-setup-modal">
@@ -952,7 +964,6 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 .pg-grid.rail-closed { grid-template-columns: minmax(0, 1fr); }
 .pg-grid.rail-closed .pg-rail { display: none; }
 .pg-rail { padding: 1rem; display: flex; flex-direction: column; gap: .55rem; position: sticky; top: 4.5rem; }
-.pg-count { color: var(--faint); font-size: .74rem; }
 .pg-sep { border-top: 1px solid var(--line); margin: .35rem 0; }
 .pg-row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
 .pg-val { color: var(--muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
@@ -977,24 +988,58 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 .pg-rename { width: 100%; }
 .pg-hist-clear { background: none; border: 0; color: var(--faint); font-size: .72rem; cursor: pointer; text-align: left; padding: .15rem 0; }
 .pg-hist-clear:hover:not(:disabled) { color: var(--rose); }
-.pg-prov-opt { display: flex; justify-content: space-between; gap: .6rem; align-items: baseline; min-width: 0; width: 100%; }
 .pg-prov-n { color: var(--faint); font-size: .74rem; flex: none; }
-.pg-off { color: var(--gold); }
 .pg-rail-toggle { font-size: .95rem; }
 .pg-edit { display: flex; flex-direction: column; gap: .4rem; max-width: min(46rem, 92%); }
 .pg-edit-actions { display: flex; gap: .4rem; justify-content: flex-end; }
 .pg-backdrop { display: none; }
 
-.pg-picker { position: relative; }
-.pg-picklist {
-  position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 30;
-  background: var(--bg-elev, var(--surface-2)); border: 1px solid var(--line-2, var(--line));
-  border-radius: 10px; box-shadow: 0 10px 28px rgba(0,0,0,.35);
-  max-height: 340px; overflow-y: auto; overscroll-behavior: contain; padding: .25rem;
-}
-.pg-pick-group { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--faint); padding: .45rem .5rem .2rem; }
-.pg-pick-item { display: block; width: 100%; text-align: left; background: none; border: 0; color: var(--text); cursor: pointer; padding: .3rem .5rem; border-radius: 8px; }
-.pg-pick-item:hover, .pg-pick-item.is-active { background: var(--teal-dim); }
+/* Rail entry point — one button, opens the picker modal */
+.pg-pick-btn { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left;
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px;
+  padding: .5rem .7rem; cursor: pointer; color: var(--text); }
+.pg-pick-btn:hover { border-color: var(--teal); }
+.pg-pick-btn-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .1rem; }
+.pg-pick-btn-id { font-weight: 700; font-size: .86rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-pick-btn-sub { color: var(--faint); font-size: .72rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-pick-btn > i { color: var(--faint); flex: none; }
+
+/* Chat head model button — works with the rail closed too */
+.pg-chat-model { background: none; border: 0; color: var(--text); font: inherit; font-weight: 700;
+  display: inline-flex; align-items: center; gap: .4rem; cursor: pointer; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: .2rem .4rem; border-radius: 8px; }
+.pg-chat-model:hover { color: var(--teal); background: var(--teal-dim); }
+.pg-chat-model-caret { font-size: .62rem; color: var(--faint); flex: none; }
+
+/* Picker modal — providers | models, draft selection, explicit confirm.
+   Hand-rolled overlay (see the template note): no Transition to corrupt. */
+.pg-sel-root { position: fixed; inset: 0; z-index: 60; display: flex;
+  align-items: center; justify-content: center; padding: 1rem; }
+.pg-sel-root:focus { outline: none; }
+.pg-sel-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.55); }
+.pg-sel { display: flex; flex-direction: column; gap: .7rem; padding: 1.4rem 1.25rem;
+  width: min(760px, 94vw); position: relative; z-index: 1;
+  max-height: calc(100vh - 2rem); overflow-y: auto; overscroll-behavior: contain; }
+.pg-sel-head { display: flex; align-items: baseline; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
+.pg-sel-count { color: var(--faint); font-size: .76rem; }
+.pg-sel-grid { display: grid; grid-template-columns: minmax(190px, 250px) minmax(0, 1fr); gap: .9rem; }
+.pg-sel-col { display: flex; flex-direction: column; gap: .4rem; min-width: 0; }
+.pg-sel-lbl { font-size: .74rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.pg-sel-list { border: 1px solid var(--line); border-radius: 10px; max-height: 46vh; overflow-y: auto;
+  overscroll-behavior: contain; padding: .25rem; display: flex; flex-direction: column; gap: 1px;
+  background: var(--bg-elev, var(--surface-2)); }
+.pg-sel-row { display: flex; align-items: center; justify-content: space-between; gap: .6rem; width: 100%;
+  text-align: left; background: none; border: 0; color: var(--text); cursor: pointer;
+  padding: .42rem .55rem; border-radius: 8px; }
+.pg-sel-row:hover, .pg-sel-row.is-active { background: var(--teal-dim); }
+.pg-sel-row.is-active { font-weight: 600; }
+.pg-sel-custom { flex-direction: column; align-items: stretch; }
+.pg-sel-custom .pg-opt-sub { display: block; }
+.pg-opt-free { color: var(--teal); font-size: .68rem; font-weight: 700; flex: none; }
+.pg-opt-cur { color: var(--faint); font-size: .68rem; border: 1px solid var(--line-2, var(--line)); border-radius: 6px; padding: 0 .3rem; flex: none; white-space: nowrap; }
+.pg-sel-draft { color: var(--muted); font-size: .8rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-sel-foot { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+.pg-sel-btns { display: flex; gap: .5rem; flex: none; }
 .pg-pick-none, .pg-pick-more { color: var(--faint); font-size: .76rem; padding: .45rem .5rem; }
 
 .pg-opt { display: flex; justify-content: space-between; gap: .6rem; align-items: baseline; }
@@ -1019,7 +1064,6 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
 .pg-setup-test.is-ok { color: var(--teal); }
 .pg-setup-test.is-err { color: var(--rose); }
 .pg-modal-actions { display: flex; gap: .5rem; justify-content: flex-end; margin-top: .3rem; flex-wrap: wrap; }
-.pg-pick-custom .pg-opt-sub { display: block; }
 
 .pg-card { border: 1px solid var(--line); border-radius: 12px; padding: .7rem .8rem; background: var(--surface-2); }
 .pg-card-top { display: flex; gap: .6rem; align-items: flex-start; }
@@ -1108,7 +1152,10 @@ const costTitle = (m) => (m.meta?.priceSource === 'provider'
   /* 16px fields: iOS zooms any focused input smaller than 16px. */
   .pg-rail .input, .pg-rail .textarea, .pg-input { font-size: 1rem; }
   /* Kill the double-tap-zoom pause on the controls users tap in bursts. */
-  .pg-pick-item, .pg-act, .pg-starter, .pg-hist-open, .pg-rail-toggle { touch-action: manipulation; }
+  .pg-sel-row, .pg-act, .pg-starter, .pg-hist-open, .pg-rail-toggle, .pg-pick-btn { touch-action: manipulation; }
+  /* The picker modal stacks: providers above models, both scrollers. */
+  .pg-sel-grid { grid-template-columns: 1fr; }
+  .pg-sel-list { max-height: 30vh; }
 }
 @media (max-width: 600px) {
   .pg-bubble { max-width: 100%; }

@@ -5,7 +5,7 @@ import {
   estimateCost, errorFromResponse, sendChat, testConnection, CORS_MESSAGE,
 } from '../../src/lib/chat.js';
 import { renderMarkdown } from '../../src/lib/miniMarkdown.js';
-import { buildPlaygroundGroups, buildCatalogGroups, catalogProviderEntry, stripCatalogPrefix, capGroupItems, providerOptions, filterGroups, filterByProvider, findOption, optionsForArenaName } from '../../src/lib/playgroundModels.js';
+import { buildPlaygroundGroups, buildCatalogGroups, catalogProviderEntry, stripCatalogPrefix, capGroupItems, providerOptions, filterGroups, findOption, optionsForArenaName } from '../../src/lib/playgroundModels.js';
 import { parseModelListing } from '../../src/lib/myProviders.js';
 
 describe('chatUrl', () => {
@@ -212,15 +212,6 @@ describe('playground model options', () => {
     expect(findOption(groups, 'p1', 'model-a').arenaName).toBe('Model A');
     expect(findOption(groups, 'p2', 'model-a')).toBeNull();
     expect(optionsForArenaName(groups, 'Model A').map(o => o.modelId)).toEqual(['model-a']);
-  });
-
-  it('narrow by provider, compose with the text search', () => {
-    expect(filterByProvider(groups, 'p1')).toHaveLength(1);
-    expect(filterByProvider(groups, '')).toBe(groups);
-    expect(filterByProvider(groups, 'nope')).toEqual([]);
-    const narrowed = filterByProvider(groups, 'p1');
-    expect(filterGroups(narrowed, 'zeta')[0].items.map(i => i.modelId)).toEqual(['zeta-private']);
-    expect(filterGroups(narrowed, 'nothing')).toEqual([]);
   });
 });
 

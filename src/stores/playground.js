@@ -33,7 +33,10 @@ export const DEFAULT_SETTINGS = Object.freeze({
 // mobile drawer (default CLOSED — on a phone the overlay buries the chat,
 // so the chat must come first). Splitting them keeps a tablet rotation or
 // a desktop "hide the rail" click from leaking into the other layout.
-const DEFAULT_UI = Object.freeze({ railOpen: true, railOpenMobile: false, providerFilter: '' });
+// providerFilter rode along until the picker modal replaced the rail
+// filter — persisted docs may still carry it; the merge tolerates and
+// the view ignores unknown keys.
+const DEFAULT_UI = Object.freeze({ railOpen: true, railOpenMobile: false });
 
 const conversations = ref([]);
 const activeId = ref('');

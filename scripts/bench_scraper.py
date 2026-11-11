@@ -2079,6 +2079,29 @@ def parse_simplebench(snap):
     return models
 
 
+def parse_arc_models(data):
+    """stats-77: shared parse for scrape_arcprize — both layouts deliver a
+    list of {model, score} dicts; scores arrive as '94.2%',
+    '95.0%, $1.12/task' or '—' (no data). Percentage split + 0<s<=100 bound,
+    same contract as every other station parser."""
+    models = []
+    if not data or not isinstance(data, list):
+        return models
+    for item in data:
+        if not isinstance(item, dict):
+            continue
+        name = item.get("model", "").strip()
+        # '95.0%, $1.12/task' → '95.0' (percentage before the first %)
+        score_str = item.get("score", "").strip().split('%')[0].strip()
+        try:
+            score = float(score_str)
+            if 0 < score <= 100 and name:
+                models.append((name, score))
+        except (ValueError, TypeError):
+            pass
+    return models
+
+
 def scrape_arcprize():
     """
     Scrape ARC-AGI-2 from arcprize.org leaderboard via browser JS eval.
@@ -2091,48 +2114,85 @@ def scrape_arcprize():
     All effort variants (None/Low/Medium/High/XHigh/Max) are extracted; the
     normalization pipeline strips config-level parentheticals and keeps the
     highest score per model.
+
+    2026-11 layout change (verified live, stats-77): the leaderboard became
+    ONE TABLE PER MODEL CARD inside DIV.leaderboard-model-card — model name
+    in <caption>, one tbody row of best-per-benchmark scores, data-table
+    headers clean ('ARC-AGI-2'), plus a sticky HEADER-CLONE table at index 0
+    whose headers carry version suffixes ('ARC-AGI-2v2') and which has ZERO
+    body rows. The old querySelector('table') grabbed the clone: 0 rows, and
+    indexOf('ARC-AGI-2') missed ('ARC-AGI-2v2') — the benchmark silently
+    vanished from the doc and the score basis reshaped (guard/unit parity
+    caught it; merge hardening now carries missing benchmarks over).
+    Card layout first (caption + prefix header match), legacy single-table
+    layout kept as fallback.
     """
     url = "https://arcprize.org/leaderboard"
     js = (
         "(function() {"
+        "  function headsOf(t) {"
+        "    return Array.from(t.querySelectorAll('thead th'))"
+        "      .map(function(th) { return th.textContent.trim(); });"
+        "  }"
+        "  function arc2Idx(heads) {"
+        "    var i = heads.indexOf('ARC-AGI-2');"
+        "    if (i >= 0) return i;"
+        "    for (var j = 0; j < heads.length; j++) {"
+        "      if (heads[j].indexOf('ARC-AGI-2') === 0) return j;"
+        "    }"
+        "    return -1;"
+        "  }"
+        "  var results = [];"
+        "  var sawCard = false;"
+        "  var tables = document.querySelectorAll('table');"
+        "  for (var i = 0; i < tables.length; i++) {"
+        "    var t = tables[i];"
+        "    var cap = t.querySelector('caption');"
+        "    var body = t.querySelector('tbody tr');"
+        "    if (!cap || !body) continue;"
+        "    sawCard = true;"
+        "    var heads = headsOf(t);"
+        "    var scoreIdx = arc2Idx(heads);"
+        "    if (scoreIdx < 0) continue;"
+        "    var c = body.querySelectorAll('td,th');"
+        "    if (c.length <= scoreIdx) continue;"
+        "    var name = cap.textContent.trim();"
+        "    var score = c[scoreIdx] ? c[scoreIdx].textContent.trim() : '';"
+        "    if (!name) continue;"
+        "    results.push({model: name, score: score});"
+        "  }"
+        "  if (sawCard) return JSON.stringify(results);"
         "  var table = document.querySelector('table');"
         "  if (!table) return '[]';"
-        "  var heads = Array.from(table.querySelectorAll('thead th'))"
-        "    .map(function(th) { return th.textContent.trim(); });"
-        "  var scoreIdx = heads.indexOf('ARC-AGI-2');"
-        "  if (scoreIdx < 0) scoreIdx = 2;"
+        "  var heads2 = headsOf(table);"
+        "  var scoreIdx2 = arc2Idx(heads2);"
+        "  if (scoreIdx2 < 0) scoreIdx2 = 2;"
         "  var rows = Array.from(table.querySelectorAll('tbody tr'));"
-        "  var results = [];"
-        "  for (var i = 0; i < rows.length; i++) {"
-        "    var c = rows[i].querySelectorAll('td');"
-        "    if (c.length <= scoreIdx) continue;"
-        "    var name = c[0] ? c[0].textContent.trim() : '';"
-        "    var score = c[scoreIdx] ? c[scoreIdx].textContent.trim() : '';"
-        "    if (!name || name.toUpperCase() === 'AI SYSTEM' || name.charAt(0) === '-') continue;"
-        "    results.push({model: name, score: score});"
+        "  for (var k = 0; k < rows.length; k++) {"
+        "    var cc = rows[k].querySelectorAll('td');"
+        "    if (cc.length <= scoreIdx2) continue;"
+        "    var n = cc[0] ? cc[0].textContent.trim() : '';"
+        "    var s = cc[scoreIdx2] ? cc[scoreIdx2].textContent.trim() : '';"
+        "    if (!n || n.toUpperCase() === 'AI SYSTEM' || n.charAt(0) === '-') continue;"
+        "    results.push({model: n, score: s});"
         "  }"
         "  return JSON.stringify(results);"
         "})()"
     )
     data = load_and_eval(url, js, wait_ms=8000)
 
-    models = []
+    models = parse_arc_models(data)
     if data and isinstance(data, list):
-        for item in data:
-            if not isinstance(item, dict):
-                continue
-            name = item.get("model", "").strip()
-            # '95.0%, $1.12/task' → '95.0' (percentage before the first %)
-            score_str = item.get("score", "").strip().split('%')[0].strip()
-            try:
-                score = float(score_str)
-                if 0 < score <= 100 and name:
-                    models.append((name, score))
-            except (ValueError, TypeError):
-                pass
         print(f"    Got {len(models)} entries (all variants, ARC-AGI-2)")
     else:
         print(f"    [WARN] No data from ARC-AGI-2")
+    if data and isinstance(data, list) and not models:
+        # stats-77: a parsed-but-empty ARC leaderboard used to wipe the
+        # benchmark silently (valid empty dataset overwrote the basis).
+        # Loud signal here; merge_full_scrape_into_public carries the
+        # benchmark over from HEAD regardless.
+        print("    [WARN] ARC-AGI-2 parsed to ZERO entries — treating as suspect,"
+              " benchmark will be carried over from the shipped doc")
     return models
 
 

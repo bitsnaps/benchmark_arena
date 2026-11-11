@@ -90,10 +90,35 @@ def _listed_evidence(rec, meta_key, idx):
     return None
 
 
+def carry_missing_benchmarks(pub, dl):
+    """stats-77 (2026-11-11): a benchmark present in the shipped doc but
+    missing from the fresh scrape is carried over, NEVER silently dropped.
+    Trigger case: ARC-AGI-2's leaderboard briefly parses to an empty/failed
+    grid — the fresh doc shipped 12 benchmarks and a 7-cell avg set, every
+    baked cl/score shifted, and the client-mirror unit parity broke. The
+    benchmark basis is load-bearing math, not freeform content: a source
+    outage must keep the column (cells ride the KEEP path like rows) until
+    removal is a conscious, logged decision. Returns the carried list for
+    the caller's leak-contract print."""
+    carried = []
+    for key in ("benchmarks", "avg_benchmarks"):
+        fresh = dl.get(key) or []
+        missing = [b for b in (pub.get(key) or []) if b not in fresh]
+        if missing:
+            dl[key] = fresh + missing
+            carried.append((key, missing))
+    return carried
+
+
 def main():
     pub = json.load(open(PUB))
     dl = json.load(open(DL))
     mp, md = pub["models_meta"], dl["models_meta"]
+
+    for key, missing in carry_missing_benchmarks(pub, dl):
+        print(f"stats-77 KEEP benchmark(s) missing from the fresh scrape, "
+              f"carried over from the shipped doc: {missing} "
+              f"(removal must be a conscious decision, never a scrape outage)")
 
     # stats-69 (2026-11-01): formatting-only spelling stability. Sources
     # jitter separators — "DeepSeek V4 Flash" -> "DeepSeek-V4-Flash" arrived

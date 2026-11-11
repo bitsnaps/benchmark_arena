@@ -467,19 +467,32 @@ const run = async () => {
     // the teleported .tooltip-content (native titles are gone from cells).
     // Expected seconds derived from the committed meta via the SAME join the
     // app runs (stats-28: AA re-measures TTFT every scrape — never pin it).
+    // stats-77: anchor row picked DYNAMICALLY from the matrix rows that
+    // carry meta TTFT — a name pin breaks when AA retires a model's
+    // measurement (Claude Fable 5.1 lost its TTFT in the 2026-11 wave).
+    // stats-29 policy: upstream churn degrades to a logged skip, not a FAIL.
+    // Guard: the anchor name must not prefix another row name (hasText is
+    // substring matching — "Beam 1.0" would collide with "Beam 1.0 Mini").
     const ttftIdx = ttftIndexFromMeta(modelsMeta);
-    const fableSec = ttftIdx.get(normKey('Claude Fable 5.1'));
-    const fableRow = page.locator('.pm-table tbody tr', { has: page.locator('.prov-model', { hasText: 'Claude Fable 5.1' }) });
-    // Tier must be derived, not pinned: AA re-measures TTFT every scrape and
-    // Fable 5.1 crossed the 3.5s boundary (slow -> ok) on 2026-10-06 (stats-28 intent).
-    const fableTier = latencyTier(fableSec);
-    if (fableTier == null) fail('Claude Fable 5.1 has no AA TTFT in meta — cannot verify cell tooltip');
-    else await fableRow.locator(`td.lat-${fableTier} .b-tooltip`).first().hover();
-    await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
-    const fableTip = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
-    if (fableSec != null && fableTip.includes(`AA TTFT ${fmtSec(fableSec)}`) && fableTip.includes('Artificial Analysis'))
-      ok(`cell tooltip (b-tooltip) carries the AA median ("...${fableTip.split('AA TTFT')[1]}")`);
-    else fail(`cell tooltip missing TTFT (expected ${fableSec}): "${fableTip}"`);
+    const latNames = new Set(latVisible.map(r => r.name).filter(Boolean));
+    const anchor = latVisible
+      .map(r => ({ name: r.name, sec: r.name ? ttftIdx.get(normKey(r.name)) : null }))
+      .find(x => x.name && x.sec != null
+        && ![...latNames].some(n => n !== x.name && n.startsWith(x.name)));
+    if (!anchor) {
+      console.log('  (skip: no latency-tinted pivot row carries meta TTFT this snapshot — upstream churn)');
+    } else {
+      const anchorRow = page.locator('.pm-table tbody tr', { has: page.locator('.prov-model', { hasText: anchor.name }) });
+      // Tier must be derived, not pinned: AA re-measures TTFT every scrape
+      // (stats-28 intent; Fable 5.1 crossed the 3.5s boundary on 2026-10-06).
+      const anchorTier = latencyTier(anchor.sec);
+      await anchorRow.locator(`td.lat-${anchorTier} .b-tooltip`).first().hover();
+      await page.waitForSelector('.tooltip-content:visible', { timeout: 5000 });
+      const anchorTip = (await page.locator('.tooltip-content:visible').first().innerText()).replace(/\s+/g, ' ');
+      if (anchorTip.includes(`AA TTFT ${fmtSec(anchor.sec)}`) && anchorTip.includes('Artificial Analysis'))
+        ok(`cell tooltip (b-tooltip) carries the AA median ("...${anchorTip.split('AA TTFT')[1]}")`);
+      else fail(`cell tooltip missing TTFT (expected ${anchor.sec}): "${anchorTip}"`);
+    }
     // legend documents the ladder with three tier chips
     const legendChips = await page.locator('p .legend-chip').count();
     const legendText = (await page.locator('p.cell-sub.mt-sm').last().innerText()).replace(/\s+/g, ' ');

@@ -896,7 +896,11 @@ _AA_PAGE_JS = r"""(function(){
     var t = scripts[i].textContent || '';
     if (t.indexOf('modalit') >= 0) parts.push(t);
   }
-  return parts.join('\n');
+  // stats-76: return a JSON array of script texts. load_and_eval JSON-parses
+  // the eval result; the old joined-string return was parsed into a single
+  // FAQPage DICT when the page had one script, and aa_page_modalities
+  // demanded a str — every probe went (None, None) and tombstoned the cache.
+  return JSON.stringify(parts);
 })()"""
 
 
@@ -918,19 +922,58 @@ def _save_aa_modalities_cache(cache):
         print(f"    [WARN] AA modalities cache write failed: {e}")
 
 
+def _faqpage_probe_text(data):
+    """stats-76: normalize whatever load_and_eval returned into regex-ready
+    text — one line per Question, shaped like the raw JSON-LD the classic
+    regexes were built on. Handles every shape the eval plumbing produces:
+      - str  legacy raw script text (regex straight over it)
+      - list JSON.stringify(_AA_PAGE_JS) -> list of script texts
+      - dict a single FAQPage object load_and_eval fully parsed — walk
+             mainEntity and re-serialize the Questions (regex over the
+             original dict shape returned (None, None) for EVERY probe:
+             tombstoned the whole modality cache, guard floor caught it)
+    Returns '' when nothing usable came back (keeps the negative-cache
+    semantics: a real 404 / FAQ-less page still mines to (None, None))."""
+    if isinstance(data, str):
+        chunks = [data]
+    elif isinstance(data, list):
+        chunks = [p for p in data if isinstance(p, str)]
+    elif isinstance(data, dict):
+        ents = data.get("mainEntity") or []
+        if not isinstance(ents, list):
+            ents = []
+        chunks = []
+        for q in ents:
+            if not isinstance(q, dict):
+                continue
+            name = q.get("name") or ""
+            ans = q.get("acceptedAnswer") or {}
+            text = ans.get("text") if isinstance(ans, dict) else None
+            if not name and not text:
+                continue
+            chunks.append(
+                '{"name":%s,"acceptedAnswer":{"@type":"Answer","text":%s}}'
+                % (json.dumps(name, ensure_ascii=False),
+                   json.dumps(text or "", ensure_ascii=False)))
+    else:
+        chunks = []
+    return "\n".join(c for c in chunks if c)
+
+
 def aa_page_modalities(slug):
     """Mine one AA model page's JSON-LD FAQ for modality answers.
     Returns (input_tokens, output_tokens); either may be None = no answer
     (page 404 / layout change / FAQ missing)."""
     data = load_and_eval(f"https://artificialanalysis.ai/models/{slug}",
                          _AA_PAGE_JS, wait_ms=10000)
-    if not isinstance(data, str) or not data:
+    text = _faqpage_probe_text(data)
+    if not text:
         return (None, None)
     inp = out = None
-    m = _AA_LDJSON_ANSWER_RES["input"].search(data)
+    m = _AA_LDJSON_ANSWER_RES["input"].search(text)
     if m:
         inp = parse_aa_modality_answer(m.group(1).replace('\\"', '"'), "input")
-    m = _AA_LDJSON_ANSWER_RES["output"].search(data)
+    m = _AA_LDJSON_ANSWER_RES["output"].search(text)
     if m:
         out = parse_aa_modality_answer(m.group(1).replace('\\"', '"'), "output")
     return (inp or None, out or None)

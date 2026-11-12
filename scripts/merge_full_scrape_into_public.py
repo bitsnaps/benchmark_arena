@@ -371,11 +371,35 @@ def main():
         print(f"stats-62: {adopted} no-catalog record(s) adopted pub history "
               f"(static facts kept; stale price/ttft dropped)")
     priced_idx = _priced_listing_index() if pub_only else {}
+    # stats-78: names that still carry a LIVE unified row in the fresh doc.
+    # The catalog retirement wave (AA/OR dropping records overnight) can
+    # retire a record while benchmark sources keep scoring the model —
+    # stamping registry-only no_bench_coverage on such a record trips the
+    # cells-vs-registry guard (stats-62). Those adopt the no-catalog shape
+    # instead (static facts kept, stale time-varying measurements dropped,
+    # or_catalog_retired marks why the OR fields went dark).
+    fresh_row_names = {r.get("name") for t in ("unified_closed", "unified_open")
+                       for r in dl.get(t, [])}
     n_kept = 0
     for k in pub_only:
         rec = mp[k]
         evidence = _listed_evidence(rec, k, priced_idx)
-        if evidence:
+        if k in fresh_row_names:
+            for f in ("aa_ttft_seconds", "pricing_aa_usd_per_1m",
+                      "pricing_usd_per_1m", "price_source", "no_bench_coverage",
+                      "successor_pending"):
+                rec.pop(f, None)
+            rec["match"] = "no-catalog"
+            rec["or_catalog_retired"] = True
+            md[k] = rec
+            n_kept += 1
+            print(f"  KEEP {k}: catalog record gone upstream, but the row is "
+                  f"still live"
+                  + (f" and priced somewhere — no-catalog adoption:" if evidence
+                     else " — no-catalog adoption (honest gaps):"))
+            if evidence:
+                print(f"    {evidence}")
+        elif evidence:
             rec["no_bench_coverage"] = True
             md[k] = rec
             n_kept += 1
@@ -428,6 +452,57 @@ def main():
             rewrites += 1
     if rewrites:
         print(f"superseded_by chains re-pointed: {rewrites}")
+
+    # stats-78: meta-only formatting-variant fold, LAST pass before the
+    # writes. The row-bearing forks were already folded inside
+    # merge_duplicate_rows (phase 1.5, with full meta visibility); this pass
+    # catches meta-only census records — the same model admitted twice under
+    # formatting-only spellings (OR catalog: display name + id-derived name,
+    # "Qwen2.5 Coder 32B Instruct" vs "Qwen2.5-Coder-32B-Instruct", same
+    # or_id, 2026-11-12). Identity = or_id, never name shape (stats-74
+    # discipline): fold only when every member carrying an or_id agrees; a
+    # group with conflicting or NO or_id is left unfolded with a warning.
+    # Canonical key = the name already shipped in pub (history wins), else
+    # sorted-first (deterministic). Folded members only fill fields the
+    # canonical record lacks — never overwrite. Every fold is printed
+    # (leak contract).
+    nk_groups = {}
+    for k in md:
+        nk_groups.setdefault(_norm_key(k), []).append(k)
+    folded = 0
+    for nk_, ks in sorted(nk_groups.items()):
+        if not nk_ or len(ks) < 2:
+            continue
+        orks = {_norm_key(md[k].get("or_id")) for k in ks if md[k].get("or_id")}
+        if not orks or len(orks) > 1:
+            print(f"  WARNING: formatting-collision group left unfolded "
+                  f"(missing/conflicting or_id {sorted(orks)}): {sorted(ks)}")
+            continue
+        canon = next((k for k in ks if k in mp), sorted(ks)[0])
+        base = dict(md[canon])
+        for k in ks:
+            if k == canon:
+                continue
+            for fk, fv in md[k].items():
+                if fv is None or (isinstance(fv, list) and not fv):
+                    continue
+                # stats-78: control/triage fields describe the ABSORBED
+                # record's own state — a registry-kept variant's
+                # no_bench_coverage must never bless the keeper (live rows
+                # flagged no_bench_coverage trip the stats-62 guard), and
+                # match/or_catalog_retired/superseded_by describe the
+                # variant's own catalog fate or chain, not the keeper's.
+                if fk in ("no_bench_coverage", "match", "or_catalog_retired",
+                          "superseded_by"):
+                    continue
+                if fk not in base:
+                    base[fk] = fv
+            del md[k]
+            folded += 1
+        md[canon] = base
+    if folded:
+        print(f"stats-78: {folded} meta-only formatting-variant record(s) folded "
+              f"(identity = or_id normKey; canon = shipped name)")
 
     for path, obj in ((PUB, dl), (DL, dl)):
         with open(path, "w") as f:

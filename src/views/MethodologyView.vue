@@ -162,7 +162,8 @@ watch(() => route.query.s, jumpFromQuery);
           <li>Older models hide behind the <em>Older versions</em> toggle — never deleted. Shown,
             they rank at the bottom with no rank number and a dimmed bar.</li>
           <li>A model with <strong>one benchmark source</strong> shows in the <em>New &amp; unranked</em>
-            section under the table: its real scores are visible as-is, but it carries no rating and
+            census under the table — hidden by default; reveal it with the <em>Show new &amp; unranked</em>
+            toggle on the leaderboard. Its real scores are visible as-is, but it carries no rating and
             no rank — sparse averages lean mostly on the neutral prior, so a number would overclaim.
             It joins the ranking automatically once a second source covers it.</li>
           <li>The <em>NEW</em> badge marks models released within a recency window you can widen

@@ -16,7 +16,9 @@ const data = JSON.parse(fs.readFileSync(path.join(REPO, 'public/benchmark_result
 const META = data.models_meta || {};
 const rowsAll = [...(data.unified_closed || []), ...(data.unified_open || [])];
 const isOld = (name) => !!(META[name] && (META[name].superseded_by || META[name].stale));
-const defaultRows = rowsAll.filter(r => !isOld(r.name));
+// stats-79: the census is hidden by default — expectations track what the
+// ranked table renders (unranked rows live behind their toggle).
+const defaultRows = rowsAll.filter(r => !isOld(r.name) && !r.unranked);
 const modRows = (tok) => defaultRows.filter(r => ((META[r.name]?.input_modalities) || []).includes(tok));
 const unknownRows = defaultRows.filter(r => !(META[r.name]?.input_modalities || []).length);
 const slugify = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');

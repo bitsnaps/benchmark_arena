@@ -22,7 +22,7 @@ const route = useRoute();
 const router = useRouter();
 
 const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, isUnranked, releaseDateOf, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor, metaFor, modelSlug } = useData();
-const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId, modFilter } = useLeaderboard();
+const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId, modFilter, showUnranked } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
 const tier = computed(() =>
@@ -133,16 +133,20 @@ const priceSlider = computed({
 const priceTag = computed(() =>
   maxPrice.value == null ? 'any price' : '≤ ' + fmtUsd(maxPrice.value));
 
-// Free-listing count for the toggle tag: current tier, current generation
+// Free-listing count for the toggle tag: current tier, current generation.
+// stats-79: unranked rows are census-only — the tag must not promise rows
+// the ranked table won't render.
 const freeCount = computed(() =>
-  pivotFor(tier.value).filter(r => !isOlder(r) && hasFreeListingFor(r)).length);
+  pivotFor(tier.value).filter(r => !isOlder(r) && !isUnranked(r) && hasFreeListingFor(r)).length);
 
 // Seller dropdown options: every seller that lists at least one
-// current-generation model, busiest first (tier-independent)
+// current-generation RANKED model, busiest first (tier-independent).
+// stats-79: sellers that only list census rows would filter the ranked
+// table to zero — they don't earn an option.
 const sellerOptions = computed(() => {
   const counts = new Map();
   for (const r of pivotAll.value) {
-    if (isOlder(r)) continue;
+    if (isOlder(r) || isUnranked(r)) continue;
     for (const a of availableAtFor(r)) {
       const e = counts.get(a.p) || { n: a.n, c: 0 };
       e.c += 1;
@@ -162,6 +166,19 @@ watch(freeOnly, (on) => {
 watch(() => route.query.free, (v) => {
   const on = v === '1' || v === 'true';
   if (on !== freeOnly.value) freeOnly.value = on;
+}, { immediate: true });
+
+// ── stats-79: unranked reveal ⇄ URL (?unranked=1) ─────────────────────
+// The deep link wins over the localStorage default on load (immediate);
+// after that the toggle keeps the param in sync so shared URLs tell the
+// truth. Toggling off drops the param and clears the stored choice.
+watch(showUnranked, (on) => {
+  const want = on ? '1' : undefined;
+  if (route.query.unranked !== want) router.replace({ query: { ...route.query, unranked: want } });
+});
+watch(() => route.query.unranked, (v) => {
+  const on = v === '1' || v === 'true';
+  if (on !== showUnranked.value) showUnranked.value = on;
 }, { immediate: true });
 
 watch(maxPrice, (p) => {
@@ -197,9 +214,11 @@ const MOD_OPTIONS = [
   { v: 'video', label: 'Video input' },
 ];
 const MOD_TOOLTIP = 'Show only models whose input supports this modality. Rows with unknown modality data are hidden while a filter is on (same rule as the price cap hiding unpriced rows).';
-// Counts over the current tier's default ranking (like the Free toggle)
+// Counts over the current tier's default ranking (like the Free toggle).
+// stats-79: unranked rows hide with the census — counts stay honest to
+// what the ranked table actually renders.
 const modCount = (tok) =>
-  pivotFor(tier.value).filter(r => !isOlder(r) && ((metaFor(r)?.input_modalities) || []).includes(tok)).length;
+  pivotFor(tier.value).filter(r => !isOlder(r) && !isUnranked(r) && ((metaFor(r)?.input_modalities) || []).includes(tok)).length;
 
 watch(modFilter, (m) => {
   const want = m || undefined;
@@ -271,7 +290,7 @@ const unrankedCount = computed(() =>
   pivotFor(tier.value).filter(r => isUnranked(r) && (showOlder.value || !isOlder(r))).length);
 
 const olderCount = computed(() =>
-  pivotFor(tier.value).filter(r => isOlder(r)).length);
+  pivotFor(tier.value).filter(r => isOlder(r) && !isUnranked(r)).length);
 
 const openModel = (name) =>
   router.push({ name: 'model', params: { slug: modelSlug(name) } });
@@ -344,6 +363,19 @@ const openModel = (name) =>
           <b-tag size="is-small" type="is-warning is-light" rounded>{{ olderCount }}</b-tag>
         </b-switch>
         <span v-if="showOlder" class="cell-sub" style="white-space:nowrap">older models shown inline (dimmed, unranked)</span>
+        <!-- stats-79: the unranked census is a traceability surface — hidden
+             by default, revealed from here. Toggle itself hidden when the
+             census is empty (a control for nothing is UI debt). -->
+        <b-switch
+          v-if="unrankedCount > 0"
+          v-model="showUnranked"
+          size="is-small"
+          type="is-info"
+          left-label
+        >
+          Show new &amp; unranked
+          <b-tag size="is-small" :type="showUnranked ? 'is-info' : 'is-info is-light'" rounded>{{ unrankedCount }}</b-tag>
+        </b-switch>
         <div class="row" style="gap:.6rem;align-items:center;flex:1;min-width:240px">
           <span class="cell-sub" style="white-space:nowrap">Min coverage</span>
           <input
@@ -468,10 +500,11 @@ const openModel = (name) =>
       <PivotTable :rows="rows" :tier="tier" />
     </div>
 
-    <!-- stats-65: New & unranked — single-source rows the ranking is not
-         allowed to claim yet. Same columns, dimmed, no Score/rank; they
-         graduate into the ranked table automatically at 2 sources. -->
-    <div v-if="unrankedRows.length" class="mt-sm">
+    <!-- stats-65/stats-79: New & unranked — single-source rows the ranking is
+         not allowed to claim yet. Same columns, dimmed, no Score/rank; they
+         graduate into the ranked table automatically at 2 sources. Hidden
+         behind the Show-new-&-unranked toggle by default. -->
+    <div v-if="showUnranked && unrankedRows.length" class="mt-sm unranked-section">
       <div class="row" style="gap:.6rem;align-items:baseline;padding:0 .4rem .35rem">
         <h2 class="section-title" style="font-size:1.05rem;margin:0">New &amp; unranked</h2>
         <span class="cell-sub">

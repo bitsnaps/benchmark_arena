@@ -28,7 +28,9 @@ for (const r of [...(data.unified_closed || []), ...(data.unified_open || [])]) 
   seen.add(r.name);
   rows.push(r);
 }
-const visible = rows.filter(r => !isOld(r));
+// stats-79: the census is hidden by default — visible = what the ranked
+// table actually renders (unranked rows live behind their toggle).
+const visible = rows.filter(r => !isOld(r) && !r.unranked);
 
 // mirror the store's filter semantics
 const avail = m => m?.available_at ?? [];

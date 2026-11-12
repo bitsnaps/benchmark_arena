@@ -73,7 +73,9 @@ const fmtValue = v => {
 const anchor = rows.find(r => r.name === 'Claude Opus 5');
 const ANCHOR_TXT = anchor ? fmtValue(valueOf(anchor)) : null;
 // a visible row with no price → dash in the value column
-const dashRow = visible.find(r => blend(r.name) === null && score(r) >= 0);
+// stats-79: the census is hidden by default — the dash anchor must be a
+// RANKED row or its row isn't in the DOM to read.
+const dashRow = rankedVisible.find(r => blend(r.name) === null && score(r) >= 0);
 
 function fail(msg) { console.error('FAIL:', msg); process.exitCode = 1; }
 const ok = (msg) => console.log('  ok:', msg);
@@ -117,6 +119,10 @@ const ok = (msg) => console.log('  ok:', msg);
     // contains its row.
     if (!anchor) {
       console.log('  (skip: no Claude Opus 5 row in this snapshot)');
+    } else if (anchor.unranked) {
+      // stats-79: an unranked anchor lives only in the hidden census — a
+      // data-driven skip, same policy as stats-29 upstream churn.
+      console.log('  (skip: Claude Opus 5 is unranked this snapshot — census hidden by default)');
     } else {
       const olderSw = page.locator('label.switch:has-text("Older versions")').first();
       await olderSw.click();

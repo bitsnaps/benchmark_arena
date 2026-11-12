@@ -41,6 +41,20 @@ PUB = os.path.join(REPO_ROOT, "public", "benchmark_results.json")
 _DEBRIS = re.compile(r"\(\s*,|,\s*\)|\(\s*\)")
 
 
+def _or_nk(raw):
+    """Catalog-id norm key for stats-78 identity checks: lowercase, last
+    '/' segment, non-alphanumerics dropped ('qwen/qwen-2.5-coder-32b-instruct'
+    -> 'qwen25coder32binstruct'). None when empty."""
+    if not raw:
+        return None
+    s = str(raw).lower().strip()
+    i = s.rfind("/")
+    if i != -1:
+        s = s[i + 1:]
+    s = re.sub(r"[^a-z0-9]", "", s)
+    return s or None
+
+
 def _filled(row, benches):
     return sum(1 for b in benches if row.get(b) is not None)
 
@@ -71,14 +85,22 @@ def _rederive_group_scores(keeper, benches, avg):
 def _gap_fill_meta(keeper_name, absorbed_names, meta):
     """meta[keeper_name] keeps its record; gaps filled from absorbed records
     (or_name stays the keeper's own display identity). Absorbed records are
-    popped — they never render again."""
+    popped — they never render again. Control/triage fields (stats-78) never
+    propagate: a registry-kept duplicate's no_bench_coverage describes the
+    ABSORBED record's fate (cells gone upstream) and must not bless the
+    keeper, whose own live cells would then trip the stats-62 guard; match /
+    or_catalog_retired / superseded_by describe the variant's catalog fate
+    or chain, equally non-transferable."""
     rec = meta.get(keeper_name)
     if rec is None:
         rec = meta[keeper_name] = {}
     for name in absorbed_names:
         other = meta.pop(name, None) or {}
         for k, v in other.items():
-            if k not in ("or_name",) and rec.get(k) in (None, [], "") and v not in (None, [], ""):
+            if k in ("or_name", "no_bench_coverage", "match",
+                     "or_catalog_retired", "superseded_by"):
+                continue
+            if rec.get(k) in (None, [], "") and v not in (None, [], ""):
                 rec[k] = v
     return rec
 
@@ -90,10 +112,71 @@ def _drop_rows(doc, absorbed_rows):
     return gone
 
 
+def _formatting_folds(doc, log=print):
+    """stats-78 (2026-11-12): fold rows that differ ONLY by formatting and
+    carry the same catalog identity. Phase 1 groups by normalize_model_name,
+    but the size-strip asymmetry can split ONE model into two keys: space-
+    separated parameter sizes strip anywhere (\s+\d+B\b), while hyphenated
+    catalog tails never matched that pattern — so 'Qwen2.5 Coder 32B
+    Instruct' -> family key while 'Qwen2.5-Coder-32B-Instruct' kept its size
+    and the unranked census admitted BOTH as rows (store invariant: 'no
+    model appears twice under formatting-only spellings'). Never guess by
+    name shape — the generic [a-z0-9] key also collides real variants
+    ('Command R' vs 'Command R+'): fold only when BOTH records' models_meta
+    agree on the same non-empty or_id norm key, exactly the stats-74
+    discipline. Keeper = phase-1's own ordering (coverage desc, debris,
+    shorter name, alphabetical); cells merge keep-best; derived fields
+    recompute; meta gap-fills; absorbed rows + metas drop. Every fold is
+    printed (leak contract). Tiers below (chain rewrite) re-point
+    superseded_by AFTER folding, so targets resolve against final rows."""
+    benches = doc.get("benchmarks") or []
+    avg = doc.get("avg_benchmarks") or []
+    meta = doc.setdefault("models_meta", {})
+    rows = [(t, r) for t in ("unified_closed", "unified_open") for r in doc.get(t, [])]
+    groups = {}
+    for t, r in rows:
+        k = re.sub(r"[^a-z0-9]", "", r["name"].lower())
+        if k:
+            groups.setdefault(k, []).append((t, r))
+    merges = []
+    done = set()
+    for k in sorted(groups):
+        members = [(t, r) for t, r in groups[k]
+                   if id(r) not in done and r["name"] in meta]
+        if len(members) < 2:
+            continue
+        orks = {_or_nk((meta[r["name"]] or {}).get("or_id")) for _, r in members
+                if (meta.get(r["name"]) or {}).get("or_id")}
+        if not orks or len(orks) > 1:
+            log(f"  [Dedup-stats78] formatting-collision left unfolded "
+                f"(missing/conflicting or_id {sorted(x for x in orks if x)}): "
+                f"{[r['name'] for _, r in members]}")
+            continue
+        members.sort(key=lambda tr: (-_filled(tr[1], benches), bool(_DEBRIS.search(tr[1]["name"])),
+                                     len(tr[1]["name"]), tr[1]["name"]))
+        k_table, keeper = members[0]
+        absorbed = [r for _, r in members[1:]]
+        for r in absorbed:
+            for b in benches:
+                s = r.get(b)
+                if s is not None and (keeper.get(b) is None or s > keeper[b]):
+                    keeper[b] = s
+        _rederive_group_scores(keeper, benches, avg)
+        _gap_fill_meta(keeper["name"], [r["name"] for r in absorbed], meta)
+        _drop_rows(doc, [(None, r) for r in absorbed])
+        done |= {id(r) for r in absorbed}
+        names = [r["name"] for r in absorbed]
+        merges.append((keeper["name"], names))
+        log(f"  [Dedup-stats78] {keeper['name']!r} ({k_table}) <- {names} "
+            f"(same or_id {next(iter(orks))})")
+    return merges
+
+
 def merge_duplicate_rows(doc, log=print):
     """Mutates doc in place; returns [(keeper_name, [absorbed names])].
-    Phase 1 (stats-70): same normalize-key spellings. Phase 2 (stats-74):
-    vendor-prefixed twins with catalog-id-confirmed identity."""
+    Phase 1 (stats-70): same normalize-key spellings. Phase 1.5 (stats-78):
+    formatting-variant twins with catalog-id-confirmed identity. Phase 2
+    (stats-74): vendor-prefixed twins with catalog-id-confirmed identity."""
     benches = doc.get("benchmarks") or []
     avg = doc.get("avg_benchmarks") or []
     meta = doc.setdefault("models_meta", {})
@@ -122,6 +205,7 @@ def merge_duplicate_rows(doc, log=print):
         merges.append((keeper["name"], names))
         log(f"  [Dedup] {keeper['name']!r} ({k_table}) <- {names}")
 
+    merges += _formatting_folds(doc, log=log)
     merges += _vendor_prefix_folds(doc, log=log)
     return merges
 

@@ -1718,6 +1718,14 @@ def _parse_arena_text_html(page_html):
 # are live-fresh (same vintage as the doc timestamp).
 ARENA_TEXT_ASOF = None
 
+# stats-80: the leaderboard publish date carried by the HF dataset rows
+# (leaderboard_publish_date). Surfaced into the doc as
+# arena_text_publish_date so a lagging/missed upstream publish is visible
+# in the shipped artifact instead of silently freezing the column
+# (2026-11-12: text configs were 2 publishes behind while agent_* updated —
+# 'Claude Fable 5.2' had no Arena cell and nothing in the doc said why).
+ARENA_TEXT_PUBLISH_DATE = None
+
 # stats-68: last-resort arena mirror = our own last published document.
 RESULTS_PUBLIC_PATH = os.path.join(PUBLIC_DIR, "benchmark_results.json")
 
@@ -1796,6 +1804,7 @@ def _arena_fetch_dataset(attempts=4):
     """
     for attempt in range(attempts):
         out = []
+        pub_dates = set()
         try:
             offset, total = 0, 0
             while True:
@@ -1822,6 +1831,9 @@ def _arena_fetch_dataset(attempts=4):
                     r = wrap.get("row") or {}
                     name = r.get("model_name")
                     rating = r.get("rating")
+                    pd = r.get("leaderboard_publish_date")
+                    if isinstance(pd, str) and pd[:10]:
+                        pub_dates.add(pd[:10])
                     if isinstance(name, str) and isinstance(rating, (int, float)):
                         # site renders the rounded integer (1527.5 -> 1528)
                         out.append({"model": name.strip(),
@@ -1831,6 +1843,26 @@ def _arena_fetch_dataset(attempts=4):
                 if not rows or offset >= total or len(out) > 2000:
                     break
             if out:
+                # stats-80: surface the dataset's own leaderboard publish
+                # date - a lagging upstream publish otherwise freezes the
+                # Arena column silently (2026-11-12: text configs sat 2
+                # publishes behind agent_* and fresh models had no Arena
+                # cell with nothing in the refresh output saying why).
+                global ARENA_TEXT_PUBLISH_DATE
+                if pub_dates:
+                    ARENA_TEXT_PUBLISH_DATE = sorted(pub_dates)[-1]
+                    try:
+                        from datetime import date as _date
+                        behind = (_date.today()
+                                  - _date.fromisoformat(ARENA_TEXT_PUBLISH_DATE)).days
+                    except ValueError:
+                        behind = -1
+                    print(f"    [hf dataset] leaderboard publish date: "
+                          f"{ARENA_TEXT_PUBLISH_DATE}")
+                    if behind > 3:
+                        print(f"    [WARN] dataset publish date is {behind}d "
+                              f"old - fresh arena rows will not appear until "
+                              f"Arena's next text-table publish lands")
                 print(f"    [hf dataset] {len(out)} rows "
                       f"(lmarena-ai/leaderboard-dataset, style-control overall)")
                 return out
@@ -5593,8 +5625,12 @@ def scrape_all():
 # Patterns to strip from display names (config modes, effort levels, API modes)
 _DISPLAY_STRIP = re.compile(
     r'\s*(?:\(with fallback\)|\(thinking\)|\(no thinking\)|\(refine\.?\)|\(reasoning\)'
-    r'|\((?:high|xhigh|x-high|medium|low|minimal|adaptive|max|auto|\d+[kK]?)\)'
-    r'|\((?:high|xhigh|x-high|medium|low|minimal|adaptive|max|auto)\s+with\s+fallback\)'
+    # stats-80: effort parentheticals now also arrive as
+    # '(Max, Default Fallback)' (AA display rows) — the effort token with an
+    # optional ', fallback' / 'with fallback' / ', Default Fallback' tail is
+    # ONE marker, never a distinct model.
+    r'|\((?:high|xhigh|x-high|medium|low|minimal|adaptive|max|auto|\d+[kK]?)'
+    r'(?:\s*(?:,|with)\s*(?:default\s+)?fallback)?\)'
     r'|\((?:thinking|reasoning|refine\.?|no\s*thinking)\s*,?\s*\d+[kK]?\))'
     r'|\s+max\b'
     r'\s*',
@@ -5775,7 +5811,17 @@ def normalize_model_name(name):
     # 'GPT-6.1 Sol (max)', '(xhigh)', … and the spelled-out 'None' effort as
     # '(Non-reasoning)' — all collapse into the family base (keep-best),
     # matching the documented effort-variant policy (stats-28, line 1474).
-    n = re.sub(r'\s*\((?:high|xhigh|x-high|medium|low|minimal|adaptive|max|none|non[-\s]?reasoning|\d+[kK]?|auto)\s*(?:with\s+fallback)?\)\s*', ' ', n, flags=re.IGNORECASE)
+    # stats-80 (2026-11-12, Ibrahim): the effort marker grew a routing tail —
+    # 'Claude Fable 5.2 (Max, Default Fallback)', '(Xhigh, Default Fallback)',
+    # … (15 census rows across the Fable 5.2 / Opus 5.5 / Sonnet 5.5
+    # families). AA bills every fallback variant at the same list price and
+    # the effort token is config, not identity, so '<effort>(,|with)
+    # [default] fallback' folds into the family base exactly like the bare
+    # '(effort)' and '(effort with fallback)' forms did. The OLD spelled-out
+    # AA shape '(Adaptive Reasoning, Max Effort, Default Fallback)' stays
+    # unfolded here on purpose — it is pricing-ladder-only (_aa_base_name);
+    # row identity must never guess across a multi-word variant block.
+    n = re.sub(r'\s*\((?:high|xhigh|x-high|medium|low|minimal|adaptive|max|none|non[-\s]?reasoning|\d+[kK]?|auto)(?:\s*(?:,|with)\s*(?:default\s+)?fallback)?\)\s*', ' ', n, flags=re.IGNORECASE)
     # Also handle combined parentheticals like "(Thinking 16K)" from ARC
     n = re.sub(r'\s*\((?:thinking|reasoning|refine\.?|no\s*thinking)\s*,?\s*\d+[kK]?\)', '', n, flags=re.IGNORECASE)
     # Handle hyphen-separated effort levels: "Model - High" → "Model" (VendingBench format)
@@ -6445,6 +6491,10 @@ def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg
     # recovery fed the arena column (Cloudflare wall); auditable in the doc.
     if ARENA_TEXT_ASOF:
         data["arena_text_asof"] = ARENA_TEXT_ASOF
+    # stats-80: the dataset's own leaderboard publish date (audit trail for
+    # arena-column staleness - see _arena_fetch_dataset).
+    if ARENA_TEXT_PUBLISH_DATE:
+        data["arena_text_publish_date"] = ARENA_TEXT_PUBLISH_DATE
     for bname, bdata in all_results.items():
         data["per_benchmark"][bname] = {
             "closed": [(n, s) for n, s in bdata["closed"][:TOP_N]],
@@ -6614,8 +6664,9 @@ def _scrape_site(site_name):
         # combine run (BENCH_CACHE_TTL) keeps doc.arena_text_asof even though
         # scrape_arena_text() never runs in that process.
         asof = ARENA_TEXT_ASOF if site_name == "Arena.ai Text" else None
-        json.dump({'closed': closed, 'open': open_w, 'asof': asof},
-                  f, ensure_ascii=False)
+        pub = ARENA_TEXT_PUBLISH_DATE if site_name == "Arena.ai Text" else None
+        json.dump({'closed': closed, 'open': open_w, 'asof': asof,
+                   'publish_date': pub}, f, ensure_ascii=False)
     print(f"  [{site_name}] {len(closed)}c {len(open_w)}o")
 
 
@@ -6731,7 +6782,7 @@ def main():
                 pass
 
     # Load all results
-    global ARENA_TEXT_ASOF
+    global ARENA_TEXT_ASOF, ARENA_TEXT_PUBLISH_DATE
     for site_name, path in site_files.items():
         if os.path.exists(path):
             with open(path) as f:
@@ -6744,6 +6795,10 @@ def main():
             # stamp saved with the artifact (live runs re-set it in-process).
             if site_name == "Arena.ai Text" and data.get("asof"):
                 ARENA_TEXT_ASOF = data["asof"]
+            # stats-80: restore the dataset publish date alongside the asof
+            # vintage stamp so the doc carries it on cache-hit runs too.
+            if site_name == "Arena.ai Text" and data.get("publish_date"):
+                ARENA_TEXT_PUBLISH_DATE = data["publish_date"]
 
     # Build unified table (handles rescaling internally via _rescale_score)
     closed_table, open_table, all_benchmarks, avg_benchmarks = build_unified_table(all_results)

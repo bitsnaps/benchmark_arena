@@ -32,6 +32,34 @@ const sellerId = ref('');
 // on (same honesty rule as the price cap hiding unpriced rows).
 const modFilter = ref('');
 
+// ── stats-79: "New & unranked" reveal toggle ──────────────────────────
+// The unranked census is a traceability surface (is model X still pending
+// its first probe?), not a default view: hidden unless asked for. The
+// choice persists to localStorage under a versioned key; ?unranked=1 deep
+// links win over the stored value on load (HomeView owns the param sync).
+const UNRANKED_STORAGE_KEY = 'bl_unranked_v1';
+const UNRANKED_SCHEMA_VERSION = 1;
+const readStoredUnranked = () => {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return false;
+    const raw = window.localStorage.getItem(UNRANKED_STORAGE_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return parsed && parsed.version === UNRANKED_SCHEMA_VERSION ? parsed.on === true : false;
+  } catch { return false; }
+};
+const showUnranked = ref(readStoredUnranked());
+watch(showUnranked, (on) => {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+    if (!on) window.localStorage.removeItem(UNRANKED_STORAGE_KEY);
+    else window.localStorage.setItem(
+      UNRANKED_STORAGE_KEY,
+      JSON.stringify({ version: UNRANKED_SCHEMA_VERSION, on: true }),
+    );
+  } catch { /* storage blocked/full — the toggle still works for the session */ }
+}, { flush: 'sync' });
+
 // Leaving compare mode resets the selection
 watch(compareMode, (on) => {
   if (!on) compareRows.value = [];
@@ -52,10 +80,12 @@ const isBest = (bench, row) => {
   return max > 0 && row[bench] === max;
 };
 
+export { UNRANKED_STORAGE_KEY, UNRANKED_SCHEMA_VERSION };
+
 export function useLeaderboard() {
   return {
     searchQuery, compareMode, compareRows, showOlder, minCl,
-    freeOnly, maxPrice, sellerId, modFilter,
+    freeOnly, maxPrice, sellerId, modFilter, showUnranked,
     isSameModel, canCheck, clearCompare, isBest,
   };
 }

@@ -103,7 +103,12 @@ const EXPLORER_SEL = '.hbar .name';
       older: tr.classList.contains('is-older-row'),
     })));
   const olderShown = rowInfo.filter(r => r.older).map(r => r.name);
-  const expectedOlder = M.olderRows().map(r => r.name);
+  // stats-79: the census hides unranked rows by default — flagged older
+  // models split into the inline ranked subset (asserted here) and the
+  // unranked census subset (asserted in its own block below). Coverage is
+  // still total: every flagged model must render SOMEWHERE behind toggles.
+  const expectedOlder = M.olderRows().filter(r => !r.unranked).map(r => r.name);
+  const expectedCensusOlder = M.olderRows().filter(r => r.unranked).map(r => r.name);
   if (olderShown.length !== expectedOlder.length)
     fail(`toggle ON: ${olderShown.length} dimmed older rows, snapshot flags ${expectedOlder.length}`);
   else ok(`toggle ON: exactly ${olderShown.length} flagged models interleaved inline`);
@@ -117,6 +122,32 @@ const EXPLORER_SEL = '.hbar .name';
   const dupes = rowInfo.map(r => r.name).filter((n, i, arr) => n && arr.indexOf(n) !== i);
   if (dupes.length) fail('toggle ON: duplicated rows: ' + [...new Set(dupes)].join(' | '));
   else ok('toggle ON: no duplicated rows (older models interleaved, not appended)');
+
+  // stats-79: the unranked+older subset must render in the census (behind
+  // its reveal toggle) — and nowhere in the main table scanned above.
+  {
+    const censusSw = page.locator('label.switch', { hasText: 'Show new & unranked' });
+    if (expectedCensusOlder.length) {
+      if (!(await censusSw.count())) fail('census reveal toggle missing despite unranked rows');
+      else {
+        await censusSw.click();
+        await page.waitForTimeout(400);
+        const censusInfo = await page.locator('.unranked-section .b-table .table tbody tr').evaluateAll(rows =>
+          rows.map(tr => ({
+            name: (tr.querySelector('.model-cell .model-link')?.textContent || '').replace(/\u2605/g, '').trim(),
+            older: tr.classList.contains('is-older-row'),
+          })));
+        const censusOlderShown = censusInfo.filter(r => r.older).map(r => r.name);
+        const censusMissing = expectedCensusOlder.filter(n => !censusOlderShown.includes(n));
+        if (censusOlderShown.length !== expectedCensusOlder.length)
+          fail(`census: ${censusOlderShown.length} dimmed older rows, snapshot flags ${expectedCensusOlder.length}`);
+        else ok(`census: exactly ${censusOlderShown.length} unranked+older rows render behind the reveal toggle`);
+        if (censusMissing.length) fail('census: missing flagged models: ' + censusMissing.join(' | '));
+        await censusSw.click(); // restore the default hidden state
+        await page.waitForTimeout(300);
+      }
+    } else ok('no unranked+older overlap in this snapshot (census split check vacuous)');
+  }
   await page.screenshot({ path: SHOTS + '/leak-guard-older-section.png' });
 
   await sw.click();

@@ -81,8 +81,12 @@ const ok = (msg) => console.log('  ok:', msg);
 
   // ── 1b. Older releases (superseded + stale): hidden by default, opacity tiers on rows ──
   const ALLROWS = [...(data.unified_closed || []), ...(data.unified_open || [])];
-  const supInTable = ALLROWS.find(r => supOf(r.name));
-  const staleInTable = ALLROWS.find(r => META[r.name] && META[r.name].stale && !META[r.name].superseded_by);
+  // stats-79: the unranked census hides behind its toggle now, so anchor
+  // models must be RANKED rows — ranked+older rows interleave in the main
+  // table when Older is ON; unranked+older rows only ever live in the census.
+  const supInTable = ALLROWS.find(r => supOf(r.name) && !r.unranked) || ALLROWS.find(r => supOf(r.name));
+  const staleInTable = ALLROWS.find(r => !r.unranked && META[r.name] && META[r.name].stale && !META[r.name].superseded_by)
+    || ALLROWS.find(r => META[r.name] && META[r.name].stale && !META[r.name].superseded_by);
   const hasOverride = ALLROWS.some(r => r.name === 'gemini 3 pro');
   if (!supInTable) { console.log('  (skip: no superseded model in this snapshot)'); }
   else {
@@ -117,7 +121,10 @@ const ok = (msg) => console.log('  ok:', msg);
     // toggle ON → older models interleave INLINE in the main ranked table
     await page.locator('label.switch:has-text("Older versions")').click();
     await page.waitForTimeout(400);
-    const expectedOlder = ALLROWS.filter(isOld).length;
+    // stats-79: the census no longer renders by default, so the inline
+    // older count is the RANKED older subset only (older+unranked rows
+    // stay in the hidden census).
+    const expectedOlder = ALLROWS.filter(r => isOld(r) && !r.unranked).length;
     if (await page.locator('.older-section').count())
       fail('separate older section rendered (older models must be inline now)');
     else ok('no separate older section — old models live in the main listing');
@@ -148,7 +155,10 @@ const ok = (msg) => console.log('  ok:', msg);
     // and no link may appear anywhere else. Fully data-derived (no hard-
     // coded model names), so a data refresh cannot silently invalidate it.
     const archOf = (r) => (r['Artificial Analysis'] == null && META[r.name]?.archive_links?.aa) || null;
-    const expectedArchOn = new Set(ALLROWS.filter(archOf).map(r => archOf(r)));
+    // stats-79: census rows are hidden by default — the rendered archived
+    // links are the ranked subset of the verified set (unranked carriers
+    // show only when the census is revealed).
+    const expectedArchOn = new Set(ALLROWS.filter(r => !r.unranked && archOf(r)).map(r => archOf(r)));
     const archLoc = page.locator('.b-table .table tbody tr .arch-link');
     const gotOn = await archLoc.count();
     if (gotOn !== expectedArchOn.size)
@@ -166,10 +176,13 @@ const ok = (msg) => console.log('  ok:', msg);
     else ok('archived links open safely in a new tab (target=_blank, rel=noopener noreferrer)');
 
     // merged table = every model exactly once; top of the table unchanged
+    // stats-79: merged table = ranked + older inline; unranked rows live
+    // behind the Show-new-&-unranked toggle (asserted in its own block).
     const totalRows = await page.locator('.b-table .table tbody tr').count();
-    if (totalRows !== ALLROWS.length)
-      fail(`with toggle ON the table should list all ${ALLROWS.length} models, got ${totalRows}`);
-    else ok(`toggle ON: single merged table lists all ${totalRows} models`);
+    const expectedMerged = ALLROWS.filter(r => !r.unranked).length;
+    if (totalRows !== expectedMerged)
+      fail(`with toggle ON the table should list all ${expectedMerged} ranked+older models, got ${totalRows}`);
+    else ok(`toggle ON: single merged table lists all ${totalRows} ranked+older models`);
     const topAfter = await firstName();
     if (topAfter !== EXPECT.all) fail(`top row after merge = "${topAfter}", expected "${EXPECT.all}"`);
     else ok(`top row unchanged after merge (${topAfter})`);
@@ -180,11 +193,67 @@ const ok = (msg) => console.log('  ok:', msg);
     // stats-49: with Older OFF only current rows remain — links shrink to
     // exactly the current-row subset of the verified set
     {
-      const expectedArchOff = ALLROWS.filter(r => !isOld(r) && archOf(r)).length;
+      const expectedArchOff = ALLROWS.filter(r => !isOld(r) && !r.unranked && archOf(r)).length;
       const gotOff = await page.locator('.b-table .table tbody tr .arch-link').count();
       if (gotOff !== expectedArchOff)
         fail(`archived links (Older OFF): expected ${expectedArchOff}, got ${gotOff}`);
       else ok(`archived links respect the Older-versions filter (${gotOff} current rows linked)`);
+    }
+
+    // ── stats-79: the unranked census hides behind a toggle ──
+    // Traceability surface, not a default view: absent by default, revealed
+    // by "Show new & unranked" with the live count in the label; the reveal
+    // syncs to ?unranked=1 (deep links win on load) and persists to
+    // localStorage. Ends with the census OFF so later blocks see defaults.
+    {
+      const unrankedTotal = ALLROWS.filter(r => r.unranked && !isOld(r)).length;
+      const section = page.locator('.unranked-section');
+      if (await section.count()) fail('unranked census must be hidden by default (stats-79)');
+      else ok('unranked census hidden by default (traceability toggle off)');
+      const reveal = page.locator('label.switch:has-text("Show new & unranked")');
+      if (unrankedTotal === 0) {
+        if (await reveal.count()) fail('reveal toggle must hide entirely when the census is empty');
+        else ok('reveal toggle absent when nothing is unranked');
+      } else {
+        if (!(await reveal.count())) fail('reveal toggle missing despite unranked rows');
+        else {
+          const tag = (await reveal.locator('.tag').innerText()).trim();
+          if (tag !== String(unrankedTotal)) fail(`reveal count tag: expected ${unrankedTotal}, got "${tag}"`);
+          else ok(`reveal toggle carries the live census count (${tag})`);
+          await reveal.click();
+          await page.waitForTimeout(400);
+          if (!(await section.count())) fail('toggling on must reveal the unranked census');
+          else ok('toggling on reveals the unranked census');
+          if (!page.url().includes('unranked=1')) fail('toggling on should sync ?unranked=1 into the URL, got ' + page.url());
+          else ok('reveal state syncs to ?unranked=1 in the URL');
+          const censusRows = await section.locator('.b-table .table tbody tr').count();
+          if (censusRows !== unrankedTotal) fail(`census rows: expected ${unrankedTotal}, got ${censusRows}`);
+          else ok(`census lists exactly the ${unrankedTotal} admitted single-source rows`);
+          // reload → localStorage keeps the census open (param still in URL)
+          await page.reload({ waitUntil: 'networkidle' });
+          await page.waitForSelector('.b-table .table tbody tr');
+          await page.waitForTimeout(400);
+          if (!(await section.count())) fail('reveal choice must survive a reload (localStorage)');
+          else ok('reveal choice survives a reload (localStorage)');
+          // toggle off → census hides, param drops, stored choice clears
+          await page.locator('label.switch:has-text("Show new & unranked")').click();
+          await page.waitForTimeout(400);
+          if (await section.count()) fail('toggling off must hide the census again');
+          else ok('toggling off hides the census and drops ?unranked=1');
+          // deep link forces the census on even from a cold default state
+          await page.goto(BASE + '#/?unranked=1', { waitUntil: 'networkidle' });
+          await page.waitForSelector('.b-table .table tbody tr');
+          await page.waitForTimeout(400);
+          if (!(await page.locator('.unranked-section').count())) fail('?unranked=1 must force the census on');
+          else ok('?unranked=1 deep link forces the census on');
+          // leave the default state for the blocks below (clears storage too)
+          await page.goto(BASE, { waitUntil: 'networkidle' });
+          await page.waitForSelector('.b-table .table tbody tr');
+          await page.waitForTimeout(400);
+          if (await page.locator('.unranked-section').count()) fail('plain BASE must render with the census hidden');
+          else ok('plain home renders with the census hidden again');
+        }
+      }
     }
     // superseded model page shows the banner + successor link
     await page.goto(BASE + '#/model/' + slugify(supInTable.name), { waitUntil: 'networkidle' });
@@ -241,8 +310,11 @@ const ok = (msg) => console.log('  ok:', msg);
   // default window (7 days). Older rows are hidden by default and excluded
   // here — the badge only flags rows the table actually renders.
   const { isNewModel: freshWithin } = await import('../../src/lib/newFlag.js');
-  const expNew7 = ALLROWS.filter(r => !isOld(r) && freshWithin((META[r.name] || {}).created || null)).length;
-  const expNew30 = ALLROWS.filter(r => !isOld(r) && freshWithin((META[r.name] || {}).created || null, Date.now(), 30)).length;
+  // stats-79: the census is hidden by default — only rows the ranked table
+  // actually renders carry a visible badge, so unranked rows are excluded
+  // here too (not just the older rows).
+  const expNew7 = ALLROWS.filter(r => !isOld(r) && !r.unranked && freshWithin((META[r.name] || {}).created || null)).length;
+  const expNew30 = ALLROWS.filter(r => !isOld(r) && !r.unranked && freshWithin((META[r.name] || {}).created || null, Date.now(), 30)).length;
   const homeNew7 = await page.locator('.cov-table .new-chip').count();
   if (expNew7 === 0 && homeNew7 === 0) {
     // the 7-day release window slides with Date.now() — when the snapshot's
@@ -652,7 +724,10 @@ const ok = (msg) => console.log('  ok:', msg);
       if (seen.has(r.name)) continue;
       seen.add(r.name); allRows.push(r);
     } }
-  const gapRow = allRows.find(r => !isOld(r) && !picked.includes(r.name)
+  // stats-79: the gap anchor must be a RANKED row — the census (which
+  // renders most single-source gap models) is hidden by default now, so
+  // its rows have no checkbox in the DOM to click.
+  const gapRow = allRows.find(r => !isOld(r) && !r.unranked && !picked.includes(r.name)
     && CORE.some(b => r[b] === null || r[b] === undefined));
   if (!gapRow) fail('no current-gen row with a core-bench gap found in the snapshot');
   else {

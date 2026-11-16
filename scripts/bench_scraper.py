@@ -6158,6 +6158,20 @@ def build_unified_table(all_results):
         for yk in list(model_scores.keys()):
             if yk == xk or yk in _merged_truncated:
                 continue
+            # stats-81: a base model is NOT a truncated family. When X's full
+            # key is a word-prefix of Y's key ("gpt 5.5" -> "gpt 5.5 pro"),
+            # Y is a variant/tier of X and must keep its own row; folding
+            # would swallow the base and mislabel its cells. Observed:
+            # Arena's GPT-5.5 (High) (1481.3, rescaled 89.4-89.5 by vintage)
+            # landed on our GPT-5.5 Pro row for four published docs while
+            # plain GPT-5.5 vanished — and the upstream HF dataset never
+            # listed GPT-5.5 Pro once (full-split audit 2026-11-16).
+            # True truncations keep their shape because the extra family
+            # word sits BEFORE the version ("claude 4.7" -> "claude opus
+            # 4.7" is not a key-prefix). _VARIANT_SMALLER below stays as a
+            # second line of defense for non-prefix shapes.
+            if yk.startswith(xk + ' '):
+                continue
             yfam, yver = get_model_family_and_version(yk)
             if yfam is None or yver is None or yver != xver:
                 continue

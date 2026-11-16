@@ -95,6 +95,44 @@ const ok = (msg) => console.log('  ok:', msg);
     if (!dash && eciIdx >= 0) ok('ECI column renders (pre-ECI snapshot: dashes expected, first row may still carry a value)');
     else ok('ECI column renders honest dashes on the pre-ECI snapshot');
   }
+  // ── stats-85: ECI reference-column toggle in the Avg-set panel ──
+  // The Avg-set dropdown's benchmark checkboxes drive the Score blend AND
+  // column visibility; the ECI checkbox is display-only (never in the
+  // Score, stats-82 contract). Default checked (ECI leads). Unchecking
+  // hides the column and reflects ?eci=0 in the URL; rechecking restores
+  // the column and drops the param. Nothing else on the page may move.
+  {
+    await page.click('.avg-dropdown .avg-trigger');
+    await page.waitForSelector('.avg-dropdown .avg-bench-row', { timeout: 5000 });
+    const eciRow = page.locator('.avg-dropdown .avg-bench-row', { hasText: 'ECI' });
+    if (!(await eciRow.count())) fail('ECI toggle row missing from the Avg-set panel (stats-85)');
+    else ok('ECI toggle present in the Avg-set dropdown (display-only reference)');
+
+    // hide it
+    await eciRow.locator('label.b-checkbox, label.checkbox').first().click();
+    await page.waitForURL('**/*eci=0*', { timeout: 5000 }).catch(() => {});
+    const hidden = (await page.locator('.b-table .table thead th').allInnerTexts()).findIndex(t => t.trim() === 'ECI') < 0;
+    const urlOff = page.url().includes('eci=0');
+    if (!hidden) fail('unchecking ECI should hide the ECI column');
+    else if (!urlOff) fail('unchecking ECI should reflect ?eci=0 in the URL');
+    else ok('ECI column hides on uncheck + URL carries ?eci=0 (shareable)');
+
+    // score column count unchanged = the blend never moved (display-only)
+    const aaStill = (await page.locator('.b-table .table thead th').allInnerTexts()).some(t => t.trim() === 'AA');
+    if (!aaStill) fail('AA column vanished while toggling ECI (should not)');
+    else ok('benchmark columns untouched by the ECI toggle (display-only contract)');
+
+    // bring it back
+    await eciRow.locator('label.b-checkbox, label.checkbox').first().click();
+    await page.waitForFunction(() => !location.search.includes('eci=0'), null, { timeout: 5000 }).catch(() => {});
+    const backIdx = (await page.locator('.b-table .table thead th').allInnerTexts()).findIndex(t => t.trim() === 'ECI');
+    if (backIdx < 0) fail('re-checking ECI should restore the column');
+    else if (backIdx < (await page.locator('.b-table .table thead th').allInnerTexts()).findIndex(t => t.trim() === 'AA'))
+      ok('ECI column restored and still leads the benchmark block (param dropped)');
+    else fail('restored ECI column must sit before AA');
+    await page.click('.avg-dropdown .avg-trigger'); // close the panel
+  }
+
   const firstAll = await firstName();
   if (firstAll !== EXPECT.all) fail(`home #1 = "${firstAll}", expected "${EXPECT.all}"`);
   else ok(`home #1 row = ${firstAll} (overall top, All tab default)`);

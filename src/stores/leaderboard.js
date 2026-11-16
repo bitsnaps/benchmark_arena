@@ -60,6 +60,39 @@ watch(showUnranked, (on) => {
   } catch { /* storage blocked/full — the toggle still works for the session */ }
 }, { flush: 'sync' });
 
+// ── stats-85: ECI reference-column toggle ─────────────────────────────
+// The ECI column (Epoch Capabilities Index) is a display-only calibration
+// reference — it never feeds the Score blend (stats-82 contract). Ibrahim
+// (2026-11-16): "add ECI to the list of benchmarks, so the user
+// select/deselect from the drop-down list" — so the Avg-set panel's ECI
+// checkbox toggles COLUMN VISIBILITY only. Default ON (ECI leads, per the
+// approved first-class design). Only the OFF state is written to
+// localStorage under a versioned key, so the shipped default survives
+// cleared storage; ?eci=0 deep links hide, ?eci=1 forces back on and wins
+// over the stored value on load (HomeView owns the param sync).
+const ECI_COL_STORAGE_KEY = 'bl_eci_col_v1';
+const ECI_COL_SCHEMA_VERSION = 1;
+const readStoredEci = () => {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return true;
+    const raw = window.localStorage.getItem(ECI_COL_STORAGE_KEY);
+    if (!raw) return true;
+    const parsed = JSON.parse(raw);
+    return parsed && parsed.version === ECI_COL_SCHEMA_VERSION ? parsed.on !== false : true;
+  } catch { return true; }
+};
+const showEci = ref(readStoredEci());
+watch(showEci, (on) => {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+    if (on) window.localStorage.removeItem(ECI_COL_STORAGE_KEY);
+    else window.localStorage.setItem(
+      ECI_COL_STORAGE_KEY,
+      JSON.stringify({ version: ECI_COL_SCHEMA_VERSION, on: false }),
+    );
+  } catch { /* storage blocked/full — the toggle still works for the session */ }
+}, { flush: 'sync' });
+
 // Leaving compare mode resets the selection
 watch(compareMode, (on) => {
   if (!on) compareRows.value = [];
@@ -80,12 +113,12 @@ const isBest = (bench, row) => {
   return max > 0 && row[bench] === max;
 };
 
-export { UNRANKED_STORAGE_KEY, UNRANKED_SCHEMA_VERSION };
+export { UNRANKED_STORAGE_KEY, UNRANKED_SCHEMA_VERSION, ECI_COL_STORAGE_KEY, ECI_COL_SCHEMA_VERSION };
 
 export function useLeaderboard() {
   return {
     searchQuery, compareMode, compareRows, showOlder, minCl,
-    freeOnly, maxPrice, sellerId, modFilter, showUnranked,
+    freeOnly, maxPrice, sellerId, modFilter, showUnranked, showEci,
     isSameModel, canCheck, clearCompare, isBest,
   };
 }

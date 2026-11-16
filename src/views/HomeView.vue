@@ -22,7 +22,7 @@ const route = useRoute();
 const router = useRouter();
 
 const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, isUnranked, releaseDateOf, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor, metaFor, modelSlug } = useData();
-const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId, modFilter, showUnranked } = useLeaderboard();
+const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId, modFilter, showUnranked, showEci } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
 const tier = computed(() =>
@@ -179,6 +179,21 @@ watch(showUnranked, (on) => {
 watch(() => route.query.unranked, (v) => {
   const on = v === '1' || v === 'true';
   if (on !== showUnranked.value) showUnranked.value = on;
+}, { immediate: true });
+
+// ── stats-85: ECI reference column ⇄ URL (?eci=0 / ?eci=1) ────────────
+// Inverted vs the unranked toggle because ECI ships ON: the param only
+// appears when the state differs from the default (off → ?eci=0 so shared
+// URLs keep the hidden column; on → param dropped, clean URL). Deep links
+// win over localStorage on load; ?eci=1 also clears a stored OFF choice.
+watch(showEci, (on) => {
+  const want = on ? undefined : '0';
+  if (route.query.eci !== want) router.replace({ query: { ...route.query, eci: want } });
+});
+watch(() => route.query.eci, (v) => {
+  if (v === undefined) return; // no param → stored/default choice stands
+  const on = v === '1' || v === 'true';
+  if (on !== showEci.value) showEci.value = on;
 }, { immediate: true });
 
 watch(maxPrice, (p) => {
@@ -484,6 +499,24 @@ const openModel = (name) =>
             </div>
           </div>
 
+          <!-- stats-85: ECI reference column — same panel, different role.
+               The checkboxes above drive the Score blend AND column
+               visibility; the ECI checkbox is display-only (the index never
+               feeds the Score, stats-82 contract). Default checked — ECI
+               leads the table; unchecking hides the column, nothing else. -->
+          <hr class="dropdown-divider" />
+          <div class="avg-bench-row" style="padding:0 .9rem">
+            <b-checkbox
+              :model-value="showEci"
+              @update:model-value="showEci = $event"
+            >
+              {{ SHORT['Epoch ECI'] }}&nbsp;<b-tag size="is-small" type="is-info is-light" rounded>index</b-tag>
+            </b-checkbox>
+            <p class="cell-sub" style="margin:.15rem 0 .2rem 1.75rem">
+              Reference column only — never feeds the Score (Epoch AI, CC-BY 4.0). Uncheck to hide it from the table.
+            </p>
+          </div>
+
           <hr class="dropdown-divider" />
           <div style="padding:.4rem .9rem .7rem">
             <button class="button is-small is-fullwidth" type="button" :disabled="!isCustomAvg" @click="resetAvgSelection">
@@ -516,7 +549,7 @@ const openModel = (name) =>
     </div>
 
     <p class="cell-sub mt-sm" style="text-align:center">
-      Columns follow the Avg set — shown: {{ coreBenchmarks.map(b => SHORT[b] || b).join(', ') }}<span v-if="nonCoreBenchmarks.length">; hidden (opt in via the Avg set dropdown): {{ nonCoreBenchmarks.map(b => SHORT[b] || b).join(', ') }}</span>.
+      Columns follow the Avg set — shown: {{ coreBenchmarks.map(b => SHORT[b] || b).join(', ') }}<span v-if="nonCoreBenchmarks.length">; hidden (opt in via the Avg set dropdown): {{ nonCoreBenchmarks.map(b => SHORT[b] || b).join(', ') }}</span>. The ECI reference column has its own checkbox in the same panel (stats-85: display-only, never in the Score).
       For the visual take, open the <router-link :to="{ name: 'value' }">Value map</router-link>.
       <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'score' } }">How to read every measure<i class="fas fa-arrow-up-right-from-square"></i></router-link>
     </p>

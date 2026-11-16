@@ -35,7 +35,7 @@ const perPage = computed(() => (pageSize.value === 0
 watch(() => props.rows.length, () => { page.value = 1; });
 
 const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, isUnranked, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor, archiveLinkFor, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue, modelSlug } = useData();
-const { compareMode, compareRows, isSameModel, canCheck } = useLeaderboard();
+const { compareMode, compareRows, isSameModel, canCheck, showEci } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions
 // and unranked rows (stats-65).
@@ -147,7 +147,7 @@ const eciCiHalf = (row) => {
   const half = Math.round((ci[1] - ci[0]) / 2);
   return half > 0 ? half : null;
 };
-const eciThLabel = 'Epoch Capabilities Index (ECI) — one latent “general capability” scale fitted across 50+ benchmarks by Epoch AI (CC-BY 4.0). Raw index values, never rescaled; excluded from the Score blend by design. First-class per Ibrahim (2026-11-16): ECI leads, AA calibrates right beside the station columns.';
+const eciThLabel = 'Epoch Capabilities Index (ECI) — one latent “general capability” scale fitted across 50+ benchmarks by Epoch AI (CC-BY 4.0). Raw index values, never rescaled; excluded from the Score blend by design. First-class per Ibrahim (2026-11-16): ECI leads, AA calibrates right beside the station columns. stats-85: display-only reference — show/hide it from the Avg-set panel; hiding changes nothing else.';
 
 // Sorter for the ECI column (nulls always sink to the bottom)
 function byECI(a, b, isAsc) {
@@ -387,8 +387,14 @@ const limitedTitle = (row) =>
          Index, CC-BY 4.0). Dedicated fixed column OUTSIDE the Avg-set loop
          (Ibrahim 2026-11-16: ECI leads, AA shifts right): raw index values
          never rescaled, never blended into Score, sortable, nulls sink.
-         Intervals from models_meta.eci_ci, vintage from eci_vintage. -->
-    <b-table-column field="Epoch ECI" label="ECI" width="96" centered numeric sortable :custom-sort="byECI">
+         Intervals from models_meta.eci_ci, vintage from eci_vintage.
+         stats-85: the Avg-set panel's ECI checkbox toggles this column's
+         visibility only (display-only reference, default on) — deselecting
+         it never touches the Score blend, unlike the benchmark columns
+         below which follow the Avg-set selection 1:1. Buefy's `visible`
+         prop (NOT v-if) keeps the column registered, so hide/show cycles
+         never reorder it relative to AA. -->
+    <b-table-column field="Epoch ECI" label="ECI" width="96" centered numeric sortable :custom-sort="byECI" :visible="showEci">
       <template #header>
         <b-tooltip :label="eciThLabel" type="is-dark" multilined :delay="100" append-to-body>ECI</b-tooltip>
       </template>

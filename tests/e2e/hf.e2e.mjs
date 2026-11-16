@@ -40,7 +40,13 @@ const nameUnique = (n) => !rows.some(r => r.name !== n && r.name.includes(n));
 const OPEN = withHf.find(r => r.name === 'DeepSeek V3' && nameUnique('DeepSeek V3'))
   || withHf.find(r => nameUnique(r.name))
   || withHf[0];
-const CLOSED = visible.find(r => r.name === 'Claude Opus 5') || visible.find(r => !(META[r.name] && META[r.name].hugging_face_id));
+// stats-79: unranked rows are hidden behind the reveal toggle, so anchors
+// must never select one — today's first no-HF-id row was the unranked
+// 'Claude Fable 5.2 , Default Fallback' formatting variant and the click
+// timed out (stats-29 dynamic-anchor policy: pick anchors from what the
+// table actually renders).
+const rankedVisible = visible.filter(r => !r.unranked);
+const CLOSED = rankedVisible.find(r => r.name === 'Claude Opus 5') || rankedVisible.find(r => !(META[r.name] && META[r.name].hugging_face_id));
 const OPEN_HF = META[OPEN.name].hugging_face_id;
 const OPEN_URL = 'https://huggingface.co/' + OPEN_HF;
 
@@ -51,14 +57,26 @@ const ok = (msg) => console.log('  ok:', msg);
   fs.mkdirSync(SHOTS, { recursive: true });
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  // CI-box hardening: goto can exceed the 30s default when the gate's  // preview server + chromium contend for CPU (stats-36 gate flakes)
+  // CI-box hardening: goto can exceed the 30s default when the gate's
+  // preview server + chromium contend for CPU (stats-36 gate flakes)
   page.setDefaultNavigationTimeout(60000);
+  // stats-84 gate hardening: under 15 chromium launches the vite preview
+  // briefly refuses connections (ERR_CONNECTION_REFUSED at goto — a new
+  // spec flaked each run). One gentle retry after a beat, stats-36 style.
+  const gotoStable = async (url, opts) => {
+    try { return await page.goto(url, opts); }
+    catch (e) {
+      if (!/ERR_CONNECTION_REFUSED/.test(e.message)) throw e;
+      await page.waitForTimeout(1500);
+      return await page.goto(url, opts);
+    }
+  };
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
 
   try {
-    await page.goto(BASE, { waitUntil: 'networkidle' });
+    await gotoStable(BASE, { waitUntil: 'networkidle' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
 // stats-20: pagination default is 50/page — flip to All so the legacy
 // row-count expectations (which assume every row in the DOM) still hold
@@ -119,7 +137,7 @@ const ok = (msg) => console.log('  ok:', msg);
     }
 
     // ── 5. closed model card: no HF link ──
-    await page.goto(BASE, { waitUntil: 'networkidle' });
+    await gotoStable(BASE, { waitUntil: 'networkidle' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
 // stats-20: pagination default is 50/page — flip to All so the legacy
 // row-count expectations (which assume every row in the DOM) still hold
@@ -133,7 +151,7 @@ const ok = (msg) => console.log('  ok:', msg);
     else fail(`closed model card unexpectedly shows ${closedCard} HF link(s)`);
 
     // ── 6. ":free" stays data-only — never rendered anywhere on the page ──
-    await page.goto(BASE, { waitUntil: 'networkidle' });
+    await gotoStable(BASE, { waitUntil: 'networkidle' });
     await page.waitForSelector('.b-table .table tbody tr', { timeout: 10000 });
 // stats-20: pagination default is 50/page — flip to All so the legacy
 // row-count expectations (which assume every row in the DOM) still hold

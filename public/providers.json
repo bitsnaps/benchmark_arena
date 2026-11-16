@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-11-13",
+  "as_of": "2026-11-16",
   "kinds": [
     "first-party",
     "cloud",
@@ -6931,6 +6931,13 @@
           "name": "Google: Gemini 4 Carbon"
         },
         {
+          "id": "vertex_ai/deep-research-preview-04-2026",
+          "in": 2.0,
+          "out": 12.0,
+          "cache": 0.2,
+          "ctx": null
+        },
+        {
           "id": "vertex_ai/deep-research-pro-preview-12-2025",
           "in": 2.0,
           "out": 12.0,
@@ -10068,8 +10075,7 @@
           "id": "fireworks_ai/accounts/fireworks/models/qwen3-vl-30b-a3b-thinking",
           "in": 0.15,
           "out": 0.6,
-          "ctx": 262144,
-          "name": "Qwen: Qwen3 VL 30B A3B Thinking"
+          "ctx": 262144
         },
         {
           "id": "fireworks_ai/gpt-oss-120b",
@@ -11509,6 +11515,14 @@
           "name": "Google: Gemma 4 26B A4B "
         },
         {
+          "id": "deepinfra/XiaomiMiMo/MiMo-V2.6-Flash",
+          "in": 0.14,
+          "out": 0.28,
+          "cache": 0.0028,
+          "ctx": 1048576,
+          "name": "Xiaomi: MiMo-V2.6-Flash"
+        },
+        {
           "id": "deepinfra/meta-llama/Llama-3.3-70B-Instruct-Turbo",
           "in": 0.1,
           "out": 0.32,
@@ -11610,6 +11624,20 @@
           "cache": 0.13,
           "ctx": 163840,
           "name": "DeepSeek: DeepSeek V3.2"
+        },
+        {
+          "id": "deepinfra/nvidia/NVIDIA-Nemotron-3.5-Super-VL",
+          "in": 0.15,
+          "out": 0.5,
+          "cache": 0.02,
+          "ctx": 262144
+        },
+        {
+          "id": "deepinfra/zai-org/GLM-5.3-Flash",
+          "in": 0.15,
+          "out": 0.5,
+          "cache": 0.03,
+          "ctx": 1048576
         },
         {
           "id": "deepinfra/Qwen/Qwen3-235B-A22B",
@@ -11995,6 +12023,13 @@
           "out": 2.9,
           "ctx": 262144,
           "name": "Qwen: Qwen3 235B A22B Thinking 2507"
+        },
+        {
+          "id": "deepinfra/tencent/Hy4-preview",
+          "in": 0.834,
+          "out": 2.501,
+          "cache": 0.042,
+          "ctx": 1048576
         },
         {
           "id": "deepinfra/Qwen/Qwen3.8-27B",
@@ -12609,8 +12644,7 @@
           "id": "novita/qwen/qwen3-vl-30b-a3b-thinking",
           "in": 0.2,
           "out": 1.0,
-          "ctx": 131072,
-          "name": "Qwen: Qwen3 VL 30B A3B Thinking"
+          "ctx": 131072
         },
         {
           "id": "novita/zai-org/glm-4.6v",
@@ -14024,596 +14058,6 @@
       ]
     },
     {
-      "id": "nvidia-nim",
-      "name": "NVIDIA NIM",
-      "kind": "serverless",
-      "models": [
-        {
-          "id": "01-ai/yi-large",
-          "name": "01-ai/yi-large",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "adept/fuyu-8b",
-          "name": "adept/fuyu-8b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "ai21labs/jamba-1.5-large-instruct",
-          "name": "ai21labs/jamba-1.5-large-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "aisingapore/sea-lion-7b-instruct",
-          "name": "aisingapore/sea-lion-7b-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "bigcode/starcoder2-15b",
-          "name": "bigcode/starcoder2-15b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "databricks/dbrx-instruct",
-          "name": "databricks/dbrx-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "deepseek-ai/deepseek-coder-6.7b-instruct",
-          "name": "deepseek-ai/deepseek-coder-6.7b-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "deepseek-ai/deepseek-v4.1-flash",
-          "name": "deepseek-ai/deepseek-v4.1-flash",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "google/codegemma-1.1-7b",
-          "name": "google/codegemma-1.1-7b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "google/codegemma-7b",
-          "name": "google/codegemma-7b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "google/deplot",
-          "name": "google/deplot",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "google/gemma-2b",
-          "name": "google/gemma-2b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "google/gemma-3-12b-it",
-          "name": "Google: Gemma 3 12B",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "google/gemma-3-4b-it",
-          "name": "Google: Gemma 3 4B",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "google/gemma-4-31b-it",
-          "name": "Google: Gemma 4 31B",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "google/recurrentgemma-2b",
-          "name": "google/recurrentgemma-2b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "ibm/granite-3.0-3b-a800m-instruct",
-          "name": "ibm/granite-3.0-3b-a800m-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "ibm/granite-3.0-8b-instruct",
-          "name": "ibm/granite-3.0-8b-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "ibm/granite-34b-code-instruct",
-          "name": "ibm/granite-34b-code-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "ibm/granite-8b-code-instruct",
-          "name": "ibm/granite-8b-code-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "meta/codellama-70b",
-          "name": "meta/codellama-70b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "meta/llama-3.2-90b-vision-instruct",
-          "name": "meta/llama-3.2-90b-vision-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "meta/llama-guard-4-12b",
-          "name": "Meta: Llama Guard 4 12B",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "meta/llama2-70b",
-          "name": "meta/llama2-70b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "meta/muse-glimmer-30b",
-          "name": "Meta: Muse Glimmer 30B",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "microsoft/kosmos-2",
-          "name": "microsoft/kosmos-2",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "microsoft/phi-3-vision-128k-instruct",
-          "name": "microsoft/phi-3-vision-128k-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "microsoft/phi-3.5-moe-instruct",
-          "name": "microsoft/phi-3.5-moe-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "minimaxai/minimax-m3.1-flash",
-          "name": "minimaxai/minimax-m3.1-flash",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "mistralai/codestral-22b-instruct-v0.1",
-          "name": "mistralai/codestral-22b-instruct-v0.1",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "mistralai/mistral-7b-instruct-v0.3",
-          "name": "mistralai/mistral-7b-instruct-v0.3",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "mistralai/mistral-large",
-          "name": "Mistral Large",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "mistralai/mistral-large-2-instruct",
-          "name": "mistralai/mistral-large-2-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "mistralai/mistral-large-4-1t-a52b",
-          "name": "mistralai/mistral-large-4-1t-a52b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "mistralai/mixtral-8x22b-v0.1",
-          "name": "mistralai/mixtral-8x22b-v0.1",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "moonshotai/kimi-k2.6",
-          "name": "MoonshotAI: Kimi K2.6",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nv-mistralai/mistral-nemo-12b-instruct",
-          "name": "nv-mistralai/mistral-nemo-12b-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/ai-synthetic-video-detector",
-          "name": "nvidia/ai-synthetic-video-detector",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/cosmos-reason2-8b",
-          "name": "nvidia/cosmos-reason2-8b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/embed-qa-4",
-          "name": "nvidia/embed-qa-4",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/ising-calibration-1.5-31b",
-          "name": "nvidia/ising-calibration-1.5-31b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/llama-3.1-nemoguard-8b-content-safety",
-          "name": "nvidia/llama-3.1-nemoguard-8b-content-safety",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/llama-3.1-nemoguard-8b-topic-control",
-          "name": "nvidia/llama-3.1-nemoguard-8b-topic-control",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/llama-3.1-nemotron-51b-instruct",
-          "name": "nvidia/llama-3.1-nemotron-51b-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/llama-3.1-nemotron-70b-instruct",
-          "name": "nvidia/llama-3.1-nemotron-70b-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
-          "name": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
-          "name": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
-          "name": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/llama-3.2-nv-embedqa-1b-v1",
-          "name": "nvidia/llama-3.2-nv-embedqa-1b-v1",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/llama-nemotron-embed-vl-1b-v2",
-          "name": "nvidia/llama-nemotron-embed-vl-1b-v2",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/llama3-chatqa-1.5-70b",
-          "name": "nvidia/llama3-chatqa-1.5-70b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
-          "name": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-3-embed-1b",
-          "name": "nvidia/nemotron-3-embed-1b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "name": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-3-super-120b-a12b",
-          "name": "NVIDIA: Nemotron 3 Super",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-3-ultra-550b-a55b",
-          "name": "NVIDIA: Nemotron 3 Ultra",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-3.5-bolt-e4b",
-          "name": "nvidia/nemotron-3.5-bolt-e4b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-3.5-content-safety",
-          "name": "NVIDIA: Nemotron 3.5 Content Safety",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-3.5-embed-1b",
-          "name": "nvidia/nemotron-3.5-embed-1b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-3.5-embed-8b",
-          "name": "nvidia/nemotron-3.5-embed-8b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-3.5-lightning-30b-a3b",
-          "name": "nvidia/nemotron-3.5-lightning-30b-a3b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-3.5-super-vl-120b-a12b",
-          "name": "nvidia/nemotron-3.5-super-vl-120b-a12b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-4-340b-instruct",
-          "name": "nvidia/nemotron-4-340b-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-4-340b-reward",
-          "name": "nvidia/nemotron-4-340b-reward",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-nano-3-30b-a3b",
-          "name": "nvidia/nemotron-nano-3-30b-a3b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-parse",
-          "name": "nvidia/nemotron-parse",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nemotron-parse-2.0",
-          "name": "nvidia/nemotron-parse-2.0",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/neva-22b",
-          "name": "nvidia/neva-22b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nv-embedqa-mistral-7b-v2",
-          "name": "nvidia/nv-embedqa-mistral-7b-v2",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/nvclip",
-          "name": "nvidia/nvclip",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/riva-translate-4b-instruct",
-          "name": "nvidia/riva-translate-4b-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/riva-translate-4b-instruct-v2",
-          "name": "nvidia/riva-translate-4b-instruct-v2",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "nvidia/vila",
-          "name": "nvidia/vila",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "openai/gpt-oss-20b",
-          "name": "OpenAI: gpt-oss-20b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "poolside/laguna-xs-2.1",
-          "name": "poolside/laguna-xs-2.1",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "snowflake/arctic-embed-l",
-          "name": "snowflake/arctic-embed-l",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "stepfun-ai/step-5-preview",
-          "name": "StepFun: Step 5 Preview",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "writer/palmyra-creative-122b",
-          "name": "writer/palmyra-creative-122b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "writer/palmyra-fin-70b-32k",
-          "name": "writer/palmyra-fin-70b-32k",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "writer/palmyra-med-70b",
-          "name": "writer/palmyra-med-70b",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "writer/palmyra-med-70b-32k",
-          "name": "writer/palmyra-med-70b-32k",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "z-ai/glm-5.3-flash",
-          "name": "z-ai/glm-5.3-flash",
-          "in": null,
-          "out": null,
-          "ctx": null
-        },
-        {
-          "id": "zyphra/zamba2-7b-instruct",
-          "name": "zyphra/zamba2-7b-instruct",
-          "in": null,
-          "out": null,
-          "ctx": null
-        }
-      ],
-      "free_tier": true,
-      "edge_rtt_ms": 173
-    },
-    {
       "id": "replicate",
       "name": "Replicate",
       "kind": "serverless",
@@ -15898,6 +15342,14 @@
           "name": "Beam Free"
         },
         {
+          "id": "nebius/thinkingmachines/Inkling-2-Small",
+          "in": 0.3,
+          "out": 1.0,
+          "cache": 0.06,
+          "ctx": 1048576,
+          "name": "Thinking Machines: Inkling 2 Small"
+        },
+        {
           "id": "nebius/Qwen/Qwen3-Next-80B-A3B-Thinking",
           "in": 0.15,
           "out": 1.2,
@@ -16089,7 +15541,7 @@
           "in": 2.0,
           "out": 10.0,
           "cache": 0.2,
-          "ctx": null,
+          "ctx": 1048576,
           "name": "MoonshotAI: Kimi K3.1 Pro"
         },
         {
@@ -16351,6 +15803,246 @@
       ]
     },
     {
+      "id": "nvidia-nim",
+      "name": "NVIDIA NIM",
+      "kind": "serverless",
+      "models": [
+        {
+          "id": "bigcode/starcoder2-15b",
+          "name": "bigcode/starcoder2-15b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "deepseek-ai/deepseek-v4.1-flash",
+          "name": "deepseek-ai/deepseek-v4.1-flash",
+          "in": null,
+          "out": null,
+          "ctx": 1048576
+        },
+        {
+          "id": "google/gemma-3-12b-it",
+          "name": "Google: Gemma 3 12B",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/gemma-3-4b-it",
+          "name": "Google: Gemma 3 4B",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "google/gemma-4-31b-it",
+          "name": "Google: Gemma 4 31B",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "meta/muse-glimmer-30b",
+          "name": "Meta: Muse Glimmer 30B",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "minimaxai/minimax-m3.1-flash",
+          "name": "minimaxai/minimax-m3.1-flash",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "mistralai/mistral-large-4-1t-a52b",
+          "name": "mistralai/mistral-large-4-1t-a52b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/ai-synthetic-video-detector",
+          "name": "nvidia/ai-synthetic-video-detector",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/cosmos-reason2-8b",
+          "name": "nvidia/cosmos-reason2-8b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/embed-qa-4",
+          "name": "nvidia/embed-qa-4",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/ising-calibration-1.5-31b",
+          "name": "nvidia/ising-calibration-1.5-31b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.1-nemoguard-8b-topic-control",
+          "name": "nvidia/llama-3.1-nemoguard-8b-topic-control",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+          "name": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+          "name": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/llama-3.2-nv-embedqa-1b-v1",
+          "name": "nvidia/llama-3.2-nv-embedqa-1b-v1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3-embed-1b",
+          "name": "nvidia/nemotron-3-embed-1b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "name": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3-ultra-550b-a55b",
+          "name": "NVIDIA: Nemotron 3 Ultra",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3.5-bolt-e4b",
+          "name": "nvidia/nemotron-3.5-bolt-e4b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3.5-content-safety",
+          "name": "NVIDIA: Nemotron 3.5 Content Safety",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3.5-embed-1b",
+          "name": "nvidia/nemotron-3.5-embed-1b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3.5-embed-8b",
+          "name": "nvidia/nemotron-3.5-embed-8b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3.5-lightning-30b-a3b",
+          "name": "nvidia/nemotron-3.5-lightning-30b-a3b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+          "name": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nv-embedqa-mistral-7b-v2",
+          "name": "nvidia/nv-embedqa-mistral-7b-v2",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/nvclip",
+          "name": "nvidia/nvclip",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "nvidia/riva-translate-4b-instruct-v2",
+          "name": "nvidia/riva-translate-4b-instruct-v2",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "openai/gpt-oss-20b",
+          "name": "OpenAI: gpt-oss-20b",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "poolside/laguna-xs-2.1",
+          "name": "poolside/laguna-xs-2.1",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "snowflake/arctic-embed-l",
+          "name": "snowflake/arctic-embed-l",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "stepfun-ai/step-5-preview",
+          "name": "StepFun: Step 5 Preview",
+          "in": null,
+          "out": null,
+          "ctx": null
+        },
+        {
+          "id": "z-ai/glm-5.3-flash",
+          "name": "z-ai/glm-5.3-flash",
+          "in": null,
+          "out": null,
+          "ctx": null
+        }
+      ],
+      "free_tier": true,
+      "edge_rtt_ms": 169
+    },
+    {
       "id": "cloudflare-workers-ai",
       "name": "Cloudflare Workers AI",
       "kind": "serverless",
@@ -16469,6 +16161,14 @@
           "in": 0.27,
           "out": 0.85,
           "ctx": 131000
+        },
+        {
+          "id": "cloudflare/@cf/thinkingmachines/inkling-2-small",
+          "in": 0.3,
+          "out": 1.0,
+          "cache": 0.1,
+          "ctx": 1048576,
+          "name": "Thinking Machines: Inkling 2 Small"
         },
         {
           "id": "cloudflare/@cf/qwen/qwen2.5-coder-32b-instruct",
@@ -17775,7 +17475,7 @@
           "id": "groq/openai/gpt-oss-safeguard-20b",
           "in": 0.075,
           "out": 0.3,
-          "cache": 0.037,
+          "cache": 0.0375,
           "ctx": 131072,
           "name": "OpenAI: gpt-oss-safeguard-20b"
         },
@@ -17997,14 +17697,6 @@
       "kind": "aggregator",
       "models": [
         {
-          "id": "apodex/apodex-1.1-mini:free",
-          "name": "Apodex: Apodex 1.1 Mini (free)",
-          "in": 0.0,
-          "out": 0.0,
-          "ctx": 262144,
-          "free": true
-        },
-        {
           "id": "baidu/ernie-5.5-flash-preview:free",
           "name": "Baidu: ERNIE-5.5-Flash-Preview (free)",
           "in": 0.0,
@@ -18061,11 +17753,11 @@
           "free": true
         },
         {
-          "id": "liquid/lfm-2.5-2.6b:free",
-          "name": "LiquidAI: LFM2.5-2.6B (free)",
+          "id": "inclusionai/ling-3.2-flash:free",
+          "name": "inclusionAI: Ling 3.2 Flash (free)",
           "in": 0.0,
           "out": 0.0,
-          "ctx": 65536,
+          "ctx": 1048576,
           "free": true
         },
         {
@@ -18192,6 +17884,14 @@
           "ctx": 8192
         },
         {
+          "id": "openai/gpt-oss-20b",
+          "name": "OpenAI: gpt-oss-20b",
+          "in": 0.018,
+          "out": 0.09,
+          "cache": 0.009,
+          "ctx": 131072
+        },
+        {
           "id": "z-ai/glm-5.3-flash",
           "name": "Z.ai: GLM 5.3 Flash",
           "in": 0.0399,
@@ -18237,36 +17937,12 @@
           "ctx": 131072
         },
         {
-          "id": "openai/gpt-oss-20b",
-          "name": "OpenAI: gpt-oss-20b",
-          "in": 0.03,
-          "out": 0.13,
-          "cache": 0.03,
-          "ctx": 131072
-        },
-        {
           "id": "qwen/qwen3.7-flash",
           "name": "Qwen: Qwen3.7 Flash",
           "in": 0.03,
           "out": 0.13,
           "cache": 0.006,
           "ctx": 1000000
-        },
-        {
-          "id": "inclusionai/ling-3.0-flash-fin",
-          "name": "inclusionAI: Ling 3.0 Flash Fin",
-          "in": 0.042,
-          "out": 0.1232,
-          "cache": 0.0084,
-          "ctx": 262144
-        },
-        {
-          "id": "inclusionai/ling-3.0-flash-sante",
-          "name": "inclusionAI: Ling 3.0 Flash Sante",
-          "in": 0.042,
-          "out": 0.1232,
-          "cache": 0.0084,
-          "ctx": 262144
         },
         {
           "id": "openai/gpt-oss-120b:batch",
@@ -18313,27 +17989,11 @@
           "ctx": 4096
         },
         {
-          "id": "qwen/qwen3.5-9b",
-          "name": "Qwen: Qwen3.5-9B",
-          "in": 0.077,
-          "out": 0.113,
-          "cache": 0.069,
-          "ctx": 262144
-        },
-        {
           "id": "deepseek/deepseek-v4-flash-0731:batch",
           "name": "DeepSeek: DeepSeek V4 Flash 0731 (batch)",
           "in": 0.048,
           "out": 0.144,
           "cache": 0.012,
-          "ctx": 1048576
-        },
-        {
-          "id": "deepseek/deepseek-v4.1-flash-1017:batch",
-          "name": "DeepSeek: DeepSeek V4.1 Flash 1017 (batch)",
-          "in": 0.05,
-          "out": 0.15,
-          "cache": 0.004,
           "ctx": 1048576
         },
         {
@@ -18382,6 +18042,22 @@
           "ctx": 262144
         },
         {
+          "id": "qwen/qwen3.5-9b",
+          "name": "Qwen: Qwen3.5-9B",
+          "in": 0.086,
+          "out": 0.126,
+          "cache": 0.077,
+          "ctx": 262144
+        },
+        {
+          "id": "tencent/hy4-flash",
+          "name": "Tencent: Hy4 flash",
+          "in": 0.0437,
+          "out": 0.1756,
+          "cache": 0.0019,
+          "ctx": 1048576
+        },
+        {
           "id": "tencent/hy-mt2-1.8b",
           "name": "Tencent: Hy-MT2-1.8B",
           "in": 0.044,
@@ -18409,6 +18085,14 @@
           "in": 0.05,
           "out": 0.18,
           "cache": 0.01,
+          "ctx": 1048576
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash-0731",
+          "name": "DeepSeek: DeepSeek V4 Flash 0731",
+          "in": 0.06,
+          "out": 0.18,
+          "cache": 0.015,
           "ctx": 1048576
         },
         {
@@ -18561,27 +18245,19 @@
           "ctx": 1000000
         },
         {
-          "id": "google/gemma-4-26b-a4b-it",
-          "name": "Google: Gemma 4 26B A4B ",
-          "in": 0.0765,
-          "out": 0.255,
-          "cache": 0.0425,
-          "ctx": 262144
-        },
-        {
-          "id": "deepseek/deepseek-v4-flash-0731",
-          "name": "DeepSeek: DeepSeek V4 Flash 0731",
+          "id": "~deepseek/deepseek-v4-flash-latest",
+          "name": "DeepSeek: DeepSeek V4 Flash Latest",
           "in": 0.0434,
           "out": 0.3,
           "cache": 0.035,
           "ctx": 1048576
         },
         {
-          "id": "~deepseek/deepseek-v4-flash-latest",
-          "name": "DeepSeek: DeepSeek V4 Flash Latest",
-          "in": 0.0434,
-          "out": 0.3,
-          "cache": 0.035,
+          "id": "deepseek/deepseek-v4.1-flash-1017:batch",
+          "name": "DeepSeek: DeepSeek V4.1 Flash 1017 (batch)",
+          "in": 0.035,
+          "out": 0.311,
+          "cache": 0.003,
           "ctx": 1048576
         },
         {
@@ -18620,6 +18296,14 @@
           "ctx": 8192
         },
         {
+          "id": "minimax/minimax-m3.1-flash",
+          "name": "MiniMax: MiniMax M3.1 Flash",
+          "in": 0.075,
+          "out": 0.3,
+          "cache": 0.0075,
+          "ctx": 1048576
+        },
+        {
           "id": "openai/gpt-4o-mini:batch",
           "name": "OpenAI: GPT-4o-mini (batch)",
           "in": 0.075,
@@ -18638,9 +18322,17 @@
         {
           "id": "meta-llama/llama-3.2-3b-instruct",
           "name": "Meta: Llama 3.2 3B Instruct",
-          "in": 0.05,
-          "out": 0.33,
-          "ctx": 131072
+          "in": 0.0509,
+          "out": 0.335,
+          "ctx": 80000
+        },
+        {
+          "id": "google/gemma-4-26b-a4b-it",
+          "name": "Google: Gemma 4 26B A4B ",
+          "in": 0.09,
+          "out": 0.3,
+          "cache": 0.05,
+          "ctx": 262144
         },
         {
           "id": "meta-llama/llama-4-scout",
@@ -18689,11 +18381,12 @@
           "ctx": 262144
         },
         {
-          "id": "stepfun/step-3.5-flash",
-          "name": "StepFun: Step 3.5 Flash",
+          "id": "ricursiveai/ripple-65b-preview",
+          "name": "Ricursive: Ripple 65B Preview",
           "in": 0.1,
           "out": 0.3,
-          "ctx": 262144
+          "cache": 0.025,
+          "ctx": 1048576
         },
         {
           "id": "xiaomi/mimo-v2.6-flash",
@@ -18775,15 +18468,23 @@
         {
           "id": "~deepseek/deepseek-flash-latest",
           "name": "DeepSeek: DeepSeek Flash Latest",
-          "in": 0.038,
+          "in": 0.036,
           "out": 0.5,
           "cache": 0.01,
           "ctx": 1048576
         },
         {
+          "id": "deepseek/deepseek-v4.1-flash",
+          "name": "DeepSeek: DeepSeek V4.1 Flash",
+          "in": 0.14,
+          "out": 0.42,
+          "cache": 0.0042,
+          "ctx": 1048576
+        },
+        {
           "id": "particle-ai/particle-1",
           "name": "Particle AI: Particle-1",
-          "in": 0.05,
+          "in": 0.06,
           "out": 0.5,
           "cache": 0.003,
           "ctx": 1048576
@@ -18852,14 +18553,6 @@
           "ctx": 262144
         },
         {
-          "id": "nvidia/nemotron-3.5-super-vl",
-          "name": "NVIDIA: Nemotron 3.5 Super VL",
-          "in": 0.15,
-          "out": 0.47,
-          "cache": 0.02,
-          "ctx": 1048576
-        },
-        {
           "id": "qwen/qwen3-30b-a3b",
           "name": "Qwen: Qwen3 30B A3B",
           "in": 0.12,
@@ -18889,6 +18582,14 @@
           "out": 0.38,
           "cache": 0.13,
           "ctx": 163840
+        },
+        {
+          "id": "nvidia/nemotron-3.5-super-vl",
+          "name": "NVIDIA: Nemotron 3.5 Super VL",
+          "in": 0.15,
+          "out": 0.5,
+          "cache": 0.02,
+          "ctx": 262144
         },
         {
           "id": "tencent/hy3",
@@ -18922,13 +18623,6 @@
           "ctx": 1050000
         },
         {
-          "id": "tencent/hunyuan-a13b-instruct",
-          "name": "Tencent: Hunyuan A13B Instruct",
-          "in": 0.14,
-          "out": 0.57,
-          "ctx": 131072
-        },
-        {
           "id": "openai/gpt-5.4-nano:batch",
           "name": "OpenAI: GPT-5.4 Nano (batch)",
           "in": 0.1,
@@ -18944,20 +18638,20 @@
           "ctx": 128000
         },
         {
+          "id": "deepseek/deepseek-v4.1-flash-1017",
+          "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
+          "in": 0.15,
+          "out": 0.6,
+          "cache": 0.003,
+          "ctx": 1048576
+        },
+        {
           "id": "liquid/lfm-2.5-24b-a2b",
           "name": "LiquidAI: LFM2.5-24B-A2B",
           "in": 0.05,
           "out": 0.7,
           "cache": 0.025,
           "ctx": 128000
-        },
-        {
-          "id": "minimax/minimax-m3.1-flash",
-          "name": "MiniMax: MiniMax M3.1 Flash",
-          "in": 0.15,
-          "out": 0.6,
-          "cache": 0.015,
-          "ctx": 1048576
         },
         {
           "id": "mistralai/mistral-small-2603",
@@ -19045,14 +18739,6 @@
           "ctx": 32768
         },
         {
-          "id": "ricursiveai/ripple-65b-preview",
-          "name": "Ricursive: Ripple 65B Preview",
-          "in": 0.2,
-          "out": 0.6,
-          "cache": 0.05,
-          "ctx": 1048576
-        },
-        {
           "id": "thedrummer/cydonia-24b-v4.1",
           "name": "TheDrummer: Cydonia 24B V4.1",
           "in": 0.3,
@@ -19074,14 +18760,6 @@
           "out": 0.5,
           "cache": 0.2,
           "ctx": 6144
-        },
-        {
-          "id": "liquid/lfm-2.5-2.6b",
-          "name": "LiquidAI: LFM2.5-2.6B",
-          "in": 0.35,
-          "out": 0.5,
-          "cache": 0.04,
-          "ctx": 128000
         },
         {
           "id": "google/gemini-3.1-flash-lite:batch",
@@ -19112,6 +18790,14 @@
           "in": 0.14,
           "out": 0.8,
           "cache": 0.05,
+          "ctx": 131072
+        },
+        {
+          "id": "z-ai/glm-4.5-air",
+          "name": "Z.ai: GLM 4.5 Air",
+          "in": 0.13,
+          "out": 0.85,
+          "cache": 0.025,
           "ctx": 131072
         },
         {
@@ -19255,21 +18941,6 @@
           "ctx": 131072
         },
         {
-          "id": "deepseek/deepseek-chat",
-          "name": "DeepSeek: DeepSeek V3",
-          "in": 0.32,
-          "out": 0.89,
-          "ctx": 163840
-        },
-        {
-          "id": "deepseek/deepseek-v4.1-flash",
-          "name": "DeepSeek: DeepSeek V4.1 Flash",
-          "in": 0.039,
-          "out": 1.2,
-          "cache": 0.0012,
-          "ctx": 1048576
-        },
-        {
           "id": "deepseek/deepseek-v3.1-terminus",
           "name": "DeepSeek: DeepSeek V3.1 Terminus",
           "in": 0.27,
@@ -19277,11 +18948,11 @@
           "ctx": 163840
         },
         {
-          "id": "qwen/qwen3-vl-30b-a3b-thinking",
-          "name": "Qwen: Qwen3 VL 30B A3B Thinking",
-          "in": 0.29,
-          "out": 1.0,
-          "ctx": 262144
+          "id": "deepseek/deepseek-chat",
+          "name": "DeepSeek: DeepSeek V3",
+          "in": 0.2574,
+          "out": 1.0287,
+          "ctx": 128000
         },
         {
           "id": "google/gemma-2-27b-it",
@@ -19315,14 +18986,6 @@
           "ctx": 1048576
         },
         {
-          "id": "z-ai/glm-4.5-air",
-          "name": "Z.ai: GLM 4.5 Air",
-          "in": 0.2,
-          "out": 1.1,
-          "cache": 0.03,
-          "ctx": 131072
-        },
-        {
           "id": "xiaomi/mimo-v2.5-pro",
           "name": "Xiaomi: MiMo-V2.5-Pro",
           "in": 0.435,
@@ -19336,14 +18999,6 @@
           "in": 0.435,
           "out": 0.87,
           "cache": 0.0036,
-          "ctx": 1048576
-        },
-        {
-          "id": "z-ai/glm-5.2:batch",
-          "name": "Z.ai: GLM 5.2 (batch)",
-          "in": 0.322,
-          "out": 0.989,
-          "cache": 0.109,
           "ctx": 1048576
         },
         {
@@ -19376,14 +19031,6 @@
           "out": 1.0,
           "cache": 0.17,
           "ctx": 524288
-        },
-        {
-          "id": "minimax/minimax-m2.5",
-          "name": "MiniMax: MiniMax M2.5",
-          "in": 0.27,
-          "out": 1.08,
-          "cache": 0.027,
-          "ctx": 200000
         },
         {
           "id": "thedrummer/skyfall-36b-v2",
@@ -19456,6 +19103,14 @@
           "ctx": 400000
         },
         {
+          "id": "z-ai/glm-5.3",
+          "name": "Z.ai: GLM 5.3",
+          "in": 0.0699,
+          "out": 1.4,
+          "cache": 0.0689,
+          "ctx": 1048576
+        },
+        {
           "id": "~z-ai/glm-latest",
           "name": "Z.ai: GLM Latest",
           "in": 0.0699,
@@ -19464,12 +19119,12 @@
           "ctx": 1048576
         },
         {
-          "id": "deepseek/deepseek-v4.1-flash-1017",
-          "name": "DeepSeek: DeepSeek V4.1 Flash 1017",
-          "in": 0.3,
+          "id": "minimax/minimax-m2.5",
+          "name": "MiniMax: MiniMax M2.5",
+          "in": 0.295,
           "out": 1.2,
-          "cache": 0.006,
-          "ctx": 1048576
+          "cache": 0.06,
+          "ctx": 196608
         },
         {
           "id": "meituan/longcat-2.0",
@@ -19709,6 +19364,14 @@
           "ctx": 131072
         },
         {
+          "id": "z-ai/glm-4.7",
+          "name": "Z.ai: GLM 4.7",
+          "in": 0.4,
+          "out": 1.75,
+          "cache": 0.08,
+          "ctx": 202752
+        },
+        {
           "id": "qwen/qwen3.8-27b:batch",
           "name": "Qwen: Qwen3.8 27B (batch)",
           "in": 0.16,
@@ -19776,6 +19439,14 @@
           "in": 0.26,
           "out": 2.08,
           "ctx": 262144
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro",
+          "name": "DeepSeek: DeepSeek V4 Pro 0423",
+          "in": 0.9,
+          "out": 1.5,
+          "cache": 0.25,
+          "ctx": 1048576
         },
         {
           "id": "mistralai/devstral-2512",
@@ -19949,27 +19620,11 @@
           "ctx": 131072
         },
         {
-          "id": "z-ai/glm-4.7",
-          "name": "Z.ai: GLM 4.7",
-          "in": 0.6,
-          "out": 2.2,
-          "cache": 0.11,
-          "ctx": 204800
-        },
-        {
           "id": "qwen/qwen3.5-27b",
           "name": "Qwen: Qwen3.5-27B",
           "in": 0.26,
           "out": 2.6,
           "ctx": 262144
-        },
-        {
-          "id": "deepseek/deepseek-v4-pro",
-          "name": "DeepSeek: DeepSeek V4 Pro 0423",
-          "in": 0.9553,
-          "out": 1.9105,
-          "cache": 0.0796,
-          "ctx": 1024000
         },
         {
           "id": "moonshotai/kimi-k2",
@@ -20079,6 +19734,14 @@
           "ctx": 1048576
         },
         {
+          "id": "qwen/qwen3.5-397b-a17b",
+          "name": "Qwen: Qwen3.5 397B A17B",
+          "in": 0.45,
+          "out": 3.0,
+          "cache": 0.22,
+          "ctx": 262144
+        },
+        {
           "id": "google/gemini-3-flash-preview",
           "name": "Google: Gemini 3 Flash Preview",
           "in": 0.5,
@@ -20114,14 +19777,6 @@
           "out": 3.0,
           "cache": 0.06,
           "ctx": 262144
-        },
-        {
-          "id": "z-ai/glm-5.3",
-          "name": "Z.ai: GLM 5.3",
-          "in": 0.084,
-          "out": 3.6,
-          "cache": 0.079,
-          "ctx": 1048576
         },
         {
           "id": "stepfun/step-5-preview",
@@ -20217,28 +19872,20 @@
           "ctx": 262144
         },
         {
-          "id": "moonshotai/kimi-k2.7-code",
-          "name": "MoonshotAI: Kimi K2.7 Code",
-          "in": 0.6,
-          "out": 3.5,
-          "cache": 0.16,
-          "ctx": 262144
-        },
-        {
-          "id": "qwen/qwen3.5-397b-a17b",
-          "name": "Qwen: Qwen3.5 397B A17B",
-          "in": 0.6,
-          "out": 3.6,
-          "cache": 0.12,
-          "ctx": 256000
-        },
-        {
           "id": "z-ai/glm-5",
           "name": "Z.ai: GLM 5",
           "in": 1.0,
           "out": 3.2,
           "cache": 0.2,
           "ctx": 202752
+        },
+        {
+          "id": "moonshotai/kimi-k2.7-code",
+          "name": "MoonshotAI: Kimi K2.7 Code",
+          "in": 0.7125,
+          "out": 3.5,
+          "cache": 0.16,
+          "ctx": 262144
         },
         {
           "id": "google/gemini-3.6-flash",
@@ -20535,6 +20182,14 @@
           "ctx": 1050000
         },
         {
+          "id": "qwen/qwen4-max",
+          "name": "Qwen: Qwen4 Max",
+          "in": 1.5,
+          "out": 4.5,
+          "cache": 0.075,
+          "ctx": 1000000
+        },
+        {
           "id": "~openai/gpt-terra-latest",
           "name": "OpenAI: GPT Terra Latest",
           "in": 1.0,
@@ -20726,8 +20381,8 @@
         {
           "id": "moonshotai/kimi-k3.1-pro",
           "name": "MoonshotAI: Kimi K3.1 Pro",
-          "in": 0.2375,
-          "out": 8.4114,
+          "in": 0.2403,
+          "out": 8.4023,
           "cache": 0.2,
           "ctx": 1048576
         },
@@ -21351,6 +21006,14 @@
           "ctx": 1048576
         },
         {
+          "id": "openai/gpt-5.6-sol",
+          "name": "OpenAI: GPT-5.6 Sol",
+          "in": 4.0,
+          "out": 20.0,
+          "cache": 0.4,
+          "ctx": 1050000
+        },
+        {
           "id": "openai/gpt-5.6-sol-pro",
           "name": "OpenAI: GPT-5.6 Sol Pro",
           "in": 4.0,
@@ -21365,14 +21028,6 @@
           "out": 20.0,
           "cache": 0.2,
           "ctx": 1000000
-        },
-        {
-          "id": "openai/gpt-5.6-sol",
-          "name": "OpenAI: GPT-5.6 Sol",
-          "in": 4.4,
-          "out": 22.0,
-          "cache": 0.44,
-          "ctx": 1050000
         },
         {
           "id": "anthropic/claude-fable-5.1:batch",
@@ -23144,7 +22799,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 521
+      "edge_rtt_ms": 502
     },
     {
       "id": "poe",
@@ -23185,13 +22840,6 @@
           "in": 0.0909,
           "out": 0.1313,
           "ctx": 262144
-        },
-        {
-          "id": "ling-3.0-flash-fin",
-          "name": "inclusionAI: Ling 3.0 Flash Fin",
-          "in": 0.0606,
-          "out": 0.1818,
-          "ctx": 256000
         },
         {
           "id": "glm-5.3-flash-el",
@@ -24020,7 +23668,7 @@
           "ctx": 1050000
         }
       ],
-      "edge_rtt_ms": 316
+      "edge_rtt_ms": 289
     },
     {
       "id": "vercel-ai-gateway",
@@ -25103,6 +24751,15 @@
           "ctx": null
         },
         {
+          "id": "hy4-flash-free",
+          "name": "Hy4 flash Free",
+          "in": null,
+          "out": null,
+          "ctx": null,
+          "free": true,
+          "base": "hy4-flash"
+        },
+        {
           "id": "iceman-free",
           "name": "Iceman Free",
           "in": null,
@@ -25278,7 +24935,7 @@
           "ctx": null
         }
       ],
-      "edge_rtt_ms": 350
+      "edge_rtt_ms": 500
     },
     {
       "id": "w-b-inference-gateway",
@@ -25604,6 +25261,14 @@
           "cache": 0.5,
           "ctx": 500000,
           "name": "SpaceXAI: Grok 4.7"
+        },
+        {
+          "id": "github_copilot/gemini-4-hydrogen",
+          "in": 1.5,
+          "out": 7.5,
+          "cache": 0.075,
+          "ctx": 200000,
+          "name": "Google: Gemini 4 Hydrogen"
         },
         {
           "id": "github_copilot/claude-sonnet-5",

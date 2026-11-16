@@ -1228,6 +1228,80 @@ def enrich_archive_links(models_meta, rows):
           f"ship no link)")
 
 
+_BENCHLM_EXPECTED_RANKED = None  # stats-84: rankedCount from the payload summary
+
+
+def _benchlm_parse_next_payload(d):
+    """stats-84: PURE read of the __NEXT_DATA__ dict — no browser access.
+
+    2026-11-16 layout (live-verified): leaderboard.rows ships only the FIRST
+    PAGE of the census (25 rows of summary.rowCount=1034; the rest pages in
+    on 'Load 25 more'), while summary.rowCount/rankedCount carry the true
+    totals. Column indexes are UNCHANGED from the 2026-10-07 verified layout:
+    [1] display name, [7] status, [10]/[11] price in/out, [15] Elo,
+    [26] score 0-100 (rows widened to 43 slots but everything past 27 is
+    sub-scores/metadata we don't read).
+
+    Returns (items, scored, census, rows_n):
+      items  — the payload slice in the shared item-dict shape
+      scored — items carrying a 0-100 score
+      census — {'rowCount': int, 'rankedCount': int} when the summary block
+               has them ({} otherwise)
+      rows_n — raw rows list length (None when rows is not a list)
+    """
+    lb = ((((d or {}).get("props") or {}).get("pageProps") or {})
+          .get("homepageData") or {}).get("leaderboard") or {}
+    rows = lb.get("rows") if isinstance(lb, dict) else None
+    rows_n = len(rows) if isinstance(rows, list) else None
+    census = {}
+    if isinstance(lb, dict) and isinstance(lb.get("summary"), dict):
+        for k in ("rowCount", "rankedCount"):
+            v = lb["summary"].get(k)
+            if isinstance(v, int) and v >= 0:
+                census[k] = v
+    items = []
+    scored = 0
+    for r in rows or []:
+        if not isinstance(r, list) or len(r) < 27:
+            continue
+        name = str(r[1] or "").strip()
+        if not name:
+            continue
+        score_v = r[26]
+        score = f"{score_v}" if isinstance(score_v, (int, float)) and 0 < score_v <= 100 else ""
+        if score:
+            scored += 1
+        elo_v, pin_v, pout_v = r[15], r[10], r[11]
+        elo = f"{elo_v}" if isinstance(elo_v, (int, float)) else ""
+        if isinstance(pin_v, (int, float)) and isinstance(pout_v, (int, float)):
+            price = f"${pin_v} / ${pout_v}"
+        else:
+            price = ""
+        items.append({"model": name, "score": score, "status": str(r[7] or ""),
+                      "elo": elo, "price": price})
+    return items, scored, census, rows_n
+
+
+def _benchlm_next_verdict(rows_n, scored, census):
+    """stats-84: PURE census decision for the __NEXT_DATA__ slice.
+    Returns (ok, reason) — ok=True means the slice IS the full census and
+    the DOM harvest may be skipped. A slice SHORTER than the site's own
+    summary.rowCount is a partial payload, never the leaderboard.
+
+    reasons: 'no-rows' | 'partial' | 'too-small' | 'low-scored'
+    """
+    total = census.get("rowCount")
+    if rows_n is None:
+        return False, "no-rows"
+    if total and rows_n < total:
+        return False, "partial"
+    if rows_n < 50:
+        return False, "too-small"
+    if scored < 30:
+        return False, "low-scored"
+    return True, None
+
+
 def _benchlm_from_next_data():
     """stats-61: primary BenchLM source — the page's __NEXT_DATA__ JSON.
 
@@ -1244,7 +1318,15 @@ def _benchlm_from_next_data():
     Returns (data, scored_count) in the SAME item-dict shape the DOM path
     produces, so the shared sidecar tail is reused. (None, 0) on any failure
     so the caller falls back to the DOM harvest.
+
+    stats-84 (2026-11-16): the payload began SHIPPING ONLY THE FIRST PAGE
+    (25 rows of rowCount=1034, rankedCount=215) — accepting the slice as the
+    census silently dropped BenchLM's whole open-weight section (193 cells
+    -> 46 in the fresh doc). The slice is now compared against the payload's
+    own summary.rowCount; anything short of the site's declared census goes
+    to the DOM harvest, which clicks through the full pagination.
     """
+    global _BENCHLM_EXPECTED_RANKED
     js = ("(function(){var el=document.querySelector('#__NEXT_DATA__');"
           "return el ? el.textContent : '';})()")
     try:
@@ -1255,36 +1337,23 @@ def _benchlm_from_next_data():
         if s.startswith('"'):
             s = json.loads(s)  # unwrap quote-wrapped eval output
         d = json.loads(s)
-        rows = (d.get("props", {}).get("pageProps", {})
-                 .get("homepageData", {}).get("leaderboard", {}).get("rows"))
-        if not isinstance(rows, list) or len(rows) < 50:
-            print(f"    __NEXT_DATA__: rows={len(rows) if isinstance(rows, list) else 'n/a'} — too small, falling back to DOM")
-            return None, 0
-        data = []
-        scored = 0
-        for r in rows:
-            if not isinstance(r, list) or len(r) < 27:
-                continue
-            name = str(r[1] or "").strip()
-            if not name:
-                continue
-            score_v = r[26]
-            score = f"{score_v}" if isinstance(score_v, (int, float)) and 0 < score_v <= 100 else ""
-            if score:
-                scored += 1
-            elo_v, pin_v, pout_v = r[15], r[10], r[11]
-            elo = f"{elo_v}" if isinstance(elo_v, (int, float)) else ""
-            if isinstance(pin_v, (int, float)) and isinstance(pout_v, (int, float)):
-                price = f"${pin_v} / ${pout_v}"
+        items, scored, census, rows_n = _benchlm_parse_next_payload(d)
+        expected = census.get("rankedCount")
+        if expected:
+            _BENCHLM_EXPECTED_RANKED = expected
+        ok, reason = _benchlm_next_verdict(rows_n, scored, census)
+        if not ok:
+            if reason == "partial":
+                print(f"    __NEXT_DATA__: payload PARTIAL — {rows_n} of "
+                      f"{census.get('rowCount')} rows (site now pages the census, "
+                      f"stats-84); rankedCount={census.get('rankedCount')} — "
+                      f"DOM harvest takes over")
             else:
-                price = ""
-            data.append({"model": name, "score": score, "status": str(r[7] or ""),
-                         "elo": elo, "price": price})
-        print(f"    __NEXT_DATA__: {len(rows)} rows, {scored} scored (full census, no DOM needed)")
-        if scored < 30:
-            print("    scored too small — falling back to DOM harvest")
+                print(f"    __NEXT_DATA__: rows={rows_n if rows_n is not None else 'n/a'} "
+                      f"scored={scored} — {reason}, falling back to DOM harvest")
             return None, 0
-        return data, scored
+        print(f"    __NEXT_DATA__: {rows_n} rows, {scored} scored (full census, no DOM needed)")
+        return items, scored
     except Exception as e:
         print(f"    [WARN] __NEXT_DATA__ parse failed: {str(e)[:120]}")
         return None, 0
@@ -1348,20 +1417,35 @@ def _benchlm_dom_harvest():
                   "    }));"
                   "})()")
 
-    # Best-effort popup dismiss (Ibrahim 2026-10-07: "there is still a popup
-    # at the launch which you may need to close each turn"). Clicks only
-    # clearly-dismiss controls inside dialogs, then Escape — never a
-    # "Subscribe"-style affirmative button. Harmless no-op when absent.
+    # stats-84: dismiss ONLY inside a real open modal. The 2026-10 blanket
+    # "click anything Close-ish + Escape" was broken by the 2026-11-16
+    # redesign into a pagination killer: three visible non-dialog controls
+    # (aria-label contains 'lose') got clicked EVERY round and the
+    # leaderboard's 'Load 25 more' stopped advancing — A/B-probed live
+    # (2026-11-16): dismiss-each-round stalls at 120 rows / 46 scored, no
+    # dismiss paginates the full census (1025 rows / 215 scored = the
+    # payload's own rankedCount). DOM reads never needed the dismiss (they
+    # work under any overlay), so it is now a no-op unless an aria-modal
+    # dialog is actually on screen — the old exit-intent popup still gets
+    # closed if it ever returns as a modal.
     js_dismiss = ("(function() {"
+                  "  var modal = document.querySelector("
+                  "        '[role=\\'dialog\\'][aria-modal=\\'true\\']');"
+                  "  if (!modal) {"
+                  "    var d = document.querySelector('dialog[open]');"
+                  "    modal = (d && d.offsetParent !== null) ? d : null;"
+                  "  }"
+                  "  if (!modal) return 0;"
                   "  var clicked = 0;"
-                  "  var sels = ['[role=\\'dialog\\'] button', 'dialog[open] button',"
-                  "              'button[aria-label=\\'Close\\']',"
-                  "              'button[aria-label*=\\'lose\\' i]'];"
-                  "  for (var s = 0; s < sels.length; s++) {"
-                  "    var els = document.querySelectorAll(sels[s]);"
-                  "    for (var e = 0; e < els.length; e++) {"
-                  "      var b = els[e];"
-                  "      if (b.offsetParent !== null && !b.disabled) { b.click(); clicked++; }"
+                  "  var btns = modal.querySelectorAll('button');"
+                  "  for (var e = 0; e < btns.length; e++) {"
+                  "    var b = btns[e];"
+                  "    var al = (b.getAttribute('aria-label') || '').toLowerCase();"
+                  "    var txt = (b.textContent || '').toLowerCase().trim();"
+                  "    if (b.offsetParent !== null && !b.disabled"
+                  "        && (al.indexOf('close') >= 0 || al.indexOf('dismiss') >= 0"
+                  "            || txt === 'close' || txt === '×' || txt === 'x')) {"
+                  "      b.click(); clicked++;"
                   "    }"
                   "  }"
                   "  ['keydown', 'keyup'].forEach(function(typ) {"
@@ -1377,15 +1461,21 @@ def _benchlm_dom_harvest():
         except Exception:
             pass  # best-effort only
 
-    # JS: click the last VISIBLE+ENABLED "Load 25 more" button (there are
-    # duplicates in the DOM — sticky footer + table footer).
+    # JS: click the FIRST VISIBLE+ENABLED "Load 25 more" button. stats-84
+    # (2026-11-16 live A/B): the page carries two clones (sticky footer +
+    # table footer) and only the FIRST still paginates — clicking the LAST
+    # (the 2026-10 choice) returned true every round while the table never
+    # advanced, stalling the harvest at the first window (120 rows / 46
+    # scored vs rankedCount 215). The stale-x4 detector turned that into a
+    # loud WARN; the click order is now the live-verified one. If the site
+    # flips the live clone again, the WARN catches it — never silent.
     js_click_load = ("(function() {"
                      "  var btns = Array.from(document.querySelectorAll('button'))"
                      "    .filter(function(b) {"
                      "      return /load 25 more/i.test(b.textContent)"
                      "        && !b.disabled && b.offsetParent !== null;"
                      "    });"
-                     "  if (btns.length > 0) { btns[btns.length - 1].click(); return true; }"
+                     "  if (btns.length > 0) { btns[0].click(); return true; }"
                      "  return false;"
                      "})()")
 
@@ -1437,7 +1527,10 @@ def _benchlm_dom_harvest():
         return None
 
     harvested = {}
-    MAX_LOAD_CLICKS = 40
+    # stats-84: 1034-row census paginates at 25/round -> 41+ clicks; 40
+    # truncated the FINAL page. 60 leaves headroom for a growing census
+    # (button-gone and stale-x4 stop earlier whenever the census is done).
+    MAX_LOAD_CLICKS = 60
     stale = 0
     prev_n = -1
     for click_round in range(MAX_LOAD_CLICKS):
@@ -1552,6 +1645,14 @@ def scrape_benchlm():
                 pass
         print(f"    Got {len(data)} table rows → {len(all_models)} scored models "
               f"({skipped_no_score} skipped: no score)")
+        # stats-84: the payload's rankedCount is the site's own census — a
+        # harvest landing far short of it means the click-loop stopped early
+        # (popup interference, layout drift). WARN only: a monitoring signal,
+        # the sidecar diff is the alarm channel; never fail the feed here.
+        if _BENCHLM_EXPECTED_RANKED and len(all_models) < int(_BENCHLM_EXPECTED_RANKED * 0.9):
+            print(f"    [WARN] BenchLM scored {len(all_models)} vs site census "
+                  f"{_BENCHLM_EXPECTED_RANKED} (rankedCount) — harvest fell short; "
+                  f"sidecar will diff")
         print(f"    BenchLM status column: {status_counts}")
         if superseded_names:
             print(f"    BenchLM marks {len(superseded_names)} model(s) 'Superseded' "

@@ -102,12 +102,12 @@ const ok = (msg) => console.log('  ok:', msg);
     await page.selectOption('.page-size select', '0').catch(() => {});
 
 
-    // ── 1. Header order: SCORE, PRICE, VALUE, then the 8 core columns ──
+    // ── 1. Header order: SCORE, PRICE, VALUE, ECI (stats-82 lead), then the 8 core columns ──
     // stats-65: scope to the FIRST table — the "New & unranked" section
     // below renders the same header set a second time.
     const headers = (await page.locator('.b-table').first().locator('thead th').allInnerTexts()).map(s => s.trim().toUpperCase());
-    const want = ['#', 'MODEL', 'SCORE', 'PRICE', 'VALUE', 'AA', 'BENCHLM', 'ARENA', 'SIMPLEB', 'ARC-2', 'DESIGN', 'SWE-M', 'FRONTIER', 'CL'];
-    if (JSON.stringify(headers) === JSON.stringify(want)) ok('headers: SCORE PRICE VALUE + 8 core + CL');
+    const want = ['#', 'MODEL', 'SCORE', 'PRICE', 'VALUE', 'ECI', 'AA', 'BENCHLM', 'ARENA', 'SIMPLEB', 'ARC-2', 'DESIGN', 'SWE-M', 'FRONTIER', 'CL'];
+    if (JSON.stringify(headers) === JSON.stringify(want)) ok('headers: SCORE PRICE VALUE + ECI lead + 8 core + CL');
     else fail('headers mismatch: ' + JSON.stringify(headers));
 
     // ── 2. Anchor row: Claude Opus 5 ($5 in / $25 out → blend $10) ──

@@ -121,6 +121,44 @@ function availTitle(row) {
   return `Available at ${list.length} seller${list.length === 1 ? '' : 's'}: ${list.join(' · ')}. Full per-seller view on the model page.`;
 }
 
+// stats-82: ECI column helpers — Epoch Capabilities Index (CC-BY 4.0).
+// Raw latent-index value ships on the row; the 90% credible interval and
+// the fit vintage ride models_meta. Interval renders as a small hover tag;
+// color scale deliberately NOT applied — scoreColor is calibrated to 0-100
+// benchmark scores and would mislead on a 130-180 index.
+const eciOf = (row) => row['Epoch ECI'];
+const eciCi = (row) => {
+  const ci = metaFor(row)?.eci_ci;
+  if (!Array.isArray(ci) || ci.length !== 2) return null;
+  const lo = Math.round(ci[0]);
+  const hi = Math.round(ci[1]);
+  return lo >= hi ? null : `${lo}–${hi}`;
+};
+const eciCiTip = (row) => {
+  const m = metaFor(row) || {};
+  const ci = Array.isArray(m.eci_ci) ? m.eci_ci : null;
+  const v = m.eci_vintage ? `Epoch fit ${m.eci_vintage}. ` : '';
+  return `${v}90% credible interval: ${ci ? `${ci[0]}–${ci[1]}` : 'n/a'}. ECI is Epoch AI's single latent capability scale fitted across 50+ benchmarks — an abstract index, comparable between models only, never a 0-100 score.`;
+};
+// half-width of the 90% CI for the compact ± badge
+const eciCiHalf = (row) => {
+  const ci = metaFor(row)?.eci_ci;
+  if (!Array.isArray(ci) || ci.length !== 2) return null;
+  const half = Math.round((ci[1] - ci[0]) / 2);
+  return half > 0 ? half : null;
+};
+const eciThLabel = 'Epoch Capabilities Index (ECI) — one latent “general capability” scale fitted across 50+ benchmarks by Epoch AI (CC-BY 4.0). Raw index values, never rescaled; excluded from the Score blend by design. First-class per Ibrahim (2026-11-16): ECI leads, AA calibrates right beside the station columns.';
+
+// Sorter for the ECI column (nulls always sink to the bottom)
+function byECI(a, b, isAsc) {
+  const av = eciOf(a);
+  const bv = eciOf(b);
+  if ((av === null || av === undefined) && (bv === null || bv === undefined)) return 0;
+  if (av === null || av === undefined) return 1;
+  if (bv === null || bv === undefined) return -1;
+  return isAsc ? av - bv : bv - av;
+}
+
 // Sorter for the global Score column (nulls always sink to the bottom)
 function byScore(a, b, isAsc) {
   const av = scoreForModel(a);
@@ -342,6 +380,26 @@ const limitedTitle = (row) =>
           <b-tooltip v-if="valueFor(props.row) !== null" :label="valueTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="num value-cell" style="font-weight:600">{{ fmtValue(valueFor(props.row)) }}</span></b-tooltip>
           <b-tooltip v-else :label="valueTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="cell-sub value-cell">—</span></b-tooltip>
         </template>
+      </template>
+    </b-table-column>
+
+    <!-- stats-82: ECI — first-class external composite (Epoch Capabilities
+         Index, CC-BY 4.0). Dedicated fixed column OUTSIDE the Avg-set loop
+         (Ibrahim 2026-11-16: ECI leads, AA shifts right): raw index values
+         never rescaled, never blended into Score, sortable, nulls sink.
+         Intervals from models_meta.eci_ci, vintage from eci_vintage. -->
+    <b-table-column field="Epoch ECI" label="ECI" width="96" centered numeric sortable :custom-sort="byECI">
+      <template #header>
+        <b-tooltip :label="eciThLabel" type="is-dark" multilined :delay="100" append-to-body>ECI</b-tooltip>
+      </template>
+      <template #default="props">
+        <span v-if="eciOf(props.row) !== null && eciOf(props.row) !== undefined" :style="{ fontWeight: 500 }">
+          {{ Math.round(eciOf(props.row)) }}
+          <b-tooltip v-if="eciCi(props.row)" :label="eciCiTip(props.row)" type="is-dark" multilined :delay="100" append-to-body>
+            <span class="eci-ci cell-sub">±{{ eciCiHalf(props.row) }}</span>
+          </b-tooltip>
+        </span>
+        <span v-else class="cell-sub">—</span>
       </template>
     </b-table-column>
 

@@ -68,6 +68,22 @@ const successor = computed(() => (model.value ? supersededBy(model.value) : null
 // stats-61: BenchLM re-admitted several such rows and the leak-guard e2e
 // deep-link check requires every older model page to be marked.
 const staleFlag = computed(() => (model.value ? !!metaFor(model.value)?.stale : false));
+
+// stats-82: ECI info for the dedicated panel — raw index + 90% CI + vintage
+// (models_meta.eci_ci / eci_vintage, attached by the scraper post-build)
+const eciInfo = computed(() => {
+  if (!model.value) return null;
+  const v = model.value['Epoch ECI'];
+  if (v === null || v === undefined) return null;
+  const m = metaFor(model.value) || {};
+  const ci = Array.isArray(m.eci_ci) ? m.eci_ci : null;
+  return {
+    eci: v,
+    ci,
+    vintage: m.eci_vintage || null,
+    tip: `90% credible interval ${ci ? ci[0] + '–' + ci[1] : 'n/a'}${m.eci_vintage ? ' · Epoch fit ' + m.eci_vintage : ''}`,
+  };
+});
 const released = computed(() => (model.value ? releaseDateOf(model.value) : null));
 // ★ footnote: a source site lists this model under a different name (alias_note)
 const aliasNote = computed(() => (model.value ? metaFor(model.value)?.alias_note || null : null));
@@ -256,6 +272,22 @@ function addToCompare() {
         <div class="val num" :style="{ color: wins ? 'var(--gold)' : 'var(--faint)' }">{{ wins }}</div>
         <div class="sub">{{ best ? 'best: ' + fmtScore(best.score) + ' on ' + (SHORT[best.bench] || best.bench) : '—' }}</div>
       </div>
+    </div>
+
+    <!-- stats-82: ECI — external composite (Epoch AI, CC-BY 4.0). Not a
+         benchmark score: no bar, no rank — index value + 90% CI + vintage. -->
+    <div v-if="eciInfo" class="panel-lab mt" style="padding:1.2rem">
+      <div class="row" style="justify-content:space-between;margin-bottom:.6rem">
+        <h3 style="margin:0;font-size:1.05rem">Epoch Capabilities Index</h3>
+        <span class="cell-sub">Epoch AI · CC-BY 4.0</span>
+      </div>
+      <b-tooltip :label="eciInfo.tip" type="is-dark" multilined :delay="100" class="tt-block" style="width:100%">
+        <div class="hbar" style="cursor:default">
+          <div class="name"><i class="fas fa-gauge-high" style="margin-right:.5rem"></i>ECI <span class="cell-sub">(general capability index)</span></div>
+          <div class="num" :style="{ fontWeight: 700 }">{{ Math.round(eciInfo.eci) }} <span v-if="eciInfo.ci" class="cell-sub" style="fontWeight:400">[{{ eciInfo.ci[0] }}–{{ eciInfo.ci[1] }}]</span></div>
+        </div>
+      </b-tooltip>
+      <p class="cell-sub mt-sm">Latent capability index fitted across 50+ benchmarks by Epoch AI — an abstract scale, comparable between models only, never a 0-100 score. {{ eciInfo.vintage ? 'Fit vintage ' + eciInfo.vintage + '. ' : '' }}Excluded from our Score blend by design; the AA composite calibrates beside it.</p>
     </div>
 
     <!-- Per-benchmark bars -->

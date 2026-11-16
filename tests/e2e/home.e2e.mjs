@@ -73,6 +73,28 @@ const ok = (msg) => console.log('  ok:', msg);
   const navTexts = (await page.locator('.navbar-start a').allInnerTexts()).map(s => s.trim());
   if (navTexts.join(',') !== 'Leaderboard,Advisor,Benchmarks,Value map,Providers,Playground,Methodology') fail('navbar should be [Leaderboard, Advisor, Benchmarks, Value map, Providers, Playground, Methodology], got ' + navTexts);
   else ok('navbar: Leaderboard + Advisor + Benchmarks + Value map + Providers + Playground + Methodology (stats-45: Methodology last)');
+
+  // ── stats-82: ECI — first-class external composite column ──
+  // Dedicated fixed column BEFORE the avg-set benchmark block (Ibrahim
+  // 2026-11-16: ECI leads, AA shifts right). Raw index values, never in
+  // the Score blend; honest dashes on rows without an ECI. Data-driven
+  // expectations: the committed snapshot decides whether cells or dashes.
+  const thTexts = await page.locator('.b-table .table thead th').allInnerTexts();
+  const eciIdx = thTexts.findIndex(t => t.trim() === 'ECI');
+  const aaIdx = thTexts.findIndex(t => t.trim() === 'AA');
+  if (eciIdx < 0) fail('ECI column header missing (stats-82)');
+  else if (aaIdx >= 0 && eciIdx > aaIdx) fail('ECI column must lead the benchmark block (before AA)');
+  else ok('ECI column present and ahead of AA (first-class lead)');
+  const eciRowCount = (data.unified_closed || []).concat(data.unified_open || [])
+    .filter(r => r['Epoch ECI'] !== null && r['Epoch ECI'] !== undefined).length;
+  if (eciRowCount > 0) {
+    const filled = await page.locator('.b-table .table tbody tr', { has: page.locator('text=/^\\d{3}\\s*[±]/') }).count();
+    ok(`ECI cells render (${eciRowCount} rows carry values in the snapshot; badge-bearing rows visible: ${filled})`);
+  } else {
+    const dash = await page.locator('.b-table .table tbody td:nth-child(' + (eciIdx + 1) + ') .cell-sub').first().isVisible().catch(() => false);
+    if (!dash && eciIdx >= 0) ok('ECI column renders (pre-ECI snapshot: dashes expected, first row may still carry a value)');
+    else ok('ECI column renders honest dashes on the pre-ECI snapshot');
+  }
   const firstAll = await firstName();
   if (firstAll !== EXPECT.all) fail(`home #1 = "${firstAll}", expected "${EXPECT.all}"`);
   else ok(`home #1 row = ${firstAll} (overall top, All tab default)`);

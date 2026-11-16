@@ -155,7 +155,13 @@ const expectCount = async (page, selector, expected, label) => {
       // such a stray in CI 2026-11-03 ('Open the EQBench CW explorer').
       const chipWrap = anchorRow.locator('.b-tooltip', { has: page.locator('.free-chip') }).first();
       await chipWrap.locator('.free-chip').first().hover();
-      const chipTip = page.locator('.tooltip-content:visible').last();
+      // stats-84: the neighbor-link tooltips ('Open the SimpleBench.com
+      // explorer' etc.) can open AFTER ours when the hover auto-scroll
+      // crosses them — 'last visible' no longer implies 'ours' (CI caught
+      // it 2026-11-16 with the SimpleBench explorer tooltip). Read the
+      // caveat tooltip by CONTENT instead; the assertion stays exact — if
+      // the chip's own tooltip breaks, this waitFor times out.
+      const chipTip = page.locator('.tooltip-content:visible', { hasText: 'rate limits apply' }).last();
       await chipTip.waitFor({ state: 'visible', timeout: 5000 });
       const chipTitle = (await chipTip.innerText()).replace(/\s+/g, ' ');
       await page.mouse.move(0, 0);
@@ -274,8 +280,14 @@ const expectCount = async (page, selector, expected, label) => {
     // open content teleports to <body>, so read the LAST visible one (the
     // one our hover just opened; see the anchor note above)
     const zenWrap = zenRow.locator('.b-tooltip', { has: page.locator('.free-chip') }).first();
+    await page.mouse.move(0, 0);
+    await page.waitForTimeout(400);
     await zenWrap.locator('.free-chip').first().hover();
-    const zenTip = page.locator('.tooltip-content:visible').last();
+    // stats-26: the chip tooltip is a Buefy b-tooltip = exact caveat — the
+    // open content teleports to <body>. stats-84: read the caveat tooltip
+    // by CONTENT (see the anchor note) — a neighbor explorer tooltip can
+    // be the LAST visible one today.
+    const zenTip = page.locator('.tooltip-content:visible', { hasText: 'Free tier' }).last();
     await zenTip.waitFor({ state: 'visible', timeout: 5000 });
     const zenChipTitle = (await zenTip.innerText()).replace(/\s+/g, ' ').trim();
     await page.mouse.move(0, 0);

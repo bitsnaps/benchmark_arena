@@ -5518,9 +5518,15 @@ def _api_provider_row(entry):
             except (TypeError, ValueError):
                 pass
     prov = entry.get("top_provider") or {}
-    cw = entry.get("context_window") or {}  # Poe nests context here (stats-59)
+    # stats-59: Poe nests context in context_window; 2026-11-16 upstream
+    # also ships context_window as a bare INT on some entries — guard the
+    # .get chain and adopt the int honestly instead of crashing the whole
+    # catalog build ('int' object has no attribute 'get').
+    cw_raw = entry.get("context_window")
+    cw = cw_raw if isinstance(cw_raw, dict) else {}
+    cw_int = cw_raw if isinstance(cw_raw, (int, float)) and not isinstance(cw_raw, bool) else None
     ctx = (prov.get("context_length") or entry.get("context_length")
-           or cw.get("context_length"))
+           or cw.get("context_length") or cw_int)
     is_free, base = _free_listing_of(rid)
     row = {
         "id": rid,

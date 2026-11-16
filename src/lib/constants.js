@@ -4,6 +4,7 @@ export const BASE_TITLE = 'Benchmark Arena | LLM Leaderboard Aggregator';
 
 // Column header shorthand per benchmark
 export const SHORT = {
+  'Epoch ECI': 'ECI',
   'Artificial Analysis': 'AA',
   'BenchLM.ai': 'BenchLM',
   'Arena.ai Text': 'Arena',
@@ -45,6 +46,7 @@ export const AVG_STORAGE_KEY = 'arena.avg_selection';
 export const LEADER_BENCHES = ['Artificial Analysis', 'Arena.ai Text', 'ARC-AGI-2', 'SWE-Marathon'];
 
 export const BLURBS = {
+  'Epoch ECI': 'Epoch Capabilities Index — one latent general-capability scale fitted across 50+ benchmarks by Epoch AI (CC-BY 4.0). Abstract index: comparable between models, never a 0-100 score; kept out of our Score blend by design.',
   'Artificial Analysis': 'Composite intelligence index blending reasoning, knowledge, math and code into one headline number.',
   'BenchLM.ai': 'Independent multi-task evaluation suite scoring applied accuracy.',
   'Arena.ai Text': 'Blind human preference battles on everyday prompts — the "does it feel smart" proxy.',

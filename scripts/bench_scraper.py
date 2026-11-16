@@ -1726,6 +1726,18 @@ ARENA_TEXT_ASOF = None
 # 'Claude Fable 5.2' had no Arena cell and nothing in the doc said why).
 ARENA_TEXT_PUBLISH_DATE = None
 
+# stats-82: Epoch Capabilities Index (ECI) — first-class composite column.
+# Source CSV (CC-BY 4.0, Epoch AI): https://epoch.ai/data/eci_scores.csv —
+# one row per model: eci estimate, 90% credible-interval bounds, release
+# date. ECI is a latent capability index (~130-175 at the frontier), NOT a
+# 0-100 benchmark score: cells ship RAW (never rescaled, never in the
+# Overall blend, never in the avg-set machinery), intervals ride models_meta
+# and the doc gets `eci_asof` + `eci_source` so the vintage is auditable.
+# Refits shift historical values — expected per Epoch's own FAQ; our
+# per-refresh snapshot is the audit trail.
+ECI_CSV_URL = "https://epoch.ai/data/eci_scores.csv"
+ECI_ASOF = None
+
 # stats-68: last-resort arena mirror = our own last published document.
 RESULTS_PUBLIC_PATH = os.path.join(PUBLIC_DIR, "benchmark_results.json")
 
@@ -1776,6 +1788,164 @@ def _arena_recover_from_public():
     except Exception as e:  # noqa: BLE001
         print(f"    [prior-public recovery] failed: {e}")
     return []
+
+
+ECI_CACHE = os.path.join(TMP_DIR, "bench_Epoch_ECI.json")
+
+
+def _eci_parse_csv(csv_text):
+    """stats-82: parse the ECI model-scores CSV body into
+    {norm_key: {eci, lo, hi, vintage}}. Ambiguity rule: two upstream rows
+    that collapse onto one normKey with DIFFERENT values drop the key
+    entirely — a wrong join ships wrong numbers silently (stats-81 lesson),
+    so we never guess."""
+    import csv as _csv
+    import io as _io
+    out = {}
+    for r in _csv.DictReader(_io.StringIO(csv_text)):
+        name = (r.get("Model") or "").strip()
+        try:
+            eci = float(r["eci"])
+            lo = float(r["eci_ci_low"])
+            hi = float(r["eci_ci_high"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if not name:
+            continue
+        k = normalize_model_name(name)
+        if k in out and out[k]["eci"] != eci:
+            print(f"    [ECI] ambiguous key {k!r} — skipped")
+            out.pop(k)
+            continue
+        out[k] = {"eci": eci, "lo": lo, "hi": hi,
+                  "vintage": (r.get("date") or "").strip()[:10]}
+    return out
+
+
+def fetch_eci_scores(attempts=3):
+    """
+    stats-82 (2026-11-16, Ibrahim approved): fetch the Epoch Capabilities
+    Index model-scores CSV (CC-BY 4.0, epoch.ai/data/eci_scores.csv).
+
+    Plain HTTPS GET, no auth, no JS — csv module already in the stdlib.
+    Rows: Model, Display name, eci, eci_ci_low, eci_ci_high, date, ….
+    The 1-column cache mirrors the bench_<station>.json pattern so combine
+    runs (BENCH_CACHE_TTL) reuse a fetch made minutes earlier and a flaky
+    epoch.ai response cannot regress the doc: on failure we fall back to a
+    cache of ANY age (ECI moves slowly — a stale honest cell beats a
+    dropped column) and stamp the cell vintage in models_meta.eci_vintage.
+
+    Returns {norm_key: {"eci": float, "lo": float, "hi": float,
+                        "vintage": "YYYY-MM-DD"}} and sets ECI_ASOF
+    (fetch date). Empty dict on total failure — the column ships as
+    honest gaps (cells retained from the prior doc by the attach step).
+    """
+    global ECI_ASOF
+
+    today = time.strftime("%Y-%m-%d")
+    for attempt in range(1, attempts + 1):
+        try:
+            req = urllib.request.Request(ECI_CSV_URL,
+                                         headers={"User-Agent": "benchmark-arena-scraper"})
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                text = resp.read().decode("utf-8")
+            out = _eci_parse_csv(text)
+            if out:
+                try:
+                    with open(ECI_CACHE, "w") as f:
+                        json.dump({"asof": today, "rows": out}, f)
+                except OSError:
+                    pass
+                ECI_ASOF = today
+                print(f"    [ECI] fetched {len(out)} model scores "
+                      f"(epoch.ai/data/eci_scores.csv, CC-BY 4.0)")
+                return out
+            print(f"    [ECI] attempt {attempt}: 0 usable rows")
+        except Exception as e:  # noqa: BLE001
+            print(f"    [ECI] attempt {attempt} failed: {e}")
+        time.sleep(8)
+    # ladder: stale cache of ANY age (archive-over-remove beats a gap)
+    try:
+        with open(ECI_CACHE) as f:
+            payload = json.load(f)
+        out = payload.get("rows") or {}
+        if out:
+            ECI_ASOF = payload.get("asof") or today
+            print(f"    [ECI] live fetch failed — stale cache adopted "
+                  f"({len(out)} rows, asof {ECI_ASOF})")
+            return out
+    except (OSError, ValueError):
+        pass
+    print("    [ECI] no live data and no cache — column ships as prior-doc retention only")
+    return {}
+
+
+def attach_eci_cells(closed_table, open_table, models_meta=None, eci_map=None):
+    """
+    stats-82: write ECI cells onto EXISTING unified rows (never create rows
+    — ECI-only models stay out of the leaderboard; admission remains with
+    the benchmark stations). Strict join: normalize_model_name equality
+    ONLY — no fuzzy, no alias guessing (stats-81 lesson: wrong joins ship
+    wrong numbers silently). Cells are RAW ECI values, never rescaled, and
+    the doc-level EXCLUDE_FROM_AVG machinery never sees them because they
+    attach after build_unified_table.
+
+    Archive-over-remove (Ibrahim principle, 2026-11-16): a row whose ECI
+    vanished from the fresh CSV keeps its previous published cell with its
+    old vintage — we archive, we never erase. models_meta[name] carries
+    eci_ci=[lo,hi] + eci_vintage for the UI badge/tooltip.
+    """
+    rows = [r for r in (closed_table + open_table) if r.get("name")]
+    if eci_map is None:
+        eci_map = fetch_eci_scores()
+    matched = 0
+    meta = models_meta if models_meta is not None else {}
+    for r in rows:
+        k = normalize_model_name(r["name"])
+        hit = eci_map.get(k)
+        if hit is None:
+            continue
+        r["Epoch ECI"] = hit["eci"]
+        rec = meta.setdefault(r["name"], {})
+        rec["eci_ci"] = [hit["lo"], hit["hi"]]
+        rec["eci_vintage"] = hit["vintage"]
+        matched += 1
+    # retention: prior published cells survive where the fresh CSV lacks them
+    adopted = 0
+    if matched < len(rows):
+        try:
+            with open(RESULTS_PUBLIC_PATH) as f:
+                pub = json.load(f)
+            prior_rows = {}
+            for rr in (pub.get("unified_closed") or []) + (pub.get("unified_open") or []):
+                if isinstance(rr, dict) and rr.get("name") and rr.get("Epoch ECI") is not None:
+                    prior_rows[rr["name"]] = rr
+            prior_meta = pub.get("models_meta") or {}
+            for r in rows:
+                if r.get("Epoch ECI") is not None or r["name"] not in prior_rows:
+                    continue
+                pr = prior_rows[r["name"]]
+                r["Epoch ECI"] = pr["Epoch ECI"]
+                rec = meta.setdefault(r["name"], {})
+                pm = prior_meta.get(r["name"]) or {}
+                if pm.get("eci_ci"):
+                    rec["eci_ci"] = pm["eci_ci"]
+                if pm.get("eci_vintage"):
+                    rec["eci_vintage"] = pm["eci_vintage"]
+                adopted += 1
+        except (OSError, ValueError):
+            pass
+    # curation report: ECI models our rows do not cover (frontier feed for
+    # "new models to evaluate"; NEVER auto-joined)
+    covered_keys = {normalize_model_name(r["name"]) for r in rows}
+    unmatched = [k for k in eci_map if k not in covered_keys]
+    print(f"    [ECI] attached {matched} cells "
+          f"(+{adopted} retained from the prior doc); "
+          f"{len(unmatched)} ECI-only models not in our catalog (not joined)")
+    if unmatched:
+        sample = sorted(unmatched)[:12]
+        print(f"    [ECI] unmatched sample: {', '.join(sample)}")
+    return matched, adopted
 
 
 def _arena_fetch_dataset(attempts=4):
@@ -6509,6 +6679,12 @@ def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg
     # arena-column staleness - see _arena_fetch_dataset).
     if ARENA_TEXT_PUBLISH_DATE:
         data["arena_text_publish_date"] = ARENA_TEXT_PUBLISH_DATE
+    # stats-82: ECI vintage stamp + source attribution — the column is a
+    # licensed external composite (CC-BY 4.0); its values drift on Epoch's
+    # refits, so every shipped doc carries the fetch date it reflects.
+    if ECI_ASOF:
+        data["eci_asof"] = ECI_ASOF
+        data["eci_source"] = "epoch.ai/data/eci_scores.csv (Epoch Capabilities Index, CC-BY 4.0)"
     for bname, bdata in all_results.items():
         data["per_benchmark"][bname] = {
             "closed": [(n, s) for n, s in bdata["closed"][:TOP_N]],
@@ -6899,6 +7075,15 @@ def main():
             enrich_archive_links(models_meta, closed_table + open_table)
         except Exception as e:
             print(f"  [AA archive links] enrichment failed (non-fatal): {e}")
+
+    # stats-82: Epoch Capabilities Index — first-class composite column.
+    # Post-build attach: raw values, strict normKey join, no new rows, no
+    # rescale, never in the Overall blend (doc benchmarks list untouched —
+    # the UI renders ECI as a dedicated fixed column outside the avg-set).
+    try:
+        attach_eci_cells(closed_table, open_table, models_meta=models_meta)
+    except Exception as e:  # noqa: BLE001
+        print(f"  [ECI] attach failed (non-fatal): {e}")
 
     # Format and display
     report = format_results(all_results, closed_table, open_table, all_benchmarks, avg_benchmarks)

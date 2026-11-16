@@ -221,6 +221,33 @@ def main():
     except (FileNotFoundError, subprocess.CalledProcessError):
         pass  # not tracked at HEAD yet / optional on this run
 
+    # 4c. ECI column checks (stats-82, 2026-11-16): the Epoch Capabilities
+    #     Index is an external composite (CC-BY 4.0, epoch.ai CSV). The join
+    #     is strict normKey-only, so floors are conservative minimums and a
+    #     dip means a join/upstream break worth a human look. The vintage
+    #     stamp (eci_asof) makes a lagging epoch.ai fetch visible instead of
+    #     silently freezing the column; retention keeps prior cells.
+    def _eci_ranked(d):
+        rows = (d.get("unified_closed") or []) + (d.get("unified_open") or [])
+        return sum(1 for r in rows if not r.get("unranked") and r.get("Epoch ECI") is not None)
+
+    eci_new, eci_old = _eci_ranked(doc), _eci_ranked(head)
+    if eci_new < max(60, int(eci_old * 0.8)):
+        fail(f"ECI coverage collapsed: {eci_new} ranked cells vs HEAD {eci_old} (join or upstream break?)")
+    eci_asof = str(doc.get("eci_asof") or "")
+    if eci_asof:
+        try:
+            eci_age = (datetime.now(timezone.utc)
+                       - datetime.strptime(eci_asof, "%Y-%m-%d").replace(tzinfo=timezone.utc)).days
+            if eci_age > 7:
+                print(f"GUARD WARN ECI vintage is {eci_age}d old (asof {eci_asof}) — "
+                      f"epoch.ai fetch may be failing; retention keeps prior cells")
+        except ValueError:
+            print(f"GUARD WARN ECI asof malformed: {eci_asof!r}")
+    elif eci_old:
+        print("GUARD WARN ECI column vanished from the fresh doc (no eci_asof) — "
+              "fetch AND retention both offline?")
+
     # 5. report summary (agent pastes this into the Discord update)
     now = datetime.now(timezone.utc).replace(tzinfo=None)
     fresh = 0
@@ -236,7 +263,7 @@ def main():
             continue
     print(
         f"GUARD OK rows={r_new} ranked (+{n_unranked} unranked) (HEAD {r_old}) meta={len(mm)} "
-        f"aa_ttft={tt_new} created={cr_new} modalities={mod_new} approx_new_7d={fresh} ts={ts}"
+        f"aa_ttft={tt_new} created={cr_new} modalities={mod_new} eci={eci_new} approx_new_7d={fresh} ts={ts}"
     )
 
 

@@ -50,7 +50,13 @@ DOWNLOAD_DIR = os.environ.get("BENCH_DOWNLOAD_DIR") or os.path.join(os.path.dirn
 BENCHMARKS = {
     "Artificial Analysis": {
         "url": "https://artificialanalysis.ai/leaderboards/models",
-        "wait_after_load": 4000,
+        # stats-83 (2026-11-16): AA's page got heavier — at 4000ms the
+        # agent-browser eval caught only 48 mounted rows and a partially
+        # streamed flight payload (rows 202->48, priced models ->0,
+        # guard correctly refused). 12000ms renders the full 202-row
+        # table and the complete model-record stream (probe-verified:
+        # 202 rows, ~290 records carrying price1m*/timeToFirstToken).
+        "wait_after_load": 12000,
         "snapshot_depth": 5,
         "type": "general",
         "closed_url": "https://artificialanalysis.ai/leaderboards/models?weights=closed",
@@ -440,23 +446,34 @@ def scrape_artificial_analysis():
     """
     url = "https://artificialanalysis.ai/leaderboards/models"
     print(f"  Scraping all models via JS eval (table + flight-payload pricing)...")
-    # AA table: c[0]=Model, c[1]=Context, c[2]=Creator, c[3]=Intelligence Index
-    # Intelligence Index is ~1-63 range, rescaled later via _benchmark_scale
-    # Fetch up to 300 rows to cover the full leaderboard.
+    # AA table: Intelligence Index column resolved from the header row.
+    # stats-83 (2026-11-16): AA reordered the table — Intelligence moved to
+    # column 1 (header now ["", "Intelligence", "Price", "Speed", "Latency",
+    # "Features", ""]); the old c[3] slot holds Speed (tok/s), which both
+    # starved the model list (rows with non-numeric speed were dropped:
+    # 202 -> 48) and poisoned the survivors' scores with speed values.
+    # Header-derived index with fallback to 1. The index is ~1-63 range,
+    # rescaled later via _benchmark_scale. Fetch up to 300 rows.
     #
     # Flight-payload mining: model records look like
     #   "slug":"glm-4-5v","shortName":"GLM-4.5V (Non-reasoning)",
     #   ...,"price1mInputTokens":0.6,"price1mOutputTokens":1.8,"cacheHitPrice":…
     # anchored on the slug→shortName adjacency unique to model records
     # (stats-28 layout; shortName IS the display name the table uses).
-    # The forward scan stops at the NEXT record boundary ("slug": or
-    # "shortName":) so a record without price keys can never steal its
-    # neighbour's numbers. Duplicate arrays in the payload dedupe by name —
-    # first valued record wins, conflicts counted.
+    # The forward scan stops at the NEXT record boundary ("slug":,
+    # "shortName":, "name":" or the stats-83 "{\"id\":" opener) so a
+    # record without price keys can never steal its neighbour's numbers.
+    # Duplicate arrays in the payload dedupe by name — first valued record
+    # wins, conflicts counted.
     js = r"""(function(){
+  var scoreCol = 1;
+  var ths = document.querySelectorAll('table thead tr th, table thead tr td');
+  for (var h = 0; h < ths.length; h++) {
+    if ((ths[h].textContent || '').toLowerCase().indexOf('intelligence') >= 0) { scoreCol = h; break; }
+  }
   var models = Array.from(document.querySelectorAll('table tbody tr')).slice(0,300).map(function(tr){
     var c = tr.querySelectorAll('td');
-    return {name: c[0] ? c[0].textContent.trim() : '', score: c[3] ? c[3].textContent.trim().replace('*','') : ''};
+    return {name: c[0] ? c[0].textContent.trim() : '', score: c[scoreCol] ? c[scoreCol].textContent.trim().replace('*','') : ''};
   });
   var parts = [];
   var scripts = document.querySelectorAll('script');
@@ -474,22 +491,41 @@ def scrape_artificial_analysis():
   // older two-field shape when the payload reverts. The same records carry
   // a per-model 'deprecated' flag (+ deprecatedTo on detail pages) —
   // vendor ground truth for the older-model ladder.
+  // stats-83 (2026-11-16): model records now nest the slug inside a
+  // 'release' object and open with an id field —
+  //   {"id":"…","release":{"slug":"claude-fable-5-2","name":"Claude Fable 5.2"},
+  //    "name":"Claude Fable 5.2 (Medium, Default Fallback)",
+  //    "shortName":"Claude Fable 5.2 (medium)","suffix":"…",
+  //    "deprecated":false,…,"intelligenceIndex":56.4,…,"price1mInputTokens":…}
+  // The flat anchors now match only provider/chatbot entities, which
+  // starved payloadModels/pricing (0 priced records) while the slugs map
+  // filled with 540 non-model entities. Anchor the release shape first;
+  // keep the flat shapes as fallback (provider entities + any reverts).
+  // The record window grows to 6500 chars — the per-model scores dict now
+  // sits between intelligenceIndex and the price keys.
+  var reRel = /\\"release\\":{\\"slug\\":\\"([^"\\]*)\\",\\"name\\":\\"([^"\\]{2,150})\\"},\\"name\\":\\"([^"\\]{2,150})\\",\\"shortName\\":\\"([^"\\]{2,150})\\"/g;
   var reNew = /\\"slug\\":\\"([^"\\]*)\\",\\"name\\":\\"([^"\\]{2,150})\\",\\"shortName\\":\\"([^"\\]{2,150})\\"/g;
   var reOld = /\\"slug\\":\\"([^"\\]*)\\",\\"shortName\\":\\"([^"\\]{2,150})\\"/g;
-  var re = reNew.test(s) ? reNew : reOld;
+  var re, keyIdx, nameIdx, baseIdx;
+  if (reRel.test(s)) { re = reRel; keyIdx = 4; nameIdx = 3; baseIdx = 2; }
+  else if (reNew.test(s)) { re = reNew; keyIdx = 3; nameIdx = 2; }
+  else { re = reOld; keyIdx = 2; nameIdx = keyIdx; }
   re.lastIndex = 0;
-  var keyIdx = re === reNew ? 3 : 2;      // shortName keys pricing/slugs (downstream join)
-  var nameIdx = re === reNew ? 2 : keyIdx; // record 'name' (variant label)
   var m;
   while ((m = re.exec(s)) !== null) {
     var slug = m[1];
     var name = m[keyIdx];
     var recName = m[nameIdx];
     slugs[name] = slug;
-    var seg = s.slice(m.index + m[0].length, m.index + m[0].length + 4500);
+    if (baseIdx !== undefined) {
+      var baseNm = m[baseIdx];
+      if (baseNm && baseNm.length >= 3 && !slugs[baseNm]) slugs[baseNm] = slug;
+    }
+    var seg = s.slice(m.index + m[0].length, m.index + m[0].length + 6500);
     var stopA = seg.indexOf('\\"slug\\":');
     var stopB = seg.indexOf('\\"shortName\\":');
     var stopC = seg.indexOf('\\"name\\":\\"');
+    var stopD = seg.indexOf('{\\"id\\":');
     var stops = [stopA, stopB, stopC].filter(function(x){ return x >= 0; });
     if (stops.length) seg = seg.slice(0, Math.min.apply(null, stops));
     var grab = function(key) {

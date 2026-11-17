@@ -141,6 +141,17 @@ const perBenchData = computed(() => rawData.value?.per_benchmark || {});
 const pivotClosed = computed(() => rawData.value?.unified_closed || []);
 const pivotOpen = computed(() => rawData.value?.unified_open || []);
 
+// ── stats-87: OpenRouter-only card models ───────────────────────────
+// Open-weight models the OpenRouter catalog lists that NO tracked benchmark
+// scores (scraper-baked doc section, `card: true` on every row). A
+// display-only census: identity, pricing, context and HF identity render,
+// every benchmark cell ships null, and card rows NEVER enter the ranked
+// pivot lists below — no Score, no rank, no grade, no harmonization or
+// avg-set impact. The Home view reveals them in their own section behind
+// the "OpenRouter-only" toggle (?card=1).
+const cardModels = computed(() => rawData.value?.card_models || []);
+const isCardRow = (row) => !!row?.card;
+
 // Merged list — every LLM in one ranking so the overall top model is
 // immediately visible (deduped by name just in case a model appears in
 // both source lists).
@@ -287,6 +298,17 @@ const modelSlugs = computed(() => {
   const bySlug = new Map();
   const byName = new Map();
   for (const r of pivotAll.value) {
+    const base = slugify(r.name);
+    let s = base;
+    for (let n = 2; bySlug.has(s); n++) s = `${base}-${n}`;
+    bySlug.set(s, r);
+    byName.set(r.name, s);
+  }
+  // stats-87: card models get reachable score-card pages too (deep links
+  // stay valid even while the reveal toggle is off). Registered AFTER the
+  // ranked universe, so existing slugs never move onto a card row.
+  for (const r of cardModels.value) {
+    if (byName.has(r.name)) continue;
     const base = slugify(r.name);
     let s = base;
     for (let n = 2; bySlug.has(s); n++) s = `${base}-${n}`;
@@ -510,7 +532,7 @@ export function useData() {
     benchmarks, coreBenchmarks, nonCoreBenchmarks, perBenchData,
     avgSelection, isCustomAvg, avgPresetId, setAvgSelection, toggleAvgBench,
     applyPreset, resetAvgSelection, applyAvgParam,
-    pivotClosed, pivotOpen, pivotAll, pivotFor, stats,
+    pivotClosed, pivotOpen, pivotAll, pivotFor, stats, cardModels, isCardRow,
     avgForModel, clForModel, coveredCountForModel, scoreForModel, benchStats,
     topOverall, topClosed, topOpen, leaders,
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,

@@ -263,7 +263,8 @@ def main():
             continue
     print(
         f"GUARD OK rows={r_new} ranked (+{n_unranked} unranked) (HEAD {r_old}) meta={len(mm)} "
-        f"aa_ttft={tt_new} created={cr_new} modalities={mod_new} eci={eci_new} approx_new_7d={fresh} ts={ts}"
+        f"aa_ttft={tt_new} created={cr_new} modalities={mod_new} eci={eci_new} "
+        f"card={len(doc.get('card_models') or [])} approx_new_7d={fresh} ts={ts}"
     )
 
 

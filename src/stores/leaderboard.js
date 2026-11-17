@@ -93,6 +93,36 @@ watch(showEci, (on) => {
   } catch { /* storage blocked/full — the toggle still works for the session */ }
 }, { flush: 'sync' });
 
+// ── stats-87: OpenRouter-only reveal toggle ───────────────────────────
+// Open-weight models the OpenRouter catalog lists that no tracked
+// benchmark scores ("card models"). Like the unranked census: a
+// traceability surface, hidden unless asked for; the choice persists to
+// localStorage under a versioned key (only-ON stored, shipped default
+// survives cleared storage); ?card=1 deep links win over the stored value
+// on load (HomeView owns the param sync).
+const CARD_STORAGE_KEY = 'bl_card_v1';
+const CARD_SCHEMA_VERSION = 1;
+const readStoredCard = () => {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return false;
+    const raw = window.localStorage.getItem(CARD_STORAGE_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return parsed && parsed.version === CARD_SCHEMA_VERSION ? parsed.on === true : false;
+  } catch { return false; }
+};
+const showCardModels = ref(readStoredCard());
+watch(showCardModels, (on) => {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+    if (!on) window.localStorage.removeItem(CARD_STORAGE_KEY);
+    else window.localStorage.setItem(
+      CARD_STORAGE_KEY,
+      JSON.stringify({ version: CARD_SCHEMA_VERSION, on: true }),
+    );
+  } catch { /* storage blocked/full — the toggle still works for the session */ }
+}, { flush: 'sync' });
+
 // Leaving compare mode resets the selection
 watch(compareMode, (on) => {
   if (!on) compareRows.value = [];
@@ -113,12 +143,12 @@ const isBest = (bench, row) => {
   return max > 0 && row[bench] === max;
 };
 
-export { UNRANKED_STORAGE_KEY, UNRANKED_SCHEMA_VERSION, ECI_COL_STORAGE_KEY, ECI_COL_SCHEMA_VERSION };
+export { UNRANKED_STORAGE_KEY, UNRANKED_SCHEMA_VERSION, ECI_COL_STORAGE_KEY, ECI_COL_SCHEMA_VERSION, CARD_STORAGE_KEY, CARD_SCHEMA_VERSION };
 
 export function useLeaderboard() {
   return {
     searchQuery, compareMode, compareRows, showOlder, minCl,
-    freeOnly, maxPrice, sellerId, modFilter, showUnranked, showEci,
+    freeOnly, maxPrice, sellerId, modFilter, showUnranked, showEci, showCardModels,
     isSameModel, canCheck, clearCompare, isBest,
   };
 }

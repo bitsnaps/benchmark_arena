@@ -504,6 +504,15 @@ def main():
         print(f"stats-78: {folded} meta-only formatting-variant record(s) folded "
               f"(identity = or_id normKey; canon = shipped name)")
 
+    # stats-87: card_models retention — the section is scraper-derived, so a
+    # fresh doc carries it verbatim; but a failed OR catalog fetch on the
+    # fresh run must not silently erase the shipped census (same KEEP
+    # philosophy as stats-77's benchmark carry).
+    if not dl.get("card_models") and pub.get("card_models"):
+        dl["card_models"] = pub["card_models"]
+        print(f"stats-87 KEEP card_models: fresh doc lacks the section, carried "
+              f"{len(pub['card_models'])} row(s) from the shipped doc")
+
     for path, obj in ((PUB, dl), (DL, dl)):
         with open(path, "w") as f:
             json.dump(obj, f, indent=2, ensure_ascii=False)

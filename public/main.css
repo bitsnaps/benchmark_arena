@@ -429,6 +429,19 @@ a.hbar:hover .name { color: var(--teal); }
   border: 1px solid rgba(139, 156, 245, 0.4);
 }
 
+/* ── stats-87: OpenRouter-only card rows — open-weight models the catalog
+   lists that no tracked benchmark scores yet. Same dimming family as the
+   unranked census (teal accent: an unscored listing, not a retirement);
+   display-only section, never in the ranked table. */
+.cov-table tbody tr.is-card-row { opacity: .5; }
+.cov-table tbody tr.is-card-row:hover { opacity: 1; }
+.cov-table tbody tr.is-card-row .rank { filter: grayscale(1); opacity: .7; }
+.oronly-chip {
+  color: #5fb8a6; cursor: help;
+  background: rgba(95, 184, 166, 0.13);
+  border: 1px solid rgba(95, 184, 166, 0.4);
+}
+
 /* stats-35: "limited data" badge — row covers fewer than half of the
    selected benchmarks, so its Score leans mostly on the neutral prior.
    Muted slate (distinct from gold "older" and indigo "new"). */

@@ -4692,6 +4692,110 @@ def collect_model_metadata(unified_rows, or_models=None):
     return meta
 
 
+# ── stats-87: OpenRouter-only open models ("card models") ─────────────────
+# Open-weight models listed on the OpenRouter catalog that NONE of the 13
+# tracked benchmark sources (nor ECI) score: brand-new releases (e.g.
+# LongCat-2.5, 2026-11-04), niche checkpoints, small local models. Today
+# they are invisible to the app. This feature surfaces them as a
+# display-only census section (mirrors the stats-65 "New & unranked"
+# pattern): identity + catalog metadata only — every benchmark cell ships
+# null, the row carries card=True, and nothing card-derived ever feeds the
+# Score blend, avg-set, ranking, grades or guard floors.
+# Open-weight evidence = the catalog's own hugging_face_id (no HF repo on
+# record → not listed: open-weight cannot be verified, and the HF identity
+# is the point of the feature — Ibrahim, 2026-11-17).
+
+def _noise_folds(norm, covered):
+    """True when two normalized names differ ONLY by plain release-stage
+    noise tokens (thinking/beta/preview…). A thinking twin of a ranked
+    model is the same product for meta purposes (the shared matcher folds
+    the row-side direction), so it must not re-surface as a card row.
+    Date-bearing twins stay DISTINCT on purpose (variant discipline,
+    stats-70: a dated revision is a different model — a wrong merge is
+    worse than an honest listing)."""
+    at, bt = set(norm.split()), set(covered.split())
+    if not (at < bt or bt < at):
+        return False
+    extras = (bt - at) if at < bt else (at - bt)
+    return bool(extras) and all(t in _OR_NOISE_TOKENS for t in extras)
+
+
+def collect_card_models(unified_rows, all_benchmarks, or_models=None):
+    """Diff the OpenRouter catalog against the benchmarked universe.
+
+    Returns (card_rows, card_meta):
+      card_rows — row-shaped entries for the OpenRouter-only open models:
+                  {name, num_benchmarks: 0, cl: 0, card: True, <bench>: None…}
+                  (shape-compatible with unified rows so the pivot renders
+                  them unchanged; never placed inside unified_open/closed)
+      card_meta — {display_name: meta_record} from build_meta_record()
+    Deterministic: newest release first, undated last, then display name.
+    """
+    if or_models is None:
+        or_models = fetch_openrouter_models()
+    if not or_models:
+        return [], {}
+    names = [r["name"] for r in unified_rows if r.get("name")]
+    # Every catalog entry the benchmarked universe already matched (alias /
+    # exact / subset — the SAME matcher the meta layer uses), so a
+    # benchmarked model can never re-appear as a card row under another
+    # spelling. models_meta.or_id alone would miss subset-matched twins.
+    matched_ids = set()
+    if names:
+        matches = match_models_to_openrouter(names, or_models)
+        for entry, _method in matches.values():
+            if entry.get("id"):
+                matched_ids.add(entry["id"])
+    covered_keys = {normalize_model_name(n) for n in names if normalize_model_name(n)}
+
+    picked = {}
+    for entry in or_models:
+        eid = entry.get("id") or ""
+        tail = eid.split("/")[-1]
+        if ":" in tail:
+            continue  # :free/:thinking/:extended variants — same skip as the matcher
+        if eid in matched_ids:
+            continue
+        if not (entry.get("hugging_face_id") or "").strip():
+            continue  # open-weight cannot be verified — honest exclusion
+        org, base = _or_org_and_base(entry)
+        if not base:
+            continue
+        if (org or "").lower() == "openrouter" or eid.lower().startswith("openrouter/"):
+            continue  # anonymity-protocol / cloaked test entries
+        norm = normalize_model_name(base)
+        if not norm or norm in covered_keys:
+            continue  # already on the board under another spelling
+        if any(_noise_folds(norm, ck) for ck in covered_keys):
+            continue  # noise-token twin of a ranked row (same product, no new information)
+        prev = picked.get(norm)
+        if prev is None or (entry.get("created") or 0) > (prev.get("created") or 0):
+            picked[norm] = entry  # newest catalog twin wins per display identity
+
+    card_rows, card_meta = [], {}
+    for entry in picked.values():
+        _org, base = _or_org_and_base(entry)
+        row = {
+            "name": base,
+            "num_benchmarks": 0,
+            "cl": 0,
+            "card": True,
+            "Epoch ECI": None,  # explicit so the ECI column renders its dash
+        }
+        for b in all_benchmarks:
+            row[b] = None
+        card_rows.append(row)
+        card_meta[base] = build_meta_record(entry, "card")
+    # newest release first (undated sink), display name as the tiebreak —
+    # stable sorts compose: name ASC first, then date DESC keeps that order
+    card_rows.sort(key=lambda r: r["name"])
+    card_rows.sort(key=lambda r: (card_meta[r["name"]].get("created") or ""), reverse=True)
+    if card_rows:
+        print(f"  [Card models] {len(card_rows)} OpenRouter-only open model(s) "
+              f"(hugging-face-verified, no benchmark coverage)")
+    return card_rows, card_meta
+
+
 # ── Supersession (older model generations) ──────────────────────────────
 # Models get versioned re-releases (gpt-5.4-pro → gpt-5.5-pro …). Instead of
 # hand-marking models "deprecated", supersession is derived from data:
@@ -6866,7 +6970,7 @@ def format_results(all_results, closed_table, open_table, all_benchmarks, avg_be
 
 
 
-def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg_benchmarks, models_meta=None):
+def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg_benchmarks, models_meta=None, card_models=None):
     """Save raw results to JSON for debugging."""
     data = {
         "timestamp": time.strftime("%Y-%m-%d %H:%M"),
@@ -6878,6 +6982,12 @@ def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg
     }
     if models_meta:
         data["models_meta"] = models_meta
+    # stats-87: OpenRouter-only open models — a doc-level display-only
+    # census section (never inside unified_open/closed, so every ranked
+    # count, rank map and guard band is untouched). Omitted when empty so
+    # a failed catalog fetch never ships a fake-empty section.
+    if card_models:
+        data["card_models"] = card_models
     # stats-68: arena vintage stamp — present only when the prior-public
     # recovery fed the arena column (Cloudflare wall); auditable in the doc.
     if ARENA_TEXT_ASOF:
@@ -7113,6 +7223,17 @@ def _run_meta_only():
         print(f"  [Staleness] flagged {n_bare} legacy bare-name model(s)")
     if n_hf:
         print(f"  [HuggingFace] applied {n_hf} curated id override(s) (+{n_hfp} param fills)")
+    # stats-87: rebuild the OpenRouter-only census on meta-only days too, so
+    # the card section's pricing/context stay as fresh as the ranked meta.
+    try:
+        card_rows, card_meta = collect_card_models(
+            rows, data.get("benchmarks") or [])
+        if card_meta:
+            meta.update(card_meta)
+        if card_rows:
+            data["card_models"] = card_rows
+    except Exception as e:  # noqa: BLE001
+        print(f"  [Card models] failed (non-fatal): {e}")
     data["models_meta"] = meta
     with open(path, "w") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
@@ -7304,13 +7425,27 @@ def main():
     except Exception as e:  # noqa: BLE001
         print(f"  [Supersession][stats-86] hygiene failed (non-fatal): {e}")
 
+    # stats-87: OpenRouter-only open models — the last meta pass (all
+    # annotation ladders are done), so card records never join the
+    # supersession/stale/casing chains that key off the unified universe.
+    # Display-only census: card rows ship in their own doc section, card
+    # meta rides models_meta so pricing/context/HF identity render.
+    card_models = []
+    try:
+        card_models, card_meta = collect_card_models(
+            closed_table + open_table, all_benchmarks)
+        if card_meta:
+            models_meta.update(card_meta)
+    except Exception as e:  # noqa: BLE001
+        print(f"  [Card models] failed (non-fatal): {e}")
+
     # Format and display
     report = format_results(all_results, closed_table, open_table, all_benchmarks, avg_benchmarks)
     print("\n" + report)
 
     # Save JSON
     save_results_json(all_results, closed_table, open_table, all_benchmarks, avg_benchmarks,
-                      models_meta=models_meta)
+                      models_meta=models_meta, card_models=card_models)
 
     # Providers catalog (pricing layer) — non-fatal, independent of benchmarks
     try:

@@ -992,7 +992,11 @@ describe('stats-65: unranked single-source admissions', () => {
 
   it('every row gets its own model slug (colliding names are suffixed)', () => {
     const idx = d.modelSlugIndex.value;
-    expect(idx.size).toBe(d.pivotAll.value.length);
+    // stats-87: card models register model-page slugs too, so the index is
+    // a documented SUPERSET of the ranked universe — ranked slugs never
+    // move (card rows register after pivotAll), every ranked row still
+    // resolves to itself, and card names add only new slugs.
+    expect(idx.size).toBeGreaterThanOrEqual(d.pivotAll.value.length);
     for (const r of d.pivotAll.value) {
       expect(idx.get(d.modelSlug(r.name))?.name, `slug for "${r.name}"`).toBe(r.name);
     }

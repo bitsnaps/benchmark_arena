@@ -96,7 +96,40 @@ def main():
             n_rows_touched += 1
     for k in dl_only:
         mp[k] = md[k]
+    # stats-87: match='card' records are fresh OpenRouter-only census truth.
+    # Where a shipped record already occupied the same key (stale census
+    # history from an earlier scrape layout), the fresh card record replaces
+    # it — available_at carries over when present (card models never carry
+    # curated seller layers, so nothing else is lost). Without this the
+    # stale record's old match/or fields survive the overlay and
+    # misdescribe the card row.
+    n_card_adopted = 0
+    for k, rec in md.items():
+        if rec.get("match") != "card":
+            continue
+        kk = k.lower()
+        if kk in ambiguous or kk not in pub_l:
+            continue
+        pk = key_moves.get(pub_l[kk][0], pub_l[kk][0])
+        old = mp.get(pk)
+        if isinstance(old, dict) and old.get("available_at") and not rec.get("available_at"):
+            rec["available_at"] = old["available_at"]
+        if pk in mp:
+            mp[pk] = rec
+            n_card_adopted += 1
+    if n_card_adopted:
+        print(f"stats-87: {n_card_adopted} card record(s) adopted the fresh census shape")
     pub["models_meta"] = mp
+    # stats-87: card_models — the meta-only run rebuilds the OpenRouter-only
+    # census with fresh pricing/context, so adopt it when present (card rows
+    # carry no curated layer); keep the shipped section when the rebuild
+    # failed (honest retention, same philosophy as the ECI vintage stamp).
+    if dl.get("card_models"):
+        pub["card_models"] = dl["card_models"]
+        print(f"card_models adopted from the fresh meta run: {len(dl['card_models'])} row(s)")
+    elif pub.get("card_models"):
+        print(f"card_models kept from the shipped doc ({len(pub['card_models'])} rows) "
+              f"- fresh rebuild failed or fetched nothing")
     for path, obj in ((PUB, pub), (DL, pub)):
         with open(path, "w") as f:
             json.dump(obj, f, indent=2, ensure_ascii=False)

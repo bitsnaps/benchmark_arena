@@ -21,6 +21,12 @@ const props = defineProps({
   // table reuses this component; rows there show real cells but never a
   // computed Score (the CL blend would be mostly neutral prior).
   unrankedMode: { type: Boolean, default: false },
+  // stats-87: card-mode — the "OpenRouter-only" section under the ranked
+  // table: open-weight models the catalog lists that no tracked benchmark
+  // scores. Same trimmed-cell discipline as unranked mode (no per-row
+  // tooltip layer — hundreds of rows at page-size=All must not OOM), plus
+  // the OR-only chip instead of the unranked chip.
+  cardMode: { type: Boolean, default: false },
 });
 
 // ── Pagination (stats-20, unified in stats-21) ────────────────────────────────────────────
@@ -34,7 +40,7 @@ const perPage = computed(() => (pageSize.value === 0
 // filter/tab changes reshape the list — land back on the first page
 watch(() => props.rows.length, () => { page.value = 1; });
 
-const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, isUnranked, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor, archiveLinkFor, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue, modelSlug } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, isUnranked, isCardRow, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor, archiveLinkFor, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue, modelSlug } = useData();
 const { compareMode, compareRows, isSameModel, canCheck, showEci } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions
@@ -42,7 +48,18 @@ const { compareMode, compareRows, isSameModel, canCheck, showEci } = useLeaderbo
 const rowCls = (row) =>
   [covClass(clForModel(row)),
     isOlder(row) ? 'is-older-row' : '',
-    isUnranked(row) ? 'is-unranked-row' : ''].join(' ').trim();
+    isUnranked(row) ? 'is-unranked-row' : '',
+    isCardRow(row) ? 'is-card-row' : ''].join(' ').trim();
+
+// stats-87: tooltip for the "OR-only" chip — why this row carries no scores
+// at all (the card-model contract, mirrored on the section heading)
+const cardTitle = () =>
+  'OpenRouter-only — listed on OpenRouter but scored by none of the benchmarks we track yet. Identity, pricing and context info only; no scores to claim, never in the global Score. It joins the board automatically when a benchmark covers it.';
+
+// stats-65/stats-87: both census sections render the trimmed plain-cell
+// layout — every branch below keys off this predicate so a card row gets
+// exactly the unranked treatment (no tooltip layer, no computed rating).
+const isPlainRow = (row) => isUnranked(row) || isCardRow(row);
 
 // stats-65: tooltip for the "unranked" chip — why this row carries no rating
 const unrankedTitle = (row) =>
@@ -283,7 +300,7 @@ const limitedTitle = (row) =>
                section renders hundreds of dimmed census rows and every
                b-tooltip is an appended floating node; without the trim a
                page-size=All render OOM-crashes the tab. -->
-          <b-tooltip v-if="!isUnranked(props.row)" :label="linkTip(props.row)" type="is-dark" multilined :delay="100" append-to-body>
+          <b-tooltip v-if="!isPlainRow(props.row)" :label="linkTip(props.row)" type="is-dark" multilined :delay="100" append-to-body>
             <router-link
               class="model-link has-text-weight-semibold"
               :to="{ name: 'model', params: { slug: modelSlug(props.row.name) } }"
@@ -299,7 +316,7 @@ const limitedTitle = (row) =>
             <span v-if="tier === 'all'" class="tier-chip" :class="tierOf(props.row)">{{ tierOf(props.row) === 'closed' ? 'closed' : 'open' }}</span>
             <!-- stats-60: grade chips — overall mode shows one chip (letter or
                  Unrated); per-axis mode shows Q/V/S; off shows nothing -->
-            <template v-if="showGrades && !isUnranked(props.row)">
+            <template v-if="showGrades && !isPlainRow(props.row)">
               <b-tooltip v-if="!isAxisMode" :label="overallTip(props.row)" type="is-dark" multilined :delay="100" append-to-body><span :class="gradeChipClass(gradeFor(props.row) ?? 'Unrated')">{{ gradeFor(props.row) ?? 'Unrated' }}</span></b-tooltip>
               <template v-else>
                 <b-tooltip :label="overallTip(props.row)" type="is-dark" multilined :delay="100" append-to-body><span :class="gradeChipClass(gradeFor(props.row) ?? 'Unrated')"><span class="grade-axis">Q</span>{{ gradeFor(props.row) ?? 'U' }}</span></b-tooltip>
@@ -310,9 +327,10 @@ const limitedTitle = (row) =>
             <b-tooltip v-if="isNewRow(props.row)" :label="newBadgeTitle(releaseDateOf(props.row))" type="is-dark" multilined :delay="100" append-to-body><span class="new-chip">NEW</span></b-tooltip>
             <b-tooltip v-if="isOlder(props.row)" :label="olderTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip">older</span></b-tooltip>
             <b-tooltip v-if="isUnranked(props.row)" :label="unrankedTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip unranked-chip">unranked</span></b-tooltip>
-            <b-tooltip v-if="!isOlder(props.row) && !isUnranked(props.row) && isLimited(props.row)" :label="limitedTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="limited-chip">limited data</span></b-tooltip>
+            <b-tooltip v-if="isCardRow(props.row)" :label="cardTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip oronly-chip">OR-only</span></b-tooltip>
+            <b-tooltip v-if="!isOlder(props.row) && !isUnranked(props.row) && !isCardRow(props.row) && isLimited(props.row)" :label="limitedTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="limited-chip">limited data</span></b-tooltip>
             <b-tooltip v-if="!isUnranked(props.row) && hfUrlFor(props.row)" :label="'Hugging Face: ' + hfIdFor(props.row)" type="is-dark" :delay="100" append-to-body><a class="hf-chip" :href="hfUrlFor(props.row)" target="_blank" rel="noopener noreferrer" @click.stop>HF</a></b-tooltip>
-            <b-tooltip v-if="!isUnranked(props.row) && hasFreeListingFor(props.row)" :label="freeTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="free-chip">free</span></b-tooltip>
+            <b-tooltip v-if="!isUnranked(props.row) && !isCardRow(props.row) && hasFreeListingFor(props.row)" :label="freeTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="free-chip">free</span></b-tooltip>
             <b-tooltip v-if="!isUnranked(props.row) && availCount(props.row)" :label="availTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="avail-chip">{{ availCount(props.row) }} sellers</span></b-tooltip>
           </div>
         </div>
@@ -326,9 +344,10 @@ const limitedTitle = (row) =>
         <b-tooltip label="CL-weighted global score — each covered benchmark is first re-scaled to the catalog (50 = median model on that benchmark), then averaged and blended toward the neutral 50 in proportion to coverage (CL). Harmonized so sparse rows can't ride benchmark-specific score inflation." type="is-dark" multilined :delay="100" append-to-body>Score</b-tooltip>
       </template>
       <template #default="props">
-        <!-- stats-65: unranked rows show no computed rating — the Score blend
-             would lean mostly on the neutral prior at 1-of-8 coverage -->
-        <template v-if="isUnranked(props.row)">
+        <!-- stats-65/stats-87: unranked + card rows show no computed rating —
+             the Score blend would lean mostly on the neutral prior, and card
+             rows have no evidence at all -->
+        <template v-if="isPlainRow(props.row)">
           <div class="num cell-sub" style="font-weight:600">—</div>
         </template>
         <template v-else>
@@ -350,9 +369,9 @@ const limitedTitle = (row) =>
         <b-tooltip label="API list price, USD per 1M tokens — input / output. AA list price when available (no routing margin); OpenRouter snapshot otherwise; failing those, the cheapest seller listing; a free listing shows $0. Sorted by a 3:1 in:out blend. — = no price source at all." type="is-dark" multilined :delay="100" append-to-body>Price</b-tooltip>
       </template>
       <template #default="props">
-        <template v-if="isUnranked(props.row)">
-          <!-- stats-65: plain cells for unranked rows — raw price/value, no
-               tooltip layer (the section renders hundreds of rows) -->
+        <template v-if="isPlainRow(props.row)">
+          <!-- stats-65/stats-87: plain cells for census rows — raw price,
+               no tooltip layer (the sections render hundreds of rows) -->
           <span v-if="priceFor(props.row)" class="price-cell">{{ fmtUsd(priceFor(props.row).input) }}<span class="price-sep">/</span>{{ fmtUsd(priceFor(props.row).output) }}</span>
           <span v-else class="cell-sub">—</span>
         </template>
@@ -372,7 +391,7 @@ const limitedTitle = (row) =>
         <b-tooltip label="Value lens — Score per 1M blended tokens (Score ÷ blended $/1M, 3:1 in:out). Higher = more benchmark score per dollar. — = no Score or no API price; free tiers excluded." type="is-dark" multilined :delay="100" append-to-body>Value</b-tooltip>
       </template>
       <template #default="props">
-        <template v-if="isUnranked(props.row)">
+        <template v-if="isPlainRow(props.row)">
           <span v-if="valueFor(props.row) !== null" class="num value-cell" style="font-weight:600">{{ fmtValue(valueFor(props.row)) }}</span>
           <span v-else class="cell-sub value-cell">—</span>
         </template>

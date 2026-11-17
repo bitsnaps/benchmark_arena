@@ -21,8 +21,8 @@ import TiersSelect from '../components/TiersSelect.vue';
 const route = useRoute();
 const router = useRouter();
 
-const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, isUnranked, releaseDateOf, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor, metaFor, modelSlug } = useData();
-const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId, modFilter, showUnranked, showEci } = useLeaderboard();
+const { pivotFor, pivotAll, stats, topOverall, topOpen, scoreForModel, clForModel, leaders, coreBenchmarks, nonCoreBenchmarks, benchmarks, avgSelection, isCustomAvg, avgPresetId, applyPreset, toggleAvgBench, resetAvgSelection, applyAvgParam, loading, isOlder, isUnranked, cardModels, releaseDateOf, priceFor, availableAtFor, hasFreeListingFor, filterPriceFor, metaFor, modelSlug } = useData();
+const { searchQuery, compareMode, compareRows, showOlder, minCl, freeOnly, maxPrice, sellerId, modFilter, showUnranked, showEci, showCardModels } = useLeaderboard();
 
 // ── Tier tab ⇄ ?tier= query param ─────────────────────────────────────
 const tier = computed(() =>
@@ -196,6 +196,19 @@ watch(() => route.query.eci, (v) => {
   if (on !== showEci.value) showEci.value = on;
 }, { immediate: true });
 
+// ── stats-87: OpenRouter-only reveal ⇄ URL (?card=1) ──────────────────
+// Same contract as the unranked deep link: the param wins on load, the
+// toggle keeps it in sync so shared URLs tell the truth, toggling off
+// drops the param and clears the stored choice.
+watch(showCardModels, (on) => {
+  const want = on ? '1' : undefined;
+  if (route.query.card !== want) router.replace({ query: { ...route.query, card: want } });
+});
+watch(() => route.query.card, (v) => {
+  const on = v === '1' || v === 'true';
+  if (on !== showCardModels.value) showCardModels.value = on;
+}, { immediate: true });
+
 watch(maxPrice, (p) => {
   const want = p == null ? undefined : String(p);
   if (route.query.price !== want) router.replace({ query: { ...route.query, price: want } });
@@ -304,6 +317,27 @@ const unrankedRows = computed(() => {
 const unrankedCount = computed(() =>
   pivotFor(tier.value).filter(r => isUnranked(r) && (showOlder.value || !isOlder(r))).length);
 
+// stats-87: the "OpenRouter-only" section — open-weight models the catalog
+// lists that no tracked benchmark scores (card rows, doc section
+// card_models). Same toolbar filters as the ranked table; newest release
+// first, undated rows sink alphabetically (mirrors the unranked ordering).
+// Card models are open-weight by construction, so the section renders
+// nothing on the Closed tab. The ranked universe (pivotFor) is untouched —
+// these rows never join it, so no rank/Score/grade math can see them.
+const cardRows = computed(() => {
+  if (tier.value === 'closed') return [];
+  const list = applyFilters(cardModels.value);
+  return [...list].sort((a, b) => {
+    const da = releaseDateOf(a);
+    const db = releaseDateOf(b);
+    if (da && db && da !== db) return da < db ? 1 : -1;
+    if (da !== db) return da ? -1 : 1;
+    return a.name.localeCompare(b.name);
+  });
+});
+const cardCount = computed(() =>
+  tier.value === 'closed' ? 0 : cardModels.value.length);
+
 const olderCount = computed(() =>
   pivotFor(tier.value).filter(r => isOlder(r) && !isUnranked(r)).length);
 
@@ -391,6 +425,23 @@ const openModel = (name) =>
           Show new &amp; unranked
           <b-tag size="is-small" :type="showUnranked ? 'is-info' : 'is-info is-light'" rounded>{{ unrankedCount }}</b-tag>
         </b-switch>
+        <!-- stats-87: OpenRouter-only census — open-weight models the catalog
+             lists that no tracked benchmark scores. Same traceability-surface
+             contract as the unranked toggle (hidden unless asked for; the
+             control itself hidden when the census is empty). -->
+        <b-tooltip label="Open-weight models listed on OpenRouter that none of our tracked benchmarks score yet — identity, pricing and context info only, no scores. They join the board automatically when a benchmark covers them."
+          type="is-dark" multilined :delay="100">
+          <b-switch
+            v-if="cardCount > 0"
+            v-model="showCardModels"
+            size="is-small"
+            type="is-info"
+            left-label
+          >
+            Show OpenRouter-only
+            <b-tag size="is-small" :type="showCardModels ? 'is-info' : 'is-info is-light'" rounded>{{ cardCount }}</b-tag>
+          </b-switch>
+        </b-tooltip>
         <div class="row" style="gap:.6rem;align-items:center;flex:1;min-width:240px">
           <span class="cell-sub" style="white-space:nowrap">Min coverage</span>
           <input
@@ -546,6 +597,22 @@ const openModel = (name) =>
         </span>
       </div>
       <PivotTable :rows="unrankedRows" :tier="tier" unranked-mode />
+    </div>
+
+    <!-- stats-87: OpenRouter-only — open-weight models the catalog lists
+         that no tracked benchmark scores. Display-only census: identity,
+         pricing, context, HF identity; every benchmark cell is a dash and
+         nothing here feeds Score, rank or grades. Hidden behind its toggle
+         (and on the Closed tab, where open-weight rows never belong). -->
+    <div v-if="showCardModels && cardRows.length" class="mt-sm unranked-section oronly-section">
+      <div class="row" style="gap:.6rem;align-items:baseline;padding:0 .4rem .35rem">
+        <h2 class="section-title" style="font-size:1.05rem;margin:0">OpenRouter-only models</h2>
+        <span class="cell-sub">
+          {{ cardRows.length }} open-weight model{{ cardRows.length === 1 ? '' : 's' }} listed on OpenRouter that none of our benchmarks score yet —
+          identity, pricing and context info only, no scores to claim. They join the board automatically when a benchmark covers them.
+        </span>
+      </div>
+      <PivotTable :rows="cardRows" :tier="tier" card-mode />
     </div>
 
     <p class="cell-sub mt-sm" style="text-align:center">

@@ -207,7 +207,35 @@ def merge_duplicate_rows(doc, log=print):
 
     merges += _formatting_folds(doc, log=log)
     merges += _vendor_prefix_folds(doc, log=log)
+    # stats-86: mutates meta in place; returns a repaired count, NOT merges
+    _repoint_successors(meta, merges, log=log)
     return merges
+
+
+def _repoint_successors(meta, merges, log=print):
+    """stats-86: folds rename/absorb rows — any third row's superseded_by
+    pointing at an ABSORBED name must re-point at the keeper (same catalog
+    identity), or it dangles and the frontend join + the unit contract
+    ('every superseded_by resolves to a real row') break. 2026-11-17 live
+    case: the scraper chained AA-stub-retired 'Hy3' to 'Hy4', then the
+    stats-74 fold absorbed 'Hy4' into 'Tencent Hy4' — _gap_fill_meta must
+    NOT transfer the absorbed record's own chain (by design), but EXISTING
+    pointers from third rows describe real successions and survive the fold
+    under the keeper's display name. Returns number of re-points."""
+    n = 0
+    for keeper, absorbed in merges or []:
+        for old in absorbed or []:
+            if old == keeper:
+                continue
+            for name, rec in (meta or {}).items():
+                if name == keeper or not isinstance(rec, dict):
+                    continue
+                if rec.get("superseded_by") == old:
+                    rec["superseded_by"] = keeper
+                    n += 1
+                    log(f"  [Dedup-stats86] successor re-point: {name}: "
+                        f"'{old}' -> '{keeper}'")
+    return n
 
 
 def _vendor_prefix_folds(doc, log=print):

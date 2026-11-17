@@ -113,11 +113,28 @@ describe('freshness filtering (older models hidden by default)', () => {
   });
 
   it('RED LINE: Pro/Flash/Lite product lines never hide each other', () => {
-    for (const name of ['Gemini 3.1 Pro', 'Gemini 3.8 Flash', 'Gemini 3.5 Flash-Lite']) {
+    // stats-86 (2026-11-17): the cheap-tier representative is now Gemini 4
+    // Hydrogen — AA stub-retired the Gemini 3.8 Flash page (deprecated:1,
+    // stub:1), so the shipped stats-65 sibling fallback chains it behind
+    // Hydrogen, the flash-class Gemini 4 tier. The RULING stands: variant
+    // lines stay represented — just by the current generation of each.
+    for (const name of ['Gemini 3.1 Pro', 'Gemini 4 Hydrogen', 'Gemini 3.5 Flash-Lite']) {
       const row = rowOf(name);
       if (!row) continue;
       expect(d.isOlder(row), `"${name}" must stay visible`).toBe(false);
     }
+  });
+
+  it('REGRESSION: 2026-11 Gemini 3.8 Flash AA-stub retirement chains to Hydrogen', () => {
+    // Source-evidenced succession (AA stub page), NOT a variant-class hide:
+    // the pointer must be Gemini 4 Hydrogen (a real row) and 3.8 Flash must
+    // carry no rank. If this ever silently flips back, check whether AA
+    // un-retired the page before trusting the row again.
+    const row = rowOf('Gemini 3.8 Flash');
+    if (!row) return; // absent from snapshot → nothing to assert
+    expect(META['Gemini 3.8 Flash']?.superseded_by).toBe('Gemini 4 Hydrogen');
+    expect(d.isOlder(row), 'AA-retired 3.8 Flash must be flagged older').toBe(true);
+    expect(d.rankMaps.value.all.has('Gemini 3.8 Flash')).toBe(false);
   });
 });
 

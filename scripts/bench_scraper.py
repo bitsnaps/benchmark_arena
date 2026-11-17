@@ -5105,6 +5105,70 @@ def _newer_visible_brand_sibling(name, models_meta, row_names):
     return False, None
 
 
+def validate_supersession_pointers(models_meta, row_names):
+    """stats-86: closing pointer hygiene — every meta['superseded_by'] MUST
+    resolve to a FINAL row name (the frontend join is against unified rows).
+
+    The chain passes run at different stages; the stats-74 vendor-prefix
+    fold and the casing canon can rename a target row AFTER a pointer was
+    written to its pre-fold display name. 2026-11-17 live case: AA stub-
+    retired 'Hy3' (deprecated:1, no deprecatedTo), the stats-65 brand-
+    sibling fallback chained it to the then-row 'Hy4', and the fold renamed
+    that row to 'Tencent Hy4' afterwards — leaving a dangling pointer the
+    unit contract ('every superseded_by resolves to a real row') rejects.
+
+    Resolution ladder for a dangling target:
+      1. case-insensitive row-name hit,
+      2. (family, variant) newest VISIBLE row via parse_series(or_id) — the
+         same catalog-identity grouping the auto-chainer uses, so the
+         rewrite never invents a lineage ('tencent/hy3' -> 'tencent/hy4').
+    Still unresolvable: the pointer is REMOVED loudly and the row stays
+    visible (successor_pending semantics) — hiding behind a phantom row
+    would be worse. Returns number of repaired pointers.
+    """
+    if not models_meta or not row_names:
+        return 0
+    lower_map = {}
+    for r in row_names:
+        lower_map.setdefault(r.lower(), r)
+    fam_map = {}
+    for r in row_names:
+        rec = models_meta.get(r) or {}
+        if rec.get("superseded_by") or rec.get("stale"):
+            continue  # only VISIBLE rows may represent a line
+        s = parse_series(rec.get("or_id"))
+        if not s:
+            continue
+        key = (s[0], s[1])
+        cand = (rec.get("created") or "", r)
+        prev = fam_map.get(key)
+        if prev is None or cand > prev:
+            fam_map[key] = cand
+    n = 0
+    for name, rec in models_meta.items():
+        tgt = rec.get("superseded_by")
+        if not tgt or tgt in row_names:
+            continue
+        fixed = lower_map.get(tgt.lower())
+        if not fixed:
+            s = parse_series(rec.get("or_id"))
+            if s:
+                fixed = fam_map.get((s[0], s[1]), (None, None))[1]
+        if fixed and fixed != name:
+            print(f"    [Supersession][stats-86] repaired dangling pointer: "
+                  f"{name} -> '{tgt}' rewritten to '{fixed}'")
+            rec["superseded_by"] = fixed
+            n += 1
+        else:
+            print(f"    [Supersession][stats-86] WARNING: unresolvable "
+                  f"successor '{tgt}' on {name!r} — pointer removed, row "
+                  f"stays visible (successor_pending)")
+            rec["superseded_by"] = None
+            rec["successor_pending"] = True
+            n += 1
+    return n
+
+
 def annotate_aa_deprecation(models_meta, row_names):
     """stats-35: vendor deprecation evidence from the AA flight payload.
 
@@ -7227,6 +7291,18 @@ def main():
         attach_eci_cells(closed_table, open_table, models_meta=models_meta)
     except Exception as e:  # noqa: BLE001
         print(f"  [ECI] attach failed (non-fatal): {e}")
+
+    # stats-86: closing supersession-pointer hygiene — all renames (fold +
+    # casing) are final here, so dangling pointers get one last repair pass
+    # against the rows that actually ship.
+    try:
+        n_fixed = validate_supersession_pointers(
+            models_meta, [r["name"] for r in closed_table + open_table])
+        if n_fixed:
+            print(f"  [Supersession][stats-86] pointer hygiene: {n_fixed} "
+                  f"repaired/removed")
+    except Exception as e:  # noqa: BLE001
+        print(f"  [Supersession][stats-86] hygiene failed (non-fatal): {e}")
 
     # Format and display
     report = format_results(all_results, closed_table, open_table, all_benchmarks, avg_benchmarks)

@@ -29,7 +29,7 @@ Rules encoded here (see README "Stale-generation rule"):
      edition-only name) whose family has a strictly newer VISIBLE release.
      This is direction-safe: "gpt 5.5 instant" is caught by "GPT-5.6 Sol",
      while "Gemini 3.5 Flash-Lite" (variant 'flash-lite') is NOT caught by
-     "Gemini 3.8 Flash" — product lines never hide each other.
+     "Gemini 4 Hydrogen" — product lines never hide each other.
   4. Red line: MUST_STAY_VISIBLE models stay visible; MUST_BE_HIDDEN models
      (past regressions) are hidden.
 """
@@ -52,8 +52,11 @@ SINGLE = re.compile(r"(?:^|-)(\d+)(?:-|$)")
 SKIP_FAMILIES = set()
 
 MUST_STAY_VISIBLE = {
-    # the explicit product-line rule: none of these may hide another
-    "Gemini 3.1 Pro", "Gemini 3.8 Flash", "Gemini 3.5 Flash-Lite",
+    # the explicit product-line rule: none of these may hide another.
+    # stats-86 (2026-11-17): cheap-tier rep is now Gemini 4 Hydrogen —
+    # AA stub-retired the Gemini 3.8 Flash page (deprecated:1, stub:1) and
+    # the shipped stats-65 sibling fallback chains it behind Hydrogen.
+    "Gemini 3.1 Pro", "Gemini 4 Hydrogen", "Gemini 3.5 Flash-Lite",
 }
 MUST_BE_HIDDEN = {
     # 2026-09 regressions: undated old generations that shipped visible

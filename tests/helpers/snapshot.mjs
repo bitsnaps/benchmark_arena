@@ -131,8 +131,10 @@ export function makeMirror(data = loadSnapshot()) {
 
 // Models that must NEVER be hidden by the freshness rules — the user's red
 // line: different product lines (Pro vs Flash vs Lite) are different models
-// and none may hide the other.
-export const MUST_STAY_VISIBLE = ['Gemini 3.1 Pro', 'Gemini 3.8 Flash', 'Gemini 3.5 Flash-Lite'];
+// and none may hide the other. stats-86 (2026-11-17): the cheap-tier
+// representative is now Gemini 4 Hydrogen (AA stub-retired the 3.8 Flash
+// page; Hydrogen is the flash-class Gemini 4 tier).
+export const MUST_STAY_VISIBLE = ['Gemini 3.1 Pro', 'Gemini 4 Hydrogen', 'Gemini 3.5 Flash-Lite'];
 
 // Curated regression list: these shipped as "visible old models" bugs
 // (2026-09 user report). The generic leak rules below now cover them, but

@@ -248,6 +248,36 @@ def main():
         print("GUARD WARN ECI column vanished from the fresh doc (no eci_asof) — "
               "fetch AND retention both offline?")
 
+    # 4d. Arena column checks (stats-88, 2026-11-18): the merged column is
+    #     Overall-primary with a quantile-equated text fill. Floors: total
+    #     coverage must hold (text ladder outage class) and the measured
+    #     Overall half must not silently vanish (agent fetch + recovery both
+    #     failing ships a text-only column — loud, not fatal: the doc then
+    #     lacks arena_overall_asof and every source stamp says so).
+    def _arena_stats(d):
+        rows = (d.get("unified_closed") or []) + (d.get("unified_open") or [])
+        cov = sum(1 for r in rows if r.get("Arena") is not None)
+        mm_ = d.get("models_meta") or {}
+        srcs = {}
+        for v in mm_.values():
+            s = (v or {}).get("arena_source")
+            if s:
+                srcs[s] = srcs.get(s, 0) + 1
+        return cov, srcs
+
+    arena_new, srcs_new = _arena_stats(doc)
+    arena_old, _ = _arena_stats(head)
+    if arena_new < max(100, int(arena_old * 0.8)):
+        fail(f"Arena coverage collapsed: {arena_new} cells vs HEAD {arena_old} "
+             f"(text ladder + Overall fetch both degraded?)")
+    if arena_old and not doc.get("arena_overall_asof") and head.get("arena_overall_asof"):
+        print("GUARD WARN arena_overall_asof vanished — Overall source offline "
+              "this run; column shipped text-only (disclosed per row)")
+    print(f"GUARD NOTE Arena sources: "
+          + ", ".join(f"{k}={v}" for k, v in sorted(srcs_new.items()))
+          + f" | asof overall={doc.get('arena_overall_asof')} "
+            f"text={doc.get('arena_text_publish_date')}")
+
     # 5. report summary (agent pastes this into the Discord update)
     now = datetime.now(timezone.utc).replace(tzinfo=None)
     fresh = 0
@@ -264,7 +294,8 @@ def main():
     print(
         f"GUARD OK rows={r_new} ranked (+{n_unranked} unranked) (HEAD {r_old}) meta={len(mm)} "
         f"aa_ttft={tt_new} created={cr_new} modalities={mod_new} eci={eci_new} "
-        f"card={len(doc.get('card_models') or [])} approx_new_7d={fresh} ts={ts}"
+        f"arena={arena_new} card={len(doc.get('card_models') or [])} "
+        f"approx_new_7d={fresh} ts={ts}"
     )
 
 

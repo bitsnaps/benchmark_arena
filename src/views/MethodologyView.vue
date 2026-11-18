@@ -135,9 +135,26 @@ watch(() => route.query.s, jumpFromQuery);
         <h3><i class="fas fa-layer-group"></i> Core vs context benchmarks</h3>
         <p>
           Eight benchmarks count toward the Score by default: Artificial Analysis, BenchLM.ai,
-          Arena.ai Text, SimpleBench.com, ARC-AGI-2, Design Arena, SWE-Marathon and FrontierSWE —
+          Arena, SimpleBench.com, ARC-AGI-2, Design Arena, SWE-Marathon and FrontierSWE —
           chosen to span reasoning, knowledge, human preference, agentic tool use and software
           engineering.
+        </p>
+        <p>
+          <strong>The Arena column (stats-88).</strong> One column, two sources, fully
+          disclosed. Where LMArena's <em>Overall</em> board lists a model, the cell is its
+          measured task-outcome result from agent work (rescaled on a fixed −30..+30 delta
+          ladder; 50 = exactly the agent baseline). Where the Overall board does not list the
+          model yet (most pre-agent-board releases), the cell is a <strong>calibrated fill</strong>
+          from LMArena's Text board: the model's Text standing is quantile-equated onto the
+          Overall distribution, which preserves the Text ordering while keeping both halves of
+          the column on one comparable scale. Filled cells carry a
+          <span class="arena-fill-mark">†</span> in the table (hover for the raw Elo and the
+          calibration note), every row's provenance ships in the data
+          (<span class="mono">arena_source</span> / <span class="mono">arena_raw</span>), and the
+          doc carries both board vintages (<span class="mono">arena_overall_asof</span>,
+          <span class="mono">arena_text_publish_date</span>). The two boards disagree on the
+          shared cohort (rank correlation ≈ 0.5), which is exactly why the fill is marked as an
+          estimate and never presented as a measurement.
         </p>
         <p>
           The rest (DeepSWE, VendingBench, CyberGem, EQBench CW, LLM Chess) are

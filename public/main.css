@@ -262,6 +262,15 @@ a:hover { color: #7ff3df; }
 .arch-link i { font-size: .95em; vertical-align: .08em; opacity: .85; }
 .arch-link:hover { opacity: .6; }
 
+/* stats-88: Arena fill marker (†) on quantile-equated cells — muted so the
+   score stays dominant; the provenance words live in the cell's title attr */
+.arena-fill-mark {
+  color: var(--muted, #8a93a6);
+  font-size: .72em;
+  margin-left: .12em;
+  cursor: help;
+}
+
 /* ── Buefy tabs (leaderboard tier switcher) ───────────────── */
 .b-tabs .tabs { margin-bottom: 1.1rem; }
 .b-tabs .tab-content { padding: 0; }

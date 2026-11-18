@@ -323,7 +323,7 @@ describe('user-selectable average (commit B)', () => {
     expect(d.coreBenchmarks.value).toEqual(['Artificial Analysis']);
     d.toggleAvgBench('Artificial Analysis'); // refused
     expect(d.coreBenchmarks.value).toEqual(['Artificial Analysis']);
-    d.toggleAvgBench('Arena.ai Text'); // adding still works
+    d.toggleAvgBench('Arena'); // adding still works
     expect(d.coreBenchmarks.value.length).toBe(2);
     d.resetAvgSelection();
   });

@@ -78,6 +78,20 @@ const archTip = 'No current AA leaderboard entry — the model was archived by t
 // ★ footnote: source sites list this model under a different (e.g. HF repo) name
 const aliasNote = (row) => metaFor(row)?.alias_note || null;
 
+// stats-88: Arena fill disclosure — a † on cells the Overall (agent) board
+// did not measure; the native title carries the raw Elo input + calibration
+// note. Measured Overall cells carry no mark, so provenance is visible at
+// a glance and the number stays clean for sort/compare parsing.
+const isArenaFill = (row, b) =>
+  b === 'Arena' && metaFor(row)?.arena_source === 'text-calibrated';
+const arenaFillTip = (row) => {
+  const raw = metaFor(row)?.arena_raw;
+  const elo = raw ? Math.round(raw) : null;
+  return 'No Overall (agent-board) listing yet — calibrated from the Text board'
+    + (elo ? ` (Elo ${elo} → quantile-equated onto the Overall scale)` : '')
+    + '. Cells without a mark are measured Overall results.';
+};
+
 // stats-27: NEW badge — release date (models_meta.created) within the
 // user-adjustable window (lib/newFlag.js singleton, default 7 days). No
 // date on record → no badge, honest gap.
@@ -455,7 +469,7 @@ const limitedTitle = (row) =>
              model's own (archived) page on the source — verified URL only;
              any other gap keeps the plain dash. Icon-only per Ibrahim:
              the words live in the tooltip + aria-label -->
-        <span v-if="props.row[b] !== null && props.row[b] !== undefined" :style="{ color: scoreColor(props.row[b]), fontWeight: 500 }">{{ fmtScore(props.row[b]) }}</span>
+        <span v-if="props.row[b] !== null && props.row[b] !== undefined" :style="{ color: scoreColor(props.row[b]), fontWeight: 500 }" :title="isArenaFill(props.row, b) ? arenaFillTip(props.row) : undefined">{{ fmtScore(props.row[b]) }}<sup v-if="isArenaFill(props.row, b)" class="arena-fill-mark">†</sup></span>
         <!-- stats-49/stats-65: unranked rows keep the archived-page link as a
              PLAIN anchor (title attr, no appended tooltip node) — same href
              set, a fraction of the render weight -->

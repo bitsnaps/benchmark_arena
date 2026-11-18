@@ -7,7 +7,6 @@ export const SHORT = {
   'Epoch ECI': 'ECI',
   'Artificial Analysis': 'AA',
   'BenchLM.ai': 'BenchLM',
-  'Arena.ai Text': 'Arena',
   'SimpleBench.com': 'SimpleB',
   'ARC-AGI-2': 'ARC-2',
   'Design Arena': 'Design',
@@ -24,7 +23,7 @@ export const SHORT = {
 // Users can override it per browser via the "Avg set" dropdown (stores/data.js);
 // this list stays the shipped ranking formula and the parity-test anchor.
 export const CORE_BENCHMARKS = [
-  'Artificial Analysis', 'BenchLM.ai', 'Arena.ai Text',
+  'Artificial Analysis', 'BenchLM.ai', 'Arena',
   'SimpleBench.com', 'ARC-AGI-2', 'Design Arena',
   'SWE-Marathon', 'FrontierSWE',
 ];
@@ -43,13 +42,13 @@ export const AVG_PRESETS = [
 export const AVG_STORAGE_KEY = 'arena.avg_selection';
 
 // Benchmarks highlighted with leader cards on the overview
-export const LEADER_BENCHES = ['Artificial Analysis', 'Arena.ai Text', 'ARC-AGI-2', 'SWE-Marathon'];
+export const LEADER_BENCHES = ['Artificial Analysis', 'Arena', 'ARC-AGI-2', 'SWE-Marathon'];
 
 export const BLURBS = {
   'Epoch ECI': 'Epoch Capabilities Index — one latent general-capability scale fitted across 50+ benchmarks by Epoch AI (CC-BY 4.0). Abstract index: comparable between models, never a 0-100 score; kept out of our Score blend by design. stats-85: the Avg-set panel\'s ECI checkbox shows/hides the column only.',
   'Artificial Analysis': 'Composite intelligence index blending reasoning, knowledge, math and code into one headline number.',
   'BenchLM.ai': 'Independent multi-task evaluation suite scoring applied accuracy.',
-  'Arena.ai Text': 'Blind human preference battles on everyday prompts — the "does it feel smart" proxy.',
+  'Arena': 'LMArena blind battles — Overall (agent task work) where the board lists the model, else calibrated from the Text board (marked †). stats-88.',
   'SimpleBench.com': 'Practical scenarios where agents must use tools, files and judgement, not just recall.',
   'ARC-AGI-2': 'Abstraction and reasoning puzzles designed to be Google-proof and memorization-resistant.',
   'Design Arena': 'Frontend and UI generation judged on real rendered output.',

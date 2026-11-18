@@ -115,6 +115,40 @@ def main():
     dl = json.load(open(DL))
     mp, md = pub["models_meta"], dl["models_meta"]
 
+    # stats-88 (2026-11-18): benchmark rename migration — 'Arena.ai Text'
+    # -> 'Arena' on the PUBLIC base doc. The fresh scrape doc already ships
+    # the merged 'Arena' column (Overall-primary + quantile-equated text
+    # fill, see bench_scraper.merge_arena_columns); the public-only kept
+    # rows (stats-62 registry) and the benchmarks lists still carry the old
+    # key, and carry_missing_benchmarks would re-add a phantom 'Arena.ai
+    # Text' column from the stale name. One-time idempotent migration; also
+    # stamps the kept rows' provenance (their cells ARE legacy text values,
+    # now governed by the same disclosure contract).
+    _OLD_ARENA, _NEW_ARENA = "Arena.ai Text", "Arena"
+    _mig = 0
+    for _key in ("benchmarks", "avg_benchmarks"):
+        _lst = pub.get(_key) or []
+        if _OLD_ARENA in _lst:
+            pub[_key] = [_NEW_ARENA if b == _OLD_ARENA else b for b in _lst]
+            _mig += 1
+    for _tbl in ("unified_closed", "unified_open"):
+        for _r in pub.get(_tbl) or []:
+            if isinstance(_r, dict) and _OLD_ARENA in _r:
+                _v = _r.pop(_OLD_ARENA)
+                if _NEW_ARENA not in _r:
+                    _r[_NEW_ARENA] = _v
+                _mig += 1
+                _rec = mp.get(_r.get("name") or "")
+                if _rec is not None and isinstance(_v, (int, float)):
+                    _rec.setdefault("arena_source", "text-calibrated")
+                    _rec.setdefault(
+                        "arena_raw",
+                        round(900.0 + 6.5 * float(_v), 1))
+    if _mig:
+        print(f"stats-88: {_mig} 'Arena.ai Text' -> 'Arena' rename(s) "
+              f"applied to the public base doc (+legacy text provenance on "
+              f"kept rows)")
+
     for key, missing in carry_missing_benchmarks(pub, dl):
         print(f"stats-77 KEEP benchmark(s) missing from the fresh scrape, "
               f"carried over from the shipped doc: {missing} "

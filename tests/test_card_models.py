@@ -61,7 +61,7 @@ T_MAY = 1779000000   # ~2026-05
 T_NOV = 1794000000   # ~2026-11
 
 
-BENCHES = ["Artificial Analysis", "BenchLM.ai", "Arena.ai Text"]
+BENCHES = ["Artificial Analysis", "BenchLM.ai", "Arena"]
 
 # ── fixture universe ──────────────────────────────────────────────────────
 # Ranked rows already matched: 'Vendor A: Alpha 2' + 'Cohere: Command A+'.

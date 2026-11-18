@@ -26,7 +26,7 @@ const BASE = process.env.E2E_BASE || 'http://127.0.0.1:4173/benchmark_arena/';
 
 // ── mirror of the store math (value.e2e.mjs pattern) ────────────────────
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'public/benchmark_results.json'), 'utf8'));
-const CORE = ['Artificial Analysis','BenchLM.ai','Arena.ai Text','SimpleBench.com','ARC-AGI-2','Design Arena','SWE-Marathon','FrontierSWE'];
+const CORE = ['Artificial Analysis','BenchLM.ai','Arena','SimpleBench.com','ARC-AGI-2','Design Arena','SWE-Marathon','FrontierSWE'];
 const META = data.models_meta || {};
 // mirror returns the -1 sentinel when a row reports nothing; the scatter
 // math expects null there

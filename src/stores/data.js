@@ -523,6 +523,10 @@ function benchThAttrs(column) {
   const b = column.field;
   if (!b || b === 'avg' || b === 'rank') return {};
   const core = coreBenchmarks.value.includes(b);
+  if (b === 'Arena') {
+    // stats-88: the merged column's provenance lives in the header itself
+    return { title: 'Arena — LMArena Overall (agent task work) where the board lists the model; older models carry a † fill calibrated from the Text board (quantile-equated, disclosed per cell). See Methodology.' };
+  }
   return { title: b + (core ? ' (core — counted in global Score)' : ' (not counted in global Score)') };
 }
 

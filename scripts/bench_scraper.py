@@ -4435,7 +4435,13 @@ def merge_arena_columns(closed_table, open_table, all_results,
                 src, raw = "text-calibrated", round(elo, 1)
                 n_fill += 1
             else:
-                continue  # no Arena evidence at all — honest gap
+                # no Arena evidence at all — honest gap; still strip the
+                # station keys so no row ships the old schema (a null-valued
+                # 'Arena.ai Text'/'Arena.ai Overall' key would trip the
+                # schema contract and confuse future schema readers)
+                r.pop("Arena.ai Text", None)
+                r.pop("Arena.ai Overall", None)
+                continue
             r["Arena"] = round(final, 1)
             r.pop("Arena.ai Text", None)
             r.pop("Arena.ai Overall", None)
@@ -4455,12 +4461,11 @@ def merge_arena_columns(closed_table, open_table, all_results,
               "Arena cells for this run (no equating possible)")
         src_by, raw_by = {}, {}
         for r in rows:
-            tx = r.get("Arena.ai Text")
+            r.pop("Arena.ai Overall", None)
+            tx = r.pop("Arena.ai Text", None)
             if tx is None:
                 continue
             r["Arena"] = float(tx)
-            r.pop("Arena.ai Text", None)
-            r.pop("Arena.ai Overall", None)
             elo = tx_lo + (tx_hi - tx_lo) * float(tx) / 100.0
             src_by[r["name"]] = "text-only"
             raw_by[r["name"]] = round(elo, 1)

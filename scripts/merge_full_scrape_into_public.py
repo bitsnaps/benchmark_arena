@@ -133,10 +133,14 @@ def main():
             _mig += 1
     for _tbl in ("unified_closed", "unified_open"):
         for _r in pub.get(_tbl) or []:
-            if isinstance(_r, dict) and _OLD_ARENA in _r:
-                _v = _r.pop(_OLD_ARENA)
-                if _NEW_ARENA not in _r:
-                    _r[_NEW_ARENA] = _v
+            if not isinstance(_r, dict):
+                continue
+            if _OLD_ARENA not in _r and "Arena.ai Overall" not in _r:
+                continue
+            _v = _r.pop(_OLD_ARENA, None)
+            _r.pop("Arena.ai Overall", None)  # null station stubs never ship
+            if _NEW_ARENA not in _r and isinstance(_v, (int, float)):
+                _r[_NEW_ARENA] = _v
                 _mig += 1
                 _rec = mp.get(_r.get("name") or "")
                 if _rec is not None and isinstance(_v, (int, float)):

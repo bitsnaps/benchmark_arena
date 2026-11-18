@@ -12,7 +12,7 @@ diagnostics against temp files.)
 
 | Script | Role |
 |--------|------|
-| `bench_scraper.py` | The 13-site benchmark scraper + meta miner. Playwright-driven; also builds `providers.json` (with `kind` taxonomy) and mines `models_meta` (AA pricing layer, `aa_ttft_seconds`, `available_at`, supersession/stale flags, HF ids). |
+| `bench_scraper.py` | The 14-station benchmark scraper + meta miner (stats-88 added the Arena.ai Overall station — LMArena's agent config on the official HF leaderboard-dataset). Playwright-driven; also builds `providers.json` (with `kind` taxonomy) and mines `models_meta` (AA pricing layer, `aa_ttft_seconds`, `available_at`, supersession/stale flags, HF ids, Arena provenance `arena_source`/`arena_raw`). |
 | `merge_aa_into_public.py` | Meta-only overlay: merges the AA fields (`pricing_aa_usd_per_1m`, `price_source`, `aa_ttft_seconds`) + fresher OpenRouter fields (`pricing_usd_per_1m`, `max_output_tokens`) from a `--meta-only` scrape onto the LIVE public meta, preserving the hand-baked `available_at` layer. Public-only curated records are never regressed. |
 | `merge_full_scrape_into_public.py` | Full-scrape adoption (opposite direction of truth): a complete fresh `/bench` document is the BASE (fresh cells, tables, timestamp); curated `available_at` is restored on shared keys and public-only records whose cells vanished upstream are DROPPED (values printed, nothing silently lost — leak contract). |
 
@@ -36,6 +36,30 @@ Useful flags / env:
 - `--providers-only` — rebuild `providers.json` without touching benchmark sources.
 - `BENCH_CACHE_TTL=<seconds>` — per-site cache freshness window (default 300 s;
   raise when orchestrating multiple runs in one day to reuse the same-day cache).
+
+## The Arena column (stats-88, 2026-11-18)
+
+One shipped column named `Arena` (renamed from `Arena.ai Text` — the merge
+migration renames the key on the public base doc, once, idempotently). Two
+sources inside it:
+
+1. **Overall (primary)** — HF dataset `agent` config, category `overall`
+   (`_arena_fetch_agent_dataset`): task-outcome deltas from agent work,
+   rescaled on the fixed `(-30, +30)` ladder (50 = the agent baseline).
+   Vintage ships as `arena_overall_asof`.
+2. **Text fill** — models the Overall board does not list yet keep their
+   Text presence, quantile-equated onto the Overall delta distribution
+   (`merge_arena_columns`: text percentile -> Overall quantile). Monotone
+   in Elo, bounded to the Overall board's observed range. Provenance ships
+   per row (`models_meta.arena_source` = `overall` | `text-calibrated` |
+   `text-only`, `arena_raw` = raw delta / Elo) and the UI marks filled
+   cells with a `†` + tooltip.
+
+The `Arena.ai Overall` station ladder: HF datasets-server -> prior-public
+recovery (raw deltas from `meta.arena_raw`). If BOTH fail, the run ships a
+text-only Arena column (source stamp `text-only`, guard prints a loud NOTE
+— disclosed, never silently mixed). The dual-cohort fill error is printed
+every run for review (`fill-vs-measured median |err|`).
 
 ## Paths
 

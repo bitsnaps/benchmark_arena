@@ -1,6 +1,6 @@
 // ── stats-35: per-benchmark scale harmonization (shared scoring core) ──
 // Benchmarks arrive on incomparable distributions even though every cell is
-// nominally 0-100: after the pipeline's range-rescale, Arena.ai Text has a
+// nominally 0-100: after the pipeline's range-rescale, the Arena column has a
 // median around 83 while the AA Intelligence Index median sits near 26 and
 // FrontierSWE near 26. Averaging raw cells therefore measures WHICH
 // benchmarks a model covered as much as how strong it is, and the CL

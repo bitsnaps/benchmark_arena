@@ -21,7 +21,7 @@ const BASE = process.env.E2E_BASE || 'http://127.0.0.1:4173/benchmark_arena/';
 // the same product line + stale generations 9+ months old) are excluded
 // from the default ranking and hidden behind the Older-versions toggle.
 const data = JSON.parse(fs.readFileSync(path.join(REPO, 'public/benchmark_results.json'), 'utf8'));
-const CORE = ['Artificial Analysis','BenchLM.ai','Arena.ai Text','SimpleBench.com','ARC-AGI-2','Design Arena','SWE-Marathon','FrontierSWE'];
+const CORE = ['Artificial Analysis','BenchLM.ai','Arena','SimpleBench.com','ARC-AGI-2','Design Arena','SWE-Marathon','FrontierSWE'];
 const avg = r => { const v = CORE.map(b => r[b]).filter(x => x != null); return v.length ? v.reduce((a,b)=>a+b,0)/v.length : -1; };
 // stats-35 harmonized CL blend via the mirror (-1 sentinel preserved)
 const score = r => mirrorScore(r);

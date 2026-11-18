@@ -1863,6 +1863,12 @@ ARENA_TEXT_ASOF = None
 # 'Claude Fable 5.2' had no Arena cell and nothing in the doc said why).
 ARENA_TEXT_PUBLISH_DATE = None
 
+# stats-88: the agent config's leaderboard_publish_date — the Overall board's
+# own vintage stamp, surfaced into the doc as `arena_overall_asof` so the
+# measured half of the merged Arena column is auditable exactly like the
+# text half (stats-80 pattern).
+ARENA_OVERALL_PUBLISH_DATE = None
+
 # stats-82: Epoch Capabilities Index (ECI) — first-class composite column.
 # Source CSV (CC-BY 4.0, Epoch AI): https://epoch.ai/data/eci_scores.csv —
 # one row per model: eci estimate, 90% credible-interval bounds, release
@@ -2178,6 +2184,168 @@ def _arena_fetch_dataset(attempts=4):
             print(f"    [hf dataset] attempt {attempt+1} failed: {e}")
         time.sleep(8)
     return []
+
+
+def _arena_fetch_agent_dataset(attempts=4):
+    """
+    stats-88: PRIMARY Arena Overall source — the same official HF dataset
+    (lmarena-ai/leaderboard-dataset, CC-BY-4.0), config 'agent',
+    category 'overall'. This is the board the site's Overall tab renders:
+    task-outcome deltas from agent work (Ibrahim, 2026-11-18: "the overall
+    score is calculated from agent work on tasks, which is more
+    representative"), 65 rows, published ~weekly (2026-11-15 vintage at
+    implementation time — FRESHER than the text configs, which is the whole
+    point: fresh flagships like Claude Fable 5.2 appear here long before
+    the text table catches up).
+
+    Scores are task-outcome deltas in [-1, 1] fraction; multiplied by 100
+    into delta POINTS here (raw station unit, e.g. Fable 5.2 (Max) +28.6,
+    Solar Pro 4 -23.9). The (lo, hi) delta ladder lives in
+    _benchmark_scale('Arena.ai Overall') — one ladder shared by the station
+    rescale AND the text-fill calibration (merge_arena_columns).
+
+    Same fetch discipline as _arena_fetch_dataset: datasets-server /filter
+    API, plain JSON, urllib only, generous timeout + retries (the service
+    is erratic under load). Returns [] on any failure.
+    """
+    global ARENA_OVERALL_PUBLISH_DATE
+    for attempt in range(attempts):
+        out = []
+        pub_dates = set()
+        try:
+            offset, total = 0, 0
+            while True:
+                params = {
+                    "dataset": "lmarena-ai/leaderboard-dataset",
+                    "config": "agent",
+                    "split": "latest",
+                    "where": "\"category\"='overall'",
+                    "offset": offset,
+                    "length": 100,
+                }
+                api = ("https://datasets-server.huggingface.co/filter?"
+                       + urllib.parse.urlencode(params))
+                req = urllib.request.Request(
+                    api, headers={"User-Agent": "benchmark-arena-scraper"})
+                with urllib.request.urlopen(req, timeout=60) as resp:
+                    payload = json.load(resp)
+                rows = payload.get("rows") or []
+                total = payload.get("num_rows_total") or 0
+                for wrap in rows:
+                    r = wrap.get("row") or {}
+                    name = r.get("model_name")
+                    score = r.get("score")
+                    pd = r.get("leaderboard_publish_date")
+                    if isinstance(pd, str) and pd[:10]:
+                        pub_dates.add(pd[:10])
+                    if isinstance(name, str) and isinstance(score, (int, float)):
+                        out.append({"model": name.strip(),
+                                    "score": float(score) * 100.0,
+                                    "display": True})
+                offset += len(rows)
+                if not rows or offset >= total or len(out) > 500:
+                    break
+            if out:
+                if pub_dates:
+                    ARENA_OVERALL_PUBLISH_DATE = sorted(pub_dates)[-1]
+                    print(f"    [hf dataset] agent board publish date: "
+                          f"{ARENA_OVERALL_PUBLISH_DATE}")
+                deltas = [o["score"] for o in out]
+                print(f"    [hf dataset] {len(out)} rows (lmarena-ai/"
+                      f"leaderboard-dataset, agent overall; deltas "
+                      f"{min(deltas):+.1f}..{max(deltas):+.1f})")
+                return out
+            print(f"    [hf dataset] attempt {attempt+1}: 0 agent rows")
+        except Exception as e:  # noqa: BLE001
+            print(f"    [hf dataset] attempt {attempt+1} failed: {e}")
+        time.sleep(8)
+    return []
+
+
+def _arena_overall_recover_from_public():
+    """
+    stats-88 last-resort: rebuild the agent station from the previous
+    published doc. models_meta[name].arena_source == 'overall' rows carry
+    `arena_raw` — the exact raw delta the cell was built from — so the
+    round-trip is lossless for the measured half of the column (the
+    stats-68 pattern, but raw-delta keyed). Refusing under 20 rows: a
+    partial recovery would silently shrink the Overall coverage.
+    """
+    global ARENA_OVERALL_PUBLISH_DATE
+    try:
+        with open(RESULTS_PUBLIC_PATH) as f:
+            pub = json.load(f)
+        meta = pub.get("models_meta") or {}
+        rows = (pub.get("unified_closed") or []) + (pub.get("unified_open") or [])
+        out = []
+        for r in rows:
+            m = meta.get(r.get("name") or "") or {}
+            if m.get("arena_source") != "overall":
+                continue
+            raw = m.get("arena_raw")
+            if isinstance(raw, (int, float)) and -60 < raw < 60:
+                out.append({"model": r["name"], "score": float(raw),
+                            "display": True})
+        if len(out) >= 20:
+            ARENA_OVERALL_PUBLISH_DATE = pub.get("arena_overall_asof")
+            print(f"    [prior-public recovery] {len(out)} Overall cells "
+                  f"adopted from the published doc (vintage "
+                  f"{ARENA_OVERALL_PUBLISH_DATE})")
+            return out
+        print(f"    [prior-public recovery] only {len(out)} usable Overall "
+              f"cells — refusing")
+    except Exception as e:  # noqa: BLE001
+        print(f"    [prior-public recovery] failed: {e}")
+    return []
+
+
+def scrape_arena_overall():
+    """
+    Arena Overall leaderboard (agent task-outcome deltas, ~-24..+29 points).
+    stats-88 (Ibrahim, 2026-11-18 "add, don't replace" review): the Arena
+    column becomes Overall-primary — this station feeds the measured half;
+    models the Overall board does not list yet keep an Arena presence via
+    the calibrated text fill (see merge_arena_columns). Ladder: HF
+    datasets-server /filter (no wall, no auth, display names) -> prior-
+    public recovery (raw deltas from meta.arena_raw). Returns
+    [(name, raw_delta_points)].
+    """
+    data = _arena_fetch_agent_dataset()
+
+    if not data:
+        data = _arena_overall_recover_from_public()
+        if data:
+            print(f"    [recovery] adopted {len(data)} Overall models from "
+                  f"the prior doc")
+
+    if not data or not isinstance(data, list):
+        print("    [WARN] No data for Arena Overall (HF dataset + prior-"
+              "public recovery both failed)")
+        return []
+
+    models = []
+    for item in data:
+        if not isinstance(item, dict):
+            continue
+        raw_name = item.get("model", "")
+        delta = item.get("score", 0)
+        if not raw_name or not isinstance(delta, (int, float)) \
+                or not (-60 < delta < 60):
+            continue
+        # Agent board names are display names with variant suffixes
+        # ("Claude Fable 5.2 (Max)") — same convention the text board's
+        # display names use; the unified-table normalizer folds the
+        # parenthesized effort levels exactly as it does for text rows.
+        models.append((raw_name, float(delta)))
+
+    if not models:
+        print("    [WARN] Arena Overall parsed but no valid delta rows")
+        return []
+
+    print(f"    Got {len(models)} models "
+          f"(deltas {min(m[1] for m in models):+.1f}.."
+          f"{max(m[1] for m in models):+.1f})")
+    return models
 
 
 def scrape_arena_text():
@@ -4101,6 +4269,11 @@ def _benchmark_scale(benchmark_name):
     """
     if benchmark_name == "Arena.ai Text":
         return (900.0, 1550.0)  # Elo range, rescaled to 0-100
+    if benchmark_name == "Arena.ai Overall":
+        # stats-88: task-outcome delta points (agent board). 0 = baseline,
+        # so 50 on the 0-100 ladder = "exactly at the agent baseline".
+        # Expands with data like every other non-0-100 station.
+        return (-30.0, 30.0)
     if benchmark_name == "SWE-Marathon":
         return (0.0, 30.0)   # theoretical ceiling for resolve%
     if benchmark_name == "Artificial Analysis":
@@ -4149,6 +4322,191 @@ def normalize_score(score, benchmark_name):
         return min(score, 100.0)
     # Can't do min-max without all scores — caller should use _rescale_score
     return score
+
+
+# ── stats-88: the merged Arena column ─────────────────────────────────────
+# Ibrahim (2026-11-18): "use the overall score then fill the missing scores
+# with arena's text scores because of lack of data ... so everything falls
+# into one arena column (no more new column for the same benchmark)".
+#
+# The two boards measure different things and rank the shared cohort
+# differently (2026-11-18 audit: Spearman 0.53 over the 37 dual-listed rows;
+# Gemini 4 Argon is #7 Overall vs #2 Text) — so a naive side-by-side rescale
+# would ship cross-source orderings that are unverifiable at best and
+# backwards at worst (text-filled 90s above measured Overall 50-74s). The
+# fill therefore EQUATES the text Elo onto the Overall delta distribution
+# by quantile: a text-only model's cell = the Overall delta at the same
+# percentile of its own board. Monotone in Elo (text ordering preserved),
+# bounded to the Overall board's observed range (no functional-form fit to
+# extrapolate — the linear anchor fit tried first produced negative cells
+# below the calibration range: R² 0.42, elo 1300 → delta −31), and it
+# re-equates automatically as either board moves. Disclosure ships per cell
+# (models_meta.arena_source/arena_raw + UI marker) and per doc
+# (arena_overall_asof / arena_text_publish_date).
+
+def _arena_ladder(agent_deltas):
+    """The Overall (lo, hi) delta ladder, expanded exactly like
+    _rescale_score expands a station's range with its actual data — must
+    stay in lockstep with build_unified_table's station rescale so cell
+    inversion is exact."""
+    lo, hi = _benchmark_scale("Arena.ai Overall")
+    if agent_deltas:
+        lo = min(lo, min(agent_deltas))
+        hi = max(hi, max(agent_deltas))
+    return lo, hi
+
+
+def _qq_quantile(pct, sorted_vals):
+    """Linear-interpolated quantile of a sorted sample at pct in [0, 1].
+    stdlib-only (no numpy in the scraper)."""
+    n = len(sorted_vals)
+    if n == 0:
+        return None
+    if n == 1:
+        return sorted_vals[0]
+    pos = min(max(pct, 0.0), 1.0) * (n - 1)
+    i = int(pos)
+    if i >= n - 1:
+        return sorted_vals[-1]
+    frac = pos - i
+    return sorted_vals[i] * (1.0 - frac) + sorted_vals[i + 1] * frac
+
+
+def merge_arena_columns(closed_table, open_table, all_results,
+                        all_benchmarks, avg_benchmarks):
+    """
+    Fold the 'Arena.ai Text' (Elo) and 'Arena.ai Overall' (agent delta)
+    stations into ONE shipped column named 'Arena':
+      - Overall cell where the agent board lists the model (primary).
+      - else quantile-equated text fill (see the stats-88 block above).
+    Rows keep no trace of the two station keys; per_benchmark, the doc
+    benchmarks list and the avg set all ship 'Arena' in the text station's
+    position. Returns ({row_name: source}, {row_name: raw_value}) for the
+    models_meta stamp (arena_source / arena_raw).
+    """
+    tx_scale = _benchmark_scale("Arena.ai Text") or (900.0, 1550.0)
+    tx_lo, tx_hi = tx_scale
+    rows = [r for r in (closed_table + open_table) if r.get("name")]
+
+    ag_st = all_results.get("Arena.ai Overall")
+    tx_st = all_results.get("Arena.ai Text")
+
+    if ag_st and tx_st:
+        ag_deltas = [s for _, s in ag_st["closed"] + ag_st["open"]]
+        tx_elos = [s for _, s in tx_st["closed"] + tx_st["open"]]
+        lo, hi = _arena_ladder(ag_deltas)
+        ag_sorted = sorted(ag_deltas)
+        tx_sorted = sorted(tx_elos)
+        n_tx = len(tx_sorted)
+
+        def _tx_pct(elo):
+            import bisect as _bisect
+            less = _bisect.bisect_left(tx_sorted, elo)
+            same = _bisect.bisect_right(tx_sorted, elo) - less
+            # mid-rank: fraction of the text board this Elo sits above
+            return (less + 0.5 * same) / n_tx if n_tx else 0.5
+
+        src_by, raw_by = {}, {}
+        n_ov = n_fill = n_dual = 0
+        dual_errs = []
+        for r in rows:
+            name = r["name"]
+            ov = r.get("Arena.ai Overall")
+            tx = r.get("Arena.ai Text")
+            if ov is not None:
+                final = float(ov)
+                raw_delta = lo + (hi - lo) * final / 100.0
+                src, raw = "overall", round(raw_delta, 1)
+                n_ov += 1
+                if tx is not None:
+                    # monitoring: what the fill WOULD have estimated
+                    n_dual += 1
+                    elo = tx_lo + (tx_hi - tx_lo) * float(tx) / 100.0
+                    est = _qq_quantile(_tx_pct(elo), ag_sorted)
+                    if est is not None:
+                        dual_errs.append(abs(
+                            (est - lo) / (hi - lo) * 100.0 - final))
+            elif tx is not None:
+                elo = tx_lo + (tx_hi - tx_lo) * float(tx) / 100.0
+                est = _qq_quantile(_tx_pct(elo), ag_sorted)
+                if est is None:
+                    continue  # no Overall distribution — keep text untouched
+                final = (est - lo) / (hi - lo) * 100.0
+                src, raw = "text-calibrated", round(elo, 1)
+                n_fill += 1
+            else:
+                continue  # no Arena evidence at all — honest gap
+            r["Arena"] = round(final, 1)
+            r.pop("Arena.ai Text", None)
+            r.pop("Arena.ai Overall", None)
+            src_by[name] = src
+            raw_by[name] = raw
+        all_results.pop("Arena.ai Overall", None)
+        print(f"  [Arena merge] overall={n_ov} fill={n_fill} "
+              f"(dual={n_dual}, fill-vs-measured median |err| "
+              f"{sorted(dual_errs)[len(dual_errs)//2]:.1f} pts)"
+              if dual_errs else
+              f"  [Arena merge] overall={n_ov} fill={n_fill} (dual=0)")
+    else:
+        # Overall source unavailable (fetch + recovery failed): keep the
+        # text cells under the new name, loudly flagged — the column is
+        # then text-only for this run, never silently mixed.
+        print("  [WARN] Arena Overall station missing — shipping text-only "
+              "Arena cells for this run (no equating possible)")
+        src_by, raw_by = {}, {}
+        for r in rows:
+            tx = r.get("Arena.ai Text")
+            if tx is None:
+                continue
+            r["Arena"] = float(tx)
+            r.pop("Arena.ai Text", None)
+            r.pop("Arena.ai Overall", None)
+            elo = tx_lo + (tx_hi - tx_lo) * float(tx) / 100.0
+            src_by[r["name"]] = "text-only"
+            raw_by[r["name"]] = round(elo, 1)
+        all_results.pop("Arena.ai Overall", None)
+
+    # per_benchmark display lists: rebuild 'Arena' from the shipped rows,
+    # drop the two station entries
+    merged = {"closed": [], "open": []}
+    for r in rows:
+        v = r.get("Arena")
+        if v is None:
+            continue
+        merged["closed" if classify_model(r["name"]) == "closed" else "open"].append(
+            (r["name"], v))
+    for half in merged.values():
+        half.sort(key=lambda p: -p[1])
+    all_results.pop("Arena.ai Text", None)
+    all_results["Arena"] = merged
+
+    # benchmarks list + avg set: rename in place (position preserved),
+    # remove the Overall station from both
+    for i, b in enumerate(all_benchmarks):
+        if b == "Arena.ai Text":
+            all_benchmarks[i] = "Arena"
+    all_benchmarks[:] = [b for b in all_benchmarks if b != "Arena.ai Overall"]
+    for i, b in enumerate(avg_benchmarks):
+        if b == "Arena.ai Text":
+            avg_benchmarks[i] = "Arena"
+    avg_benchmarks[:] = [b for b in avg_benchmarks if b != "Arena.ai Overall"]
+
+    # Re-bake the derived fields against the SHIPPED column set: the build
+    # pass counted the two Arena stations separately (a dual-listed model
+    # carried 2 of 9 core cells, admission ran pre-fold), while the shipped
+    # truth is one 'Arena' cell of 8. Mirrors _rederive_group_scores
+    # (merge_duplicate_rows.py) — same contract: coverage over the shipped
+    # avg set, >=2 ranked / 1 unranked.
+    for r in rows:
+        cov = sum(1 for b in avg_benchmarks if r.get(b) is not None)
+        r["num_benchmarks"] = cov
+        r["cl"] = round(cov / len(avg_benchmarks) * 100, 1) if avg_benchmarks else 0
+        if cov >= 2:
+            r.pop("unranked", None)
+        else:
+            r["unranked"] = True
+
+    return src_by, raw_by
 
 
 # ── Model Metadata (OpenRouter) ────────────────────────────────────────────
@@ -6996,6 +7354,10 @@ def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg
     # arena-column staleness - see _arena_fetch_dataset).
     if ARENA_TEXT_PUBLISH_DATE:
         data["arena_text_publish_date"] = ARENA_TEXT_PUBLISH_DATE
+    # stats-88: the agent board's publish date — the measured half of the
+    # merged Arena column has its own vintage, auditable in the doc.
+    if ARENA_OVERALL_PUBLISH_DATE:
+        data["arena_overall_asof"] = ARENA_OVERALL_PUBLISH_DATE
     # stats-82: ECI vintage stamp + source attribution — the column is a
     # licensed external composite (CC-BY 4.0); its values drift on Epoch's
     # refits, so every shipped doc carries the fetch date it reflects.
@@ -7135,6 +7497,8 @@ def _scrape_site(site_name):
         models = scrape_benchlm()
     elif site_name == "Arena.ai Text":
         models = scrape_arena_text()
+    elif site_name == "Arena.ai Overall":
+        models = scrape_arena_overall()
     elif site_name == "SimpleBench.com":
         models = scrape_simplebench()
     elif site_name == "ARC-AGI-2":
@@ -7172,6 +7536,8 @@ def _scrape_site(site_name):
         # scrape_arena_text() never runs in that process.
         asof = ARENA_TEXT_ASOF if site_name == "Arena.ai Text" else None
         pub = ARENA_TEXT_PUBLISH_DATE if site_name == "Arena.ai Text" else None
+        if site_name == "Arena.ai Overall":
+            pub = ARENA_OVERALL_PUBLISH_DATE
         json.dump({'closed': closed, 'open': open_w, 'asof': asof,
                    'publish_date': pub}, f, ensure_ascii=False)
     print(f"  [{site_name}] {len(closed)}c {len(open_w)}o")
@@ -7259,6 +7625,7 @@ def main():
         "Artificial Analysis": f"{TMP_DIR}/bench_Artificial_Analysis.json",
         "BenchLM.ai": f"{TMP_DIR}/bench_BenchLMai.json",
         "Arena.ai Text": f"{TMP_DIR}/bench_Arenaai_Text.json",
+        "Arena.ai Overall": f"{TMP_DIR}/bench_Arenaai_Overall.json",
         "SimpleBench.com": f"{TMP_DIR}/bench_SimpleBenchcom.json",
         "ARC-AGI-2": f"{TMP_DIR}/bench_ARC-AGI-2.json",
         "Design Arena": f"{TMP_DIR}/bench_Design_Arena.json",
@@ -7301,6 +7668,7 @@ def main():
 
     # Load all results
     global ARENA_TEXT_ASOF, ARENA_TEXT_PUBLISH_DATE
+    global ARENA_OVERALL_PUBLISH_DATE
     for site_name, path in site_files.items():
         if os.path.exists(path):
             with open(path) as f:
@@ -7317,9 +7685,25 @@ def main():
             # vintage stamp so the doc carries it on cache-hit runs too.
             if site_name == "Arena.ai Text" and data.get("publish_date"):
                 ARENA_TEXT_PUBLISH_DATE = data["publish_date"]
+            # stats-88: same restore for the agent board's publish date.
+            if site_name == "Arena.ai Overall" and data.get("publish_date"):
+                ARENA_OVERALL_PUBLISH_DATE = data["publish_date"]
 
     # Build unified table (handles rescaling internally via _rescale_score)
     closed_table, open_table, all_benchmarks, avg_benchmarks = build_unified_table(all_results)
+
+    # stats-88: fold Arena.ai Text + Arena.ai Overall into ONE shipped
+    # 'Arena' column (Overall-primary, quantile-equated text fill) BEFORE
+    # any downstream consumer sees the tables — metadata, monitors, casing,
+    # archive links, ECI attach, card models and the report all operate on
+    # the final column set only.
+    try:
+        arena_src_by, arena_raw_by = merge_arena_columns(
+            closed_table, open_table, all_results,
+            all_benchmarks, avg_benchmarks)
+    except Exception as e:  # noqa: BLE001
+        print(f"  [Arena merge] failed (non-fatal): {e}")
+        arena_src_by, arena_raw_by = {}, {}
 
     # Enrich models with OpenRouter catalog metadata (params, modalities,
     # pricing, context, reasoning…). Non-fatal: leaderboard works without it.
@@ -7353,6 +7737,17 @@ def main():
     except Exception as e:
         print(f"  [OpenRouter] metadata collection failed (non-fatal): {e}")
         models_meta = {}
+
+    # stats-88: per-row Arena provenance — arena_source ('overall' = measured
+    # on the agent board, 'text-calibrated' = quantile-equated from Text,
+    # 'text-only' = Overall source down) and arena_raw (the raw value the
+    # cell was built from: delta points for overall, Elo for the fill). The
+    # UI marker + tooltip and the prior-public Overall recovery both read it.
+    for _n, _src in arena_src_by.items():
+        rec = models_meta.setdefault(_n, {})
+        rec["arena_source"] = _src
+        if _n in arena_raw_by:
+            rec["arena_raw"] = arena_raw_by[_n]
 
     # EQBench alias footnotes (data-driven; renders as ★ next to the model
     # name in the UI). e.g. EQBench lists Qwen3.8-Max under its HF repo name.

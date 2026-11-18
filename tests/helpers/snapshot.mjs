@@ -28,7 +28,7 @@ export function loadSnapshot() {
 
 // Benchmarks the headline Avg is computed over (mirrors lib/constants.js).
 export const CORE_BENCHMARKS = [
-  'Artificial Analysis', 'BenchLM.ai', 'Arena.ai Text', 'SimpleBench.com',
+  'Artificial Analysis', 'BenchLM.ai', 'Arena', 'SimpleBench.com',
   'ARC-AGI-2', 'Design Arena', 'SWE-Marathon', 'FrontierSWE',
 ];
 

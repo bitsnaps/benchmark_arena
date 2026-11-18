@@ -45,7 +45,7 @@ export const PROFILES = {
     label: 'Everyday chat',
     icon: 'fa-comments',
     blurb: 'Assistants, drafting and everyday Q&A feel.',
-    benches: ['Arena.ai Text', 'BenchLM.ai', 'Artificial Analysis'],
+    benches: ['Arena', 'BenchLM.ai', 'Artificial Analysis'],
   },
   creative: {
     id: 'creative',

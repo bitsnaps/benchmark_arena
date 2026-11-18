@@ -22,6 +22,7 @@ const LETTERS = ['S', 'A', 'B', 'C', 'D', 'Unrated'];
   fs.mkdirSync(SHOTS, { recursive: true });
   const browser = await chromium.launch();
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  await context.addInitScript(() => window.localStorage.setItem('bl_card_v1', JSON.stringify({ version: 1, on: false })));
   const page = await context.newPage();
   page.setDefaultNavigationTimeout(60000);
   const errors = [];
@@ -94,6 +95,7 @@ const LETTERS = ['S', 'A', 'B', 'C', 'D', 'Unrated'];
   // ── 5. unknown ?tiers= value: dropped from URL, default chips return ──
   // (fresh context so the localStorage mode from earlier steps does not leak)
   const ctx2 = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  await ctx2.addInitScript(() => window.localStorage.setItem('bl_card_v1', JSON.stringify({ version: 1, on: false })));
   const page2 = await ctx2.newPage();
   await page2.goto(BASE + '#/?tiers=bogus', { waitUntil: 'load' });
   await page2.waitForSelector('table tbody tr', { timeout: 30000 });

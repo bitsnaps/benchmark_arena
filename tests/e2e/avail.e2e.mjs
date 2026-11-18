@@ -105,6 +105,7 @@ const expectCount = async (page, selector, expected, label) => {
   fs.mkdirSync(SHOTS, { recursive: true });
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await page.addInitScript(() => window.localStorage.setItem('bl_card_v1', JSON.stringify({ version: 1, on: false })));
   // CI-box hardening: goto can exceed the 30s default when the gate's  // preview server + chromium contend for CPU (stats-36 gate flakes)
   page.setDefaultNavigationTimeout(60000);
   // stats-84 gate hardening: under 15 chromium launches the vite preview

@@ -93,32 +93,35 @@ watch(showEci, (on) => {
   } catch { /* storage blocked/full — the toggle still works for the session */ }
 }, { flush: 'sync' });
 
-// ── stats-87: OpenRouter-only reveal toggle ───────────────────────────
+// ── stats-87/89: OpenRouter-only reveal toggle ────────────────────────
 // Open-weight models the OpenRouter catalog lists that no tracked
-// benchmark scores ("card models"). Like the unranked census: a
-// traceability surface, hidden unless asked for; the choice persists to
-// localStorage under a versioned key (only-ON stored, shipped default
-// survives cleared storage); ?card=1 deep links win over the stored value
-// on load (HomeView owns the param sync).
+// benchmark scores ("card models"). stats-89: they render INLINE at the
+// bottom of the ranked table (Ibrahim: a separate section made benchmark
+// comparison hard to spot), so the shipped default is ON — the board
+// keeps its ranked-first shape because scoreless rows sink under the
+// default score sort. Persistence stores only the OFF choice under a
+// versioned key (the shipped default survives cleared storage — the same
+// inverted contract as bl_eci_v1); ?card=0 / ?card=1 deep links win over
+// the stored value on load (HomeView owns the param sync).
 const CARD_STORAGE_KEY = 'bl_card_v1';
 const CARD_SCHEMA_VERSION = 1;
 const readStoredCard = () => {
   try {
-    if (typeof window === 'undefined' || !window.localStorage) return false;
+    if (typeof window === 'undefined' || !window.localStorage) return true;
     const raw = window.localStorage.getItem(CARD_STORAGE_KEY);
-    if (!raw) return false;
+    if (!raw) return true;
     const parsed = JSON.parse(raw);
-    return parsed && parsed.version === CARD_SCHEMA_VERSION ? parsed.on === true : false;
-  } catch { return false; }
+    return parsed && parsed.version === CARD_SCHEMA_VERSION ? parsed.on !== false : true;
+  } catch { return true; }
 };
 const showCardModels = ref(readStoredCard());
 watch(showCardModels, (on) => {
   try {
     if (typeof window === 'undefined' || !window.localStorage) return;
-    if (!on) window.localStorage.removeItem(CARD_STORAGE_KEY);
+    if (on) window.localStorage.removeItem(CARD_STORAGE_KEY);
     else window.localStorage.setItem(
       CARD_STORAGE_KEY,
-      JSON.stringify({ version: CARD_SCHEMA_VERSION, on: true }),
+      JSON.stringify({ version: CARD_SCHEMA_VERSION, on: false }),
     );
   } catch { /* storage blocked/full — the toggle still works for the session */ }
 }, { flush: 'sync' });

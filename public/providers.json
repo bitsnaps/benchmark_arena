@@ -16460,7 +16460,7 @@
         }
       ],
       "free_tier": true,
-      "edge_rtt_ms": 169
+      "edge_rtt_ms": 167
     },
     {
       "id": "cloudflare-workers-ai",
@@ -23291,7 +23291,7 @@
           "base": "z-ai/glm-5.3-flash"
         }
       ],
-      "edge_rtt_ms": 496
+      "edge_rtt_ms": 509
     },
     {
       "id": "poe",
@@ -24153,7 +24153,7 @@
           "ctx": 1050000
         }
       ],
-      "edge_rtt_ms": 368
+      "edge_rtt_ms": 454
     },
     {
       "id": "vercel-ai-gateway",
@@ -25416,7 +25416,7 @@
           "ctx": null
         }
       ],
-      "edge_rtt_ms": 471
+      "edge_rtt_ms": 402
     },
     {
       "id": "w-b-inference-gateway",

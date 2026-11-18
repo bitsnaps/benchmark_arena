@@ -1,15 +1,19 @@
-// stats-87 e2e: the "OpenRouter-only models" census — open-weight models
-// the OpenRouter catalog lists that no tracked benchmark scores.
+// stats-87/89 e2e: the "OpenRouter-only" card-model census — open-weight
+// models the OpenRouter catalog lists that no tracked benchmark scores.
+// stats-89: the census no longer renders as a separate section — the rows
+// merge INLINE into the ranked table (default ON, toggle hides/shows),
+// parked under the ranking by the default score sort.
 // Runs under tests/run-e2e.mjs (vite preview on 4173, base /benchmark_arena/).
 // Expectations derive from the committed snapshot's card_models section, so
 // a data refresh cannot silently invalidate the suite.
 //
 // Contract under test:
-//   · hidden by default (traceability surface, like the stats-79 census)
-//   · toolbar toggle carries the live count; reveal syncs ?card=1 and
-//     persists to localStorage; deep links force it on from a cold state
-//   · rows render display-only: OR-only chip, no rank, no Score
-//   · the Closed tab never shows the section (card models are open-weight)
+//   · merged rows visible by default in the MAIN table (count tag, clean URL)
+//   · each card row renders display-only: OR-only chip, no rank, no Score
+//   · the ranked top of the table is untouched (#1 keeps its rank number)
+//   · toggle off removes the rows, syncs ?card=0 and persists (localStorage)
+//   · deep links win on load: ?card=0 hides, ?card=1 forces on (clears OFF)
+//   · the Closed tab never shows card rows (card models are open-weight)
 //   · every card model resolves a model page (slug index includes them)
 import { chromium } from 'playwright';
 import fs from 'node:fs';
@@ -27,6 +31,18 @@ console.log(`card_models in snapshot: ${CARDS.length}`);
 
 function fail(msg) { console.error('FAIL:', msg); process.exitCode = 1; }
 const ok = (msg) => console.log('  ok:', msg);
+// poll briefly for the expected final count (hash navigations re-render
+// without a reload — same helper shape as avail.e2e)
+const expectCount = async (page, loc, expected, label) => {
+  let n = -1;
+  for (let i = 0; i < 40; i++) {
+    n = await loc.count();
+    if (n === expected) break;
+    await page.waitForTimeout(100);
+  }
+  if (n === expected) ok(`${label}: ${n}`);
+  else fail(`${label} = ${n}, expected ${expected}`);
+};
 
 (async () => {
   fs.mkdirSync(SHOTS, { recursive: true });
@@ -36,7 +52,7 @@ const ok = (msg) => console.log('  ok:', msg);
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
-  // exact row counts need the whole census on one page ("All")
+  // exact row counts need the whole table on one page ("All")
   await page.addInitScript(() => window.localStorage.setItem('arena.pagesize', '0'));
 
   if (CARDS.length === 0) {
@@ -47,67 +63,72 @@ const ok = (msg) => console.log('  ok:', msg);
     return;
   }
 
-  // ── default state: hidden census, visible toggle with the live count ──
+  const cardRowsInTable = () => page.locator('.b-table .table tbody tr:has(.oronly-chip)');
+
+  // ── default state: merged inline rows visible, clean URL, live count ──
   await page.goto(BASE, { waitUntil: 'networkidle' });
   await page.waitForSelector('.b-table .table tbody tr');
   await page.waitForTimeout(400);
-  if (await page.locator('.oronly-section').count()) {
-    fail('OpenRouter-only census must be hidden by default');
-  } else ok('OR-only census hidden by default (toggle off)');
+  if (page.url().includes('card=')) fail('default URL must be clean (no ?card), got ' + page.url());
+  else ok('default URL stays clean (ON is the shipped default)');
+  await expectCount(page, cardRowsInTable(), CARDS.length,
+    `main table carries all ${CARDS.length} card rows inline`);
+
+  // display-only contract on the first card row: OR-only chip, no rank, no score
+  const firstCard = cardRowsInTable().first();
+  const rankText = (await firstCard.locator('.rank').innerText()).trim();
+  if (rankText !== '—') fail(`card row rank must be an honest dash, got "${rankText}"`);
+  else ok('card rows show no rank (—)');
+  const scoreText = (await firstCard.locator('td:nth-child(3)').innerText()).trim();
+  if (!scoreText.includes('—')) fail(`card row Score must be a dash, got "${scoreText}"`);
+  else ok('card rows show no computed Score');
+  // ranked top untouched: the table's first row is still ranked #1
+  const topRank = (await page.locator('.b-table .table tbody tr').first().locator('.rank').innerText()).trim();
+  if (topRank !== '1') fail(`ranked #1 must keep its rank number, got "${topRank}"`);
+  else ok('ranked #1 keeps its rank number above the merged card rows');
   const reveal = page.locator('label.switch:has-text("Show OpenRouter-only")');
-  if (!(await reveal.count())) fail('OR-only reveal toggle missing despite census rows');
-  else {
-    const tag = (await reveal.locator('.tag').innerText()).trim();
-    if (tag !== String(CARDS.length)) fail(`reveal count tag: expected ${CARDS.length}, got "${tag}"`);
-    else ok(`reveal toggle carries the live census count (${tag})`);
+  const tag = (await reveal.locator('.tag').innerText()).trim();
+  if (tag !== String(CARDS.length)) fail(`reveal count tag: expected ${CARDS.length}, got "${tag}"`);
+  else ok(`reveal toggle carries the live census count (${tag})`);
+  await page.screenshot({ path: path.join(SHOTS, 'oronly-inline-merge.png') });
 
-    // ── toggle on: section renders display-only rows ──
-    await reveal.click();
-    await page.waitForTimeout(400);
-    const section = page.locator('.oronly-section');
-    if (!(await section.count())) fail('toggling on must reveal the OR-only census');
-    else {
-      ok('toggling on reveals the OR-only census');
-      if (!page.url().includes('card=1')) fail('reveal should sync ?card=1 into the URL, got ' + page.url());
-      else ok('reveal state syncs to ?card=1 in the URL');
-      const rows = section.locator('.b-table .table tbody tr');
-      const n = await rows.count();
-      if (n !== CARDS.length) fail(`census rows: expected ${CARDS.length}, got ${n}`);
-      else ok(`census lists exactly the ${CARDS.length} OpenRouter-only open models`);
-      // display-only contract on the first row: OR-only chip, no rank, no score
-      const first = rows.first();
-      if (!(await first.locator('.oronly-chip').count())) fail('card row must carry the OR-only chip');
-      else ok('card rows carry the OR-only chip');
-      const rankText = (await first.locator('.rank').innerText()).trim();
-      if (rankText !== '—') fail(`card row rank must be an honest dash, got "${rankText}"`);
-      else ok('card rows show no rank (—)');
-      const scoreText = (await first.locator('td:nth-child(3)').innerText()).trim();
-      if (!scoreText.includes('—')) fail(`card row Score must be a dash, got "${scoreText}"`);
-      else ok('card rows show no computed Score');
-      await page.screenshot({ path: path.join(SHOTS, 'oronly-census.png') });
+  // ── Closed tab: never (card models are open-weight), while toggle is ON ──
+  await page.goto(BASE + '#/?tier=closed', { waitUntil: 'networkidle' });
+  await page.waitForSelector('.b-table .table tbody tr');
+  await page.waitForTimeout(400);
+  await expectCount(page, cardRowsInTable(), 0, 'Closed tab shows zero card rows (toggle ON)');
 
-      // reload → the reveal choice persists (localStorage + param still in URL)
-      await page.reload({ waitUntil: 'networkidle' });
-      await page.waitForSelector('.b-table .table tbody tr');
-      await page.waitForTimeout(400);
-      if (!(await page.locator('.oronly-section').count())) fail('reveal choice must survive a reload');
-      else ok('reveal choice survives a reload (localStorage)');
-    }
-  }
+  // back to the open board, still ON
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  await page.waitForSelector('.b-table .table tbody tr');
+  await page.waitForTimeout(400);
 
-  // ── deep link forces the census on from a cold state ──
+  // ── toggle off: rows vanish, ?card=0 syncs, choice persists ──
+  await reveal.click();
+  await page.waitForTimeout(400);
+  await expectCount(page, cardRowsInTable(), 0, 'toggling off removes every card row from the table');
+  if (!page.url().includes('card=0')) fail('hiding should sync ?card=0 into the URL, got ' + page.url());
+  else ok('hidden state syncs to ?card=0 in the URL');
+  await page.reload({ waitUntil: 'networkidle' });
+  await page.waitForSelector('.b-table .table tbody tr');
+  await page.waitForTimeout(400);
+  await expectCount(page, cardRowsInTable(), 0, 'hidden choice survives a reload (localStorage)');
+
+  // ── deep links win on load ──
   await page.goto(BASE + '#/?card=1', { waitUntil: 'networkidle' });
   await page.waitForSelector('.b-table .table tbody tr');
   await page.waitForTimeout(400);
-  if (!(await page.locator('.oronly-section').count())) fail('?card=1 must force the census on');
-  else ok('?card=1 deep link forces the census on');
-
-  // ── Closed tab: never (card models are open-weight) ──
-  await page.goto(BASE + '#/?tier=closed&card=1', { waitUntil: 'networkidle' });
+  await expectCount(page, cardRowsInTable(), CARDS.length, '?card=1 forces the rows on (clears a stored OFF)');
+  // ?card=1 must clear the stored OFF choice: a fresh load without params stays ON
+  await page.goto(BASE, { waitUntil: 'networkidle' });
   await page.waitForSelector('.b-table .table tbody tr');
   await page.waitForTimeout(400);
-  if (await page.locator('.oronly-section').count()) fail('Closed tab must not render the OR-only section');
-  else ok('Closed tab hides the OR-only section');
+  await expectCount(page, cardRowsInTable(), CARDS.length, 'after ?card=1, the stored default is ON again');
+
+  await page.goto(BASE + '#/?card=0', { waitUntil: 'networkidle' });
+  await page.waitForSelector('.b-table .table tbody tr');
+  await page.waitForTimeout(400);
+  await expectCount(page, cardRowsInTable(), 0, '?card=0 deep link forces the rows off');
 
   // ── model page: every card model resolves a score card ──
   const card = CARDS[0];
@@ -118,7 +139,7 @@ const ok = (msg) => console.log('  ok:', msg);
   else ok(`card model page resolves for "${card.name}"`);
   await page.screenshot({ path: path.join(SHOTS, 'oronly-model-page.png') });
 
-  // ── leave defaults for the rest of the suite ──
+  // ── leave defaults for the rest of the suite (ON, no stored key) ──
   await page.goto(BASE, { waitUntil: 'networkidle' });
   await page.evaluate(() => window.localStorage.removeItem('bl_card_v1'));
   await page.waitForTimeout(200);

@@ -21,12 +21,10 @@ const props = defineProps({
   // table reuses this component; rows there show real cells but never a
   // computed Score (the CL blend would be mostly neutral prior).
   unrankedMode: { type: Boolean, default: false },
-  // stats-87: card-mode — the "OpenRouter-only" section under the ranked
-  // table: open-weight models the catalog lists that no tracked benchmark
-  // scores. Same trimmed-cell discipline as unranked mode (no per-row
-  // tooltip layer — hundreds of rows at page-size=All must not OOM), plus
-  // the OR-only chip instead of the unranked chip.
-  cardMode: { type: Boolean, default: false },
+  // stats-89: card rows render INLINE in this same table when the
+  // OpenRouter-only reveal is on — no dedicated prop needed; every branch
+  // below keys off the row's card flag (isCardRow) like the older/unranked
+  // treatment does.
 });
 
 // ── Pagination (stats-20, unified in stats-21) ────────────────────────────────────────────
@@ -51,14 +49,15 @@ const rowCls = (row) =>
     isUnranked(row) ? 'is-unranked-row' : '',
     isCardRow(row) ? 'is-card-row' : ''].join(' ').trim();
 
-// stats-87: tooltip for the "OR-only" chip — why this row carries no scores
-// at all (the card-model contract, mirrored on the section heading)
+// stats-87/89: tooltip for the "OR-only" chip — why this row carries no scores
+// at all (the card-model contract, mirrored on the toggle tooltip)
 const cardTitle = () =>
-  'OpenRouter-only — listed on OpenRouter but scored by none of the benchmarks we track yet. Identity, pricing and context info only; no scores to claim, never in the global Score. It joins the board automatically when a benchmark covers it.';
+  'OpenRouter-only — listed on OpenRouter but scored by none of the benchmarks we track yet. Identity, pricing and context info only; no scores to claim, never in the global Score. It joins the ranked board automatically when a benchmark covers it.';
 
-// stats-65/stats-87: both census sections render the trimmed plain-cell
-// layout — every branch below keys off this predicate so a card row gets
-// exactly the unranked treatment (no tooltip layer, no computed rating).
+// stats-65/stats-87: census rows (the unranked section + inline card rows)
+// render the trimmed plain-cell layout — every branch below keys off this
+// predicate so a card row gets exactly the unranked treatment (no tooltip
+// layer, no computed rating).
 const isPlainRow = (row) => isUnranked(row) || isCardRow(row);
 
 // stats-65: tooltip for the "unranked" chip — why this row carries no rating

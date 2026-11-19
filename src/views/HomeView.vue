@@ -293,25 +293,39 @@ const applyFilters = (list) => {
 
 const rows = computed(() => {
   const all = applyFilters(pivotFor(tier.value)).filter(r => !isUnranked(r));
-  // stats-89: card rows join the ranked table INLINE while revealed —
-  // same toolbar filters, same grid, honest dashes everywhere. b-table's
-  // default score sort (nulls sink via byScore) parks them below the
-  // ranking; column sorts (name/price/context) slot them in naturally.
-  // Closed tab never merges (cardRows is empty there — open-weight only).
+  // stats-89/90: census rows join the ranked table INLINE while revealed —
+  // card rows (OpenRouter-only, default ON) and new & unranked rows
+  // (single-source, default OFF per Ibrahim: keep the board fast/light).
+  // Same toolbar filters, same grid, honest dashes everywhere. The census
+  // key parks scoreless rows below the ranking (they claim no rating, so
+  // they must not sort by their mostly-neutral prior blend either); b-table's
+  // score sort takes over from there, and column sorts (name/price/context)
+  // slot census rows in naturally since some cells are real.
+  // Closed tab: card rows never merge (open-weight only); unranked closed
+  // models do — pivotFor(tier) already scopes them per tab.
+  const censusScore = (r) => isUnranked(r) ? -1 : (scoreForModel(r) ?? -1);
   const cards = showCardModels.value ? cardRows.value : [];
-  if (!showOlder.value) return [...all.filter(r => !isOlder(r)), ...cards];
+  const un = showUnranked.value ? unrankedRows.value : [];
+  if (!showOlder.value) return [...all.filter(r => !isOlder(r)), ...cards, ...un];
   // Older toggle on: pre-sort the merged list by the CL-weighted score so
-  // older AND card models sit at their natural position (scoreless rows
-  // sink; the table's interactive sort takes over from there).
-  return [...all, ...cards].sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1));
+  // older models sit at their natural position and BOTH census kinds park
+  // at the end (scoreless rows sink; the table's interactive sort takes
+  // over from there).
+  return [...all, ...cards, ...un].sort((a, b) => censusScore(b) - censusScore(a));
 });
 
-// stats-65: the "New & unranked" section — every admitted single-source row
-// (unranked flag baked by the scraper) that passes the SAME toolbar filters
-// as the ranked table. Newest release first; rows without a catalog date
-// (launch-day, not yet provider-matched) sink to the end alphabetically.
-// Older+unranked rows stay behind the Older-versions toggle like everywhere
-// else: hidden while the toggle is off, shown dimmed when it is on.
+// stats-65/stats-90: the "New & unranked" census — every admitted
+// single-source row (unranked flag baked by the scraper) that passes the
+// SAME toolbar filters as the ranked table. stats-90: no longer a separate
+// section — these rows merge INLINE into the main table while the reveal
+// toggle is on (default OFF: the census is a traceability surface, and
+// Ibrahim wants the default board fast/light). Newest release first; rows
+// without a catalog date (launch-day, not yet provider-matched) sink to
+// the end alphabetically. Older+unranked rows stay behind the
+// Older-versions toggle like everywhere else: hidden while the toggle is
+// off, shown dimmed when it is on. The ranked universe (pivotFor) is
+// untouched — these rows never join it, so no rank/Score/grade math can
+// see them.
 const unrankedRows = computed(() => {
   const list = applyFilters(pivotFor(tier.value))
     .filter(r => isUnranked(r) && (showOlder.value || !isOlder(r)));
@@ -422,19 +436,25 @@ const openModel = (name) =>
           <b-tag size="is-small" type="is-warning is-light" rounded>{{ olderCount }}</b-tag>
         </b-switch>
         <span v-if="showOlder" class="cell-sub" style="white-space:nowrap">older models shown inline (dimmed, unranked)</span>
-        <!-- stats-79: the unranked census is a traceability surface — hidden
-             by default, revealed from here. Toggle itself hidden when the
-             census is empty (a control for nothing is UI debt). -->
-        <b-switch
-          v-if="unrankedCount > 0"
-          v-model="showUnranked"
-          size="is-small"
-          type="is-info"
-          left-label
-        >
-          Show new &amp; unranked
-          <b-tag size="is-small" :type="showUnranked ? 'is-info' : 'is-info is-light'" rounded>{{ unrankedCount }}</b-tag>
-        </b-switch>
+        <!-- stats-79/90: the unranked census is a traceability surface —
+             hidden by default, revealed from here; rows render INLINE in the
+             main table (stats-90, the stats-89 card-row pattern), parked
+             under the ranking by the score sort. Toggle itself hidden when
+             the census is empty (a control for nothing is UI debt). -->
+        <b-tooltip label="Single-source models the ranking is not allowed to claim yet — one benchmark source, real scores shown as-is, no computed rating and no rank. Shown inline below the ranking; they join it automatically when a 2nd source lands. Hidden by default to keep the board fast."
+          type="is-dark" multilined :delay="100">
+          <b-switch
+            v-if="unrankedCount > 0"
+            v-model="showUnranked"
+            size="is-small"
+            type="is-info"
+            left-label
+          >
+            Show new &amp; unranked
+            <b-tag size="is-small" :type="showUnranked ? 'is-info' : 'is-info is-light'" rounded>{{ unrankedCount }}</b-tag>
+          </b-switch>
+        </b-tooltip>
+        <span v-if="showUnranked && unrankedCount > 0" class="cell-sub" style="white-space:nowrap">new &amp; unranked shown inline (dimmed, no rank yet)</span>
         <!-- stats-87/89: OpenRouter-only census — open-weight models the
              catalog lists that no tracked benchmark scores. stats-89: ON by
              default and merged inline at the bottom of the table (the
@@ -590,24 +610,10 @@ const openModel = (name) =>
       </div>
     </div>
 
-    <!-- The table — older models render inline (dimmed, unranked) when toggled on -->
+    <!-- The table — older models render inline (dimmed, unranked) when toggled on;
+         stats-90: the new & unranked census merges inline the same way while revealed -->
     <div class="mt">
       <PivotTable :rows="rows" :tier="tier" />
-    </div>
-
-    <!-- stats-65/stats-79: New & unranked — single-source rows the ranking is
-         not allowed to claim yet. Same columns, dimmed, no Score/rank; they
-         graduate into the ranked table automatically at 2 sources. Hidden
-         behind the Show-new-&-unranked toggle by default. -->
-    <div v-if="showUnranked && unrankedRows.length" class="mt-sm unranked-section">
-      <div class="row" style="gap:.6rem;align-items:baseline;padding:0 .4rem .35rem">
-        <h2 class="section-title" style="font-size:1.05rem;margin:0">New &amp; unranked</h2>
-        <span class="cell-sub">
-          {{ unrankedCount }} model{{ unrankedCount === 1 ? '' : 's' }} with one benchmark source —
-          real scores shown as-is, no rating yet. They join the ranking automatically when a 2nd source lands.
-        </span>
-      </div>
-      <PivotTable :rows="unrankedRows" :tier="tier" unranked-mode />
     </div>
 
     <p class="cell-sub mt-sm" style="text-align:center">

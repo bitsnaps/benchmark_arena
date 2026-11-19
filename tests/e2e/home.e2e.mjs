@@ -261,15 +261,22 @@ const ok = (msg) => console.log('  ok:', msg);
       else ok(`archived links respect the Older-versions filter (${gotOff} current rows linked)`);
     }
 
-    // ── stats-79: the unranked census hides behind a toggle ──
+    // ── stats-79/90: the unranked census hides behind a toggle ──
     // Traceability surface, not a default view: absent by default, revealed
-    // by "Show new & unranked" with the live count in the label; the reveal
-    // syncs to ?unranked=1 (deep links win on load) and persists to
-    // localStorage. Ends with the census OFF so later blocks see defaults.
+    // by "Show new & unranked" with the live count in the label. stats-90:
+    // revealed rows merge INLINE into the main table (the stats-89
+    // card-row pattern — no separate section), parked under the ranking by
+    // the score sort; the reveal syncs to ?unranked=1 (deep links win on
+    // load) and persists to localStorage. Ends with the census OFF so
+    // later blocks see defaults.
     {
       const unrankedTotal = ALLROWS.filter(r => r.unranked && !isOld(r)).length;
-      const section = page.locator('.unranked-section');
-      if (await section.count()) fail('unranked census must be hidden by default (stats-79)');
+      const closedNames = new Set((data.unified_closed || []).map(r => r.name));
+      const unInTable = () => page.locator('.b-table .table tbody tr:has(.unranked-chip)');
+      if (await page.locator('.unranked-section').count())
+        fail('separate unranked section must be gone (stats-90 inline merge)');
+      else ok('no separate unranked section (census merges inline, stats-90)');
+      if (await unInTable().count()) fail('unranked census must be hidden by default (stats-79/90)');
       else ok('unranked census hidden by default (traceability toggle off)');
       const reveal = page.locator('label.switch:has-text("Show new & unranked")');
       if (unrankedTotal === 0) {
@@ -283,35 +290,51 @@ const ok = (msg) => console.log('  ok:', msg);
           else ok(`reveal toggle carries the live census count (${tag})`);
           await reveal.click();
           await page.waitForTimeout(400);
-          if (!(await section.count())) fail('toggling on must reveal the unranked census');
-          else ok('toggling on reveals the unranked census');
+          const shown = await unInTable().count();
+          if (shown !== unrankedTotal) fail(`inline census rows: expected ${unrankedTotal}, got ${shown}`);
+          else ok(`revealed census merges exactly ${unrankedTotal} unranked rows into the main table`);
           if (!page.url().includes('unranked=1')) fail('toggling on should sync ?unranked=1 into the URL, got ' + page.url());
           else ok('reveal state syncs to ?unranked=1 in the URL');
-          const censusRows = await section.locator('.b-table .table tbody tr').count();
-          if (censusRows !== unrankedTotal) fail(`census rows: expected ${unrankedTotal}, got ${censusRows}`);
-          else ok(`census lists exactly the ${unrankedTotal} admitted single-source rows`);
+          // census rows claim no rank and no rating: every chip row is an
+          // honest dash in the # column, and the ranked #1 stays on top
+          const rankDash = await unInTable().evaluateAll(rows =>
+            rows.filter(tr => (tr.querySelector('.rank')?.textContent || '').trim() === '—').length);
+          if (rankDash !== shown) fail(`unranked rows must show no rank: ${rankDash}/${shown} dash`);
+          else ok(`all ${rankDash} inline census rows show the honest rank dash`);
+          const topRank = (await page.locator('.b-table .table tbody tr').first().locator('.rank').innerText()).trim();
+          if (topRank !== '1') fail(`default sort must keep ranked #1 above the parked census, got "${topRank}"`);
+          else ok('default score sort parks the census under the ranking (#1 still on top)');
           // reload → localStorage keeps the census open (param still in URL)
           await page.reload({ waitUntil: 'networkidle' });
           await page.waitForSelector('.b-table .table tbody tr');
           await page.waitForTimeout(400);
-          if (!(await section.count())) fail('reveal choice must survive a reload (localStorage)');
+          if (!(await unInTable().count())) fail('reveal choice must survive a reload (localStorage)');
           else ok('reveal choice survives a reload (localStorage)');
           // toggle off → census hides, param drops, stored choice clears
           await page.locator('label.switch:has-text("Show new & unranked")').click();
           await page.waitForTimeout(400);
-          if (await section.count()) fail('toggling off must hide the census again');
+          if (await unInTable().count()) fail('toggling off must hide the census again');
           else ok('toggling off hides the census and drops ?unranked=1');
           // deep link forces the census on even from a cold default state
           await page.goto(BASE + '#/?unranked=1', { waitUntil: 'networkidle' });
           await page.waitForSelector('.b-table .table tbody tr');
           await page.waitForTimeout(400);
-          if (!(await page.locator('.unranked-section').count())) fail('?unranked=1 must force the census on');
+          if (!(await unInTable().count())) fail('?unranked=1 must force the census on');
           else ok('?unranked=1 deep link forces the census on');
+          // per-tab scoping survives the merge: the Closed tab shows only
+          // the closed subset of the census (open unranked rows stay hidden)
+          await page.goto(BASE + '#/?tier=closed&unranked=1', { waitUntil: 'networkidle' });
+          await page.waitForSelector('.b-table .table tbody tr');
+          await page.waitForTimeout(400);
+          const closedUn = ALLROWS.filter(r => r.unranked && !isOld(r) && closedNames.has(r.name)).length;
+          const shownClosed = await unInTable().count();
+          if (shownClosed !== closedUn) fail(`closed-tab census: expected ${closedUn}, got ${shownClosed}`);
+          else ok(`closed tab merges exactly the ${closedUn} closed unranked rows`);
           // leave the default state for the blocks below (clears storage too)
           await page.goto(BASE, { waitUntil: 'networkidle' });
           await page.waitForSelector('.b-table .table tbody tr');
           await page.waitForTimeout(400);
-          if (await page.locator('.unranked-section').count()) fail('plain BASE must render with the census hidden');
+          if (await unInTable().count()) fail('plain BASE must render with the census hidden');
           else ok('plain home renders with the census hidden again');
         }
       }

@@ -17,14 +17,11 @@ import { computed, ref, watch } from 'vue';
 const props = defineProps({
   rows: { type: Array, required: true },
   tier: { type: String, default: 'all' },
-  // stats-65: unranked-mode — the "New & unranked" section under the ranked
-  // table reuses this component; rows there show real cells but never a
-  // computed Score (the CL blend would be mostly neutral prior).
-  unrankedMode: { type: Boolean, default: false },
-  // stats-89: card rows render INLINE in this same table when the
-  // OpenRouter-only reveal is on — no dedicated prop needed; every branch
-  // below keys off the row's card flag (isCardRow) like the older/unranked
-  // treatment does.
+  // stats-90: unranked-mode retired — the "New & unranked" census no longer
+  // renders as a separate section; its rows merge INLINE into this same
+  // table (stats-89 card-row pattern). stats-65 already made every branch
+  // key off isUnranked/isCardRow (isPlainRow), so the census treatment is
+  // shared: dimmed, honest dashes, real cells as-is, no computed rating.
 });
 
 // ── Pagination (stats-20, unified in stats-21) ────────────────────────────────────────────
@@ -190,9 +187,15 @@ function byECI(a, b, isAsc) {
 }
 
 // Sorter for the global Score column (nulls always sink to the bottom)
+// stats-90: census rows (unranked + card) claim no rating — the UI shows
+// them an honest dash, so they must SORT as scoreless too. A single-source
+// row still yields a mostly-neutral prior blend from scoreForModel; letting
+// it drive the sort would interleave dash-Score rows mid-table and turn the
+// census into a ghost ranking. Parked under the ranking instead.
+const censusScoreKey = (r) => (isUnranked(r) || isCardRow(r)) ? null : scoreForModel(r);
 function byScore(a, b, isAsc) {
-  const av = scoreForModel(a);
-  const bv = scoreForModel(b);
+  const av = censusScoreKey(a);
+  const bv = censusScoreKey(b);
   if (av === null && bv === null) return 0;
   if (av === null) return 1;
   if (bv === null) return -1;
@@ -210,10 +213,13 @@ function byPrice(a, b, isAsc) {
 }
 
 // Sorter for the Value column — score per 1M blended tokens; rows without a
-// value (no score or no price, free tiers) sink last in BOTH directions
+// value (no score or no price, free tiers) sink last in BOTH directions.
+// stats-90: census rows claim no rating, so no value either — a Value number
+// on a dash-Score row would be a rating through the back door.
 function byValue(a, b, isAsc) {
-  const av = valueFor(a);
-  const bv = valueFor(b);
+  const key = (r) => (isUnranked(r) || isCardRow(r)) ? null : valueFor(r);
+  const av = key(a);
+  const bv = key(b);
   if (av === null && bv === null) return 0;
   if (av === null) return 1;
   if (bv === null) return -1;
@@ -405,7 +411,9 @@ const limitedTitle = (row) =>
       </template>
       <template #default="props">
         <template v-if="isPlainRow(props.row)">
-          <span v-if="valueFor(props.row) !== null" class="num value-cell" style="font-weight:600">{{ fmtValue(valueFor(props.row)) }}</span>
+          <!-- stats-90: unranked rows claim no value (no rating → no Score÷price
+               quotient — same honesty rule as the dash Score above) -->
+          <span v-if="!isUnranked(props.row) && valueFor(props.row) !== null" class="num value-cell" style="font-weight:600">{{ fmtValue(valueFor(props.row)) }}</span>
           <span v-else class="cell-sub value-cell">—</span>
         </template>
         <template v-else>

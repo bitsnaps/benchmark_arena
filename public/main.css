@@ -730,6 +730,36 @@ a.hbar:hover .name { color: var(--teal); }
   color: var(--muted);
 }
 
+/* ── Creator-reported benchmarks — the vendor lane (stats-91) ── */
+/* Display-only rows on the model page: benchmark | qualifier chip | score.
+   Deliberately bar-less and rank-less — these numbers never compete with
+   measured results. */
+.vendor-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .4rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.vendor-row:last-of-type { border-bottom: 0; }
+.vendor-row .name {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.vendor-side { display: flex; align-items: center; white-space: nowrap; }
+/* stats-91: count-only row link on card rows — quiet, monospace-ish */
+.vendor-link {
+  color: var(--muted);
+  font-size: .78rem;
+  white-space: nowrap;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--muted);
+}
+.vendor-link:hover { color: var(--teal); border-bottom-color: var(--teal); }
+
 /* ── Compare pivot — models × providers (stats-18) ────────── */
 .pm-controls {
   flex-wrap: wrap;

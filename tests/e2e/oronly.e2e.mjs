@@ -139,6 +139,62 @@ const expectCount = async (page, loc, expected, label) => {
   else ok(`card model page resolves for "${card.name}"`);
   await page.screenshot({ path: path.join(SHOTS, 'oronly-model-page.png') });
 
+  // ── stats-91: the creator-reported (vendor) lane ──
+  // Count-only row links in the table (never vendor numbers inside the
+  // table), and the full provenance panel on the model page behind them.
+  {
+    const withVendor = CARDS.filter(c => (c.vendor_scores || []).length);
+    const totalVendor = withVendor.reduce((a, c) => a + c.vendor_scores.length, 0);
+    console.log(`  vendor lane in snapshot: ${totalVendor} scores on ${withVendor.length} card models`);
+    // back on the board with the census forced ON (the ?card=0 deep-link
+    // test above stored an OFF choice; ?card=1 clears it per contract)
+    await page.goto(BASE + '#/?card=1', { waitUntil: 'networkidle' });
+    await page.waitForSelector('.b-table .table tbody tr');
+    await page.waitForTimeout(400);
+    await expectCount(page, page.locator('.b-table .table tbody tr:has(.oronly-chip) .vendor-link'),
+      withVendor.length, 'main table shows a count-only creator-scores link on exactly the scored card rows');
+    const linkText = (await page.locator('.vendor-link').first().innerText().catch(() => '')).trim();
+    if (!/\d+ creator scores/.test(linkText)) fail(`row link must be count-only, got "${linkText}"`);
+    else ok('row link carries a count, not vendor numbers');
+
+    // model page WITH scores: LongCat 2.0 (Ibrahim's example when he
+    // proposed the lane) — panel, count, disclaimer, qualifier chip, link
+    const lc = withVendor.find(c => c.name === 'LongCat 2.0') || withVendor[0];
+    await page.goto(BASE + '#/model/' + slugify(lc.name), { waitUntil: 'networkidle' });
+    await page.waitForSelector('.model-head', { timeout: 10000 });
+    const panel = page.locator('.panel-lab:has(h3:has-text("Creator-reported benchmarks"))');
+    if (!(await panel.count())) fail(`creator-reported panel missing on "${lc.name}"`);
+    else ok(`creator-reported panel renders on "${lc.name}"`);
+    const rowsShown = await panel.locator('.vendor-row').count();
+    if (rowsShown !== lc.vendor_scores.length) fail(`panel rows: expected ${lc.vendor_scores.length}, got ${rowsShown}`);
+    else ok(`panel lists all ${rowsShown} creator-reported benchmarks`);
+    const disc = await panel.locator('.notice').innerText().catch(() => '');
+    if (!disc.includes('not measured by us')) fail('disclaimer must state the numbers are not measured by us');
+    else ok('disclaimer present (self-reported, not measured by us)');
+    if (!(await panel.locator('.vendor-row .tag-lab').count())) fail('qualifier chip missing on vendor rows');
+    else ok('qualifier chips render (in-house / cited / reported)');
+    if (!(await panel.locator('a:has-text("view the model card")').count())) fail('panel must link the model card');
+    else ok('panel links the model card (provenance)');
+    if (lc.vendor_scores.some(s => s.source === 'hf-eval')) {
+      // structured records carry their report date — shown in the panel
+      const dated = await panel.locator('.vendor-row .cell-sub').count();
+      if (!dated) fail('hf-eval rows should surface their report date');
+      else ok('structured (hf-eval) rows surface their report date');
+    }
+    await page.screenshot({ path: path.join(SHOTS, 'vendor-panel.png') });
+
+    // model page WITHOUT scores: the panel must be absent (honest gap, no
+    // empty section) — pick a census model with no vendor_scores
+    const bare = CARDS.find(c => !(c.vendor_scores || []).length);
+    if (bare) {
+      await page.goto(BASE + '#/model/' + slugify(bare.name), { waitUntil: 'networkidle' });
+      await page.waitForSelector('.model-head', { timeout: 10000 });
+      if (await page.locator('h3:has-text("Creator-reported benchmarks")').count())
+        fail(`"${bare.name}" has no vendor scores — panel must not render`);
+      else ok(`"${bare.name}" shows no vendor panel (honest gap)`);
+    }
+  }
+
   // ── leave defaults for the rest of the suite (ON, no stored key) ──
   await page.goto(BASE, { waitUntil: 'networkidle' });
   await page.evaluate(() => window.localStorage.removeItem('bl_card_v1'));

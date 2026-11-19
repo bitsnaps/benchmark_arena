@@ -38,7 +38,7 @@ const perPage = computed(() => (pageSize.value === 0
 // filter/tab changes reshape the list — land back on the first page
 watch(() => props.rows.length, () => { page.value = 1; });
 
-const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, isUnranked, isCardRow, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor, archiveLinkFor, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue, modelSlug } = useData();
+const { stats, coreBenchmarks, scoreForModel, avgForModel, clForModel, coveredCountForModel, rankOf, tierOf, benchThAttrs, isOlder, isUnranked, isCardRow, supersededBy, metaFor, releaseDateOf, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, hasFreeListingFor, archiveLinkFor, tiersMode, gradeFor, gradeValueFor, gradeSpeedFor, gradeBoundsOverall, gradeBoundsValue, modelSlug, vendorScoresFor } = useData();
 const { compareMode, compareRows, isSameModel, canCheck, showEci } = useLeaderboard();
 
 // Opacity bands from benchmark coverage + extra dimming for older versions
@@ -53,6 +53,12 @@ const rowCls = (row) =>
 // at all (the card-model contract, mirrored on the toggle tooltip)
 const cardTitle = () =>
   'OpenRouter-only — listed on OpenRouter but scored by none of the benchmarks we track yet. Identity, pricing and context info only; no scores to claim, never in the global Score. It joins the ranked board automatically when a benchmark covers it.';
+
+// stats-91: creator-reported score count for a card row — the row link is
+// count-only (no numbers in the table): a vendor number sitting beside our
+// measured cells WILL be misread as comparable, so the detail lives on the
+// model page panel behind this link.
+const vendorCountOf = (row) => vendorScoresFor(row).length;
 
 // stats-65/stats-87: census rows (the unranked section + inline card rows)
 // render the trimmed plain-cell layout — every branch below keys off this
@@ -341,6 +347,15 @@ const limitedTitle = (row) =>
             <b-tooltip v-if="isOlder(props.row)" :label="olderTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip">older</span></b-tooltip>
             <b-tooltip v-if="isUnranked(props.row)" :label="unrankedTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip unranked-chip">unranked</span></b-tooltip>
             <b-tooltip v-if="isCardRow(props.row)" :label="cardTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip oronly-chip">OR-only</span></b-tooltip>
+            <!-- stats-91: creator-reported lane — count-only link to the model
+                 page panel (never vendor numbers inside the table) -->
+            <router-link
+              v-if="vendorCountOf(props.row)"
+              class="vendor-link"
+              :to="{ name: 'model', params: { slug: modelSlug(props.row.name) } }"
+              :title="vendorCountOf(props.row) + ' creator-reported benchmarks — details on the model page (self-reported, never in the Score)'"
+              @click.stop
+            >{{ vendorCountOf(props.row) }} creator scores <i class="fas fa-arrow-up-right-from-square"></i></router-link>
             <b-tooltip v-if="!isOlder(props.row) && !isUnranked(props.row) && !isCardRow(props.row) && isLimited(props.row)" :label="limitedTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="limited-chip">limited data</span></b-tooltip>
             <b-tooltip v-if="!isUnranked(props.row) && hfUrlFor(props.row)" :label="'Hugging Face: ' + hfIdFor(props.row)" type="is-dark" :delay="100" append-to-body><a class="hf-chip" :href="hfUrlFor(props.row)" target="_blank" rel="noopener noreferrer" @click.stop>HF</a></b-tooltip>
             <b-tooltip v-if="!isUnranked(props.row) && !isCardRow(props.row) && hasFreeListingFor(props.row)" :label="freeTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="free-chip">free</span></b-tooltip>

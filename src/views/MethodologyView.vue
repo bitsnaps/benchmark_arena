@@ -185,6 +185,15 @@ watch(() => route.query.s, jumpFromQuery);
             It joins the ranking automatically once a second source covers it.</li>
           <li>The <em>NEW</em> badge marks models released within a recency window you can widen
             or shrink; release dates come from the provider catalog.</li>
+          <li><strong>Creator-reported benchmarks</strong> (stats-91): open-weight census models whose
+            creators publish their own eval numbers — on the HF model card or in HF's structured
+            eval files — get a <em>Creator-reported benchmarks</em> panel on their model page, with a
+            count-only link from the leaderboard row. Every number keeps its provenance (the card's
+            own wording, the qualifier — measured in-house by the creator vs cited from a third
+            party — and the source link) and a standing disclaimer: self-reported, not measured by
+            us. Vendor numbers never enter the Score, ranks or the avg set, and never appear inside
+            the leaderboard table itself — a vendor 88.9 next to a measured 78.2 would be misread
+            as comparable no matter how it is dimmed.</li>
         </ul>
       </div>
     </div>

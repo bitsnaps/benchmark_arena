@@ -52,3 +52,4 @@ __pycache__/
 
 # Manual scrape drops (browser exports; never commit)
 data/
+.vendor_cache/

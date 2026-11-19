@@ -14,7 +14,7 @@ import { useLeaderboard } from '../stores/leaderboard.js';
 const route = useRoute();
 const router = useRouter();
 
-const { benchmarks, benchRankIndex, modelSlugIndex, modelSlug, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, archiveLinkFor, tiersMode, gradeFor, gradeBoundsOverall } = useData();
+const { benchmarks, benchRankIndex, modelSlugIndex, modelSlug, avgForModel, scoreForModel, clForModel, rankMaps, rankOf, tierOf, isCore, stats, supersededBy, releaseDateOf, metaFor, priceFor, valueFor, hfIdFor, hfUrlFor, availableAtFor, archiveLinkFor, tiersMode, gradeFor, gradeBoundsOverall, vendorScoresFor } = useData();
 const { compareMode, compareRows } = useLeaderboard();
 
 // stats-49: the archived-page icon is wordless — this tooltip + the link's
@@ -154,6 +154,20 @@ const availPrice = (a) => {
 // Compare shortcut
 const inCompare = computed(() => !!model.value && compareRows.value.some(r => r.name === model.value.name));
 const compareFull = computed(() => compareRows.value.length >= 5 && !inCompare.value);
+
+// ── stats-91: creator-reported benchmarks (the vendor lane) ─────────────
+// Scores the model's creator published on the HF card / structured eval
+// files — display-only, never blended into the Score. qualifier:
+//   in-house  = measured by the creator's own harness
+//   cited     = the creator's card cites a third-party report (footnote *)
+//   reported  = HF's structured eval system (.eval_results / model-index)
+const vendorScores = computed(() => (model.value ? vendorScoresFor(model.value) : []));
+const vendorUrl = computed(() => model.value?.vendor_source_url || hfUrl.value || null);
+const VENDOR_NOTE = {
+  'in-house': 'measured by the creator\u2019s own harness',
+  cited: 'cited by the creator from a third-party report',
+  reported: 'filed in the HF structured eval system',
+};
 
 function addToCompare() {
   if (!model.value || inCompare.value || compareFull.value) return;
@@ -338,6 +352,34 @@ function addToCompare() {
       <p class="cell-sub mt-sm" v-if="missing.length">
         Not reported on: {{ missing.map(b => SHORT[b] || b).join(', ') }}.
       </p>
+    </div>
+
+    <!-- stats-91: creator-reported benchmarks — the vendor lane. Scores the
+         model's creator published (card tables / HF structured evals);
+         display-only, provenance per row, never blended into the Score. -->
+    <div v-if="vendorScores.length" class="panel-lab mt" style="padding:1.2rem">
+      <div class="row" style="justify-content:space-between;margin-bottom:.6rem">
+        <h3 style="margin:0;font-size:1.05rem">Creator-reported benchmarks <span class="cell-sub">({{ vendorScores.length }})</span></h3>
+        <a v-if="vendorUrl" class="cell-sub" :href="vendorUrl" target="_blank" rel="noopener noreferrer">view the model card <i class="fas fa-arrow-up-right-from-square"></i></a>
+      </div>
+      <div class="notice" style="margin:0 0 .7rem;border-color:var(--teal)">
+        <i class="fas fa-circle-info"></i>
+        <span>Self-reported by the model's creator — <b>not measured by us</b>. These numbers never feed the leaderboard Score or ranks; harnesses and splits differ between labs, so treat them as claims, not comparable results.</span>
+      </div>
+      <div v-for="s in vendorScores" :key="s.benchmark" class="vendor-row">
+        <div class="name" style="min-width:0">
+          <span style="font-weight:500">{{ s.benchmark }}</span>
+          <b-tooltip :label="VENDOR_NOTE[s.qualifier] || 'creator-reported'" type="is-dark" :delay="100">
+            <span class="tag-lab" :class="s.qualifier === 'cited' ? 'rose' : 'teal'" style="font-size:.72rem">{{ s.qualifier }}</span>
+          </b-tooltip>
+          <a v-if="s.reported_url" class="arch-link" :href="s.reported_url" target="_blank" rel="noopener noreferrer" style="margin-left:.4rem" aria-label="source report"><i class="fas fa-arrow-up-right-from-square"></i></a>
+        </div>
+        <div class="vendor-side">
+          <span v-if="s.reported_date" class="cell-sub" style="margin-right:.6rem">{{ s.reported_date }}</span>
+          <span class="num" style="font-weight:600">{{ s.score }}</span>
+        </div>
+      </div>
+      <p class="cell-sub mt-sm">Extracted {{ model.vendor_extracted_at || 'at bake time' }} from {{ vendorUrl || 'the model card' }} — the card's own wording is kept verbatim so every number stays traceable.</p>
     </div>
 
     <!-- API pricing (price layer) -->

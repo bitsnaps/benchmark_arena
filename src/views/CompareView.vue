@@ -11,6 +11,7 @@ import {
   fmtScore, scoreColor, barWidth, providerColor, initials,
   fmtCtx, fmtB, fmtUsd, modalityIcon,
 } from '../lib/format.js';
+import { vendorCompareGroups } from '../lib/vendorCompare.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
@@ -21,6 +22,7 @@ const {
   benchmarks, pivotAll, modelSlugIndex, scoreForModel, clForModel, coveredCountForModel, rankMaps, tierOf, isCore,
   stats, metaFor, metaCoverage, topClosed, topOpen, isOlder, archiveLinkFor,
   priceFor, valueFor, hasFreeListingFor,
+  cardModels, isCardRow, isUnranked, vendorScoresFor,
   modelSlug,
 } = useData();
 const { compareRows, compareMode } = useLeaderboard();
@@ -94,11 +96,28 @@ const addQ = ref('');
 const addOptions = computed(() => {
   const q = addQ.value.trim().toLowerCase();
   const picked = new Set(compareRows.value.map(r => r.name));
-  return pivotAll.value
+  // stats-92: the OR-only census joins the picker — deep links always
+  // resolved card slugs (modelSlugIndex registers them), but the models
+  // themselves could not be searched. Census rows sort after the ranked
+  // board (they claim no rating by contract).
+  const known = new Set(pivotAll.value.map(r => r.name));
+  const pool = [...pivotAll.value, ...cardModels.value.filter(r => !known.has(r.name))];
+  const sc = (r) => (isCardRow(r) || isUnranked(r) ? null : scoreForModel(r));
+  return pool
     .filter(r => !picked.has(r.name) && (!q || r.name.toLowerCase().includes(q)))
-    .sort((a, b) => (scoreForModel(b) ?? -1) - (scoreForModel(a) ?? -1))
+    .sort((a, b) => (sc(b) ?? -1) - (sc(a) ?? -1))
     .slice(0, 8);
 });
+// One-line status for a picker option: ranked rows show the Score, census
+// rows say what they are instead of faking a number.
+const optionSub = (r) => {
+  if (isCardRow(r)) {
+    const n = vendorScoresFor(r).length;
+    return n ? `OR-only · ${n} creator scores` : 'OR-only';
+  }
+  if (isUnranked(r)) return 'new & unranked';
+  return `Score ${fmtScore(scoreForModel(r))}`;
+};
 function addModel(option) {
   if (!option) return;
   if (compareRows.value.length >= MAX || compareRows.value.some(r => r.name === option.name)) return;
@@ -139,13 +158,20 @@ async function copyLink() {
 const sel = computed(() => compareRows.value.map((row) => {
   const meta = metaFor(row);
   const price = priceFor(row);
-  const wscore = scoreForModel(row);
+  // stats-92: census rows (unranked single-source admissions + OR-only
+  // cards) claim no rating — scoreForModel on a 1-cell unranked row
+  // returns a mostly-prior blend that would ghost-rank this grid exactly
+  // the way stats-90 banned in the home table. Honest dash here instead.
+  const census = isCardRow(row) || isUnranked(row);
+  const wscore = census ? null : scoreForModel(row);
   const tier = tierOf(row);
   return {
     row, meta, price, blended: price ? price.blend : null, avg: wscore, tier,
+    census,
     free: hasFreeListingFor(row),
     // valueFor owns the ÷0 guard: free/$0 rows stay out of the value lens
-    value: valueFor(row),
+    // (and census rows claim no rating, so no value number either)
+    value: census ? null : valueFor(row),
     overallRank: rankMaps.value.all.get(row.name) ?? null,
     tierRank: rankMaps.value[tier]?.get(row.name) ?? null,
     supersededBy: meta?.superseded_by || null,
@@ -159,7 +185,9 @@ const winCounts = computed(() => {
   const counts = new Map(sel.value.map(s => [s.row.name, 0]));
   if (sel.value.length < 2) return counts;
   for (const b of benchmarks.value) {
-    const scored = sel.value.filter(s => s.row[b] !== null && s.row[b] !== undefined);
+    // stats-92: census rows can't win — a crown is a leaderboard claim and
+    // the census (unranked + OR-only) carries no rating by contract
+    const scored = sel.value.filter(s => !s.census && s.row[b] !== null && s.row[b] !== undefined);
     if (scored.length < 2) continue;
     const max = Math.max(...scored.map(s => s.row[b]));
     const winners = scored.filter(s => s.row[b] === max);
@@ -176,14 +204,18 @@ const gridCols = computed(() =>
 // `dir` marks comparable rows: 'high' = bigger wins, 'low' = smaller wins.
 const cmpGroups = computed(() => {
   const S = sel.value;
-  const mk = (dir, fn) => {
+  const mk = (dir, fn, rankedOnly = false) => {
     const cells = S.map(fn);
     let target = null;
     if (dir) {
-      const nums = cells.map(c => c.num).filter(v => v !== null && v !== undefined);
+      const nums = cells
+        .filter((c, i) => !rankedOnly || !S[i].census)
+        .map(c => c.num).filter(v => v !== null && v !== undefined);
       if (nums.length) target = dir === 'low' ? Math.min(...nums) : Math.max(...nums);
     }
-    cells.forEach((c) => { c.winner = !!dir && target !== null && c.num !== null && c.num !== undefined && c.num === target; });
+    // stats-92: census cells display their number but never take the teal
+    // win — "best of selection" stays a ranked-models claim
+    cells.forEach((c, i) => { c.winner = !!dir && !S[i].census && target !== null && c.num !== null && c.num !== undefined && c.num === target; });
     return cells;
   };
   const dash = (fn) => S.map(fn); // non-comparable rows
@@ -277,12 +309,39 @@ const cmpGroups = computed(() => {
           num: v, main: fmtScore(v), color: scoreColor(v), bar: v,
           arch: v === null ? archiveLinkFor(s.row, b) : null,
         };
-      }),
+      }, true),
     })),
   });
 
+  // stats-92: creator-reported benchmarks — the vendor lane joins Side by
+  // side in its OWN group below the measured scores (never mixed with the
+  // measured columns). Rows exist only for benchmarks the selected models
+  // actually report; cells carry the qualifier (in-house = the creator's
+  // own harness, cited = quoted from a third-party report). No teal, no
+  // blending: self-reported numbers are claims, not measured results.
+  const vendorGroups = vendorCompareGroups(S.map(s => s.row), vendorScoresFor);
+  if (vendorGroups.length) {
+    groups.push({
+      label: 'Creator-reported benchmarks',
+      hint: 'self-reported by the creators — not measured by us',
+      rows: vendorGroups.map(g => ({
+        key: 'v:' + g.benchmark,
+        label: g.benchmark,
+        hint: g.models > 1 ? `reported by ${g.models} of the selected models` : 'reported by 1 selected model',
+        cells: dash((s) => {
+          const e = g.entries.find(x => x.model === s.row.name);
+          if (!e) return { main: '—' };
+          return { num: e.score, main: fmtScore(e.score), color: scoreColor(e.score), bar: e.score, sub: e.qualifier };
+        }),
+      })),
+    });
+  }
+
   return groups;
 });
+
+const hasVendorRows = computed(() =>
+  vendorCompareGroups(compareRows.value, vendorScoresFor).length > 0);
 
 const orUrl = (orId) => 'https://openrouter.ai/' + orId;
 </script>
@@ -321,7 +380,7 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
                 <span class="av" :style="{ background: providerColor(option.name).color }">{{ initials(option.name) }}</span>
                 <div>
                   <div class="has-text-weight-semibold" style="font-size:.9rem">{{ option.name }}</div>
-                  <div class="cell-sub">{{ providerColor(option.name).name }} · Score {{ fmtScore(scoreForModel(option)) }}</div>
+                  <div class="cell-sub">{{ providerColor(option.name).name }} · {{ optionSub(option) }}</div>
                 </div>
               </div>
             </template>
@@ -354,7 +413,7 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
               <span class="av" :style="{ background: providerColor(option.name).color }">{{ initials(option.name) }}</span>
               <div>
                 <div class="has-text-weight-semibold" style="font-size:.9rem">{{ option.name }}</div>
-                <div class="cell-sub">{{ providerColor(option.name).name }} · Score {{ fmtScore(scoreForModel(option)) }}</div>
+                <div class="cell-sub">{{ providerColor(option.name).name }} · {{ optionSub(option) }}</div>
               </div>
             </div>
           </template>
@@ -392,6 +451,9 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
             <div class="cell-sub">{{ providerColor(s.row.name).name }}</div>
             <div class="row mt-sm" style="gap:.35rem">
               <span class="tag-lab" :class="s.tier === 'closed' ? 'rose' : 'teal'">{{ s.tier }}</span>
+              <!-- stats-92: census columns say what they are, so the dash
+                   Global Score below reads as honesty, not breakage -->
+              <span v-if="s.census" class="tag-lab muted">{{ s.row.card ? 'OR-only' : 'unranked' }}</span>
               <span v-if="s.overallRank" class="tag-lab">#{{ s.overallRank }}</span>
               <span v-if="winCounts.get(s.row.name)" class="tag-lab gold">
                 <i class="fas fa-crown"></i>&nbsp;{{ winCounts.get(s.row.name) }} wins
@@ -403,7 +465,7 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
 
           <!-- Spec + score rows -->
           <template v-for="g in cmpGroups" :key="g.label">
-            <div class="cmp-group">{{ g.label }}</div>
+            <div class="cmp-group">{{ g.label }}<span v-if="g.hint" class="cmp-hint" style="margin-left:.5rem">{{ g.hint }}</span></div>
             <template v-for="r in g.rows" :key="r.key">
               <div class="cmp-label">
                 <span>{{ r.label }}</span>
@@ -431,9 +493,12 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
     </div>
 
     <!-- Footnotes -->
-    <div v-if="sel.length" class="row mt-sm" style="gap:.4rem">
+    <div v-if="sel.length" class="row mt-sm" style="gap:.4rem;flex-direction:column;align-items:flex-start">
+      <p v-if="hasVendorRows" class="cell-sub">
+        <b>Creator-reported benchmarks</b> are claims from the model creators — self-reported, <b>not measured by us</b>. Qualifier per cell: <i>in-house</i> = the creator's own harness, <i>cited</i> = quoted from a third-party report. They never feed the Score or ranks.
+      </p>
       <p class="cell-sub">
-        Teal = best of the selection for that row (prices: cheapest wins).
+        Teal = best of the selection for that row (prices: cheapest wins; census rows carry no rating, so they never take a win).
         <router-link class="meth-link" :to="{ name: 'methodology', query: { s: 'money' } }">How prices are blended<i class="fas fa-arrow-up-right-from-square"></i></router-link>
       </p>
     </div>

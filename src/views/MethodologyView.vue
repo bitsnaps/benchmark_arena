@@ -196,7 +196,11 @@ watch(() => route.query.s, jumpFromQuery);
             party — and the source link) and a standing disclaimer: self-reported, not measured by
             us. Vendor numbers never enter the Score, ranks or the avg set, and never appear inside
             the leaderboard table itself — a vendor 88.9 next to a measured 78.2 would be misread
-            as comparable no matter how it is dimmed.</li>
+            as comparable no matter how it is dimmed. On the Side-by-side page they get their own
+            <em>Creator-reported benchmarks</em> group below the measured scores, keyed by the
+            benchmark name exactly as the creator wrote it (no aliasing), one qualifier per cell
+            and no best-of-selection highlighting — where two selected creators happen to report
+            the same benchmark, the rows invite a rough reading, never a verdict.</li>
         </ul>
       </div>
     </div>

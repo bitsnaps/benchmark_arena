@@ -302,6 +302,140 @@ const ok = (msg) => console.log('  ok:', msg);
   else ok('sticky metric labels visible on mobile');
   await mob.screenshot({ path: SHOTS + '/compare-mobile.png' });
 
+  // ── stats-92 prep: exact slug map (mirrors modelSlugs — suffix order) ──
+  const slugMap = new Map();
+  {
+    const used = new Set();
+    const assign = (r) => {
+      let s = slugify(r.name); const base = s; let n = 2;
+      while (used.has(s)) s = `${base}-${n++}`;
+      used.add(s); slugMap.set(r.name, s);
+    };
+    for (const r of pivotAll) assign(r);
+    for (const r of (data.card_models || [])) if (!slugMap.has(r.name)) assign(r);
+  }
+  const fs1 = (v) => (v === null || v === undefined ? '—' : Number.isInteger(v) ? String(v) : v.toFixed(1));
+  // row cells helper: .cmp-grid children after a .cmp-label until the next row/group
+  // (label match uses the FIRST span — the label div also carries the hint text)
+  const rowCells = (bench) => page.evaluate((b) => {
+    const kids = [...document.querySelectorAll('.cmp-grid > *')];
+    let i = kids.findIndex(k => k.classList.contains('cmp-label') && k.querySelector('span')?.textContent.trim() === b);
+    if (i < 0) return null;
+    const out = [];
+    for (let j = i + 1; j < kids.length && !kids[j].classList.contains('cmp-label') && !kids[j].classList.contains('cmp-group'); j++) out.push(kids[j].textContent.trim());
+    return out;
+  }, bench);
+
+  // ── 11. stats-92: creator-reported benchmarks join Side by side ──
+  const vendorRows = (data.card_models || []).filter(r => Array.isArray(r.vendor_scores) && r.vendor_scores.length);
+  if (vendorRows.length < 2) fail('snapshot should carry >=2 vendor-scored census models');
+  const longcat = vendorRows.find(r => /longcat/i.test(r.name)) || vendorRows[0];
+  const mate = vendorRows.find(r => r.name !== longcat.name
+    && r.vendor_scores.some(v => longcat.vendor_scores.some(w => w.benchmark === v.benchmark)));
+  const pair = [longcat, mate].filter(Boolean);
+  const shared = mate
+    ? longcat.vendor_scores.filter(w => mate.vendor_scores.some(v => v.benchmark === w.benchmark)).map(w => w.benchmark)
+    : [];
+  console.log('vendor pair:', pair.map(r => r.name).join(' + '), '| shared benchmarks:', shared.length);
+  await page.goto(BASE + '#/compare?models=' + pair.map(r => slugMap.get(r.name)).join(','), { waitUntil: 'networkidle' });
+  await page.waitForSelector('.cmp-headcell', { timeout: 10000 });
+  await page.waitForTimeout(400);
+  if ((await heads().count()) !== pair.length) fail('vendor pair should load columns, got ' + (await heads().count()));
+  else ok('census pair loads side by side');
+  // census honesty: dash Global Score + census chip on every census column
+  const headNums = await page.locator('.cmp-headcell .num').allInnerTexts();
+  if (headNums.some(t => t.trim() !== '—')) fail('census columns must show dash Global Score, got ' + JSON.stringify(headNums));
+  else ok('census columns show honest dash Global Score');
+  const mutedChips = await page.locator('.cmp-headcell .tag-lab.muted').count();
+  if (mutedChips !== pair.length) fail(`expected ${pair.length} census chips, got ${mutedChips}`);
+  else ok('census columns carry the OR-only chip');
+  // the vendor group renders with its disclaimer + qualifier cells
+  const vendorLabel = page.locator('.cmp-group', { hasText: 'Creator-reported benchmarks' });
+  if ((await vendorLabel.count()) !== 1) fail('Creator-reported benchmarks group missing');
+  else ok('Creator-reported benchmarks group renders');
+  if (!/not measured by us/i.test(await vendorLabel.innerText())) fail('vendor group hint missing the disclaimer');
+  else ok('vendor group hint carries the self-reported disclaimer');
+  // no winner highlighting inside the vendor group (claims, not measured)
+  const winnersAfterVendor = await page.evaluate(() => {
+    const kids = [...document.querySelectorAll('.cmp-grid > *')];
+    const vi = kids.findIndex(k => k.classList.contains('cmp-group') && /creator-reported/i.test(k.textContent));
+    if (vi < 0) return -1;
+    return kids.slice(vi + 1).filter(k => k.classList.contains('winner-cell')).length;
+  });
+  if (winnersAfterVendor !== 0) fail(`creator-reported rows must have no teal winner cells, got ${winnersAfterVendor}`);
+  else ok('no winner highlighting in the creator-reported group');
+  // a shared benchmark row shows BOTH creator numbers with qualifiers
+  if (shared.length) {
+    const cells = await rowCells(shared[0]);
+    const want = pair.map(r => fs1(r.vendor_scores.find(v => v.benchmark === shared[0]).score));
+    if (!cells || cells.length !== 2 || cells.some(c => c === '—')) fail(`shared row "${shared[0]}" should hold 2 creator numbers, got ${JSON.stringify(cells)}`);
+    else if (!want.every((w, i) => cells[i].includes(w))) fail(`shared row numbers mismatch: want ${JSON.stringify(want)}, got ${JSON.stringify(cells)}`);
+    else if (!cells.every(c => /in-house|cited|reported/.test(c))) fail(`shared row cells missing qualifiers: ${JSON.stringify(cells)}`);
+    else ok(`shared benchmark "${shared[0]}" compares both creators (${cells.map(c => c.split(' ')[0]).join(' vs ')})`);
+  }
+  // footnote disclaimer visible when creator rows are on the page
+  if (!/self-reported, <b>not measured by us<\/b>|not measured by us/.test(await page.locator('.panel-lab.mt .row.mt-sm').last().innerText().catch(() => ''))) {
+    // tolerant check: just look for the sentence anywhere on the page
+    const bodyTxt = await page.locator('section').innerText();
+    if (!/Creator-reported benchmarks.*are claims|not measured by us/s.test(bodyTxt)) fail('vendor footnote disclaimer missing');
+    else ok('footnote disclaimer present');
+  } else ok('footnote disclaimer present');
+  // picker search now finds census models with their creator-score status
+  // (the store still holds the vendor pair — deep links live in the SPA
+  // store — so clear the selection to reach the empty state first)
+  await page.goto(BASE + '#/compare', { waitUntil: 'networkidle' });
+  await page.waitForSelector('.cmp-headcell', { timeout: 10000 });
+  await page.click('.cmp-toolbar button:has-text("Clear all")');
+  await page.waitForSelector('.panel-lab .chip', { timeout: 10000 });
+  await page.fill('.panel-lab input', longcat.name.split(' ').slice(0, 2).join(' '));
+  await page.waitForTimeout(600);
+  const opt = page.locator('.dropdown-item', { hasText: longcat.name }).first();
+  if (!(await opt.isVisible().catch(() => false))) fail('picker search should surface census models');
+  else if (!/creator scores/.test(await opt.innerText())) fail('census picker option should say "creator scores", got: ' + (await opt.innerText()));
+  else ok(`picker search surfaces "${longcat.name}" with creator-score status`);
+
+  // ── 12. stats-92: unranked rows compare honestly (no ghost rating) ──
+  const unranked = [...closedRows, ...openRows].find(r => r.unranked && (r['Artificial Analysis'] != null));
+  if (unranked) {
+    await page.goto(BASE + '#/compare?models=' + slugMap.get(top3[0].name) + ',' + slugMap.get(unranked.name), { waitUntil: 'networkidle' });
+    await page.waitForSelector('.cmp-headcell', { timeout: 10000 });
+    await page.waitForTimeout(400);
+    const ghost = await page.evaluate((unName) => {
+      const cols = [...document.querySelectorAll('.cmp-headcell')];
+      const col = cols.find(c => c.textContent.includes(unName));
+      if (!col) return { found: false };
+      return {
+        found: true,
+        num: col.querySelector('.num')?.textContent.trim(),
+        chip: col.textContent.includes('unranked'),
+        crown: /wins/.test(col.textContent),
+        value: (() => {
+          const kids = [...document.querySelectorAll('.cmp-grid > *')];
+          let i = kids.findIndex(k => k.classList.contains('cmp-label') && /Score per/.test(k.textContent));
+          if (i < 0) return null;
+          return kids[i + 1 + cols.findIndex(c => c.textContent.includes(unName))]?.textContent.trim();
+        })(),
+      };
+    }, unranked.name);
+    if (!ghost.found) fail('unranked column not found in compare');
+    else if (ghost.num !== '—') fail(`unranked Global Score must be dash, got ${ghost.num} (stats-90 ghost-rating leak)`);
+    else if (!ghost.chip) fail('unranked column missing the unranked chip');
+    else if (ghost.crown) fail('unranked column must never carry a wins crown');
+    else if (ghost.value !== null && !/—/.test(ghost.value)) fail(`unranked Value must be dash, got ${ghost.value}`);
+    else ok('unranked column: dash Global Score, unranked chip, no crown, dash Value');
+    // vendor group must NOT render for a selection without vendor models
+    const vGroups = await page.locator('.cmp-group', { hasText: 'Creator-reported benchmarks' }).count();
+    if (vGroups !== 0) fail('creator-reported group must hide when no selected model reports scores');
+    else ok('creator-reported group stays hidden without vendor models');
+    // regression: the ranked column still shows its real blend score
+    const rankedNum = await page.evaluate((rkName) => {
+      const col = [...document.querySelectorAll('.cmp-headcell')].find(c => c.textContent.includes(rkName));
+      return col?.querySelector('.num')?.textContent.trim();
+    }, top3[0].name);
+    if (rankedNum !== fs1(mirrorScore(top3[0]))) fail(`ranked Global Score changed: want ${fs1(mirrorScore(top3[0]))}, got ${rankedNum}`);
+    else ok(`ranked column keeps its blend score (${rankedNum})`);
+  }
+
   if (errors.length) fail('page errors: ' + errors.join(' | '));
   else ok('zero console/page errors');
 

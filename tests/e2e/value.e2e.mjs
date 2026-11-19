@@ -103,8 +103,9 @@ const ok = (msg) => console.log('  ok:', msg);
 
 
     // ── 1. Header order: SCORE, PRICE, VALUE, ECI (stats-82 lead), then the 8 core columns ──
-    // stats-65: scope to the FIRST table — the "New & unranked" section
-    // below renders the same header set a second time.
+    // stats-65: scope to the FIRST table (stats-90: the unranked census now
+    // merges into that same table instead of rendering a second one below —
+    // .first() stays as cheap future-proofing).
     const headers = (await page.locator('.b-table').first().locator('thead th').allInnerTexts()).map(s => s.trim().toUpperCase());
     const want = ['#', 'MODEL', 'SCORE', 'PRICE', 'VALUE', 'ECI', 'AA', 'BENCHLM', 'ARENA', 'SIMPLEB', 'ARC-2', 'DESIGN', 'SWE-M', 'FRONTIER', 'CL'];
     if (JSON.stringify(headers) === JSON.stringify(want)) ok('headers: SCORE PRICE VALUE + ECI lead + 8 core + CL');

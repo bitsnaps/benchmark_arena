@@ -178,11 +178,14 @@ watch(() => route.query.s, jumpFromQuery);
             snapshot release.</li>
           <li>Older models hide behind the <em>Older versions</em> toggle — never deleted. Shown,
             they rank at the bottom with no rank number and a dimmed bar.</li>
-          <li>A model with <strong>one benchmark source</strong> shows in the <em>New &amp; unranked</em>
-            census under the table — hidden by default; reveal it with the <em>Show new &amp; unranked</em>
-            toggle on the leaderboard. Its real scores are visible as-is, but it carries no rating and
-            no rank — sparse averages lean mostly on the neutral prior, so a number would overclaim.
-            It joins the ranking automatically once a second source covers it.</li>
+          <li>A model with <strong>one benchmark source</strong> stays out of the ranking but is not
+            hidden from the site: reveal the <em>New &amp; unranked</em> census with the
+            <em>Show new &amp; unranked</em> toggle on the leaderboard (hidden by default — the
+            census is a traceability surface, kept off so the default board stays fast). Revealed,
+            its rows merge into the main table below the ranking — dimmed, real scores visible
+            as-is, but no rating and no rank: sparse averages lean mostly on the neutral prior, so
+            a number would overclaim. A row joins the ranking automatically once a second source
+            covers it.</li>
           <li>The <em>NEW</em> badge marks models released within a recency window you can widen
             or shrink; release dates come from the provider catalog.</li>
         </ul>

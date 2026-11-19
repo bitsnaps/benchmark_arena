@@ -124,8 +124,10 @@ const EXPLORER_SEL = '.hbar .name';
   if (dupes.length) fail('toggle ON: duplicated rows: ' + [...new Set(dupes)].join(' | '));
   else ok('toggle ON: no duplicated rows (older models interleaved, not appended)');
 
-  // stats-79: the unranked+older subset must render in the census (behind
-  // its reveal toggle) — and nowhere in the main table scanned above.
+  // stats-79/90: the unranked+older subset must render behind the reveal
+  // toggle — revealed, the census merges INLINE into this same main table
+  // (stats-90), so the scan targets chip-bearing rows (the scan above ran
+  // with the census OFF, which is why flagged unranked rows were absent).
   {
     const censusSw = page.locator('label.switch', { hasText: 'Show new & unranked' });
     if (expectedCensusOlder.length) {
@@ -133,7 +135,7 @@ const EXPLORER_SEL = '.hbar .name';
       else {
         await censusSw.click();
         await page.waitForTimeout(400);
-        const censusInfo = await page.locator('.unranked-section .b-table .table tbody tr').evaluateAll(rows =>
+        const censusInfo = await page.locator('.b-table .table tbody tr:has(.unranked-chip)').evaluateAll(rows =>
           rows.map(tr => ({
             name: (tr.querySelector('.model-cell .model-link')?.textContent || '').replace(/\u2605/g, '').trim(),
             older: tr.classList.contains('is-older-row'),

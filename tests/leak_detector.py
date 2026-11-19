@@ -209,6 +209,15 @@ def main(path):
     for old, new, why in iter_leaks(ranked_rows, meta):
         problems.append(f"leak: '{old}' visible but {why} ('{new}')")
 
+    # 3b ── stats-91 vendor-lane red line: creator-reported scores live ONLY
+    # on card_models rows (baked by bake_vendor_scores.py). A ranked row
+    # carrying vendor_scores would put a self-reported number one blend away
+    # from the Score math.
+    vendor_ranked = [r["name"] for r in ranked_rows if "vendor_scores" in r]
+    if vendor_ranked:
+        problems.append("vendor-lane leak: ranked rows carry vendor_scores: "
+                        + ", ".join(vendor_ranked[:5]))
+
     # 4 ── curated red lines
     for n in MUST_BE_HIDDEN:
         if n in row_names and n not in flagged:

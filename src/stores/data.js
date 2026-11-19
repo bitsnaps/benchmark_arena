@@ -152,6 +152,13 @@ const pivotOpen = computed(() => rawData.value?.unified_open || []);
 const cardModels = computed(() => rawData.value?.card_models || []);
 const isCardRow = (row) => !!row?.card;
 
+// stats-91: creator-reported benchmark scores (the vendor lane) — baked ONLY
+// on card_models rows by bake_vendor_scores.py, so a ranked row can never
+// carry one (the leak detector + test_vendor_scores.py enforce that). The
+// helper is the single read path: scores are display-only, they never touch
+// the Score/rank/avg-set math.
+const vendorScoresFor = (row) => (Array.isArray(row?.vendor_scores) ? row.vendor_scores : []);
+
 // Merged list — every LLM in one ranking so the overall top model is
 // immediately visible (deduped by name just in case a model appears in
 // both source lists).
@@ -536,7 +543,7 @@ export function useData() {
     benchmarks, coreBenchmarks, nonCoreBenchmarks, perBenchData,
     avgSelection, isCustomAvg, avgPresetId, setAvgSelection, toggleAvgBench,
     applyPreset, resetAvgSelection, applyAvgParam,
-    pivotClosed, pivotOpen, pivotAll, pivotFor, stats, cardModels, isCardRow,
+    pivotClosed, pivotOpen, pivotAll, pivotFor, stats, cardModels, isCardRow, vendorScoresFor,
     avgForModel, clForModel, coveredCountForModel, scoreForModel, benchStats,
     topOverall, topClosed, topOpen, leaders,
     rankMaps, rankOf, tierOf, isCore, benchThAttrs,

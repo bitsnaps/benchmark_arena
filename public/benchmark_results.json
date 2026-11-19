@@ -41839,7 +41839,29 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "AutomationBench",
+          "score": 45.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OSWorld",
+          "score": 83.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Terminal-Bench 2.1",
+          "score": 84.1,
+          "qualifier": "in-house",
+          "source": "card"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/nex-agi/Nex-N2.6",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Ripple 65B Preview",
@@ -41859,7 +41881,281 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "AA-LCR",
+          "score": 75.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "AGIEval-En (acc)",
+          "score": 74.4,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "AIME 2024",
+          "score": 97.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "AIME 2025",
+          "score": 98.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "AIME 2026",
+          "score": 95.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "ARC-Challenge (MC acc)",
+          "score": 95.7,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "AutomationBench (Public)",
+          "score": 36.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "BBEH (EM)",
+          "score": 17.9,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "BBH (CoT EM)",
+          "score": 85.6,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "BigCodeBench (pass@1, n=5, T=0.8)",
+          "score": 49.2,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "C-Eval (MC acc)",
+          "score": 69.6,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "DeepSWE 1.1",
+          "score": 44.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "DROP (F1)",
+          "score": 77.8,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "FORTRESS Adversarial",
+          "score": 83.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "FORTRESS Benign",
+          "score": 95.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "GPQA Diamond",
+          "score": 85.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "GPQA main (CoT EM)",
+          "score": 37.7,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "GPQA-Diamond (CoT EM)",
+          "score": 38.4,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "GSM1K (CoT EM)",
+          "score": 88.4,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "GSM8K (CoT EM)",
+          "score": 88.5,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "HellaSwag (acc norm)",
+          "score": 84.6,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "HMMT Feb 2026",
+          "score": 90.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "HumanEval (pass@1, n=20, T=0.2)",
+          "score": 70.9,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "IFBench",
+          "score": 79.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MATH (flex EM)",
+          "score": 59.1,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "MBPP Sanitized (pass@1, n=32, T=0.2)",
+          "score": 81.5,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "MCP Atlas",
+          "score": 71.67,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MGSM (CoT EM, 11-lang avg)",
+          "score": 78.2,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU",
+          "score": 89.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU (MC acc)",
+          "score": 83.7,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU-Pro",
+          "score": 84.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU-Pro (CoT EM)",
+          "score": 61.5,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "OpenBookQA (acc norm)",
+          "score": 47.4,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "PIQA (acc norm)",
+          "score": 83.6,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "SciCode (Inspect AI)",
+          "score": 39.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SimpleQA-Verified (EM)",
+          "score": 10.1,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "StrongREJECT",
+          "score": 97.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SuperGPQA (MC acc)",
+          "score": 34.2,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "SWE-bench Pro v1.0",
+          "score": 61.42,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SWE-bench Pro v2.0 Hard",
+          "score": 79.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SWE-bench Verified",
+          "score": 76.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Terminal-Bench 2.1 (self-reported)",
+          "score": 80.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Terminal-Bench 2.1 (Terminus 2)",
+          "score": 80.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "WinoGrande (acc)",
+          "score": 83.4,
+          "qualifier": "cited",
+          "source": "card"
+        },
+        {
+          "benchmark": "τ³-bench banking",
+          "score": 31.27,
+          "qualifier": "in-house",
+          "source": "card"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/ricursiveAI/Ripple-65B-Preview",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Motif 3",
@@ -41879,7 +42175,35 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "GPQA",
+          "score": 83.4,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_date": "2026-08-07",
+          "reported_url": "https://arxiv.org/abs/2608.09119"
+        },
+        {
+          "benchmark": "HLE",
+          "score": 37.0,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_date": "2026-08-07",
+          "reported_url": "https://arxiv.org/abs/2608.09119"
+        },
+        {
+          "benchmark": "SWE-bench Verified",
+          "score": 76.2,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_date": "2026-08-07",
+          "reported_url": "https://arxiv.org/abs/2608.09119"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/Motif-Technologies/Motif-3",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Moondream 3 Preview",
@@ -41899,7 +42223,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/moondream/moondream3-preview",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Moondream 3.1",
@@ -41919,7 +42246,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/moondream/moondream3.1-9B-A2B",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Schematron V2 Small",
@@ -41939,7 +42269,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/inference-net/schematron-v2-llama-3.2-3b",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Schematron V2 Turbo",
@@ -41959,7 +42292,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/inference-net/schematron-v2-granite-4.0-h-micro",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Ling 3.0 Flash VL",
@@ -41979,7 +42315,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/inclusionAI/Ling-3.0-flash-VL",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Nex-N2.5-Mini",
@@ -41999,7 +42338,101 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "AutomationBench v1.0.6",
+          "score": 32.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "BrowseComp",
+          "score": 83.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "DeepSWE v1.1",
+          "score": 36.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Job Bench",
+          "score": 28.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OmniDoc",
+          "score": 89.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OSWorld-2",
+          "score": 30.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OSWorld-G",
+          "score": 82.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OSWorld-Verified",
+          "score": 71.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SWE-Bench Pro",
+          "score": 43.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SWE-MM",
+          "score": 25.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Terminal-Bench 2.1",
+          "score": 73.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Toolathlon Verified",
+          "score": 54.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Vision2Web",
+          "score": 52.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "WebArena-Verified",
+          "score": 63.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "WebTest",
+          "score": 48.6,
+          "qualifier": "in-house",
+          "source": "card"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/nex-agi/Nex-N2.5-mini",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Nex-N2.5-Pro",
@@ -42019,7 +42452,101 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "AutomationBench v1.0.6",
+          "score": 44.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "BrowseComp",
+          "score": 89.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "DeepSWE v1.1",
+          "score": 55.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Job Bench",
+          "score": 41.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OmniDoc",
+          "score": 92.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OSWorld-2",
+          "score": 56.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OSWorld-G",
+          "score": 87.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OSWorld-Verified",
+          "score": 82.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SWE-Bench Pro",
+          "score": 61.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SWE-MM",
+          "score": 38.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Terminal-Bench 2.1",
+          "score": 82.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Toolathlon Verified",
+          "score": 68.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Vision2Web",
+          "score": 68.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "WebArena-Verified",
+          "score": 67.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "WebTest",
+          "score": 52.8,
+          "qualifier": "in-house",
+          "source": "card"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/nex-agi/Nex-N2.5-Pro",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Qwen3.8 Flash",
@@ -42039,7 +42566,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Hy-MT2-1.8B",
@@ -42059,7 +42589,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/tencent/Hy-MT2-1.8B",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Hy-MT2-30B-A3B",
@@ -42079,7 +42612,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/tencent/Hy-MT2-30B-A3B",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Hy-MT2-7B",
@@ -42099,7 +42635,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/tencent/Hy-MT2-7B",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Ling 3.0 Tiny",
@@ -42119,7 +42658,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/inclusionAI/Ling-3.0-tiny",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "LongCat 2.0",
@@ -42139,7 +42681,71 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "BrowseComp",
+          "score": 79.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "FORTE",
+          "score": 73.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "GPQA-diamond",
+          "score": 88.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "IFEval",
+          "score": 90.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "IMO-AnswerBench",
+          "score": 81.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "RWSearch",
+          "score": 78.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SWE-bench Multilingual",
+          "score": 77.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SWE-bench Pro",
+          "score": 59.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Terminal-Bench 2.1",
+          "score": 70.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Writing Bench",
+          "score": 83.8,
+          "qualifier": "in-house",
+          "source": "card"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/meituan-longcat/LongCat-2.0",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Inkling",
@@ -42159,7 +42765,53 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "AIME 2026",
+          "score": 97.1,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_url": "https://huggingface.co/thinkingmachines/Inkling"
+        },
+        {
+          "benchmark": "GPQA",
+          "score": 87.2,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_url": "https://huggingface.co/thinkingmachines/Inkling"
+        },
+        {
+          "benchmark": "HLE",
+          "score": 46.0,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_url": "https://huggingface.co/thinkingmachines/Inkling"
+        },
+        {
+          "benchmark": "MMMU Pro",
+          "score": 73.5,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_url": "https://huggingface.co/thinkingmachines/Inkling"
+        },
+        {
+          "benchmark": "SWE-bench Pro",
+          "score": 54.3,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_url": "https://huggingface.co/thinkingmachines/Inkling"
+        },
+        {
+          "benchmark": "SWE-bench Verified",
+          "score": 77.6,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_url": "https://huggingface.co/thinkingmachines/Inkling"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/thinkingmachines/Inkling",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Nemotron 3.5 Content Safety",
@@ -42179,7 +42831,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/nvidia/Nemotron-3.5-Content-Safety",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Reka Edge",
@@ -42199,7 +42854,53 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "MLVU Video Understanding",
+          "score": 74.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMVU Multimodal Video Understanding",
+          "score": 71.68,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Mobile Actions Tool Use",
+          "score": 88.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "RefCOCO-A Object Detection",
+          "score": 93.13,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "RefCOCO-B Object Detection",
+          "score": 86.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "VideoHallucer Hallucination",
+          "score": 59.57,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "VQA-V2 Visual Question Answering",
+          "score": 88.4,
+          "qualifier": "in-house",
+          "source": "card"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/RekaAI/reka-edge-2603",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Nemotron 3 Super",
@@ -42219,7 +42920,125 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "AA-LCR",
+          "score": 58.31,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Airline",
+          "score": 56.25,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Arena-Hard-V2 (Hard Prompt)",
+          "score": 73.88,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "GPQA (no tools)",
+          "score": 79.23,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "HLE (no tools)",
+          "score": 18.26,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "HMMT Feb25 (with tools)",
+          "score": 94.73,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "IFBench (prompt)",
+          "score": 72.58,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "LiveCodeBench (v5 2024-07↔2024-12)",
+          "score": 81.19,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "LiveCodeBench (v6 2024-08↔2025-05)",
+          "score": 78.69,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU-Pro",
+          "score": 83.73,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU-ProX (avg over languages)",
+          "score": 79.35,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Retail",
+          "score": 62.83,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "RULER-500 @ 128k (500 samples per task)",
+          "score": 96.79,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "RULER-500 @ 256k (500 samples per task)",
+          "score": 96.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "RULER-500 @ 512k (500 samples per task)",
+          "score": 96.09,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Scale AI Multi-Challenge",
+          "score": 55.23,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SciCode (subtask)",
+          "score": 42.05,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Telecom",
+          "score": 64.36,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Terminal Bench (hard subset)",
+          "score": 25.78,
+          "qualifier": "in-house",
+          "source": "card"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-FP8",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Qwen3.5-9B",
@@ -42239,7 +43058,425 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "AA-LCR",
+          "score": 63.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "AI2D TEST",
+          "score": 90.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "AndroidWorld",
+          "score": 57.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "BabyVision",
+          "score": 28.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "BFCL-V4",
+          "score": 66.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "C-Eval",
+          "score": 88.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "CC-OCR",
+          "score": 79.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "CharXiv(RQ)",
+          "score": 73.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "CountBench",
+          "score": 97.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "DeepPlanning",
+          "score": 18.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "DynaMath",
+          "score": 83.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "EmbSpatialBench",
+          "score": 83.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "ERQA",
+          "score": 55.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Global PIQA",
+          "score": 83.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "GPQA Diamond",
+          "score": 81.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "HallusionBench",
+          "score": 69.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "HMMT Feb",
+          "score": 83.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "HMMT Nov 25",
+          "score": 82.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Hypersim",
+          "score": 13.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "IFBench",
+          "score": 64.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "IFEval",
+          "score": 91.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "INCLUDE",
+          "score": 75.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "LingoQA",
+          "score": 80.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "LiveCodeBench v6",
+          "score": 65.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "LongBench v2",
+          "score": 55.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "LVBench",
+          "score": 70.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MathVision",
+          "score": 78.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Mathvista(mini)",
+          "score": 85.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MAXIFE",
+          "score": 83.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MedXpertQA-MM",
+          "score": 49.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MLVU",
+          "score": 84.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMBench EN-DEV-v1.1",
+          "score": 90.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLongBench-Doc",
+          "score": 57.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU-Pro",
+          "score": 82.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU-ProX",
+          "score": 76.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU-Redux",
+          "score": 91.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMMLU",
+          "score": 81.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMMU",
+          "score": 78.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMMU-Pro",
+          "score": 70.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMStar",
+          "score": 79.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMVU",
+          "score": 67.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MultiChallenge",
+          "score": 54.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MVBench",
+          "score": 74.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "NOVA-63",
+          "score": 55.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Nuscene",
+          "score": 11.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OCRBench",
+          "score": 89.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OJBench",
+          "score": 29.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OmniDocBench1.5",
+          "score": 87.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "OSWorld-Verified",
+          "score": 41.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "PMC-VQA",
+          "score": 57.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "PolyMATH",
+          "score": 57.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "RealWorldQA",
+          "score": 80.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "RefCOCO(avg)",
+          "score": 89.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "RefSpatialBench",
+          "score": 58.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "ScreenSpot Pro",
+          "score": 65.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SimpleVQA",
+          "score": 51.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SLAKE",
+          "score": 79.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SuperGPQA",
+          "score": 58.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "TAU2-Bench",
+          "score": 79.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "TIR-Bench",
+          "score": 45.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "VideoMME (w sub.)",
+          "score": 84.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "VideoMME (w/o sub.)",
+          "score": 78.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "VideoMMMU",
+          "score": 78.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "VITA-Bench",
+          "score": 29.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "VlmsAreBlind",
+          "score": 93.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "We-Math",
+          "score": 75.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "WMT24++",
+          "score": 72.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "ZEROBench",
+          "score": 3.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "ZEROBench sub",
+          "score": 31.1,
+          "qualifier": "in-house",
+          "source": "card"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/Qwen/Qwen3.5-9B",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Qwen3 Coder Next",
@@ -42259,7 +43496,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/Qwen/Qwen3-Coder-Next",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Nemotron 3 Nano 30B A3B",
@@ -42279,7 +43519,32 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "GPQA",
+          "score": 75.0,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
+        },
+        {
+          "benchmark": "HLE",
+          "score": 15.5,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
+        },
+        {
+          "benchmark": "MMLU-Pro",
+          "score": 78.3,
+          "qualifier": "reported",
+          "source": "hf-eval",
+          "reported_url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Devstral 2 2512",
@@ -42299,7 +43564,29 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "SWE Bench Multilingual",
+          "score": 61.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SWE Bench Verified",
+          "score": 72.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Terminal Bench",
+          "score": 32.6,
+          "qualifier": "in-house",
+          "source": "card"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Ministral 3 14B 2512",
@@ -42319,7 +43606,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/mistralai/Ministral-3-14B-Instruct-2512",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Mistral Large 3 2512",
@@ -42339,7 +43629,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/mistralai/Mistral-Large-3-675B-Instruct-2512",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Voxtral Small 24B 2507",
@@ -42359,7 +43652,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/mistralai/Voxtral-Small-24B-2507",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "gpt-oss-safeguard-20b",
@@ -42379,7 +43675,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/openai/gpt-oss-safeguard-20b",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Qwen3 VL 8B Instruct",
@@ -42399,7 +43698,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Qwen3 VL 30B A3B Instruct",
@@ -42419,7 +43721,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/Qwen/Qwen3-VL-30B-A3B-Instruct",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Cydonia 24B V4.1",
@@ -42439,7 +43744,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/thedrummer/cydonia-24b-v4.1",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Hermes 4 405B",
@@ -42459,7 +43767,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/NousResearch/Hermes-4-405B",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Qwen3 30B A3B Instruct 2507",
@@ -42479,7 +43790,161 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [
+        {
+          "benchmark": "Aider-Polyglot",
+          "score": 35.6,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "AIME25",
+          "score": 61.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Arena-Hard v2",
+          "score": 69.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "BFCL-v3",
+          "score": 65.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "Creative Writing v3",
+          "score": 86.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "GPQA",
+          "score": 70.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "HMMT25",
+          "score": 43.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "IFEval",
+          "score": 84.7,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "INCLUDE",
+          "score": 71.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "LiveBench 20241125",
+          "score": 69.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "LiveCodeBench v6 (25.02-25.05)",
+          "score": 43.2,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU-Pro",
+          "score": 78.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU-ProX",
+          "score": 72.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MMLU-Redux",
+          "score": 89.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MultiIF",
+          "score": 67.9,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "MultiPL-E",
+          "score": 83.8,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "PolyMATH",
+          "score": 43.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "SuperGPQA",
+          "score": 53.4,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "TAU1-Airline",
+          "score": 40.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "TAU1-Retail",
+          "score": 59.1,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "TAU2-Airline",
+          "score": 38.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "TAU2-Retail",
+          "score": 57.0,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "TAU2-Telecom",
+          "score": 12.3,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "WritingBench",
+          "score": 85.5,
+          "qualifier": "in-house",
+          "source": "card"
+        },
+        {
+          "benchmark": "ZebraLogic",
+          "score": 90.0,
+          "qualifier": "in-house",
+          "source": "card"
+        }
+      ],
+      "vendor_source_url": "https://huggingface.co/Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Qwen3 Coder 480B A35B",
@@ -42499,7 +43964,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/Qwen/Qwen3-Coder-480B-A35B-Instruct",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "UI-TARS 7B",
@@ -42519,7 +43987,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/ByteDance-Seed/UI-TARS-1.5-7B",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Uncensored",
@@ -42539,7 +44010,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/cognitivecomputations/Dolphin-Mistral-24B-Venice-Edition",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Llama Guard 4 12B",
@@ -42559,7 +44033,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/meta-llama/Llama-Guard-4-12B",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Mistral Small 3.1 24B",
@@ -42579,7 +44056,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Command A",
@@ -42599,7 +44079,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/CohereForAI/c4ai-command-a-03-2025",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Skyfall 36B V2",
@@ -42619,7 +44102,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/TheDrummer/Skyfall-36B-v2",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Aion-RP 1.0 (8B)",
@@ -42639,7 +44125,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/aion-labs/Aion-RP-Llama-3.1-8B",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Qwen2.5 VL 72B Instruct",
@@ -42659,7 +44148,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Mistral Small 3",
@@ -42679,7 +44171,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/mistralai/Mistral-Small-24B-Instruct-2501",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Command R7B (12-2024)",
@@ -42699,7 +44194,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/CohereLabs/c4ai-command-r7b-12-2024",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Mistral Large 2407",
@@ -42719,7 +44217,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/mistralai/Mistral-Large-Instruct-2407",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "UnslopNemo 12B",
@@ -42739,7 +44240,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/TheDrummer/UnslopNemo-12B-v4.1",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Magnum v4 72B",
@@ -42759,7 +44263,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/anthracite-org/magnum-v4-72b",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Llama 3.1 Euryale 70B v2.2",
@@ -42779,7 +44286,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/Sao10K/L3.1-70B-Euryale-v2.2",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Llama 3 8B Lunaris",
@@ -42799,7 +44309,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/Sao10K/L3-8B-Lunaris-v1",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Mistral Nemo",
@@ -42819,7 +44332,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/mistralai/Mistral-Nemo-Instruct-2407",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Gemma 2 27B",
@@ -42839,7 +44355,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/google/gemma-2-27b-it",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "Mixtral 8x22B Instruct",
@@ -42859,7 +44378,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/mistralai/Mixtral-8x22B-Instruct-v0.1",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "ReMM SLERP 13B",
@@ -42879,7 +44401,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/Undi95/ReMM-SLERP-L2-13B",
+      "vendor_extracted_at": "2026-11-19"
     },
     {
       "name": "MythoMax 13B",
@@ -42899,7 +44424,10 @@
       "FrontierSWE": null,
       "CyberGem": null,
       "EQBench CW": null,
-      "LLM Chess": null
+      "LLM Chess": null,
+      "vendor_scores": [],
+      "vendor_source_url": "https://huggingface.co/Gryphe/MythoMax-L2-13b",
+      "vendor_extracted_at": "2026-11-19"
     }
   ],
   "arena_text_asof": "2026-11-18 03:06",

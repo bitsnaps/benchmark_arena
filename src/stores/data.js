@@ -7,6 +7,7 @@ import { SHORT, CORE_BENCHMARKS, LEADER_BENCHES, AVG_PRESETS, AVG_STORAGE_KEY } 
 import { slugify } from '../lib/format.js';
 import { computeBenchStats, harmonize } from '../lib/benchScale.js';
 import { computeGradeMaps, speedTierFor, tiersMode, setTiersMode } from '../lib/tiers.js';
+import { runtimeEntries, buildRuntimeRow, buildRuntimeMeta } from '../lib/runtimeHf.js';
 
 const rawData = ref(null);
 const loading = ref(true);
@@ -149,7 +150,27 @@ const pivotOpen = computed(() => rawData.value?.unified_open || []);
 // pivot lists below — no Score, no rank, no grade, no harmonization or
 // avg-set impact. The Home view reveals them in their own section behind
 // the "OpenRouter-only" toggle (?card=1).
-const cardModels = computed(() => rawData.value?.card_models || []);
+// stats-94: the runtime HF lane joins the census client-side — entries the
+// user added in THIS browser (src/lib/runtimeHf.js, localStorage-backed).
+// Same red lines as the baked lane: rows are card+hf_only with every cell
+// null, appended AFTER the baked section (slug registration order keeps
+// existing deep links stable), and a baked row with the same name always
+// wins — the runtime duplicate simply drops out of the merge.
+const cardModels = computed(() => {
+  const baked = rawData.value?.card_models || [];
+  // belt-and-braces: a runtime entry must not collide with ANY board name
+  // (add() already rejects these; this closes the stale-storage hole so a
+  // ranked row can never gain a census twin even through hand-edited data)
+  const ranked = [
+    ...(rawData.value?.unified_closed || []),
+    ...(rawData.value?.unified_open || []),
+  ].map(r => r.name);
+  const blocked = new Set([...baked.map(r => r.name), ...ranked]);
+  const extra = runtimeEntries.value
+    .filter(e => !blocked.has(e.name))
+    .map(e => buildRuntimeRow(e, benchmarks.value));
+  return extra.length ? [...baked, ...extra] : baked;
+});
 const isCardRow = (row) => !!row?.card;
 
 // stats-91: creator-reported benchmark scores (the vendor lane) — baked ONLY
@@ -354,7 +375,17 @@ const benchRankIndex = computed(() => {
 // ── Model metadata (OpenRouter catalog snapshot) ──────────────────────
 // One entry per matched model: params, modalities, context, pricing…
 // Models absent from the catalog simply resolve to null.
-const modelsMeta = computed(() => rawData.value?.models_meta || {});
+// stats-94: runtime meta records fill ONLY the gaps — a baked record (any
+// row kind) is never shadowed by a runtime addition, so a ranked row's
+// metadata stays byte-identical no matter what the user added.
+const modelsMeta = computed(() => {
+  const base = rawData.value?.models_meta || {};
+  const extra = {};
+  for (const e of runtimeEntries.value) {
+    if (!(e.name in base)) extra[e.name] = buildRuntimeMeta(e);
+  }
+  return Object.keys(extra).length ? { ...base, ...extra } : base;
+});
 const metaFor = (row) => (row && row.name ? modelsMeta.value[row.name] || null : null);
 // Supersession: this model is an older version of a product line and a
 // newer release exists (scraper fills models_meta.superseded_by by ordering

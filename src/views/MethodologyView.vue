@@ -199,6 +199,16 @@ watch(() => route.query.s, jumpFromQuery);
             covers it.</li>
           <li>The <em>NEW</em> badge marks models released within a recency window you can widen
             or shrink; release dates come from the provider catalog.</li>
+          <li><strong>The HF-only census</strong> (stats-93/94): open-weight releases that exist on
+            Hugging Face with no OpenRouter listing carry an <em>HF-only</em> chip — identity and
+            repo info only, every score cell an honest dash, never in the Score or ranks. The
+            baked lane is a curated allowlist; on the Side-by-side picker you can also add any
+            public HF repo yourself at runtime — the identity is fetched live from the Hugging
+            Face API, stored only in your browser's localStorage, disclosed on the model page and
+            removable there. Quantized/mirror repos are refused, a repo already on the board is
+            refused, and a runtime entry never touches the published snapshot: once a repo gets an
+            OpenRouter listing, the next data refresh admits it through the normal census diff
+            instead.</li>
           <li><strong>Creator-reported benchmarks</strong> (stats-91): open-weight census models whose
             creators publish their own eval numbers — on the HF model card or in HF's structured
             eval files — get a <em>Creator-reported benchmarks</em> panel on their model page, with a

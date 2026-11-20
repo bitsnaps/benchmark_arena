@@ -56,8 +56,16 @@ const cardTitle = () =>
 const hfOnlyTitle = () =>
   'HF-only — released on Hugging Face with no OpenRouter listing (curated allowlist). Identity and repo info only; no scores to claim, never in the global Score. It joins the board automatically once OpenRouter lists it.';
 
+// stats-94: runtime additions carry the same chip — the tooltip discloses
+// that THIS entry came from the user (localStorage, this browser only)
+const hfRuntimeTitle = () =>
+  'HF-only — added by you from a Hugging Face repo id at runtime (stored in this browser, not part of our census). Identity and repo info only; no scores to claim, never in the global Score. Remove it from the model page.';
+
 const cardChipLabel = (row) => (row && row.hf_only ? 'HF-only' : 'OR-only');
-const cardChipTitle = (row) => (row && row.hf_only ? hfOnlyTitle() : cardTitle());
+const cardChipTitle = (row) => {
+  if (row && row.hf_only) return row.runtime ? hfRuntimeTitle() : hfOnlyTitle();
+  return cardTitle();
+};
 
 // stats-91: creator-reported score count for a card row — the row link is
 // count-only (no numbers in the table): a vendor number sitting beside our

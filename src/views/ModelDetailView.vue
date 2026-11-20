@@ -1,7 +1,7 @@
 <script setup>
 // Model detail — full score card for one model: ranks, Avg, coverage,
 // per-benchmark bars with rank-in-benchmark, and a compare shortcut.
-import { computed, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { SHORT, BASE_TITLE } from '../lib/constants.js';
 import { fmtScore, fmtUsd, fmtValue, fmtCtx, fmtSec, scoreColor, barWidth, rankClass, providerColor, initials, slugify, modalityIcon } from '../lib/format.js';
@@ -9,6 +9,7 @@ import { latencyClass } from '../lib/pivot.js';
 import { isNewModel, newBadgeTitle } from '../lib/newFlag.js';
 import { GRADE_UNRATED, gradeTitle } from '../lib/tiers.js';
 import { elsewhereFor } from '../lib/measuredElsewhere.js';
+import { removeRuntimeRepo } from '../lib/runtimeHf.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
@@ -174,6 +175,22 @@ const VENDOR_NOTE = {
 // never scores; see src/lib/measuredElsewhere.js for the contract
 const elsewhere = computed(() => (model.value ? elsewhereFor(model.value.name) : []));
 
+// ── stats-94: runtime HF lane ────────────────────────────────────────────
+// A census row the user added in THIS browser (picker → HF identity fetch,
+// localStorage-backed). The panel discloses the provenance and offers the
+// one removal affordance: the model page is where an entry gets inspected,
+// so it is where it can be removed too.
+const isRuntimeAdd = computed(() => !!model.value?.runtime);
+const runtimeHfId = computed(() => (model.value ? hfIdFor(model.value) : null));
+const runtimeAddedOn = computed(() => (model.value ? metaFor(model.value)?.hf_runtime_added || null : null));
+const runtimeParams = computed(() => (model.value ? metaFor(model.value)?.total_params_b ?? null : null));
+const runtimeDownloads = computed(() => (model.value ? metaFor(model.value)?.downloads ?? null : null));
+function removeRuntimeAdd() {
+  if (!model.value?.runtime) return;
+  removeRuntimeRepo(model.value.name);
+  router.push({ name: 'home' });
+}
+
 function addToCompare() {
   if (!model.value || inCompare.value || compareFull.value) return;
   compareRows.value.push(model.value);
@@ -260,6 +277,20 @@ function addToCompare() {
         predates the newest releases in the snapshot. It is excluded from the default
         leaderboard ranking and shown only in the “Older versions” section.
       </span>
+    </div>
+
+    <!-- stats-94: runtime HF addition — provenance + the remove affordance.
+         Sits above the stat tiles because every tile is an honest dash for
+         this row kind (census: no Score, no rank, no coverage claim). -->
+    <div v-if="isRuntimeAdd" class="notice mt" style="border-color:var(--teal)">
+      <i class="fas fa-cube"></i>
+      <span>
+        Runtime addition — you added this Hugging Face repo
+        (<a :href="'https://huggingface.co/' + runtimeHfId" target="_blank" rel="noopener noreferrer">{{ runtimeHfId }}</a><template v-if="runtimeAddedOn"> · added {{ runtimeAddedOn }}</template><template v-if="runtimeParams"> · {{ runtimeParams }}B params</template><template v-if="runtimeDownloads != null"> · {{ runtimeDownloads.toLocaleString() }} downloads</template>)
+        in this browser. It is an identity-only census row: no scores, never ranked,
+        stored only in your localStorage — it is not part of our published census.
+      </span>
+      <b-button size="is-small" type="is-danger is-light" icon-left="trash" @click="removeRuntimeAdd">Remove</b-button>
     </div>
 
     <!-- Stat tiles -->

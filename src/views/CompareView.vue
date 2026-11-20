@@ -12,6 +12,7 @@ import {
   fmtCtx, fmtB, fmtUsd, modalityIcon,
 } from '../lib/format.js';
 import { vendorCompareGroups } from '../lib/vendorCompare.js';
+import { isRepoShaped, normalizeHfInput, addRuntimeRepo } from '../lib/runtimeHf.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
@@ -93,6 +94,11 @@ const removeModel = (name) => {
 const clearAll = () => { compareRows.value = []; };
 
 const addQ = ref('');
+const hfCandidate = computed(() => (isRepoShaped(addQ.value) ? normalizeHfInput(addQ.value) : null));
+// stats-94: runtime HF adds — loading/error state for the picker's add option
+const hfAdding = ref(false);
+const hfError = ref('');
+watch(addQ, () => { hfError.value = ''; });
 const addOptions = computed(() => {
   const q = addQ.value.trim().toLowerCase();
   const picked = new Set(compareRows.value.map(r => r.name));
@@ -103,17 +109,25 @@ const addOptions = computed(() => {
   const known = new Set(pivotAll.value.map(r => r.name));
   const pool = [...pivotAll.value, ...cardModels.value.filter(r => !known.has(r.name))];
   const sc = (r) => (isCardRow(r) || isUnranked(r) ? null : scoreForModel(r));
-  return pool
+  const opts = pool
     .filter(r => !picked.has(r.name) && (!q || r.name.toLowerCase().includes(q)))
     .sort((a, b) => (sc(b) ?? -1) - (sc(a) ?? -1))
     .slice(0, 8);
+  // stats-94: a repo-shaped query offers the runtime HF add first —
+  // "org/repo" or a pasted huggingface.co URL resolves to a census-only
+  // identity row (no scores, this browser only). Hidden while a fetch is
+  // in flight so the option can't be double-fired.
+  if (hfCandidate.value && !hfAdding.value) {
+    opts.unshift({ __hf: true, hfId: hfCandidate.value, name: hfCandidate.value });
+  }
+  return opts;
 });
 // One-line status for a picker option: ranked rows show the Score, census
 // rows say what they are instead of faking a number.
 const optionSub = (r) => {
   if (isCardRow(r)) {
     const n = vendorScoresFor(r).length;
-    const chip = r.hf_only ? 'HF-only' : 'OR-only';
+    const chip = r.runtime ? 'HF-only · added by you' : r.hf_only ? 'HF-only' : 'OR-only';
     return n ? `${chip} · ${n} creator scores` : chip;
   }
   if (isUnranked(r)) return 'new & unranked';
@@ -121,9 +135,41 @@ const optionSub = (r) => {
 };
 function addModel(option) {
   if (!option) return;
+  // stats-94: the synthetic "add HF repo" option routes through the runtime
+  // lane instead of a board row
+  if (option.__hf) { pickHfRepo(option.hfId); return; }
   if (compareRows.value.length >= MAX || compareRows.value.some(r => r.name === option.name)) return;
   compareRows.value = [...compareRows.value, option];
   addQ.value = '';
+}
+
+// stats-94: fetch the repo's public identity, drop it into the runtime HF
+// census lane (localStorage — this browser only), and select it as a
+// compare column. The row is a census card: identity only, no Score, never
+// ranked (enforced by the store merge, not by this view).
+async function pickHfRepo(hfId) {
+  if (hfAdding.value) return;
+  if (compareRows.value.length >= MAX) { hfError.value = 'Cap reached — remove one first.'; return; }
+  hfError.value = '';
+  hfAdding.value = true;
+  try {
+    const known = [...pivotAll.value.map(r => r.name), ...cardModels.value.map(r => r.name)];
+    const res = await addRuntimeRepo(hfId, { knownNames: known });
+    const entry = res.entry;
+    const row = entry ? cardModels.value.find(r => r.name === entry.name) : null;
+    if (res.ok || res.reason === 'already-added') {
+      if (row && !compareRows.value.some(r => r.name === row.name)) {
+        compareRows.value = [...compareRows.value, row];
+        addQ.value = '';
+      } else if (!row) {
+        hfError.value = res.error || 'Could not load that entry.';
+      }
+    } else {
+      hfError.value = res.error || 'Could not add that repo.';
+    }
+  } finally {
+    hfAdding.value = false;
+  }
 }
 const atCap = computed(() => compareRows.value.length >= MAX);
 
@@ -377,7 +423,15 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
             @select="addModel"
           >
             <template #default="{ option }">
-              <div class="model-cell" style="padding:.2rem 0">
+              <!-- stats-94: the synthetic "add HF repo" option -->
+              <div v-if="option.__hf" class="model-cell" style="padding:.2rem 0">
+                <span class="av" style="background:#FFD21E;color:#1a1a1a">HF</span>
+                <div>
+                  <div class="has-text-weight-semibold" style="font-size:.9rem">Add Hugging Face repo: {{ option.hfId }}</div>
+                  <div class="cell-sub">census-only identity from HF · no scores · this browser's lane</div>
+                </div>
+              </div>
+              <div v-else class="model-cell" style="padding:.2rem 0">
                 <span class="av" :style="{ background: providerColor(option.name).color }">{{ initials(option.name) }}</span>
                 <div>
                   <div class="has-text-weight-semibold" style="font-size:.9rem">{{ option.name }}</div>
@@ -388,6 +442,7 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
             <template #empty>No model matches that search.</template>
           </b-autocomplete>
         </b-field>
+        <p v-if="hfError" class="cell-sub" style="margin:0"><span class="tag-lab rose">{{ hfError }}</span></p>
       </div>
       <div class="row mt">
         <button v-for="p in presets" :key="p.label" class="chip" @click="loadPreset(p.rows)">
@@ -410,7 +465,15 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
           @select="addModel"
         >
           <template #default="{ option }">
-            <div class="model-cell" style="padding:.2rem 0">
+            <!-- stats-94: the synthetic "add HF repo" option -->
+            <div v-if="option.__hf" class="model-cell" style="padding:.2rem 0">
+              <span class="av" style="background:#FFD21E;color:#1a1a1a">HF</span>
+              <div>
+                <div class="has-text-weight-semibold" style="font-size:.9rem">Add Hugging Face repo: {{ option.hfId }}</div>
+                <div class="cell-sub">census-only identity from HF · no scores · this browser's lane</div>
+              </div>
+            </div>
+            <div v-else class="model-cell" style="padding:.2rem 0">
               <span class="av" :style="{ background: providerColor(option.name).color }">{{ initials(option.name) }}</span>
               <div>
                 <div class="has-text-weight-semibold" style="font-size:.9rem">{{ option.name }}</div>
@@ -420,6 +483,7 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
           </template>
         </b-autocomplete>
       </b-field>
+      <p v-if="hfError" class="cell-sub" style="margin:0"><span class="tag-lab rose">{{ hfError }}</span></p>
       <div class="row" style="gap:.5rem">
         <b-tag type="is-warning" rounded>{{ sel.length }}/{{ MAX }}</b-tag>
         <b-button size="is-small" icon-left="link" @click="copyLink">{{ copied ? 'Copied!' : 'Copy link' }}</b-button>

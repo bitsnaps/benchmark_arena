@@ -157,7 +157,18 @@ watch(() => route.query.s, jumpFromQuery);
           estimate and never presented as a measurement.
         </p>
         <p>
-          The rest (DeepSWE, VendingBench, CyberGem, EQBench CW, LLM Chess) are
+          <strong>The MaxxBench column (stats-93).</strong> MaxxBench (by unLAP) takes
+          89 DeepSWE feature-implementation tasks and mutates the instructions or the
+          starting code while keeping the core problem — a direct memorization check on
+          our DeepSWE column: a model tuned to the original tasks shows a large
+          DeepSWE−MaxxBench gap, a model that understood the problem adapts. Cells are
+          pass rates over 178 agent attempts in a fixed harness, self-run by unLAP and
+          read from BenchLM's public markdown mirror (CC BY-NC 4.0, attributed in the
+          doc; BenchLM's own estimated aggregates are never used). Sparse coverage —
+          context only, never in the Score blend by default.
+        </p>
+        <p>
+          The rest (DeepSWE, MaxxBench, VendingBench, CyberGem, EQBench CW, LLM Chess) are
           <strong>context only</strong>: niche or thin-coverage evals you can browse per-benchmark
           on the Benchmarks page, or fold into the Score with the <em>Avg set</em> dropdown.
           Custom sets persist in your browser and are shareable via <span class="mono">?avg=</span>

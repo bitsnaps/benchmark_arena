@@ -113,7 +113,8 @@ const addOptions = computed(() => {
 const optionSub = (r) => {
   if (isCardRow(r)) {
     const n = vendorScoresFor(r).length;
-    return n ? `OR-only · ${n} creator scores` : 'OR-only';
+    const chip = r.hf_only ? 'HF-only' : 'OR-only';
+    return n ? `${chip} · ${n} creator scores` : chip;
   }
   if (isUnranked(r)) return 'new & unranked';
   return `Score ${fmtScore(scoreForModel(r))}`;
@@ -453,7 +454,7 @@ const orUrl = (orId) => 'https://openrouter.ai/' + orId;
               <span class="tag-lab" :class="s.tier === 'closed' ? 'rose' : 'teal'">{{ s.tier }}</span>
               <!-- stats-92: census columns say what they are, so the dash
                    Global Score below reads as honesty, not breakage -->
-              <span v-if="s.census" class="tag-lab muted">{{ s.row.card ? 'OR-only' : 'unranked' }}</span>
+              <span v-if="s.census" class="tag-lab muted">{{ s.row.hf_only ? 'HF-only' : s.row.card ? 'OR-only' : 'unranked' }}</span>
               <span v-if="s.overallRank" class="tag-lab">#{{ s.overallRank }}</span>
               <span v-if="winCounts.get(s.row.name)" class="tag-lab gold">
                 <i class="fas fa-crown"></i>&nbsp;{{ winCounts.get(s.row.name) }} wins

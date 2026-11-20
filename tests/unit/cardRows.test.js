@@ -48,13 +48,33 @@ describe('stats-87: card models census (doc contract)', () => {
     }
   });
 
-  it('every card row has a proper meta record (pricing source of truth)', () => {
+  it('every card row has a proper meta record (stats-93: two lane kinds)', () => {
     for (const r of cards) {
       const m = snapshot.models_meta[r.name];
       expect(m, `meta for "${r.name}"`).toBeTruthy();
-      expect(m.or_id, `or_id for "${r.name}"`).toBeTruthy();
-      expect(m.match, `match for "${r.name}"`).toBe('card');
+      if (r.hf_only) {
+        // stats-93 (C): curated HF-only lane — no OR listing exists, so the
+        // record carries the HF identity instead of an or_id
+        expect(m.hf_only, `hf_only for "${r.name}"`).toBe(true);
+        expect(m.match, `match for "${r.name}"`).toBe('curated-hf');
+        expect(m.hugging_face_id, `hf id for "${r.name}"`).toBeTruthy();
+        expect(m.or_id ?? null, `or_id for "${r.name}"`).toBeNull();
+      } else {
+        expect(m.or_id, `or_id for "${r.name}"`).toBeTruthy();
+        expect(m.match, `match for "${r.name}"`).toBe('card');
+      }
     }
+  });
+
+  it('stats-93: the doc carries BOTH census lanes (OR free-only fix + curated HF lane)', () => {
+    // B: at least one :free-only OR listing admitted (the ERNIE class)
+    expect(cards.some(r => r.card && !r.hf_only &&
+      (snapshot.models_meta[r.name]?.or_id || '').endsWith(':free')),
+    'a :free-only OR census row exists (B fix)').toBe(true);
+    // C: the curated HF lane ships with provenance flags
+    const lane = cards.filter(r => r.hf_only);
+    expect(lane.length).toBeGreaterThan(0);
+    expect(lane.every(r => snapshot.models_meta[r.name]?.match === 'curated-hf')).toBe(true);
   });
 
   it('card names never collide with ranked rows (normKey keeps +, stats-70)', () => {

@@ -51,6 +51,14 @@ const rowCls = (row) =>
 const cardTitle = () =>
   'OpenRouter-only — listed on OpenRouter but scored by none of the benchmarks we track yet. Identity, pricing and context info only; no scores to claim, never in the global Score. It joins the ranked board automatically when a benchmark covers it.';
 
+// stats-93 (C): tooltip for the "HF-only" chip — the curated Hugging-Face lane
+// (open-weight releases with no OpenRouter catalog presence at all)
+const hfOnlyTitle = () =>
+  'HF-only — released on Hugging Face with no OpenRouter listing (curated allowlist). Identity and repo info only; no scores to claim, never in the global Score. It joins the board automatically once OpenRouter lists it.';
+
+const cardChipLabel = (row) => (row && row.hf_only ? 'HF-only' : 'OR-only');
+const cardChipTitle = (row) => (row && row.hf_only ? hfOnlyTitle() : cardTitle());
+
 // stats-91: creator-reported score count for a card row — the row link is
 // count-only (no numbers in the table): a vendor number sitting beside our
 // measured cells WILL be misread as comparable, so the detail lives on the
@@ -352,7 +360,7 @@ const limitedTitle = (row) =>
             <b-tooltip v-if="isNewRow(props.row)" :label="newBadgeTitle(releaseDateOf(props.row))" type="is-dark" multilined :delay="100" append-to-body><span class="new-chip">NEW</span></b-tooltip>
             <b-tooltip v-if="isOlder(props.row)" :label="olderTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip">older</span></b-tooltip>
             <b-tooltip v-if="isUnranked(props.row)" :label="unrankedTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip unranked-chip">unranked</span></b-tooltip>
-            <b-tooltip v-if="isCardRow(props.row)" :label="cardTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip oronly-chip">OR-only</span></b-tooltip>
+            <b-tooltip v-if="isCardRow(props.row)" :label="cardChipTitle(props.row)" type="is-dark" multilined :delay="100" append-to-body><span class="older-chip oronly-chip">{{ cardChipLabel(props.row) }}</span></b-tooltip>
             <!-- stats-91: creator-reported lane — count-only link to the model
                  page panel (never vendor numbers inside the table) -->
             <router-link

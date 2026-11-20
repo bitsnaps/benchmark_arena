@@ -95,6 +95,12 @@ BENCHMARKS = {
         "url": "https://deepswe.datacurve.ai/",
         "type": "coding",
     },
+    # stats-93: MaxxBench — unLAP's anti-memorization DeepSWE mutations;
+    # fetched as BenchLM's public markdown mirror (plain HTTP, no browser)
+    "MaxxBench": {
+        "url": "https://benchlm.ai/benchmarks/maxxbench",
+        "type": "coding",
+    },
     "VendingBench": {
         "url": "https://andonlabs.com/evals/vending-bench-2",
         "type": "agentic",
@@ -4116,6 +4122,75 @@ def scrape_llmchess():
     return models
 
 
+# ── stats-93: MaxxBench (unLAP, mirrored by BenchLM.ai) ─────────────────
+# Anti-memorization coding eval: 89 DeepSWE feature-implementation tasks with
+# MUTATED instructions/starting code (median +17 lines / +3.5%), two attempts
+# per model in the mini-swe-agent harness — pass rate over 178 attempts. The
+# companion to our DeepSWE column: same task family, changed requirements, so
+# a big DeepSWE−MaxxBench gap flags task memorization, not skill.
+# SCALE: 0-100 pass rates — no _benchmark_scale entry (identity passthrough).
+# NON-CORE: EXCLUDE_FROM_AVG in build_unified_table — 14-model coverage must
+# never tilt the Score blend; the column is context-only, exactly like its
+# DeepSWE sibling.
+# SOURCE: unLAP runs the benchmark (github.com/unlap-labs/maxxbench,
+# Apache-2.0 harness); the machine-readable board is BenchLM's public
+# markdown mirror (plain GET, "Last updated" dated). BenchLM catalog data is
+# CC BY-NC 4.0 — fine for this non-commercial, attribution-carrying project.
+# Only their SELF-RUN table ("Run by MaxxBench" column) is taken; BenchLM's
+# own 'Estimated' aggregates never touch this column. Doc stamps:
+# maxxbench_asof + maxxbench_source.
+MAXX_MD_URL = "https://benchlm.ai/md/benchmarks/maxxbench.md"
+MAXX_ASOF = None  # "Last updated" date from the mirror, stamped on the doc
+
+MAXX_ROW_RE = re.compile(
+    r"^\|\s*(\d+)\s*\|"            # rank
+    r"\s*\[([^\]]+)\]\("           # [Model]
+    r"[^)]*\)\s*\|"                # (link target)
+    r"\s*[^|]+\|"                  # creator column
+    r"\s*([\d.]+)\s*%\s*\|",       # score with % sign
+    re.M)
+
+
+def scrape_maxxbench():
+    """Scrape the MaxxBench leaderboard (BenchLM md mirror) → [(name, score)].
+
+    Names are BenchLM's display spellings, which our canonical rows match
+    exactly (all 14 verified 2026-11-20, incl. 'DeepSeek V4.1 Flash 1017'
+    and 'DeepSeek V4 Flash 0731' — our own OR-derived snapshot names)."""
+    global MAXX_ASOF
+    import urllib.request
+    req = urllib.request.Request(
+        MAXX_MD_URL,
+        headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            md = resp.read().decode("utf-8", "replace")
+    except Exception as e:
+        print(f"    fetch failed: {e}")
+        return []
+    m = re.search(r"Last updated:\s*([A-Za-z]+ \d{1,2}, \d{4})", md)
+    if m:
+        try:
+            MAXX_ASOF = time.strftime("%Y-%m-%d", time.strptime(m.group(1), "%B %d, %Y"))
+        except ValueError:
+            MAXX_ASOF = None
+    rows, seen = [], set()
+    for rank, name, score in MAXX_ROW_RE.findall(md):
+        name = name.strip()
+        try:
+            val = float(score)
+        except ValueError:
+            continue
+        if not name or name.lower() in seen or not (0.0 <= val <= 100.0):
+            continue
+        seen.add(name.lower())
+        rows.append((name, val))
+    rows.sort(key=lambda x: -x[1])
+    print(f"    Got {len(rows)} models (mirror asof {MAXX_ASOF or 'unknown'})")
+    return rows
+
+
 # ── Model Name Cleaning ───────────────────────────────────────────────────
 # Org names that get appended to model names by some benchmark sites.
 # Two lists: with-separator (e.g., "ModelName Anthropic") and without-separator
@@ -5083,6 +5158,199 @@ def _noise_folds(norm, covered):
     return bool(extras) and all(t in _OR_NOISE_TOKENS for t in extras)
 
 
+# ── stats-93 (C): curated Hugging-Face-only lane ──────────────────────────
+# Open-weight LLMs released on Hugging Face with NO OpenRouter catalog
+# presence at all (priced or free). The census diff above can only see
+# OR-listed models, so these org-only releases were invisible everywhere
+# (Ibrahim, 2026-11-19: "open weights models from huggingface such as
+# LongCat, Nex ... don't appear on our leaderboard").
+# Curation discipline (allowlist, never a sweep — a naive org crawl ships
+# hundreds of distills/quants/research noise rows):
+#   · mainline releases from the model's own org repo only
+#   · NO quants/GGUF/FP8/NVFP4/MLX/ONNX, no distills, no fine-tunes of
+#     other families, no packaging variants (bake-time regex is a safety
+#     net, not the primary filter)
+#   · AUTO-GRADUATE: once a lane entry's org+base appears on the OR catalog
+#     in ANY tier (priced or :free), the lane row is skipped — the OR census
+#     diff owns it from then on (ERNIE-5.5-Flash-Preview graduated on day 1
+#     via the stats-93 free-only fix).
+# Provenance per row: hf_only=True on the row, meta.match='curated-hf',
+# meta.hf_lane_added = curation date. Same red lines as card_models: census
+# namespace only, never in Score/rank/avg math.
+CURATED_HF_LANE = [
+    {"hf_id": "meituan-longcat/LongCat-2.5",      "added": "2026-11-20"},
+    {"hf_id": "meituan-longcat/LongCat-Next",     "added": "2026-11-20"},
+    {"hf_id": "meituan-longcat/LongCat-Flash-Chat",     "added": "2026-11-20"},
+    {"hf_id": "meituan-longcat/LongCat-Flash-Thinking", "added": "2026-11-20"},
+    {"hf_id": "meituan-longcat/LongCat-Flash-Omni",     "added": "2026-11-20"},
+    {"hf_id": "meituan-longcat/LongCat-Flash-Lite",     "added": "2026-11-20"},
+    {"hf_id": "nex-agi/Nex-N2.5-Max", "added": "2026-11-20"},
+    {"hf_id": "nex-agi/Nex-N2-mini",  "added": "2026-11-20"},
+    {"hf_id": "nex-agi/Nex-N2-Pro",   "added": "2026-11-20"},
+    {"hf_id": "NousResearch/Arete-27B", "added": "2026-11-20"},
+    {"hf_id": "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB", "added": "2026-11-20"},
+    {"hf_id": "nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB", "added": "2026-11-20"},
+    {"hf_id": "KRAFTON/Raon-1-nano",          "added": "2026-11-20"},
+    {"hf_id": "KRAFTON/Raon-1-mini-preview",  "added": "2026-11-20"},
+    {"hf_id": "whittleOrg/Whittle-Next-27B-A3B", "added": "2026-11-20"},
+    {"hf_id": "maxwell-model/Maxwell-V1-Flash",  "added": "2026-11-20"},
+    {"hf_id": "upstage/Solar-Open2-250B",        "added": "2026-11-20"},
+]
+_HF_LANE_QUANT_RE = re.compile(
+    r"(gguf|awq|gptq|nvfp4|int[48]|fp[48]|mlx|onnx|bnb|4-?bit|8-?bit"
+    r"|uncensored|heretic|frankenmoe|unlocked|-it$)", re.IGNORECASE)
+HF_LANE_CACHE_PATH = os.path.join(TMP_DIR, "hf_lane_meta.json")
+HF_LANE_CACHE_TTL = 24 * 3600
+
+
+def _hf_lane_graduated_on(hf_id, or_models):
+    """Return the OR listing id when this HF repo is ON the OR catalog
+    (any tier — priced, :free, or variant), else None."""
+    org, _, repo = hf_id.partition("/")
+    repo_l = repo.lower()
+    for e in or_models or []:
+        eid = e.get("id") or ""
+        o, _, tail = eid.partition("/")
+        if o.lower() != org.lower():
+            continue
+        if tail.split(":", 1)[0].lower() == repo_l:
+            return eid
+    return None
+
+
+def _hf_lane_fetch_meta(hf_ids):
+    """Fetch created date / downloads / likes for lane repos (24h cache).
+
+    Returns {hf_id: {created, downloads, likes, pipeline_tag}}; a repo that
+    fails (renamed, deleted, network) is simply absent — the lane row for it
+    is skipped rather than guessed."""
+    cache = {}
+    if os.path.exists(HF_LANE_CACHE_PATH):
+        try:
+            if time.time() - os.path.getmtime(HF_LANE_CACHE_PATH) < HF_LANE_CACHE_TTL:
+                with open(HF_LANE_CACHE_PATH) as f:
+                    cache = json.load(f)
+        except (OSError, ValueError):
+            cache = {}
+    import urllib.request
+    out = {}
+    for hf_id in hf_ids:
+        if hf_id in cache:
+            if cache[hf_id] is not None:
+                out[hf_id] = cache[hf_id]
+            continue
+        try:
+            url = "https://huggingface.co/api/models/" + urllib.request.quote(hf_id, safe="/")
+            req = urllib.request.Request(url, headers={"User-Agent": "benchmark-arena-scraper/1.3"})
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                payload = json.loads(resp.read().decode("utf-8"))
+            out[hf_id] = {
+                "created": (payload.get("createdAt") or "")[:10] or None,
+                "downloads": payload.get("downloads"),
+                "likes": payload.get("likes"),
+                "pipeline_tag": payload.get("pipeline_tag"),
+            }
+        except Exception as e:  # noqa: BLE001
+            print(f"    [HF lane] {hf_id}: fetch failed ({e}) — skipped")
+            out[hf_id] = None
+    # persist (None entries too — a dead repo must not re-fetch every run)
+    try:
+        merged = dict(cache)
+        merged.update(out)
+        with open(HF_LANE_CACHE_PATH, "w") as f:
+            json.dump(merged, f)
+    except OSError:
+        pass
+    return out
+
+
+def _build_hf_lane_meta_record(hf_id, m, added):
+    """Meta record for a lane row — SAME key shape as build_meta_record so
+    the meta layer stays homogeneous; every OR-only field stays None (the
+    model page renders honest dashes, never guesses)."""
+    org, _, _repo = hf_id.partition("/")
+    return {
+        "or_id": None,
+        "or_name": None,
+        "provider": org,
+        "created": m.get("created"),
+        "context_length": None,
+        "max_output_tokens": None,
+        "modality": None,
+        "input_modalities": [],
+        "output_modalities": [],
+        "tokenizer": None,
+        "knowledge_cutoff": None,
+        "total_params_b": m.get("total_params_b"),
+        "active_params_b": None,
+        "params_source": "huggingface" if m.get("total_params_b") is not None else None,
+        "pricing_usd_per_1m": None,
+        "reasoning": None,
+        "supported_parameters": [],
+        "hugging_face_id": hf_id,
+        "or_free_variants": None,
+        "description": None,
+        "superseded_by": None,
+        "match": "curated-hf",
+        "hf_only": True,
+        "hf_lane_added": added,
+    }
+
+
+def collect_hf_lane_rows(existing_norm_keys, or_models, all_benchmarks):
+    """Build census rows for the curated HF-only allowlist (stats-93 C).
+
+    existing_norm_keys — normKeys the lane must not duplicate (ranked rows +
+    OR-census card rows). Returns (rows, meta) in the census shape:
+    {name, num_benchmarks: 0, cl: 0, card: True, hf_only: True, cells None}.
+    """
+    lane = []
+    for item in CURATED_HF_LANE:
+        hf_id = (item.get("hf_id") or "").strip()
+        added = item.get("added")
+        if not hf_id or "/" not in hf_id:
+            continue
+        if _HF_LANE_QUANT_RE.search(hf_id):
+            continue  # defensive: curation already excludes these
+        grad = _hf_lane_graduated_on(hf_id, or_models)
+        if grad:
+            continue  # auto-graduate: the OR census diff owns it now
+        repo = hf_id.split("/", 1)[1]
+        norm = normalize_model_name(repo)
+        if not norm or norm in existing_norm_keys:
+            continue
+        if any(_noise_folds(norm, ck) for ck in existing_norm_keys):
+            continue  # noise-token twin of a row we already carry
+        lane.append({"hf_id": hf_id, "repo": repo, "norm": norm, "added": added})
+    if not lane:
+        return [], {}
+    metas = _hf_lane_fetch_meta([l["hf_id"] for l in lane])
+    param_ids = [l["hf_id"] for l in lane if l["hf_id"] in metas]
+    params = fetch_hf_param_counts(param_ids) if param_ids else {}
+    rows, meta = [], {}
+    for l in lane:
+        m = metas.get(l["hf_id"])
+        if not m:
+            continue  # repo dead/renamed — never guess identity
+        m = dict(m)
+        m["total_params_b"] = params.get(l["hf_id"])
+        rows.append({
+            "name": l["repo"],
+            "num_benchmarks": 0,
+            "cl": 0,
+            "card": True,
+            "hf_only": True,
+            "Epoch ECI": None,  # explicit so the ECI column renders its dash
+        })
+        for b in all_benchmarks:
+            rows[-1][b] = None
+        meta[l["repo"]] = _build_hf_lane_meta_record(l["hf_id"], m, l["added"])
+    if rows:
+        print(f"  [HF lane] {len(rows)} curated HF-only open model(s) "
+              f"(no OpenRouter presence, provenance=curated-hf)")
+    return rows, meta
+
+
 def collect_card_models(unified_rows, all_benchmarks, or_models=None):
     """Diff the OpenRouter catalog against the benchmarked universe.
 
@@ -5092,6 +5360,9 @@ def collect_card_models(unified_rows, all_benchmarks, or_models=None):
                   (shape-compatible with unified rows so the pivot renders
                   them unchanged; never placed inside unified_open/closed)
       card_meta — {display_name: meta_record} from build_meta_record()
+    stats-93 (B): a model whose ONLY catalog presence is a `:free` variant
+    counts as OpenRouter-listed (served by the free tier) and enters the
+    census when HF-verified; a `:free` twin of a priced listing stays out.
     Deterministic: newest release first, undated last, then display name.
     """
     if or_models is None:
@@ -5111,12 +5382,30 @@ def collect_card_models(unified_rows, all_benchmarks, or_models=None):
                 matched_ids.add(entry["id"])
     covered_keys = {normalize_model_name(n) for n in names if normalize_model_name(n)}
 
+    # stats-93 (B): :free-only listings. The wholesale ":" skip below made a
+    # model whose ONLY catalog presence is a `:free` variant invisible to the
+    # census (ERNIE-5.5-Flash-Preview class: served by OpenRouter's own free
+    # tier, HF-verified — a real open model, not a pricing variant). Bases
+    # with a priced (non-variant) listing stay represented by that priced
+    # row; a `:free` entry whose base has NO priced listing passes the same
+    # census checks as any other entry. Non-free variants
+    # (:thinking/:extended/:batch) keep the wholesale skip.
+    priced_bases = set()
+    for e in or_models:
+        peid = e.get("id") or ""
+        if peid and ":" not in peid.split("/")[-1]:
+            priced_bases.add(peid)
     picked = {}
     for entry in or_models:
         eid = entry.get("id") or ""
         tail = eid.split("/")[-1]
+        is_free_only = False
         if ":" in tail:
-            continue  # :free/:thinking/:extended variants — same skip as the matcher
+            if not tail.endswith(":free"):
+                continue  # :thinking/:extended/:batch variants — same skip as the matcher
+            is_free_only = eid[: -len(":free")] not in priced_bases
+            if not is_free_only:
+                continue  # priced listing already represents this model
         if eid in matched_ids:
             continue
         if not (entry.get("hugging_face_id") or "").strip():
@@ -5126,18 +5415,21 @@ def collect_card_models(unified_rows, all_benchmarks, or_models=None):
             continue
         if (org or "").lower() == "openrouter" or eid.lower().startswith("openrouter/"):
             continue  # anonymity-protocol / cloaked test entries
+        if is_free_only:
+            # :free display names carry a " (free)" suffix — the census row
+            # names the MODEL, not the pricing variant
+            base = re.sub(r"\s*\(\s*free\s*\)\s*$", "", base, flags=re.IGNORECASE)
         norm = normalize_model_name(base)
         if not norm or norm in covered_keys:
             continue  # already on the board under another spelling
         if any(_noise_folds(norm, ck) for ck in covered_keys):
             continue  # noise-token twin of a ranked row (same product, no new information)
         prev = picked.get(norm)
-        if prev is None or (entry.get("created") or 0) > (prev.get("created") or 0):
-            picked[norm] = entry  # newest catalog twin wins per display identity
+        if prev is None or (entry.get("created") or 0) > (prev[0].get("created") or 0):
+            picked[norm] = (entry, base)  # newest catalog twin wins per display identity
 
     card_rows, card_meta = [], {}
-    for entry in picked.values():
-        _org, base = _or_org_and_base(entry)
+    for entry, base in picked.values():
         row = {
             "name": base,
             "num_benchmarks": 0,
@@ -5149,6 +5441,16 @@ def collect_card_models(unified_rows, all_benchmarks, or_models=None):
             row[b] = None
         card_rows.append(row)
         card_meta[base] = build_meta_record(entry, "card")
+    # stats-93 (C): curated HF-only lane — org-only open models the OR diff
+    # can never see. Non-fatal: a failed HF fetch ships the OR census alone.
+    try:
+        lane_covered = covered_keys | {
+            normalize_model_name(n) for n in card_meta if normalize_model_name(n)}
+        hf_rows, hf_meta = collect_hf_lane_rows(lane_covered, or_models, all_benchmarks)
+        card_rows.extend(hf_rows)
+        card_meta.update(hf_meta)
+    except Exception as e:  # noqa: BLE001
+        print(f"  [HF lane] failed (non-fatal): {e}")
     # newest release first (undated sink), display name as the tiebreak —
     # stable sorts compose: name ASC first, then date DESC keeps that order
     card_rows.sort(key=lambda r: r["name"])
@@ -6917,7 +7219,8 @@ def build_unified_table(all_results):
     """
     all_benchmarks = list(all_results.keys())
     # Benchmarks excluded from the global average
-    EXCLUDE_FROM_AVG = {"DeepSWE", "VendingBench", "CyberGem", "EQBench CW", "LLM Chess"}
+    EXCLUDE_FROM_AVG = {"DeepSWE", "VendingBench", "CyberGem", "EQBench CW", "LLM Chess",
+                        "MaxxBench"}
     avg_benchmarks = [b for b in all_benchmarks if b not in EXCLUDE_FROM_AVG]
 
     # Collect all models with their per-benchmark scores
@@ -7369,6 +7672,14 @@ def save_results_json(all_results, closed_table, open_table, all_benchmarks, avg
     if ECI_ASOF:
         data["eci_asof"] = ECI_ASOF
         data["eci_source"] = "epoch.ai/data/eci_scores.csv (Epoch Capabilities Index, CC-BY 4.0)"
+    # stats-93: MaxxBench vintage stamp + attribution — the column mirrors
+    # unLAP's board via BenchLM's markdown mirror; its cells drift on
+    # unLAP re-runs, so the shipped doc carries the vintage it reflects.
+    if MAXX_ASOF:
+        data["maxxbench_asof"] = MAXX_ASOF
+        data["maxxbench_source"] = (
+            "benchlm.ai/benchmarks/maxxbench — MaxxBench by unLAP (anti-memorization "
+            "DeepSWE mutations, self-run), mirrored by BenchLM.ai, CC BY-NC 4.0")
     for bname, bdata in all_results.items():
         data["per_benchmark"][bname] = {
             "closed": [(n, s) for n, s in bdata["closed"][:TOP_N]],
@@ -7512,6 +7823,8 @@ def _scrape_site(site_name):
         models = scrape_design_arena()
     elif site_name == "DeepSWE":
         models = scrape_deepswe()
+    elif site_name == "MaxxBench":
+        models = scrape_maxxbench()
     elif site_name == "VendingBench":
         models = scrape_vending_bench()
     elif site_name == "SWE-Marathon":
@@ -7635,6 +7948,7 @@ def main():
         "ARC-AGI-2": f"{TMP_DIR}/bench_ARC-AGI-2.json",
         "Design Arena": f"{TMP_DIR}/bench_Design_Arena.json",
         "DeepSWE": f"{TMP_DIR}/bench_DeepSWE.json",
+        "MaxxBench": f"{TMP_DIR}/bench_MaxxBench.json",
         "VendingBench": f"{TMP_DIR}/bench_VendingBench.json",
         "SWE-Marathon": f"{TMP_DIR}/bench_SWE-Marathon.json",
         "FrontierSWE": f"{TMP_DIR}/bench_FrontierSWE.json",

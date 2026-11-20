@@ -8,6 +8,7 @@ import { fmtScore, fmtUsd, fmtValue, fmtCtx, fmtSec, scoreColor, barWidth, rankC
 import { latencyClass } from '../lib/pivot.js';
 import { isNewModel, newBadgeTitle } from '../lib/newFlag.js';
 import { GRADE_UNRATED, gradeTitle } from '../lib/tiers.js';
+import { elsewhereFor } from '../lib/measuredElsewhere.js';
 import { useData } from '../stores/data.js';
 import { useLeaderboard } from '../stores/leaderboard.js';
 
@@ -168,6 +169,10 @@ const VENDOR_NOTE = {
   cited: 'cited by the creator from a third-party report',
   reported: 'filed in the HF structured eval system',
 };
+
+// stats-93: boards that list this model elsewhere (GDPx / RLI) — links only,
+// never scores; see src/lib/measuredElsewhere.js for the contract
+const elsewhere = computed(() => (model.value ? elsewhereFor(model.value.name) : []));
 
 function addToCompare() {
   if (!model.value || inCompare.value || compareFull.value) return;
@@ -380,6 +385,27 @@ function addToCompare() {
         </div>
       </div>
       <p class="cell-sub mt-sm">Extracted {{ model.vendor_extracted_at || 'at bake time' }} from {{ vendorUrl || 'the model card' }} — the card's own wording is kept verbatim so every number stays traceable.</p>
+    </div>
+
+    <!-- stats-93: measured elsewhere — boards that list this model but that
+         we deliberately don't scrape (HTML-only source, or a metric that
+         belongs to an agent+harness pair). Links only, never numbers. -->
+    <div v-if="elsewhere.length" class="panel-lab mt" style="padding:1.2rem">
+      <h3 style="margin:0 0 .6rem;font-size:1.05rem">Measured elsewhere</h3>
+      <div class="notice" style="margin:0 0 .7rem">
+        <i class="fas fa-circle-info"></i>
+        <span>Third-party boards that evaluate this model — linked for reference, <b>not scraped or compared by us</b>. Their methodology and scales differ; open the board to see the numbers in their own context.</span>
+      </div>
+      <div v-for="b in elsewhere" :key="b.key" class="vendor-row">
+        <div class="name" style="min-width:0">
+          <span style="font-weight:500">{{ b.label }}</span>
+        </div>
+        <a class="arch-link cell-sub" :href="b.url" target="_blank" rel="noopener noreferrer"
+           :aria-label="b.label + ' board'" style="white-space:nowrap">
+          open board <i class="fas fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+      <p class="cell-sub mt-sm">{{ elsewhere[0].note }}</p>
     </div>
 
     <!-- API pricing (price layer) -->

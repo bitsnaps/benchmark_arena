@@ -125,14 +125,17 @@ describe('freshness filtering (older models hidden by default)', () => {
     }
   });
 
-  it('REGRESSION: 2026-11 Gemini 3.8 Flash AA-stub retirement chains to Hydrogen', () => {
+  it('REGRESSION: 2026-11 Gemini 3.8 Flash AA-stub retirement chains to newest brand sibling', () => {
     // Source-evidenced succession (AA stub page), NOT a variant-class hide:
-    // the pointer must be Gemini 4 Hydrogen (a real row) and 3.8 Flash must
-    // carry no rank. If this ever silently flips back, check whether AA
-    // un-retired the page before trusting the row again.
+    // the stats-65 sibling fallback chains the stub-retired 3.8 Flash page
+    // to the NEWEST visible newer brand sibling. At the 2026-11-18 snapshot
+    // that was Gemini 4 Hydrogen (created 2026-11-12); the 2026-11-21
+    // refresh dated Gemini 4 Neon (google/gemini-4-neon, created 2026-11-18),
+    // so the pointer now targets Neon. Bump the expected sibling when Google
+    // ships the next Gemini 4 tier. 3.8 Flash must carry no rank either way.
     const row = rowOf('Gemini 3.8 Flash');
     if (!row) return; // absent from snapshot → nothing to assert
-    expect(META['Gemini 3.8 Flash']?.superseded_by).toBe('Gemini 4 Hydrogen');
+    expect(META['Gemini 3.8 Flash']?.superseded_by).toBe('Gemini 4 Neon');
     expect(d.isOlder(row), 'AA-retired 3.8 Flash must be flagged older').toBe(true);
     expect(d.rankMaps.value.all.has('Gemini 3.8 Flash')).toBe(false);
   });

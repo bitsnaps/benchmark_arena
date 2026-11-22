@@ -22,6 +22,7 @@ rows ONLY, with per-score provenance. Red lines:
 import json
 import os
 import re
+import sys
 
 FAILS = []
 
@@ -90,14 +91,25 @@ missing_prov = [f"{r['name']}/{s['benchmark']}" for r in with_scores
 check("hf-eval records carry date or source url", not missing_prov, "; ".join(missing_prov[:4]))
 
 # ── known anchors (fail loudly if the lane silently empties) ──
+# stats-91 wrote these against the 2026-11-19 snapshot; census cards churn
+# by design (stats-93: "removals/dedup stay the daily refresh's honest
+# business"), so an anchor whose card LEFT the census goes dormant with a
+# NOTE instead of failing — but a card that IS still in the census and has
+# lost its anchored score fails loudly (that's the silent-empty class the
+# anchors exist for; caught live 2026-11-22 when a cold-cache bake shipped
+# LongCat 2.0 + Motif 3 as empty gaps).
 by_name = {r["name"]: {s["benchmark"]: s["score"] for s in r.get("vendor_scores", [])} for r in cards}
-lc = by_name.get("LongCat 2.0") or {}
-check("LongCat 2.0 GPQA-diamond 88.9 (Ibrahim's example)", lc.get("GPQA-diamond") == 88.9,
-      str(lc.get("GPQA-diamond")))
-check("LongCat 2.0 SWE-bench Pro 59.5", lc.get("SWE-bench Pro") == 59.5, str(lc.get("SWE-bench Pro")))
-mt = by_name.get("Motif 3") or {}
-check("Motif 3 structured SWE-bench Verified 76.2", mt.get("SWE-bench Verified") == 76.2,
-      str(mt.get("SWE-bench Verified")))
+census_names = {r.get("name") for r in cards}
+for card, anchor_bench, anchor_val, label in (
+    ("LongCat 2.0", "GPQA-diamond", 88.9, "LongCat 2.0 GPQA-diamond 88.9 (Ibrahim's example)"),
+    ("LongCat 2.0", "SWE-bench Pro", 59.5, "LongCat 2.0 SWE-bench Pro 59.5"),
+    ("Motif 3", "SWE-bench Verified", 76.2, "Motif 3 structured SWE-bench Verified 76.2"),
+):
+    if card not in census_names:
+        print(f"NOTE  anchor dormant — {card} left the census (card churn)")
+        continue
+    check(label, (by_name.get(card) or {}).get(anchor_bench) == anchor_val,
+          str((by_name.get(card) or {}).get(anchor_bench)))
 
 print(f"vendor lane: {total} scores across {len(with_scores)} census models")
 if FAILS:

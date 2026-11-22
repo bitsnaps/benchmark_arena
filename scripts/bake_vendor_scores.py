@@ -13,14 +13,25 @@
 # CURATED contract: every extracted number is printed for review before the
 # doc is committed; the script never guesses a benchmark name (it keeps the
 # card's own wording, trimmed) and drops anything it cannot parse cleanly.
-# Re-runnable: card READMEs are cached in scripts/.vendor_cache (gitignored)
-# keyed by HF id + commit sha, so daily-refresh integration can later diff
-# the sha and re-extract only changed cards (phase-2 hook).
+# Re-runnable: card READMEs are cached in scripts/.vendor_cache (gitignored).
+#
+# stats-96 (phase-2, the daily-refresh hook the stats-91 header promised):
+# every card is sha-diffed against the HF repo's latest commit sha
+# (api/models/{hf}.sha, fetched fresh daily — the plain fetch() cache never
+# expires and would pin the sha forever). sha unchanged -> the cached card
+# is reused and the row keeps its original vendor_extracted_at (content
+# untouched = extraction date untouched). sha changed or first sight -> the
+# card's cache files are busted, everything re-fetched/re-extracted, and
+# the row is stamped today. .eval_results YAMLs ride the same repo sha, so
+# one diff covers both sources.
 import json
 import os
 import re
 import sys
+import time
+import urllib.error
 import urllib.request
+from datetime import datetime, timezone
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOC = os.path.join(REPO, "public", "benchmark_results.json")
@@ -66,26 +77,72 @@ def clean_text(s):
     return re.sub(r"\s+", " ", s).strip()
 
 
-def fetch(url, binary=False):
-    """Fetch with the workspace cache; returns None on any failure."""
+def fetch(url, binary=False, fresh=False, retries=2, timeout=25):
+    """Fetch with the workspace cache; returns None on any failure.
+    fresh=True bypasses the cache READ (still writes it) — used for the
+    daily sha probe, whose whole point is to notice upstream changes.
+    stats-96: 429/5xx get a short backoff-retry (first seen 2026-11-22 when
+    a 63-card probe burst tripped HF's unauthenticated budget and one missed
+    .eval_results YAML cost Motif 3 its whole structured lane). Successes
+    are cached, so a retry only ever re-costs the failed request.
+    retries=0 for the sha probes — a failed probe is SAFE by design (cached
+    fallback + TTL), and under throttle the backoff chain is what pushed
+    whole bake windows past the 10-min cap.
+    Negative responses are cached too, tiered: a 404 (no .eval_results dir —
+    the steady state for most cards) is stable for 7 days, a 429/5xx only
+    15 min; both markers die with the card's cache on a sha change. Without
+    this every run re-fetched ~40 live 404s and the whole run stalled."""
     os.makedirs(CACHE, exist_ok=True)
     key = re.sub(r"[^a-zA-Z0-9._-]", "_", url.split("huggingface.co/", 1)[-1])
     path = os.path.join(CACHE, key)
-    if os.path.exists(path) and os.path.getsize(path) > 0:
+    if not fresh and os.path.exists(path) and os.path.getsize(path) > 0:
         return open(path, "rb").read() if binary else open(path, encoding="utf-8", errors="ignore").read()
+    marker = path + ".err"
+    if not fresh and os.path.exists(marker):
+        try:
+            code, at = json.load(open(marker))
+        except Exception:  # noqa: BLE001
+            code, at = 0, 0
+        ttl = 7 * 86400 if code == 404 else 900
+        if time.time() - at < ttl:
+            return None
     try:
         req = urllib.request.Request(url, headers=UA)
-        with urllib.request.urlopen(req, timeout=25) as r:
-            data = r.read()
+        data = None
+        for attempt in range(retries + 1):
+            try:
+                with urllib.request.urlopen(req, timeout=timeout) as r:
+                    data = r.read()
+                break
+            except urllib.error.HTTPError as e:
+                if e.code in (429, 500, 502, 503, 504) and attempt < retries:
+                    time.sleep((5, 12)[min(attempt, 1)])
+                    continue
+                raise
+        if data is None:
+            return None
         open(path, "wb").write(data)
+        if os.path.exists(marker):
+            os.unlink(marker)
         return data if binary else data.decode("utf-8", errors="ignore")
+    except urllib.error.HTTPError as e:
+        try:
+            json.dump([e.code, time.time()], open(marker, "w"))
+        except OSError:
+            pass
+        print(f"    fetch-fail {url.split('huggingface.co/')[-1]}: {e}")
+        return None
     except Exception as e:
+        try:
+            json.dump([0, time.time()], open(marker, "w"))
+        except OSError:
+            pass
         print(f"    fetch-fail {url.split('huggingface.co/')[-1]}: {e}")
         return None
 
 
-def api_json(url):
-    raw = fetch(url)
+def api_json(url, fresh=False, retries=2, timeout=25):
+    raw = fetch(url, fresh=fresh, retries=retries, timeout=timeout)
     if not raw:
         return None
     try:
@@ -94,16 +151,58 @@ def api_json(url):
         return None
 
 
+# ── stats-96: sha-diff state ─────────────────────────────────────────
+
+SHA_MAP = os.path.join(CACHE, "_sha_map.json")
+# stats-96: live HF probes allowed per bake run — bounds a cold start (cache
+# wiped by a recycle, or a brand-new card set) to ~20 x 10s of network worst
+# case so the refresh window can never stall on throttled connections.
+PROBE_BUDGET = 20
+
+
+def _load_sha_map():
+    try:
+        return json.load(open(SHA_MAP, encoding="utf-8"))
+    except Exception:  # noqa: BLE001 — missing/corrupt map = first sight
+        return {}
+
+
+def _save_sha_map(m):
+    try:
+        os.makedirs(CACHE, exist_ok=True)
+        json.dump(m, open(SHA_MAP, "w", encoding="utf-8"), indent=1)
+    except Exception as e:  # noqa: BLE001
+        print(f"    [sha-map] write failed (non-fatal): {e}")
+
+
+def bust_card_cache(hf):
+    """Drop every cache file belonging to one HF repo (README raw, meta,
+    .eval_results tree + YAMLs all key off the repo path prefix)."""
+    prefix = re.sub(r"[^a-zA-Z0-9._-]", "_", hf)
+    n = 0
+    try:
+        for f in os.listdir(CACHE):
+            if f.startswith(prefix):
+                os.unlink(os.path.join(CACHE, f))
+                n += 1
+    except OSError:
+        pass
+    return n
+
+
 # ── source 1: HF structured eval system ────────────────────────────────
 
-def hf_eval_scores(hf):
+def hf_eval_scores(hf, meta=None):
     """model-index entries + .eval_results YAML files. Returns {bench: rec}.
     YAML docs are lists of {dataset:{id,task_id}, value, date, source{url,name}}
     (Motif-3 shape) — a top-level list parses to ONE list doc, so both a dict
     doc and items of a list doc are harvested. Per-score provenance (date,
-    source url) is carried through — the structured lane's whole point."""
+    source url) is carried through — the structured lane's whole point.
+    stats-96: `meta` may be pre-fetched by the caller (the sha probe already
+    made the api/models call — never spend a second one)."""
     out = {}
-    meta = api_json(f"https://huggingface.co/api/models/{hf}")
+    if meta is None:
+        meta = api_json(f"https://huggingface.co/api/models/{hf}")
     if not meta:
         return out
     for e in meta.get("model-index") or []:
@@ -296,15 +395,68 @@ def main():
     doc = json.load(open(DOC, encoding="utf-8"))
     cards = doc.get("card_models") or []
     meta = doc.get("models_meta") or {}
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     print(f"card_models: {len(cards)}")
+    sha_map = _load_sha_map()
     updated = 0
+    n_changed = n_unchanged = 0
+    n_probed = 0
     for row in cards:
         name = row.get("name") or ""
         hf = (meta.get(name) or {}).get("hugging_face_id")
         if not hf:
             print(f"  {name}: no HF id — skipped")
             continue
-        scores = hf_eval_scores(hf)
+        # stats-96 sha probe: fresh daily, cache-read bypassed. A FAILED
+        # probe (HF rate limit / network) must read as "unchanged" — never
+        # re-stamp, never bust, and fall back to the last-good cached meta
+        # so the structured lane survives a rate-limited window (first seen
+        # minutes after a 63-card probe burst: 429s wiped hf-eval lanes).
+        # Probe budget: one live probe per card per ~20h — retries, dry-runs
+        # and same-day re-runs reuse the last-good sha with zero network
+        # (first seen: backoff-retries under throttle pushed the whole bake
+        # past the refresh's 10-min window).
+        prev = sha_map.get(hf) or {}
+        probed_now = False
+        if (time.time() - (prev.get("probed_at") or 0)) < 20 * 3600 \
+                and prev.get("sha"):
+            sha = prev["sha"]
+            card_meta = api_json(f"https://huggingface.co/api/models/{hf}")
+            changed = False
+        elif n_probed < PROBE_BUDGET:
+            # stats-96: bounded live-probe budget per run — a cold start (new
+            # card set, or the cache wiped by a sandbox recycle) must finish
+            # inside the refresh's 10-min window. Cards past the budget ship
+            # an honest gap this run; incremental map saves bank every
+            # success, so the next window/daily run closes the rest.
+            n_probed += 1
+            card_meta = api_json(f"https://huggingface.co/api/models/{hf}",
+                                 fresh=True, retries=0, timeout=10)
+            sha = (card_meta or {}).get("sha") or ""
+            probed_now = bool(sha)
+            if not sha and prev.get("sha"):
+                # last-good cached meta only — never a live stall here
+                meta_cache = os.path.join(
+                    CACHE, re.sub(r"[^a-zA-Z0-9._-]", "_",
+                                  f"api/models/{hf}"))
+                card_meta = json.load(open(meta_cache, encoding="utf-8")) \
+                    if os.path.exists(meta_cache) else None
+            sha = (card_meta or {}).get("sha") or ""
+            changed = bool(sha) and prev.get("sha") != sha
+        else:
+            sha = prev.get("sha") or ""
+            card_meta = api_json(f"https://huggingface.co/api/models/{hf}") \
+                if prev.get("sha") else None
+            changed = False
+            if not prev.get("sha"):
+                print(f"    probe budget spent — {hf} ships a gap this run")
+        if changed and prev.get("sha"):
+            n_busted = bust_card_cache(hf)
+            print(f"    sha-diff: {hf} moved {prev['sha'][:7]} -> {sha[:7]} "
+                  f"(cache busted: {n_busted} file(s))")
+        elif not prev.get("sha"):
+            print(f"    sha-diff: {hf} first sight (sha {sha[:7] or 'unavailable'})")
+        scores = hf_eval_scores(hf, meta=card_meta)
         n_hf = len(scores)
         readme = fetch(f"https://huggingface.co/{hf}/raw/main/README.md")
         n_card = 0
@@ -325,10 +477,37 @@ def main():
             {"benchmark": b, **scores[b]} for b in sorted(scores, key=str.lower)
         ]
         row["vendor_source_url"] = f"https://huggingface.co/{hf}"
-        row["vendor_extracted_at"] = "2026-11-19"
+        # stats-96: the stamp tracks card CONTENT — unchanged sha keeps the
+        # original extraction date, a changed sha re-stamps today.
+        extracted_at = today if changed else (prev.get("extracted_at") or today)
+        row["vendor_extracted_at"] = extracted_at
+        if sha:
+            entry = {**prev, "sha": sha, "extracted_at": extracted_at}
+            # probed_at tracks the last LIVE probe: refreshed when this run
+            # actually probed, kept when the 20h TTL path reused the sha,
+            # stamped now for a first success after earlier failures.
+            entry["probed_at"] = (time.time() if (probed_now or not prev.get("probed_at"))
+                                  else prev["probed_at"])
+            sha_map[hf] = entry
+            # stats-96: persist EVERY new probe (stats-65 lesson) — a killed
+            # 10-min window used to lose the whole loop's probes because the
+            # map only saved after it; incremental saves make repeated
+            # windows converge on the full card set under HF throttling.
+            if probed_now:
+                _save_sha_map(sha_map)
+        n_changed += 1 if changed else 0
+        n_unchanged += 0 if changed else 1
         status = f"{len(row['vendor_scores'])} scores (hf-eval {n_hf}, card {n_card})"
         print(f"  {name}: {status}")
         updated += 1
+        # stats-96: gentle inter-card gap — the fresh sha probes + README
+        # fetches burst ~63 calls per run; spacing keeps the unauthenticated
+        # HF budget from throttling mid-run (failures are safe now, but a
+        # clean run beats a degraded one).
+        time.sleep(0.3)
+    _save_sha_map(sha_map)
+    print(f"sha-diff census: {n_changed} changed/new, {n_unchanged} unchanged "
+          f"(cached cards reused)")
 
     print(f"\nupdated {updated}/{len(cards)} card rows")
     print("\n── REVIEW: every extracted number ──")

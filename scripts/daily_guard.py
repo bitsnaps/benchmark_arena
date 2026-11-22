@@ -278,6 +278,59 @@ def main():
           + f" | asof overall={doc.get('arena_overall_asof')} "
             f"text={doc.get('arena_text_publish_date')}")
 
+    # 4e. MaxxBench lane checks (stats-96, 2026-11-22): the column is owned
+    #     by the daily refresh since stats-93 (cells come off the BenchLM
+    #     mirror via bake_maxxbench.py in the refresh). A collapse means the
+    #     mirror parse broke or the bake step died; a vanished stamp means
+    #     the bake step was skipped. Name drift shows up passively: the bake
+    #     only writes exact normalize_model_name matches and prints every
+    #     unmatched mirror name for review — a drift wave shrinks the cell
+    #     count into this floor.
+    def _mx_cells(d):
+        rows = (d.get("unified_closed") or []) + (d.get("unified_open") or [])
+        return sum(1 for r in rows if not r.get("unranked")
+                   and r.get("MaxxBench") is not None)
+
+    mx_new, mx_old = _mx_cells(doc), _mx_cells(head)
+    if mx_old and mx_new < max(8, int(mx_old * 0.6)):
+        fail(f"MaxxBench coverage collapsed: {mx_new} ranked cells vs HEAD {mx_old} "
+             f"(mirror parse break or name-drift wave? bake prints the unmatched list)")
+    if head.get("maxxbench_asof") and not doc.get("maxxbench_asof"):
+        fail("maxxbench_asof vanished — bake_maxxbench step skipped or failed")
+    mx_asof = str(doc.get("maxxbench_asof") or "")
+    if mx_asof:
+        try:
+            mx_age = (datetime.now(timezone.utc)
+                      - datetime.strptime(mx_asof, "%Y-%m-%d").replace(tzinfo=timezone.utc)).days
+            if mx_age > 7:
+                print(f"GUARD WARN MaxxBench vintage is {mx_age}d old (asof {mx_asof}) — "
+                      f"BenchLM mirror may be stale/frozen")
+        except ValueError:
+            print(f"GUARD WARN MaxxBench asof malformed: {mx_asof!r}")
+
+    # 4f. Vendor-lane checks (stats-96, 2026-11-22): creator-reported scores
+    #     live ONLY on card_models rows (stats-91 red line, leak detector
+    #     asserts too). The bake is sha-diffed against HF (phase-2); a floor
+    #     of 2 scored cards matches the compare.e2e vendor-pair spec, so a
+    #     dead bake or an extraction collapse blocks the refresh here —
+    #     before anything can ship without the lane.
+    def _vendor_cards(d):
+        return sum(1 for r in (d.get("card_models") or [])
+                   if isinstance(r.get("vendor_scores"), list) and r["vendor_scores"])
+
+    vendor_new, vendor_old = _vendor_cards(doc), _vendor_cards(head)
+    if vendor_old and vendor_new < 2:
+        fail(f"vendor lane collapsed: {vendor_new} scored census cards vs HEAD "
+             f"{vendor_old} (bake_vendor_scores failed or HF unreachable?)")
+    card_new = len(doc.get("card_models") or [])
+    card_old = len(head.get("card_models") or [])
+    if card_old and card_new < max(40, int(card_old * 0.7)):
+        fail(f"census shrank: card_models {card_new} vs HEAD {card_old} "
+             f"(OpenRouter census rebuild break?)")
+    if vendor_old and vendor_new < vendor_old:
+        print(f"GUARD NOTE vendor lane {vendor_new} scored cards < HEAD {vendor_old} "
+              f"(cards churned or extraction partial — non-fatal)")
+
     # 5. report summary (agent pastes this into the Discord update)
     now = datetime.now(timezone.utc).replace(tzinfo=None)
     fresh = 0
@@ -295,6 +348,7 @@ def main():
         f"GUARD OK rows={r_new} ranked (+{n_unranked} unranked) (HEAD {r_old}) meta={len(mm)} "
         f"aa_ttft={tt_new} created={cr_new} modalities={mod_new} eci={eci_new} "
         f"arena={arena_new} card={len(doc.get('card_models') or [])} "
+        f"mx={mx_new} vendor={vendor_new} "
         f"approx_new_7d={fresh} ts={ts}"
     )
 

@@ -14,16 +14,28 @@ diagnostics against temp files.)
 |--------|------|
 | `bench_scraper.py` | The 14-station benchmark scraper + meta miner (stats-88 added the Arena.ai Overall station — LMArena's agent config on the official HF leaderboard-dataset). Playwright-driven; also builds `providers.json` (with `kind` taxonomy) and mines `models_meta` (AA pricing layer, `aa_ttft_seconds`, `available_at`, supersession/stale flags, HF ids, Arena provenance `arena_source`/`arena_raw`). |
 | `merge_aa_into_public.py` | Meta-only overlay: merges the AA fields (`pricing_aa_usd_per_1m`, `price_source`, `aa_ttft_seconds`) + fresher OpenRouter fields (`pricing_usd_per_1m`, `max_output_tokens`) from a `--meta-only` scrape onto the LIVE public meta, preserving the hand-baked `available_at` layer. Public-only curated records are never regressed. |
-| `merge_full_scrape_into_public.py` | Full-scrape adoption (opposite direction of truth): a complete fresh `/bench` document is the BASE (fresh cells, tables, timestamp); curated `available_at` is restored on shared keys and public-only records whose cells vanished upstream are DROPPED (values printed, nothing silently lost — leak contract). |
+| `merge_full_scrape_into_public.py` | Full-scrape adoption (opposite direction of truth): a complete fresh `/bench` document is the BASE (fresh cells, tables, timestamp); curated `available_at` is restored on shared keys and public-only records whose cells vanished upstream are DROPPED (values printed, nothing silently lost — leak contract). Lane state (vendor_scores, MaxxBench stamps/cells, census additions) is NOT carried — the bakes below own it. |
+| `bake_poe_available_at.py` | Poe seller listings -> `available_at` (stats-59). Non-fatal in the refresh; guard floors catch a silent drop. |
+| `bake_maxxbench.py` | MaxxBench column + census growth (stats-93/96): re-reads the BenchLM mirror, writes ranked-row cells + `per_benchmark` + doc vintage stamps (`maxxbench_asof`/`maxxbench_source`, CC BY-NC 4.0 attribution) and appends census rows not already shipped. ADDITIVE ONLY; exact `normalize_model_name` matches — unmatched mirror names are printed for review (passive name-drift watch). Owns the lane from the fresh-cells merge onward. |
+| `bake_vendor_scores.py` | Creator-reported scores onto card_models rows (stats-91/96): HF structured eval system (`model-index` + `.eval_results`) then the card README's own tables. stats-96 phase-2: every card is sha-diffed daily against the HF repo commit (`api/models/{hf}.sha`, fresh probe); unchanged sha reuses the cached card and keeps the original `vendor_extracted_at`, changed sha busts the card's cache files and re-extracts. Red lines: ranked rows never touched; every number printed for review. |
 
 ## Running a refresh
 
+The unattended path is `scripts/daily_refresh.sh` (stats-96, 8 steps): scrape
+-> full merge -> Poe bake -> MaxxBench bake -> vendor bake -> guard ->
+prepush -> commit. Manual equivalent:
+
 ```bash
-# 1. Full scrape (all 13 benchmark sources + catalogs + meta). ~2.5 min.
+# 1. Full scrape (all 14 benchmark stations + catalogs + meta). ~2.5 min warm.
 python3 scripts/bench_scraper.py
 
 # 2a. Fresh-cells day: adopt the full document
 python3 scripts/merge_full_scrape_into_public.py
+
+# 2a-bis. Lane bakes — the fresh-cells merge does NOT carry lane state
+python3 scripts/bake_poe_available_at.py
+python3 scripts/bake_maxxbench.py --apply
+python3 scripts/bake_vendor_scores.py --apply   # sha-diffed vs HF (stats-96)
 
 # 2b. Pricing-only day: overlay AA/OR meta onto live public (cheap, no cells move)
 python3 scripts/bench_scraper.py --meta-only
